@@ -9,6 +9,7 @@ const Navigation = () => {
     { label: "Startseite", href: "#home" },
     { label: "Leistungen", href: "#services" },
     { label: "Über mich", href: "#about" },
+    { label: "Preise", href: "#pricing" },
     { label: "Kontakt", href: "#contact" }
   ];
 
