@@ -6,41 +6,41 @@ const PricingSection = () => {
   const pricingTiers = [
     {
       title: "Standard LKW-Fahrer",
-      price: "55",
-      unit: "€/Stunde",
+      price: "399",
+      unit: "€ (8-Stunden-Tag)",
       icon: Truck,
       features: [
         "CE-Führerschein",
         "Fahrerkarte",
         "Modul 95",
-        "Deutschlandweit",
-        "Kurzfristig verfügbar"
+        "Transport & Baustelle",
+        "Überführungsfahrten"
       ]
     },
     {
-      title: "Spezialist",
-      price: "68",
-      unit: "€/Stunde", 
+      title: "Spezialfahrer",
+      price: "539",
+      unit: "€ (8-Stunden-Tag)", 
       icon: CheckCircle,
       features: [
         "ADR-Schein",
-        "Kran-/Staplerschein",
-        "Gefahrgut-Transport",
+        "Kran-/Staplererfahrung",
+        "Gefahrgut",
         "Schwertransport",
-        "Erfahrung 10+ Jahre"
+        "Komplexe Einsätze"
       ]
     },
     {
       title: "Baumaschinenführer",
-      price: "62",
-      unit: "€/Stunde",
+      price: "489",
+      unit: "€ (8-Stunden-Tag)",
       icon: Clock,
       features: [
-        "Baggerführerschein",
+        "Bagger-Erfahrung",
         "Radlader-Erfahrung",
-        "Kranführerschein",
-        "Baustellenerfahrung",
-        "Flexible Arbeitszeiten"
+        "Kran-Erfahrung",
+        "Flexibel auf Baustellen",
+        "Vielseitig einsetzbar"
       ]
     }
   ];
@@ -84,71 +84,53 @@ const PricingSection = () => {
         </div>
 
         <div className="bg-muted p-8 rounded-lg max-w-4xl mx-auto">
-          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
             <Euro className="h-5 w-5 text-primary" />
-            Warum diese Preise?
+            Erweiterungen & Zuschläge
           </h3>
-          <div className="mb-6">
-            <p className="text-sm text-muted-foreground mb-4">
-              Unsere Preise berücksichtigen die Realität selbstständiger Fahrer:
-            </p>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Brutto-Stundensatz:</span>
-                  <span className="font-semibold">55€</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>- Steuern (25-30%):</span>
-                  <span className="text-red-600">-15€</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>- Sozialabgaben:</span>
-                  <span className="text-red-600">-8€</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>- Rücklagen/Altersvorsorge:</span>
-                  <span className="text-red-600">-7€</span>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>- Ausfallzeiten (20%):</span>
-                  <span className="text-red-600">-5€</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>- Fahrtkosten/Spesen:</span>
-                  <span className="text-red-600">-3€</span>
-                </div>
-                <div className="flex justify-between border-t pt-2">
-                  <span className="font-semibold">Netto-Verdienst:</span>
-                  <span className="font-bold text-green-600">~17€/h</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <h4 className="font-semibold mb-3">Zusätzliche Konditionen:</h4>
-          <div className="grid md:grid-cols-2 gap-6 text-sm">
+          <div className="grid md:grid-cols-2 gap-6 text-sm mb-8">
             <div>
-              <h5 className="font-semibold mb-2">Mindestbuchung:</h5>
-              <p className="text-muted-foreground">8 Stunden pro Einsatz</p>
+              <h5 className="font-semibold mb-2">Bereitschaft / Reservezeit:</h5>
+              <p className="text-muted-foreground">160 € / Tag (max. 8 Std.)</p>
             </div>
             <div>
-              <h5 className="font-semibold mb-2">Bereitschaftszeit:</h5>
-              <p className="text-muted-foreground">35 €/Stunde</p>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-2">Wochenende/Feiertage:</h5>
-              <p className="text-muted-foreground">+25% Zuschlag</p>
+              <h5 className="font-semibold mb-2">Wochenend- oder Feiertagseinsatz:</h5>
+              <p className="text-muted-foreground">+25%</p>
             </div>
             <div>
               <h5 className="font-semibold mb-2">Nachtarbeit:</h5>
-              <p className="text-muted-foreground">+20% Zuschlag (22-6 Uhr)</p>
+              <p className="text-muted-foreground">+20% (22–6 Uhr)</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Kurzeinsätze:</h5>
+              <p className="text-muted-foreground">Pauschal 299 € (unter 5 Std.)</p>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-4">
-            Alle Preise zzgl. gesetzlicher MwSt. Fahrtkosten werden separat berechnet.
+          
+          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <CheckCircle className="h-5 w-5 text-primary" />
+            Vorteile für Auftraggeber
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6 text-sm">
+            <div>
+              <h5 className="font-semibold mb-2">Klare Kalkulation:</h5>
+              <p className="text-muted-foreground">Ohne Überraschungen</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Keine Arbeitgeberpflichten:</h5>
+              <p className="text-muted-foreground">Keine Sozialabgaben, kein Lohnnebenkostenrisiko</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Flexible Verfügbarkeit:</h5>
+              <p className="text-muted-foreground">Kurzfristige Verfügbarkeit</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Rechnung:</h5>
+              <p className="text-muted-foreground">Mit ausgewiesener MwSt.</p>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground mt-6">
+            Alle Preise zzgl. gesetzlicher MwSt. Fahrtkosten nach Aufwand.
           </p>
         </div>
       </div>
