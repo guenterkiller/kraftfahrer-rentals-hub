@@ -14,7 +14,7 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          LKW-Fahrer gesucht?
+          LKW-Fahrer mieten – Bundesweite Vermittlung selbstständiger Fahrer
         </h1>
         
         <div className="bg-primary text-white p-6 mb-8 max-w-4xl mx-auto">

@@ -10,6 +10,7 @@ const Navigation = () => {
     { label: "Leistungen", href: "#services" },
     { label: "Über mich", href: "#about" },
     { label: "Preise", href: "#pricing" },
+    { label: "Referenzen", href: "#testimonials" },
     { label: "Kontakt", href: "#contact" }
   ];
 
@@ -18,7 +19,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="font-bold text-xl text-primary">
-            Kraftfahrer-Express
+            Fahrerexpress
           </div>
           
           {/* Desktop Navigation */}
