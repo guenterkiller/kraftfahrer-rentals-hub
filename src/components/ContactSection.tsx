@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,11 +28,19 @@ const ContactSection = () => {
               <CardTitle>Kontaktinformationen</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+              <div className="mb-6">
+                <h3 className="font-bold text-lg mb-2">Günter Killer</h3>
+                <p className="text-muted-foreground">Fahrerexpress-Agentur</p>
+                <p className="text-sm text-muted-foreground">
+                  Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
+                </p>
+              </div>
+              
               <div className="flex items-start gap-3">
                 <Phone className="h-5 w-5 text-primary mt-1" />
                 <div>
-                  <p className="font-semibold">Telefon</p>
-                  <p className="text-muted-foreground">+49 (0) 123 456 789</p>
+                  <p className="font-semibold">Mobil</p>
+                  <p className="text-muted-foreground">01577 1442285</p>
                 </div>
               </div>
               
@@ -48,8 +57,8 @@ const ContactSection = () => {
                 <div>
                   <p className="font-semibold">Adresse</p>
                   <p className="text-muted-foreground">
-                    Musterstraße 123<br />
-                    12345 Musterstadt<br />
+                    Walther-von-Cronberg-Platz 12<br />
+                    60594 Frankfurt<br />
                     Deutschland
                   </p>
                 </div>
@@ -65,6 +74,13 @@ const ContactSection = () => {
                     Notfall: 24/7 verfügbar
                   </p>
                 </div>
+              </div>
+              
+              <div className="pt-4 border-t">
+                <p className="text-sm text-muted-foreground">
+                  <strong>Website:</strong> www.kraftfahrer-mieten.com<br />
+                  <strong>USt-IdNr.:</strong> DE207642217
+                </p>
               </div>
             </CardContent>
           </Card>
