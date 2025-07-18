@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
-import heroImage from "@/assets/hero-truck.jpg";
+import heroImage from "@/assets/german-truck.jpg";
 
 const HeroSection = () => {
   return (

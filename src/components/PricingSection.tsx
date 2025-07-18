@@ -6,7 +6,7 @@ const PricingSection = () => {
   const pricingTiers = [
     {
       title: "Standard LKW-Fahrer",
-      price: "28-35",
+      price: "32",
       unit: "€/Stunde",
       icon: Truck,
       features: [
@@ -19,7 +19,7 @@ const PricingSection = () => {
     },
     {
       title: "Spezialist",
-      price: "35-45",
+      price: "42",
       unit: "€/Stunde", 
       icon: CheckCircle,
       features: [
@@ -32,7 +32,7 @@ const PricingSection = () => {
     },
     {
       title: "Baumaschinenführer",
-      price: "32-42",
+      price: "38",
       unit: "€/Stunde",
       icon: Clock,
       features: [
