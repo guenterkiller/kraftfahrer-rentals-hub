@@ -1,0 +1,69 @@
+import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
+
+const Navigation = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const menuItems = [
+    { label: "Startseite", href: "#home" },
+    { label: "Leistungen", href: "#services" },
+    { label: "Über mich", href: "#about" },
+    { label: "Kontakt", href: "#contact" }
+  ];
+
+  return (
+    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <div className="font-bold text-xl text-primary">
+            Kraftfahrer-Express
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {menuItems.map((item) => (
+              <a 
+                key={item.label}
+                href={item.href}
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                {item.label}
+              </a>
+            ))}
+            <Button>Fahrer anfragen</Button>
+          </div>
+          
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+        
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t">
+            <div className="flex flex-col space-y-4">
+              {menuItems.map((item) => (
+                <a 
+                  key={item.label}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <Button className="w-full">Fahrer anfragen</Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Navigation;
