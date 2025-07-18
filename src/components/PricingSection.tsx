@@ -107,7 +107,37 @@ const PricingSection = () => {
             </div>
           </div>
           
-          <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <Truck className="h-5 w-5 text-primary" />
+            Anfahrt & Fahrtkosten
+          </h3>
+          <div className="grid md:grid-cols-2 gap-6 text-sm mb-8">
+            <div>
+              <h5 className="font-semibold mb-2">Anfahrt inklusive:</h5>
+              <p className="text-muted-foreground">Bis 25 km (einfache Strecke) im Tagespreis enthalten</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Kilometervergütung:</h5>
+              <p className="text-muted-foreground">0,40 €/km (Hin- und Rückweg) ab 25 km</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Weite Einsätze ({'>'}150 km):</h5>
+              <p className="text-muted-foreground">Fahrt am Vortag & Übernachtung empfohlen</p>
+            </div>
+            <div>
+              <h5 className="font-semibold mb-2">Übernachtungskosten:</h5>
+              <p className="text-muted-foreground">Pauschal 85 € netto/Nacht oder auf Nachweis</p>
+            </div>
+          </div>
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mb-8">
+            <h4 className="font-semibold mb-2 text-blue-900 dark:text-blue-100">💡 Zusatztipp für weite Einsätze:</h4>
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              Bei Einsätzen über 150 km empfehlen wir eine frühzeitige Abstimmung mit dem Kunden 
+              und lassen uns die Konditionen schriftlich bestätigen.
+            </p>
+          </div>
+          
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-primary" />
             Vorteile für Auftraggeber
           </h3>
