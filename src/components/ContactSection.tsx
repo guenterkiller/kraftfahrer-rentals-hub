@@ -112,6 +112,14 @@ const ContactSection = () => {
             </CardContent>
           </Card>
         </div>
+        
+        <div className="text-center mt-8 pt-8 border-t">
+          <p className="text-sm text-muted-foreground">
+            <a href="/impressum" className="hover:text-primary transition-colors">
+              Impressum
+            </a>
+          </p>
+        </div>
       </div>
     </section>
   );
