@@ -24,7 +24,7 @@ const Impressum = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <h3 className="font-semibold text-lg mb-4">Angaben gemäß § 5 TMG:</h3>
+                <h3 className="font-semibold text-lg mb-4">Angaben gemäß § 5 Telemediengesetz (TMG):</h3>
                 
                 <div className="space-y-2">
                   <p className="font-semibold">Günter Killer</p>
@@ -39,18 +39,19 @@ const Impressum = () => {
                 <h4 className="font-semibold mb-2">Adresse:</h4>
                 <p>Walther-von-Cronberg-Platz 12</p>
                 <p>60594 Frankfurt am Main</p>
+                <p>Deutschland</p>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Kontakt:</h4>
-                <p>Mobil: 01577 1442285</p>
+                <p>Mobil: +49 (0)1577 1442285</p>
                 <p>E-Mail: info@kraftfahrer-mieten.com</p>
                 <p>Website: www.kraftfahrer-mieten.com</p>
               </div>
               
               <div>
                 <h4 className="font-semibold mb-2">Umsatzsteuer-Identifikationsnummer:</h4>
-                <p>gemäß § 27a UStG: DE207642217</p>
+                <p>gemäß § 27a Umsatzsteuergesetz: DE207642217</p>
               </div>
               
               <div className="pt-6 border-t">
@@ -58,6 +59,34 @@ const Impressum = () => {
                 <p>Günter Killer</p>
                 <p>Walther-von-Cronberg-Platz 12</p>
                 <p>60594 Frankfurt am Main</p>
+              </div>
+              
+              <div className="pt-6 border-t">
+                <h4 className="font-semibold mb-2">Berufshaftung / Berufsbezeichnung:</h4>
+                <p>Gewerbetreibender im Bereich Transport- und Fahrdienstleistungen</p>
+                <p className="text-sm text-muted-foreground">
+                  Keine Zulassungspflicht nach §34 GewO; Tätigkeit erfolgt im Rahmen der Selbstständigkeit ohne Vermittlung von Arbeitnehmern.
+                </p>
+              </div>
+              
+              <div className="pt-6 border-t">
+                <h4 className="font-semibold mb-2">Haftungsausschluss:</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte übernehme ich jedoch keine Gewähr. Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG bin ich als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen.
+                </p>
+              </div>
+              
+              <div className="pt-6 border-t">
+                <h4 className="font-semibold mb-2">Streitschlichtung:</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
+                  <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline ml-1">
+                    https://ec.europa.eu/consumers/odr
+                  </a>
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Ich bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+                </p>
               </div>
             </CardContent>
           </Card>
