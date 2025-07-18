@@ -75,8 +75,8 @@ const PricingSection = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline">
-                  Anfrage stellen
+                <Button className="w-full" variant="outline" asChild>
+                  <a href="#contact">Anfrage stellen</a>
                 </Button>
               </CardContent>
             </Card>

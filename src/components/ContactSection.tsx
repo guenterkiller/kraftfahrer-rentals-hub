@@ -3,8 +3,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
+  const { toast } = useToast();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: "Anfrage gesendet",
+      description: "Vielen Dank für Ihre Anfrage! Wir werden uns zeitnah bei Ihnen melden.",
+    });
+  };
+
   return (
     <section className="py-16 bg-muted">
       <div className="container mx-auto px-4">
@@ -63,7 +74,7 @@ const ContactSection = () => {
               <CardTitle>Anfrage senden</CardTitle>
             </CardHeader>
             <CardContent>
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <Input placeholder="Vorname" />
                   <Input placeholder="Nachname" />
@@ -78,7 +89,7 @@ const ContactSection = () => {
                   rows={4}
                 />
                 
-                <Button className="w-full" size="lg">
+                <Button className="w-full" size="lg" type="submit">
                   Anfrage senden
                 </Button>
               </form>

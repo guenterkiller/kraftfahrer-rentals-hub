@@ -33,7 +33,9 @@ const Navigation = () => {
                 {item.label}
               </a>
             ))}
-            <Button>Fahrer anfragen</Button>
+            <Button asChild>
+              <a href="#contact">Fahrer anfragen</a>
+            </Button>
           </div>
           
           {/* Mobile Menu Button */}
@@ -59,7 +61,9 @@ const Navigation = () => {
                   {item.label}
                 </a>
               ))}
-              <Button className="w-full">Fahrer anfragen</Button>
+              <Button className="w-full" asChild>
+                <a href="#contact">Fahrer anfragen</a>
+              </Button>
             </div>
           </div>
         )}
