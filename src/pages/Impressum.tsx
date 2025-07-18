@@ -30,7 +30,7 @@ const Impressum = () => {
                   <p className="font-semibold">Günter Killer</p>
                   <p>Fahrerexpress-Agentur</p>
                   <p className="text-sm text-muted-foreground">
-                    Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
+                    Selbstständiger Berufskraftfahrer (C+E) – deutschlandweit im Einsatz
                   </p>
                 </div>
               </div>
@@ -46,7 +46,7 @@ const Impressum = () => {
                 <h4 className="font-semibold mb-2">Kontakt:</h4>
                 <p>Mobil: +49 (0)1577 1442285</p>
                 <p>E-Mail: info@kraftfahrer-mieten.com</p>
-                <p>Website: www.kraftfahrer-mieten.com</p>
+                <p>Web: www.kraftfahrer-mieten.com</p>
               </div>
               
               <div>
@@ -62,10 +62,12 @@ const Impressum = () => {
               </div>
               
               <div className="pt-6 border-t">
-                <h4 className="font-semibold mb-2">Berufshaftung / Berufsbezeichnung:</h4>
-                <p>Gewerbetreibender im Bereich Transport- und Fahrdienstleistungen</p>
-                <p className="text-sm text-muted-foreground">
-                  Keine Zulassungspflicht nach §34 GewO; Tätigkeit erfolgt im Rahmen der Selbstständigkeit ohne Vermittlung von Arbeitnehmern.
+                <h4 className="font-semibold mb-2">Tätigkeitsbeschreibung:</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Selbstständige Durchführung von Fahrdienstleistungen im gesamten Bundesgebiet. Einsatz erfolgt flexibel nach Auftrag und Fahrzeugart – ohne Einschränkung auf bestimmte Fahrzeugtypen.
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Keine Güter- oder Personenbeförderung im eigenen Namen. Keine Vermittlungstätigkeit.
                 </p>
               </div>
               
@@ -79,8 +81,10 @@ const Impressum = () => {
               <div className="pt-6 border-t">
                 <h4 className="font-semibold mb-2">Streitschlichtung:</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: 
-                  <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline ml-1">
+                  Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                     https://ec.europa.eu/consumers/odr
                   </a>
                 </p>
