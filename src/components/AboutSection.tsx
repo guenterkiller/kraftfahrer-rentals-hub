@@ -15,13 +15,22 @@ const AboutSection = () => {
                 </div>
                 
                 <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl font-bold mb-4">Inh. Günter Killer</h3>
+                  <h3 className="text-2xl font-bold mb-4">Günter Killer</h3>
+                  <p className="text-lg mb-4 text-primary font-semibold">
+                    Fahrerexpress-Agentur
+                  </p>
                   <p className="text-lg mb-4">
-                    Seit 2009 Ihr Partner für die rechtskonforme Vermittlung selbstständiger Berufskraftfahrer.
+                    Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
                   </p>
-                  <p className="text-muted-foreground">
-                    Keine Arbeitnehmerüberlassung, keine Zeitarbeit – nur geprüfte Profis mit Werkvertrag.
+                  <p className="text-muted-foreground mb-4">
+                    Flexibel. Zuverlässig. Deutschlandweit.
                   </p>
+                  <div className="text-sm text-muted-foreground">
+                    <p>📱 Mobil: 01577 1442285</p>
+                    <p>✉️ E-Mail: info@kraftfahrer-mieten.com</p>
+                    <p>🌐 Web: www.kraftfahrer-mieten.com</p>
+                    <p>📍 60594 Frankfurt, Walther-von-Cronberg-Platz 12</p>
+                  </div>
                 </div>
               </div>
             </CardContent>

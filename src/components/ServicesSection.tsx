@@ -31,7 +31,8 @@ const ServicesSection = () => {
     "Modul 95",
     "ADR (bei Bedarf)",
     "Kran-/Staplerschein",
-    "Mischmeisterdienst"
+    "Mischmeister für Flüssigboden",
+    "Fahrmischerfahrer"
   ];
 
   const specialServices = [

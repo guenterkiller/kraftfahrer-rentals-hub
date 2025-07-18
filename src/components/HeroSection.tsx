@@ -14,15 +14,15 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          LKW-Fahrer mieten – Bundesweite Vermittlung selbstständiger Fahrer
+          Fahrerexpress-Agentur - Günter Killer
         </h1>
         
         <div className="bg-primary text-white p-6 mb-8 max-w-4xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            LKW-Fahrer Bereitstellung & Vermittlung
+            Flexibel. Zuverlässig. Deutschlandweit.
           </h2>
           <p className="text-lg md:text-xl">
-            Selbstständige LKW-Fahrer & Kraftfahrer mieten
+            Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
           </p>
         </div>
         
