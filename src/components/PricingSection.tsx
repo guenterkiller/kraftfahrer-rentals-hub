@@ -6,7 +6,7 @@ const PricingSection = () => {
   const pricingTiers = [
     {
       title: "Standard LKW-Fahrer",
-      price: "32",
+      price: "55",
       unit: "€/Stunde",
       icon: Truck,
       features: [
@@ -19,7 +19,7 @@ const PricingSection = () => {
     },
     {
       title: "Spezialist",
-      price: "42",
+      price: "68",
       unit: "€/Stunde", 
       icon: CheckCircle,
       features: [
@@ -32,7 +32,7 @@ const PricingSection = () => {
     },
     {
       title: "Baumaschinenführer",
-      price: "38",
+      price: "62",
       unit: "€/Stunde",
       icon: Clock,
       features: [
@@ -86,23 +86,64 @@ const PricingSection = () => {
         <div className="bg-muted p-8 rounded-lg max-w-4xl mx-auto">
           <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
             <Euro className="h-5 w-5 text-primary" />
-            Zusätzliche Informationen
+            Warum diese Preise?
           </h3>
+          <div className="mb-6">
+            <p className="text-sm text-muted-foreground mb-4">
+              Unsere Preise berücksichtigen die Realität selbstständiger Fahrer:
+            </p>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>Brutto-Stundensatz:</span>
+                  <span className="font-semibold">55€</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>- Steuern (25-30%):</span>
+                  <span className="text-red-600">-15€</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>- Sozialabgaben:</span>
+                  <span className="text-red-600">-8€</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>- Rücklagen/Altersvorsorge:</span>
+                  <span className="text-red-600">-7€</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span>- Ausfallzeiten (20%):</span>
+                  <span className="text-red-600">-5€</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>- Fahrtkosten/Spesen:</span>
+                  <span className="text-red-600">-3€</span>
+                </div>
+                <div className="flex justify-between border-t pt-2">
+                  <span className="font-semibold">Netto-Verdienst:</span>
+                  <span className="font-bold text-green-600">~17€/h</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h4 className="font-semibold mb-3">Zusätzliche Konditionen:</h4>
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div>
-              <h4 className="font-semibold mb-2">Mindestbuchung:</h4>
+              <h5 className="font-semibold mb-2">Mindestbuchung:</h5>
               <p className="text-muted-foreground">8 Stunden pro Einsatz</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Bereitschaftszeit:</h4>
-              <p className="text-muted-foreground">20 €/Stunde</p>
+              <h5 className="font-semibold mb-2">Bereitschaftszeit:</h5>
+              <p className="text-muted-foreground">35 €/Stunde</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Wochenende/Feiertage:</h4>
+              <h5 className="font-semibold mb-2">Wochenende/Feiertage:</h5>
               <p className="text-muted-foreground">+25% Zuschlag</p>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Nachtarbeit:</h4>
+              <h5 className="font-semibold mb-2">Nachtarbeit:</h5>
               <p className="text-muted-foreground">+20% Zuschlag (22-6 Uhr)</p>
             </div>
           </div>
