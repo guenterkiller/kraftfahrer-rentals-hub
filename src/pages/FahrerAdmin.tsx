@@ -25,7 +25,7 @@ interface FahrerProfile {
   stundensatz: number;
   verfuegbarkeit?: string;
   beschreibung?: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: string;
   created_at: string;
 }
 
