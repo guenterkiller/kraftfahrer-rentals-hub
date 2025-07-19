@@ -45,7 +45,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to business owner
     const emailResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
       to: ["info@kraftfahrer-mieten.com"],
       subject: `Neue Fahrer-Anfrage von ${vorname} ${nachname}`,
       html: `
@@ -75,7 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to customer
     const confirmationResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
       to: [email],
       subject: "Bestätigung Ihrer Fahrer-Anfrage",
       html: `
