@@ -4,39 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 
 const ContactSection = () => {
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setMessage('');
     
     try {
       const formData = new FormData(e.target as HTMLFormElement);
-      const vorname = formData.get('vorname') as string || '';
-      const nachname = formData.get('nachname') as string || '';
-      const email = formData.get('email') as string || '';
-      const telefon = formData.get('telefon') as string || '';
-      const unternehmen = formData.get('unternehmen') as string || '';
-      const nachricht = formData.get('nachricht') as string || '';
+      const vorname = formData.get('vorname') as string;
+      const nachname = formData.get('nachname') as string;
+      const email = formData.get('email') as string;
+      const telefon = formData.get('telefon') as string;
+      const unternehmen = formData.get('unternehmen') as string;
+      const nachricht = formData.get('nachricht') as string;
 
-      // Validierung
       if (!vorname || !nachname || !email || !nachricht) {
-        toast({
-          title: "Fehler",
-          description: "Bitte füllen Sie alle Pflichtfelder aus.",
-          variant: "destructive",
-        });
+        setMessage('Bitte füllen Sie alle Pflichtfelder aus.');
         return;
       }
 
-      // E-Mail direkt über fetch senden (Fallback)
       const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-contact-email', {
         method: 'POST',
         headers: {
@@ -53,26 +46,15 @@ const ContactSection = () => {
         })
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
+      if (response.ok) {
+        setMessage('Anfrage erfolgreich gesendet! Wir melden uns in Kürze bei Ihnen.');
+        (e.target as HTMLFormElement).reset();
+      } else {
+        setMessage('Fehler beim Senden. Bitte kontaktieren Sie uns direkt: 01577 1442285');
       }
 
-      const data = await response.json();
-
-      toast({
-        title: "Anfrage gesendet!",
-        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
-      });
-
-      // Form zurücksetzen
-      (e.target as HTMLFormElement).reset();
-
-    } catch (error: any) {
-      toast({
-        title: "Fehler",
-        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
-        variant: "destructive",
-      });
+    } catch (error) {
+      setMessage('Fehler beim Senden. Bitte kontaktieren Sie uns direkt: 01577 1442285');
     } finally {
       setIsSubmitting(false);
     }
@@ -151,6 +133,11 @@ const ContactSection = () => {
               <CardTitle>Anfrage senden</CardTitle>
             </CardHeader>
             <CardContent>
+              {message && (
+                <div className={`mb-4 p-3 rounded ${message.includes('erfolgreich') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                  {message}
+                </div>
+              )}
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <Input name="vorname" placeholder="Vorname" required />
