@@ -10,50 +10,66 @@ import { Link } from "react-router-dom";
 const ContactSection = () => {
   const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data = {
-      vorname: formData.get('vorname') || '',
-      nachname: formData.get('nachname') || '',
-      email: formData.get('email') || '',
-      telefon: formData.get('telefon') || '',
-      unternehmen: formData.get('unternehmen') || '',
-      nachricht: formData.get('nachricht') || ''
-    };
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+      const vorname = formData.get('vorname') as string || '';
+      const nachname = formData.get('nachname') as string || '';
+      const email = formData.get('email') as string || '';
+      const telefon = formData.get('telefon') as string || '';
+      const unternehmen = formData.get('unternehmen') as string || '';
+      const nachricht = formData.get('nachricht') as string || '';
 
-    // E-Mail-Content erstellen
-    const subject = `Neue Fahrer-Anfrage von ${data.vorname} ${data.nachname}`;
-    const body = `
-Neue Fahrer-Anfrage:
+      // Validierung
+      if (!vorname || !nachname || !email || !nachricht) {
+        toast({
+          title: "Fehler",
+          description: "Bitte füllen Sie alle Pflichtfelder aus.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-Name: ${data.vorname} ${data.nachname}
-E-Mail: ${data.email}
-Telefon: ${data.telefon}
-Unternehmen: ${data.unternehmen}
+      // E-Mail-Content
+      const subject = `Fahrer-Anfrage von ${vorname} ${nachname}`;
+      const body = `Neue Fahrer-Anfrage:
+
+Name: ${vorname} ${nachname}
+E-Mail: ${email}
+Telefon: ${telefon}
+Unternehmen: ${unternehmen}
 
 Nachricht:
-${data.nachricht}
+${nachricht}
 
 ---
-Diese Anfrage wurde über www.kraftfahrer-mieten.com gesendet.
-    `.trim();
+Gesendet über www.kraftfahrer-mieten.com`;
 
-    // Mailto-Link erstellen und öffnen
-    const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    // E-Mail-Programm öffnen
-    window.location.href = mailtoLink;
+      // Mailto-Link
+      const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      // E-Mail öffnen
+      window.open(mailtoLink, '_self');
 
-    // Erfolgsmeldung anzeigen
-    toast({
-      title: "E-Mail wird geöffnet",
-      description: "Ihr E-Mail-Programm wird geöffnet. Bitte senden Sie die E-Mail ab.",
-    });
+      // Erfolgsmeldung
+      toast({
+        title: "E-Mail wird geöffnet",
+        description: "Ihr E-Mail-Programm wird mit der Anfrage geöffnet.",
+      });
 
-    // Form zurücksetzen
-    (e.target as HTMLFormElement).reset();
+      // Form zurücksetzen
+      (e.target as HTMLFormElement).reset();
+
+    } catch (error) {
+      console.error("Fehler beim Kontaktformular:", error);
+      toast({
+        title: "Fehler",
+        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
