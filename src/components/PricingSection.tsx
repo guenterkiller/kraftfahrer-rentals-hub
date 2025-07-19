@@ -90,22 +90,22 @@ const PricingSection = () => {
             Wie setzen sich unsere Preise zusammen?
           </h3>
           <p className="text-muted-foreground mb-6 text-sm">
-            Transparente Aufschlüsselung am Beispiel eines Standard LKW-Fahrers (399 € Tagespreis):
+            Transparente Aufschlüsselung am Beispiel eines Standard LKW-Fahrers (399 € Netto-Tagespreis):
           </p>
           
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
-                <span>Netto-Honorar (8h)</span>
-                <span className="font-medium">335,29 €</span>
+              <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg border border-primary/20">
+                <span className="font-semibold">Netto-Honorar (8h)</span>
+                <span className="font-bold text-primary">399,00 €</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                 <span>MwSt. (19%)</span>
-                <span className="font-medium">63,71 €</span>
+                <span className="font-medium">75,81 €</span>
               </div>
-              <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg border border-primary/20">
-                <span className="font-semibold">Brutto-Tagespreis</span>
-                <span className="font-bold text-primary">399,00 €</span>
+              <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <span className="font-semibold">Brutto-Rechnungsbetrag</span>
+                <span className="font-bold text-green-700 dark:text-green-400">474,81 €</span>
               </div>
             </div>
             
@@ -114,32 +114,32 @@ const PricingSection = () => {
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
                   <span>• Krankenversicherung (15-16%)</span>
-                  <span>~50 €</span>
+                  <span>~60 €</span>
                 </div>
                 <div className="flex justify-between">
                   <span>• Rentenversicherung (18,6%)</span>
-                  <span>~62 €</span>
+                  <span>~74 €</span>
                 </div>
                 <div className="flex justify-between">
                   <span>• Einkommensteuer (~25%)</span>
-                  <span>~84 €</span>
+                  <span>~100 €</span>
                 </div>
                 <div className="flex justify-between">
                   <span>• Fahrzeugkosten, Versicherung</span>
-                  <span>~35 €</span>
+                  <span>~40 €</span>
                 </div>
                 <div className="flex justify-between">
                   <span>• Ausfallzeiten (Urlaub, Krankheit)</span>
-                  <span>~25 €</span>
+                  <span>~30 €</span>
                 </div>
                 <div className="flex justify-between">
                   <span>• Betriebskosten, Büro, Buchhaltung</span>
-                  <span>~20 €</span>
+                  <span>~25 €</span>
                 </div>
                 <hr className="border-gray-300 dark:border-gray-600" />
                 <div className="flex justify-between font-semibold">
                   <span>Verbleibt netto für den Fahrer:</span>
-                  <span>~59 € (7,40 €/h)</span>
+                  <span>~70 € (8,75 €/h)</span>
                 </div>
               </div>
             </div>
