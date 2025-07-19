@@ -15,6 +15,7 @@ const ContactSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Formular wurde abgesendet!');
     setIsSubmitting(true);
     
     try {
@@ -26,8 +27,11 @@ const ContactSection = () => {
       const unternehmen = formData.get('unternehmen') as string || '';
       const nachricht = formData.get('nachricht') as string || '';
 
+      console.log('Formulardaten:', { vorname, nachname, email, telefon, unternehmen, nachricht });
+
       // Validierung
       if (!vorname || !nachname || !email || !nachricht) {
+        console.log('Validierung fehlgeschlagen - fehlende Felder');
         toast({
           title: "Fehler",
           description: "Bitte füllen Sie alle Pflichtfelder aus.",
