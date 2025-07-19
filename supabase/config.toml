@@ -2,3 +2,6 @@ project_id = "hxnabnsoffzevqhruvar"
 
 [functions.send-contact-email]
 verify_jwt = false
+
+[functions.submit-fahrer-anfrage]
+verify_jwt = false

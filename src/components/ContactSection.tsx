@@ -36,30 +36,32 @@ const ContactSection = () => {
         return;
       }
 
-      console.log("Sending contact email...");
+      // Erstelle mailto Link für direkte E-Mail
+      const subject = `Kontaktanfrage von ${vorname} ${nachname}`;
+      const body = `
+Neue Kontaktanfrage
 
-      // E-Mail über Supabase Edge Function senden
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          vorname,
-          nachname,
-          email,
-          telefon,
-          unternehmen,
-          nachricht
-        }
-      });
+Kontaktdaten:
+Name: ${vorname} ${nachname}
+E-Mail: ${email}
+${telefon ? `Telefon: ${telefon}` : ''}
+${unternehmen ? `Unternehmen: ${unternehmen}` : ''}
 
-      if (error) {
-        console.error("Supabase function error:", error);
-        throw new Error(error.message || "Fehler beim E-Mail-Versand");
-      }
+Nachricht:
+${nachricht}
 
-      console.log("Email sent successfully:", data);
+---
+Diese Anfrage wurde über das Kontaktformular auf kraftfahrer-mieten.com gesendet.
+      `.trim();
+
+      const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      
+      // Öffne E-Mail-Client
+      window.location.href = mailtoLink;
 
       toast({
-        title: "Anfrage erfolgreich gesendet!",
-        description: "Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden. Sie erhalten zusätzlich eine Bestätigungs-E-Mail.",
+        title: "E-Mail-Client geöffnet",
+        description: "Ihr E-Mail-Programm wurde geöffnet. Bitte senden Sie die E-Mail ab.",
       });
 
       // Form zurücksetzen
@@ -68,8 +70,8 @@ const ContactSection = () => {
     } catch (error: any) {
       console.error("Fehler beim Kontaktformular:", error);
       toast({
-        title: "Fehler beim Senden",
-        description: error.message || "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        title: "Fehler",
+        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
         variant: "destructive",
       });
     } finally {
