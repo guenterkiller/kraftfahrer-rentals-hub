@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 
 const FahreranfrageSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,18 +16,16 @@ const FahreranfrageSection = () => {
     setIsSubmitting(true);
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const data = {
-      vorname: formData.get("vorname") as string,
-      nachname: formData.get("nachname") as string,
-      email: formData.get("email") as string,
-      telefon: formData.get("telefon") as string,
-      unternehmen: formData.get("unternehmen") as string,
-      nachricht: formData.get("nachricht") as string,
-      datenschutz: formData.get("datenschutz") === "on",
-    };
+    
+    // Client-side validation
+    const vorname = formData.get("vorname") as string;
+    const nachname = formData.get("nachname") as string;
+    const email = formData.get("email") as string;
+    const telefon = formData.get("telefon") as string;
+    const nachricht = formData.get("nachricht") as string;
+    const datenschutz = formData.get("datenschutz") === "on";
 
-    // Validation
-    if (!data.vorname || !data.nachname || !data.email || !data.telefon || !data.nachricht || !data.datenschutz) {
+    if (!vorname || !nachname || !email || !telefon || !nachricht || !datenschutz) {
       toast({
         title: "Fehler",
         description: "Bitte füllen Sie alle Pflichtfelder aus und stimmen Sie der Datenschutzerklärung zu.",
@@ -39,21 +36,21 @@ const FahreranfrageSection = () => {
     }
 
     try {
-      const { data: result, error } = await supabase.functions.invoke("send-fahreranfrage", {
-        body: data,
+      const response = await fetch("/fahrer-anfrage-send.php", {
+        method: "POST",
+        body: formData,
       });
 
-      if (error) {
-        throw error;
+      if (response.ok) {
+        toast({
+          title: "Anfrage gesendet!",
+          description: "Vielen Dank für Ihre Anfrage. Wir melden uns zeitnah bei Ihnen.",
+        });
+        // Reset form
+        (e.target as HTMLFormElement).reset();
+      } else {
+        throw new Error("Server error");
       }
-
-      toast({
-        title: "Anfrage gesendet!",
-        description: "Vielen Dank für Ihre Anfrage. Wir melden uns zeitnah bei Ihnen.",
-      });
-
-      // Reset form
-      (e.target as HTMLFormElement).reset();
     } catch (error: any) {
       console.error("Error submitting fahreranfrage:", error);
       toast({
