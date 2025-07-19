@@ -61,6 +61,7 @@ const PricingSection = () => {
               <CardHeader className="text-center pb-6">
                 <tier.icon className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-xl mb-2">{tier.title}</CardTitle>
+                <div className="text-xs text-muted-foreground mb-1">netto</div>
                 <div className="text-3xl font-bold text-primary mb-1">
                   {tier.price}
                 </div>
