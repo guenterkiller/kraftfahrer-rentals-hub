@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import heroImage from "@/assets/german-truck.jpg";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -54,7 +55,7 @@ const HeroSection = () => {
             <a href="#contact">Fahrer anfragen</a>
           </Button>
           <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
-            <a href="/fahrer-registrierung">Als Fahrer bewerben</a>
+            <Link to="/fahrer-registrierung">Als Fahrer bewerben</Link>
           </Button>
         </div>
       </div>

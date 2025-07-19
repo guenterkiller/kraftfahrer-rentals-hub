@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -150,9 +151,9 @@ const ContactSection = () => {
         
         <div className="text-center mt-8 pt-8 border-t">
           <p className="text-sm text-muted-foreground">
-            <a href="/impressum" className="hover:text-primary transition-colors">
+            <Link to="/impressum" className="hover:text-primary transition-colors">
               Impressum
-            </a>
+            </Link>
           </p>
         </div>
       </div>

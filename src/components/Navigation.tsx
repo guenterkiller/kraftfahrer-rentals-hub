@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,7 +27,7 @@ const Navigation = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
+            {menuItems.slice(0, -1).map((item) => (
               <a 
                 key={item.label}
                 href={item.href}
@@ -35,6 +36,12 @@ const Navigation = () => {
                 {item.label}
               </a>
             ))}
+            <Link 
+              to="/fahrer-registrierung"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              Fahrer werden
+            </Link>
             <Button asChild>
               <a href="#contact">Fahrer anfragen</a>
             </Button>
@@ -53,7 +60,7 @@ const Navigation = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="flex flex-col space-y-4">
-              {menuItems.map((item) => (
+              {menuItems.slice(0, -1).map((item) => (
                 <a 
                   key={item.label}
                   href={item.href}
@@ -63,6 +70,13 @@ const Navigation = () => {
                   {item.label}
                 </a>
               ))}
+              <Link 
+                to="/fahrer-registrierung"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Fahrer werden
+              </Link>
               <Button className="w-full" asChild>
                 <a href="#contact">Fahrer anfragen</a>
               </Button>
