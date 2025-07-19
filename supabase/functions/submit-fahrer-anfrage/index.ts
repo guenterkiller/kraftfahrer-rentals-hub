@@ -78,7 +78,13 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error("Database error:", error);
-      throw new Error(error.message);
+      
+      // Bessere Fehlerbehandlung für häufige Probleme
+      if (error.code === '23505' && error.message.includes('email_key')) {
+        throw new Error("Diese E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail-Adresse.");
+      }
+      
+      throw new Error(error.message || "Fehler beim Speichern der Bewerbung");
     }
 
     console.log("Fahrer application saved successfully:", data);
