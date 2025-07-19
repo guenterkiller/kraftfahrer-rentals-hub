@@ -73,7 +73,11 @@ const FahrerRegistrierung = () => {
         throw new Error("Bitte wählen Sie mindestens eine Führerscheinklasse aus.");
       }
 
-      console.log("Sende Fahrer-Bewerbung über Edge Function...");
+      console.log("Sende Fahrer-Bewerbung über Edge Function...", {
+        vorname: formData.vorname,
+        nachname: formData.nachname,
+        email: formData.email
+      });
 
       // Verwende die Edge Function für Fahrer-Bewerbungen
       const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
@@ -94,6 +98,8 @@ const FahrerRegistrierung = () => {
           beschreibung: formData.beschreibung || null
         }
       });
+
+      console.log('Edge Function Response:', { data, error });
 
       if (error) {
         console.error("Edge Function Fehler:", error);
