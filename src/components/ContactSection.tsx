@@ -30,7 +30,7 @@ const ContactSection = () => {
         return;
       }
 
-      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-contact-email', {
+      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/simple-contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
