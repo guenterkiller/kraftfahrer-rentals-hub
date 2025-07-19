@@ -66,7 +66,18 @@ const HeroSection = () => {
             </a>
           </Button>
           <Button size="lg" className="bg-white text-primary border-2 border-white hover:bg-primary hover:text-white transition-all" asChild>
-            <Link to="/fahrer-registrierung">Als Fahrer bewerben</Link>
+            <a 
+              href="#contact"
+              onClick={(e) => {
+                e.preventDefault();
+                const element = document.querySelector('#contact');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+            >
+              Mehr erfahren
+            </a>
           </Button>
         </div>
       </div>

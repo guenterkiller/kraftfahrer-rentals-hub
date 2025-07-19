@@ -14,8 +14,7 @@ const Navigation = () => {
     { label: "Über mich", href: "#about" },
     { label: "Preise", href: "#pricing" },
     { label: "Referenzen", href: "#testimonials" },
-    { label: "Kontakt", href: "#contact" },
-    { label: "Fahrer werden", href: "/fahrer-registrierung" }
+    { label: "Kontakt", href: "#contact" }
   ];
 
   const handleNavClick = (href: string, e: React.MouseEvent) => {
@@ -46,35 +45,16 @@ const Navigation = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {menuItems.slice(0, -1).map((item) => {
-              if (item.href === "/fahrer-registrierung") {
-                return (
-                  <Link 
-                    key={item.label}
-                    to={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                );
-              }
-              return (
-                <a 
-                  key={item.label}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-                  onClick={(e) => handleNavClick(item.href, e)}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
-            <Link 
-              to="/fahrer-registrierung"
-              className="text-muted-foreground hover:text-primary transition-colors"
-            >
-              Fahrer werden
-            </Link>
+            {menuItems.map((item) => (
+              <a 
+                key={item.label}
+                href={item.href}
+                className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                onClick={(e) => handleNavClick(item.href, e)}
+              >
+                {item.label}
+              </a>
+            ))}
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
               <a 
                 href="#contact"
@@ -98,40 +78,19 @@ const Navigation = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="flex flex-col space-y-4">
-              {menuItems.slice(0, -1).map((item) => {
-                if (item.href === "/fahrer-registrierung") {
-                  return (
-                    <Link 
-                      key={item.label}
-                      to={item.href}
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                }
-                return (
-                  <a 
-                    key={item.label}
-                    href={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-                    onClick={(e) => {
-                      setIsMenuOpen(false);
-                      handleNavClick(item.href, e);
-                    }}
-                  >
-                    {item.label}
-                  </a>
-                );
-              })}
-              <Link 
-                to="/fahrer-registrierung"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Fahrer werden
-              </Link>
+              {menuItems.map((item) => (
+                <a 
+                  key={item.label}
+                  href={item.href}
+                  className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                  onClick={(e) => {
+                    setIsMenuOpen(false);
+                    handleNavClick(item.href, e);
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
                 <a 
                   href="#contact"
