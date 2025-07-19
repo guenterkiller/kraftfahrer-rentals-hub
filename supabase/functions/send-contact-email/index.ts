@@ -43,10 +43,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Sending email for contact from ${vorname} ${nachname}`);
 
-    // Send email to business owner (temporarily to your email until domain is verified)
+    // Send email to business owner
     const emailResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
-      to: ["gunter.killer96@googlemail.com"], // Temporarily using your email
+      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      to: ["info@kraftfahrer-mieten.com"],
       subject: `Neue Fahrer-Anfrage von ${vorname} ${nachname}`,
       html: `
         <h2>Neue Fahrer-Anfrage</h2>
@@ -75,7 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to customer
     const confirmationResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
+      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
       to: [email],
       subject: "Bestätigung Ihrer Fahrer-Anfrage",
       html: `
