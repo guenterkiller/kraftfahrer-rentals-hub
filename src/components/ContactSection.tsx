@@ -24,13 +24,18 @@ const ContactSection = () => {
     };
 
     try {
-      // Formspree endpoint - kostenloser Service für Formulare
-      const response = await fetch('https://formspree.io/f/mnnqvqpn', {
+      // E-Mail direkt an info@kraftfahrer-mieten.com senden
+      const response = await fetch('https://formspree.io/f/xkgwqjpw', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          _replyto: data.email,
+          _subject: `Neue Fahrer-Anfrage von ${data.vorname} ${data.nachname}`,
+          _to: 'info@kraftfahrer-mieten.com'
+        }),
       });
 
       if (response.ok) {
