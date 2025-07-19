@@ -9,12 +9,45 @@ import { useToast } from "@/hooks/use-toast";
 const ContactSection = () => {
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Anfrage gesendet",
-      description: "Vielen Dank für Ihre Anfrage! Wir werden uns zeitnah bei Ihnen melden.",
-    });
+    
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = {
+      vorname: formData.get('vorname'),
+      nachname: formData.get('nachname'),
+      email: formData.get('email'),
+      telefon: formData.get('telefon'),
+      unternehmen: formData.get('unternehmen'),
+      nachricht: formData.get('nachricht')
+    };
+
+    try {
+      // Formspree endpoint - kostenloser Service für Formulare
+      const response = await fetch('https://formspree.io/f/mnnqvqpn', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Anfrage erfolgreich gesendet!",
+          description: "Vielen Dank für Ihre Anfrage! Wir werden uns zeitnah bei Ihnen melden.",
+        });
+        (e.target as HTMLFormElement).reset();
+      } else {
+        throw new Error('Fehler beim Senden');
+      }
+    } catch (error) {
+      toast({
+        title: "Fehler beim Senden",
+        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt per Telefon.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -92,17 +125,19 @@ const ContactSection = () => {
             <CardContent>
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <Input placeholder="Vorname" />
-                  <Input placeholder="Nachname" />
+                  <Input name="vorname" placeholder="Vorname" required />
+                  <Input name="nachname" placeholder="Nachname" required />
                 </div>
                 
-                <Input placeholder="E-Mail-Adresse" type="email" />
-                <Input placeholder="Telefonnummer" type="tel" />
-                <Input placeholder="Unternehmen" />
+                <Input name="email" placeholder="E-Mail-Adresse" type="email" required />
+                <Input name="telefon" placeholder="Telefonnummer" type="tel" />
+                <Input name="unternehmen" placeholder="Unternehmen" />
                 
                 <Textarea 
+                  name="nachricht"
                   placeholder="Beschreiben Sie Ihren Fahrbedarf (Fahrzeugtyp, Zeitraum, Einsatzort, etc.)"
                   rows={4}
+                  required
                 />
                 
                 <Button className="w-full" size="lg" type="submit">
