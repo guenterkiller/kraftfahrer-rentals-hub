@@ -64,6 +64,17 @@ const FahrerRegistrierung = () => {
     setIsLoading(true);
 
     try {
+      // Validierung der Pflichtfelder
+      if (!formData.vorname || !formData.nachname || !formData.email || !formData.telefon || !formData.stundensatz) {
+        throw new Error("Bitte füllen Sie alle Pflichtfelder aus.");
+      }
+
+      if (formData.fuehrerscheinklassen.length === 0) {
+        throw new Error("Bitte wählen Sie mindestens eine Führerscheinklasse aus.");
+      }
+
+      console.log("Sende Daten:", formData);
+
       const { data, error } = await supabase
         .from('fahrer_profile')
         .insert([{
@@ -71,20 +82,25 @@ const FahrerRegistrierung = () => {
           nachname: formData.nachname,
           email: formData.email,
           telefon: formData.telefon,
-          adresse: formData.adresse,
-          plz: formData.plz,
-          ort: formData.ort,
+          adresse: formData.adresse || null,
+          plz: formData.plz || null,
+          ort: formData.ort || null,
           fuehrerscheinklassen: formData.fuehrerscheinklassen,
-          erfahrung_jahre: parseInt(formData.erfahrung_jahre),
+          erfahrung_jahre: formData.erfahrung_jahre ? parseInt(formData.erfahrung_jahre) : null,
           spezialisierungen: formData.spezialisierungen,
           verfuegbare_regionen: formData.verfuegbare_regionen,
           stundensatz: parseFloat(formData.stundensatz),
-          verfuegbarkeit: formData.verfuegbarkeit,
-          beschreibung: formData.beschreibung,
+          verfuegbarkeit: formData.verfuegbarkeit || null,
+          beschreibung: formData.beschreibung || null,
           status: 'pending'
         }]);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase Fehler:", error);
+        throw error;
+      }
+
+      console.log("Erfolgreich gespeichert:", data);
 
       toast({
         title: "Registrierung erfolgreich!",
@@ -114,10 +130,11 @@ const FahrerRegistrierung = () => {
         beschreibung: "",
       });
 
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Fehler beim Senden:", error);
       toast({
         title: "Fehler bei der Registrierung",
-        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+        description: error.message || "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
         variant: "destructive",
       });
     } finally {
