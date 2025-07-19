@@ -13,13 +13,8 @@ const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Test beim Laden der Komponente
-  console.log('ContactSection geladen!');
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('=== FORMULAR SUBMIT START ===');
-    
     setIsSubmitting(true);
     
     try {
@@ -31,11 +26,8 @@ const ContactSection = () => {
       const unternehmen = formData.get('unternehmen') as string || '';
       const nachricht = formData.get('nachricht') as string || '';
 
-      console.log('Formulardaten:', { vorname, nachname, email, telefon, unternehmen, nachricht });
-
       // Validierung
       if (!vorname || !nachname || !email || !nachricht) {
-        console.log('Validierung fehlgeschlagen - fehlende Felder');
         toast({
           title: "Fehler",
           description: "Bitte füllen Sie alle Pflichtfelder aus.",
@@ -44,8 +36,7 @@ const ContactSection = () => {
         return;
       }
 
-      console.log('Sende Anfrage an Edge Function...');
-      
+      // E-Mail über Edge Function senden
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
           vorname,
@@ -57,13 +48,10 @@ const ContactSection = () => {
         }
       });
 
-      console.log('Edge Function Response:', { data, error });
-
       if (error) {
-        console.error('Fehler beim E-Mail-Versand:', error);
         toast({
           title: "Fehler beim Senden",
-          description: `Fehler: ${error.message}. Bitte kontaktieren Sie uns direkt: 01577 1442285`,
+          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
           variant: "destructive",
         });
         return;
@@ -78,7 +66,6 @@ const ContactSection = () => {
       (e.target as HTMLFormElement).reset();
 
     } catch (error: any) {
-      console.error("Fehler beim Kontaktformular:", error);
       toast({
         title: "Fehler",
         description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
