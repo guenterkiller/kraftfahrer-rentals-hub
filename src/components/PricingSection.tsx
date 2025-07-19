@@ -110,47 +110,48 @@ const PricingSection = () => {
             </div>
             
             <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Warum 399€ netto pro Tag?</h4>
-              <div className="space-y-2 text-xs bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                <p className="font-medium">Bei 200 Arbeitstagen/Jahr = 79.800€ Jahresumsatz</p>
-                <p className="text-muted-foreground">Davon gehen ab (pro Jahr):</p>
-                <div className="space-y-1 ml-2">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Was bleibt vom 399€ Tagespreis?</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between items-center p-2 bg-white dark:bg-gray-800 rounded">
+                  <span>Tagesumsatz netto</span>
+                  <span className="font-medium">399,00 €</span>
+                </div>
+                <div className="text-xs text-muted-foreground ml-2">Abzüge pro Tag:</div>
+                <div className="space-y-1 text-xs ml-4">
                   <div className="flex justify-between">
-                    <span>• Krankenversicherung (~15%)</span>
-                    <span>~12.000 €</span>
+                    <span>• Krankenversicherung (anteilig)</span>
+                    <span>-30,00 €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>• Rentenversicherung (18,6%)</span>
-                    <span>~14.800 €</span>
+                    <span>• Rentenversicherung (anteilig)</span>
+                    <span>-37,00 €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>• Einkommensteuer (~25%)</span>
-                    <span>~20.000 €</span>
+                    <span>• Einkommensteuer (anteilig)</span>
+                    <span>-50,00 €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>• Fahrzeug, Versicherung, Betrieb</span>
-                    <span>~8.000 €</span>
+                    <span>• Fahrzeug & Betriebskosten</span>
+                    <span>-20,00 €</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>• Ausfall-/Akquisezeiten (65 Tage)</span>
-                    <span>~25.000 €</span>
+                    <span>• Ausfallzeiten-Rücklage*</span>
+                    <span>-62,00 €</span>
                   </div>
                 </div>
-                <hr className="border-blue-300 dark:border-blue-600" />
-                <div className="flex justify-between font-semibold text-green-700 dark:text-green-400">
-                  <span>Verbleibt netto/Jahr:</span>
-                  <span>~20.000 € (100 €/Tag)</span>
+                <hr className="border-gray-300 dark:border-gray-600" />
+                <div className="flex justify-between font-semibold text-green-700 dark:text-green-400 p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                  <span>Verbleibt netto/Tag:</span>
+                  <span>200,00 € (25,00 €/h)</span>
                 </div>
               </div>
               
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg text-xs">
-                <p className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">Realität eines Selbstständigen:</p>
-                <ul className="text-yellow-700 dark:text-yellow-300 space-y-1">
-                  <li>• Nur ~200 von 365 Tagen buchbar</li>
-                  <li>• Urlaub, Krankheit = kein Einkommen</li>
-                  <li>• Doppelte Sozialabgaben (ohne Arbeitgeber)</li>
-                  <li>• Eigenfinanzierung Altersvorsorge</li>
-                </ul>
+              <div className="bg-amber-50 dark:bg-amber-900/20 p-3 rounded-lg text-xs border border-amber-200 dark:border-amber-800">
+                <p className="font-medium text-amber-800 dark:text-amber-200 mb-1">*Warum so hohe Ausfallzeiten-Rücklage?</p>
+                <p className="text-amber-700 dark:text-amber-300">
+                  Von 365 Tagen sind nur ~200 buchbar. An den anderen 165 Tagen (Urlaub, Krankheit, keine Aufträge) 
+                  muss trotzdem Miete, Versicherung etc. bezahlt werden. Daher müssen pro Arbeitstag 125€ zurückgelegt werden.
+                </p>
               </div>
             </div>
           </div>
