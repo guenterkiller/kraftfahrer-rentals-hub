@@ -110,37 +110,47 @@ const PricingSection = () => {
             </div>
             
             <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Was vom Netto-Honorar abgeht:</h4>
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span>• Krankenversicherung (15-16%)</span>
-                  <span>~60 €</span>
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Warum 399€ netto pro Tag?</h4>
+              <div className="space-y-2 text-xs bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+                <p className="font-medium">Bei 200 Arbeitstagen/Jahr = 79.800€ Jahresumsatz</p>
+                <p className="text-muted-foreground">Davon gehen ab (pro Jahr):</p>
+                <div className="space-y-1 ml-2">
+                  <div className="flex justify-between">
+                    <span>• Krankenversicherung (~15%)</span>
+                    <span>~12.000 €</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• Rentenversicherung (18,6%)</span>
+                    <span>~14.800 €</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• Einkommensteuer (~25%)</span>
+                    <span>~20.000 €</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• Fahrzeug, Versicherung, Betrieb</span>
+                    <span>~8.000 €</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• Ausfall-/Akquisezeiten (65 Tage)</span>
+                    <span>~25.000 €</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>• Rentenversicherung (18,6%)</span>
-                  <span>~74 €</span>
+                <hr className="border-blue-300 dark:border-blue-600" />
+                <div className="flex justify-between font-semibold text-green-700 dark:text-green-400">
+                  <span>Verbleibt netto/Jahr:</span>
+                  <span>~20.000 € (100 €/Tag)</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>• Einkommensteuer (~25%)</span>
-                  <span>~100 €</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>• Fahrzeugkosten, Versicherung</span>
-                  <span>~40 €</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>• Ausfallzeiten (Urlaub, Krankheit)</span>
-                  <span>~30 €</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>• Betriebskosten, Büro, Buchhaltung</span>
-                  <span>~25 €</span>
-                </div>
-                <hr className="border-gray-300 dark:border-gray-600" />
-                <div className="flex justify-between font-semibold">
-                  <span>Verbleibt netto für den Fahrer:</span>
-                  <span>~70 € (8,75 €/h)</span>
-                </div>
+              </div>
+              
+              <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg text-xs">
+                <p className="font-medium text-yellow-800 dark:text-yellow-200 mb-1">Realität eines Selbstständigen:</p>
+                <ul className="text-yellow-700 dark:text-yellow-300 space-y-1">
+                  <li>• Nur ~200 von 365 Tagen buchbar</li>
+                  <li>• Urlaub, Krankheit = kein Einkommen</li>
+                  <li>• Doppelte Sozialabgaben (ohne Arbeitgeber)</li>
+                  <li>• Eigenfinanzierung Altersvorsorge</li>
+                </ul>
               </div>
             </div>
           </div>
