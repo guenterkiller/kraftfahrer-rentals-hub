@@ -24,17 +24,20 @@ const ContactSection = () => {
     };
 
     try {
-      // E-Mail direkt an info@kraftfahrer-mieten.com senden
-      const response = await fetch('https://formspree.io/f/xkgwqjpw', {
+      // Direkte E-Mail-Weiterleitung an Ihre E-Mail-Adresse
+      const response = await fetch('https://formspree.io/f/myyrkqko', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...data,
+          name: `${data.vorname} ${data.nachname}`,
+          email: data.email,
+          phone: data.telefon,
+          company: data.unternehmen,
+          message: data.nachricht,
           _replyto: data.email,
           _subject: `Neue Fahrer-Anfrage von ${data.vorname} ${data.nachname}`,
-          _to: 'info@kraftfahrer-mieten.com'
         }),
       });
 
