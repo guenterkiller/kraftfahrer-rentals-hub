@@ -75,6 +75,12 @@ const Navigation = () => {
             >
               Fahrer werden
             </Link>
+            <Link 
+              to="/fahrer-admin"
+              className="text-sm px-3 py-1 rounded-md bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+            >
+              Admin
+            </Link>
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
               <a 
                 href="#contact"
