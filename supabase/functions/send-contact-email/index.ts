@@ -85,53 +85,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Email sent successfully:", emailResponse);
 
-    // Send confirmation email to customer
-    const confirmationResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
-      to: [email],
-      subject: "Bestätigung Ihrer Fahrer-Anfrage",
-      html: `
-        <h2>Vielen Dank für Ihre Anfrage!</h2>
-        
-        <p>Lieber ${vorname} ${nachname},</p>
-        
-        <p>wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
-        
-        <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3>Ihre Anfrage:</h3>
-          <p style="white-space: pre-wrap;">${nachricht}</p>
-        </div>
-        
-        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3>Kontakt für Rückfragen:</h3>
-          <p><strong>Günter Killer</strong><br>
-          Fahrerexpress-Agentur</p>
-          <p>📱 Mobil: 01577 1442285<br>
-          📧 E-Mail: info@kraftfahrer-mieten.com</p>
-          <p><strong>Erreichbarkeit:</strong><br>
-          Mo-Fr: 8:00 - 18:00 Uhr<br>
-          Sa: 9:00 - 14:00 Uhr<br>
-          Notfall: 24/7 verfügbar</p>
-        </div>
-        
-        <p>Mit freundlichen Grüßen<br>
-        Ihr Kraftfahrer-Mieten Team</p>
-        
-        <hr>
-        <p style="color: #666; font-size: 12px;">
-          Fahrerexpress-Agentur<br>
-          Walther-von-Cronberg-Platz 12<br>
-          60594 Frankfurt<br>
-          www.kraftfahrer-mieten.com
-        </p>
-      `,
-    });
-
-    console.log("Confirmation email sent:", confirmationResponse);
-
     return new Response(
       JSON.stringify({ 
-        message: "E-Mails erfolgreich versendet",
+        message: "E-Mail erfolgreich versendet",
         emailId: emailResponse.data?.id 
       }),
       {
