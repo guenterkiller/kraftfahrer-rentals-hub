@@ -15,48 +15,45 @@ const ContactSection = () => {
     
     const formData = new FormData(e.target as HTMLFormElement);
     const data = {
-      vorname: formData.get('vorname'),
-      nachname: formData.get('nachname'),
-      email: formData.get('email'),
-      telefon: formData.get('telefon'),
-      unternehmen: formData.get('unternehmen'),
-      nachricht: formData.get('nachricht')
+      vorname: formData.get('vorname') || '',
+      nachname: formData.get('nachname') || '',
+      email: formData.get('email') || '',
+      telefon: formData.get('telefon') || '',
+      unternehmen: formData.get('unternehmen') || '',
+      nachricht: formData.get('nachricht') || ''
     };
 
-    try {
-      // Direkte E-Mail-Weiterleitung an Ihre E-Mail-Adresse
-      const response = await fetch('https://formspree.io/f/myyrkqko', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: `${data.vorname} ${data.nachname}`,
-          email: data.email,
-          phone: data.telefon,
-          company: data.unternehmen,
-          message: data.nachricht,
-          _replyto: data.email,
-          _subject: `Neue Fahrer-Anfrage von ${data.vorname} ${data.nachname}`,
-        }),
-      });
+    // E-Mail-Content erstellen
+    const subject = `Neue Fahrer-Anfrage von ${data.vorname} ${data.nachname}`;
+    const body = `
+Neue Fahrer-Anfrage:
 
-      if (response.ok) {
-        toast({
-          title: "Anfrage erfolgreich gesendet!",
-          description: "Vielen Dank für Ihre Anfrage! Wir werden uns zeitnah bei Ihnen melden.",
-        });
-        (e.target as HTMLFormElement).reset();
-      } else {
-        throw new Error('Fehler beim Senden');
-      }
-    } catch (error) {
-      toast({
-        title: "Fehler beim Senden",
-        description: "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt per Telefon.",
-        variant: "destructive",
-      });
-    }
+Name: ${data.vorname} ${data.nachname}
+E-Mail: ${data.email}
+Telefon: ${data.telefon}
+Unternehmen: ${data.unternehmen}
+
+Nachricht:
+${data.nachricht}
+
+---
+Diese Anfrage wurde über www.kraftfahrer-mieten.com gesendet.
+    `.trim();
+
+    // Mailto-Link erstellen und öffnen
+    const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    // E-Mail-Programm öffnen
+    window.location.href = mailtoLink;
+
+    // Erfolgsmeldung anzeigen
+    toast({
+      title: "E-Mail wird geöffnet",
+      description: "Ihr E-Mail-Programm wird geöffnet. Bitte senden Sie die E-Mail ab.",
+    });
+
+    // Form zurücksetzen
+    (e.target as HTMLFormElement).reset();
   };
 
   return (
