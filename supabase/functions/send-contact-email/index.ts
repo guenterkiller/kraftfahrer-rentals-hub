@@ -43,10 +43,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Sending email for contact from ${vorname} ${nachname}`);
 
-    // Send email to business owner
+    // Send email to business owner (temporarily to your email until domain is verified)
     const emailResponse = await resend.emails.send({
       from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
-      to: ["info@kraftfahrer-mieten.com"],
+      to: ["gunter.killer96@googlemail.com"], // Temporarily using your email
       subject: `Neue Fahrer-Anfrage von ${vorname} ${nachname}`,
       html: `
         <h2>Neue Fahrer-Anfrage</h2>
