@@ -14,13 +14,11 @@ const ContactSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Test beim Laden der Komponente
-  console.log('ContactSection geladen!', { toast: !!toast });
+  console.log('ContactSection geladen!');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('=== FORMULAR SUBMIT START ===');
-    
-    alert('Formular wurde abgesendet!'); // Einfacher Alert-Test
     
     setIsSubmitting(true);
     
@@ -38,7 +36,11 @@ const ContactSection = () => {
       // Validierung
       if (!vorname || !nachname || !email || !nachricht) {
         console.log('Validierung fehlgeschlagen - fehlende Felder');
-        alert('Bitte alle Pflichtfelder ausfüllen!');
+        toast({
+          title: "Fehler",
+          description: "Bitte füllen Sie alle Pflichtfelder aus.",
+          variant: "destructive",
+        });
         return;
       }
 
@@ -59,18 +61,29 @@ const ContactSection = () => {
 
       if (error) {
         console.error('Fehler beim E-Mail-Versand:', error);
-        alert(`Fehler: ${error.message}`);
+        toast({
+          title: "Fehler beim Senden",
+          description: `Fehler: ${error.message}. Bitte kontaktieren Sie uns direkt: 01577 1442285`,
+          variant: "destructive",
+        });
         return;
       }
 
-      alert('Anfrage erfolgreich gesendet!');
+      toast({
+        title: "Anfrage gesendet!",
+        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
+      });
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
 
     } catch (error: any) {
       console.error("Fehler beim Kontaktformular:", error);
-      alert(`Fehler: ${error.message}`);
+      toast({
+        title: "Fehler",
+        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -151,18 +164,8 @@ const ContactSection = () => {
             <CardContent>
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <Input 
-                    name="vorname" 
-                    placeholder="Vorname" 
-                    required 
-                    onChange={(e) => console.log('Vorname:', e.target.value)}
-                  />
-                  <Input 
-                    name="nachname" 
-                    placeholder="Nachname" 
-                    required 
-                    onChange={(e) => console.log('Nachname:', e.target.value)}
-                  />
+                  <Input name="vorname" placeholder="Vorname" required />
+                  <Input name="nachname" placeholder="Nachname" required />
                 </div>
                 
                 <Input name="email" placeholder="E-Mail-Adresse" type="email" required />
@@ -181,7 +184,6 @@ const ContactSection = () => {
                   size="lg" 
                   type="submit"
                   disabled={isSubmitting}
-                  onClick={() => console.log('Button geklickt!')}
                 >
                   {isSubmitting ? "Wird gesendet..." : "Anfrage senden"}
                 </Button>
