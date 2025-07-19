@@ -31,7 +31,16 @@ const Navigation = () => {
               <a 
                 key={item.label}
                 href={item.href}
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                onClick={(e) => {
+                  if (item.href.startsWith('#')) {
+                    e.preventDefault();
+                    const element = document.querySelector(item.href);
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }
+                }}
               >
                 {item.label}
               </a>
@@ -43,7 +52,18 @@ const Navigation = () => {
               Fahrer werden
             </Link>
             <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-              <a href="#contact">Fahrer anfragen</a>
+              <a 
+                href="#contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const element = document.querySelector('#contact');
+                  if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+              >
+                Fahrer anfragen
+              </a>
             </Button>
           </div>
           
@@ -64,8 +84,17 @@ const Navigation = () => {
                 <a 
                   key={item.label}
                   href={item.href}
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
+                  className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                  onClick={(e) => {
+                    if (item.href.startsWith('#')) {
+                      e.preventDefault();
+                      setIsMenuOpen(false);
+                      const element = document.querySelector(item.href);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }
+                  }}
                 >
                   {item.label}
                 </a>
@@ -78,7 +107,19 @@ const Navigation = () => {
                 Fahrer werden
               </Link>
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-                <a href="#contact">Fahrer anfragen</a>
+                <a 
+                  href="#contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMenuOpen(false);
+                    const element = document.querySelector('#contact');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }}
+                >
+                  Fahrer anfragen
+                </a>
               </Button>
             </div>
           </div>
