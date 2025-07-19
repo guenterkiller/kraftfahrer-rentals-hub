@@ -1,5 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Resend } from "npm:resend@2.0.0";
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -89,6 +92,60 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     console.log("Fahrer application saved successfully:", data);
+
+    // Send email notification
+    try {
+      console.log(`Sending email notification for fahrer application from ${fahrerData.vorname} ${fahrerData.nachname}`);
+      
+      const emailResponse = await resend.emails.send({
+        from: "Fahrerexpress <onboarding@resend.dev>",
+        to: ["guenter.killer@t-online.de"],
+        subject: `Neue Fahrer-Bewerbung von ${fahrerData.vorname} ${fahrerData.nachname}`,
+        html: `
+          <h1>Neue Fahrer-Bewerbung eingegangen</h1>
+          <h2>Persönliche Daten:</h2>
+          <p><strong>Name:</strong> ${fahrerData.vorname} ${fahrerData.nachname}</p>
+          <p><strong>E-Mail:</strong> ${fahrerData.email}</p>
+          <p><strong>Telefon:</strong> ${fahrerData.telefon}</p>
+          ${fahrerData.adresse ? `<p><strong>Adresse:</strong> ${fahrerData.adresse}</p>` : ''}
+          ${fahrerData.plz ? `<p><strong>PLZ:</strong> ${fahrerData.plz}</p>` : ''}
+          ${fahrerData.ort ? `<p><strong>Ort:</strong> ${fahrerData.ort}</p>` : ''}
+          
+          <h2>Berufliche Angaben:</h2>
+          ${fahrerData.fuehrerscheinklassen?.length ? `<p><strong>Führerscheinklassen:</strong> ${fahrerData.fuehrerscheinklassen.join(', ')}</p>` : ''}
+          ${fahrerData.erfahrung_jahre ? `<p><strong>Erfahrung:</strong> ${fahrerData.erfahrung_jahre} Jahre</p>` : ''}
+          ${fahrerData.stundensatz ? `<p><strong>Stundensatz:</strong> ${fahrerData.stundensatz} €</p>` : ''}
+          ${fahrerData.spezialisierungen?.length ? `<p><strong>Spezialisierungen:</strong> ${fahrerData.spezialisierungen.join(', ')}</p>` : ''}
+          ${fahrerData.verfuegbare_regionen?.length ? `<p><strong>Verfügbare Regionen:</strong> ${fahrerData.verfuegbare_regionen.join(', ')}</p>` : ''}
+          ${fahrerData.verfuegbarkeit ? `<p><strong>Verfügbarkeit:</strong> ${fahrerData.verfuegbarkeit}</p>` : ''}
+          
+          ${fahrerData.beschreibung ? `<h2>Beschreibung:</h2><p>${fahrerData.beschreibung}</p>` : ''}
+          
+          <p><em>Gesendet am ${new Date().toLocaleString('de-DE')}</em></p>
+        `,
+      });
+
+      console.log("Email sent successfully:", emailResponse);
+
+      // Send confirmation email to applicant
+      const confirmationResponse = await resend.emails.send({
+        from: "Fahrerexpress <onboarding@resend.dev>",
+        to: [fahrerData.email],
+        subject: "Bestätigung Ihrer Fahrer-Bewerbung",
+        html: `
+          <h1>Vielen Dank für Ihre Bewerbung!</h1>
+          <p>Hallo ${fahrerData.vorname},</p>
+          <p>wir haben Ihre Bewerbung als Fahrer erfolgreich erhalten und werden diese zeitnah prüfen.</p>
+          <p>Sie erhalten in Kürze eine Rückmeldung von uns.</p>
+          <p>Mit freundlichen Grüßen<br>Ihr Fahrerexpress-Team</p>
+        `,
+      });
+
+      console.log("Confirmation email sent:", confirmationResponse);
+    } catch (emailError) {
+      console.error("Error sending email:", emailError);
+      // Continue execution even if email fails
+    }
 
     return new Response(
       JSON.stringify({ 
