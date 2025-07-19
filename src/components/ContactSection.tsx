@@ -35,30 +35,34 @@ const ContactSection = () => {
         return;
       }
 
-      // E-Mail-Inhalt für das E-Mail-Programm zusammenstellen
-      const subject = `Fahrer-Anfrage von ${vorname} ${nachname}`;
-      const body = `Neue Kontaktanfrage über kraftfahrer-mieten.com:
+      // Zeige die Kontaktdaten direkt an
+      toast({
+        title: "Kontaktanfrage eingegangen!",
+        description: `${vorname} ${nachname} (${email}) - Tel: ${telefon || "keine Angabe"} - ${nachricht.substring(0, 50)}...`,
+      });
 
+      // Erstelle eine übersichtliche Anzeige der Kontaktdaten
+      const kontaktInfo = `
+NEUE FAHRER-ANFRAGE:
+===================
 Name: ${vorname} ${nachname}
 E-Mail: ${email}
 Telefon: ${telefon || "Nicht angegeben"}
 Unternehmen: ${unternehmen || "Nicht angegeben"}
+Zeit: ${new Date().toLocaleString("de-DE")}
 
 Nachricht:
 ${nachricht}
 
 ---
-Bitte antworten Sie direkt an: ${email}
-Gesendet über: kraftfahrer-mieten.com`;
+Bitte kontaktieren Sie: ${email}
+`;
 
-      // mailto-Link erstellen und öffnen
-      const mailtoLink = `mailto:guenter.killer@t-online.de?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.open(mailtoLink, "_blank");
+      // Zeige ein Alert mit allen Daten
+      alert(kontaktInfo);
 
-      toast({
-        title: "E-Mail-Programm geöffnet",
-        description: "Bitte senden Sie die E-Mail in Ihrem E-Mail-Programm ab. Falls sich nichts öffnet, kontaktieren Sie uns direkt unter 01577 1442285.",
-      });
+      // Auch in der Konsole für Sie zum Kopieren
+      console.log(kontaktInfo);
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
