@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import heroImage from "@/assets/german-truck.jpg";
-import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (

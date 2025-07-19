@@ -1,12 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
 
   const menuItems = [
     { label: "Startseite", href: "#home" },
@@ -19,17 +16,10 @@ const Navigation = () => {
 
   const handleNavClick = (href: string, e: React.MouseEvent) => {
     if (href.startsWith('#')) {
-      if (isHomePage) {
-        // Auf der Startseite - normales Scrolling
-        e.preventDefault();
-        const element = document.querySelector(href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      } else {
-        // Auf anderer Seite - zur Startseite mit Anker navigieren
-        e.preventDefault();
-        window.location.href = `/${href}`;
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   };
