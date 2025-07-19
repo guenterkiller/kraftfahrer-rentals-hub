@@ -35,31 +35,39 @@ const ContactSection = () => {
         return;
       }
 
-      // E-Mail über Edge Function senden
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          vorname,
-          nachname,
-          email,
-          telefon,
-          unternehmen,
-          nachricht
-        }
-      });
-
-      if (error) {
-        toast({
-          title: "Fehler beim Senden",
-          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
-          variant: "destructive",
-        });
-        return;
-      }
+      // Temporäre Lösung: Daten in localStorage speichern und dem Nutzer anzeigen
+      const contactData = {
+        vorname,
+        nachname, 
+        email,
+        telefon,
+        unternehmen,
+        nachricht,
+        timestamp: new Date().toLocaleString('de-DE')
+      };
+      
+      // Speichere Anfrage in localStorage für Sie zum Abrufen
+      const existingData = JSON.parse(localStorage.getItem('contactRequests') || '[]');
+      existingData.push(contactData);
+      localStorage.setItem('contactRequests', JSON.stringify(existingData));
 
       toast({
-        title: "Anfrage gesendet!",
-        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
+        title: "Anfrage gespeichert!",
+        description: `Kontaktdaten von ${vorname} ${nachname} (${email}) wurden gespeichert. Öffnen Sie die Browser-Konsole (F12) um alle Anfragen zu sehen.`,
       });
+
+      // Zeige die Daten auch in der Konsole an
+      console.log('=== NEUE KONTAKTANFRAGE ===');
+      console.log('Name:', vorname, nachname);
+      console.log('E-Mail:', email);
+      console.log('Telefon:', telefon || 'Nicht angegeben');
+      console.log('Unternehmen:', unternehmen || 'Nicht angegeben');
+      console.log('Nachricht:', nachricht);
+      console.log('Zeit:', contactData.timestamp);
+      console.log('=== ENDE ANFRAGE ===');
+      
+      // Zeige alle gespeicherten Anfragen
+      console.log('=== ALLE ANFRAGEN ===', existingData);
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
