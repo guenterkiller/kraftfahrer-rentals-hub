@@ -28,6 +28,17 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log("Contact form submission received");
     
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    console.log("Resend API Key available:", !!resendApiKey);
+    
+    if (!resendApiKey) {
+      console.error("RESEND_API_KEY not found in environment");
+      return new Response(
+        JSON.stringify({ error: "E-Mail-Service nicht konfiguriert" }),
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+    
     const { vorname, nachname, email, telefon, unternehmen, nachricht }: ContactRequest = await req.json();
 
     // Validation
