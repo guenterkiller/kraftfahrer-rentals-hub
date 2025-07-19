@@ -113,11 +113,6 @@ const FahrerRegistrierung = () => {
         description: "Vielen Dank für Ihre Registrierung! Wir werden Ihre Daten prüfen und uns bei Ihnen melden.",
       });
 
-      // Nach erfolgreichem Submit zur Startseite weiterleiten
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 2000);
-
       // Form zurücksetzen
       setFormData({
         vorname: "",
