@@ -75,7 +75,7 @@ const HeroSection = () => {
                 }
               }}
             >
-              Mehr erfahren
+              Als Fahrer bewerben
             </a>
           </Button>
         </div>
