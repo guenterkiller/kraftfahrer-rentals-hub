@@ -18,8 +18,9 @@ const Navigation = () => {
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="font-bold text-xl text-primary">
-            Fahrerexpress
+          <div className="font-bold text-sm md:text-xl text-primary">
+            <div className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</div>
+            <div className="sm:hidden">Fahrerexpress<br/>Günter Killer</div>
           </div>
           
           {/* Desktop Navigation */}

@@ -13,20 +13,22 @@ const HeroSection = () => {
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
-          Fahrerexpress-Agentur - Günter Killer
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+          <span className="block sm:hidden">Fahrerexpress-Agentur</span>
+          <span className="block sm:hidden">Günter Killer</span>
+          <span className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</span>
         </h1>
         
-        <div className="bg-primary text-white p-6 mb-8 max-w-4xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+        <div className="bg-primary text-white p-4 md:p-6 mb-8 max-w-4xl mx-auto">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
             Flexibel. Zuverlässig. Deutschlandweit.
           </h2>
-          <p className="text-lg md:text-xl">
+          <p className="text-base sm:text-lg md:text-xl">
             Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
           </p>
         </div>
         
-        <p className="text-lg md:text-xl mb-8 max-w-4xl mx-auto leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-4xl mx-auto leading-relaxed px-4">
           Sie möchten kurzfristig einen LKW-Fahrer mieten? Fahrerexpress vermittelt bundesweit 
           selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer – flexibel, zuverlässig 
           und ohne Arbeitnehmerüberlassung.
