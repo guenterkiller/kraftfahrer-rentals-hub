@@ -6,12 +6,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const ContactSection = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
     try {
       const formData = new FormData(e.target as HTMLFormElement);
@@ -32,64 +36,44 @@ const ContactSection = () => {
         return;
       }
 
-      // E-Mail-Content
-      const subject = `Fahrer-Anfrage von ${vorname} ${nachname}`;
-      const body = `Neue Fahrer-Anfrage:
+      console.log("Sending contact email...");
 
-Name: ${vorname} ${nachname}
-E-Mail: ${email}
-Telefon: ${telefon}
-Unternehmen: ${unternehmen}
-
-Nachricht:
-${nachricht}
-
----
-Gesendet über www.kraftfahrer-mieten.com`;
-
-      // Mailto-Link
-      const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Versuche E-Mail zu öffnen
-      const mailWindow = window.open(mailtoLink, '_self');
-      
-      // Fallback für Geräte ohne Mail-Programm
-      setTimeout(() => {
-        const fallbackMessage = `Falls sich kein E-Mail-Programm öffnet, kontaktieren Sie uns direkt:
-
-📧 E-Mail: info@kraftfahrer-mieten.com
-📱 Telefon: 01577 1442285
-
-Ihre Nachricht:
-"${nachricht}"
-
-Von: ${vorname} ${nachname} (${email})`;
-
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(fallbackMessage).then(() => {
-            toast({
-              title: "Kontaktdaten kopiert",
-              description: "Die Kontaktdaten wurden in die Zwischenablage kopiert. Sie können uns auch direkt anrufen: 01577 1442285",
-            });
-          });
-        } else {
-          toast({
-            title: "Kein E-Mail-Programm?",
-            description: "Kontaktieren Sie uns direkt: info@kraftfahrer-mieten.com oder 01577 1442285",
-          });
+      // E-Mail über Supabase Edge Function senden
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          vorname,
+          nachname,
+          email,
+          telefon,
+          unternehmen,
+          nachricht
         }
-      }, 1000);
+      });
+
+      if (error) {
+        console.error("Supabase function error:", error);
+        throw new Error(error.message || "Fehler beim E-Mail-Versand");
+      }
+
+      console.log("Email sent successfully:", data);
+
+      toast({
+        title: "Anfrage erfolgreich gesendet!",
+        description: "Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden. Sie erhalten zusätzlich eine Bestätigungs-E-Mail.",
+      });
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Fehler beim Kontaktformular:", error);
       toast({
-        title: "Fehler",
-        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        title: "Fehler beim Senden",
+        description: error.message || "Bitte kontaktieren Sie uns direkt: 01577 1442285",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -183,8 +167,13 @@ Von: ${vorname} ${nachname} (${email})`;
                   required
                 />
                 
-                <Button className="w-full" size="lg" type="submit">
-                  Anfrage senden
+                <Button 
+                  className="w-full" 
+                  size="lg" 
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Wird gesendet..." : "Anfrage senden"}
                 </Button>
               </form>
             </CardContent>
