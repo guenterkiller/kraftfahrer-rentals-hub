@@ -13,9 +13,15 @@ const ContactSection = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Test beim Laden der Komponente
+  console.log('ContactSection geladen!', { toast: !!toast });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Formular wurde abgesendet!');
+    console.log('=== FORMULAR SUBMIT START ===');
+    
+    alert('Formular wurde abgesendet!'); // Einfacher Alert-Test
+    
     setIsSubmitting(true);
     
     try {
@@ -32,17 +38,11 @@ const ContactSection = () => {
       // Validierung
       if (!vorname || !nachname || !email || !nachricht) {
         console.log('Validierung fehlgeschlagen - fehlende Felder');
-        toast({
-          title: "Fehler",
-          description: "Bitte füllen Sie alle Pflichtfelder aus.",
-          variant: "destructive",
-        });
+        alert('Bitte alle Pflichtfelder ausfüllen!');
         return;
       }
 
-      // E-Mail über Edge Function senden
-      console.log('Sende Anfrage an Edge Function...', { vorname, nachname, email });
-      console.log('Supabase client:', supabase);
+      console.log('Sende Anfrage an Edge Function...');
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
@@ -59,30 +59,18 @@ const ContactSection = () => {
 
       if (error) {
         console.error('Fehler beim E-Mail-Versand:', error);
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        toast({
-          title: "Fehler beim Senden",
-          description: `Fehler: ${error.message}. Bitte kontaktieren Sie uns direkt: 01577 1442285`,
-          variant: "destructive",
-        });
+        alert(`Fehler: ${error.message}`);
         return;
       }
 
-      toast({
-        title: "Anfrage gesendet!",
-        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
-      });
+      alert('Anfrage erfolgreich gesendet!');
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
 
     } catch (error: any) {
       console.error("Fehler beim Kontaktformular:", error);
-      toast({
-        title: "Fehler",
-        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
-        variant: "destructive",
-      });
+      alert(`Fehler: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
