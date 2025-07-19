@@ -35,42 +35,41 @@ const ContactSection = () => {
         return;
       }
 
-      // Zeige die Kontaktdaten direkt an
-      toast({
-        title: "Kontaktanfrage eingegangen!",
-        description: `${vorname} ${nachname} (${email}) - Tel: ${telefon || "keine Angabe"} - ${nachricht.substring(0, 50)}...`,
+      // E-Mail über Edge Function senden
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          vorname,
+          nachname,
+          email,
+          telefon,
+          unternehmen,
+          nachricht
+        }
       });
 
-      // Erstelle eine übersichtliche Anzeige der Kontaktdaten
-      const kontaktInfo = `
-NEUE FAHRER-ANFRAGE:
-===================
-Name: ${vorname} ${nachname}
-E-Mail: ${email}
-Telefon: ${telefon || "Nicht angegeben"}
-Unternehmen: ${unternehmen || "Nicht angegeben"}
-Zeit: ${new Date().toLocaleString("de-DE")}
+      if (error) {
+        console.error('E-Mail Fehler:', error);
+        toast({
+          title: "E-Mail Fehler",
+          description: "E-Mail konnte nicht gesendet werden. Bitte kontaktieren Sie uns direkt: 01577 1442285",
+          variant: "destructive",
+        });
+        return;
+      }
 
-Nachricht:
-${nachricht}
-
----
-Bitte kontaktieren Sie: ${email}
-`;
-
-      // Zeige ein Alert mit allen Daten
-      alert(kontaktInfo);
-
-      // Auch in der Konsole für Sie zum Kopieren
-      console.log(kontaktInfo);
+      toast({
+        title: "Anfrage erfolgreich gesendet!",
+        description: "Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.",
+      });
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
 
     } catch (error: any) {
+      console.error('Unerwarteter Fehler:', error);
       toast({
         title: "Fehler",
-        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        description: "Unerwarteter Fehler. Bitte kontaktieren Sie uns direkt: 01577 1442285",
         variant: "destructive",
       });
     } finally {
