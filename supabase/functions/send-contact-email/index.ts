@@ -26,6 +26,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log("=== EDGE FUNCTION CALLED ===");
     console.log("Contact form submission received");
     
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
