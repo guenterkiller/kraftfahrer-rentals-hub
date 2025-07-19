@@ -9,6 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const FahrerRegistrierung = () => {
   const { toast } = useToast();
@@ -89,6 +91,11 @@ const FahrerRegistrierung = () => {
         description: "Vielen Dank für Ihre Registrierung! Wir werden Ihre Daten prüfen und uns bei Ihnen melden.",
       });
 
+      // Nach erfolgreichem Submit zur Startseite weiterleiten
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+
       // Form zurücksetzen
       setFormData({
         vorname: "",
@@ -124,6 +131,17 @@ const FahrerRegistrierung = () => {
       <div className="min-h-screen bg-muted pt-20 pb-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            
+            {/* Zurück Button */}
+            <div className="mb-6">
+              <Button variant="ghost" asChild className="mb-4">
+                <Link to="/" className="flex items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Zurück zur Startseite
+                </Link>
+              </Button>
+            </div>
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl text-center">
