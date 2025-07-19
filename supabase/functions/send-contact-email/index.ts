@@ -58,7 +58,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email to business owner
     const emailResponse = await resend.emails.send({
       from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
-      to: ["guenter.killer@t-online.de"],
+      to: ["gunter.killer96@googlemail.com"],
       subject: `Neue Fahrer-Anfrage von ${vorname} ${nachname}`,
       html: `
         <h2>Neue Fahrer-Anfrage</h2>
