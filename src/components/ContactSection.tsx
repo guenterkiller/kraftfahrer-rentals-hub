@@ -163,8 +163,18 @@ const ContactSection = () => {
             <CardContent>
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
-                  <Input name="vorname" placeholder="Vorname" required />
-                  <Input name="nachname" placeholder="Nachname" required />
+                  <Input 
+                    name="vorname" 
+                    placeholder="Vorname" 
+                    required 
+                    onChange={(e) => console.log('Vorname:', e.target.value)}
+                  />
+                  <Input 
+                    name="nachname" 
+                    placeholder="Nachname" 
+                    required 
+                    onChange={(e) => console.log('Nachname:', e.target.value)}
+                  />
                 </div>
                 
                 <Input name="email" placeholder="E-Mail-Adresse" type="email" required />
@@ -183,6 +193,7 @@ const ContactSection = () => {
                   size="lg" 
                   type="submit"
                   disabled={isSubmitting}
+                  onClick={() => console.log('Button geklickt!')}
                 >
                   {isSubmitting ? "Wird gesendet..." : "Anfrage senden"}
                 </Button>
