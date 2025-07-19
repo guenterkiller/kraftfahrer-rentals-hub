@@ -36,26 +36,28 @@ const ContactSection = () => {
         return;
       }
 
-      // E-Mail über Edge Function senden
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
+      // E-Mail direkt über fetch senden (Fallback)
+      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-contact-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`,
+        },
+        body: JSON.stringify({
           vorname,
           nachname,
           email,
           telefon,
           unternehmen,
           nachricht
-        }
+        })
       });
 
-      if (error) {
-        toast({
-          title: "Fehler beim Senden",
-          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
-          variant: "destructive",
-        });
-        return;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${await response.text()}`);
       }
+
+      const data = await response.json();
 
       toast({
         title: "Anfrage gesendet!",
