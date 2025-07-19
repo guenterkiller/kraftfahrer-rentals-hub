@@ -40,6 +40,15 @@ const FahrerAdmin = () => {
     fetchFahrer();
   }, []);
 
+  // Force reload data when component mounts
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchFahrer();
+    }, 5000); // Refresh every 5 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   const fetchFahrer = async () => {
     try {
       const { data, error } = await supabase
