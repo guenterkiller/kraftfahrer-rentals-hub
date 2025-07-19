@@ -51,10 +51,10 @@ const HeroSection = () => {
         </div>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
+          <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
             <a href="#contact">Fahrer anfragen</a>
           </Button>
-          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
+          <Button size="lg" className="bg-white text-primary border-2 border-white hover:bg-primary hover:text-white transition-all" asChild>
             <Link to="/fahrer-registrierung">Als Fahrer bewerben</Link>
           </Button>
         </div>

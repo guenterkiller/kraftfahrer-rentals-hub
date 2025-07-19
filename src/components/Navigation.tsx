@@ -42,7 +42,7 @@ const Navigation = () => {
             >
               Fahrer werden
             </Link>
-            <Button asChild>
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
               <a href="#contact">Fahrer anfragen</a>
             </Button>
           </div>
@@ -77,7 +77,7 @@ const Navigation = () => {
               >
                 Fahrer werden
               </Link>
-              <Button className="w-full" asChild>
+              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
                 <a href="#contact">Fahrer anfragen</a>
               </Button>
             </div>
