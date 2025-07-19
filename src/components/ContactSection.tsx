@@ -4,58 +4,73 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 
 const ContactSection = () => {
+  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setMessage('');
     
     try {
       const formData = new FormData(e.target as HTMLFormElement);
-      const vorname = formData.get('vorname') as string;
-      const nachname = formData.get('nachname') as string;
-      const email = formData.get('email') as string;
-      const telefon = formData.get('telefon') as string;
-      const unternehmen = formData.get('unternehmen') as string;
-      const nachricht = formData.get('nachricht') as string;
+      const vorname = formData.get('vorname') as string || '';
+      const nachname = formData.get('nachname') as string || '';
+      const email = formData.get('email') as string || '';
+      const telefon = formData.get('telefon') as string || '';
+      const unternehmen = formData.get('unternehmen') as string || '';
+      const nachricht = formData.get('nachricht') as string || '';
 
+      // Validierung
       if (!vorname || !nachname || !email || !nachricht) {
-        setMessage('Bitte füllen Sie alle Pflichtfelder aus.');
+        toast({
+          title: "Fehler",
+          description: "Bitte füllen Sie alle Pflichtfelder aus.",
+          variant: "destructive",
+        });
         return;
       }
 
-      // E-Mail-Inhalt zusammenstellen
-      const subject = `Fahrer-Anfrage von ${vorname} ${nachname}`;
-      const body = `
-Neue Kontaktanfrage über kraftfahrer-mieten.com:
+      // E-Mail über Edge Function senden
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          vorname,
+          nachname,
+          email,
+          telefon,
+          unternehmen,
+          nachricht
+        }
+      });
 
-Name: ${vorname} ${nachname}
-E-Mail: ${email}
-Telefon: ${telefon || 'Nicht angegeben'}
-Unternehmen: ${unternehmen || 'Nicht angegeben'}
+      if (error) {
+        toast({
+          title: "Fehler beim Senden",
+          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+          variant: "destructive",
+        });
+        return;
+      }
 
-Nachricht:
-${nachricht}
+      toast({
+        title: "Anfrage gesendet!",
+        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
+      });
 
----
-Bitte antworten Sie direkt an: ${email}
-      `;
-
-      // mailto-Link öffnen
-      const mailtoLink = `mailto:guenter.killer@t-online.de?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.open(mailtoLink, '_blank');
-
-      setMessage('Ihr E-Mail-Programm wird geöffnet. Bitte senden Sie die E-Mail ab, oder kontaktieren Sie uns direkt unter 01577 1442285.');
+      // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
 
-    } catch (error) {
-      setMessage('Fehler beim Erstellen der E-Mail. Bitte kontaktieren Sie uns direkt: 01577 1442285');
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -134,11 +149,6 @@ Bitte antworten Sie direkt an: ${email}
               <CardTitle>Anfrage senden</CardTitle>
             </CardHeader>
             <CardContent>
-              {message && (
-                <div className={`mb-4 p-3 rounded ${message.includes('erfolgreich') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                  {message}
-                </div>
-              )}
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <Input name="vorname" placeholder="Vorname" required />
