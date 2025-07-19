@@ -35,39 +35,30 @@ const ContactSection = () => {
         return;
       }
 
-      // Temporäre Lösung: Daten in localStorage speichern und dem Nutzer anzeigen
-      const contactData = {
-        vorname,
-        nachname, 
-        email,
-        telefon,
-        unternehmen,
-        nachricht,
-        timestamp: new Date().toLocaleString('de-DE')
-      };
-      
-      // Speichere Anfrage in localStorage für Sie zum Abrufen
-      const existingData = JSON.parse(localStorage.getItem('contactRequests') || '[]');
-      existingData.push(contactData);
-      localStorage.setItem('contactRequests', JSON.stringify(existingData));
+      // E-Mail-Inhalt für das E-Mail-Programm zusammenstellen
+      const subject = `Fahrer-Anfrage von ${vorname} ${nachname}`;
+      const body = `Neue Kontaktanfrage über kraftfahrer-mieten.com:
+
+Name: ${vorname} ${nachname}
+E-Mail: ${email}
+Telefon: ${telefon || "Nicht angegeben"}
+Unternehmen: ${unternehmen || "Nicht angegeben"}
+
+Nachricht:
+${nachricht}
+
+---
+Bitte antworten Sie direkt an: ${email}
+Gesendet über: kraftfahrer-mieten.com`;
+
+      // mailto-Link erstellen und öffnen
+      const mailtoLink = `mailto:guenter.killer@t-online.de?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.open(mailtoLink, "_blank");
 
       toast({
-        title: "Anfrage gespeichert!",
-        description: `Kontaktdaten von ${vorname} ${nachname} (${email}) wurden gespeichert. Öffnen Sie die Browser-Konsole (F12) um alle Anfragen zu sehen.`,
+        title: "E-Mail-Programm geöffnet",
+        description: "Bitte senden Sie die E-Mail in Ihrem E-Mail-Programm ab. Falls sich nichts öffnet, kontaktieren Sie uns direkt unter 01577 1442285.",
       });
-
-      // Zeige die Daten auch in der Konsole an
-      console.log('=== NEUE KONTAKTANFRAGE ===');
-      console.log('Name:', vorname, nachname);
-      console.log('E-Mail:', email);
-      console.log('Telefon:', telefon || 'Nicht angegeben');
-      console.log('Unternehmen:', unternehmen || 'Nicht angegeben');
-      console.log('Nachricht:', nachricht);
-      console.log('Zeit:', contactData.timestamp);
-      console.log('=== ENDE ANFRAGE ===');
-      
-      // Zeige alle gespeicherten Anfragen
-      console.log('=== ALLE ANFRAGEN ===', existingData);
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
