@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Euro, Clock, Truck } from "lucide-react";
+import { CheckCircle, Euro, Clock, Truck, Calculator, TrendingUp } from "lucide-react";
 
 const PricingSection = () => {
   const pricingTiers = [
@@ -81,6 +81,85 @@ const PricingSection = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Preiskalkulation */}
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 p-8 rounded-lg max-w-4xl mx-auto mb-12 border border-blue-200 dark:border-blue-800">
+          <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <Calculator className="h-5 w-5 text-primary" />
+            Wie setzen sich unsere Preise zusammen?
+          </h3>
+          <p className="text-muted-foreground mb-6 text-sm">
+            Transparente Aufschlüsselung am Beispiel eines Standard LKW-Fahrers (399 € Tagespreis):
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-6 text-sm">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                <span>Netto-Honorar (8h)</span>
+                <span className="font-medium">335,29 €</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
+                <span>MwSt. (19%)</span>
+                <span className="font-medium">63,71 €</span>
+              </div>
+              <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg border border-primary/20">
+                <span className="font-semibold">Brutto-Tagespreis</span>
+                <span className="font-bold text-primary">399,00 €</span>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Was vom Netto-Honorar abgeht:</h4>
+              <div className="space-y-2 text-xs">
+                <div className="flex justify-between">
+                  <span>• Krankenversicherung (15-16%)</span>
+                  <span>~50 €</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• Rentenversicherung (18,6%)</span>
+                  <span>~62 €</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• Einkommensteuer (~25%)</span>
+                  <span>~84 €</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• Fahrzeugkosten, Versicherung</span>
+                  <span>~35 €</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• Ausfallzeiten (Urlaub, Krankheit)</span>
+                  <span>~25 €</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• Betriebskosten, Büro, Buchhaltung</span>
+                  <span>~20 €</span>
+                </div>
+                <hr className="border-gray-300 dark:border-gray-600" />
+                <div className="flex justify-between font-semibold">
+                  <span>Verbleibt netto für den Fahrer:</span>
+                  <span>~59 € (7,40 €/h)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
+            <div className="flex items-start gap-2">
+              <TrendingUp className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-1">Warum diese Preise notwendig sind:</h4>
+                <ul className="text-xs text-amber-800 dark:text-amber-200 space-y-1">
+                  <li>• Selbstständige tragen alle Sozialabgaben allein (Arbeitgeber + Arbeitnehmeranteil)</li>
+                  <li>• Keine bezahlten Krankheitstage oder Urlaubstage</li>
+                  <li>• Auslastung selten bei 100% - Akquise und Ausfallzeiten müssen einkalkuliert werden</li>
+                  <li>• Eigenfinanzierung der Altersvorsorge notwendig</li>
+                  <li>• Keine Lohnfortzahlung bei Unfällen oder längerer Krankheit</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="bg-muted p-8 rounded-lg max-w-4xl mx-auto">
