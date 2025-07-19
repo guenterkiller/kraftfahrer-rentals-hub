@@ -50,14 +50,35 @@ Gesendet über www.kraftfahrer-mieten.com`;
       // Mailto-Link
       const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       
-      // E-Mail öffnen
-      window.open(mailtoLink, '_self');
+      // Versuche E-Mail zu öffnen
+      const mailWindow = window.open(mailtoLink, '_self');
+      
+      // Fallback für Geräte ohne Mail-Programm
+      setTimeout(() => {
+        const fallbackMessage = `Falls sich kein E-Mail-Programm öffnet, kontaktieren Sie uns direkt:
 
-      // Erfolgsmeldung
-      toast({
-        title: "E-Mail wird geöffnet",
-        description: "Ihr E-Mail-Programm wird mit der Anfrage geöffnet.",
-      });
+📧 E-Mail: info@kraftfahrer-mieten.com
+📱 Telefon: 01577 1442285
+
+Ihre Nachricht:
+"${nachricht}"
+
+Von: ${vorname} ${nachname} (${email})`;
+
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(fallbackMessage).then(() => {
+            toast({
+              title: "Kontaktdaten kopiert",
+              description: "Die Kontaktdaten wurden in die Zwischenablage kopiert. Sie können uns auch direkt anrufen: 01577 1442285",
+            });
+          });
+        } else {
+          toast({
+            title: "Kein E-Mail-Programm?",
+            description: "Kontaktieren Sie uns direkt: info@kraftfahrer-mieten.com oder 01577 1442285",
+          });
+        }
+      }, 1000);
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
