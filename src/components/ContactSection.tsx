@@ -36,7 +36,9 @@ const ContactSection = () => {
       }
 
       // E-Mail über Edge Function senden
-      const { error } = await supabase.functions.invoke('send-contact-email', {
+      console.log('Calling send-contact-email function with data:', { vorname, nachname, email });
+      
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
           vorname,
           nachname,
@@ -47,11 +49,13 @@ const ContactSection = () => {
         }
       });
 
+      console.log('Function response:', { data, error });
+
       if (error) {
         console.error('E-Mail Fehler:', error);
         toast({
           title: "E-Mail Fehler",
-          description: "E-Mail konnte nicht gesendet werden. Bitte kontaktieren Sie uns direkt: 01577 1442285",
+          description: `E-Mail konnte nicht gesendet werden: ${error.message}. Bitte kontaktieren Sie uns direkt: 01577 1442285`,
           variant: "destructive",
         });
         return;
