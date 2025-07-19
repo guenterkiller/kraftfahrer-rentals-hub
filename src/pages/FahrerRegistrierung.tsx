@@ -73,11 +73,11 @@ const FahrerRegistrierung = () => {
         throw new Error("Bitte wählen Sie mindestens eine Führerscheinklasse aus.");
       }
 
-      console.log("Sende Daten:", formData);
+      console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
-      const { data, error } = await supabase
-        .from('fahrer_profile')
-        .insert([{
+      // Verwende die Edge Function für Fahrer-Bewerbungen
+      const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
+        body: {
           vorname: formData.vorname,
           nachname: formData.nachname,
           email: formData.email,
@@ -91,16 +91,16 @@ const FahrerRegistrierung = () => {
           verfuegbare_regionen: formData.verfuegbare_regionen,
           stundensatz: parseFloat(formData.stundensatz),
           verfuegbarkeit: formData.verfuegbarkeit || null,
-          beschreibung: formData.beschreibung || null,
-          status: 'pending'
-        }]);
+          beschreibung: formData.beschreibung || null
+        }
+      });
 
       if (error) {
-        console.error("Supabase Fehler:", error);
-        throw error;
+        console.error("Edge Function Fehler:", error);
+        throw new Error(error.message || "Fehler beim Speichern der Bewerbung");
       }
 
-      console.log("Erfolgreich gespeichert:", data);
+      console.log("Fahrer-Bewerbung erfolgreich gespeichert:", data);
 
       toast({
         title: "Registrierung erfolgreich!",
