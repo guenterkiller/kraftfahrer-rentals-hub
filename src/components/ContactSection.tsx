@@ -36,32 +36,31 @@ const ContactSection = () => {
         return;
       }
 
-      // Erstelle mailto Link für direkte E-Mail
-      const subject = `Kontaktanfrage von ${vorname} ${nachname}`;
-      const body = `
-Neue Kontaktanfrage
+      // E-Mail über Edge Function senden
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          vorname,
+          nachname,
+          email,
+          telefon,
+          unternehmen,
+          nachricht
+        }
+      });
 
-Kontaktdaten:
-Name: ${vorname} ${nachname}
-E-Mail: ${email}
-${telefon ? `Telefon: ${telefon}` : ''}
-${unternehmen ? `Unternehmen: ${unternehmen}` : ''}
-
-Nachricht:
-${nachricht}
-
----
-Diese Anfrage wurde über das Kontaktformular auf kraftfahrer-mieten.com gesendet.
-      `.trim();
-
-      const mailtoLink = `mailto:info@kraftfahrer-mieten.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      
-      // Öffne E-Mail-Client
-      window.location.href = mailtoLink;
+      if (error) {
+        console.error('Fehler beim E-Mail-Versand:', error);
+        toast({
+          title: "Fehler beim Senden",
+          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
-        title: "E-Mail-Client geöffnet",
-        description: "Ihr E-Mail-Programm wurde geöffnet. Bitte senden Sie die E-Mail ab.",
+        title: "Anfrage gesendet!",
+        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
       });
 
       // Form zurücksetzen

@@ -76,8 +76,10 @@ const PricingSection = () => {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline" asChild>
-                  <a href="#contact">Anfrage stellen</a>
+                <Button className="w-full" variant="outline" onClick={() => {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}>
+                  Anfrage stellen
                 </Button>
               </CardContent>
             </Card>
