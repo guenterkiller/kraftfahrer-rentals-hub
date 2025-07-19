@@ -30,31 +30,32 @@ const ContactSection = () => {
         return;
       }
 
-      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/simple-contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`,
-        },
-        body: JSON.stringify({
-          vorname,
-          nachname,
-          email,
-          telefon,
-          unternehmen,
-          nachricht
-        })
-      });
+      // E-Mail-Inhalt zusammenstellen
+      const subject = `Fahrer-Anfrage von ${vorname} ${nachname}`;
+      const body = `
+Neue Kontaktanfrage über kraftfahrer-mieten.com:
 
-      if (response.ok) {
-        setMessage('Anfrage erfolgreich gesendet! Wir melden uns in Kürze bei Ihnen.');
-        (e.target as HTMLFormElement).reset();
-      } else {
-        setMessage('Fehler beim Senden. Bitte kontaktieren Sie uns direkt: 01577 1442285');
-      }
+Name: ${vorname} ${nachname}
+E-Mail: ${email}
+Telefon: ${telefon || 'Nicht angegeben'}
+Unternehmen: ${unternehmen || 'Nicht angegeben'}
+
+Nachricht:
+${nachricht}
+
+---
+Bitte antworten Sie direkt an: ${email}
+      `;
+
+      // mailto-Link öffnen
+      const mailtoLink = `mailto:guenter.killer@t-online.de?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.open(mailtoLink, '_blank');
+
+      setMessage('Ihr E-Mail-Programm wird geöffnet. Bitte senden Sie die E-Mail ab, oder kontaktieren Sie uns direkt unter 01577 1442285.');
+      (e.target as HTMLFormElement).reset();
 
     } catch (error) {
-      setMessage('Fehler beim Senden. Bitte kontaktieren Sie uns direkt: 01577 1442285');
+      setMessage('Fehler beim Erstellen der E-Mail. Bitte kontaktieren Sie uns direkt: 01577 1442285');
     } finally {
       setIsSubmitting(false);
     }
