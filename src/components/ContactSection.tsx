@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,9 +37,7 @@ const ContactSection = () => {
       }
 
       // E-Mail über Edge Function senden
-      console.log('Calling send-contact-email function with data:', { vorname, nachname, email });
-      
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
         body: {
           vorname,
           nachname,
@@ -49,31 +48,29 @@ const ContactSection = () => {
         }
       });
 
-      console.log('Function response:', { data, error });
-
       if (error) {
-        console.error('E-Mail Fehler:', error);
+        console.error('Fehler beim E-Mail-Versand:', error);
         toast({
-          title: "E-Mail Fehler",
-          description: `E-Mail konnte nicht gesendet werden: ${error.message}. Bitte kontaktieren Sie uns direkt: 01577 1442285`,
+          title: "Fehler beim Senden",
+          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
           variant: "destructive",
         });
         return;
       }
 
       toast({
-        title: "Anfrage erfolgreich gesendet!",
-        description: "Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.",
+        title: "Anfrage gesendet!",
+        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
       });
 
       // Form zurücksetzen
       (e.target as HTMLFormElement).reset();
 
     } catch (error: any) {
-      console.error('Unerwarteter Fehler:', error);
+      console.error("Fehler beim Kontaktformular:", error);
       toast({
         title: "Fehler",
-        description: "Unerwarteter Fehler. Bitte kontaktieren Sie uns direkt: 01577 1442285",
+        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
         variant: "destructive",
       });
     } finally {

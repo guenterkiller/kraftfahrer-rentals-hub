@@ -5,6 +5,3 @@ verify_jwt = false
 
 [functions.submit-fahrer-anfrage]
 verify_jwt = false
-
-[functions.simple-contact]
-verify_jwt = false

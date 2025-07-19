@@ -5,9 +5,8 @@ const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Max-Age": "86400",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
 interface ContactRequest {
@@ -26,19 +25,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    console.log("=== EDGE FUNCTION CALLED ===");
     console.log("Contact form submission received");
-    
-    const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    console.log("Resend API Key available:", !!resendApiKey);
-    
-    if (!resendApiKey) {
-      console.error("RESEND_API_KEY not found in environment");
-      return new Response(
-        JSON.stringify({ error: "E-Mail-Service nicht konfiguriert" }),
-        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
-      );
-    }
     
     const { vorname, nachname, email, telefon, unternehmen, nachricht }: ContactRequest = await req.json();
 
@@ -58,8 +45,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to business owner
     const emailResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <onboarding@resend.dev>",
-      to: ["ihre-email@domain.de"], // TODO: Bitte Ihre richtige E-Mail-Adresse eintragen
+      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      to: ["info@kraftfahrer-mieten.com"],
       subject: `Neue Fahrer-Anfrage von ${vorname} ${nachname}`,
       html: `
         <h2>Neue Fahrer-Anfrage</h2>
@@ -86,9 +73,53 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Email sent successfully:", emailResponse);
 
+    // Send confirmation email to customer
+    const confirmationResponse = await resend.emails.send({
+      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      to: [email],
+      subject: "Bestätigung Ihrer Fahrer-Anfrage",
+      html: `
+        <h2>Vielen Dank für Ihre Anfrage!</h2>
+        
+        <p>Lieber ${vorname} ${nachname},</p>
+        
+        <p>wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
+        
+        <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Ihre Anfrage:</h3>
+          <p style="white-space: pre-wrap;">${nachricht}</p>
+        </div>
+        
+        <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3>Kontakt für Rückfragen:</h3>
+          <p><strong>Günter Killer</strong><br>
+          Fahrerexpress-Agentur</p>
+          <p>📱 Mobil: 01577 1442285<br>
+          📧 E-Mail: info@kraftfahrer-mieten.com</p>
+          <p><strong>Erreichbarkeit:</strong><br>
+          Mo-Fr: 8:00 - 18:00 Uhr<br>
+          Sa: 9:00 - 14:00 Uhr<br>
+          Notfall: 24/7 verfügbar</p>
+        </div>
+        
+        <p>Mit freundlichen Grüßen<br>
+        Ihr Kraftfahrer-Mieten Team</p>
+        
+        <hr>
+        <p style="color: #666; font-size: 12px;">
+          Fahrerexpress-Agentur<br>
+          Walther-von-Cronberg-Platz 12<br>
+          60594 Frankfurt<br>
+          www.kraftfahrer-mieten.com
+        </p>
+      `,
+    });
+
+    console.log("Confirmation email sent:", confirmationResponse);
+
     return new Response(
       JSON.stringify({ 
-        message: "E-Mail erfolgreich versendet",
+        message: "E-Mails erfolgreich versendet",
         emailId: emailResponse.data?.id 
       }),
       {
