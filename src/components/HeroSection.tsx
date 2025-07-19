@@ -53,8 +53,8 @@ const HeroSection = () => {
           <Button size="lg" className="bg-primary hover:bg-primary/90" asChild>
             <a href="#contact">Fahrer anfragen</a>
           </Button>
-          <Button size="lg" variant="hero" asChild>
-            <a href="#about">Mehr erfahren</a>
+          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary" asChild>
+            <a href="/fahrer-registrierung">Als Fahrer bewerben</a>
           </Button>
         </div>
       </div>

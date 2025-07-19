@@ -11,7 +11,8 @@ const Navigation = () => {
     { label: "Über mich", href: "#about" },
     { label: "Preise", href: "#pricing" },
     { label: "Referenzen", href: "#testimonials" },
-    { label: "Kontakt", href: "#contact" }
+    { label: "Kontakt", href: "#contact" },
+    { label: "Fahrer werden", href: "/fahrer-registrierung" }
   ];
 
   return (
