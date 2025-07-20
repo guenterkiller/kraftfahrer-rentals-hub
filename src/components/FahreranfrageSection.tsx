@@ -36,7 +36,7 @@ const FahreranfrageSection = () => {
     }
 
     try {
-      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/submit-fahrer-anfrage', {
+      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-fahrer-anfrage-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
