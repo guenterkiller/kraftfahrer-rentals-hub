@@ -76,7 +76,7 @@ const FahrerRegistrierung = () => {
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
       // Verwende die Edge Function für Fahrer-Bewerbungen
-      const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
+      const { data, error } = await supabase.functions.invoke('fahrerwerden', {
         body: {
           name: `${formData.vorname} ${formData.nachname}`.trim(),
           email: formData.email,
