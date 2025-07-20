@@ -92,6 +92,20 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error("Supabase insert error:", JSON.stringify(error, null, 2));
+      
+      // Check for duplicate email error
+      if (error.code === '23505' && error.message.includes('fahrer_profile_email_key')) {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Diese E-Mail-Adresse ist bereits registriert. Falls Sie bereits ein Fahrer-Profil haben, kontaktieren Sie uns bitte direkt.' 
+          }),
+          { 
+            status: 400, 
+            headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+          }
+        );
+      }
+      
       throw new Error("Fehler beim Speichern der Anfrage in der Datenbank");
     }
     
