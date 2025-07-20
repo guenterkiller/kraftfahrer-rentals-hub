@@ -8,6 +8,8 @@ import Impressum from "./pages/Impressum";
 import NotFound from "./pages/NotFound";
 import FahrerRegistrierung from "./pages/FahrerRegistrierung";
 import FahrerAdmin from "./pages/FahrerAdmin";
+import Wissenswertes from "./pages/Wissenswertes";
+import Projekte from "./pages/Projekte";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
+          <Route path="/wissenswertes" element={<Wissenswertes />} />
+          <Route path="/projekte" element={<Projekte />} />
           <Route path="/impressum" element={<Impressum />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

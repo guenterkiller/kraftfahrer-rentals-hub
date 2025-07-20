@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const FahrerRegistrierung = () => {
@@ -344,16 +344,129 @@ const FahrerRegistrierung = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <Label htmlFor="beschreibung">Beschreibung / Zusätzliche Informationen</Label>
-                    <Textarea
-                      id="beschreibung"
-                      value={formData.beschreibung}
-                      onChange={(e) => setFormData({...formData, beschreibung: e.target.value})}
-                      rows={4}
-                      placeholder="Beschreiben Sie Ihre Erfahrungen, besonderen Qualifikationen oder Präferenzen..."
-                    />
-                  </div>
+                   {/* Dokument-Uploads */}
+                   <div className="space-y-4">
+                     <Label>Dokumente hochladen (optional)</Label>
+                     
+                     <div className="grid md:grid-cols-2 gap-4">
+                       <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+                         <div className="flex flex-col items-center space-y-2">
+                           <FileText className="h-8 w-8 text-muted-foreground" />
+                           <h4 className="font-medium">Führerschein</h4>
+                           <p className="text-sm text-muted-foreground">
+                             Laden Sie eine Kopie Ihres Führerscheins hoch
+                           </p>
+                           <Input
+                             type="file"
+                             accept=".pdf,.jpg,.jpeg,.png"
+                             className="hidden"
+                             id="fuehrerschein"
+                           />
+                           <Button
+                             type="button"
+                             variant="outline"
+                             size="sm"
+                             onClick={() => document.getElementById('fuehrerschein')?.click()}
+                           >
+                             <Upload className="h-4 w-4 mr-2" />
+                             Datei wählen
+                           </Button>
+                         </div>
+                       </div>
+
+                       <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+                         <div className="flex flex-col items-center space-y-2">
+                           <FileText className="h-8 w-8 text-muted-foreground" />
+                           <h4 className="font-medium">Fahrerkarte</h4>
+                           <p className="text-sm text-muted-foreground">
+                             Laden Sie eine Kopie Ihrer Fahrerkarte hoch
+                           </p>
+                           <Input
+                             type="file"
+                             accept=".pdf,.jpg,.jpeg,.png"
+                             className="hidden"
+                             id="fahrerkarte"
+                           />
+                           <Button
+                             type="button"
+                             variant="outline"
+                             size="sm"
+                             onClick={() => document.getElementById('fahrerkarte')?.click()}
+                           >
+                             <Upload className="h-4 w-4 mr-2" />
+                             Datei wählen
+                           </Button>
+                         </div>
+                       </div>
+                     </div>
+
+                     <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
+                       <div className="flex flex-col items-center space-y-2">
+                         <FileText className="h-8 w-8 text-muted-foreground" />
+                         <h4 className="font-medium">Weitere Zertifikate</h4>
+                         <p className="text-sm text-muted-foreground">
+                           ADR-Schein, Kranführerschein, etc. (Mehrere Dateien möglich)
+                         </p>
+                         <Input
+                           type="file"
+                           accept=".pdf,.jpg,.jpeg,.png"
+                           multiple
+                           className="hidden"
+                           id="zertifikate"
+                         />
+                         <Button
+                           type="button"
+                           variant="outline"
+                           size="sm"
+                           onClick={() => document.getElementById('zertifikate')?.click()}
+                         >
+                           <Upload className="h-4 w-4 mr-2" />
+                           Dateien wählen
+                         </Button>
+                       </div>
+                     </div>
+                   </div>
+
+                   <div>
+                     <Label htmlFor="beschreibung">Beschreibung / Zusätzliche Informationen</Label>
+                     <Textarea
+                       id="beschreibung"
+                       value={formData.beschreibung}
+                       onChange={(e) => setFormData({...formData, beschreibung: e.target.value})}
+                       rows={4}
+                       placeholder="Beschreiben Sie Ihre Erfahrungen, besonderen Qualifikationen oder Präferenzen..."
+                     />
+                   </div>
+
+                   {/* Einverständniserklärungen */}
+                   <div className="space-y-3 border-t pt-6">
+                     <div className="flex items-start space-x-2">
+                       <Checkbox id="datenschutz" required />
+                       <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
+                         Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
+                         <Link to="/impressum" className="text-primary hover:underline">
+                           Datenschutzerklärung
+                         </Link>{" "}
+                         zu. *
+                       </Label>
+                     </div>
+                     
+                     <div className="flex items-start space-x-2">
+                       <Checkbox id="newsletter" />
+                       <Label htmlFor="newsletter" className="text-sm leading-relaxed">
+                         Ich möchte über neue Fahrer-Einsätze und Angebote per E-Mail informiert werden. 
+                         (Jobalarm - jederzeit kündbar)
+                       </Label>
+                     </div>
+                     
+                     <div className="flex items-start space-x-2">
+                       <Checkbox id="marketing" />
+                       <Label htmlFor="marketing" className="text-sm leading-relaxed">
+                         Ich bin damit einverstanden, dass Fahrerexpress-Agentur mich über neue Services 
+                         und Angebote informiert. (Marketing - jederzeit kündbar)
+                       </Label>
+                     </div>
+                   </div>
 
                   <Button 
                     type="submit" 

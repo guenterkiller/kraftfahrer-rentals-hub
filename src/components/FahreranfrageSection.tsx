@@ -149,6 +149,67 @@ const FahreranfrageSection = () => {
                 />
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="einsatzbeginn">Gewünschter Einsatzbeginn</Label>
+                  <Input
+                    type="date"
+                    id="einsatzbeginn"
+                    name="einsatzbeginn"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="einsatzdauer">Einsatzdauer</Label>
+                  <Input
+                    type="text"
+                    id="einsatzdauer"
+                    name="einsatzdauer"
+                    placeholder="z.B. 3 Tage, 2 Wochen"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="fahrzeugtyp">Benötigter Fahrzeugtyp</Label>
+                <select 
+                  id="fahrzeugtyp"
+                  name="fahrzeugtyp"
+                  className="w-full mt-1 px-3 py-2 border border-input bg-background rounded-md"
+                >
+                  <option value="">Bitte wählen</option>
+                  <option value="lkw-ce">LKW C+E</option>
+                  <option value="fahrmischer">Fahrmischer</option>
+                  <option value="sattelzug">Sattelzug</option>
+                  <option value="kipper">Kipper</option>
+                  <option value="pritsche">Pritschenwagen</option>
+                  <option value="sonstige">Sonstige</option>
+                </select>
+              </div>
+
+              <div>
+                <Label>Spezialanforderungen</Label>
+                <div className="mt-2 space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="adr" name="anforderungen" value="adr" />
+                    <Label htmlFor="adr" className="text-sm">ADR-Schein erforderlich</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="kran" name="anforderungen" value="kran" />
+                    <Label htmlFor="kran" className="text-sm">Kran-Erfahrung erforderlich</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="langstrecke" name="anforderungen" value="langstrecke" />
+                    <Label htmlFor="langstrecke" className="text-sm">Langstreckenfahrten</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="nachtschicht" name="anforderungen" value="nachtschicht" />
+                    <Label htmlFor="nachtschicht" className="text-sm">Nachtschicht möglich</Label>
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <Label htmlFor="nachricht">Beschreiben Sie Ihren Fahrbedarf *</Label>
                 <Textarea
@@ -156,27 +217,39 @@ const FahreranfrageSection = () => {
                   name="nachricht"
                   rows={6}
                   required
-                  placeholder="z.B. Fahrzeugart, Einsatzdauer, Einsatzort, besondere Anforderungen..."
+                  placeholder="z.B. Einsatzort, besondere Anforderungen, weitere Details..."
                   className="mt-1"
                 />
               </div>
 
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="datenschutz"
-                  name="datenschutz"
-                  required
-                />
-                <Label htmlFor="datenschutz" className="text-sm">
-                  Ich stimme der Verarbeitung meiner Daten zu. *{" "}
-                  <a 
-                    href="/impressum" 
-                    target="_blank" 
-                    className="text-primary hover:underline"
-                  >
-                    Datenschutzerklärung
-                  </a>
-                </Label>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="datenschutz"
+                    name="datenschutz"
+                    required
+                  />
+                  <Label htmlFor="datenschutz" className="text-sm">
+                    Ich stimme der Verarbeitung meiner Daten zu. *{" "}
+                    <a 
+                      href="/impressum" 
+                      target="_blank" 
+                      className="text-primary hover:underline"
+                    >
+                      Datenschutzerklärung
+                    </a>
+                  </Label>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="newsletter"
+                    name="newsletter"
+                  />
+                  <Label htmlFor="newsletter" className="text-sm">
+                    Ich möchte über neue Fahrer und Angebote per E-Mail informiert werden
+                  </Label>
+                </div>
               </div>
 
               <Button
