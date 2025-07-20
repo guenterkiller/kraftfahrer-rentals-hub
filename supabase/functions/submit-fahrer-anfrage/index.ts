@@ -4,6 +4,11 @@ import { Resend } from "npm:resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
+// Initialize Supabase client
+const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -23,7 +28,6 @@ interface FahrerAnfrageRequest {
   specializations?: string[];
   regions?: string[];
   hourly_rate?: string;
-  // File uploads are handled separately and not part of this interface
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -51,8 +55,42 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`Processing fahrer request from ${requestData.name}`);
 
-    // Send email notification
-    const emailResponse = await resend.emails.send({
+    // Extract IP address and User-Agent from headers
+    const ipAddress = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+    const userAgent = req.headers.get("user-agent") || "unknown";
+
+    // Save to database
+    console.log("Saving to database...");
+    const { data: dbData, error: dbError } = await supabase
+      .from('fahreranfragen')
+      .insert({
+        name: requestData.name,
+        email: requestData.email,
+        phone: requestData.phone,
+        company: requestData.company || null,
+        message: requestData.message || null,
+        description: requestData.description || null,
+        license_classes: requestData.license_classes || [],
+        experience: requestData.experience || null,
+        specializations: requestData.specializations || [],
+        regions: requestData.regions || [],
+        hourly_rate: requestData.hourly_rate || null,
+        ip_address: ipAddress,
+        user_agent: userAgent,
+        status: 'new'
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error("Database error:", dbError);
+      throw new Error("Fehler beim Speichern der Anfrage in der Datenbank");
+    }
+
+    console.log("Saved to database successfully:", dbData.id);
+
+    // Send notification email to admin
+    const adminEmailResponse = await resend.emails.send({
       from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
       to: ["info@kraftfahrer-mieten.com"],
       subject: `Neue Fahreranfrage von ${requestData.name}`,
@@ -69,11 +107,33 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Spezialisierungen:</strong> ${requestData.specializations?.length ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Verfügbare Regionen:</strong> ${requestData.regions?.length ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Stundensatz:</strong> ${requestData.hourly_rate || 'nicht angegeben'}</p>
+        <p><strong>IP-Adresse:</strong> ${ipAddress}</p>
         <p><em>Gesendet am ${new Date().toLocaleString('de-DE')}</em></p>
       `,
     });
 
-    console.log("Email sent successfully:", emailResponse);
+    console.log("Admin email sent successfully:", adminEmailResponse);
+
+    // Send confirmation email to applicant
+    const confirmationEmailResponse = await resend.emails.send({
+      from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
+      to: [requestData.email],
+      subject: "Ihre Anfrage bei der Fahrerexpress-Agentur",
+      html: `
+        <h2>Vielen Dank für Ihre Anfrage!</h2>
+        <p>Lieber Herr/Frau ${requestData.name},</p>
+        <p>vielen Dank für Ihre Fahreranfrage. Wir haben Ihre Daten erhalten und melden uns kurzfristig bei Ihnen.</p>
+        <p>Bei Rückfragen erreichen Sie uns jederzeit unter:</p>
+        <ul>
+          <li>E-Mail: <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a></li>
+          <li>Telefon: <a href="tel:015771442285">01577 1442285</a></li>
+        </ul>
+        <p>Freundliche Grüße<br>
+        Ihr Fahrerexpress-Team</p>
+      `,
+    });
+
+    console.log("Confirmation email sent successfully:", confirmationEmailResponse);
 
     return new Response(
       JSON.stringify({ success: true }),
