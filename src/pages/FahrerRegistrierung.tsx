@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 const FahrerRegistrierung = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
   const [formData, setFormData] = useState({
     vorname: "",
     nachname: "",
@@ -57,21 +58,112 @@ const FahrerRegistrierung = () => {
         ? [...prev[field as keyof typeof prev] as string[], value]
         : (prev[field as keyof typeof prev] as string[]).filter(item => item !== value)
     }));
+    // Clear validation error when user interacts with field
+    if (validationErrors[field]) {
+      setValidationErrors(prev => ({
+        ...prev,
+        [field]: ""
+      }));
+    }
+  };
+
+  const validateField = (field: string, value: any) => {
+    const errors: {[key: string]: string} = {};
+    
+    switch (field) {
+      case 'vorname':
+        if (!value || value.trim() === '') {
+          errors.vorname = 'Bitte geben Sie Ihren Vornamen ein';
+        }
+        break;
+      case 'nachname':
+        if (!value || value.trim() === '') {
+          errors.nachname = 'Bitte geben Sie Ihren Nachnamen ein';
+        }
+        break;
+      case 'email':
+        if (!value || value.trim() === '') {
+          errors.email = 'Bitte geben Sie Ihre E-Mail-Adresse ein';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          errors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
+        }
+        break;
+      case 'telefon':
+        if (!value || value.trim() === '') {
+          errors.telefon = 'Bitte geben Sie Ihre Telefonnummer ein';
+        }
+        break;
+      case 'stundensatz':
+        if (!value || value.trim() === '') {
+          errors.stundensatz = 'Bitte geben Sie Ihren Stundensatz ein';
+        } else if (isNaN(Number(value)) || Number(value) <= 0) {
+          errors.stundensatz = 'Bitte geben Sie den Stundenlohn als gültige Zahl ein (z.B. 25)';
+        }
+        break;
+      case 'fuehrerscheinklassen':
+        if (!value || value.length === 0) {
+          errors.fuehrerscheinklassen = 'Bitte wählen Sie mindestens eine Führerscheinklasse aus';
+        }
+        break;
+      case 'erfahrung_jahre':
+        if (!value || value.trim() === '') {
+          errors.erfahrung_jahre = 'Bitte wählen Sie Ihre Berufserfahrung aus';
+        }
+        break;
+    }
+    
+    return errors;
+  };
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    
+    // Clear validation error when user starts typing
+    if (validationErrors[field]) {
+      setValidationErrors(prev => ({
+        ...prev,
+        [field]: ""
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const errors: {[key: string]: string} = {};
+    
+    // Validate all required fields
+    const vornameErrors = validateField('vorname', formData.vorname);
+    const nachnameErrors = validateField('nachname', formData.nachname);
+    const emailErrors = validateField('email', formData.email);
+    const telefonErrors = validateField('telefon', formData.telefon);
+    const stundensatzErrors = validateField('stundensatz', formData.stundensatz);
+    const fuehrerscheinklassenErrors = validateField('fuehrerscheinklassen', formData.fuehrerscheinklassen);
+    const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
+    
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors);
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Client-side validation before submit
+    if (!validateForm()) {
+      toast({
+        title: "Eingabefehler",
+        description: "Bitte korrigieren Sie die markierten Felder.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // Validierung der Pflichtfelder
-      if (!formData.vorname || !formData.nachname || !formData.email || !formData.telefon || !formData.stundensatz) {
-        throw new Error("Bitte füllen Sie alle Pflichtfelder aus.");
-      }
-
-      if (formData.fuehrerscheinklassen.length === 0) {
-        throw new Error("Bitte wählen Sie mindestens eine Führerscheinklasse aus.");
-      }
 
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
@@ -109,7 +201,7 @@ const FahrerRegistrierung = () => {
         window.location.href = '/';
       }, 2000);
 
-      // Form zurücksetzen
+      // Form NUR nach erfolgreichem Submit zurücksetzen
       setFormData({
         vorname: "",
         nachname: "",
@@ -126,6 +218,7 @@ const FahrerRegistrierung = () => {
         verfuegbarkeit: "",
         beschreibung: "",
       });
+      setValidationErrors({});
 
     } catch (error: any) {
       console.error("Fehler beim Senden:", error);
@@ -134,6 +227,7 @@ const FahrerRegistrierung = () => {
         description: error.message || "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
         variant: "destructive",
       });
+      // WICHTIG: Form-Daten bleiben erhalten bei Fehlern!
     } finally {
       setIsLoading(false);
     }
@@ -174,18 +268,26 @@ const FahrerRegistrierung = () => {
                       <Input
                         id="vorname"
                         value={formData.vorname}
-                        onChange={(e) => setFormData({...formData, vorname: e.target.value})}
+                        onChange={(e) => handleInputChange('vorname', e.target.value)}
+                        className={validationErrors.vorname ? "border-destructive" : ""}
                         required
                       />
+                      {validationErrors.vorname && (
+                        <p className="text-sm text-destructive mt-1">{validationErrors.vorname}</p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="nachname">Nachname *</Label>
                       <Input
                         id="nachname"
                         value={formData.nachname}
-                        onChange={(e) => setFormData({...formData, nachname: e.target.value})}
+                        onChange={(e) => handleInputChange('nachname', e.target.value)}
+                        className={validationErrors.nachname ? "border-destructive" : ""}
                         required
                       />
+                      {validationErrors.nachname && (
+                        <p className="text-sm text-destructive mt-1">{validationErrors.nachname}</p>
+                      )}
                     </div>
                   </div>
 
@@ -196,29 +298,37 @@ const FahrerRegistrierung = () => {
                         id="email"
                         type="email"
                         value={formData.email}
-                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                        className={validationErrors.email ? "border-destructive" : ""}
                         required
                       />
+                      {validationErrors.email && (
+                        <p className="text-sm text-destructive mt-1">{validationErrors.email}</p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="telefon">Telefon *</Label>
                       <Input
                         id="telefon"
                         value={formData.telefon}
-                        onChange={(e) => setFormData({...formData, telefon: e.target.value})}
+                        onChange={(e) => handleInputChange('telefon', e.target.value)}
+                        className={validationErrors.telefon ? "border-destructive" : ""}
                         required
                       />
+                      {validationErrors.telefon && (
+                        <p className="text-sm text-destructive mt-1">{validationErrors.telefon}</p>
+                      )}
                     </div>
                   </div>
 
                   {/* Adresse */}
                   <div>
-                    <Label htmlFor="adresse">Adresse</Label>
-                    <Input
-                      id="adresse"
-                      value={formData.adresse}
-                      onChange={(e) => setFormData({...formData, adresse: e.target.value})}
-                    />
+                      <Label htmlFor="adresse">Adresse</Label>
+                      <Input
+                        id="adresse"
+                        value={formData.adresse}
+                        onChange={(e) => handleInputChange('adresse', e.target.value)}
+                      />
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
@@ -227,7 +337,7 @@ const FahrerRegistrierung = () => {
                       <Input
                         id="plz"
                         value={formData.plz}
-                        onChange={(e) => setFormData({...formData, plz: e.target.value})}
+                        onChange={(e) => handleInputChange('plz', e.target.value)}
                       />
                     </div>
                     <div>
@@ -235,7 +345,7 @@ const FahrerRegistrierung = () => {
                       <Input
                         id="ort"
                         value={formData.ort}
-                        onChange={(e) => setFormData({...formData, ort: e.target.value})}
+                        onChange={(e) => handleInputChange('ort', e.target.value)}
                       />
                     </div>
                   </div>
@@ -257,12 +367,18 @@ const FahrerRegistrierung = () => {
                         </div>
                       ))}
                     </div>
+                    {validationErrors.fuehrerscheinklassen && (
+                      <p className="text-sm text-destructive mt-1">{validationErrors.fuehrerscheinklassen}</p>
+                    )}
                   </div>
 
                   <div>
                     <Label htmlFor="erfahrung">Berufserfahrung (Jahre) *</Label>
-                    <Select onValueChange={(value) => setFormData({...formData, erfahrung_jahre: value})}>
-                      <SelectTrigger>
+                    <Select 
+                      value={formData.erfahrung_jahre} 
+                      onValueChange={(value) => handleInputChange('erfahrung_jahre', value)}
+                    >
+                      <SelectTrigger className={validationErrors.erfahrung_jahre ? "border-destructive" : ""}>
                         <SelectValue placeholder="Wählen Sie Ihre Erfahrung" />
                       </SelectTrigger>
                       <SelectContent>
@@ -273,6 +389,9 @@ const FahrerRegistrierung = () => {
                         <SelectItem value="20">Über 20 Jahre</SelectItem>
                       </SelectContent>
                     </Select>
+                    {validationErrors.erfahrung_jahre && (
+                      <p className="text-sm text-destructive mt-1">{validationErrors.erfahrung_jahre}</p>
+                    )}
                   </div>
 
                   {/* Spezialisierungen */}
@@ -320,14 +439,22 @@ const FahrerRegistrierung = () => {
                         id="stundensatz"
                         type="number"
                         step="0.50"
+                        placeholder="z.B. 25"
                         value={formData.stundensatz}
-                        onChange={(e) => setFormData({...formData, stundensatz: e.target.value})}
+                        onChange={(e) => handleInputChange('stundensatz', e.target.value)}
+                        className={validationErrors.stundensatz ? "border-destructive" : ""}
                         required
                       />
+                      {validationErrors.stundensatz && (
+                        <p className="text-sm text-destructive mt-1">{validationErrors.stundensatz}</p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="verfuegbarkeit">Verfügbarkeit</Label>
-                      <Select onValueChange={(value) => setFormData({...formData, verfuegbarkeit: value})}>
+                      <Select 
+                        value={formData.verfuegbarkeit} 
+                        onValueChange={(value) => handleInputChange('verfuegbarkeit', value)}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Verfügbarkeit wählen" />
                         </SelectTrigger>
@@ -424,16 +551,16 @@ const FahrerRegistrierung = () => {
                      </div>
                    </div>
 
-                   <div>
-                     <Label htmlFor="beschreibung">Beschreibung / Zusätzliche Informationen</Label>
-                     <Textarea
-                       id="beschreibung"
-                       value={formData.beschreibung}
-                       onChange={(e) => setFormData({...formData, beschreibung: e.target.value})}
-                       rows={4}
-                       placeholder="Beschreiben Sie Ihre Erfahrungen, besonderen Qualifikationen oder Präferenzen..."
-                     />
-                   </div>
+                    <div>
+                      <Label htmlFor="beschreibung">Beschreibung / Zusätzliche Informationen</Label>
+                      <Textarea
+                        id="beschreibung"
+                        value={formData.beschreibung}
+                        onChange={(e) => handleInputChange('beschreibung', e.target.value)}
+                        rows={4}
+                        placeholder="Beschreiben Sie Ihre Erfahrungen, besonderen Qualifikationen oder Präferenzen..."
+                      />
+                    </div>
 
                    {/* Einverständniserklärungen */}
                    <div className="space-y-3 border-t pt-6">
