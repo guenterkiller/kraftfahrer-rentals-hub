@@ -62,28 +62,30 @@ const handler = async (req: Request): Promise<Response> => {
     // Save to database
     console.log("Saving to database...");
     
-    // Ensure arrays are properly formatted and provide fallbacks for all fields
+    // Split name into vorname and nachname
+    const nameParts = requestData.name.trim().split(' ');
+    const vorname = nameParts[0] || '';
+    const nachname = nameParts.slice(1).join(' ') || '';
+    
+    // Map data to correct table fields
     const insertData = {
-      name: requestData.name,
+      vorname,
+      nachname,
       email: requestData.email,
-      phone: requestData.phone,
-      company: requestData.company || "nicht angegeben",
-      message: requestData.message || "nicht angegeben", 
-      description: requestData.description || "nicht angegeben",
-      license_classes: Array.isArray(requestData.license_classes) ? requestData.license_classes : [],
-      experience: requestData.experience || "nicht angegeben",
-      specializations: Array.isArray(requestData.specializations) ? requestData.specializations : [],
-      regions: Array.isArray(requestData.regions) ? requestData.regions : [],
-      hourly_rate: requestData.hourly_rate || "nicht angegeben",
-      status: 'new',
-      ip_address: ipAddress,
-      user_agent: userAgent
+      telefon: requestData.phone,
+      beschreibung: requestData.description || '',
+      fuehrerscheinklassen: Array.isArray(requestData.license_classes) ? requestData.license_classes : [],
+      erfahrung_jahre: requestData.experience ? parseInt(requestData.experience) : null,
+      spezialisierungen: Array.isArray(requestData.specializations) ? requestData.specializations : [],
+      verfuegbare_regionen: Array.isArray(requestData.regions) ? requestData.regions : [],
+      stundensatz: requestData.hourly_rate ? parseFloat(requestData.hourly_rate) : null,
+      status: 'pending'
     };
     
     console.log("Insert data being sent:", JSON.stringify(insertData, null, 2));
     
     const { data, error } = await supabase
-      .from('fahreranfragen')
+      .from('fahrer_profile')
       .insert([insertData]);
     
     console.log("Insert result:", { data, error });
