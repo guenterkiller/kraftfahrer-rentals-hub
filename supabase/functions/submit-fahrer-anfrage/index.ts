@@ -62,36 +62,38 @@ const handler = async (req: Request): Promise<Response> => {
     // Save to database
     console.log("Saving to database...");
     
-    // Ensure arrays are properly formatted and provide fallbacks
+    // Ensure arrays are properly formatted and provide fallbacks for all fields
     const insertData = {
       name: requestData.name,
       email: requestData.email,
       phone: requestData.phone,
       company: requestData.company || "nicht angegeben",
-      message: requestData.message || "nicht angegeben",
+      message: requestData.message || "nicht angegeben", 
       description: requestData.description || "nicht angegeben",
       license_classes: Array.isArray(requestData.license_classes) ? requestData.license_classes : [],
       experience: requestData.experience || "nicht angegeben",
       specializations: Array.isArray(requestData.specializations) ? requestData.specializations : [],
       regions: Array.isArray(requestData.regions) ? requestData.regions : [],
       hourly_rate: requestData.hourly_rate || "nicht angegeben",
+      status: 'new',
       ip_address: ipAddress,
-      user_agent: userAgent,
-      status: 'new'
+      user_agent: userAgent
     };
     
-    console.log("Insert data:", insertData);
+    console.log("Insert data being sent:", JSON.stringify(insertData, null, 2));
     
-    const { data: dbData, error: dbError } = await supabase
+    const { data, error } = await supabase
       .from('fahreranfragen')
-      .insert(insertData)
-      .select()
-      .single();
+      .insert([insertData]);
+    
+    console.log("Insert result:", { data, error });
 
-    if (dbError) {
-      console.error("Supabase insert error:", dbError);
+    if (error) {
+      console.error("Supabase insert error:", JSON.stringify(error, null, 2));
       throw new Error("Fehler beim Speichern der Anfrage in der Datenbank");
     }
+    
+    const dbData = data && data[0] ? data[0] : null;
 
     console.log("Saved to database successfully:", dbData.id);
 
