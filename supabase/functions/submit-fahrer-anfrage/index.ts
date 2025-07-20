@@ -16,7 +16,14 @@ interface FahrerAnfrageRequest {
   email: string;
   phone: string;
   company?: string;
-  message: string;
+  message?: string;
+  description?: string;
+  license_classes?: string[];
+  experience?: string;
+  specializations?: string[];
+  regions?: string[];
+  hourly_rate?: string;
+  // File uploads are handled separately and not part of this interface
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -30,11 +37,11 @@ const handler = async (req: Request): Promise<Response> => {
     
     const requestData: FahrerAnfrageRequest = await req.json();
 
-    // Validation
-    if (!requestData.name || !requestData.email || !requestData.phone || !requestData.message) {
+    // Validation - only name, email, and phone are required
+    if (!requestData.name || !requestData.email || !requestData.phone) {
       console.error("Missing required fields");
       return new Response(
-        JSON.stringify({ error: "Alle Pflichtfelder müssen ausgefüllt werden." }),
+        JSON.stringify({ error: "Name, E-Mail und Telefon sind Pflichtfelder." }),
         {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
@@ -54,9 +61,14 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Name:</strong> ${requestData.name}</p>
         <p><strong>E-Mail:</strong> ${requestData.email}</p>
         <p><strong>Telefon:</strong> ${requestData.phone}</p>
-        ${requestData.company ? `<p><strong>Unternehmen:</strong> ${requestData.company}</p>` : ''}
-        <p><strong>Nachricht:</strong></p>
-        <p>${requestData.message}</p>
+        <p><strong>Unternehmen:</strong> ${requestData.company || 'nicht angegeben'}</p>
+        <p><strong>Nachricht:</strong> ${requestData.message || 'nicht angegeben'}</p>
+        <p><strong>Beschreibung:</strong> ${requestData.description || 'nicht angegeben'}</p>
+        <p><strong>Führerscheinklassen:</strong> ${requestData.license_classes?.length ? requestData.license_classes.join(', ') : 'nicht angegeben'}</p>
+        <p><strong>Erfahrung:</strong> ${requestData.experience || 'nicht angegeben'}</p>
+        <p><strong>Spezialisierungen:</strong> ${requestData.specializations?.length ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
+        <p><strong>Verfügbare Regionen:</strong> ${requestData.regions?.length ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
+        <p><strong>Stundensatz:</strong> ${requestData.hourly_rate || 'nicht angegeben'}</p>
         <p><em>Gesendet am ${new Date().toLocaleString('de-DE')}</em></p>
       `,
     });
