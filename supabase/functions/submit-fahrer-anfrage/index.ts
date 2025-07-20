@@ -61,29 +61,35 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Save to database
     console.log("Saving to database...");
+    
+    // Ensure arrays are properly formatted and provide fallbacks
+    const insertData = {
+      name: requestData.name,
+      email: requestData.email,
+      phone: requestData.phone,
+      company: requestData.company || "nicht angegeben",
+      message: requestData.message || "nicht angegeben",
+      description: requestData.description || "nicht angegeben",
+      license_classes: Array.isArray(requestData.license_classes) ? requestData.license_classes : [],
+      experience: requestData.experience || "nicht angegeben",
+      specializations: Array.isArray(requestData.specializations) ? requestData.specializations : [],
+      regions: Array.isArray(requestData.regions) ? requestData.regions : [],
+      hourly_rate: requestData.hourly_rate || "nicht angegeben",
+      ip_address: ipAddress,
+      user_agent: userAgent,
+      status: 'new'
+    };
+    
+    console.log("Insert data:", insertData);
+    
     const { data: dbData, error: dbError } = await supabase
       .from('fahreranfragen')
-      .insert({
-        name: requestData.name,
-        email: requestData.email,
-        phone: requestData.phone,
-        company: requestData.company || null,
-        message: requestData.message || null,
-        description: requestData.description || null,
-        license_classes: requestData.license_classes || [],
-        experience: requestData.experience || null,
-        specializations: requestData.specializations || [],
-        regions: requestData.regions || [],
-        hourly_rate: requestData.hourly_rate || null,
-        ip_address: ipAddress,
-        user_agent: userAgent,
-        status: 'new'
-      })
+      .insert(insertData)
       .select()
       .single();
 
     if (dbError) {
-      console.error("Database error:", dbError);
+      console.error("Supabase insert error:", dbError);
       throw new Error("Fehler beim Speichern der Anfrage in der Datenbank");
     }
 
