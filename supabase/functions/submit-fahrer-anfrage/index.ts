@@ -46,8 +46,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email notification
     const emailResponse = await resend.emails.send({
-      from: "Fahrerexpress <onboarding@resend.dev>",
-      to: ["guenter.killer@t-online.de"],
+      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      to: ["info@kraftfahrer-mieten.com"],
       subject: `Neue Fahreranfrage von ${requestData.name}`,
       html: `
         <h2>Neue Fahreranfrage</h2>
