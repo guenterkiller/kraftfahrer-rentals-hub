@@ -78,20 +78,17 @@ const FahrerRegistrierung = () => {
       // Verwende die Edge Function für Fahrer-Bewerbungen
       const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
         body: {
-          vorname: formData.vorname,
-          nachname: formData.nachname,
+          name: `${formData.vorname} ${formData.nachname}`.trim(),
           email: formData.email,
-          telefon: formData.telefon,
-          adresse: formData.adresse || null,
-          plz: formData.plz || null,
-          ort: formData.ort || null,
-          fuehrerscheinklassen: formData.fuehrerscheinklassen,
-          erfahrung_jahre: formData.erfahrung_jahre ? parseInt(formData.erfahrung_jahre) : null,
-          spezialisierungen: formData.spezialisierungen,
-          verfuegbare_regionen: formData.verfuegbare_regionen,
-          stundensatz: parseFloat(formData.stundensatz),
-          verfuegbarkeit: formData.verfuegbarkeit || null,
-          beschreibung: formData.beschreibung || null
+          phone: formData.telefon,
+          company: formData.adresse ? `${formData.adresse}, ${formData.plz} ${formData.ort}`.trim() : null,
+          message: formData.verfuegbarkeit || null,
+          description: formData.beschreibung || null,
+          license_classes: formData.fuehrerscheinklassen,
+          experience: formData.erfahrung_jahre || null,
+          specializations: formData.spezialisierungen,
+          regions: formData.verfuegbare_regionen,
+          hourly_rate: formData.stundensatz ? `${formData.stundensatz} €` : null
         }
       });
 
