@@ -123,6 +123,8 @@ const handler = async (req: Request): Promise<Response> => {
         <h2>Vielen Dank für Ihre Anfrage!</h2>
         <p>Lieber Herr/Frau ${requestData.name},</p>
         <p>vielen Dank für Ihre Fahreranfrage. Wir haben Ihre Daten erhalten und melden uns kurzfristig bei Ihnen.</p>
+        <p>Bei passenden Anfragen melden wir uns gerne auch telefonisch bei Ihnen.</p>
+        <p>Wenn Sie Ihre Angaben nachträglich korrigieren oder ergänzen möchten, schreiben Sie uns bitte direkt an info@kraftfahrer-mieten.com unter Angabe Ihres Namens und der Telefonnummer.</p>
         <p>Bei Rückfragen erreichen Sie uns jederzeit unter:</p>
         <ul>
           <li>E-Mail: <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a></li>
