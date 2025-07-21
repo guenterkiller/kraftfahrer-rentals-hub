@@ -77,6 +77,89 @@ export type Database = {
         }
         Relationships: []
       }
+      job_requests: {
+        Row: {
+          besonderheiten: string | null
+          company: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          einsatzort: string
+          fahrzeugtyp: string
+          fuehrerscheinklasse: string
+          id: string
+          nachricht: string
+          status: string
+          updated_at: string
+          zeitraum: string
+        }
+        Insert: {
+          besonderheiten?: string | null
+          company?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string
+          einsatzort: string
+          fahrzeugtyp: string
+          fuehrerscheinklasse?: string
+          id?: string
+          nachricht: string
+          status?: string
+          updated_at?: string
+          zeitraum: string
+        }
+        Update: {
+          besonderheiten?: string | null
+          company?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string
+          einsatzort?: string
+          fahrzeugtyp?: string
+          fuehrerscheinklasse?: string
+          id?: string
+          nachricht?: string
+          status?: string
+          updated_at?: string
+          zeitraum?: string
+        }
+        Relationships: []
+      }
+      jobalarm_antworten: {
+        Row: {
+          antwort: string
+          created_at: string
+          fahrer_email: string
+          id: string
+          job_id: string
+        }
+        Insert: {
+          antwort: string
+          created_at?: string
+          fahrer_email: string
+          id?: string
+          job_id: string
+        }
+        Update: {
+          antwort?: string
+          created_at?: string
+          fahrer_email?: string
+          id?: string
+          job_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobalarm_antworten_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jobalarm_fahrer: {
         Row: {
           created_at: string

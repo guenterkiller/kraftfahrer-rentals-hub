@@ -60,7 +60,7 @@ const FahreranfrageSection = () => {
 
       // Save job request to database
       const { data: jobRequest, error: jobError } = await supabase
-        .from('job_requests')
+        .from('job_requests' as any)
         .insert([{
           customer_name: `${vorname} ${nachname}`,
           customer_email: email,
@@ -73,7 +73,7 @@ const FahreranfrageSection = () => {
           besonderheiten: besonderheiten || null,
           nachricht,
           status: 'open'
-        }])
+        }] as any)
         .select()
         .single();
 
@@ -84,10 +84,11 @@ const FahreranfrageSection = () => {
 
       console.log("Job request saved:", jobRequest);
 
-      // Send job alert emails to all drivers
-      const alertResponse = await supabase.functions.invoke('send-job-alert-emails', {
-        body: {
-          job_id: jobRequest.id,
+      // Send job alert emails to all drivers (only if job was saved successfully)
+      if (jobRequest && (jobRequest as any).id) {
+        const alertResponse = await supabase.functions.invoke('send-job-alert-emails', {
+          body: {
+            job_id: (jobRequest as any).id,
           einsatzort,
           zeitraum,
           fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
@@ -95,12 +96,13 @@ const FahreranfrageSection = () => {
           besonderheiten,
           customer_name: `${vorname} ${nachname}`,
           customer_email: email
-        }
-      });
+          }
+        });
 
-      if (alertResponse.error) {
-        console.error("Error sending job alert emails:", alertResponse.error);
-        // Don't fail the whole request if emails fail
+        if (alertResponse.error) {
+          console.error("Error sending job alert emails:", alertResponse.error);
+          // Don't fail the whole request if emails fail
+        }
       }
 
       // Also send the original customer notification email
