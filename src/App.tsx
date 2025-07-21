@@ -12,6 +12,7 @@ import Fahrerboerse from "./pages/Fahrerboerse";
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
+import Versicherung from "./pages/Versicherung";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/vermittlung" element={<Vermittlung />} />
           <Route path="/wissenswertes" element={<Wissenswertes />} />
           <Route path="/projekte" element={<Projekte />} />
+          <Route path="/versicherung" element={<Versicherung />} />
           <Route path="/impressum" element={<Impressum />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
