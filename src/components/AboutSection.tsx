@@ -12,7 +12,7 @@ const AboutSection = () => {
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg">
                   <img 
-                    src="/lovable-uploads/77c68a82-ca5f-456b-a22c-4c19614f3318.png" 
+                    src="/lovable-uploads/78e60df8-7b75-4383-98da-b6043410d6c6.png" 
                     alt="Günter Killer" 
                     className="w-full h-full object-cover"
                   />
