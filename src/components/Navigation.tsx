@@ -71,12 +71,11 @@ const Navigation = () => {
                 </a>
               );
             })}
-            <Link 
-              to="/fahrer-registrierung"
-              className="text-muted-foreground hover:text-primary transition-colors text-sm"
-            >
-              Fahrer werden
-            </Link>
+            <Button size="sm" className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all" asChild>
+              <Link to="/fahrer-registrierung">
+                🚀 Fahrer werden
+              </Link>
+            </Button>
             <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
               <a 
                 href="#contact"
@@ -127,13 +126,14 @@ const Navigation = () => {
                   </a>
                 );
               })}
-              <Link 
-                to="/fahrer-registrierung"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Fahrer werden
-              </Link>
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all mb-2" asChild>
+                <Link 
+                  to="/fahrer-registrierung"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  🚀 Fahrer werden
+                </Link>
+              </Button>
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
                 <a 
                   href="#contact"

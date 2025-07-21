@@ -65,8 +65,8 @@ const HeroSection = () => {
               🚛 Fahrer buchen
             </a>
           </Button>
-          <Button size="lg" className="text-lg px-8 py-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all transform hover:scale-105" asChild>
-            <Link to="/fahrer-registrierung">👨‍💼 Fahrer werden</Link>
+          <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-105 border-0" asChild>
+            <Link to="/fahrer-registrierung">🚀 Fahrer werden</Link>
           </Button>
         </div>
       </div>
