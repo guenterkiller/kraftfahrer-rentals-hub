@@ -67,6 +67,14 @@ const handler = async (req: Request): Promise<Response> => {
     const vorname = nameParts[0] || '';
     const nachname = nameParts.slice(1).join(' ') || '';
     
+    // Parse hourly rate safely
+    let parsedRate = null;
+    if (requestData.hourly_rate) {
+      const cleaned = String(requestData.hourly_rate).replace(/[^\d.,]/g, '').replace(',', '.');
+      const parsed = parseFloat(cleaned);
+      parsedRate = isNaN(parsed) ? null : parsed;
+    }
+    
     // Map data to correct table fields
     const insertData = {
       vorname,
@@ -78,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
       erfahrung_jahre: requestData.experience ? parseInt(requestData.experience) : null,
       spezialisierungen: Array.isArray(requestData.specializations) ? requestData.specializations : [],
       verfuegbare_regionen: Array.isArray(requestData.regions) ? requestData.regions : [],
-      stundensatz: requestData.hourly_rate ? parseFloat(requestData.hourly_rate) : null,
+      stundensatz: parsedRate,
       status: 'pending'
     };
     
