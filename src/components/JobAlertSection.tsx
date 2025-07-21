@@ -31,7 +31,7 @@ const JobAlertSection = () => {
     try {
       // Save to Supabase jobalarm_fahrer table
       const { error } = await supabase
-        .from('jobalarm_fahrer')
+        .from('jobalarm_fahrer' as any)
         .insert([{ email }]);
 
       if (error) {
