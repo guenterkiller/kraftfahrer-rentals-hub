@@ -11,6 +11,7 @@ import FahrerAdmin from "./pages/FahrerAdmin";
 import Fahrerboerse from "./pages/Fahrerboerse";
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
+import Vermittlung from "./pages/Vermittlung";
 
 const queryClient = new QueryClient();
 
