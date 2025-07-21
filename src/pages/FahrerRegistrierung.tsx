@@ -175,7 +175,7 @@ const FahrerRegistrierung = () => {
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
       // Verwende die Edge Function für Fahrer-Bewerbungen
-      const { data, error } = await supabase.functions.invoke('fahrerwerden', {
+      const response = await supabase.functions.invoke('fahrerwerden', {
         body: {
           name: `${formData.vorname} ${formData.nachname}`.trim(),
           email: formData.email,
@@ -191,12 +191,24 @@ const FahrerRegistrierung = () => {
         }
       });
 
-      if (error) {
-        console.error("Edge Function Fehler:", error);
-        throw new Error(error.message || "Fehler beim Speichern der Bewerbung");
+      // Check for specific status codes and handle them appropriately
+      if (response.error) {
+        console.error("Edge Function Fehler:", response.error);
+        
+        // Handle duplicate email error specifically
+        if (response.error.message && response.error.message.includes('bereits registriert')) {
+          toast({
+            title: "E-Mail bereits registriert",
+            description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        throw new Error(response.error.message || "Fehler beim Speichern der Bewerbung");
       }
 
-      console.log("Fahrer-Bewerbung erfolgreich gespeichert:", data);
+      console.log("Fahrer-Bewerbung erfolgreich gespeichert:", response.data);
 
       toast({
         title: "Registrierung erfolgreich!",

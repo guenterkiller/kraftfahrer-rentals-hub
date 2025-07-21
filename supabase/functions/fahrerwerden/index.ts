@@ -59,8 +59,34 @@ const handler = async (req: Request): Promise<Response> => {
     const ipAddress = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
     const userAgent = req.headers.get("user-agent") || "unknown";
 
+    // Check if email already exists first
+    console.log("Checking if email already exists...");
+    const { data: existingDriver, error: checkError } = await supabase
+      .from('fahrer_profile')
+      .select('id')
+      .eq('email', requestData.email)
+      .maybeSingle();
+    
+    if (checkError) {
+      console.error("Error checking existing email:", checkError);
+      throw new Error("Fehler beim Überprüfen der E-Mail-Adresse");
+    }
+    
+    if (existingDriver) {
+      console.log("Email already exists, returning 409");
+      return new Response(
+        JSON.stringify({ 
+          error: 'Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.' 
+        }),
+        { 
+          status: 409, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        }
+      );
+    }
+
     // Save to database
-    console.log("Saving to database...");
+    console.log("Email is unique, proceeding with registration...");
     
     // Split name into vorname and nachname
     const nameParts = requestData.name.trim().split(' ');
