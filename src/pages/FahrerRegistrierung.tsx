@@ -31,6 +31,7 @@ const FahrerRegistrierung = () => {
     stundensatz: "",
     verfuegbarkeit: "",
     beschreibung: "",
+    vermittlungszustimmung: false,
   });
 
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
@@ -110,6 +111,11 @@ const FahrerRegistrierung = () => {
           errors.erfahrung_jahre = 'Bitte wählen Sie Ihre Berufserfahrung aus';
         }
         break;
+      case 'vermittlungszustimmung':
+        if (!value) {
+          errors.vermittlungszustimmung = 'Sie müssen der Vermittlungsprovision zustimmen';
+        }
+        break;
     }
     
     return errors;
@@ -141,8 +147,9 @@ const FahrerRegistrierung = () => {
     const stundensatzErrors = validateField('stundensatz', formData.stundensatz);
     const fuehrerscheinklassenErrors = validateField('fuehrerscheinklassen', formData.fuehrerscheinklassen);
     const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
+    const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
     
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors);
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -217,6 +224,7 @@ const FahrerRegistrierung = () => {
         stundensatz: "",
         verfuegbarkeit: "",
         beschreibung: "",
+        vermittlungszustimmung: false,
       });
       setValidationErrors({});
 
@@ -583,14 +591,32 @@ const FahrerRegistrierung = () => {
                        </Label>
                      </div>
                      
-                     <div className="flex items-start space-x-2">
-                       <Checkbox id="marketing" />
-                       <Label htmlFor="marketing" className="text-sm leading-relaxed">
-                         Ich bin damit einverstanden, dass Fahrerexpress-Agentur mich über neue Services 
-                         und Angebote informiert. (Marketing - jederzeit kündbar)
-                       </Label>
-                     </div>
-                   </div>
+                      <div className="flex items-start space-x-2">
+                        <Checkbox id="marketing" />
+                        <Label htmlFor="marketing" className="text-sm leading-relaxed">
+                          Ich bin damit einverstanden, dass Fahrerexpress-Agentur mich über neue Services 
+                          und Angebote informiert. (Marketing - jederzeit kündbar)
+                        </Label>
+                      </div>
+                      
+                      <div className="flex items-start space-x-2">
+                        <Checkbox 
+                          id="vermittlungszustimmung"
+                          checked={formData.vermittlungszustimmung}
+                          onCheckedChange={(checked) => handleInputChange('vermittlungszustimmung', checked)}
+                          required 
+                        />
+                        <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
+                          Ich bin selbstständig tätig und stimme der Vermittlungsprovision von 15 % pro vermitteltem Einsatz zu. *{" "}
+                          <Link to="/vermittlung" className="text-primary hover:underline">
+                            Mehr Informationen
+                          </Link>
+                        </Label>
+                      </div>
+                      {validationErrors.vermittlungszustimmung && (
+                        <p className="text-sm text-destructive mt-1">{validationErrors.vermittlungszustimmung}</p>
+                      )}
+                    </div>
 
                   <Button 
                     type="submit" 

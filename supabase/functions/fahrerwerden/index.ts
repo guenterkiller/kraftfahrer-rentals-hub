@@ -166,6 +166,8 @@ const handler = async (req: Request): Promise<Response> => {
           <li>E-Mail: <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a></li>
           <li>Telefon: <a href="tel:015771442285">01577 1442285</a></li>
         </ul>
+        <p><strong>Hinweis:</strong> Sie haben der Vermittlungsprovision von 15 % auf vermittelte Einsätze zugestimmt. 
+        Die Abrechnung erfolgt je nach Einsatz monatlich oder fallbezogen.</p>
         <p>Freundliche Grüße<br>
         Ihr Fahrerexpress-Team</p>
       `,
