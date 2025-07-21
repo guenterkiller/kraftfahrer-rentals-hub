@@ -84,7 +84,8 @@ const handler = async (req: Request): Promise<Response> => {
         try {
           await resend.emails.send({
             from: "Fahrer-Vermittlung <noreply@resend.dev>",
-            to: ["info@example.com"], // Replace with actual customer notification email
+            to: ["info@kraftfahrer-mieten.com"],
+            cc: ["guenter.killer@t-online.de"],
             subject: `🎉 Fahrer verfügbar für Auftrag ${jobData.einsatzort}`,
             html: `
               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
