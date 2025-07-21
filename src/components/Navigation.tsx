@@ -81,7 +81,7 @@ const Navigation = () => {
                 href="#contact"
                 onClick={(e) => handleNavClick('#contact', e)}
               >
-                Fahrer anfragen
+                Fahrer buchen
               </a>
             </Button>
           </div>
@@ -142,7 +142,7 @@ const Navigation = () => {
                     handleNavClick('#contact', e);
                   }}
                 >
-                  Fahrer anfragen
+                  Fahrer buchen
                 </a>
               </Button>
             </div>

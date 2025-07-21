@@ -277,7 +277,7 @@ const Fahrerboerse = () => {
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-[500px]">
                         <DialogHeader>
-                          <DialogTitle>Fahrer anfragen</DialogTitle>
+                          <DialogTitle>Fahrer buchen</DialogTitle>
                           <DialogDescription>
                             Anfrage für {getInitials(driver.vorname, driver.nachname)} aus {getLocationDisplay(driver.plz || "", driver.ort || "")}
                           </DialogDescription>
