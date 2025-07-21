@@ -47,7 +47,8 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
       to: ["info@kraftfahrer-mieten.com"],
-      subject: `Neue Fahrer-Anfrage von ${vorname} ${nachname}`,
+      bcc: ["guenter.killer@t-online.de"],
+      subject: "🚛 Neue Fahrerbuchung über die Webseite – Fahrerexpress",
       html: `
         <h2>Neue Fahrer-Anfrage</h2>
         
