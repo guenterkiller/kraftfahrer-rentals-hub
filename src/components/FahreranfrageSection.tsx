@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const FahreranfrageSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,31 +37,95 @@ const FahreranfrageSection = () => {
     }
 
     try {
-      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-fahrer-anfrage-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`
-        },
-        body: JSON.stringify({
+      // Collect all form data
+      const einsatzbeginn = formData.get("einsatzbeginn") as string;
+      const einsatzdauer = formData.get("einsatzdauer") as string;
+      const fahrzeugtyp = formData.get("fahrzeugtyp") as string;
+      
+      // Collect special requirements
+      const anforderungen = Array.from(formData.getAll("anforderungen"));
+      const besonderheiten = anforderungen.length > 0 ? anforderungen.join(", ") : "";
+      
+      // Build zeitraum string
+      const zeitraum = einsatzbeginn && einsatzdauer 
+        ? `Ab ${einsatzbeginn} für ${einsatzdauer}`
+        : einsatzbeginn 
+        ? `Ab ${einsatzbeginn}` 
+        : einsatzdauer || "Nach Absprache";
+
+      // Extract location from message or use a default
+      const einsatzort = nachricht.includes("Einsatzort") 
+        ? nachricht.split("Einsatzort")[1]?.split(/[,\n]/)[0]?.trim() || "Siehe Nachricht"
+        : "Siehe Nachricht";
+
+      // Save job request to database
+      const { data: jobRequest, error: jobError } = await supabase
+        .from('job_requests')
+        .insert([{
+          customer_name: `${vorname} ${nachname}`,
+          customer_email: email,
+          customer_phone: telefon,
+          company: formData.get('unternehmen') as string || null,
+          einsatzort,
+          zeitraum,
+          fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
+          fuehrerscheinklasse: "C+E", // Default, could be made dynamic
+          besonderheiten: besonderheiten || null,
+          nachricht,
+          status: 'open'
+        }])
+        .select()
+        .single();
+
+      if (jobError) {
+        console.error("Error saving job request:", jobError);
+        throw new Error("Failed to save job request");
+      }
+
+      console.log("Job request saved:", jobRequest);
+
+      // Send job alert emails to all drivers
+      const alertResponse = await supabase.functions.invoke('send-job-alert-emails', {
+        body: {
+          job_id: jobRequest.id,
+          einsatzort,
+          zeitraum,
+          fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
+          fuehrerscheinklasse: "C+E",
+          besonderheiten,
+          customer_name: `${vorname} ${nachname}`,
+          customer_email: email
+        }
+      });
+
+      if (alertResponse.error) {
+        console.error("Error sending job alert emails:", alertResponse.error);
+        // Don't fail the whole request if emails fail
+      }
+
+      // Also send the original customer notification email
+      const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
+        body: {
           name: `${vorname} ${nachname}`,
           email: email,
           phone: telefon,
           company: formData.get('unternehmen') || '',
           message: nachricht
-        })
+        }
       });
 
-      if (response.ok) {
-        toast({
-          title: "Anfrage gesendet!",
-          description: "Vielen Dank für Ihre Anfrage. Wir melden uns zeitnah bei Ihnen.",
-        });
-        // Reset form
-        (e.target as HTMLFormElement).reset();
-      } else {
-        throw new Error("Server error");
+      if (customerResponse.error) {
+        console.error("Error sending customer email:", customerResponse.error);
       }
+
+      toast({
+        title: "Anfrage gesendet!",
+        description: "Vielen Dank für Ihre Anfrage. Alle verfügbaren Fahrer wurden benachrichtigt. Wir melden uns zeitnah bei Ihnen.",
+      });
+      
+      // Reset form
+      (e.target as HTMLFormElement).reset();
+
     } catch (error: any) {
       console.error("Error submitting fahreranfrage:", error);
       toast({
