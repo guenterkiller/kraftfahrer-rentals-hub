@@ -119,7 +119,11 @@ const handler = async (req: Request): Promise<Response> => {
     
     const dbData = data && data[0] ? data[0] : null;
 
-    console.log("Saved to database successfully:", dbData.id);
+    if (dbData && dbData.id) {
+      console.log("Saved to database successfully:", dbData.id);
+    } else {
+      console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
+    }
 
     // Send notification email to admin
     const adminEmailResponse = await resend.emails.send({
