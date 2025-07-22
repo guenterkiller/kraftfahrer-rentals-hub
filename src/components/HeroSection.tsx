@@ -53,10 +53,10 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-6 justify-center max-w-2xl mx-auto">
           <Button size="lg" className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all transform hover:scale-105" asChild>
             <a 
-              href="#contact"
+              href="#fahreranfrage"
               onClick={(e) => {
                 e.preventDefault();
-                const element = document.querySelector('#contact');
+                const element = document.querySelector('#fahreranfrage');
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }

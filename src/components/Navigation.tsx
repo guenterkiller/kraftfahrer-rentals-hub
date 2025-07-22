@@ -77,12 +77,21 @@ const Navigation = () => {
               </Link>
             </Button>
             <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-              <a 
-                href="#contact"
-                onClick={(e) => handleNavClick('#contact', e)}
+              <Link 
+                to="/#fahreranfrage"
+                onClick={(e) => {
+                  // Wenn wir schon auf der Index-Seite sind, scrolle zum Formular
+                  if (window.location.pathname === '/') {
+                    e.preventDefault();
+                    const element = document.querySelector('#fahreranfrage');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }
+                }}
               >
                 Fahrer buchen
-              </a>
+              </Link>
             </Button>
           </div>
           
@@ -135,15 +144,22 @@ const Navigation = () => {
                 </Link>
               </Button>
               <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" asChild>
-                <a 
-                  href="#contact"
+                <Link 
+                  to="/#fahreranfrage"
                   onClick={(e) => {
                     setIsMenuOpen(false);
-                    handleNavClick('#contact', e);
+                    // Wenn wir schon auf der Index-Seite sind, scrolle zum Formular
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      const element = document.querySelector('#fahreranfrage');
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }
                   }}
                 >
                   Fahrer buchen
-                </a>
+                </Link>
               </Button>
             </div>
           </div>
