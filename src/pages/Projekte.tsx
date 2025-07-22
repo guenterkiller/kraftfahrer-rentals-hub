@@ -3,10 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Clock, Users, Truck, Calendar } from "lucide-react";
-import fahrmischerMuenchen from "@/assets/projekt-fahrmischer-muenchen.jpg";
-import logistikHamburg from "@/assets/projekt-logistik-hamburg.jpg";
-import kranFrankfurt from "@/assets/projekt-kran-frankfurt.jpg";
-import landwirtschaftNiedersachsen from "@/assets/projekt-landwirtschaft-niedersachsen.jpg";
+// Using uploaded project images
 
 const Projekte = () => {
   const projekte = [
@@ -27,7 +24,7 @@ const Projekte = () => {
       losung: "Erfahrene Fahrmischerfahrer mit Stadtkenntnis eingesetzt. Enge Abstimmung mit Bauleitung.",
       ergebnis: "Termingerechte Fertigstellung ohne Verzögerungen. Folgeaufträge erhalten.",
       bewertung: 5,
-      bild: fahrmischerMuenchen
+      bild: "/lovable-uploads/b2cd4743-98d6-4618-81c8-418636570dfc.png"
     },
     {
       id: 2,
@@ -46,7 +43,7 @@ const Projekte = () => {
       losung: "Pool erfahrener Wochenend-Fahrer aufgebaut. Flexible Einsatzplanung.",
       ergebnis: "Zuverlässige Abdeckung aller Wochenend-Transporte. Dauerhaft zufriedener Kunde.",
       bewertung: 5,
-      bild: logistikHamburg
+      bild: "/lovable-uploads/20627488-c22f-4d48-a48c-a32273f9a5dc.png"
     },
     {
       id: 3,
@@ -65,7 +62,7 @@ const Projekte = () => {
       losung: "Kranführer mit Hochhaus-Erfahrung und allen Zertifikaten vermittelt.",
       ergebnis: "Unfallfreier Bauabschnitt. Lobende Erwähnung bei Bauaufsicht.",
       bewertung: 5,
-      bild: kranFrankfurt
+      bild: "/lovable-uploads/878ffe35-4811-4857-8771-adce4681b6b0.png"
     },
     {
       id: 4,
@@ -84,7 +81,7 @@ const Projekte = () => {
       losung: "Fahrer mit landwirtschaftlicher Erfahrung und Flexibilität bei Arbeitszeiten.",
       ergebnis: "Komplette Ernte termingerecht eingefahren. Wiederbeauftragung für nächstes Jahr.",
       bewertung: 5,
-      bild: landwirtschaftNiedersachsen
+      bild: "/lovable-uploads/20627488-c22f-4d48-a48c-a32273f9a5dc.png"
     }
   ];
 
