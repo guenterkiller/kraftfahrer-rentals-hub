@@ -595,21 +595,6 @@ const FahrerRegistrierung = () => {
                        </Label>
                      </div>
                      
-                     <div className="flex items-start space-x-2">
-                       <Checkbox id="newsletter" />
-                       <Label htmlFor="newsletter" className="text-sm leading-relaxed">
-                         Ich möchte über neue Fahrer-Einsätze und Angebote per E-Mail informiert werden. 
-                         (Jobalarm - jederzeit kündbar)
-                       </Label>
-                     </div>
-                     
-                      <div className="flex items-start space-x-2">
-                        <Checkbox id="marketing" />
-                        <Label htmlFor="marketing" className="text-sm leading-relaxed">
-                          Ich bin damit einverstanden, dass Fahrerexpress-Agentur mich über neue Services 
-                          und Angebote informiert. (Marketing - jederzeit kündbar)
-                        </Label>
-                      </div>
                       
                       <div className="flex items-start space-x-2">
                         <Checkbox 
