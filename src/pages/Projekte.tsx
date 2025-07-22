@@ -10,7 +10,7 @@ const Projekte = () => {
     {
       id: 1,
       title: "Großbaustelle München - Fahrmischer-Einsatz",
-      kunde: "Bauunternehmen München GmbH",
+      kunde: "RRS-System",
       zeitraum: "März 2024 - Mai 2024",
       dauer: "8 Wochen",
       ort: "München, Bayern",
