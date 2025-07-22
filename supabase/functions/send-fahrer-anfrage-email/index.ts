@@ -97,7 +97,7 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Regionen:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
         
-        <p><strong>Bitte beachten Sie:</strong> Die Agentur berechnet zusätzlich eine Provision von 15 % auf das Netto-Honorar.</p>
+        
         
         <p>Falls Sie Fragen haben, kontaktieren Sie uns gerne unter info@fahrerexpress.de oder telefonisch.</p>
         

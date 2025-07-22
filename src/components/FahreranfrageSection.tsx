@@ -289,12 +289,6 @@ const FahreranfrageSection = () => {
                 />
               </div>
 
-              {/* Provision notice */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
-                  <strong>Hinweis:</strong> Für die Vermittlung fällt eine Provision von 15 % des Netto-Honorars an. Diese wird separat berechnet.
-                </p>
-              </div>
 
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
