@@ -66,22 +66,22 @@ const Projekte = () => {
     },
     {
       id: 4,
-      title: "Landwirtschafts-Transporte Niedersachsen",
-      kunde: "Agrar-Genossenschaft Weser-Ems",
-      zeitraum: "September 2024 - November 2024",
-      dauer: "Erntezeit (8 Wochen)",
-      ort: "Niedersachsen",
-      fahrzeugtyp: "Kipper + Anhänger",
-      beschreibung: "Getreide- und Rübentransporte während der intensiven Erntezeit.",
+      title: "Schwerlasttransport Speyer – Speziallogistik für Industrieanlage",
+      kunde: "Industrieservice Rhein-Süd",
+      zeitraum: "August 2018",
+      dauer: "3 Wochen",
+      ort: "Speyer",
+      fahrzeugtyp: "Schwerlast-Sattelzug",
+      beschreibung: "Transport von Industrieanlagen und Maschinenbauteilen mit speziellen Anforderungen an Ladungssicherung.",
       herausforderungen: [
-        "Witterungsabhängige Einsätze",
-        "Sehr kurzfristige Abrufe",
-        "Landwirtschaftliche Fahrwege"
+        "Übermaße und Übergewicht",
+        "Spezielle Genehmigungen erforderlich",
+        "Komplexe Routenplanung"
       ],
-      losung: "Fahrer mit landwirtschaftlicher Erfahrung und Flexibilität bei Arbeitszeiten.",
-      ergebnis: "Komplette Ernte termingerecht eingefahren. Wiederbeauftragung für nächstes Jahr.",
+      losung: "Erfahrene Schwerlastfahrer mit entsprechenden Qualifikationen und Begleitfahrzeugen.",
+      ergebnis: "Alle Anlagenteile sicher und termingerecht am Zielort angeliefert.",
       bewertung: 5,
-      bild: "/lovable-uploads/20627488-c22f-4d48-a48c-a32273f9a5dc.png"
+      bild: "/lovable-uploads/317386e9-d20a-42c9-bf9c-306b44687d48.png"
     }
   ];
 
