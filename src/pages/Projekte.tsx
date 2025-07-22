@@ -66,7 +66,7 @@ const Projekte = () => {
     },
     {
       id: 4,
-      title: "Schwerlasttransport Speyer – Baumaschinen-Transporte",
+      title: "Schwerlasttransport Speyer – Speziallogistik für Industrieanlage",
       kunde: "Bauunternehmen Speyer",
       zeitraum: "August 2018",
       dauer: "3 Wochen",
