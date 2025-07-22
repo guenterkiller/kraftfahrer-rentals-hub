@@ -325,7 +325,7 @@ const FahreranfrageSection = () => {
                 disabled={isSubmitting}
                 className="w-full"
               >
-                {isSubmitting ? "Wird gesendet..." : "Anfrage senden"}
+                {isSubmitting ? "Wird gesendet..." : "Fahrer buchen"}
               </Button>
             </form>
           </CardContent>

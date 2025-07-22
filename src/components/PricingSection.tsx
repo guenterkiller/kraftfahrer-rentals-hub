@@ -77,9 +77,9 @@ const PricingSection = () => {
                   ))}
                 </ul>
                 <Button className="w-full" variant="outline" onClick={() => {
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('fahreranfrage')?.scrollIntoView({ behavior: 'smooth' });
                 }}>
-                  Anfrage stellen
+                  Fahrer buchen
                 </Button>
               </CardContent>
             </Card>

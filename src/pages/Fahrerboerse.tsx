@@ -272,7 +272,7 @@ const Fahrerboerse = () => {
                           className="w-full"
                           onClick={() => setSelectedFahrer(driver)}
                         >
-                          Jetzt anfragen
+                          Fahrer buchen
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="sm:max-w-[500px]">
@@ -358,7 +358,7 @@ const Fahrerboerse = () => {
                             disabled={isSubmitting}
                             className="w-full"
                           >
-                            {isSubmitting ? "Wird gesendet..." : "Anfrage senden"}
+                            {isSubmitting ? "Wird gesendet..." : "Fahrer buchen"}
                           </Button>
                         </form>
                       </DialogContent>

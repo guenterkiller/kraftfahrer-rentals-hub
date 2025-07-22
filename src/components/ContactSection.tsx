@@ -1,82 +1,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
 
 const ContactSection = () => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      const formData = new FormData(e.target as HTMLFormElement);
-      const vorname = formData.get('vorname') as string || '';
-      const nachname = formData.get('nachname') as string || '';
-      const email = formData.get('email') as string || '';
-      const telefon = formData.get('telefon') as string || '';
-      const unternehmen = formData.get('unternehmen') as string || '';
-      const nachricht = formData.get('nachricht') as string || '';
-
-      // Validierung
-      if (!vorname || !nachname || !email || !nachricht) {
-        toast({
-          title: "Fehler",
-          description: "Bitte füllen Sie alle Pflichtfelder aus.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // E-Mail über Edge Function senden
-      const { error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          vorname,
-          nachname,
-          email,
-          telefon,
-          unternehmen,
-          nachricht
-        }
-      });
-
-      if (error) {
-        console.error('Fehler beim E-Mail-Versand:', error);
-        toast({
-          title: "Fehler beim Senden",
-          description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      toast({
-        title: "Anfrage gesendet!",
-        description: "Vielen Dank! Wir melden uns in Kürze bei Ihnen.",
-      });
-
-      // Form zurücksetzen
-      (e.target as HTMLFormElement).reset();
-
-    } catch (error: any) {
-      console.error("Fehler beim Kontaktformular:", error);
-      toast({
-        title: "Fehler",
-        description: "Bitte kontaktieren Sie uns direkt: 01577 1442285",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <section className="py-16 bg-muted">
@@ -148,35 +76,30 @@ const ContactSection = () => {
           
           <Card>
             <CardHeader>
-              <CardTitle>Anfrage senden</CardTitle>
+              <CardTitle>Fahrer buchen</CardTitle>
             </CardHeader>
-            <CardContent>
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <Input name="vorname" placeholder="Vorname" required />
-                  <Input name="nachname" placeholder="Nachname" required />
-                </div>
-                
-                <Input name="email" placeholder="E-Mail-Adresse" type="email" required />
-                <Input name="telefon" placeholder="Telefonnummer" type="tel" />
-                <Input name="unternehmen" placeholder="Unternehmen" />
-                
-                <Textarea 
-                  name="nachricht"
-                  placeholder="Beschreiben Sie Ihren Fahrbedarf (Fahrzeugtyp, Zeitraum, Einsatzort, etc.)"
-                  rows={4}
-                  required
-                />
-                
-                <Button 
-                  className="w-full" 
-                  size="lg" 
-                  type="submit"
-                  disabled={isSubmitting}
+            <CardContent className="text-center">
+              <p className="text-muted-foreground mb-6">
+                Nutzen Sie unser zentrales Buchungsformular, um den passenden Fahrer für Ihren Bedarf zu finden.
+              </p>
+              <Button 
+                size="lg" 
+                asChild
+                className="w-full"
+              >
+                <a 
+                  href="#fahreranfrage"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.querySelector('#fahreranfrage');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }}
                 >
-                  {isSubmitting ? "Wird gesendet..." : "Anfrage senden"}
-                </Button>
-              </form>
+                  Fahrer buchen
+                </a>
+              </Button>
             </CardContent>
           </Card>
         </div>
