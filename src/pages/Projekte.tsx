@@ -47,20 +47,20 @@ const Projekte = () => {
     },
     {
       id: 3,
-      title: "Kranfahrer-Einsatz Frankfurt - Hochhaus-Bau",
-      kunde: "Hochbau Frankfurt AG",
-      zeitraum: "Juni 2024 - August 2024",
-      dauer: "12 Wochen",
-      ort: "Frankfurt am Main",
-      fahrzeugtyp: "Mobilkran 50t",
-      beschreibung: "Spezieller Kranfahrer-Einsatz für Hochhaus-Projekt mit besonderen Sicherheitsanforderungen.",
+      title: "Baggerfahrer-Einsatz Künzelau – Flüssigbodenaufbereitung",
+      kunde: "Flüssigboden GmbH",
+      zeitraum: "Mai 2021 - Juli 2021",
+      dauer: "10 Wochen",
+      ort: "Künzelau",
+      fahrzeugtyp: "Spezialbagger",
+      beschreibung: "Flüssigbodenaufbereitung für Infrastrukturprojekt mit speziellen Anforderungen an Bodenbeschaffenheit.",
       herausforderungen: [
-        "Höchste Sicherheitsstandards",
-        "Enge Innenstadtlage",
-        "Koordination mit Behörden"
+        "Spezielle Bodenmischverfahren",
+        "Präzise Materialzufuhr",
+        "Umweltschutzauflagen"
       ],
-      losung: "Kranführer mit Hochhaus-Erfahrung und allen Zertifikaten vermittelt.",
-      ergebnis: "Unfallfreier Bauabschnitt. Lobende Erwähnung bei Bauaufsicht.",
+      losung: "Erfahrene Baggerfahrer mit Spezialkenntnissen in Flüssigbodenverfahren eingesetzt.",
+      ergebnis: "Erfolgreiche Bodenaufbereitung nach Zeitplan. Qualitätsstandards übertroffen.",
       bewertung: 5,
       bild: "/lovable-uploads/878ffe35-4811-4857-8771-adce4681b6b0.png"
     },
