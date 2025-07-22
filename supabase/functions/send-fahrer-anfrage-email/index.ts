@@ -51,7 +51,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send notification email to admin
     console.log("Sending admin notification email...");
     const adminEmailResponse = await resend.emails.send({
-      from: "Fahrerexpress <noreply@fahrerexpress.de>",
+      from: "Fahrerexpress <onboarding@resend.dev>",
       to: ["info@fahrerexpress.de"],
       subject: "Neue Fahrer-Anfrage eingegangen",
       html: `
@@ -84,7 +84,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to client
     console.log("Sending confirmation email to client...");
     const clientEmailResponse = await resend.emails.send({
-      from: "Fahrerexpress <noreply@fahrerexpress.de>",
+      from: "Fahrerexpress <onboarding@resend.dev>",
       to: [requestData.email],
       subject: "Bestätigung Ihrer Fahrer-Anfrage",
       html: `
