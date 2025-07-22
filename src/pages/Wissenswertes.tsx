@@ -290,9 +290,8 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Die Kosten variieren je nach Fahrzeugtyp, Einsatzgebiet und Anforderungen. 
-                    Typische Stundensätze liegen zwischen 25-45 Euro. Für genaue Angebote 
-                    kontaktieren Sie uns mit Ihren spezifischen Anforderungen.
+                    Typische Stundensätze liegen je nach Fahrzeug und Einsatzart zwischen 45 und 75 Euro. 
+                    Für exakte Angebote kontaktieren Sie uns mit Ihrer Anfrage.
                   </p>
                 </CardContent>
               </Card>
