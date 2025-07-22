@@ -72,7 +72,7 @@ const Projekte = () => {
       dauer: "3 Wochen",
       ort: "Speyer",
       fahrzeugtyp: "Schwerlast-Sattelzug",
-      beschreibung: "Transport von Industrieanlagen und Maschinenbauteilen mit speziellen Anforderungen an Ladungssicherung.",
+      beschreibung: "Transport von Baumaschinen und schweren Geräten mit speziellen Anforderungen an Ladungssicherung.",
       herausforderungen: [
         "Übermaße und Übergewicht",
         "Spezielle Genehmigungen erforderlich",
