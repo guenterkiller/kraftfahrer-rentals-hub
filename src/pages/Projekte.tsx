@@ -229,7 +229,7 @@ const Projekte = () => {
                     Alle Fahrer waren pünktlich, kompetent und haben sich perfekt in unser Team integriert."
                   </p>
                   <p className="text-sm font-medium">
-                    - Thomas M., Bauunternehmen München GmbH
+                    - Thomas M., RRS-System
                   </p>
                 </CardContent>
               </Card>
