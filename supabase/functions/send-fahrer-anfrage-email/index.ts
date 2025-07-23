@@ -14,7 +14,8 @@ const corsHeaders = {
 };
 
 interface FahrerAnfrageEmailRequest {
-  name: string;
+  vorname: string;
+  nachname: string;
   email: string;
   phone: string;
   company?: string;
@@ -44,12 +45,13 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Fahrer-Anfrage email sending received");
 
     const requestData: FahrerAnfrageEmailRequest = await req.json();
+    console.log("Eingehende Anfrage:", requestData);
     
-    console.log("Processing fahrer email request from", requestData.name);
+    console.log("Processing fahrer email request from", `${requestData.vorname} ${requestData.nachname}`);
 
     // Validate required fields
-    if (!requestData.name || !requestData.email || !requestData.phone) {
-      throw new Error("Name, E-Mail und Telefon sind Pflichtfelder");
+    if (!requestData.vorname || !requestData.nachname || !requestData.email || !requestData.phone) {
+      throw new Error("Vorname, Nachname, E-Mail und Telefon sind Pflichtfelder");
     }
 
     const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('cf-connecting-ip') || 'unknown';
@@ -63,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "Neue Fahrer-Anfrage eingegangen",
       html: `
         <h2>Neue Fahrer-Anfrage</h2>
-        <p><strong>Name:</strong> ${requestData.name}</p>
+        <p><strong>Name:</strong> ${requestData.vorname} ${requestData.nachname}</p>
         <p><strong>E-Mail:</strong> ${requestData.email}</p>
         <p><strong>Telefon:</strong> ${requestData.phone}</p>
         <p><strong>Firma:</strong> ${requestData.company || 'nicht angegeben'}</p>
@@ -105,7 +107,7 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "Bestätigung Ihrer Fahrer-Anfrage",
       html: `
         <h2>Vielen Dank für Ihre Anfrage!</h2>
-        <p>Liebe/r ${requestData.name},</p>
+        <p>Liebe/r ${requestData.vorname} ${requestData.nachname},</p>
         <p>wir haben Ihre Anfrage für einen Fahrer erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
         
         <h3>Ihre Anfrage im Überblick:</h3>

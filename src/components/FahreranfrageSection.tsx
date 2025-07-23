@@ -123,7 +123,8 @@ const FahreranfrageSection = () => {
       // Also send the original customer notification email with correct data structure
       const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
         body: {
-          name: `${vorname} ${nachname}`.trim(),
+          vorname: vorname.trim(),
+          nachname: nachname.trim(),
           email: email.trim(),
           phone: telefon.trim(),
           company: (formData.get('unternehmen') as string)?.trim() || '',
