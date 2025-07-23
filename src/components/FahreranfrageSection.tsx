@@ -42,38 +42,53 @@ const FahreranfrageSection = () => {
       const einsatzdauer = formData.get("einsatzdauer") as string;
       const fahrzeugtyp = formData.get("fahrzeugtyp") as string;
       
-      // Collect special requirements
+      // Collect special requirements as array
       const anforderungen = Array.from(formData.getAll("anforderungen"));
       const besonderheiten = anforderungen.length > 0 ? anforderungen.join(", ") : "";
       
-      // Build zeitraum string
-      const zeitraum = einsatzbeginn && einsatzdauer 
-        ? `Ab ${einsatzbeginn} für ${einsatzdauer}`
-        : einsatzbeginn 
-        ? `Ab ${einsatzbeginn}` 
-        : einsatzdauer || "Nach Absprache";
+      // Convert einsatzbeginn to proper ISO format if provided
+      let zeitraumFormatted = "Nach Absprache";
+      if (einsatzbeginn) {
+        try {
+          // Create ISO date string for the beginning of the day
+          const date = new Date(einsatzbeginn + "T08:00:00");
+          const isoDateString = date.toISOString();
+          
+          zeitraumFormatted = einsatzdauer 
+            ? `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')} für ${einsatzdauer}`
+            : `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')}`;
+        } catch (dateError) {
+          console.error("Date conversion error:", dateError);
+          zeitraumFormatted = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
+        }
+      } else if (einsatzdauer) {
+        zeitraumFormatted = `Dauer: ${einsatzdauer}`;
+      }
 
       // Extract location from message or use a default
       const einsatzort = nachricht.includes("Einsatzort") 
         ? nachricht.split("Einsatzort")[1]?.split(/[,\n]/)[0]?.trim() || "Siehe Nachricht"
         : "Siehe Nachricht";
 
+      // Prepare data for database insert with proper validation
+      const jobRequestData = {
+        customer_name: `${vorname} ${nachname}`.trim(),
+        customer_email: email.trim(),
+        customer_phone: telefon.trim(),
+        company: (formData.get('unternehmen') as string)?.trim() || null,
+        einsatzort: einsatzort.trim(),
+        zeitraum: zeitraumFormatted,
+        fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
+        fuehrerscheinklasse: "C+E", // Default, could be made dynamic
+        besonderheiten: besonderheiten || null,
+        nachricht: nachricht.trim(),
+        status: 'open'
+      };
+
       // Save job request to database
       const { data: jobRequest, error: jobError } = await supabase
-        .from('job_requests' as any)
-        .insert([{
-          customer_name: `${vorname} ${nachname}`,
-          customer_email: email,
-          customer_phone: telefon,
-          company: formData.get('unternehmen') as string || null,
-          einsatzort,
-          zeitraum,
-          fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
-          fuehrerscheinklasse: "C+E", // Default, could be made dynamic
-          besonderheiten: besonderheiten || null,
-          nachricht,
-          status: 'open'
-        }] as any)
+        .from('job_requests')
+        .insert([jobRequestData])
         .select()
         .single();
 
@@ -85,17 +100,17 @@ const FahreranfrageSection = () => {
       console.log("Job request saved:", jobRequest);
 
       // Send job alert emails to all drivers (only if job was saved successfully)
-      if (jobRequest && (jobRequest as any).id) {
+      if (jobRequest && jobRequest.id) {
         const alertResponse = await supabase.functions.invoke('send-job-alert-emails', {
           body: {
-            job_id: (jobRequest as any).id,
-          einsatzort,
-          zeitraum,
-          fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
-          fuehrerscheinklasse: "C+E",
-          besonderheiten,
-          customer_name: `${vorname} ${nachname}`,
-          customer_email: email
+            job_id: jobRequest.id,
+            einsatzort: jobRequestData.einsatzort,
+            zeitraum: jobRequestData.zeitraum,
+            fahrzeugtyp: jobRequestData.fahrzeugtyp,
+            fuehrerscheinklasse: jobRequestData.fuehrerscheinklasse,
+            besonderheiten: jobRequestData.besonderheiten,
+            customer_name: jobRequestData.customer_name,
+            customer_email: jobRequestData.customer_email
           }
         });
 
@@ -105,14 +120,21 @@ const FahreranfrageSection = () => {
         }
       }
 
-      // Also send the original customer notification email
+      // Also send the original customer notification email with correct data structure
       const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
         body: {
-          name: `${vorname} ${nachname}`,
-          email: email,
-          phone: telefon,
-          company: formData.get('unternehmen') || '',
-          message: nachricht
+          name: `${vorname} ${nachname}`.trim(),
+          email: email.trim(),
+          phone: telefon.trim(),
+          company: (formData.get('unternehmen') as string)?.trim() || '',
+          message: nachricht.trim(),
+          // Add fields that the function expects for job requests
+          einsatzbeginn: einsatzbeginn || '',
+          einsatzdauer: einsatzdauer || '',
+          fahrzeugtyp: fahrzeugtyp || '',
+          spezialanforderungen: anforderungen,
+          datenschutz: datenschutz,
+          newsletter: formData.get("newsletter") === "on"
         }
       });
 

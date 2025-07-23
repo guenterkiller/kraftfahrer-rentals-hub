@@ -25,6 +25,13 @@ interface FahrerAnfrageEmailRequest {
   specializations?: string[];
   regions?: string[];
   hourly_rate?: string;
+  // Additional fields for customer job requests
+  einsatzbeginn?: string;
+  einsatzdauer?: string;
+  fahrzeugtyp?: string;
+  spezialanforderungen?: string[];
+  datenschutz?: boolean;
+  newsletter?: boolean;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -60,13 +67,22 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>E-Mail:</strong> ${requestData.email}</p>
         <p><strong>Telefon:</strong> ${requestData.phone}</p>
         <p><strong>Firma:</strong> ${requestData.company || 'nicht angegeben'}</p>
-        <p><strong>Benötigte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'nicht angegeben'}</p>
+        
+        ${requestData.einsatzbeginn ? `<p><strong>Einsatzbeginn:</strong> ${requestData.einsatzbeginn}</p>` : ''}
+        ${requestData.einsatzdauer ? `<p><strong>Einsatzdauer:</strong> ${requestData.einsatzdauer}</p>` : ''}
+        ${requestData.fahrzeugtyp ? `<p><strong>Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</p>` : ''}
+        ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<p><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</p>` : ''}
+        
+        <p><strong>Benötigte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</p>
         <p><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Regionen:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Erfahrung:</strong> ${requestData.experience || 'nicht angegeben'}</p>
         <p><strong>Stundenlohn:</strong> ${requestData.hourly_rate || 'nicht angegeben'}</p>
         <p><strong>Nachricht:</strong> ${requestData.message || 'nicht angegeben'}</p>
         <p><strong>Beschreibung:</strong> ${requestData.description || 'nicht angegeben'}</p>
+        
+        <p><strong>Datenschutz zugestimmt:</strong> ${requestData.datenschutz ? 'Ja' : 'Nein'}</p>
+        <p><strong>Newsletter gewünscht:</strong> ${requestData.newsletter ? 'Ja' : 'Nein'}</p>
         <hr>
         <p><strong>IP-Adresse:</strong> ${ipAddress}</p>
         <p><strong>User-Agent:</strong> ${userAgent}</p>
@@ -93,7 +109,11 @@ const handler = async (req: Request): Promise<Response> => {
         <p>wir haben Ihre Anfrage für einen Fahrer erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
         
         <h3>Ihre Anfrage im Überblick:</h3>
-        <p><strong>Gewünschte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'nicht angegeben'}</p>
+        ${requestData.einsatzbeginn ? `<p><strong>Gewünschter Einsatzbeginn:</strong> ${new Date(requestData.einsatzbeginn).toLocaleDateString('de-DE')}</p>` : ''}
+        ${requestData.einsatzdauer ? `<p><strong>Einsatzdauer:</strong> ${requestData.einsatzdauer}</p>` : ''}
+        ${requestData.fahrzeugtyp ? `<p><strong>Benötigter Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</p>` : ''}
+        ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<p><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</p>` : ''}
+        <p><strong>Gewünschte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</p>
         <p><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Regionen:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
         
