@@ -183,19 +183,32 @@ const handler = async (req: Request): Promise<Response> => {
       to: [requestData.email],
       subject: "Vielen Dank für Ihre Registrierung als Fahrer",
       html: `
-        <h2>Vielen Dank für Ihre Registrierung als selbstständiger Kraftfahrer!</h2>
-        <p>Lieber Herr/Frau ${requestData.name},</p>
-        <p>vielen Dank für Ihre Registrierung als Fahrer bei unserer Agentur. Wir haben Ihre Daten erfolgreich aufgenommen und werden Sie bei passenden Aufträgen kontaktieren.</p>
-        <p>Bei geeigneten Einsätzen melden wir uns gerne auch telefonisch bei Ihnen.</p>
-        <p>Wenn Sie Ihre Angaben nachträglich korrigieren oder ergänzen möchten, schreiben Sie uns bitte direkt an info@kraftfahrer-mieten.com unter Angabe Ihres Namens und der Telefonnummer.</p>
-        <p>Bei Rückfragen erreichen Sie uns jederzeit unter:</p>
+        <h2>Vielen Dank für Ihre Anmeldung!</h2>
+
+        <p>Lieber Herr/Frau ${insertData.vorname} ${insertData.nachname},</p>
+
+        <p>vielen Dank, dass Sie sich bei uns als <strong>selbstständiger Kraftfahrer mit eigenem Gewerbe</strong> registriert haben.</p>
+
+        <p>Wir haben Ihre Angaben erhalten und melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind.</p>
+
+        <p>Falls Sie Ihre Angaben korrigieren oder ergänzen möchten, schreiben Sie uns bitte an:
+        <br>
+        📧 <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a><br>
+        unter Angabe Ihres Namens und Ihrer Telefonnummer.</p>
+
+        <hr>
+
+        <p><strong>Wichtiger Hinweis:</strong><br>
+        Sie haben der Vermittlungsprovision in Höhe von <strong>15 %</strong> auf vermittelte Einsätze zugestimmt.<br>
+        Die Abrechnung erfolgt je nach Einsatz <strong>monatlich oder fallbezogen</strong>.</p>
+
+        <p>Bei Rückfragen erreichen Sie uns jederzeit:</p>
         <ul>
-          <li>E-Mail: <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a></li>
-          <li>Telefon: <a href="tel:015771442285">01577 1442285</a></li>
+          <li>E-Mail: <strong>info@kraftfahrer-mieten.com</strong></li>
+          <li>Telefon: <strong>01577 1442285</strong></li>
         </ul>
-        <p><strong>Hinweis:</strong> Sie haben der Vermittlungsprovision von 15 % auf vermittelte Einsätze zugestimmt. 
-        Die Abrechnung erfolgt je nach Einsatz monatlich oder fallbezogen.</p>
-        <p>Freundliche Grüße<br>
+
+        <p>Mit freundlichen Grüßen<br>
         Ihr Fahrerexpress-Team</p>
       `,
     });
