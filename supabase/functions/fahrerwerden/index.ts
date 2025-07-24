@@ -179,14 +179,14 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to applicant
     const confirmationEmailResponse = await resend.emails.send({
-      from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
+      from: "Fahrerexpress <noreply@kraftfahrer-mieten.com>",
       to: [requestData.email],
-      subject: "Ihre Anfrage bei der Fahrerexpress-Agentur",
+      subject: "Vielen Dank für Ihre Registrierung als Fahrer",
       html: `
-        <h2>Vielen Dank für Ihre Anfrage!</h2>
+        <h2>Vielen Dank für Ihre Registrierung als selbstständiger Kraftfahrer!</h2>
         <p>Lieber Herr/Frau ${requestData.name},</p>
-        <p>vielen Dank für Ihre Fahreranfrage. Wir haben Ihre Daten erhalten und melden uns kurzfristig bei Ihnen.</p>
-        <p>Bei passenden Anfragen melden wir uns gerne auch telefonisch bei Ihnen.</p>
+        <p>vielen Dank für Ihre Registrierung als Fahrer bei unserer Agentur. Wir haben Ihre Daten erfolgreich aufgenommen und werden Sie bei passenden Aufträgen kontaktieren.</p>
+        <p>Bei geeigneten Einsätzen melden wir uns gerne auch telefonisch bei Ihnen.</p>
         <p>Wenn Sie Ihre Angaben nachträglich korrigieren oder ergänzen möchten, schreiben Sie uns bitte direkt an info@kraftfahrer-mieten.com unter Angabe Ihres Namens und der Telefonnummer.</p>
         <p>Bei Rückfragen erreichen Sie uns jederzeit unter:</p>
         <ul>
