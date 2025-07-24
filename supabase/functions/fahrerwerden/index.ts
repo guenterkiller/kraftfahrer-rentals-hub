@@ -153,26 +153,27 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to admin
     const adminEmailResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      from: "Fahrerexpress <noreply@kraftfahrer-mieten.com>",
       to: ["info@kraftfahrer-mieten.com"],
-      subject: `Neue Fahreranfrage von ${requestData.name}`,
+      subject: "Neue Fahrer-Registrierung",
       html: `
-        <h2>Neue Fahreranfrage</h2>
-        <p><strong>Name:</strong> ${requestData.name}</p>
-        <p><strong>E-Mail:</strong> ${requestData.email}</p>
-        <p><strong>Telefon:</strong> ${requestData.phone}</p>
-        <p><strong>Unternehmen:</strong> ${requestData.company || 'nicht angegeben'}</p>
-        <p><strong>Nachricht:</strong> ${requestData.message || 'nicht angegeben'}</p>
-        <p><strong>Beschreibung:</strong> ${requestData.description || 'nicht angegeben'}</p>
-        <p><strong>Führerscheinklassen:</strong> ${requestData.license_classes?.length ? requestData.license_classes.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Erfahrung:</strong> ${requestData.experience || 'nicht angegeben'}</p>
-        <p><strong>Spezialisierungen:</strong> ${requestData.specializations?.length ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Verfügbare Regionen:</strong> ${requestData.regions?.length ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Stundensatz:</strong> ${requestData.hourly_rate || 'nicht angegeben'}</p>
-        <p><strong>IP-Adresse:</strong> ${ipAddress}</p>
-        <p><em>Gesendet am ${new Date().toLocaleString('de-DE')}</em></p>
-      `,
+        <h2>Ein neuer Fahrer hat sich registriert</h2>
+        <p><strong>Vorname:</strong> ${insertData.vorname}</p>
+        <p><strong>Nachname:</strong> ${insertData.nachname}</p>
+        <p><strong>E-Mail:</strong> ${insertData.email}</p>
+        <p><strong>Telefon:</strong> ${insertData.telefon}</p>
+        <p><strong>Region:</strong> ${insertData.verfuegbare_regionen?.length ? insertData.verfuegbare_regionen.join(', ') : 'nicht angegeben'}</p>
+        <p><strong>Fahrzeugtyp:</strong> ${insertData.fuehrerscheinklassen?.length ? insertData.fuehrerscheinklassen.join(', ') : 'nicht angegeben'}</p>
+        <p><strong>Besonderheiten:</strong> ${insertData.spezialisierungen?.length ? insertData.spezialisierungen.join(', ') : 'keine'}</p>
+        <hr>
+        <p><strong>Registriert am:</strong> ${new Date().toLocaleString('de-DE')}</p>
+      `
     });
+
+    if (adminEmailResponse.error) {
+      console.error("Admin email error (Fahrer werden):", adminEmailResponse.error);
+      throw new Error("Fehler beim Senden der Admin-E-Mail");
+    }
 
     console.log("Admin email sent successfully:", adminEmailResponse);
 
