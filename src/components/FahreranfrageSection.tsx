@@ -22,7 +22,7 @@ const FahreranfrageSection = () => {
     const vorname = formData.get("vorname") as string;
     const nachname = formData.get("nachname") as string;
     const email = formData.get("email") as string;
-    const telefon = formData.get("telefon") as string;
+    const telefon = formData.get("phone") as string;
     const nachricht = formData.get("nachricht") as string;
     const datenschutz = formData.get("datenschutz") === "on";
 
@@ -218,16 +218,16 @@ const FahreranfrageSection = () => {
                 />
               </div>
 
-              <div>
-                <Label htmlFor="telefon">Telefonnummer *</Label>
-                <Input
-                  type="text"
-                  id="telefon"
-                  name="telefon"
-                  required
-                  className="mt-1"
-                />
-              </div>
+                <div>
+                  <Label htmlFor="phone">Telefonnummer *</Label>
+                  <Input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    required
+                    className="mt-1"
+                  />
+                </div>
 
               <div>
                 <Label htmlFor="unternehmen">Unternehmen</Label>
