@@ -34,6 +34,17 @@ const FahrerRegistrierung = () => {
     vermittlungszustimmung: false,
   });
 
+  // File upload states
+  const [selectedFiles, setSelectedFiles] = useState<{
+    fuehrerschein: File | null,
+    fahrerkarte: File | null,
+    zertifikate: FileList | null
+  }>({
+    fuehrerschein: null,
+    fahrerkarte: null,
+    zertifikate: null
+  });
+
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
   const spezialisierungen = [
     "Baustellen-LKW",
@@ -136,6 +147,22 @@ const FahrerRegistrierung = () => {
     }
   };
 
+  const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'zertifikate', files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    
+    setSelectedFiles(prev => ({
+      ...prev,
+      [field]: field === 'zertifikate' ? files : files[0]
+    }));
+
+    toast({
+      title: "Datei ausgewählt",
+      description: field === 'zertifikate' ? 
+        `${files.length} Datei(en) für ${field} ausgewählt` : 
+        `${files[0].name} für ${field} ausgewählt`,
+    });
+  };
+
   const validateForm = () => {
     const errors: {[key: string]: string} = {};
     
@@ -174,6 +201,74 @@ const FahrerRegistrierung = () => {
 
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
+      // Upload files to Supabase Storage and get URLs
+      const uploadedFiles: { [key: string]: string } = {};
+      
+      if (selectedFiles.fuehrerschein) {
+        try {
+          const fileExt = selectedFiles.fuehrerschein.name.split('.').pop();
+          const fileName = `${Date.now()}-fuehrerschein.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('driver-documents')
+            .upload(fileName, selectedFiles.fuehrerschein);
+            
+          if (uploadError) throw uploadError;
+          uploadedFiles.fuehrerschein = fileName;
+        } catch (error) {
+          console.error("Upload Fehler Führerschein:", error);
+          toast({
+            title: "Upload-Fehler",
+            description: "Fehler beim Hochladen des Führerscheins. Formular wird trotzdem übermittelt.",
+            variant: "destructive",
+          });
+        }
+      }
+
+      if (selectedFiles.fahrerkarte) {
+        try {
+          const fileExt = selectedFiles.fahrerkarte.name.split('.').pop();
+          const fileName = `${Date.now()}-fahrerkarte.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('driver-documents')
+            .upload(fileName, selectedFiles.fahrerkarte);
+            
+          if (uploadError) throw uploadError;
+          uploadedFiles.fahrerkarte = fileName;
+        } catch (error) {
+          console.error("Upload Fehler Fahrerkarte:", error);
+          toast({
+            title: "Upload-Fehler", 
+            description: "Fehler beim Hochladen der Fahrerkarte. Formular wird trotzdem übermittelt.",
+            variant: "destructive",
+          });
+        }
+      }
+
+      if (selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0) {
+        const zertifikatFiles: string[] = [];
+        for (let i = 0; i < selectedFiles.zertifikate.length; i++) {
+          try {
+            const file = selectedFiles.zertifikate[i];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}-zertifikat-${i}.${fileExt}`;
+            
+            const { data: uploadData, error: uploadError } = await supabase.storage
+              .from('driver-documents')
+              .upload(fileName, file);
+              
+            if (uploadError) throw uploadError;
+            zertifikatFiles.push(fileName);
+          } catch (error) {
+            console.error(`Upload Fehler Zertifikat ${i}:`, error);
+          }
+        }
+        if (zertifikatFiles.length > 0) {
+          uploadedFiles.zertifikate = zertifikatFiles.join(',');
+        }
+      }
+
       // Verwende die Edge Function für Fahrer-Bewerbungen
       const response = await supabase.functions.invoke('fahrerwerden', {
         body: {
@@ -187,7 +282,8 @@ const FahrerRegistrierung = () => {
           experience: formData.erfahrung_jahre || null,
           specializations: formData.spezialisierungen,
           regions: formData.verfuegbare_regionen,
-          hourly_rate: formData.stundensatz ? `${formData.stundensatz} €` : null
+          hourly_rate: formData.stundensatz ? `${formData.stundensatz} €` : null,
+          uploaded_files: uploadedFiles
         }
       });
 
@@ -237,6 +333,11 @@ const FahrerRegistrierung = () => {
         verfuegbarkeit: "",
         beschreibung: "",
         vermittlungszustimmung: false,
+      });
+      setSelectedFiles({
+        fuehrerschein: null,
+        fahrerkarte: null,
+        zertifikate: null
       });
       setValidationErrors({});
 
@@ -497,15 +598,21 @@ const FahrerRegistrierung = () => {
                          <div className="flex flex-col items-center space-y-2">
                            <FileText className="h-8 w-8 text-muted-foreground" />
                            <h4 className="font-medium">Führerschein</h4>
-                           <p className="text-sm text-muted-foreground">
-                             Laden Sie eine Kopie Ihres Führerscheins hoch
-                           </p>
-                           <Input
-                             type="file"
-                             accept=".pdf,.jpg,.jpeg,.png"
-                             className="hidden"
-                             id="fuehrerschein"
-                           />
+                            <p className="text-sm text-muted-foreground">
+                              Laden Sie eine Kopie Ihres Führerscheins hoch
+                            </p>
+                            {selectedFiles.fuehrerschein && (
+                              <p className="text-xs text-primary font-medium">
+                                ✓ {selectedFiles.fuehrerschein.name}
+                              </p>
+                            )}
+                            <Input
+                              type="file"
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              className="hidden"
+                              id="fuehrerschein"
+                              onChange={(e) => handleFileChange('fuehrerschein', e.target.files)}
+                            />
                            <Button
                              type="button"
                              variant="outline"
@@ -522,15 +629,21 @@ const FahrerRegistrierung = () => {
                          <div className="flex flex-col items-center space-y-2">
                            <FileText className="h-8 w-8 text-muted-foreground" />
                            <h4 className="font-medium">Fahrerkarte</h4>
-                           <p className="text-sm text-muted-foreground">
-                             Laden Sie eine Kopie Ihrer Fahrerkarte hoch
-                           </p>
-                           <Input
-                             type="file"
-                             accept=".pdf,.jpg,.jpeg,.png"
-                             className="hidden"
-                             id="fahrerkarte"
-                           />
+                            <p className="text-sm text-muted-foreground">
+                              Laden Sie eine Kopie Ihrer Fahrerkarte hoch
+                            </p>
+                            {selectedFiles.fahrerkarte && (
+                              <p className="text-xs text-primary font-medium">
+                                ✓ {selectedFiles.fahrerkarte.name}
+                              </p>
+                            )}
+                            <Input
+                              type="file"
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              className="hidden"
+                              id="fahrerkarte"
+                              onChange={(e) => handleFileChange('fahrerkarte', e.target.files)}
+                            />
                            <Button
                              type="button"
                              variant="outline"
@@ -548,16 +661,22 @@ const FahrerRegistrierung = () => {
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-muted-foreground" />
                          <h4 className="font-medium">Weitere Zertifikate</h4>
-                         <p className="text-sm text-muted-foreground">
-                           ADR-Schein, Kranführerschein, etc. (Mehrere Dateien möglich)
-                         </p>
-                         <Input
-                           type="file"
-                           accept=".pdf,.jpg,.jpeg,.png"
-                           multiple
-                           className="hidden"
-                           id="zertifikate"
-                         />
+                          <p className="text-sm text-muted-foreground">
+                            ADR-Schein, Kranführerschein, etc. (Mehrere Dateien möglich)
+                          </p>
+                          {selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0 && (
+                            <p className="text-xs text-primary font-medium">
+                              ✓ {selectedFiles.zertifikate.length} Datei(en) ausgewählt
+                            </p>
+                          )}
+                          <Input
+                            type="file"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            multiple
+                            className="hidden"
+                            id="zertifikate"
+                            onChange={(e) => handleFileChange('zertifikate', e.target.files)}
+                          />
                          <Button
                            type="button"
                            variant="outline"
