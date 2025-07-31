@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      fahrer_dokumente: {
+        Row: {
+          created_at: string
+          fahrer_id: string
+          filename: string
+          filepath: string
+          id: string
+          type: string
+          uploaded_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          fahrer_id: string
+          filename: string
+          filepath: string
+          id?: string
+          type: string
+          uploaded_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          fahrer_id?: string
+          filename?: string
+          filepath?: string
+          id?: string
+          type?: string
+          uploaded_at?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fahrer_dokumente_fahrer_id_fkey"
+            columns: ["fahrer_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fahrer_profile: {
         Row: {
           adresse: string | null

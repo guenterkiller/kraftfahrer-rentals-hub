@@ -26,10 +26,13 @@ interface FahrerProfile {
 }
 
 interface DocumentFile {
-  name: string;
-  type: string;
+  id: string;
+  filename: string;
+  filepath: string;
   url: string;
-  downloadUrl: string;
+  type: string;
+  uploaded_at: string;
+  fahrer_id: string;
 }
 
 const Admin = () => {
@@ -40,7 +43,7 @@ const Admin = () => {
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [documents, setDocuments] = useState<Record<string, DocumentFile[]>>({});
-  const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; name: string } | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -202,47 +205,31 @@ const Admin = () => {
     if (documents[fahrerId]) return; // Already loaded
 
     try {
-      const { data: files, error } = await supabase.storage
-        .from("driver-documents")
-        .list(`uploads/${fahrerEmail}`, {
-          limit: 100,
-          offset: 0
-        });
+      console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerId);
+      
+      // Lade Dokumente aus der Datenbank statt aus Storage
+      const { data: docs, error } = await supabase
+        .from('fahrer_dokumente')
+        .select('*')
+        .eq('fahrer_id', fahrerId)
+        .order('uploaded_at', { ascending: false });
 
       if (error) {
-        console.error("Error loading documents:", error);
+        console.error("❌ Admin: Fehler beim Laden der Dokumente:", error);
         return;
       }
 
-      const documentFiles: DocumentFile[] = [];
-
-      for (const file of files || []) {
-        if (file.name === ".emptyFolderPlaceholder") continue;
-
-        const { data: urlData } = supabase.storage
-          .from("driver-documents")
-          .getPublicUrl(`uploads/${fahrerEmail}/${file.name}`);
-
-        const { data: downloadData } = await supabase.storage
-          .from("driver-documents")
-          .createSignedUrl(`uploads/${fahrerEmail}/${file.name}`, 3600);
-
-        const fileType = file.name.toLowerCase().includes('.pdf') ? 'pdf' : 'image';
-        
-        documentFiles.push({
-          name: file.name,
-          type: fileType,
-          url: urlData.publicUrl,
-          downloadUrl: downloadData?.signedUrl || urlData.publicUrl
-        });
-      }
+      console.log("✅ Admin: Dokumente geladen:", docs);
+      
+      // Wenn keine Dokumente in der DB, zeige leere Liste
+      const documentFiles: DocumentFile[] = docs || [];
 
       setDocuments(prev => ({
         ...prev,
         [fahrerId]: documentFiles
       }));
     } catch (error) {
-      console.error("Error loading documents:", error);
+      console.error("❌ Admin: Fehler beim Laden der Dokumente:", error);
     }
   };
 
@@ -261,12 +248,12 @@ const Admin = () => {
     setPreviewDoc({
       url: doc.url,
       type: doc.type,
-      name: doc.name
+      filename: doc.filename
     });
   };
 
   const handleDownload = (doc: DocumentFile) => {
-    window.open(doc.downloadUrl, '_blank');
+    window.open(doc.url, '_blank');
   };
 
   const getStatusBadge = (status: string) => {
@@ -419,7 +406,7 @@ const Admin = () => {
                                       ) : (
                                         <Image className="h-5 w-5 text-blue-500" />
                                       )}
-                                      <span className="font-medium">{doc.name}</span>
+                                      <span className="font-medium">{doc.filename}</span>
                                     </div>
                                     <div className="flex space-x-2">
                                       <Button
@@ -461,7 +448,7 @@ const Admin = () => {
       <Dialog open={!!previewDoc} onOpenChange={() => setPreviewDoc(null)}>
         <DialogContent className="max-w-4xl h-[80vh]">
           <DialogHeader>
-            <DialogTitle>{previewDoc?.name}</DialogTitle>
+            <DialogTitle>{previewDoc?.filename}</DialogTitle>
           </DialogHeader>
           {previewDoc && (
             <div className="flex-1 overflow-auto">
@@ -469,12 +456,12 @@ const Admin = () => {
                 <iframe
                   src={previewDoc.url}
                   className="w-full h-full border-0"
-                  title={previewDoc.name}
+                  title={previewDoc.filename}
                 />
               ) : (
                 <img
                   src={previewDoc.url}
-                  alt={previewDoc.name}
+                  alt={previewDoc.filename}
                   className="max-w-full h-auto mx-auto"
                 />
               )}

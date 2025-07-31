@@ -225,7 +225,8 @@ const handler = async (req: Request): Promise<Response> => {
     
     const { data, error } = await supabase
       .from('fahrer_profile')
-      .insert([insertData]);
+      .insert([insertData])
+      .select();
     
     console.log("Insert result:", { data, error });
 
@@ -252,6 +253,83 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (dbData && dbData.id) {
       console.log("Saved to database successfully:", dbData.id);
+      
+      // Save document entries to fahrer_dokumente table
+      const documentPromises = [];
+      
+      // Process Führerschein documents
+      if (uploadedFiles.fuehrerschein) {
+        const fuehrerscheinPaths = uploadedFiles.fuehrerschein.split(',');
+        for (const filePath of fuehrerscheinPaths) {
+          const fileName = filePath.split('/').pop() || filePath;
+          const { data: urlData } = supabase.storage
+            .from('driver-documents')
+            .getPublicUrl(filePath);
+          
+          documentPromises.push(
+            supabase.from('fahrer_dokumente').insert({
+              fahrer_id: dbData.id,
+              filename: fileName,
+              filepath: filePath,
+              url: urlData.publicUrl,
+              type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
+            })
+          );
+        }
+      }
+      
+      // Process Fahrerkarte documents
+      if (uploadedFiles.fahrerkarte) {
+        const fahrerkartePaths = uploadedFiles.fahrerkarte.split(',');
+        for (const filePath of fahrerkartePaths) {
+          const fileName = filePath.split('/').pop() || filePath;
+          const { data: urlData } = supabase.storage
+            .from('driver-documents')
+            .getPublicUrl(filePath);
+          
+          documentPromises.push(
+            supabase.from('fahrer_dokumente').insert({
+              fahrer_id: dbData.id,
+              filename: fileName,
+              filepath: filePath,
+              url: urlData.publicUrl,
+              type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
+            })
+          );
+        }
+      }
+      
+      // Process Zertifikat documents
+      if (uploadedFiles.zertifikate) {
+        const zertifikatPaths = uploadedFiles.zertifikate.split(',');
+        for (const filePath of zertifikatPaths) {
+          const fileName = filePath.split('/').pop() || filePath;
+          const { data: urlData } = supabase.storage
+            .from('driver-documents')
+            .getPublicUrl(filePath);
+          
+          documentPromises.push(
+            supabase.from('fahrer_dokumente').insert({
+              fahrer_id: dbData.id,
+              filename: fileName,
+              filepath: filePath,
+              url: urlData.publicUrl,
+              type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
+            })
+          );
+        }
+      }
+      
+      // Execute all document inserts
+      if (documentPromises.length > 0) {
+        try {
+          await Promise.all(documentPromises);
+          console.log("Document records saved successfully");
+        } catch (docError) {
+          console.error("Error saving document records:", docError);
+          // Don't fail the whole registration for this
+        }
+      }
     } else {
       console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
     }
