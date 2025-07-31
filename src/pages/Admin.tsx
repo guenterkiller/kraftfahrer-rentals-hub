@@ -119,8 +119,7 @@ const Admin = () => {
     
     const { data, error } = await supabase
       .from("fahrer_profile")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*");
 
     console.log("📊 Admin: Supabase Antwort:", { data, error });
     console.log("📈 Admin: Anzahl Fahrer gefunden:", data?.length || 0);
