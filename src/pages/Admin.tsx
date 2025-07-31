@@ -315,21 +315,39 @@ const Admin = () => {
   };
 
   const assignDriverToJob = async () => {
-    if (!selectedJobId || !selectedDriverEmail) return;
+    console.log("🚀 Starting driver assignment...");
+    console.log("📋 Selected Job ID:", selectedJobId);
+    console.log("👤 Selected Driver Email:", selectedDriverEmail);
+    
+    if (!selectedJobId || !selectedDriverEmail) {
+      console.error("❌ Missing job ID or driver email");
+      toast({
+        title: "Fehler",
+        description: "Bitte wählen Sie einen Fahrer aus",
+        variant: "destructive"
+      });
+      return;
+    }
 
     setAssigningDriver(true);
+    
     try {
       const selectedDriver = fahrer.find(f => f.email === selectedDriverEmail);
+      console.log("🔍 Found driver:", selectedDriver);
+      
       if (!selectedDriver) {
+        console.error("❌ Driver not found in fahrer list");
         toast({
           title: "Fehler",
-          description: "Fahrer nicht gefunden",
+          description: "Ausgewählter Fahrer nicht gefunden",
           variant: "destructive"
         });
+        setAssigningDriver(false);
         return;
       }
 
-      const { error } = await supabase.functions.invoke('assign-driver-to-job', {
+      console.log("📧 Invoking edge function...");
+      const { data, error } = await supabase.functions.invoke('assign-driver-to-job', {
         body: {
           jobId: selectedJobId,
           driverEmail: selectedDriverEmail,
@@ -337,30 +355,50 @@ const Admin = () => {
         }
       });
 
+      console.log("📨 Function response:", { data, error });
+
       if (error) {
-        console.error("❌ Admin: Fehler beim Zuweisen des Fahrers:", error);
+        console.error("❌ Edge function error:", error);
         toast({
-          title: "Fehler",
-          description: "Fahrer konnte nicht zugewiesen werden",
+          title: "Fehler beim E-Mail-Versand",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
           variant: "destructive"
         });
+        setAssigningDriver(false);
         return;
       }
 
+      // Update job status to assigned
+      console.log("📝 Updating job status...");
+      const { error: updateError } = await supabase
+        .from('job_requests')
+        .update({ status: 'assigned' })
+        .eq('id', selectedJobId);
+
+      if (updateError) {
+        console.error("❌ Job update error:", updateError);
+        // Don't fail completely, just log the error
+      }
+
+      console.log("✅ Assignment successful!");
       toast({
-        title: "Fahrer zugewiesen",
-        description: `${selectedDriver.vorname} ${selectedDriver.nachname} wurde erfolgreich benachrichtigt`
+        title: "Fahrer erfolgreich zugewiesen",
+        description: `${selectedDriver.vorname} ${selectedDriver.nachname} wurde per E-Mail benachrichtigt`
       });
 
+      // Close modal and reset states
       setAssignDialogOpen(false);
       setSelectedJobId("");
       setSelectedDriverEmail("");
+      
+      // Reload job requests to show updated status
+      await loadJobRequests();
 
     } catch (error) {
-      console.error("❌ Admin: Fehler beim Zuweisen des Fahrers:", error);
+      console.error("❌ Unexpected error in assignDriverToJob:", error);
       toast({
-        title: "Fehler",
-        description: "Unerwarteter Fehler beim Zuweisen des Fahrers",
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
         variant: "destructive"
       });
     } finally {
