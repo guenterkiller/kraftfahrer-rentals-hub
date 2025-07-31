@@ -45,6 +45,7 @@ const Admin = () => {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [documents, setDocuments] = useState<Record<string, DocumentFile[]>>({});
   const [documentCounts, setDocumentCounts] = useState<Record<string, number>>({});
+  const [jobRequests, setJobRequests] = useState<any[]>([]);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
@@ -199,6 +200,7 @@ const Admin = () => {
         await logAdminEvent('login', authData?.user?.email || email);
         
         loadFahrerData();
+        loadJobRequests();
         toast({
           title: "Erfolgreich angemeldet",
           description: "Willkommen im Admin-Bereich"
@@ -215,6 +217,82 @@ const Admin = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadJobRequests = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("job_requests")
+        .select("*")
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error("❌ Admin: Fehler beim Laden der Fahreranfragen:", error);
+        return;
+      }
+
+      console.log("✅ Admin: Fahreranfragen erfolgreich geladen:", data);
+      setJobRequests(data || []);
+    } catch (error) {
+      console.error("❌ Admin: Unerwarteter Fehler beim Laden der Fahreranfragen:", error);
+    }
+  };
+
+  const handleAcceptJob = async (jobId: string) => {
+    try {
+      const { error } = await supabase
+        .from("job_requests")
+        .update({ status: 'angenommen' })
+        .eq('id', jobId);
+
+      if (error) {
+        toast({
+          title: "Fehler",
+          description: "Anfrage konnte nicht angenommen werden",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Update local state
+      setJobRequests(prev => 
+        prev.map(req => 
+          req.id === jobId ? { ...req, status: 'angenommen' } : req
+        )
+      );
+
+      toast({
+        title: "Anfrage angenommen",
+        description: "Die Fahreranfrage wurde erfolgreich angenommen"
+      });
+
+      // Optional: Send notification to all registered drivers
+      await sendJobNotificationToDrivers(jobId);
+
+    } catch (error) {
+      console.error("❌ Admin: Fehler beim Annehmen der Anfrage:", error);
+      toast({
+        title: "Fehler",
+        description: "Unerwarteter Fehler beim Annehmen der Anfrage",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const sendJobNotificationToDrivers = async (jobId: string) => {
+    try {
+      const { error } = await supabase.functions.invoke('send-job-alert-emails', {
+        body: { jobId }
+      });
+
+      if (error) {
+        console.error("❌ Admin: Fehler beim Senden der Benachrichtigungen:", error);
+      } else {
+        console.log("✅ Admin: Benachrichtigungen an Fahrer gesendet");
+      }
+    } catch (error) {
+      console.error("❌ Admin: Fehler beim Senden der Benachrichtigungen:", error);
     }
   };
 
@@ -586,6 +664,73 @@ const Admin = () => {
                 ))}
               </TableBody>
             </Table>
+          </CardContent>
+        </Card>
+
+        {/* Job Requests Section */}
+        <Card className="mt-8">
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>Eingegangene Fahreranfragen ({jobRequests.length})</CardTitle>
+              <Button 
+                onClick={loadJobRequests} 
+                variant="outline" 
+                size="sm"
+              >
+                Aktualisieren
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {jobRequests.length === 0 ? (
+              <p className="text-gray-500 italic">Keine Anfragen vorhanden.</p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>E-Mail</TableHead>
+                    <TableHead>Telefon</TableHead>
+                    <TableHead>Einsatzort</TableHead>
+                    <TableHead>Zeitraum</TableHead>
+                    <TableHead>Fahrzeugtyp</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Eingang</TableHead>
+                    <TableHead>Aktionen</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {jobRequests.map((req) => (
+                    <TableRow key={req.id}>
+                      <TableCell className="font-medium">{req.customer_name}</TableCell>
+                      <TableCell>{req.customer_email}</TableCell>
+                      <TableCell>{req.customer_phone}</TableCell>
+                      <TableCell>{req.einsatzort}</TableCell>
+                      <TableCell>{req.zeitraum}</TableCell>
+                      <TableCell>{req.fahrzeugtyp}</TableCell>
+                      <TableCell>
+                        <Badge variant={req.status === 'angenommen' ? 'default' : 'outline'}>
+                          {req.status === 'angenommen' ? 'Angenommen' : 'Offen'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(req.created_at).toLocaleDateString('de-DE')}
+                      </TableCell>
+                      <TableCell>
+                        {req.status !== 'angenommen' && (
+                          <Button
+                            size="sm"
+                            onClick={() => handleAcceptJob(req.id)}
+                          >
+                            Annehmen
+                          </Button>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
