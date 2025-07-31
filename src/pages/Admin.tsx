@@ -115,20 +115,27 @@ const Admin = () => {
   };
 
   const loadFahrerData = async () => {
+    console.log("🔍 Admin: Lade Fahrerdaten...");
+    
     const { data, error } = await supabase
       .from("fahrer_profile")
       .select("*")
       .order("created_at", { ascending: false });
 
+    console.log("📊 Admin: Supabase Antwort:", { data, error });
+    console.log("📈 Admin: Anzahl Fahrer gefunden:", data?.length || 0);
+
     if (error) {
+      console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
       toast({
         title: "Fehler beim Laden",
-        description: "Fahrerdaten konnten nicht geladen werden",
+        description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
         variant: "destructive"
       });
       return;
     }
 
+    console.log("✅ Admin: Fahrerdaten erfolgreich geladen:", data);
     setFahrer(data || []);
   };
 
