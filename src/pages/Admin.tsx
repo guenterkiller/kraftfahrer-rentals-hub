@@ -23,6 +23,9 @@ interface FahrerProfile {
   dokumente: any;
   fuehrerscheinklassen: string[] | null;
   spezialisierungen: string[] | null;
+  verfuegbare_regionen: string[] | null;
+  ort: string | null;
+  plz: string | null;
 }
 
 interface DocumentFile {
@@ -586,7 +589,10 @@ const Admin = () => {
                       </TableCell>
                       <TableCell>{f.email}</TableCell>
                       <TableCell>{f.telefon}</TableCell>
-                      <TableCell>{f.bundesland || "Nicht angegeben"}</TableCell>
+                      <TableCell>
+                        {f.verfuegbare_regionen?.length ? f.verfuegbare_regionen.join(", ") : 
+                         f.ort ? f.ort : "Nicht angegeben"}
+                      </TableCell>
                       <TableCell>
                         {f.fuehrerscheinklassen?.join(", ") || "-"}
                       </TableCell>
