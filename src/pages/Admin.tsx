@@ -117,6 +117,24 @@ const Admin = () => {
   const loadFahrerData = async () => {
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
+    // Stelle sicher, dass Supabase Auth korrekt initialisiert ist
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser();
+
+    console.log("🔐 Admin: Auth Status:", { user: user?.email, authError });
+
+    if (!user || user.email !== ADMIN_EMAIL) {
+      console.error("❌ Admin: Kein Zugriff - ungültiger Benutzer");
+      toast({
+        title: "Zugriff verweigert",
+        description: "Keine Berechtigung für den Admin-Bereich",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const { data, error } = await supabase
       .from("fahrer_profile")
       .select("*");
