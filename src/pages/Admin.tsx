@@ -63,6 +63,7 @@ const Admin = () => {
     setLoading(true);
 
     try {
+      // Prüfe zuerst über Edge Function
       const { data, error } = await supabase.functions.invoke('check-admin-login', {
         body: { email, password }
       });
@@ -72,17 +73,33 @@ const Admin = () => {
       }
 
       if (data?.success) {
-        // Simulate user session for admin access
-        const adminUser = {
-          id: 'admin',
-          email: data.user.email,
-          aud: 'authenticated',
-          role: 'authenticated',
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-        } as User;
-        
-        setUser(adminUser);
+        // Führe echte Supabase Auth-Anmeldung durch
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        console.log("🔐 Admin: Supabase Auth Anmeldung:", { authData, authError });
+
+        if (authError) {
+          console.error("❌ Admin: Supabase Auth Fehler:", authError);
+          // Fallback: Verwende simulierte Session
+          const adminUser = {
+            id: 'admin',
+            email: data.user.email,
+            aud: 'authenticated',
+            role: 'authenticated',
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          } as User;
+          
+          setUser(adminUser);
+        } else {
+          // Verwende echte Auth-Session
+          setUser(authData.user);
+          console.log("✅ Admin: Echte Auth-Session erstellt für:", authData.user.email);
+        }
+
         loadFahrerData();
         toast({
           title: "Erfolgreich angemeldet",
