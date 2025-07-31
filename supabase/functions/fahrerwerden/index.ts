@@ -254,8 +254,9 @@ const handler = async (req: Request): Promise<Response> => {
     if (dbData && dbData.id) {
       console.log("Saved to database successfully:", dbData.id);
       
-      // Save document entries to fahrer_dokumente table
-      const documentPromises = [];
+      
+      // Insert documents directly into fahrer_dokumente table
+      const documentInserts = [];
       
       // Process Führerschein documents
       if (uploadedFiles.fuehrerschein) {
@@ -266,15 +267,13 @@ const handler = async (req: Request): Promise<Response> => {
             .from('driver-documents')
             .getPublicUrl(filePath);
           
-          documentPromises.push(
-            supabase.from('fahrer_dokumente').insert({
-              fahrer_id: dbData.id,
-              filename: fileName,
-              filepath: filePath,
-              url: urlData.publicUrl,
-              type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
-            })
-          );
+          documentInserts.push({
+            fahrer_id: dbData.id,
+            filename: fileName,
+            filepath: filePath,
+            url: urlData.publicUrl,
+            type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
+          });
         }
       }
       
@@ -287,15 +286,13 @@ const handler = async (req: Request): Promise<Response> => {
             .from('driver-documents')
             .getPublicUrl(filePath);
           
-          documentPromises.push(
-            supabase.from('fahrer_dokumente').insert({
-              fahrer_id: dbData.id,
-              filename: fileName,
-              filepath: filePath,
-              url: urlData.publicUrl,
-              type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
-            })
-          );
+          documentInserts.push({
+            fahrer_id: dbData.id,
+            filename: fileName,
+            filepath: filePath,
+            url: urlData.publicUrl,
+            type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
+          });
         }
       }
       
@@ -308,32 +305,33 @@ const handler = async (req: Request): Promise<Response> => {
             .from('driver-documents')
             .getPublicUrl(filePath);
           
-          documentPromises.push(
-            supabase.from('fahrer_dokumente').insert({
-              fahrer_id: dbData.id,
-              filename: fileName,
-              filepath: filePath,
-              url: urlData.publicUrl,
-              type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
-            })
-          );
+          documentInserts.push({
+            fahrer_id: dbData.id,
+            filename: fileName,
+            filepath: filePath,
+            url: urlData.publicUrl,
+            type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
+          });
         }
       }
-      
-      // Execute all document inserts
-      if (documentPromises.length > 0) {
-        console.log(`Attempting to insert ${documentPromises.length} document records...`);
-        try {
-          const docResults = await Promise.all(documentPromises);
-          console.log("Document records saved successfully:", docResults);
-          console.log("All document inserts completed for fahrer_id:", dbData.id);
-        } catch (docError) {
-          console.error("Error saving document records:", docError);
-          console.error("Document error details:", JSON.stringify(docError, null, 2));
-          // Don't fail the whole registration for this
+
+      // Batch insert all documents
+      if (documentInserts.length > 0) {
+        console.log(`Inserting ${documentInserts.length} document records:`, documentInserts);
+        
+        const { data: docData, error: docError } = await supabase
+          .from('fahrer_dokumente')
+          .insert(documentInserts)
+          .select();
+        
+        if (docError) {
+          console.error("Error inserting documents:", docError);
+          console.error("Document insert data:", JSON.stringify(documentInserts, null, 2));
+        } else {
+          console.log("Documents inserted successfully:", docData);
         }
       } else {
-        console.log("No documents to insert - documentPromises is empty");
+        console.log("No documents to insert - no uploaded files found");
       }
     } else {
       console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
