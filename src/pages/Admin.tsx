@@ -565,57 +565,49 @@ const Admin = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-8"></TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>E-Mail</TableHead>
-                  <TableHead>Telefon</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Registriert</TableHead>
-                  <TableHead>Führerschein</TableHead>
-                  <TableHead>Dokumente</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {fahrer.map((f) => (
-                  <Collapsible key={f.id} open={expandedRows.has(f.id)}>
-                    <CollapsibleTrigger asChild>
-                      <TableRow 
-                        className="cursor-pointer hover:bg-gray-50"
-                        onClick={() => toggleRow(f.id, f.email)}
-                      >
-                        <TableCell>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Name</TableHead>
+                    <TableHead>E-Mail</TableHead>
+                    <TableHead>Telefon</TableHead>
+                    <TableHead>Bundesland</TableHead>
+                    <TableHead>Führerscheinklasse</TableHead>
+                    <TableHead>Registriert am</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Dokumente</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fahrer.map((f) => (
+                    <TableRow key={f.id}>
+                      <TableCell className="font-medium">
+                        {f.vorname} {f.nachname}
+                      </TableCell>
+                      <TableCell>{f.email}</TableCell>
+                      <TableCell>{f.telefon}</TableCell>
+                      <TableCell>{f.bundesland || "Nicht angegeben"}</TableCell>
+                      <TableCell>
+                        {f.fuehrerscheinklassen?.join(", ") || "-"}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(f.created_at).toLocaleDateString('de-DE')}
+                      </TableCell>
+                      <TableCell>{getStatusBadge(f.status)}</TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => toggleRow(f.id, f.email)}
+                        >
+                          {documentCounts[f.id] || 0} Dateien
                           {expandedRows.has(f.id) ? 
-                            <ChevronDown className="h-4 w-4" /> : 
-                            <ChevronRight className="h-4 w-4" />
+                            <ChevronDown className="h-4 w-4 ml-1" /> : 
+                            <ChevronRight className="h-4 w-4 ml-1" />
                           }
-                        </TableCell>
-                        <TableCell className="font-medium">
-                          {f.vorname} {f.nachname}
-                        </TableCell>
-                        <TableCell>{f.email}</TableCell>
-                        <TableCell>{f.telefon}</TableCell>
-                        <TableCell>{getStatusBadge(f.status)}</TableCell>
-                        <TableCell>
-                          {new Date(f.created_at).toLocaleDateString('de-DE')}
-                        </TableCell>
-                        <TableCell>
-                          {f.fuehrerscheinklassen?.join(", ") || "-"}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {documentCounts[f.id] || 0} Dateien
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    </CollapsibleTrigger>
-                    
-                    <CollapsibleContent asChild>
-                      <TableRow>
-                        <TableCell colSpan={8} className="bg-gray-50">
-                          <div className="py-4">
+                        </Button>
+                        {expandedRows.has(f.id) && (
+                          <div className="mt-4 p-4 bg-gray-50 rounded border">
                             <h4 className="font-medium mb-3">Hochgeladene Dokumente:</h4>
                             {documents[f.id]?.length > 0 ? (
                               <div className="grid gap-2">
@@ -657,13 +649,12 @@ const Admin = () => {
                               <p className="text-gray-500 italic">Keine Dokumente hochgeladen</p>
                             )}
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    </CollapsibleContent>
-                  </Collapsible>
-                ))}
-              </TableBody>
-            </Table>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
           </CardContent>
         </Card>
 
