@@ -44,6 +44,7 @@ const Admin = () => {
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [documents, setDocuments] = useState<Record<string, DocumentFile[]>>({});
+  const [documentCounts, setDocumentCounts] = useState<Record<string, number>>({});
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
@@ -283,7 +284,13 @@ const Admin = () => {
       
       // Clear existing documents when reloading
       setDocuments({});
+      setDocumentCounts({});
       setExpandedRows(new Set());
+      
+      // Load document counts for all drivers
+      if (data) {
+        loadDocumentCounts(data);
+      }
       
       toast({
         title: "Daten aktualisiert",
@@ -298,6 +305,28 @@ const Admin = () => {
       });
     } finally {
       setIsLoadingData(false);
+    }
+  };
+
+  const loadDocumentCounts = async (fahrerData: FahrerProfile[]) => {
+    const counts: Record<string, number> = {};
+    
+    try {
+      for (const fahrer of fahrerData) {
+        const { data: storageFiles, error } = await supabase.storage
+          .from('driver-documents')
+          .list(`uploads/${fahrer.email}/`);
+
+        if (!error && storageFiles) {
+          counts[fahrer.id] = storageFiles.length;
+        } else {
+          counts[fahrer.id] = 0;
+        }
+      }
+      
+      setDocumentCounts(counts);
+    } catch (error) {
+      console.error("❌ Admin: Fehler beim Laden der Dokumentenzählung:", error);
     }
   };
 
@@ -499,7 +528,7 @@ const Admin = () => {
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">
-                            {documents[f.id]?.length || 0} Dateien
+                            {documentCounts[f.id] || 0} Dateien
                           </Badge>
                         </TableCell>
                       </TableRow>
