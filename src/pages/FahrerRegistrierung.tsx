@@ -199,112 +199,57 @@ const FahrerRegistrierung = () => {
 
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
-      // Upload files to Supabase Storage and get URLs
-      const uploadedFiles: { [key: string]: string } = {};
+      // Prepare FormData for the Edge Function
+      const formDataToSend = new FormData();
       
+      // Add form fields
+      formDataToSend.append('name', `${formData.vorname} ${formData.nachname}`.trim());
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.telefon);
+      formDataToSend.append('company', formData.adresse ? `${formData.adresse}, ${formData.plz} ${formData.ort}`.trim() : '');
+      formDataToSend.append('message', formData.verfuegbarkeit || '');
+      formDataToSend.append('description', formData.beschreibung || '');
+      formDataToSend.append('license_classes', JSON.stringify(formData.fuehrerscheinklassen));
+      formDataToSend.append('experience', formData.erfahrung_jahre || '');
+      formDataToSend.append('specializations', JSON.stringify(formData.spezialisierungen));
+      formDataToSend.append('regions', JSON.stringify(formData.verfuegbare_regionen));
+      formDataToSend.append('hourly_rate', formData.stundensatz ? `${formData.stundensatz} €` : '');
+      
+      // Add files
       if (selectedFiles.fuehrerschein && selectedFiles.fuehrerschein.length > 0) {
-        const fuehrerscheinFiles: string[] = [];
         for (let i = 0; i < selectedFiles.fuehrerschein.length; i++) {
-          try {
-            const file = selectedFiles.fuehrerschein[i];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}-fuehrerschein_${i + 1}.${fileExt}`;
-            
-            const { data: uploadData, error: uploadError } = await supabase.storage
-              .from('driver-documents')
-              .upload(fileName, file);
-              
-            if (uploadError) throw uploadError;
-            fuehrerscheinFiles.push(fileName);
-          } catch (error) {
-            console.error(`Upload Fehler Führerschein ${i + 1}:`, error);
-            toast({
-              title: "Upload-Fehler",
-              description: `Fehler beim Hochladen des Führerscheins ${i + 1}. Formular wird trotzdem übermittelt.`,
-              variant: "destructive",
-            });
-          }
-        }
-        if (fuehrerscheinFiles.length > 0) {
-          uploadedFiles.fuehrerschein = fuehrerscheinFiles.join(',');
+          formDataToSend.append('fuehrerschein', selectedFiles.fuehrerschein[i]);
         }
       }
-
+      
       if (selectedFiles.fahrerkarte && selectedFiles.fahrerkarte.length > 0) {
-        const fahrerkarteFiles: string[] = [];
         for (let i = 0; i < selectedFiles.fahrerkarte.length; i++) {
-          try {
-            const file = selectedFiles.fahrerkarte[i];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}-fahrerkarte_${i + 1}.${fileExt}`;
-            
-            const { data: uploadData, error: uploadError } = await supabase.storage
-              .from('driver-documents')
-              .upload(fileName, file);
-              
-            if (uploadError) throw uploadError;
-            fahrerkarteFiles.push(fileName);
-          } catch (error) {
-            console.error(`Upload Fehler Fahrerkarte ${i + 1}:`, error);
-            toast({
-              title: "Upload-Fehler", 
-              description: `Fehler beim Hochladen der Fahrerkarte ${i + 1}. Formular wird trotzdem übermittelt.`,
-              variant: "destructive",
-            });
-          }
-        }
-        if (fahrerkarteFiles.length > 0) {
-          uploadedFiles.fahrerkarte = fahrerkarteFiles.join(',');
+          formDataToSend.append('fahrerkarte', selectedFiles.fahrerkarte[i]);
         }
       }
-
+      
       if (selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0) {
-        const zertifikatFiles: string[] = [];
         for (let i = 0; i < selectedFiles.zertifikate.length; i++) {
-          try {
-            const file = selectedFiles.zertifikate[i];
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}-zertifikat_${i + 1}.${fileExt}`;
-            
-            const { data: uploadData, error: uploadError } = await supabase.storage
-              .from('driver-documents')
-              .upload(fileName, file);
-              
-            if (uploadError) throw uploadError;
-            zertifikatFiles.push(fileName);
-          } catch (error) {
-            console.error(`Upload Fehler Zertifikat ${i + 1}:`, error);
-          }
-        }
-        if (zertifikatFiles.length > 0) {
-          uploadedFiles.zertifikate = zertifikatFiles.join(',');
+          formDataToSend.append('zertifikate', selectedFiles.zertifikate[i]);
         }
       }
 
-      // Verwende die Edge Function für Fahrer-Bewerbungen
-      const response = await supabase.functions.invoke('fahrerwerden', {
-        body: {
-          name: `${formData.vorname} ${formData.nachname}`.trim(),
-          email: formData.email,
-          phone: formData.telefon,
-          company: formData.adresse ? `${formData.adresse}, ${formData.plz} ${formData.ort}`.trim() : null,
-          message: formData.verfuegbarkeit || null,
-          description: formData.beschreibung || null,
-          license_classes: formData.fuehrerscheinklassen,
-          experience: formData.erfahrung_jahre || null,
-          specializations: formData.spezialisierungen,
-          regions: formData.verfuegbare_regionen,
-          hourly_rate: formData.stundensatz ? `${formData.stundensatz} €` : null,
-          uploaded_files: uploadedFiles
+      // Send FormData to Edge Function using fetch directly
+      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/fahrerwerden', {
+        method: 'POST',
+        body: formDataToSend,
+        headers: {
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`,
         }
       });
-
-      // Check for specific status codes and handle them appropriately
-      if (response.error) {
-        console.error("Edge Function Fehler:", response.error);
+      
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        console.error("Edge Function Fehler:", responseData);
         
         // Handle duplicate email error specifically
-        if (response.error.message && response.error.message.includes('bereits registriert')) {
+        if (responseData.error && responseData.error.includes('bereits registriert')) {
           toast({
             title: "E-Mail bereits registriert",
             description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.",
@@ -313,10 +258,10 @@ const FahrerRegistrierung = () => {
           return;
         }
         
-        throw new Error(response.error.message || "Fehler beim Speichern der Bewerbung");
+        throw new Error(responseData.error || "Fehler beim Speichern der Bewerbung");
       }
 
-      console.log("Fahrer-Bewerbung erfolgreich gespeichert:", response.data);
+      console.log("Fahrer-Bewerbung erfolgreich gespeichert:", responseData);
 
       toast({
         title: "Registrierung erfolgreich!",

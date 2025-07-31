@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.submit-fahrer-anfrage]
 verify_jwt = false
+
+[functions.fahrerwerden]
+verify_jwt = false

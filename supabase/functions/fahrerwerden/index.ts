@@ -39,7 +39,23 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log("Fahrer-Anfrage submission received");
     
-    const requestData: FahrerAnfrageRequest = await req.json();
+    // Parse FormData instead of JSON
+    const formData = await req.formData();
+    
+    // Extract form fields
+    const requestData: FahrerAnfrageRequest = {
+      name: formData.get("name") as string || "",
+      email: formData.get("email") as string || "",
+      phone: formData.get("phone") as string || "",
+      company: formData.get("company") as string || "",
+      message: formData.get("message") as string || "",
+      description: formData.get("description") as string || "",
+      license_classes: JSON.parse(formData.get("license_classes") as string || "[]"),
+      experience: formData.get("experience") as string || "",
+      specializations: JSON.parse(formData.get("specializations") as string || "[]"),
+      regions: JSON.parse(formData.get("regions") as string || "[]"),
+      hourly_rate: formData.get("hourly_rate") as string || "",
+    };
 
     // Validation - only name, email, and phone are required
     if (!requestData.name || !requestData.email || !requestData.phone) {
@@ -85,6 +101,94 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Upload files to storage first
+    console.log("Uploading files to storage...");
+    const uploadedFiles: { [key: string]: string } = {};
+    const emailSafe = requestData.email.replace(/[^a-zA-Z0-9@.-]/g, '_');
+    
+    // Upload Führerschein files
+    const fuehrerscheinFiles = formData.getAll("fuehrerschein") as File[];
+    if (fuehrerscheinFiles.length > 0) {
+      const fuehrerscheinPaths: string[] = [];
+      for (let i = 0; i < fuehrerscheinFiles.length; i++) {
+        const file = fuehrerscheinFiles[i];
+        if (file && file.size > 0) {
+          const fileExt = file.name.split('.').pop() || 'pdf';
+          const fileName = `uploads/${emailSafe}/fuehrerschein_${i + 1}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('driver-documents')
+            .upload(fileName, file, { upsert: true });
+          
+          if (uploadError) {
+            console.error(`Upload error for Führerschein ${i + 1}:`, uploadError);
+          } else {
+            fuehrerscheinPaths.push(fileName);
+            console.log(`Führerschein ${i + 1} uploaded successfully: ${fileName}`);
+          }
+        }
+      }
+      if (fuehrerscheinPaths.length > 0) {
+        uploadedFiles.fuehrerschein = fuehrerscheinPaths.join(',');
+      }
+    }
+    
+    // Upload Fahrerkarte files
+    const fahrerkarteFiles = formData.getAll("fahrerkarte") as File[];
+    if (fahrerkarteFiles.length > 0) {
+      const fahrerkartePaths: string[] = [];
+      for (let i = 0; i < fahrerkarteFiles.length; i++) {
+        const file = fahrerkarteFiles[i];
+        if (file && file.size > 0) {
+          const fileExt = file.name.split('.').pop() || 'pdf';
+          const fileName = `uploads/${emailSafe}/fahrerkarte_${i + 1}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('driver-documents')
+            .upload(fileName, file, { upsert: true });
+          
+          if (uploadError) {
+            console.error(`Upload error for Fahrerkarte ${i + 1}:`, uploadError);
+          } else {
+            fahrerkartePaths.push(fileName);
+            console.log(`Fahrerkarte ${i + 1} uploaded successfully: ${fileName}`);
+          }
+        }
+      }
+      if (fahrerkartePaths.length > 0) {
+        uploadedFiles.fahrerkarte = fahrerkartePaths.join(',');
+      }
+    }
+    
+    // Upload Zertifikat files
+    const zertifikatFiles = formData.getAll("zertifikate") as File[];
+    if (zertifikatFiles.length > 0) {
+      const zertifikatPaths: string[] = [];
+      for (let i = 0; i < zertifikatFiles.length; i++) {
+        const file = zertifikatFiles[i];
+        if (file && file.size > 0) {
+          const fileExt = file.name.split('.').pop() || 'pdf';
+          const fileName = `uploads/${emailSafe}/zertifikat_${i + 1}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('driver-documents')
+            .upload(fileName, file, { upsert: true });
+          
+          if (uploadError) {
+            console.error(`Upload error for Zertifikat ${i + 1}:`, uploadError);
+          } else {
+            zertifikatPaths.push(fileName);
+            console.log(`Zertifikat ${i + 1} uploaded successfully: ${fileName}`);
+          }
+        }
+      }
+      if (zertifikatPaths.length > 0) {
+        uploadedFiles.zertifikate = zertifikatPaths.join(',');
+      }
+    }
+    
+    console.log("File uploads completed. Uploaded files:", uploadedFiles);
+
     // Save to database
     console.log("Email is unique, proceeding with registration...");
     
@@ -113,7 +217,8 @@ const handler = async (req: Request): Promise<Response> => {
       spezialisierungen: Array.isArray(requestData.specializations) ? requestData.specializations : [],
       verfuegbare_regionen: Array.isArray(requestData.regions) ? requestData.regions : [],
       stundensatz: parsedRate,
-      status: 'pending'
+      status: 'pending',
+      dokumente: uploadedFiles
     };
     
     console.log("Insert data being sent:", JSON.stringify(insertData, null, 2));
@@ -165,6 +270,7 @@ const handler = async (req: Request): Promise<Response> => {
         <p><strong>Region:</strong> ${insertData.verfuegbare_regionen?.length ? insertData.verfuegbare_regionen.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Fahrzeugtyp:</strong> ${insertData.fuehrerscheinklassen?.length ? insertData.fuehrerscheinklassen.join(', ') : 'nicht angegeben'}</p>
         <p><strong>Besonderheiten:</strong> ${insertData.spezialisierungen?.length ? insertData.spezialisierungen.join(', ') : 'keine'}</p>
+        ${Object.keys(uploadedFiles).length > 0 ? `<p><strong>Hochgeladene Dokumente:</strong> ${Object.keys(uploadedFiles).join(', ')}</p>` : ''}
         <hr>
         <p><strong>Registriert am:</strong> ${new Date().toLocaleString('de-DE')}</p>
       `
@@ -226,7 +332,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
     );
   } catch (error: any) {
-    console.error("Error in submit-fahrer-anfrage function:", error);
+    console.error("Error in fahrerwerden function:", error);
     return new Response(
       JSON.stringify({ error: error.message || "Fehler beim Senden der Anfrage" }),
       {
