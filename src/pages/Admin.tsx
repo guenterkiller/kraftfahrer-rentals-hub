@@ -305,6 +305,11 @@ const Admin = () => {
   };
 
   const handleAssignDriver = (jobId: string) => {
+    console.log("🎯 Opening assign dialog for job:", jobId);
+    console.log("📋 Available drivers:", fahrer.length);
+    console.log("✅ Approved drivers:", fahrer.filter(f => f.status === 'approved').length);
+    console.log("👥 Driver list:", fahrer.map(f => ({ name: `${f.vorname} ${f.nachname}`, email: f.email, status: f.status })));
+    
     setSelectedJobId(jobId);
     setAssignDialogOpen(true);
   };
@@ -872,22 +877,37 @@ const Admin = () => {
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium mb-2 block">
-                Fahrer auswählen:
+                Fahrer auswählen ({fahrer.length} registriert, {fahrer.filter(f => f.status === 'approved').length} genehmigt):
               </label>
               <Select value={selectedDriverEmail} onValueChange={setSelectedDriverEmail}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-background border border-input">
                   <SelectValue placeholder="Fahrer wählen..." />
                 </SelectTrigger>
-                <SelectContent>
-                  {fahrer
-                    .filter(f => f.status === 'approved')
-                    .map((f) => (
-                      <SelectItem key={f.id} value={f.email}>
-                        {f.vorname} {f.nachname} - {f.verfuegbare_regionen?.join(", ") || f.ort || "Alle Regionen"}
-                      </SelectItem>
-                    ))}
+                <SelectContent className="bg-background border border-input z-50">
+                  {fahrer.length === 0 ? (
+                    <SelectItem value="" disabled>
+                      Keine Fahrer gefunden
+                    </SelectItem>
+                  ) : fahrer.filter(f => f.status === 'approved').length === 0 ? (
+                    <SelectItem value="" disabled>
+                      Keine genehmigten Fahrer verfügbar
+                    </SelectItem>
+                  ) : (
+                    fahrer
+                      .filter(f => f.status === 'approved')
+                      .map((f) => (
+                        <SelectItem key={f.id} value={f.email}>
+                          {f.vorname} {f.nachname} – {f.email}
+                        </SelectItem>
+                      ))
+                  )}
                 </SelectContent>
               </Select>
+              
+              {/* Debug Info */}
+              <div className="text-xs text-gray-500 mt-2">
+                Verfügbare Fahrer: {fahrer.map(f => `${f.vorname} ${f.nachname} (${f.status})`).join(', ') || 'Keine gefunden'}
+              </div>
             </div>
             
             <div className="flex justify-end space-x-2">
