@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
@@ -51,6 +52,10 @@ const Admin = () => {
   const [jobRequests, setJobRequests] = useState<any[]>([]);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
+  const [assignDialogOpen, setAssignDialogOpen] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState<string>("");
+  const [selectedDriverEmail, setSelectedDriverEmail] = useState<string>("");
+  const [assigningDriver, setAssigningDriver] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -296,6 +301,65 @@ const Admin = () => {
       }
     } catch (error) {
       console.error("❌ Admin: Fehler beim Senden der Benachrichtigungen:", error);
+    }
+  };
+
+  const handleAssignDriver = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setAssignDialogOpen(true);
+  };
+
+  const assignDriverToJob = async () => {
+    if (!selectedJobId || !selectedDriverEmail) return;
+
+    setAssigningDriver(true);
+    try {
+      const selectedDriver = fahrer.find(f => f.email === selectedDriverEmail);
+      if (!selectedDriver) {
+        toast({
+          title: "Fehler",
+          description: "Fahrer nicht gefunden",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { error } = await supabase.functions.invoke('assign-driver-to-job', {
+        body: {
+          jobId: selectedJobId,
+          driverEmail: selectedDriverEmail,
+          driverName: `${selectedDriver.vorname} ${selectedDriver.nachname}`
+        }
+      });
+
+      if (error) {
+        console.error("❌ Admin: Fehler beim Zuweisen des Fahrers:", error);
+        toast({
+          title: "Fehler",
+          description: "Fahrer konnte nicht zugewiesen werden",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      toast({
+        title: "Fahrer zugewiesen",
+        description: `${selectedDriver.vorname} ${selectedDriver.nachname} wurde erfolgreich benachrichtigt`
+      });
+
+      setAssignDialogOpen(false);
+      setSelectedJobId("");
+      setSelectedDriverEmail("");
+
+    } catch (error) {
+      console.error("❌ Admin: Fehler beim Zuweisen des Fahrers:", error);
+      toast({
+        title: "Fehler",
+        description: "Unerwarteter Fehler beim Zuweisen des Fahrers",
+        variant: "destructive"
+      });
+    } finally {
+      setAssigningDriver(false);
     }
   };
 
@@ -735,23 +799,34 @@ const Admin = () => {
                         {new Date(req.created_at).toLocaleDateString('de-DE')}
                       </TableCell>
                       <TableCell>
-                        {req.status === 'angenommen' ? (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            disabled
-                            className="bg-gray-100 text-gray-500 cursor-not-allowed"
-                          >
-                            Angenommen
-                          </Button>
-                        ) : (
-                          <Button
-                            size="sm"
-                            onClick={() => handleAcceptJob(req.id)}
-                          >
-                            Annehmen
-                          </Button>
-                        )}
+                        <div className="flex gap-2">
+                          {req.status === 'angenommen' ? (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled
+                              className="bg-gray-100 text-gray-500 cursor-not-allowed"
+                            >
+                              Angenommen
+                            </Button>
+                          ) : (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => handleAcceptJob(req.id)}
+                              >
+                                Annehmen
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleAssignDriver(req.id)}
+                              >
+                                Fahrer zuweisen
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -785,6 +860,52 @@ const Admin = () => {
               )}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Assign Driver Dialog */}
+      <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Fahrer zuweisen & benachrichtigen</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium mb-2 block">
+                Fahrer auswählen:
+              </label>
+              <Select value={selectedDriverEmail} onValueChange={setSelectedDriverEmail}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Fahrer wählen..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {fahrer
+                    .filter(f => f.status === 'approved')
+                    .map((f) => (
+                      <SelectItem key={f.id} value={f.email}>
+                        {f.vorname} {f.nachname} - {f.verfuegbare_regionen?.join(", ") || f.ort || "Alle Regionen"}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => setAssignDialogOpen(false)}
+                disabled={assigningDriver}
+              >
+                Abbrechen
+              </Button>
+              <Button
+                onClick={assignDriverToJob}
+                disabled={!selectedDriverEmail || assigningDriver}
+              >
+                {assigningDriver ? "Wird zugewiesen..." : "Zuweisen & E-Mail senden"}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
