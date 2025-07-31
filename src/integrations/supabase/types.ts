@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_log: {
+        Row: {
+          created_at: string
+          email: string
+          event: string
+          id: string
+          ip_address: string | null
+          timestamp: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          event: string
+          id?: string
+          ip_address?: string | null
+          timestamp?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event?: string
+          id?: string
+          ip_address?: string | null
+          timestamp?: string
+        }
+        Relationships: []
+      }
       fahrer_dokumente: {
         Row: {
           created_at: string

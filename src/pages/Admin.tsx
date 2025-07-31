@@ -40,10 +40,12 @@ const Admin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(false);
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const [documents, setDocuments] = useState<Record<string, DocumentFile[]>>({});
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
+  const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -51,7 +53,74 @@ const Admin = () => {
 
   useEffect(() => {
     checkAuth();
+    setupInactivityTimer();
+    
+    return () => {
+      if (inactivityTimer) {
+        clearTimeout(inactivityTimer);
+      }
+    };
   }, []);
+
+  // Auto-Logout bei Inaktivität
+  const setupInactivityTimer = () => {
+    const resetTimer = () => {
+      if (inactivityTimer) {
+        clearTimeout(inactivityTimer);
+      }
+      
+      const timer = setTimeout(() => {
+        handleAutoLogout();
+      }, 15 * 60 * 1000); // 15 Minuten
+      
+      setInactivityTimer(timer);
+    };
+
+    // Activity Events
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+    events.forEach(event => {
+      document.addEventListener(event, resetTimer, true);
+    });
+
+    resetTimer(); // Initial timer start
+    
+    return () => {
+      events.forEach(event => {
+        document.removeEventListener(event, resetTimer, true);
+      });
+    };
+  };
+
+  const logAdminEvent = async (event: string, email?: string) => {
+    try {
+      await supabase.from('admin_log').insert({
+        email: email || user?.email || 'unknown',
+        event,
+        timestamp: new Date().toISOString()
+      });
+      console.log(`📝 Admin-Log: ${event} für ${email || user?.email}`);
+    } catch (error) {
+      console.error('❌ Fehler beim Logging:', error);
+    }
+  };
+
+  const handleAutoLogout = async () => {
+    if (user) {
+      await logAdminEvent('auto_logout', user.email);
+      await supabase.auth.signOut();
+      setUser(null);
+      setFahrer([]);
+      setDocuments({});
+      
+      toast({
+        title: "Automatisch abgemeldet",
+        description: "Sie wurden wegen Inaktivität abgemeldet",
+        variant: "destructive"
+      });
+      
+      navigate('/');
+    }
+  };
 
   const checkAuth = async () => {
     console.log("🔍 Admin: Prüfe Authentifizierung...");
@@ -125,6 +194,9 @@ const Admin = () => {
           console.log("✅ Admin: Echte Auth-Session erstellt für:", authData.user.email);
         }
 
+        // Log erfolgreiches Login
+        await logAdminEvent('login', authData?.user?.email || email);
+        
         loadFahrerData();
         toast({
           title: "Erfolgreich angemeldet",
@@ -146,10 +218,19 @@ const Admin = () => {
   };
 
   const handleLogout = async () => {
+    if (user) {
+      await logAdminEvent('manual_logout', user.email);
+    }
+    
     await supabase.auth.signOut();
     setUser(null);
     setFahrer([]);
     setDocuments({});
+    
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer);
+    }
+    
     toast({
       title: "Abgemeldet",
       description: "Sie wurden erfolgreich abgemeldet"
@@ -157,48 +238,67 @@ const Admin = () => {
   };
 
   const loadFahrerData = async () => {
+    setIsLoadingData(true);
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
-    // Debug: Aktuellen Benutzer prüfen
-    const { data: user, error: userError } = await supabase.auth.getUser();
-    console.log("👤 Aktueller Benutzer:", user);
-    console.log("❗ Auth-Fehler:", userError);
-    console.log("🔑 User UID:", user?.user?.id);
-    
-    // Stelle sicher, dass Supabase Auth korrekt initialisiert ist
-    const authError = userError;
+    try {
+      // Debug: Aktuellen Benutzer prüfen
+      const { data: user, error: userError } = await supabase.auth.getUser();
+      console.log("👤 Aktueller Benutzer:", user);
+      console.log("❗ Auth-Fehler:", userError);
+      console.log("🔑 User UID:", user?.user?.id);
+      
+      console.log("🔐 Admin: Auth Status:", { user: user?.user?.email, authError: userError });
 
-    console.log("🔐 Admin: Auth Status:", { user: user?.user?.email, authError });
+      if (!user?.user || user.user.email !== ADMIN_EMAIL) {
+        console.error("❌ Admin: Kein Zugriff - ungültiger Benutzer");
+        toast({
+          title: "Zugriff verweigert",
+          description: "Keine Berechtigung für den Admin-Bereich",
+          variant: "destructive"
+        });
+        return;
+      }
 
-    if (!user?.user || user.user.email !== ADMIN_EMAIL) {
-      console.error("❌ Admin: Kein Zugriff - ungültiger Benutzer");
+      const { data, error } = await supabase
+        .from("fahrer_profile")
+        .select("*")
+        .order('created_at', { ascending: false });
+
+      console.log("📊 Admin: Supabase Antwort:", { data, error });
+      console.log("📈 Admin: Anzahl Fahrer gefunden:", data?.length || 0);
+
+      if (error) {
+        console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
+        toast({
+          title: "Fehler beim Laden",
+          description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log("✅ Admin: Fahrerdaten erfolgreich geladen:", data);
+      setFahrer(data || []);
+      
+      // Clear existing documents when reloading
+      setDocuments({});
+      setExpandedRows(new Set());
+      
       toast({
-        title: "Zugriff verweigert",
-        description: "Keine Berechtigung für den Admin-Bereich",
+        title: "Daten aktualisiert",
+        description: `${data?.length || 0} Fahrer geladen`
+      });
+    } catch (error) {
+      console.error("❌ Admin: Unerwarteter Fehler:", error);
+      toast({
+        title: "Fehler",
+        description: "Unerwarteter Fehler beim Laden der Daten",
         variant: "destructive"
       });
-      return;
+    } finally {
+      setIsLoadingData(false);
     }
-
-    const { data, error } = await supabase
-      .from("fahrer_profile")
-      .select("*");
-
-    console.log("📊 Admin: Supabase Antwort:", { data, error });
-    console.log("📈 Admin: Anzahl Fahrer gefunden:", data?.length || 0);
-
-    if (error) {
-      console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
-      toast({
-        title: "Fehler beim Laden",
-        description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
-        variant: "destructive"
-      });
-      return;
-    }
-
-    console.log("✅ Admin: Fahrerdaten erfolgreich geladen:", data);
-    setFahrer(data || []);
   };
 
   const loadDocuments = async (fahrerEmail: string, fahrerId: string) => {
@@ -335,8 +435,13 @@ const Admin = () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Registrierte Fahrer ({fahrer.length})</CardTitle>
-              <Button onClick={loadFahrerData} variant="outline" size="sm">
-                Aktualisieren
+              <Button 
+                onClick={loadFahrerData} 
+                variant="outline" 
+                size="sm"
+                disabled={isLoadingData}
+              >
+                {isLoadingData ? "Lädt..." : "Aktualisieren"}
               </Button>
             </div>
           </CardHeader>
