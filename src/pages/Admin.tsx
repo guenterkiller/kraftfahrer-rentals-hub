@@ -62,36 +62,45 @@ const Admin = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (email !== ADMIN_EMAIL) {
-      toast({
-        title: "Zugriff verweigert",
-        description: "Sie sind nicht berechtigt, auf diesen Bereich zuzugreifen.",
-        variant: "destructive"
+    try {
+      const { data, error } = await supabase.functions.invoke('check-admin-login', {
+        body: { email, password }
       });
-      setLoading(false);
-      return;
-    }
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+      if (error) {
+        throw error;
+      }
 
-    if (error) {
+      if (data?.success) {
+        // Simulate user session for admin access
+        const adminUser = {
+          id: 'admin',
+          email: data.user.email,
+          aud: 'authenticated',
+          role: 'authenticated',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as User;
+        
+        setUser(adminUser);
+        loadFahrerData();
+        toast({
+          title: "Erfolgreich angemeldet",
+          description: "Willkommen im Admin-Bereich"
+        });
+      } else {
+        throw new Error("Login fehlgeschlagen");
+      }
+    } catch (error: any) {
+      console.error('Login error:', error);
       toast({
         title: "Login fehlgeschlagen",
-        description: error.message,
+        description: error.message || "Ungültige Anmeldedaten",
         variant: "destructive"
       });
-    } else if (data.user) {
-      setUser(data.user);
-      loadFahrerData();
-      toast({
-        title: "Erfolgreich angemeldet",
-        description: "Willkommen im Admin-Bereich"
-      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleLogout = async () => {
