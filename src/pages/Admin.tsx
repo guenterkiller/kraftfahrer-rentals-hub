@@ -156,15 +156,18 @@ const Admin = () => {
   const loadFahrerData = async () => {
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
+    // Debug: Aktuellen Benutzer prüfen
+    const { data: user, error: userError } = await supabase.auth.getUser();
+    console.log("👤 Aktueller Benutzer:", user);
+    console.log("❗ Auth-Fehler:", userError);
+    console.log("🔑 User UID:", user?.user?.id);
+    
     // Stelle sicher, dass Supabase Auth korrekt initialisiert ist
-    const {
-      data: { user },
-      error: authError
-    } = await supabase.auth.getUser();
+    const authError = userError;
 
-    console.log("🔐 Admin: Auth Status:", { user: user?.email, authError });
+    console.log("🔐 Admin: Auth Status:", { user: user?.user?.email, authError });
 
-    if (!user || user.email !== ADMIN_EMAIL) {
+    if (!user?.user || user.user.email !== ADMIN_EMAIL) {
       console.error("❌ Admin: Kein Zugriff - ungültiger Benutzer");
       toast({
         title: "Zugriff verweigert",
