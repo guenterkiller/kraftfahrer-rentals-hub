@@ -322,13 +322,18 @@ const handler = async (req: Request): Promise<Response> => {
       
       // Execute all document inserts
       if (documentPromises.length > 0) {
+        console.log(`Attempting to insert ${documentPromises.length} document records...`);
         try {
-          await Promise.all(documentPromises);
-          console.log("Document records saved successfully");
+          const docResults = await Promise.all(documentPromises);
+          console.log("Document records saved successfully:", docResults);
+          console.log("All document inserts completed for fahrer_id:", dbData.id);
         } catch (docError) {
           console.error("Error saving document records:", docError);
+          console.error("Document error details:", JSON.stringify(docError, null, 2));
           // Don't fail the whole registration for this
         }
+      } else {
+        console.log("No documents to insert - documentPromises is empty");
       }
     } else {
       console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
