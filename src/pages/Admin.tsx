@@ -923,11 +923,11 @@ const Admin = () => {
                 </SelectTrigger>
                 <SelectContent className="bg-background border border-input z-50">
                   {fahrer.length === 0 ? (
-                    <SelectItem value="" disabled>
+                    <SelectItem value="__no_drivers__" disabled>
                       Keine Fahrer gefunden
                     </SelectItem>
                   ) : fahrer.filter(f => f.status === 'approved').length === 0 ? (
-                    <SelectItem value="" disabled>
+                    <SelectItem value="__no_approved_drivers__" disabled>
                       Keine genehmigten Fahrer verfügbar
                     </SelectItem>
                   ) : (
