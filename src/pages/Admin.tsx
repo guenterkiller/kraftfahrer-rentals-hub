@@ -305,24 +305,36 @@ const Admin = () => {
     if (documents[fahrerId]) return; // Already loaded
 
     try {
-      console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerId);
+      console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerEmail);
       
-      // Lade Dokumente aus der Datenbank statt aus Storage
-      const { data: docs, error } = await supabase
-        .from('fahrer_dokumente')
-        .select('*')
-        .eq('fahrer_id', fahrerId)
-        .order('uploaded_at', { ascending: false });
+      // Lade Dokumente direkt aus Storage anhand des Pfads uploads/<email>/
+      const { data: storageFiles, error } = await supabase.storage
+        .from('driver-documents')
+        .list(`uploads/${fahrerEmail}/`);
 
       if (error) {
-        console.error("❌ Admin: Fehler beim Laden der Dokumente:", error);
+        console.error("❌ Admin: Fehler beim Laden der Storage-Dokumente:", error);
         return;
       }
 
-      console.log("✅ Admin: Dokumente geladen:", docs);
+      console.log("✅ Admin: Storage-Dokumente geladen:", storageFiles);
       
-      // Wenn keine Dokumente in der DB, zeige leere Liste
-      const documentFiles: DocumentFile[] = docs || [];
+      // Konvertiere Storage-Files zu DocumentFile Format
+      const documentFiles: DocumentFile[] = storageFiles?.map(file => {
+        const { data: publicUrl } = supabase.storage
+          .from('driver-documents')
+          .getPublicUrl(`uploads/${fahrerEmail}/${file.name}`);
+        
+        return {
+          id: file.id || file.name,
+          filename: file.name,
+          filepath: `uploads/${fahrerEmail}/${file.name}`,
+          url: publicUrl.publicUrl,
+          type: file.name.toLowerCase().includes('.pdf') ? 'pdf' : 'image',
+          uploaded_at: file.updated_at || file.created_at || new Date().toISOString(),
+          fahrer_id: fahrerId
+        };
+      }) || [];
 
       setDocuments(prev => ({
         ...prev,

@@ -254,85 +254,8 @@ const handler = async (req: Request): Promise<Response> => {
     if (dbData && dbData.id) {
       console.log("Saved to database successfully:", dbData.id);
       
-      
-      // Insert documents directly into fahrer_dokumente table
-      const documentInserts = [];
-      
-      // Process Führerschein documents
-      if (uploadedFiles.fuehrerschein) {
-        const fuehrerscheinPaths = uploadedFiles.fuehrerschein.split(',');
-        for (const filePath of fuehrerscheinPaths) {
-          const fileName = filePath.split('/').pop() || filePath;
-          const { data: urlData } = supabase.storage
-            .from('driver-documents')
-            .getPublicUrl(filePath);
-          
-          documentInserts.push({
-            fahrer_id: dbData.id,
-            filename: fileName,
-            filepath: filePath,
-            url: urlData.publicUrl,
-            type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
-          });
-        }
-      }
-      
-      // Process Fahrerkarte documents
-      if (uploadedFiles.fahrerkarte) {
-        const fahrerkartePaths = uploadedFiles.fahrerkarte.split(',');
-        for (const filePath of fahrerkartePaths) {
-          const fileName = filePath.split('/').pop() || filePath;
-          const { data: urlData } = supabase.storage
-            .from('driver-documents')
-            .getPublicUrl(filePath);
-          
-          documentInserts.push({
-            fahrer_id: dbData.id,
-            filename: fileName,
-            filepath: filePath,
-            url: urlData.publicUrl,
-            type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
-          });
-        }
-      }
-      
-      // Process Zertifikat documents
-      if (uploadedFiles.zertifikate) {
-        const zertifikatPaths = uploadedFiles.zertifikate.split(',');
-        for (const filePath of zertifikatPaths) {
-          const fileName = filePath.split('/').pop() || filePath;
-          const { data: urlData } = supabase.storage
-            .from('driver-documents')
-            .getPublicUrl(filePath);
-          
-          documentInserts.push({
-            fahrer_id: dbData.id,
-            filename: fileName,
-            filepath: filePath,
-            url: urlData.publicUrl,
-            type: fileName.toLowerCase().includes('.pdf') ? 'pdf' : 'image'
-          });
-        }
-      }
-
-      // Batch insert all documents
-      if (documentInserts.length > 0) {
-        console.log(`Inserting ${documentInserts.length} document records:`, documentInserts);
-        
-        const { data: docData, error: docError } = await supabase
-          .from('fahrer_dokumente')
-          .insert(documentInserts)
-          .select();
-        
-        if (docError) {
-          console.error("Error inserting documents:", docError);
-          console.error("Document insert data:", JSON.stringify(documentInserts, null, 2));
-        } else {
-          console.log("Documents inserted successfully:", docData);
-        }
-      } else {
-        console.log("No documents to insert - no uploaded files found");
-      }
+      console.log("File uploads completed successfully. Documents are stored in Storage.");
+      // Dokumente werden nun direkt aus dem Storage gelesen, nicht mehr aus der Tabelle
     } else {
       console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
     }
