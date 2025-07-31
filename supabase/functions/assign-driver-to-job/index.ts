@@ -57,71 +57,52 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "info@kraftfahrer-mieten.com",
       to: [driverEmail],
-      subject: "Neue Fahreranfrage erhalten",
+      cc: ["info@kraftfahrer-mieten.com"],
+      subject: "Neue Fahraufgabe über Fahrerexpress – Bitte Rückmeldung",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #2563eb; margin-bottom: 20px;">Neue Fahreranfrage verfügbar</h2>
-          
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6;">
           <p>Hallo ${driverName},</p>
           
-          <p>wir haben eine neue Fahreranfrage erhalten, die zu Ihrem Profil passen könnte:</p>
+          <p>Sie wurden für folgenden Einsatz angefragt:</p>
           
-          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: #374151;">Auftragsdaten:</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold; width: 40%;">Kunde:</td>
-                <td style="padding: 8px 0;">${job.customer_name}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Unternehmen:</td>
-                <td style="padding: 8px 0;">${job.company || 'Nicht angegeben'}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Einsatzort:</td>
-                <td style="padding: 8px 0;">${job.einsatzort}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Zeitraum:</td>
-                <td style="padding: 8px 0;">${job.zeitraum}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Fahrzeugtyp:</td>
-                <td style="padding: 8px 0;">${job.fahrzeugtyp}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Führerscheinklasse:</td>
-                <td style="padding: 8px 0;">${job.fuehrerscheinklasse}</td>
-              </tr>
-              ${job.besonderheiten ? `
-              <tr>
-                <td style="padding: 8px 0; font-weight: bold;">Besonderheiten:</td>
-                <td style="padding: 8px 0;">${job.besonderheiten}</td>
-              </tr>
-              ` : ''}
-            </table>
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #007bff;">
+            <p style="margin: 0;"><strong>📍 Ort:</strong> ${job.einsatzort}</p>
+            <p style="margin: 8px 0;"><strong>📅 Zeitraum:</strong> ${job.zeitraum}</p>
+            <p style="margin: 8px 0;"><strong>🚛 Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
+            <p style="margin: 8px 0;"><strong>👤 Auftraggeber:</strong> ${job.customer_name}</p>
+            <p style="margin: 8px 0;"><strong>📞 Kontakt:</strong> ${job.customer_phone}${job.customer_email ? ' / ' + job.customer_email : ''}</p>
+            <p style="margin: 8px 0 0 0;"><strong>📄 Nachricht:</strong> ${job.nachricht}</p>
           </div>
           
-          <div style="background-color: #dbeafe; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h4 style="margin-top: 0; color: #1e40af;">Nächste Schritte:</h4>
-            <p style="margin-bottom: 0;">
-              Wenn Sie Interesse an diesem Auftrag haben, melden Sie sich bitte umgehend bei unserer Agentur:
-            </p>
+          <div style="background-color: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #ffeaa7;">
+            <h3 style="margin-top: 0; color: #856404;">📄 Vermittlungsbedingungen</h3>
+            <p>Mit dieser E-Mail weisen wir Sie ausdrücklich auf folgende verbindliche Regelungen hin:</p>
+            
+            <h4 style="color: #856404; margin-top: 20px;">§ X – Vermittlungsprovision</h4>
+            <p>Die Fahrerexpress-Agentur – Günter Killer erhält für jeden vermittelten Auftrag eine Provision in Höhe von <strong>15 % des tatsächlichen, vom Kunden gezahlten Netto-Honorars</strong> (ohne Umsatzsteuer) an den Fahrer.</p>
             <ul style="margin: 10px 0;">
-              <li>📞 Telefon: [Ihre Telefonnummer]</li>
-              <li>📧 E-Mail: info@kraftfahrer-mieten.com</li>
+              <li>Die Provision ist innerhalb von <strong>5 Werktagen</strong> nach Zahlungseingang durch den Fahrer zu überweisen.</li>
+              <li>Der Fahrer verpflichtet sich, dem Vermittler eine Kopie der Rechnung oder einen Zahlungsnachweis zu senden.</li>
+              <li>Bei nachträglicher Honorarkürzung (Rabatt, Skonto etc.) reduziert sich die Provision entsprechend.</li>
+              <li>Erfolgt kein Nachweis, darf der Vermittler das ursprünglich vereinbarte Honorar zur Berechnung ansetzen.</li>
             </ul>
+            
+            <h4 style="color: #856404; margin-top: 20px;">§ Y – Kundenschutz (6 Monate)</h4>
+            <p>Der Fahrer verpflichtet sich, während der laufenden Vermittlung und für <strong>6 Monate danach</strong>, keine direkten Verträge mit dem übermittelten Kunden abzuschließen – außer über den Vermittler.</p>
+            <p>Bei Verstoß ist eine pauschale Vertragsstrafe i. H. v. <strong>1.000 € je Fall</strong> fällig.</p>
           </div>
           
-          <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
-            Mit freundlichen Grüßen<br>
-            Ihr Team von Kraftfahrer-Mieten.com
-          </p>
+          <div style="background-color: #d4edda; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #c3e6cb;">
+            <p style="margin: 0;"><strong>Bitte bestätigen Sie dem Kunden direkt die Einsatzmöglichkeit</strong> – und informieren Sie uns kurz per E-Mail an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>, ob Sie den Einsatz übernehmen.</p>
+          </div>
           
-          <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
-          <p style="font-size: 12px; color: #9ca3af; text-align: center;">
-            Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht direkt auf diese E-Mail.
-          </p>
+          <p style="margin-top: 30px;">Vielen Dank und gute Fahrt!</p>
+          
+          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+            <p style="margin: 0; font-weight: bold;">Günter Killer</p>
+            <p style="margin: 5px 0;">Fahrerexpress-Agentur</p>
+            <p style="margin: 5px 0;"><a href="https://www.kraftfahrer-mieten.com" style="color: #007bff;">www.kraftfahrer-mieten.com</a></p>
+          </div>
         </div>
       `,
     });
