@@ -51,10 +51,32 @@ const Admin = () => {
   }, []);
 
   const checkAuth = async () => {
+    console.log("🔍 Admin: Prüfe Authentifizierung...");
+    
+    // Prüfe Session erst
     const { data: { session } } = await supabase.auth.getSession();
+    console.log("🔐 Admin: Session Check:", session);
+    
     if (session?.user && session.user.email === ADMIN_EMAIL) {
+      console.log("✅ Admin: Session gefunden für:", session.user.email);
       setUser(session.user);
       loadFahrerData();
+      return;
+    }
+    
+    // Fallback: getUser() wenn keine Session
+    const { data: { user }, error } = await supabase.auth.getUser();
+    console.log("🔐 Admin: getUser() Result:", { user, error });
+    console.log("🔐 Admin: User Email:", user?.email);
+    console.log("🔐 Admin: Expected Email:", ADMIN_EMAIL);
+    console.log("🔐 Admin: Email Match:", user?.email === ADMIN_EMAIL);
+    
+    if (user && user.email === ADMIN_EMAIL) {
+      console.log("✅ Admin: User authentifiziert:", user.email);
+      setUser(user);
+      loadFahrerData();
+    } else {
+      console.log("❌ Admin: Keine gültige Authentifizierung");
     }
   };
 
