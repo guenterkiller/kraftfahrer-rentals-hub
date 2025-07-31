@@ -702,14 +702,35 @@ const Admin = () => {
                 <TableBody>
                   {jobRequests.map((req) => (
                     <TableRow key={req.id}>
-                      <TableCell className="font-medium">{req.customer_name}</TableCell>
+                      <TableCell className="font-medium">
+                        <div>
+                          <div>{req.customer_name}</div>
+                          {req.nachricht && (
+                            <div className="mt-1 text-sm text-gray-600 bg-gray-50 p-2 rounded">
+                              <strong>Nachricht:</strong> {req.nachricht}
+                            </div>
+                          )}
+                          {req.besonderheiten && (
+                            <div className="mt-1 text-sm text-amber-700 bg-amber-50 p-2 rounded">
+                              <strong>Besonderheiten:</strong> {req.besonderheiten}
+                            </div>
+                          )}
+                        </div>
+                      </TableCell>
                       <TableCell>{req.customer_email}</TableCell>
                       <TableCell>{req.customer_phone}</TableCell>
                       <TableCell>{req.einsatzort}</TableCell>
                       <TableCell>{req.zeitraum}</TableCell>
                       <TableCell>{req.fahrzeugtyp}</TableCell>
                       <TableCell>
-                        <Badge variant={req.status === 'angenommen' ? 'default' : 'outline'}>
+                        <Badge 
+                          variant={req.status === 'angenommen' ? 'default' : 'outline'}
+                          className={
+                            req.status === 'angenommen' 
+                              ? 'bg-green-100 text-green-800 border-green-200' 
+                              : 'bg-blue-100 text-blue-800 border-blue-200'
+                          }
+                        >
                           {req.status === 'angenommen' ? 'Angenommen' : 'Offen'}
                         </Badge>
                       </TableCell>
@@ -717,7 +738,16 @@ const Admin = () => {
                         {new Date(req.created_at).toLocaleDateString('de-DE')}
                       </TableCell>
                       <TableCell>
-                        {req.status !== 'angenommen' && (
+                        {req.status === 'angenommen' ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled
+                            className="bg-gray-100 text-gray-500 cursor-not-allowed"
+                          >
+                            Angenommen
+                          </Button>
+                        ) : (
                           <Button
                             size="sm"
                             onClick={() => handleAcceptJob(req.id)}
