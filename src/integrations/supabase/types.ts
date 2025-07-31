@@ -19,6 +19,7 @@ export type Database = {
           adresse: string | null
           beschreibung: string | null
           created_at: string
+          dokumente: Json | null
           email: string
           erfahrung_jahre: number | null
           fuehrerscheinklassen: string[] | null
@@ -39,6 +40,7 @@ export type Database = {
           adresse?: string | null
           beschreibung?: string | null
           created_at?: string
+          dokumente?: Json | null
           email: string
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
@@ -59,6 +61,7 @@ export type Database = {
           adresse?: string | null
           beschreibung?: string | null
           created_at?: string
+          dokumente?: Json | null
           email?: string
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
