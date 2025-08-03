@@ -14,6 +14,7 @@ import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
 import Versicherung from "./pages/Versicherung";
 import Admin from "./pages/Admin";
+import FahrerWerden from "./pages/FahrerWerden";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/fahrer-werden" element={<FahrerWerden />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
           <Route path="/fahrerboerse" element={<Fahrerboerse />} />
