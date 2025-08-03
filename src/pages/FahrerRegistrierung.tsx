@@ -328,6 +328,96 @@ const FahrerRegistrierung = () => {
               </Button>
             </div>
 
+            {/* Werbetext für selbstständige Fahrer */}
+            <Card className="mb-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
+              <CardContent className="p-8">
+                <div className="space-y-6">
+                  <div className="text-center">
+                    <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
+                      💬 Warum selbstständige fahrer bei uns mehr erreichen
+                    </h2>
+                    <p className="text-lg text-muted-foreground">
+                      Stell dir vor, du bestimmst selbst, wann, wo und für wen du fährst – ganz ohne Disponenten, 
+                      Schichtpläne oder endlose Diskussionen mit der Dispo.
+                    </p>
+                  </div>
+
+                  <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
+                    <p className="text-lg mb-4">
+                      Bei Fahrerexpress bist du nicht „nur ein Fahrer". Du bist Partner auf Augenhöhe – 
+                      mit klaren Aufträgen, ehrlicher Bezahlung und einem Ansprechpartner, der selbst jahrelang auf dem Bock saß.
+                    </p>
+
+                    <div className="grid md:grid-cols-3 gap-4 my-6">
+                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
+                        <span className="text-2xl">🚛</span>
+                        <span className="text-sm">Du willst mehr verdienen als mit Festanstellung?</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
+                        <span className="text-2xl">🧭</span>
+                        <span className="text-sm">Du willst selbst bestimmen, wann du fährst – und wann du Pause machst?</span>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
+                        <span className="text-2xl">💼</span>
+                        <span className="text-sm">Du willst raus aus dem Hamsterrad und dein eigener Chef sein?</span>
+                      </div>
+                    </div>
+
+                    <div className="text-center bg-primary/10 rounded-lg p-4 mb-6">
+                      <p className="text-lg font-semibold text-primary">
+                        👉 Dann ist jetzt der richtige Moment, dich bei uns zu registrieren.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="bg-card/50 rounded-lg p-6 border border-green-500/20">
+                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                      ✅ Was du bekommst:
+                    </h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                          <span>Planbare Aufträge, deutschlandweit – keine „Springerdienste"</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                          <span>Transparente Honorare – keine Lohnverhandlungen oder Tricks</span>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                          <span>Keine Lohnabzüge wie bei Zeitarbeit – du schreibst deine eigene Rechnung</span>
+                        </div>
+                        <div className="flex items-start gap-3">
+                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                          <span>Persönliche Betreuung – kein Callcenter, kein Systemdruck</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-primary/10 rounded-lg p-6 text-center">
+                    <div className="space-y-4">
+                      <p className="text-lg flex items-center justify-center gap-2">
+                        <span className="text-2xl">🔧</span>
+                        Du bringst Erfahrung, Führerschein und Motivation mit – wir liefern dir die passenden Aufträge.
+                      </p>
+                      <div className="border-t border-primary/20 pt-4">
+                        <p className="text-xl font-bold text-primary mb-2">
+                          📝 Trag dich jetzt ein – kostenlos & unverbindlich.
+                        </p>
+                        <p className="text-lg text-muted-foreground">
+                          Und vielleicht ist dein erster Auftrag schon morgen drin.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl text-center">
@@ -705,95 +795,6 @@ const FahrerRegistrierung = () => {
               </CardContent>
             </Card>
 
-            {/* Werbetext für selbstständige Fahrer */}
-            <Card className="mt-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-              <CardContent className="p-8">
-                <div className="space-y-6">
-                  <div className="text-center">
-                    <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
-                      💬 Warum selbstständige fahrer bei uns mehr erreichen
-                    </h2>
-                    <p className="text-lg text-muted-foreground">
-                      Stell dir vor, du bestimmst selbst, wann, wo und für wen du fährst – ganz ohne Disponenten, 
-                      Schichtpläne oder endlose Diskussionen mit der Dispo.
-                    </p>
-                  </div>
-
-                  <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
-                    <p className="text-lg mb-4">
-                      Bei Fahrerexpress bist du nicht „nur ein Fahrer". Du bist Partner auf Augenhöhe – 
-                      mit klaren Aufträgen, ehrlicher Bezahlung und einem Ansprechpartner, der selbst jahrelang auf dem Bock saß.
-                    </p>
-
-                    <div className="grid md:grid-cols-3 gap-4 my-6">
-                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
-                        <span className="text-2xl">🚛</span>
-                        <span className="text-sm">Du willst mehr verdienen als mit Festanstellung?</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
-                        <span className="text-2xl">🧭</span>
-                        <span className="text-sm">Du willst selbst bestimmen, wann du fährst – und wann du Pause machst?</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
-                        <span className="text-2xl">💼</span>
-                        <span className="text-sm">Du willst raus aus dem Hamsterrad und dein eigener Chef sein?</span>
-                      </div>
-                    </div>
-
-                    <div className="text-center bg-primary/10 rounded-lg p-4 mb-6">
-                      <p className="text-lg font-semibold text-primary">
-                        👉 Dann ist jetzt der richtige Moment, dich bei uns zu registrieren.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="bg-card/50 rounded-lg p-6 border border-green-500/20">
-                    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                      ✅ Was du bekommst:
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-3">
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Planbare Aufträge, deutschlandweit – keine „Springerdienste"</span>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Transparente Honorare – keine Lohnverhandlungen oder Tricks</span>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Keine Lohnabzüge wie bei Zeitarbeit – du schreibst deine eigene Rechnung</span>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Persönliche Betreuung – kein Callcenter, kein Systemdruck</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-primary/10 rounded-lg p-6 text-center">
-                    <div className="space-y-4">
-                      <p className="text-lg flex items-center justify-center gap-2">
-                        <span className="text-2xl">🔧</span>
-                        Du bringst Erfahrung, Führerschein und Motivation mit – wir liefern dir die passenden Aufträge.
-                      </p>
-                      <div className="border-t border-primary/20 pt-4">
-                        <p className="text-xl font-bold text-primary mb-2">
-                          📝 Trag dich jetzt ein – kostenlos & unverbindlich.
-                        </p>
-                        <p className="text-lg text-muted-foreground">
-                          Und vielleicht ist dein erster Auftrag schon morgen drin.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>
