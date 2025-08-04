@@ -110,18 +110,18 @@ const handler = async (req: Request): Promise<Response> => {
         <p>Liebe/r ${requestData.vorname} ${requestData.nachname},</p>
         <p>wir haben Ihre Anfrage für einen Fahrer erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
         
-        <h3>Ihre Anfrage im Überblick:</h3>
-        ${requestData.einsatzbeginn ? `<p><strong>Gewünschter Einsatzbeginn:</strong> ${new Date(requestData.einsatzbeginn).toLocaleDateString('de-DE')}</p>` : ''}
-        ${requestData.einsatzdauer ? `<p><strong>Einsatzdauer:</strong> ${requestData.einsatzdauer}</p>` : ''}
-        ${requestData.fahrzeugtyp ? `<p><strong>Benötigter Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</p>` : ''}
-        ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<p><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</p>` : ''}
-        <p><strong>Gewünschte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</p>
-        <p><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Regionen:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
+        <h3>📝 Ihre Anfrage im Überblick:</h3>
+        <ul>
+          ${requestData.fahrzeugtyp ? `<li><strong>Benötigter Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</li>` : ''}
+          ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
+          <li><strong>Gewünschte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
+          <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</li>
+          <li><strong>Region:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</li>
+        </ul>
         
-        
-        
-        <p>Falls Sie Fragen haben, kontaktieren Sie uns gerne unter info@fahrerexpress.de oder telefonisch.</p>
+        <p>Falls Sie Fragen haben, kontaktieren Sie uns gerne unter:<br>
+        📧 info@fahrerexpress.de<br>
+        📞 Telefonisch erreichbar unter: 01577 1442285</p>
         
         <p>Mit freundlichen Grüßen<br>
         Ihr Fahrerexpress-Team</p>

@@ -266,17 +266,25 @@ const handler = async (req: Request): Promise<Response> => {
       to: ["info@kraftfahrer-mieten.com"],
       subject: "Neue Fahrer-Registrierung",
       html: `
-        <h2>Ein neuer Fahrer hat sich registriert</h2>
-        <p><strong>Vorname:</strong> ${insertData.vorname}</p>
-        <p><strong>Nachname:</strong> ${insertData.nachname}</p>
-        <p><strong>E-Mail:</strong> ${insertData.email}</p>
-        <p><strong>Telefon:</strong> ${insertData.telefon}</p>
-        <p><strong>Region:</strong> ${insertData.verfuegbare_regionen?.length ? insertData.verfuegbare_regionen.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Fahrzeugtyp:</strong> ${insertData.fuehrerscheinklassen?.length ? insertData.fuehrerscheinklassen.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Besonderheiten:</strong> ${insertData.spezialisierungen?.length ? insertData.spezialisierungen.join(', ') : 'keine'}</p>
-        ${Object.keys(uploadedFiles).length > 0 ? `<p><strong>Hochgeladene Dokumente:</strong> ${Object.keys(uploadedFiles).join(', ')}</p>` : ''}
-        <hr>
-        <p><strong>Registriert am:</strong> ${new Date().toLocaleString('de-DE')}</p>
+        <h2>📥 Neue Fahrerregistrierung eingegangen</h2>
+        <p>Ein neuer Fahrer hat sich erfolgreich über das Portal registriert:</p>
+        
+        <h3>🧾 Persönliche Daten:</h3>
+        <ul>
+          <li><strong>Vorname:</strong> ${insertData.vorname}</li>
+          <li><strong>Nachname:</strong> ${insertData.nachname}</li>
+          <li><strong>E-Mail:</strong> ${insertData.email}</li>
+          <li><strong>Telefon:</strong> ${insertData.telefon}</li>
+        </ul>
+        
+        <h3>🚛 Fahrerdetails:</h3>
+        <ul>
+          <li><strong>Region:</strong> ${insertData.verfuegbare_regionen?.length ? insertData.verfuegbare_regionen.join(', ') : 'nicht angegeben'}</li>
+          <li><strong>Fahrzeugtyp:</strong> ${insertData.fuehrerscheinklassen?.length ? insertData.fuehrerscheinklassen.join(', ') : 'nicht angegeben'}</li>
+          <li><strong>Besonderheiten:</strong> ${insertData.spezialisierungen?.length ? insertData.spezialisierungen.join(', ') : 'keine'}</li>
+        </ul>
+        
+        <p><strong>📅 Registriert am:</strong> ${new Date().toLocaleString('de-DE')}</p>
       `
     });
 
@@ -297,26 +305,23 @@ const handler = async (req: Request): Promise<Response> => {
 
         <p>Lieber Herr/Frau ${insertData.vorname} ${insertData.nachname},</p>
 
-        <p>vielen Dank, dass Sie sich bei uns als <strong>selbstständiger Kraftfahrer mit eigenem Gewerbe</strong> registriert haben.</p>
+        <p>vielen Dank, dass Sie sich bei uns als selbstständiger Kraftfahrer mit eigenem Gewerbe registriert haben.</p>
 
         <p>Wir haben Ihre Angaben erhalten und melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind.</p>
 
-        <p>Falls Sie Ihre Angaben korrigieren oder ergänzen möchten, schreiben Sie uns bitte an:
-        <br>
-        📧 <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a><br>
+        <p>Falls Sie Ihre Angaben korrigieren oder ergänzen möchten, schreiben Sie uns bitte an:<br>
+        📧 info@kraftfahrer-mieten.com<br>
         unter Angabe Ihres Namens und Ihrer Telefonnummer.</p>
 
-        <hr>
+        <hr style="margin: 20px 0;">
 
-        <p><strong>Wichtiger Hinweis:</strong><br>
-        Sie haben der Vermittlungsprovision in Höhe von <strong>15 %</strong> auf vermittelte Einsätze zugestimmt.<br>
-        Die Abrechnung erfolgt je nach Einsatz <strong>monatlich oder fallbezogen</strong>.</p>
+        <p><strong>📌 Wichtiger Hinweis zur Vermittlungsprovision:</strong><br>
+        Sie haben der Vermittlungsprovision in Höhe von 15 % auf vermittelte Einsätze zugestimmt.<br>
+        Die Abrechnung erfolgt je nach Einsatz monatlich oder fallbezogen.</p>
 
-        <p>Bei Rückfragen erreichen Sie uns jederzeit:</p>
-        <ul>
-          <li>E-Mail: <strong>info@kraftfahrer-mieten.com</strong></li>
-          <li>Telefon: <strong>01577 1442285</strong></li>
-        </ul>
+        <p>Bei Rückfragen erreichen Sie uns jederzeit:<br>
+        📧 info@kraftfahrer-mieten.com<br>
+        📞 01577 1442285</p>
 
         <p>Mit freundlichen Grüßen<br>
         Ihr Fahrerexpress-Team</p>
