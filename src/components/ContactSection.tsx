@@ -105,9 +105,12 @@ const ContactSection = () => {
         </div>
         
         <div className="text-center mt-8 pt-8 border-t">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground space-x-6">
             <Link to="/impressum" className="hover:text-primary transition-colors">
               Impressum
+            </Link>
+            <Link to="/datenschutz" className="hover:text-primary transition-colors">
+              Datenschutz
             </Link>
           </p>
         </div>
