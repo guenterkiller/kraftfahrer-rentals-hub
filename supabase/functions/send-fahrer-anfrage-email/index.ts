@@ -61,27 +61,31 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending admin notification email...");
     const adminEmailResponse = await resend.emails.send({
       from: "Fahrerexpress <noreply@kraftfahrer-mieten.com>",
-      to: ["info@fahrerexpress.de"],
-      subject: "Neue Fahrer-Anfrage eingegangen",
+      to: ["info@kraftfahrer-mieten.com"],
+      subject: `Neue Fahreranfrage von ${requestData.vorname} ${requestData.nachname}`,
       html: `
-        <h2>Neue Fahrer-Anfrage</h2>
-        <p><strong>Name:</strong> ${requestData.vorname} ${requestData.nachname}</p>
-        <p><strong>E-Mail:</strong> ${requestData.email}</p>
-        <p><strong>Telefon:</strong> ${requestData.phone}</p>
-        <p><strong>Firma:</strong> ${requestData.company || 'nicht angegeben'}</p>
+        <h2>📥 Neue Fahreranfrage eingegangen</h2>
+        <p>Eine neue Anfrage wurde gestellt:</p>
+        
+        <h3>🚛 Fahrzeugdetails:</h3>
+        <ul>
+          <li><strong>Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp || 'nicht angegeben'}</li>
+          <li><strong>Führerscheinklasse:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
+          <li><strong>Spezialanforderungen:</strong> ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? requestData.spezialanforderungen.join(', ') : 'keine'}</li>
+          <li><strong>Region:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</li>
+        </ul>
+        
+        <h3>👤 Kundendaten:</h3>
+        <ul>
+          <li><strong>Absender:</strong> ${requestData.vorname} ${requestData.nachname}</li>
+          <li><strong>Telefon:</strong> ${requestData.phone}</li>
+          <li><strong>E-Mail:</strong> ${requestData.email}</li>
+          <li><strong>Firma:</strong> ${requestData.company || 'nicht angegeben'}</li>
+        </ul>
         
         ${requestData.einsatzbeginn ? `<p><strong>Einsatzbeginn:</strong> ${requestData.einsatzbeginn}</p>` : ''}
         ${requestData.einsatzdauer ? `<p><strong>Einsatzdauer:</strong> ${requestData.einsatzdauer}</p>` : ''}
-        ${requestData.fahrzeugtyp ? `<p><strong>Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</p>` : ''}
-        ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<p><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</p>` : ''}
-        
-        <p><strong>Benötigte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</p>
-        <p><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Regionen:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</p>
-        <p><strong>Erfahrung:</strong> ${requestData.experience || 'nicht angegeben'}</p>
-        <p><strong>Stundenlohn:</strong> ${requestData.hourly_rate || 'nicht angegeben'}</p>
-        <p><strong>Nachricht:</strong> ${requestData.message || 'nicht angegeben'}</p>
-        <p><strong>Beschreibung:</strong> ${requestData.description || 'nicht angegeben'}</p>
+        ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</p>` : ''}
         
         <p><strong>Datenschutz zugestimmt:</strong> ${requestData.datenschutz ? 'Ja' : 'Nein'}</p>
         <p><strong>Newsletter gewünscht:</strong> ${requestData.newsletter ? 'Ja' : 'Nein'}</p>
@@ -97,7 +101,7 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Fehler beim Senden der Admin-E-Mail");
     }
 
-    console.log("Admin email sent successfully");
+    console.log("Admin email sent successfully to info@kraftfahrer-mieten.com:", adminEmailResponse.data?.id);
 
     // Send confirmation email to client
     console.log("Sending confirmation email to client...");
