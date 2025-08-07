@@ -7,8 +7,15 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import JobAlertSection from "@/components/JobAlertSection";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
+import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
+  useSEO({
+    title: "LKW-Fahrer mieten – Selbstständige Fahrer bundesweit | Fahrerexpress",
+    description: "Jetzt erfahrene LKW-Fahrer & Baumaschinenführer mieten. Flexibel, rechtskonform & bundesweit. Fahrerexpress – Ihre Lösung bei Fahrermangel.",
+    keywords: "kraftfahrer mieten, selbständiger berufskraftfahrer gesucht, LKW-Fahrer mieten, selbstständige Kraftfahrer, Baumaschinenführer, bundesweite Vermittlung",
+    ogImage: "https://lovable.dev/opengraph-image-p98pqg.png"
+  });
   return (
     <div>
       <Navigation />

@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Phone, Mail, MapPin, Clock, User, Car } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 
 interface FahrerProfile {
   id: string;
@@ -30,6 +31,12 @@ interface FahrerProfile {
 }
 
 const FahrerAdmin = () => {
+  useSEO({
+    title: "Fahrer Administration | Fahrerexpress",
+    description: "Geschützter Admin-Bereich für die Verwaltung registrierter Fahrer.",
+    noindex: true
+  });
+
   const { toast } = useToast();
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -3,8 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { CheckCircle, AlertTriangle, FileText, Users, Shield, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSEO } from "@/hooks/useSEO";
 
 const Wissenswertes = () => {
+  useSEO({
+    title: "Wissenswertes für Auftraggeber – Rechtliche Grundlagen | Fahrerexpress",
+    description: "Alles über die Beauftragung selbstständiger Fahrer: Rechtliche Hinweise, Scheinselbstständigkeit vermeiden, Versicherungsschutz & Vertragsgestaltung.",
+    keywords: "selbstständige Fahrer beauftragen, Scheinselbstständigkeit vermeiden, Arbeitnehmerüberlassung, Kraftfahrer rechtlich, Vertragsgestaltung Fahrer"
+  });
   return (
     <div className="min-h-screen bg-background">
       <Navigation />

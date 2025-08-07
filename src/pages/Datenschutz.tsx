@@ -1,8 +1,15 @@
 import Navigation from "@/components/Navigation";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 
 const Datenschutz = () => {
+  useSEO({
+    title: "Datenschutzerklärung | Fahrerexpress-Agentur Frankfurt",
+    description: "Datenschutzerklärung der Fahrerexpress-Agentur. Transparente Informationen über Datenverarbeitung, DSGVO-konform.",
+    keywords: "Datenschutz Fahrerexpress, DSGVO, Datenschutzerklärung",
+    noindex: true
+  });
   return (
     <div>
       <Navigation />

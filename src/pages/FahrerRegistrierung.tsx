@@ -11,8 +11,14 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { ArrowLeft, Upload, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSEO } from "@/hooks/useSEO";
 
 const FahrerRegistrierung = () => {
+  useSEO({
+    title: "Fahrer werden – Jetzt als selbstständiger LKW-Fahrer registrieren",
+    description: "Werden Sie selbstständiger Partner bei Fahrerexpress. Mehr verdienen, selbst bestimmen, deutschlandweite Aufträge. Jetzt kostenlos registrieren!",
+    keywords: "selbstständiger LKW-Fahrer werden, Fahrer registrieren, selbstständig als Kraftfahrer, Fahrerexpress Partner werden"
+  });
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});

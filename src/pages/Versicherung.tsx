@@ -3,8 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { AlertTriangle, Shield, Heart, Calculator, TrendingUp, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useSEO } from "@/hooks/useSEO";
 
 const Versicherung = () => {
+  useSEO({
+    title: "Versicherungen für selbstständige LKW-Fahrer | Fahrerexpress",
+    description: "Schutz vor Altersarmut: Berufsunfähigkeitsversicherung, Krankentagegeld & Altersvorsorge für selbstständige Kraftfahrer. Jetzt absichern!",
+    keywords: "Versicherung selbstständige Fahrer, Berufsunfähigkeitsversicherung LKW-Fahrer, Krankentagegeld, Rürup-Rente, Altersvorsorge Kraftfahrer"
+  });
   return (
     <div className="min-h-screen bg-background">
       <Navigation />

@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
+import { useSEO } from "@/hooks/useSEO";
 
 interface FahrerProfile {
   id: string;
@@ -40,6 +41,12 @@ interface DocumentFile {
 }
 
 const Admin = () => {
+  useSEO({
+    title: "Admin Bereich | Fahrerexpress",
+    description: "Geschützter Admin-Bereich für die Verwaltung der Fahrerexpress-Agentur.",
+    noindex: true
+  });
+
   const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -2,8 +2,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSEO } from "@/hooks/useSEO";
 
 const Impressum = () => {
+  useSEO({
+    title: "Impressum | Fahrerexpress-Agentur Frankfurt",
+    description: "Impressum der Fahrerexpress-Agentur Frankfurt. Kontaktdaten, Geschäftsführung und rechtliche Angaben gemäß TMG.",
+    keywords: "Impressum Fahrerexpress, Kontakt Frankfurt, Günter Killer, Fahrerexpress-Agentur",
+    noindex: true
+  });
   return (
     <div className="min-h-screen bg-muted">
       <div className="container mx-auto px-4 py-8">

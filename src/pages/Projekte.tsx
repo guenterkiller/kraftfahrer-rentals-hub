@@ -3,9 +3,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Clock, Users, Truck, Calendar } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 // Using uploaded project images
 
 const Projekte = () => {
+  useSEO({
+    title: "Erfolgreiche Projekte & Einsatzbeispiele | Fahrerexpress",
+    description: "Referenzen unserer erfolgreichen Fahrereinsätze: München, Hamburg, Speyer. Zufriedene Kunden bei Bau, Logistik und Schwertransport.",
+    keywords: "Fahrerexpress Referenzen, erfolgreiche Projekte, Kundenbewertungen, Fahrereinsätze Deutschland, Fahrmischer München, Logistik Hamburg"
+  });
   const projekte = [
     {
       id: 1,

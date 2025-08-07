@@ -3,8 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Euro, Clock, Users } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlung = () => {
+  useSEO({
+    title: "Vermittlung & Provision für selbstständige Fahrer | Fahrerexpress",
+    description: "Transparente Vermittlungskosten: 15% Provision nur bei erfolgreichem Einsatz. Keine Fixkosten, keine Mindestlaufzeit für Kraftfahrer.",
+    keywords: "Vermittlungsprovision, Fahrer Provision, Vermittlungskosten selbstständige Fahrer, 15 Prozent Provision"
+  });
   return (
     <div className="min-h-screen bg-muted">
       <Navigation />

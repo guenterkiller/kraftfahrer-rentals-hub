@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Star, Clock, Euro } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 
 interface FahrerProfile {
   id: string;
@@ -37,6 +38,12 @@ interface ContactFormData {
 }
 
 const Fahrerboerse = () => {
+  useSEO({
+    title: "Fahrerbörse – Verfügbare LKW-Fahrer finden | Fahrerexpress",
+    description: "Durchsuchen Sie unsere Fahrerbörse und finden Sie qualifizierte LKW-Fahrer für Ihren Bedarf. Sofort verfügbar, deutschlandweit.",
+    keywords: "Fahrerbörse, LKW-Fahrer finden, Kraftfahrer verfügbar, Fahrer buchen, selbstständige Fahrer"
+  });
+
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedFahrer, setSelectedFahrer] = useState<FahrerProfile | null>(null);
