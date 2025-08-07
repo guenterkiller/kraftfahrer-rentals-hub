@@ -16,6 +16,7 @@ const Navigation = () => {
     { label: "Projekte", href: "/projekte" },
     { label: "Wissenswertes", href: "/wissenswertes" },
     { label: "Versicherung", href: "/versicherung" },
+    { label: "Fahrerbörse", href: "/fahrerboerse" },
     { label: "Kontakt", href: "#contact" },
     { label: "Fahrer werden", href: "/fahrer-registrierung" }
   ];

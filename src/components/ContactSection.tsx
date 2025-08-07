@@ -105,6 +105,23 @@ const ContactSection = () => {
         </div>
         
         <div className="text-center mt-8 pt-8 border-t">
+          <div className="flex flex-wrap justify-center gap-4 mb-4">
+            <Link to="/projekte" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Projekte
+            </Link>
+            <Link to="/wissenswertes" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Wissenswertes
+            </Link>
+            <Link to="/versicherung" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Versicherung
+            </Link>
+            <Link to="/fahrerboerse" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Fahrerbörse
+            </Link>
+            <Link to="/vermittlung" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              Vermittlung
+            </Link>
+          </div>
           <p className="text-sm text-muted-foreground space-x-6">
             <Link to="/impressum" className="hover:text-primary transition-colors">
               Impressum
