@@ -1,4 +1,10 @@
 RewriteEngine On
+
+# Force HTTPS redirect - 301 redirect from HTTP to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://kraftfahrer-mieten.com/$1 [R=301,L]
+
+# SPA fallback routing
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f

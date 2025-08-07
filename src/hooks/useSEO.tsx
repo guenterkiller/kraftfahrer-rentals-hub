@@ -12,7 +12,10 @@ interface SEOData {
 export const useSEO = (seoData: SEOData) => {
   const location = useLocation();
   const baseUrl = 'https://kraftfahrer-mieten.com';
-  const canonicalUrl = `${baseUrl}${location.pathname}`;
+  // Für die Startseite explizit mit trailing slash
+  const canonicalUrl = location.pathname === '/' 
+    ? 'https://kraftfahrer-mieten.com/' 
+    : `${baseUrl}${location.pathname}`;
 
   useEffect(() => {
     // Set page title
