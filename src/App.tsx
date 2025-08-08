@@ -15,7 +15,7 @@ import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
 import Versicherung from "./pages/Versicherung";
 import Admin from "./pages/Admin";
-import Navigation from "./components/Navigation";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -24,24 +24,21 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Navigation />
-        <main className="pt-16">
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
-            <Route path="/fahrer-admin" element={<FahrerAdmin />} />
-            
-            <Route path="/vermittlung" element={<Vermittlung />} />
-            <Route path="/wissenswertes" element={<Wissenswertes />} />
-            <Route path="/projekte" element={<Projekte />} />
-            <Route path="/versicherung" element={<Versicherung />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/impressum" element={<Impressum />} />
-            <Route path="/datenschutz" element={<Datenschutz />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </main>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
+          <Route path="/fahrer-admin" element={<FahrerAdmin />} />
+          
+          <Route path="/vermittlung" element={<Vermittlung />} />
+          <Route path="/wissenswertes" element={<Wissenswertes />} />
+          <Route path="/projekte" element={<Projekte />} />
+          <Route path="/versicherung" element={<Versicherung />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/impressum" element={<Impressum />} />
+          <Route path="/datenschutz" element={<Datenschutz />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

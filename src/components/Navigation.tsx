@@ -3,19 +3,19 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Navigation() {
+const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b z-50">
+    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="font-bold text-sm md:text-xl text-primary">
-            <span className="hidden sm:inline">Fahrerexpress-Agentur - Günter Killer</span>
-            <span className="sm:hidden">Fahrerexpress<br/>Günter Killer</span>
-          </Link>
+          <div className="font-bold text-sm md:text-xl text-primary">
+            <div className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</div>
+            <div className="sm:hidden">Fahrerexpress<br/>Günter Killer</div>
+          </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
@@ -88,4 +88,6 @@ export default function Navigation() {
       </div>
     </nav>
   );
-}
+};
+
+export default Navigation;
