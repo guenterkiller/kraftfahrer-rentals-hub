@@ -4,6 +4,10 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://kraftfahrer-mieten.com/$1 [R=301,L]
 
+# Remove legacy Fahrerbörse URLs
+Redirect gone /fahrerboerse
+Redirect gone /fahrerbörse
+
 # SPA fallback routing
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
