@@ -1,42 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
-  const isHomePage = location.pathname === '/';
 
-  const menuItems = [
-    { label: "Startseite", href: "#home" },
-    { label: "Leistungen", href: "#services" },
-    { label: "Über mich", href: "#about" },
-    { label: "Preise", href: "#pricing" },
-    { label: "Projekte", href: "/projekte" },
-    { label: "Wissenswertes", href: "/wissenswertes" },
-    { label: "Versicherung", href: "/versicherung" },
-    { label: "Fahrerbörse", href: "/fahrerboerse" },
-    { label: "Kontakt", href: "#contact" },
-    { label: "Fahrer werden", href: "/fahrer-registrierung" }
-  ];
 
-  const handleNavClick = (href: string, e: React.MouseEvent) => {
-    if (href.startsWith('#')) {
-      if (isHomePage) {
-        // Auf der Startseite - normales Scrolling
-        e.preventDefault();
-        const element = document.querySelector(href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      } else {
-        // Auf anderer Seite - zur Startseite mit Anker navigieren
-        e.preventDefault();
-        window.location.href = `/${href}`;
-      }
-    }
-  };
 
   return (
     <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b z-50">
@@ -49,29 +19,6 @@ const Navigation = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            {menuItems.slice(0, -1).map((item) => {
-              if (item.href.startsWith('/')) {
-                return (
-                  <Link 
-                    key={item.label}
-                    to={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {item.label}
-                  </Link>
-                );
-              }
-              return (
-                <a 
-                  key={item.label}
-                  href={item.href}
-                  className="text-muted-foreground hover:text-primary transition-colors cursor-pointer text-sm"
-                  onClick={(e) => handleNavClick(item.href, e)}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
             <Button size="sm" className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all" asChild>
               <Link to="/fahrer-registrierung">
                 🚀 Fahrer werden
@@ -109,33 +56,6 @@ const Navigation = () => {
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t">
             <div className="flex flex-col space-y-4">
-              {menuItems.slice(0, -1).map((item) => {
-                if (item.href.startsWith('/')) {
-                  return (
-                    <Link 
-                      key={item.label}
-                      to={item.href}
-                      className="text-muted-foreground hover:text-primary transition-colors"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                }
-                return (
-                  <a 
-                    key={item.label}
-                    href={item.href}
-                    className="text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-                    onClick={(e) => {
-                      setIsMenuOpen(false);
-                      handleNavClick(item.href, e);
-                    }}
-                  >
-                    {item.label}
-                  </a>
-                );
-              })}
               <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all mb-2" asChild>
                 <Link 
                   to="/fahrer-registrierung"

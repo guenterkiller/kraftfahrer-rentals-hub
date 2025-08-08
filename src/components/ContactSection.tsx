@@ -115,9 +115,6 @@ const ContactSection = () => {
             <Link to="/versicherung" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Versicherung
             </Link>
-            <Link to="/fahrerboerse" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Fahrerbörse
-            </Link>
             <Link to="/vermittlung" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Vermittlung
             </Link>

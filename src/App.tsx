@@ -9,7 +9,7 @@ import Datenschutz from "./pages/Datenschutz";
 import NotFound from "./pages/NotFound";
 import FahrerRegistrierung from "./pages/FahrerRegistrierung";
 import FahrerAdmin from "./pages/FahrerAdmin";
-import Fahrerboerse from "./pages/Fahrerboerse";
+
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
@@ -28,7 +28,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
-          <Route path="/fahrerboerse" element={<Fahrerboerse />} />
+          
           <Route path="/vermittlung" element={<Vermittlung />} />
           <Route path="/wissenswertes" element={<Wissenswertes />} />
           <Route path="/projekte" element={<Projekte />} />
