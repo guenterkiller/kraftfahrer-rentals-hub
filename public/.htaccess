@@ -1,5 +1,14 @@
 RewriteEngine On
 
+# MIME types for images
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+
+# Prevent partial content to avoid 206 issues for crawlers
+<IfModule mod_headers.c>
+  Header set Accept-Ranges none
+</IfModule>
+
 # Force HTTPS redirect - 301 redirect from HTTP to HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://kraftfahrer-mieten.com/$1 [R=301,L]
