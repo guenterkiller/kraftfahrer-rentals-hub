@@ -2,6 +2,9 @@ Options -MultiViews
 
 RewriteEngine On
 
+# Bypass all rewrites for admin-check.html (serve static)
+RewriteRule ^admin-check\.html$ - [L]
+
 # MIME types for images
 AddType image/jpeg .jpg .jpeg
 AddType image/png .png
