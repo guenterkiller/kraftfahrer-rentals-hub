@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,6 +65,8 @@ const Admin = () => {
   const [assigningDriver, setAssigningDriver] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 
   const ADMIN_EMAIL = "guenter.killer@t-online.de";
 
@@ -166,6 +168,7 @@ const Admin = () => {
       loadFahrerData();
     } else {
       console.log("❌ Admin: Keine gültige Authentifizierung");
+      navigate('/admin/login');
     }
   };
 
@@ -431,6 +434,8 @@ const Admin = () => {
       title: "Abgemeldet",
       description: "Sie wurden erfolgreich abgemeldet"
     });
+
+    navigate('/admin/login');
   };
 
   const loadFahrerData = async () => {
@@ -655,6 +660,10 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <div className={`w-full text-xs md:text-sm border-b px-3 py-2 ${envOk ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+        {envOk ? '✅ Supabase ENV: konfiguriert' : '❌ Supabase Config fehlt'}
+        <span className="ml-2">URL: {SUPABASE_URL ? 'gesetzt' : 'leer'} | ANON: {SUPABASE_PUBLISHABLE_KEY ? 'gesetzt' : 'leer'}</span>
+      </div>
       <div className="container mx-auto py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
