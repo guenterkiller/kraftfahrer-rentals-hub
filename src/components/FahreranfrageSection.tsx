@@ -5,9 +5,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-
+import { Info } from "lucide-react";
 const FahreranfrageSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -25,11 +27,12 @@ const FahreranfrageSection = () => {
     const telefon = formData.get("phone") as string;
     const nachricht = formData.get("nachricht") as string;
     const datenschutz = formData.get("datenschutz") === "on";
+    const preiseOk = formData.get("preise_ok") === "on";
 
-    if (!vorname || !nachname || !email || !telefon || !nachricht || !datenschutz) {
+    if (!vorname || !nachname || !email || !telefon || !nachricht || !datenschutz || !preiseOk) {
       toast({
         title: "Fehler",
-        description: "Bitte füllen Sie alle Pflichtfelder aus und stimmen Sie der Datenschutzerklärung zu.",
+        description: "Bitte füllen Sie alle Pflichtfelder aus und bestätigen Sie die Preise sowie die Datenschutzerklärung.",
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -191,11 +194,49 @@ const FahreranfrageSection = () => {
                   <span aria-hidden="true" className="text-2xl">💰</span>
                   <div>
                     <h3 className="font-bold text-xl md:text-2xl mb-2">Ihr Fahrerpreis</h3>
-                    <ul className="space-y-1">
-                      <li className="text-base md:text-lg">– Standard LKW-Fahrer: <span className="font-semibold text-primary text-lg md:text-xl">399 € netto / Tag</span> (8 Std.)</li>
-                      <li className="text-base md:text-lg">– Spezialfahrer (ADR/Kran): <span className="font-semibold text-primary text-lg md:text-xl">539 € netto / Tag</span> (8 Std.)</li>
-                      <li className="text-base md:text-lg">– Baumaschinenführer: <span className="font-semibold text-primary text-lg md:text-xl">489 € netto / Tag</span> (8 Std.)</li>
-                    </ul>
+                    <TooltipProvider delayDuration={100}>
+                      <ul className="space-y-1">
+                        <li className="text-base md:text-lg flex items-center">
+                          <span>– Standard LKW-Fahrer: <span className="font-semibold text-primary text-lg md:text-xl">399 € netto / Tag</span> (8 Std.)</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button type="button" className="ml-2 inline-flex items-center text-muted-foreground hover:text-foreground" aria-label="Preisdetails">
+                                <Info className="h-4 w-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              inkl. 8 Std., Mehrstunden nach Absprache.
+                            </TooltipContent>
+                          </Tooltip>
+                        </li>
+                        <li className="text-base md:text-lg flex items-center">
+                          <span>– Spezialfahrer (ADR/Kran): <span className="font-semibold text-primary text-lg md:text-xl">539 € netto / Tag</span> (8 Std.)</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button type="button" className="ml-2 inline-flex items-center text-muted-foreground hover:text-foreground" aria-label="Preisdetails">
+                                <Info className="h-4 w-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              inkl. 8 Std., Mehrstunden nach Absprache.
+                            </TooltipContent>
+                          </Tooltip>
+                        </li>
+                        <li className="text-base md:text-lg flex items-center">
+                          <span>– Baumaschinenführer: <span className="font-semibold text-primary text-lg md:text-xl">489 € netto / Tag</span> (8 Std.)</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button type="button" className="ml-2 inline-flex items-center text-muted-foreground hover:text-foreground" aria-label="Preisdetails">
+                                <Info className="h-4 w-4" />
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              inkl. 8 Std., Mehrstunden nach Absprache.
+                            </TooltipContent>
+                          </Tooltip>
+                        </li>
+                      </ul>
+                    </TooltipProvider>
                     <p className="mt-3 text-sm text-muted-foreground">
                       Alle Preise zzgl. MwSt., Fahrtkosten und evtl. Übernachtung nach Aufwand. Mit Absenden des Formulars buchen Sie verbindlich zum angegebenen Tagespreis.
                     </p>
@@ -334,6 +375,16 @@ const FahreranfrageSection = () => {
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <Checkbox
+                    id="preise_ok"
+                    name="preise_ok"
+                    required
+                  />
+                  <Label htmlFor="preise_ok" className="text-sm">
+                    Ich habe die Preise gelesen und verstanden. *
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
                     id="datenschutz"
                     name="datenschutz"
                     required
@@ -366,7 +417,12 @@ const FahreranfrageSection = () => {
                 disabled={isSubmitting}
                 className="w-full"
               >
-                {isSubmitting ? "Wird gesendet..." : "Fahrer buchen"}
+                {isSubmitting ? "Wird gesendet..." : (
+                  <span className="flex items-center justify-center gap-2">
+                    <span>Fahrer buchen</span>
+                    <Badge variant="secondary" className="text-[11px] md:text-xs px-2 py-1">ab 399 € netto</Badge>
+                  </span>
+                )}
               </Button>
             </form>
           </CardContent>
