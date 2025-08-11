@@ -184,6 +184,24 @@ const FahreranfrageSection = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Preisbox */}
+              <div role="note" aria-label="Ihr Fahrerpreis" className="rounded-lg border border-primary/20 bg-muted/40 p-4 md:p-5 relative">
+                <div className="absolute inset-x-0 top-0 h-1 bg-primary rounded-t-lg" />
+                <div className="flex items-start gap-3">
+                  <span aria-hidden="true" className="text-2xl">💰</span>
+                  <div>
+                    <h3 className="font-bold text-xl md:text-2xl mb-2">Ihr Fahrerpreis</h3>
+                    <ul className="space-y-1">
+                      <li className="text-base md:text-lg">– Standard LKW-Fahrer: <span className="font-semibold text-primary text-lg md:text-xl">399 € netto / Tag</span> (8 Std.)</li>
+                      <li className="text-base md:text-lg">– Spezialfahrer (ADR/Kran): <span className="font-semibold text-primary text-lg md:text-xl">539 € netto / Tag</span> (8 Std.)</li>
+                      <li className="text-base md:text-lg">– Baumaschinenführer: <span className="font-semibold text-primary text-lg md:text-xl">489 € netto / Tag</span> (8 Std.)</li>
+                    </ul>
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      Alle Preise zzgl. MwSt., Fahrtkosten und evtl. Übernachtung nach Aufwand. Mit Absenden des Formulars buchen Sie verbindlich zum angegebenen Tagespreis.
+                    </p>
+                  </div>
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="vorname">Vorname *</Label>
