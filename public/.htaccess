@@ -17,6 +17,10 @@ RewriteRule ^(.*)$ https://kraftfahrer-mieten.com/$1 [R=301,L]
 Redirect gone /fahrerboerse
 Redirect gone /fahrerbörse
 
+# 301 redirects for legacy .html URLs
+Redirect 301 /index.html /
+RedirectMatch 301 ^/(.+)\.html$ /$1
+
 # SPA fallback routing
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
