@@ -137,7 +137,7 @@ const Admin = () => {
         variant: "destructive"
       });
       
-      navigate('/');
+      navigate('/admin/login');
     }
   };
 
@@ -458,6 +458,7 @@ const Admin = () => {
           description: "Keine Berechtigung für den Admin-Bereich",
           variant: "destructive"
         });
+        navigate('/admin/login');
         return;
       }
 
