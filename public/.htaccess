@@ -36,6 +36,11 @@ RewriteRule ^ https://kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
 # SPA fallback routing
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
+
+# Explicit SPA routes for admin (avoid any external redirects)
+RewriteRule ^admin$ /index.html [L]
+RewriteRule ^admin/login$ /index.html [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
