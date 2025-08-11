@@ -9,17 +9,25 @@ AddType image/png .png
   Header set Accept-Ranges none
 </IfModule>
 
-# Force HTTPS redirect - 301 redirect from HTTP to HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://kraftfahrer-mieten.com/$1 [R=301,L]
+# Canonical 301 redirects for legacy .html URLs (one hop, HTTPS)
+RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^impressum\.html$ https://kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteRule ^datenschutzerklaerung\.html$ https://kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://kraftfahrer-mieten.com/agb [R=301,L]
+# Referenzen variants (mobile/smartphone/printable .../default.html)
+RewriteRule ^referenzen/default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+# Generic: any other .html → sans extension
+RewriteCond %{REQUEST_URI} \.html$ [NC]
+RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
 
 # Remove legacy Fahrerbörse URLs
 Redirect gone /fahrerboerse
 Redirect gone /fahrerbörse
 
-# 301 redirects for legacy .html URLs
-Redirect 301 /index.html /
-RedirectMatch 301 ^/(.+)\.html$ /$1
+# Force HTTPS for any remaining HTTP requests (no .html)
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
 
 # SPA fallback routing
 RewriteBase /
