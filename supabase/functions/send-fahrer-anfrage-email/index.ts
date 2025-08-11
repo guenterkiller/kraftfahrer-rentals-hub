@@ -33,6 +33,10 @@ interface FahrerAnfrageEmailRequest {
   spezialanforderungen?: string[];
   datenschutz?: boolean;
   newsletter?: boolean;
+  // Price acknowledgement proof
+  price_acknowledged?: boolean;
+  price_ack_time?: string;
+  price_plan?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -54,8 +58,23 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Vorname, Nachname, E-Mail und Telefon sind Pflichtfelder");
     }
 
-    const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('cf-connecting-ip') || 'unknown';
-    const userAgent = req.headers.get('user-agent') || 'unknown';
+const rawIp = req.headers.get('x-forwarded-for') || req.headers.get('cf-connecting-ip') || 'unknown';
+const anonymizeIp = (ip: string) => {
+  if (!ip || ip === 'unknown') return 'unknown';
+  // Handle possible multiple IPs in x-forwarded-for
+  const firstIp = ip.split(',')[0].trim();
+  if (firstIp.includes(':')) { // IPv6
+    const parts = firstIp.split(':');
+    return parts.slice(0, 4).join(':') + '::/64';
+  }
+  const octets = firstIp.split('.');
+  if (octets.length === 4) {
+    return `${octets[0]}.${octets[1]}.${octets[2]}.0`;
+  }
+  return 'unknown';
+};
+const ipAddressMasked = anonymizeIp(rawIp);
+const userAgent = req.headers.get('user-agent') || 'unknown';
 
     // Send notification email to admin
     console.log("Sending admin notification email...");
@@ -83,16 +102,24 @@ const handler = async (req: Request): Promise<Response> => {
           <li><strong>Firma:</strong> ${requestData.company || 'nicht angegeben'}</li>
         </ul>
         
-        ${requestData.einsatzbeginn ? `<p><strong>Einsatzbeginn:</strong> ${requestData.einsatzbeginn}</p>` : ''}
-        ${requestData.einsatzdauer ? `<p><strong>Einsatzdauer:</strong> ${requestData.einsatzdauer}</p>` : ''}
-        ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</p>` : ''}
+${requestData.einsatzbeginn ? `<p><strong>Einsatzbeginn:</strong> ${requestData.einsatzbeginn}</p>` : ''}
+${requestData.einsatzdauer ? `<p><strong>Einsatzdauer:</strong> ${requestData.einsatzdauer}</p>` : ''}
+${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</p>` : ''}
         
-        <p><strong>Datenschutz zugestimmt:</strong> ${requestData.datenschutz ? 'Ja' : 'Nein'}</p>
-        <p><strong>Newsletter gewünscht:</strong> ${requestData.newsletter ? 'Ja' : 'Nein'}</p>
-        <hr>
-        <p><strong>IP-Adresse:</strong> ${ipAddress}</p>
-        <p><strong>User-Agent:</strong> ${userAgent}</p>
-        <p><strong>Zeitpunkt:</strong> ${new Date().toLocaleString('de-DE')}</p>
+<p><strong>Datenschutz zugestimmt:</strong> ${requestData.datenschutz ? 'Ja' : 'Nein'}</p>
+<p><strong>Newsletter gewünscht:</strong> ${requestData.newsletter ? 'Ja' : 'Nein'}</p>
+<hr>
+
+<h3>💶 Preisbestätigung</h3>
+<ul>
+  <li><strong>Preisbestätigung:</strong> ${requestData.price_acknowledged ? 'JA' : 'NEIN'}</li>
+  <li><strong>Zeit der Bestätigung:</strong> ${requestData.price_ack_time ? new Date(requestData.price_ack_time).toLocaleString('de-DE') : '—'}</li>
+  <li><strong>Fahrertyp:</strong> ${requestData.price_plan || '—'}</li>
+</ul>
+
+<p><strong>IP-Adresse (anonymisiert):</strong> ${ipAddressMasked}</p>
+<p><strong>User-Agent:</strong> ${userAgent}</p>
+<p><strong>Zeitpunkt:</strong> ${new Date().toLocaleString('de-DE')}</p>
       `,
     });
 

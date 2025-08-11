@@ -13,7 +13,37 @@ import { Info } from "lucide-react";
 const FahreranfrageSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const [priceAcknowledged, setPriceAcknowledged] = useState(false);
+  const [priceAckTime, setPriceAckTime] = useState<string | null>(null);
+  const [pricePlan, setPricePlan] = useState<string>("Standard LKW-Fahrer");
 
+  const derivePlan = () => {
+    const adr = (document.getElementById('adr') as HTMLInputElement | null)?.checked;
+    const kran = (document.getElementById('kran') as HTMLInputElement | null)?.checked;
+    const fahrzeugtyp = (document.getElementById('fahrzeugtyp') as HTMLSelectElement | null)?.value || '';
+    const msg = ((document.getElementById('nachricht') as HTMLTextAreaElement | null)?.value || '').toLowerCase();
+    if (adr || kran) return "Spezialfahrer (ADR/Kran)";
+    if (msg.includes('baumaschin')) return "Baumaschinenführer";
+    return "Standard LKW-Fahrer";
+  };
+
+  const sendGAEvent = (plan: string, tsIso: string) => {
+    try {
+      // gtag is loaded in index.html, but guard just in case
+      const gtag = (window as any).gtag;
+      if (typeof gtag === 'function') {
+        gtag('event', 'price_acknowledged', {
+          plan,
+          timestamp: tsIso,
+        });
+      } else {
+        // no-op if GA is blocked
+        console.warn('gtag not available; price_acknowledged not sent');
+      }
+    } catch (e) {
+      console.error('GA event error', e);
+    }
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -125,21 +155,25 @@ const FahreranfrageSection = () => {
 
       // Also send the original customer notification email with correct data structure
       const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
-        body: {
-          vorname: vorname.trim(),
-          nachname: nachname.trim(),
-          email: email.trim(),
-          phone: telefon.trim(),
-          company: (formData.get('unternehmen') as string)?.trim() || '',
-          message: nachricht.trim(),
-          // Add fields that the function expects for job requests
-          einsatzbeginn: einsatzbeginn || '',
-          einsatzdauer: einsatzdauer || '',
-          fahrzeugtyp: fahrzeugtyp || '',
-          spezialanforderungen: anforderungen,
-          datenschutz: datenschutz,
-          newsletter: formData.get("newsletter") === "on"
-        }
+body: {
+  vorname: vorname.trim(),
+  nachname: nachname.trim(),
+  email: email.trim(),
+  phone: telefon.trim(),
+  company: (formData.get('unternehmen') as string)?.trim() || '',
+  message: nachricht.trim(),
+  // Add fields that the function expects for job requests
+  einsatzbeginn: einsatzbeginn || '',
+  einsatzdauer: einsatzdauer || '',
+  fahrzeugtyp: fahrzeugtyp || '',
+  spezialanforderungen: anforderungen,
+  datenschutz: datenschutz,
+  newsletter: formData.get("newsletter") === "on",
+  // Price acknowledgement proof
+  price_acknowledged: true,
+  price_ack_time: priceAckTime || new Date().toISOString(),
+  price_plan: pricePlan
+}
       });
 
       if (customerResponse.error) {
@@ -374,11 +408,25 @@ const FahreranfrageSection = () => {
 
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="preise_ok"
-                    name="preise_ok"
-                    required
-                  />
+<Checkbox
+  id="preise_ok"
+  name="preise_ok"
+  required
+  onCheckedChange={(checked) => {
+    const isChecked = checked === true;
+    if (isChecked) {
+      const plan = derivePlan();
+      const ts = new Date().toISOString();
+      setPricePlan(plan);
+      setPriceAckTime(ts);
+      setPriceAcknowledged(true);
+      sendGAEvent(plan, ts);
+    } else {
+      setPriceAcknowledged(false);
+      setPriceAckTime(null);
+    }
+  }}
+/>
                   <Label htmlFor="preise_ok" className="text-sm">
                     Ich habe die Preise gelesen und verstanden. *
                   </Label>
@@ -391,13 +439,13 @@ const FahreranfrageSection = () => {
                   />
                   <Label htmlFor="datenschutz" className="text-sm">
                     Ich stimme der Verarbeitung meiner Daten zu. *{" "}
-                    <a 
-                      href="/impressum" 
-                      target="_blank" 
-                      className="text-primary hover:underline"
-                    >
-                      Datenschutzerklärung
-                    </a>
+<a 
+  href="/datenschutz" 
+  target="_blank" 
+  className="text-primary hover:underline"
+>
+  Datenschutzerklärung
+</a>
                   </Label>
                 </div>
                 

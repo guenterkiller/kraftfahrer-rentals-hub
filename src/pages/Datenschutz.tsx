@@ -154,14 +154,21 @@ const Datenschutz = () => {
             </div>
           </section>
 
-          <section className="mb-8">
-            <div className="bg-border/50 border border-border p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-4 text-primary">Hinweis zu Cookies & Tracking:</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Diese Website verwendet keine Cookies und keine Tracking-Dienste wie Google Analytics oder Facebook Pixel.
-              </p>
-            </div>
-          </section>
+<section className="mb-8">
+  <h2 className="text-2xl font-semibold mb-4 text-primary">Preisbestätigung im Buchungsformular</h2>
+  <p className="text-muted-foreground leading-relaxed">
+    Wenn Sie über unser Formular „Fahrer buchen“ eine Anfrage senden, müssen Sie vor dem Absenden bestätigen, dass Sie die angegebenen Preise gelesen und verstanden haben. Zu diesem Zweck speichern wir Ihre Bestätigung zusammen mit dem gewählten Fahrertyp und Datum/Uhrzeit der Bestätigung. Diese Informationen dienen ausschließlich dem Nachweis der Einwilligung und Preiskenntnis im Rahmen der Auftragserteilung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung) sowie Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse, Missverständnisse zu vermeiden und Vertragsklarheit sicherzustellen). Ihre IP-Adresse wird dabei nicht vollständig gespeichert, sondern in anonymisierter Form (gekürzt) verarbeitet. Die Daten werden spätestens 12 Monate nach Abschluss oder Ablehnung des Auftrags gelöscht, sofern keine längere Aufbewahrung zur Erfüllung gesetzlicher Pflichten erforderlich ist.
+  </p>
+</section>
+
+<section className="mb-8">
+  <div className="bg-border/50 border border-border p-6 rounded-lg">
+    <h3 className="text-xl font-semibold mb-4 text-primary">Hinweis zu Cookies & Tracking:</h3>
+    <p className="text-muted-foreground leading-relaxed">
+      Diese Website verwendet keine Cookies und keine Tracking-Dienste wie Google Analytics oder Facebook Pixel.
+    </p>
+  </div>
+</section>
 
           <div className="text-center pt-8 border-t">
             <p className="text-sm text-muted-foreground">
