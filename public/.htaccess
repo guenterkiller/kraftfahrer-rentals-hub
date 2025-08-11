@@ -12,6 +12,7 @@ AddType image/png .png
 </IfModule>
 
 # Canonical 301 redirects for legacy .html URLs (one hop, HTTPS)
+# IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
 RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
 RewriteRule ^impressum\.html$ https://kraftfahrer-mieten.com/impressum [R=301,L]
 RewriteRule ^datenschutzerklaerung\.html$ https://kraftfahrer-mieten.com/datenschutz [R=301,L]
@@ -19,8 +20,9 @@ RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://kraftfahrer-mieten.
 # Referenzen variants (mobile/smartphone/printable .../default.html)
 RewriteRule ^referenzen/default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
 RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
-# Generic: any other .html → sans extension
+# Generic: any other .html → sans extension, except admin-check.html
 RewriteCond %{REQUEST_URI} \.html$ [NC]
+RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
 RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
 
 # Remove legacy Fahrerbörse URLs
