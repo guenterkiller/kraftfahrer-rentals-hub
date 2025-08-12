@@ -60,7 +60,8 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Sending job alerts to ${drivers.length} drivers`);
 
     // Create unique response URLs for each driver
-    const baseUrl = `https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/handle-driver-response`;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? '';
+    const baseUrl = `${supabaseUrl}/functions/v1/handle-driver-response`;
     
     // Send emails to all drivers
     const emailPromises = drivers.map(async (driver) => {

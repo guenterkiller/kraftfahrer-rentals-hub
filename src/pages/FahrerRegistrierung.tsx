@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { ArrowLeft, Upload, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -241,11 +241,11 @@ const FahrerRegistrierung = () => {
       }
 
       // Send FormData to Edge Function using fetch directly
-      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/fahrerwerden', {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/fahrerwerden`, {
         method: 'POST',
         body: formDataToSend,
         headers: {
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`,
+          'Authorization': `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         }
       });
       
