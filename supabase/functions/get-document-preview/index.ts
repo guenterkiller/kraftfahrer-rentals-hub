@@ -28,30 +28,30 @@ serve(async (req) => {
       throw new Error('filepath is required');
     }
 
-    // Create signed URL using service role with fallback bucket
+    // Create signed URL using service role with correct bucket priority
     let signedData: { signedUrl: string } | null = null;
 
-    // Try primary bucket 'fahrer-dokumente'
+    // Try 'driver-documents' bucket first (where files are currently stored)
     const primary = await supabase.storage
-      .from('fahrer-dokumente')
+      .from('driver-documents')
       .createSignedUrl(filepath, ttl);
 
     if (primary.error) {
-      console.error('Primary bucket error, trying fallback:', primary.error);
+      console.error('Primary bucket (driver-documents) error, trying fallback:', primary.error);
       const fallback = await supabase.storage
-        .from('driver-documents')
+        .from('fahrer-dokumente')
         .createSignedUrl(filepath, ttl);
       
       if (fallback.error) {
-        console.error('Fallback bucket error:', fallback.error);
-        throw fallback.error;
+        console.error('Fallback bucket (fahrer-dokumente) error:', fallback.error);
+        throw new Error(`File not found in any bucket: ${filepath}`);
       }
       signedData = fallback.data as { signedUrl: string };
     } else {
       signedData = primary.data as { signedUrl: string };
     }
 
-    console.log('Signed URL created successfully');
+    console.log('Signed URL created successfully from bucket:', primary.error ? 'fahrer-dokumente' : 'driver-documents');
 
     return new Response(JSON.stringify({
       success: true,
