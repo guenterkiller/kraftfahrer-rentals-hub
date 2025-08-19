@@ -323,8 +323,64 @@ const handler = async (req: Request): Promise<Response> => {
     if (dbData && dbData.id) {
       console.log("Saved to database successfully:", dbData.id);
       
-      console.log("File uploads completed successfully. Documents are stored in Storage.");
-      // Dokumente werden nun direkt aus dem Storage gelesen, nicht mehr aus der Tabelle
+      // Also create entries in fahrer_dokumente table for admin preview
+      const fahrerId = dbData.id;
+      const documentInserts = [];
+      
+      // Create entries for each uploaded file
+      if (uploadedFiles.fuehrerschein) {
+        const paths = uploadedFiles.fuehrerschein.split(',');
+        paths.forEach((path, index) => {
+          documentInserts.push({
+            fahrer_id: fahrerId,
+            filepath: path,
+            filename: `fuehrerschein_${index + 1}`,
+            type: 'fuehrerschein',
+            url: path
+          });
+        });
+      }
+      
+      if (uploadedFiles.fahrerkarte) {
+        const paths = uploadedFiles.fahrerkarte.split(',');
+        paths.forEach((path, index) => {
+          documentInserts.push({
+            fahrer_id: fahrerId,
+            filepath: path,
+            filename: `fahrerkarte_${index + 1}`,
+            type: 'fahrerkarte',
+            url: path
+          });
+        });
+      }
+      
+      if (uploadedFiles.zertifikate) {
+        const paths = uploadedFiles.zertifikate.split(',');
+        paths.forEach((path, index) => {
+          documentInserts.push({
+            fahrer_id: fahrerId,
+            filepath: path,
+            filename: `zertifikat_${index + 1}`,
+            type: 'zertifikate',
+            url: path
+          });
+        });
+      }
+      
+      if (documentInserts.length > 0) {
+        console.log("Creating document entries for admin access...");
+        const { error: docError } = await supabase
+          .from('fahrer_dokumente')
+          .insert(documentInserts);
+        
+        if (docError) {
+          console.error("Error creating document entries:", docError);
+        } else {
+          console.log(`Created ${documentInserts.length} document entries for admin access`);
+        }
+      }
+      
+      console.log("File uploads completed successfully. Documents are stored in Storage and logged for admin access.");
     } else {
       console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
     }
