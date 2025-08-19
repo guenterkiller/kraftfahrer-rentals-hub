@@ -53,7 +53,8 @@ export async function uploadViaEdge(
   const json = await res.json();
   
   if (!res.ok || !json.success) {
-    throw new Error(json.error || "Upload fehlgeschlagen");
+    const detail = typeof json.error === 'string' ? json.error : JSON.stringify(json.error);
+    throw new Error(detail || "Upload fehlgeschlagen");
   }
   
   return json as { success: true; path: string; url: string | null };

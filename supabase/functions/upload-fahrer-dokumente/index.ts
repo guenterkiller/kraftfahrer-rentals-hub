@@ -9,6 +9,7 @@ const ORIGINS = new Set([
   "https://www.kraftfahrer-mieten.com",
   "http://localhost:5173",
   "https://wyovmwbtniqcomqpppkk.supabase.co",
+  "https://hxnabnsoffzevqhruvar.supabase.co",
 ]);
 
 function corsHeaders(req: Request) {
@@ -76,7 +77,8 @@ serve(async (req) => {
       
     if (upErr) {
       console.error("Storage upload error:", upErr);
-      throw upErr;
+      const errMsg = upErr instanceof Error ? upErr.message : (() => { try { return JSON.stringify(upErr); } catch { return String(upErr); } })();
+      throw new Error(errMsg);
     }
 
     console.log("File uploaded successfully, calculating checksum...");
@@ -94,7 +96,6 @@ serve(async (req) => {
       .from("fahrer_dokumente")
       .insert([{
         fahrer_id,
-        bucket: BUCKET,
         filepath: path,
         filename: file.name,
         type: dokument_typ,
@@ -132,7 +133,7 @@ serve(async (req) => {
     });
 
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
+    const msg = e instanceof Error ? e.message : (() => { try { return JSON.stringify(e); } catch { return String(e); } })();
     console.error("Upload error:", msg);
     return new Response(JSON.stringify({ 
       success: false, 
