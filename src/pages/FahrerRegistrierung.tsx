@@ -245,92 +245,57 @@ const FahrerRegistrierung = () => {
     setIsLoading(true);
 
     try {
-      console.log("Sende Fahrer-Bewerbung über Edge Function...");
+      console.log("Sende Fahrer-Registrierung über fahrerwerden Function...");
 
-      // First, create or fetch the driver profile via Edge Function (handles duplicates safely)
-      const nameParts = `${formData.vorname} ${formData.nachname}`.trim().split(' ');
-      const vorname = nameParts[0] || '';
-      const nachname = nameParts.slice(1).join(' ') || '';
+      // Prepare FormData for the fahrerwerden function which includes email sending
+      const formDataToSend = new FormData();
       
-      const parsedRate = formData.stundensatz ? parseFloat(formData.stundensatz.replace(/[^\d.,]/g, '').replace(',', '.')) : null;
+      // Basic data
+      formDataToSend.append("name", `${formData.vorname} ${formData.nachname}`);
+      formDataToSend.append("email", formData.email);
+      formDataToSend.append("phone", formData.telefon);
+      formDataToSend.append("company", "");
+      formDataToSend.append("message", "");
+      formDataToSend.append("description", formData.beschreibung || "");
+      formDataToSend.append("license_classes", JSON.stringify(formData.fuehrerscheinklassen));
+      formDataToSend.append("experience", formData.erfahrung_jahre || "");
+      formDataToSend.append("specializations", JSON.stringify(formData.spezialisierungen));
+      formDataToSend.append("regions", JSON.stringify(formData.verfuegbare_regionen));
+      formDataToSend.append("hourly_rate", formData.stundensatz || "");
 
-      const payload = {
-        vorname,
-        nachname,
-        email: formData.email,
-        telefon: formData.telefon,
-        adresse: formData.adresse || null,
-        plz: formData.plz || null,
-        ort: formData.ort || null,
-        beschreibung: formData.beschreibung || null,
-        fuehrerscheinklassen: formData.fuehrerscheinklassen,
-        erfahrung_jahre: formData.erfahrung_jahre ? parseInt(formData.erfahrung_jahre) : null,
-        spezialisierungen: formData.spezialisierungen,
-        verfuegbare_regionen: formData.verfuegbare_regionen,
-        stundensatz: parsedRate,
-        verfuegbarkeit: formData.verfuegbarkeit || null,
-      };
+      // Add file uploads
+      if (selectedFiles.fuehrerschein) {
+        Array.from(selectedFiles.fuehrerschein).forEach(file => {
+          formDataToSend.append("fuehrerschein", file);
+        });
+      }
 
-      const resp = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/create-or-get-fahrer', {
+      if (selectedFiles.fahrerkarte) {
+        Array.from(selectedFiles.fahrerkarte).forEach(file => {
+          formDataToSend.append("fahrerkarte", file);
+        });
+      }
+
+      if (selectedFiles.zertifikate) {
+        Array.from(selectedFiles.zertifikate).forEach(file => {
+          formDataToSend.append("zertifikate", file);
+        });
+      }
+
+      // Send to fahrerwerden function which includes email functionality
+      const response = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/fahrerwerden', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formDataToSend,
       });
-      const out = await resp.json();
-      if (!resp.ok || !out?.success) {
-        console.error('Create-or-get error:', out);
-        throw new Error(out?.error || 'Fehler beim Erstellen des Fahrer-Profils');
-      }
-      const fahrerId: string = out.id;
 
-      console.log("Driver profile ready with ID:", fahrerId);
-      // Upload documents if any
-      const uploadPromises: Promise<void>[] = [];
-
-      // Upload Führerschein files
-      if (selectedFiles.fuehrerschein && selectedFiles.fuehrerschein.length > 0) {
-        for (let i = 0; i < selectedFiles.fuehrerschein.length; i++) {
-          const file = selectedFiles.fuehrerschein[i];
-          uploadPromises.push(
-            uploadViaEdge(file, fahrerId, 'fuehrerschein').then(() => {
-              console.log(`Führerschein ${i + 1} uploaded successfully`);
-            })
-          );
-        }
-      }
+      const result = await response.json();
       
-      // Upload Fahrerkarte files
-      if (selectedFiles.fahrerkarte && selectedFiles.fahrerkarte.length > 0) {
-        for (let i = 0; i < selectedFiles.fahrerkarte.length; i++) {
-          const file = selectedFiles.fahrerkarte[i];
-          uploadPromises.push(
-            uploadViaEdge(file, fahrerId, 'fahrerkarte').then(() => {
-              console.log(`Fahrerkarte ${i + 1} uploaded successfully`);
-            })
-          );
-        }
-      }
-      
-      // Upload Zertifikat files
-      if (selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0) {
-        for (let i = 0; i < selectedFiles.zertifikate.length; i++) {
-          const file = selectedFiles.zertifikate[i];
-          uploadPromises.push(
-            uploadViaEdge(file, fahrerId, 'zertifikat').then(() => {
-              console.log(`Zertifikat ${i + 1} uploaded successfully`);
-            })
-          );
-        }
+      if (!response.ok || !result?.success) {
+        console.error('Fahrerwerden error:', result);
+        throw new Error(result?.error || 'Fehler bei der Registrierung');
       }
 
-      // Wait for all uploads to complete
-      if (uploadPromises.length > 0) {
-        console.log(`Uploading ${uploadPromises.length} documents...`);
-        await Promise.all(uploadPromises);
-        console.log("All documents uploaded successfully");
-      }
-
-      console.log("Registration completed successfully");
+      console.log("Registration completed successfully with emails sent");
 
       toast({
         title: "Registrierung erfolgreich!",
