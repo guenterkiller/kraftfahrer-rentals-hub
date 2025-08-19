@@ -13,6 +13,20 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === 'development' &&
     componentTagger(),
+    {
+      name: 'copy-htaccess',
+      writeBundle() {
+        const fs = require('fs');
+        const path = require('path');
+        const srcPath = path.resolve(__dirname, 'public/htaccess-ionos');
+        const destPath = path.resolve(__dirname, 'dist/.htaccess');
+        
+        if (fs.existsSync(srcPath)) {
+          fs.copyFileSync(srcPath, destPath);
+          console.log('✓ .htaccess für IONOS kopiert');
+        }
+      }
+    }
   ].filter(Boolean),
   resolve: {
     alias: {
