@@ -292,6 +292,7 @@ const FahreranfrageSection = () => {
                     type="text"
                     id="einsatzdauer"
                     name="einsatzdauer"
+                    autoComplete="off"
                     placeholder="z.B. 3 Tage, 2 Wochen"
                     className="mt-1"
                   />
@@ -303,6 +304,7 @@ const FahreranfrageSection = () => {
                 <select 
                   id="fahrzeugtyp"
                   name="fahrzeugtyp"
+                  autoComplete="off"
                   className="w-full mt-1 px-3 py-2 border border-input bg-background rounded-md"
                 >
                   <option value="">Bitte wählen</option>
@@ -342,6 +344,7 @@ const FahreranfrageSection = () => {
                 <Textarea
                   id="nachricht"
                   name="nachricht"
+                  autoComplete="off"
                   rows={6}
                   required
                   placeholder="z.B. Einsatzort, besondere Anforderungen, weitere Details..."
