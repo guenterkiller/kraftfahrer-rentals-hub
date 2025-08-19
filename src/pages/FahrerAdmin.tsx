@@ -7,8 +7,16 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
-import { Phone, Mail, MapPin, Clock, User, Car } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, User, Car, FileText, ExternalLink, Eye } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
+
+interface FahrerDokument {
+  id: string;
+  filename: string;
+  filepath: string;
+  type: string;
+  uploaded_at: string;
+}
 
 interface FahrerProfile {
   id: string;
@@ -28,6 +36,7 @@ interface FahrerProfile {
   beschreibung?: string;
   status: string;
   created_at: string;
+  dokumente?: FahrerDokument[];
 }
 
 const FahrerAdmin = () => {
@@ -42,6 +51,7 @@ const FahrerAdmin = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [documentPreviews, setDocumentPreviews] = useState<{[key: string]: string}>({});
 
   useEffect(() => {
     fetchFahrer();
@@ -64,7 +74,26 @@ const FahrerAdmin = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setFahrer(data || []);
+      
+      // Fetch documents for each driver
+      const fahrerWithDocs = await Promise.all(
+        (data || []).map(async (fahrerProfile) => {
+          const { data: dokumente, error: docError } = await supabase
+            .from('fahrer_dokumente')
+            .select('*')
+            .eq('fahrer_id', fahrerProfile.id)
+            .order('uploaded_at', { ascending: false });
+          
+          if (docError) {
+            console.error('Error fetching documents for driver:', fahrerProfile.id, docError);
+            return { ...fahrerProfile, dokumente: [] };
+          }
+          
+          return { ...fahrerProfile, dokumente: dokumente || [] };
+        })
+      );
+      
+      setFahrer(fahrerWithDocs);
     } catch (error) {
       toast({
         title: "Fehler beim Laden",
@@ -97,6 +126,43 @@ const FahrerAdmin = () => {
       toast({
         title: "Fehler",
         description: "Status konnte nicht aktualisiert werden.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const previewDocument = async (filepath: string, filename: string) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('fahrer-dokumente')
+        .createSignedUrl(filepath, 60); // 60 seconds expiry
+
+      if (error) throw error;
+
+      if (data?.signedUrl) {
+        const isImage = filename.toLowerCase().match(/\.(jpg|jpeg|png)$/);
+        
+        if (isImage) {
+          // For images, show in a new tab or modal
+          setDocumentPreviews(prev => ({
+            ...prev,
+            [filepath]: data.signedUrl
+          }));
+        } else {
+          // For PDFs, open in new tab
+          window.open(data.signedUrl, '_blank');
+        }
+        
+        toast({
+          title: "Dokument geladen",
+          description: `${filename} wurde erfolgreich geladen.`,
+        });
+      }
+    } catch (error) {
+      console.error('Error creating signed URL:', error);
+      toast({
+        title: "Fehler",
+        description: "Dokument konnte nicht geladen werden.",
         variant: "destructive",
       });
     }
@@ -307,6 +373,62 @@ const FahrerAdmin = () => {
                       <div className="text-sm font-medium mb-2">Beschreibung:</div>
                       <div className="text-sm text-muted-foreground bg-muted p-3 rounded">
                         {fahrerProfile.beschreibung}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Dokumente */}
+                  {fahrerProfile.dokumente && fahrerProfile.dokumente.length > 0 && (
+                    <div className="mt-4">
+                      <div className="text-sm font-medium mb-3">Hochgeladene Dokumente:</div>
+                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {fahrerProfile.dokumente.map((doc) => {
+                          const isImage = doc.filename.toLowerCase().match(/\.(jpg|jpeg|png)$/);
+                          const isPDF = doc.filename.toLowerCase().endsWith('.pdf');
+                          const previewUrl = documentPreviews[doc.filepath];
+                          
+                          return (
+                            <div key={doc.id} className="border rounded-lg p-3 space-y-2">
+                              <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-muted-foreground" />
+                                <Badge variant="outline" className="text-xs">
+                                  {doc.type}
+                                </Badge>
+                              </div>
+                              
+                              <div className="text-xs text-muted-foreground truncate" title={doc.filename}>
+                                {doc.filename}
+                              </div>
+                              
+                              <div className="text-xs text-muted-foreground">
+                                {new Date(doc.uploaded_at).toLocaleDateString('de-DE')}
+                              </div>
+                              
+                              <div className="flex gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => previewDocument(doc.filepath, doc.filename)}
+                                  className="flex-1"
+                                >
+                                  <Eye className="h-3 w-3 mr-1" />
+                                  {isPDF ? 'PDF öffnen' : 'Vorschau'}
+                                </Button>
+                              </div>
+                              
+                              {/* Image preview inline */}
+                              {isImage && previewUrl && (
+                                <div className="mt-2">
+                                  <img 
+                                    src={previewUrl} 
+                                    alt={doc.filename}
+                                    className="w-full h-32 object-cover rounded border"
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}

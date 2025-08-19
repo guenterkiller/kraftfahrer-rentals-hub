@@ -51,6 +51,9 @@ const FahrerRegistrierung = () => {
     zertifikate: null
   });
 
+  // File validation errors
+  const [fileErrors, setFileErrors] = useState<string[]>([]);
+
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
   const spezialisierungen = [
     "Baustellen-LKW",
@@ -153,17 +156,52 @@ const FahrerRegistrierung = () => {
     }
   };
 
+  // File validation function
+  const validateFiles = (files: FileList) => {
+    const errors: string[] = [];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      // Check file type
+      if (!allowedTypes.includes(file.type)) {
+        errors.push(`"${file.name}": Format nicht erlaubt (nur JPG, PNG, PDF)`);
+        continue;
+      }
+      
+      // Check file size
+      if (file.size > maxSize) {
+        errors.push(`"${file.name}": Datei zu groß (${(file.size / 1024 / 1024).toFixed(1)}MB, max. 10MB)`);
+        continue;
+      }
+      
+      // File is valid
+      errors.push(`"${file.name}": ✓ OK`);
+    }
+    
+    return errors;
+  };
+
   const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'zertifikate', files: FileList | null) => {
     if (!files || files.length === 0) return;
+    
+    // Validate files
+    const validationResults = validateFiles(files);
+    setFileErrors(validationResults);
     
     setSelectedFiles(prev => ({
       ...prev,
       [field]: files
     }));
 
+    // Show validation results in toast
+    const hasErrors = validationResults.some(msg => !msg.includes('✓ OK'));
     toast({
-      title: "Datei(en) ausgewählt",
+      title: hasErrors ? "Datei-Validierung" : "Datei(en) ausgewählt",
       description: `${files.length} Datei(en) für ${field} ausgewählt`,
+      variant: hasErrors ? "destructive" : "default"
     });
   };
 
@@ -642,7 +680,7 @@ const FahrerRegistrierung = () => {
                     </div>
                   </div>
 
-                   {/* Dokument-Uploads */}
+                    {/* Dokument-Uploads */}
                    <div className="space-y-4">
                      <Label>Dokumente hochladen (optional)</Label>
                      
@@ -651,9 +689,13 @@ const FahrerRegistrierung = () => {
                          <div className="flex flex-col items-center space-y-2">
                            <FileText className="h-8 w-8 text-muted-foreground" />
                             <h4 className="font-medium">Führerschein</h4>
-                             <p className="text-sm text-muted-foreground">
+                             <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihres Führerscheins hoch (mehrere Dateien möglich)
                              </p>
+                             <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded mb-3">
+                               <p className="font-medium">Erlaubte Formate: JPG/JPEG, PNG, PDF | Max. 10 MB pro Datei</p>
+                               <p>Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                             </div>
                              {selectedFiles.fuehrerschein && selectedFiles.fuehrerschein.length > 0 && (
                                <p className="text-xs text-primary font-medium">
                                  ✓ {selectedFiles.fuehrerschein.length} Datei(en) ausgewählt
@@ -661,7 +703,7 @@ const FahrerRegistrierung = () => {
                              )}
                              <Input
                                type="file"
-                               accept=".pdf,.jpg,.jpeg,.png"
+                               accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
                                multiple
                                className="hidden"
                                id="fuehrerschein"
@@ -683,9 +725,13 @@ const FahrerRegistrierung = () => {
                          <div className="flex flex-col items-center space-y-2">
                            <FileText className="h-8 w-8 text-muted-foreground" />
                             <h4 className="font-medium">Fahrerkarte</h4>
-                             <p className="text-sm text-muted-foreground">
+                             <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihrer Fahrerkarte hoch (mehrere Dateien möglich)
                              </p>
+                             <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded mb-3">
+                               <p className="font-medium">Erlaubte Formate: JPG/JPEG, PNG, PDF | Max. 10 MB pro Datei</p>
+                               <p>Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                             </div>
                              {selectedFiles.fahrerkarte && selectedFiles.fahrerkarte.length > 0 && (
                                <p className="text-xs text-primary font-medium">
                                  ✓ {selectedFiles.fahrerkarte.length} Datei(en) ausgewählt
@@ -693,7 +739,7 @@ const FahrerRegistrierung = () => {
                              )}
                              <Input
                                type="file"
-                               accept=".pdf,.jpg,.jpeg,.png"
+                               accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
                                multiple
                                className="hidden"
                                id="fahrerkarte"
@@ -716,9 +762,13 @@ const FahrerRegistrierung = () => {
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-muted-foreground" />
                          <h4 className="font-medium">Weitere Zertifikate</h4>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground mb-2">
                             ADR-Schein, Kranführerschein, etc. (Mehrere Dateien möglich)
                           </p>
+                          <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded mb-3">
+                            <p className="font-medium">Erlaubte Formate: JPG/JPEG, PNG, PDF | Max. 10 MB pro Datei</p>
+                            <p>Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                          </div>
                           {selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0 && (
                             <p className="text-xs text-primary font-medium">
                               ✓ {selectedFiles.zertifikate.length} Datei(en) ausgewählt
@@ -726,7 +776,7 @@ const FahrerRegistrierung = () => {
                           )}
                           <Input
                             type="file"
-                            accept=".pdf,.jpg,.jpeg,.png"
+                            accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
                             multiple
                             className="hidden"
                             id="zertifikate"
@@ -743,6 +793,20 @@ const FahrerRegistrierung = () => {
                          </Button>
                        </div>
                      </div>
+
+                     {/* File Validation Results */}
+                     {fileErrors.length > 0 && (
+                       <div className="bg-muted/50 p-4 rounded-lg">
+                         <h5 className="font-medium mb-2">Datei-Validierung:</h5>
+                         <div className="text-sm space-y-1">
+                           {fileErrors.map((error, index) => (
+                             <p key={index} className={error.includes('✓ OK') ? 'text-green-600' : 'text-destructive'}>
+                               {error}
+                             </p>
+                           ))}
+                         </div>
+                       </div>
+                     )}
                    </div>
 
                     <div>
