@@ -223,6 +223,7 @@ const FahreranfrageSection = () => {
                     type="text"
                     id="vorname"
                     name="vorname"
+                    autoComplete="given-name"
                     required
                     className="mt-1"
                   />
@@ -233,6 +234,7 @@ const FahreranfrageSection = () => {
                     type="text"
                     id="nachname"
                     name="nachname"
+                    autoComplete="family-name"
                     required
                     className="mt-1"
                   />
@@ -245,6 +247,7 @@ const FahreranfrageSection = () => {
                   type="email"
                   id="email"
                   name="email"
+                  autoComplete="email"
                   required
                   className="mt-1"
                 />
@@ -253,9 +256,10 @@ const FahreranfrageSection = () => {
                 <div>
                   <Label htmlFor="phone">Telefonnummer *</Label>
                   <Input
-                    type="text"
+                    type="tel"
                     id="phone"
                     name="phone"
+                    autoComplete="tel"
                     required
                     className="mt-1"
                   />
@@ -267,6 +271,7 @@ const FahreranfrageSection = () => {
                   type="text"
                   id="unternehmen"
                   name="unternehmen"
+                  autoComplete="organization"
                   className="mt-1"
                 />
               </div>

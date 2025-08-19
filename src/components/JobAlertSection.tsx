@@ -93,6 +93,7 @@ const JobAlertSection = () => {
                     type="email"
                     id="jobalert-email"
                     name="email"
+                    autoComplete="email"
                     placeholder="ihre.email@beispiel.de"
                     required
                     className="mt-1"
