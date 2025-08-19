@@ -105,7 +105,6 @@ const FahreranfrageSection = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${anonKey}`, // nur wenn Verify JWT aktiv
         },
         body: JSON.stringify(requestData),
       });
