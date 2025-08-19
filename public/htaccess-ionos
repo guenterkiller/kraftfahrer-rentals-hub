@@ -14,6 +14,14 @@ AddType image/png .png
   Header set Accept-Ranges none
 </IfModule>
 
+# SPA fallback routing - MUST come before 301 redirects
+RewriteBase /
+RewriteRule ^index\.html$ - [L]
+
+# Explicit SPA routes for admin (avoid any external redirects)
+RewriteRule ^admin/?$ /index.html [L]
+RewriteRule ^admin/login/?$ /index.html [L]
+
 # Canonical 301 redirects for legacy .html URLs (one hop, HTTPS)
 # IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
 RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
@@ -36,14 +44,7 @@ Redirect gone /fahrerbörse
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
 
-# SPA fallback routing
-RewriteBase /
-RewriteRule ^index\.html$ - [L]
-
-# Explicit SPA routes for admin (avoid any external redirects)
-RewriteRule ^admin$ /index.html [L]
-RewriteRule ^admin/login$ /index.html [L]
-
+# Final SPA fallback for all other routes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
