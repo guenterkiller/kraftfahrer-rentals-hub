@@ -253,8 +253,10 @@ const FahrerRegistrierung = () => {
       const nachname = nameParts.slice(1).join(' ') || '';
       
       const parsedRate = formData.stundensatz ? parseFloat(formData.stundensatz.replace(/[^\d.,]/g, '').replace(',', '.')) : null;
+      const fahrerId = crypto.randomUUID();
       
       const insertData = {
+        id: fahrerId,
         vorname,
         nachname,
         email: formData.email,
@@ -274,42 +276,18 @@ const FahrerRegistrierung = () => {
 
       console.log("Creating driver profile...", insertData);
 
-      // Check if email already exists first
-      const { data: existingDriver, error: checkError } = await supabase
-        .from('fahrer_profile')
-        .select('id')
-        .eq('email', formData.email)
-        .maybeSingle();
-      
-      if (checkError) {
-        console.error("Error checking existing email:", checkError);
-        throw new Error("Fehler beim Überprüfen der E-Mail-Adresse");
-      }
-      
-      if (existingDriver) {
-        toast({
-          title: "E-Mail bereits registriert",
-          description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.",
-          variant: "destructive",
-        });
-        return;
-      }
 
-      // Create the driver profile
-      const { data: driverData, error: insertError } = await supabase
+      // Create the driver profile (no SELECT to avoid exposing data)
+      const { error: insertError } = await supabase
         .from('fahrer_profile')
-        .insert([insertData])
-        .select()
-        .single();
+        .insert([insertData]);
 
       if (insertError) {
         console.error("Driver profile creation error:", insertError);
         throw new Error("Fehler beim Erstellen des Fahrer-Profils");
       }
 
-      console.log("Driver profile created:", driverData);
-      const fahrerId = driverData.id;
-
+      console.log("Driver profile created with ID:", fahrerId);
       // Upload documents if any
       const uploadPromises: Promise<void>[] = [];
 
