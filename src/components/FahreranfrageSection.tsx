@@ -98,26 +98,27 @@ const FahreranfrageSection = () => {
       };
 
       // Call Edge Function instead of direct Supabase
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://hxnabnsoffzevqhruvar.supabase.co";
-      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc";
-      
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
+
       const response = await fetch(`${supabaseUrl}/functions/v1/submit-fahrer-anfrage`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${anonKey}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${anonKey}`, // nur wenn Verify JWT aktiv
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify(requestData),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Edge Function error:", errorData);
-        throw new Error(errorData.error || "Failed to submit request");
+      let payload: any = null;
+      try { payload = await response.clone().json(); } catch { /* non-JSON */ }
+
+      if (!response.ok || (payload && payload.success === false)) {
+        const msg = payload?.error || payload?.message || `${response.status} ${response.statusText}`;
+        throw new Error(msg);
       }
 
-      const result = await response.json();
-      console.log("Edge Function success:", result);
+      console.log("Edge Function success:", payload ?? await response.text());
 
       toast({
         title: "Anfrage gesendet!",
