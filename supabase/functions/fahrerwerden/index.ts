@@ -186,7 +186,7 @@ const handler = async (req: Request): Promise<Response> => {
           const fileName = `uploads/${emailSafe}/fuehrerschein_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('driver-documents')
+            .from('fahrer-dokumente')
             .upload(fileName, file, { upsert: true });
           
           if (uploadError) {
@@ -213,7 +213,7 @@ const handler = async (req: Request): Promise<Response> => {
           const fileName = `uploads/${emailSafe}/fahrerkarte_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('driver-documents')
+            .from('fahrer-dokumente')
             .upload(fileName, file, { upsert: true });
           
           if (uploadError) {
@@ -240,7 +240,7 @@ const handler = async (req: Request): Promise<Response> => {
           const fileName = `uploads/${emailSafe}/zertifikat_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('driver-documents')
+            .from('fahrer-dokumente')
             .upload(fileName, file, { upsert: true });
           
           if (uploadError) {

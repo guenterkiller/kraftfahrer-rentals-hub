@@ -28,22 +28,34 @@ serve(async (req) => {
       throw new Error('filepath is required');
     }
 
-    // Create signed URL using service role
-    const { data, error } = await supabase
-      .storage
+    // Create signed URL using service role with fallback bucket
+    let signedData: { signedUrl: string } | null = null;
+
+    // Try primary bucket 'fahrer-dokumente'
+    const primary = await supabase.storage
       .from('fahrer-dokumente')
       .createSignedUrl(filepath, ttl);
+
+    if (primary.error) {
+      console.error('Primary bucket error, trying fallback:', primary.error);
+      const fallback = await supabase.storage
+        .from('driver-documents')
+        .createSignedUrl(filepath, ttl);
       
-    if (error) {
-      console.error('Storage error:', error);
-      throw error;
+      if (fallback.error) {
+        console.error('Fallback bucket error:', fallback.error);
+        throw fallback.error;
+      }
+      signedData = fallback.data as { signedUrl: string };
+    } else {
+      signedData = primary.data as { signedUrl: string };
     }
 
     console.log('Signed URL created successfully');
 
     return new Response(JSON.stringify({
       success: true,
-      signedUrl: data.signedUrl
+      signedUrl: signedData!.signedUrl
     }), {
       headers: { 
         ...corsHeaders, 
