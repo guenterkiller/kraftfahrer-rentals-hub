@@ -12,6 +12,7 @@ import Navigation from "@/components/Navigation";
 import { ArrowLeft, Upload, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
+import { validateFiles, uploadViaEdge } from "@/utils/fileValidation";
 
 const FahrerRegistrierung = () => {
   useSEO({
@@ -157,39 +158,24 @@ const FahrerRegistrierung = () => {
   };
 
   // File validation function
-  const validateFiles = (files: FileList) => {
-    const errors: string[] = [];
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+  const validateFilesAndShow = (files: FileList) => {
+    const validationResults = validateFiles(Array.from(files));
+    setFileErrors(validationResults);
     
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      
-      // Check file type
-      if (!allowedTypes.includes(file.type)) {
-        errors.push(`"${file.name}": Format nicht erlaubt (nur JPG, PNG, PDF)`);
-        continue;
-      }
-      
-      // Check file size
-      if (file.size > maxSize) {
-        errors.push(`"${file.name}": Datei zu groß (${(file.size / 1024 / 1024).toFixed(1)}MB, max. 10MB)`);
-        continue;
-      }
-      
-      // File is valid
-      errors.push(`"${file.name}": ✓ OK`);
-    }
+    // Check if there are any actual errors (not just "OK" messages)
+    const hasErrors = validationResults.some(msg => !msg.includes('✓ OK'));
     
-    return errors;
+    return !hasErrors; // Return true if no errors
   };
 
   const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'zertifikate', files: FileList | null) => {
-    if (!files || files.length === 0) return;
+    if (!files || files.length === 0) {
+      setFileErrors([]);
+      return;
+    }
     
-    // Validate files
-    const validationResults = validateFiles(files);
-    setFileErrors(validationResults);
+    // Validate files and update state
+    const isValid = validateFilesAndShow(files);
     
     setSelectedFiles(prev => ({
       ...prev,
@@ -197,11 +183,10 @@ const FahrerRegistrierung = () => {
     }));
 
     // Show validation results in toast
-    const hasErrors = validationResults.some(msg => !msg.includes('✓ OK'));
     toast({
-      title: hasErrors ? "Datei-Validierung" : "Datei(en) ausgewählt",
-      description: `${files.length} Datei(en) für ${field} ausgewählt`,
-      variant: hasErrors ? "destructive" : "default"
+      title: isValid ? "Datei(en) ausgewählt" : "Datei-Validierung",
+      description: `${files.length} Datei(en) für ${field} ${isValid ? 'ausgewählt' : 'validiert'}`,
+      variant: isValid ? "default" : "destructive"
     });
   };
 
@@ -237,75 +222,141 @@ const FahrerRegistrierung = () => {
       return;
     }
 
+    // Validate all selected files before proceeding
+    const allFiles: File[] = [];
+    if (selectedFiles.fuehrerschein) allFiles.push(...Array.from(selectedFiles.fuehrerschein));
+    if (selectedFiles.fahrerkarte) allFiles.push(...Array.from(selectedFiles.fahrerkarte));
+    if (selectedFiles.zertifikate) allFiles.push(...Array.from(selectedFiles.zertifikate));
+
+    if (allFiles.length > 0) {
+      const fileValidation = validateFiles(allFiles);
+      const hasFileErrors = fileValidation.some(msg => !msg.includes('✓ OK'));
+      
+      if (hasFileErrors) {
+        toast({
+          title: "Datei-Validierungsfehler",
+          description: "Bitte korrigieren Sie die Dateien bevor Sie fortfahren.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     try {
-
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
-      // Prepare FormData for the Edge Function
-      const formDataToSend = new FormData();
+      // First, create the driver profile
+      const nameParts = `${formData.vorname} ${formData.nachname}`.trim().split(' ');
+      const vorname = nameParts[0] || '';
+      const nachname = nameParts.slice(1).join(' ') || '';
       
-      // Add form fields
-      formDataToSend.append('name', `${formData.vorname} ${formData.nachname}`.trim());
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('phone', formData.telefon);
-      formDataToSend.append('company', formData.adresse ? `${formData.adresse}, ${formData.plz} ${formData.ort}`.trim() : '');
-      formDataToSend.append('message', formData.verfuegbarkeit || '');
-      formDataToSend.append('description', formData.beschreibung || '');
-      formDataToSend.append('license_classes', JSON.stringify(formData.fuehrerscheinklassen));
-      formDataToSend.append('experience', formData.erfahrung_jahre || '');
-      formDataToSend.append('specializations', JSON.stringify(formData.spezialisierungen));
-      formDataToSend.append('regions', JSON.stringify(formData.verfuegbare_regionen));
-      formDataToSend.append('hourly_rate', formData.stundensatz ? `${formData.stundensatz} €` : '');
+      const parsedRate = formData.stundensatz ? parseFloat(formData.stundensatz.replace(/[^\d.,]/g, '').replace(',', '.')) : null;
       
-      // Add files
+      const insertData = {
+        vorname,
+        nachname,
+        email: formData.email,
+        telefon: formData.telefon,
+        adresse: formData.adresse || null,
+        plz: formData.plz || null,
+        ort: formData.ort || null,
+        beschreibung: formData.beschreibung || null,
+        fuehrerscheinklassen: formData.fuehrerscheinklassen,
+        erfahrung_jahre: formData.erfahrung_jahre ? parseInt(formData.erfahrung_jahre) : null,
+        spezialisierungen: formData.spezialisierungen,
+        verfuegbare_regionen: formData.verfuegbare_regionen,
+        stundensatz: parsedRate,
+        verfuegbarkeit: formData.verfuegbarkeit || null,
+        status: 'pending'
+      };
+
+      console.log("Creating driver profile...", insertData);
+
+      // Check if email already exists first
+      const { data: existingDriver, error: checkError } = await supabase
+        .from('fahrer_profile')
+        .select('id')
+        .eq('email', formData.email)
+        .maybeSingle();
+      
+      if (checkError) {
+        console.error("Error checking existing email:", checkError);
+        throw new Error("Fehler beim Überprüfen der E-Mail-Adresse");
+      }
+      
+      if (existingDriver) {
+        toast({
+          title: "E-Mail bereits registriert",
+          description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Create the driver profile
+      const { data: driverData, error: insertError } = await supabase
+        .from('fahrer_profile')
+        .insert([insertData])
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("Driver profile creation error:", insertError);
+        throw new Error("Fehler beim Erstellen des Fahrer-Profils");
+      }
+
+      console.log("Driver profile created:", driverData);
+      const fahrerId = driverData.id;
+
+      // Upload documents if any
+      const uploadPromises: Promise<void>[] = [];
+
+      // Upload Führerschein files
       if (selectedFiles.fuehrerschein && selectedFiles.fuehrerschein.length > 0) {
         for (let i = 0; i < selectedFiles.fuehrerschein.length; i++) {
-          formDataToSend.append('fuehrerschein', selectedFiles.fuehrerschein[i]);
+          const file = selectedFiles.fuehrerschein[i];
+          uploadPromises.push(
+            uploadViaEdge(file, fahrerId, 'fuehrerschein').then(() => {
+              console.log(`Führerschein ${i + 1} uploaded successfully`);
+            })
+          );
         }
       }
       
+      // Upload Fahrerkarte files
       if (selectedFiles.fahrerkarte && selectedFiles.fahrerkarte.length > 0) {
         for (let i = 0; i < selectedFiles.fahrerkarte.length; i++) {
-          formDataToSend.append('fahrerkarte', selectedFiles.fahrerkarte[i]);
+          const file = selectedFiles.fahrerkarte[i];
+          uploadPromises.push(
+            uploadViaEdge(file, fahrerId, 'fahrerkarte').then(() => {
+              console.log(`Fahrerkarte ${i + 1} uploaded successfully`);
+            })
+          );
         }
       }
       
+      // Upload Zertifikat files
       if (selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0) {
         for (let i = 0; i < selectedFiles.zertifikate.length; i++) {
-          formDataToSend.append('zertifikate', selectedFiles.zertifikate[i]);
+          const file = selectedFiles.zertifikate[i];
+          uploadPromises.push(
+            uploadViaEdge(file, fahrerId, 'zertifikat').then(() => {
+              console.log(`Zertifikat ${i + 1} uploaded successfully`);
+            })
+          );
         }
       }
 
-      // Send FormData to Edge Function using fetch directly
-      const response = await fetch(`${SUPABASE_URL}/functions/v1/fahrerwerden`, {
-        method: 'POST',
-        body: formDataToSend,
-        headers: {
-          'Authorization': `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
-        }
-      });
-      
-      const responseData = await response.json();
-      
-      if (!response.ok) {
-        console.error("Edge Function Fehler:", responseData);
-        
-        // Handle duplicate email error specifically
-        if (responseData.error && responseData.error.includes('bereits registriert')) {
-          toast({
-            title: "E-Mail bereits registriert",
-            description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.",
-            variant: "destructive",
-          });
-          return;
-        }
-        
-        throw new Error(responseData.error || "Fehler beim Speichern der Bewerbung");
+      // Wait for all uploads to complete
+      if (uploadPromises.length > 0) {
+        console.log(`Uploading ${uploadPromises.length} documents...`);
+        await Promise.all(uploadPromises);
+        console.log("All documents uploaded successfully");
       }
 
-      console.log("Fahrer-Bewerbung erfolgreich gespeichert:", responseData);
+      console.log("Registration completed successfully");
 
       toast({
         title: "Registrierung erfolgreich!",
@@ -341,6 +392,7 @@ const FahrerRegistrierung = () => {
         zertifikate: null
       });
       setValidationErrors({});
+      setFileErrors([]);
 
     } catch (error: any) {
       console.error("Fehler beim Senden:", error);
@@ -692,9 +744,11 @@ const FahrerRegistrierung = () => {
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihres Führerscheins hoch (mehrere Dateien möglich)
                              </p>
-                             <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded mb-3">
-                               <p className="font-medium">Erlaubte Formate: JPG/JPEG, PNG, PDF | Max. 10 MB pro Datei</p>
-                               <p>Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                             <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
+                               <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
+                               <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                               <p>❌ Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. Ä.</p>
+                               <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
                              </div>
                              {selectedFiles.fuehrerschein && selectedFiles.fuehrerschein.length > 0 && (
                                <p className="text-xs text-primary font-medium">
@@ -728,9 +782,11 @@ const FahrerRegistrierung = () => {
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihrer Fahrerkarte hoch (mehrere Dateien möglich)
                              </p>
-                             <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded mb-3">
-                               <p className="font-medium">Erlaubte Formate: JPG/JPEG, PNG, PDF | Max. 10 MB pro Datei</p>
-                               <p>Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                             <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
+                               <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
+                               <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                               <p>❌ Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. Ä.</p>
+                               <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
                              </div>
                              {selectedFiles.fahrerkarte && selectedFiles.fahrerkarte.length > 0 && (
                                <p className="text-xs text-primary font-medium">
@@ -765,9 +821,11 @@ const FahrerRegistrierung = () => {
                           <p className="text-sm text-muted-foreground mb-2">
                             ADR-Schein, Kranführerschein, etc. (Mehrere Dateien möglich)
                           </p>
-                          <div className="text-xs text-muted-foreground bg-muted/50 p-2 rounded mb-3">
-                            <p className="font-medium">Erlaubte Formate: JPG/JPEG, PNG, PDF | Max. 10 MB pro Datei</p>
-                            <p>Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                          <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
+                            <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
+                            <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                            <p>❌ Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. Ä.</p>
+                            <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
                           </div>
                           {selectedFiles.zertifikate && selectedFiles.zertifikate.length > 0 && (
                             <p className="text-xs text-primary font-medium">

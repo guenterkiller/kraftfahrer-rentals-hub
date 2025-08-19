@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Phone, Mail, MapPin, Clock, User, Car, FileText, ExternalLink, Eye } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
+import { getSignedPreview } from "@/utils/documentPreview";
 
 interface FahrerDokument {
   id: string;
@@ -133,24 +134,20 @@ const FahrerAdmin = () => {
 
   const previewDocument = async (filepath: string, filename: string) => {
     try {
-      const { data, error } = await supabase.storage
-        .from('fahrer-dokumente')
-        .createSignedUrl(filepath, 60); // 60 seconds expiry
-
-      if (error) throw error;
-
-      if (data?.signedUrl) {
+      const signedUrl = await getSignedPreview(filepath, 60); // 60 seconds expiry
+      
+      if (signedUrl) {
         const isImage = filename.toLowerCase().match(/\.(jpg|jpeg|png)$/);
         
         if (isImage) {
           // For images, show in a new tab or modal
           setDocumentPreviews(prev => ({
             ...prev,
-            [filepath]: data.signedUrl
+            [filepath]: signedUrl
           }));
         } else {
           // For PDFs, open in new tab
-          window.open(data.signedUrl, '_blank');
+          window.open(signedUrl, '_blank');
         }
         
         toast({

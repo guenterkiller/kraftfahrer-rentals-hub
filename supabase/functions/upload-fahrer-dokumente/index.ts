@@ -1,182 +1,148 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+// Deno Edge Function for secure document upload
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
-const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const ALLOWED = new Set(["image/jpeg", "image/png", "application/pdf"]);
+const MAX = 10 * 1024 * 1024; // 10 MB
+const BUCKET = "fahrer-dokumente";
+const ORIGINS = new Set([
+  "https://www.kraftfahrer-mieten.com",
+  "http://localhost:5173",
+  "https://wyovmwbtniqcomqpppkk.supabase.co",
+]);
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+function corsHeaders(req: Request) {
+  const origin = req.headers.get("origin");
+  const allow = origin && ORIGINS.has(origin) ? origin : "*";
+  return {
+    "Access-Control-Allow-Origin": allow,
+    "Vary": "Origin",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "authorization, content-type",
+  };
+}
 
-// Allowed MIME types
-const ALLOWED_MIME_TYPES = [
-  'image/jpeg',
-  'image/png', 
-  'application/pdf'
-];
-
-// Max file size: 10MB
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
-const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
+serve(async (req) => {
+  console.log(`Upload request received: ${req.method}`);
+  
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response("", { headers: corsHeaders(req) });
   }
 
   try {
-    console.log("Document upload request received");
-    
-    const formData = await req.formData();
-    const fahrer_id = formData.get("fahrer_id") as string;
-    const dokument_typ = formData.get("dokument_typ") as string;
-    const file = formData.get("file") as File;
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")! // Service Role für Server-seitigen Upload
+    );
 
-    // Validation
+    const form = await req.formData();
+    const fahrer_id = String(form.get("fahrer_id") ?? "");
+    const dokument_typ = String(form.get("dokument_typ") ?? "");
+    const file = form.get("file") as File | null;
+
+    console.log(`Processing upload - fahrer_id: ${fahrer_id}, type: ${dokument_typ}, file: ${file?.name}`);
+
     if (!fahrer_id || !dokument_typ || !file) {
-      return new Response(
-        JSON.stringify({ 
-          error: "Fahrer-ID, Dokumenttyp und Datei sind erforderlich" 
-        }),
-        { 
-          status: 400, 
-          headers: { "Content-Type": "application/json", ...corsHeaders } 
-        }
-      );
+      throw new Error("Pflichtfelder fehlen (fahrer_id, dokument_typ, file).");
     }
 
-    // Validate file type
-    if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-      return new Response(
-        JSON.stringify({ 
-          error: `Dateityp nicht erlaubt: ${file.type}. Nur JPG, PNG, PDF erlaubt.` 
-        }),
-        { 
-          status: 400, 
-          headers: { "Content-Type": "application/json", ...corsHeaders } 
-        }
-      );
+    if (!ALLOWED.has(file.type)) {
+      throw new Error("Nur JPG/PNG/PDF erlaubt.");
     }
-
-    // Validate file size
-    if (file.size > MAX_FILE_SIZE) {
-      return new Response(
-        JSON.stringify({ 
-          error: `Datei zu groß: ${(file.size / 1024 / 1024).toFixed(1)}MB. Maximum 10MB erlaubt.` 
-        }),
-        { 
-          status: 400, 
-          headers: { "Content-Type": "application/json", ...corsHeaders } 
-        }
-      );
-    }
-
-    console.log(`Uploading file for fahrer_id: ${fahrer_id}, type: ${dokument_typ}, size: ${file.size}, mime: ${file.type}`);
-
-    // Generate unique filename with UUID
-    const uuid = crypto.randomUUID();
-    const fileExtension = file.name.split('.').pop() || (file.type === 'application/pdf' ? 'pdf' : 'jpg');
-    const fileName = `${fahrer_id}/${dokument_typ}/${uuid}.${fileExtension}`;
     
-    console.log(`Generated path: ${fileName}`);
-
-    // Upload to Supabase Storage bucket 'fahrer-dokumente'
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('fahrer-dokumente')
-      .upload(fileName, file, { 
-        upsert: false, // No overwrite, each file gets unique name
-        contentType: file.type 
-      });
-
-    if (uploadError) {
-      console.error("Storage upload error:", uploadError);
-      return new Response(
-        JSON.stringify({ 
-          error: `Fehler beim Hochladen: ${uploadError.message}` 
-        }),
-        { 
-          status: 500, 
-          headers: { "Content-Type": "application/json", ...corsHeaders } 
-        }
-      );
+    if (file.size > MAX) {
+      throw new Error("Datei größer als 10 MB.");
     }
 
-    console.log("File uploaded successfully to storage:", uploadData.path);
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (!["jpg", "jpeg", "png", "pdf"].includes(ext)) {
+      throw new Error("Unzulässige Dateiendung.");
+    }
 
-    // Insert metadata into fahrer_dokumente table
-    const { data: dbData, error: dbError } = await supabase
-      .from('fahrer_dokumente')
-      .insert({
+    const uuid = crypto.randomUUID();
+    const path = `${fahrer_id}/${dokument_typ}/${uuid}.${ext}`;
+
+    console.log(`Uploading to path: ${path}`);
+
+    // Upload in privaten Bucket
+    const { error: upErr } = await supabase
+      .storage
+      .from(BUCKET)
+      .upload(path, file, {
+        contentType: file.type,
+        upsert: true,
+        cacheControl: "3600",
+      });
+      
+    if (upErr) {
+      console.error("Storage upload error:", upErr);
+      throw upErr;
+    }
+
+    console.log("File uploaded successfully, calculating checksum...");
+
+    // Checksumme berechnen (optional, aber nützlich)
+    const buf = await file.arrayBuffer();
+    const digest = await crypto.subtle.digest("SHA-256", buf);
+    const checksum = Array.from(new Uint8Array(digest))
+      .map(b => b.toString(16).padStart(2, "0")).join("");
+
+    console.log("Saving metadata to database...");
+
+    // Metadaten in die Tabelle schreiben
+    const { error: dbErr } = await supabase
+      .from("fahrer_dokumente")
+      .insert([{
         fahrer_id,
-        bucket: 'fahrer-dokumente',
-        filepath: uploadData.path,
+        bucket: BUCKET,
+        filepath: path,
         filename: file.name,
         type: dokument_typ,
-        url: uploadData.path, // We'll generate signed URLs on-demand
-        uploaded_at: new Date().toISOString()
-      })
-      .select()
-      .single();
-
-    if (dbError) {
-      console.error("Database insert error:", dbError);
-      // Try to clean up uploaded file
-      await supabase.storage
-        .from('fahrer-dokumente')
-        .remove([uploadData.path]);
+        url: path, // We store the path, not the full URL
+        uploaded_at: new Date().toISOString(),
+      }]);
       
-      return new Response(
-        JSON.stringify({ 
-          error: `Fehler beim Speichern der Metadaten: ${dbError.message}` 
-        }),
-        { 
-          status: 500, 
-          headers: { "Content-Type": "application/json", ...corsHeaders } 
-        }
-      );
+    if (dbErr) {
+      console.error("Database insert error:", dbErr);
+      // Try to clean up uploaded file
+      await supabase.storage.from(BUCKET).remove([path]);
+      throw dbErr;
     }
 
-    console.log("Metadata saved successfully:", dbData);
+    console.log("Metadata saved, creating signed URL...");
 
-    // Generate signed URL for immediate preview (60 seconds)
-    const { data: signedUrlData, error: signedUrlError } = await supabase.storage
-      .from('fahrer-dokumente')
-      .createSignedUrl(uploadData.path, 60);
+    // Kurzlebige Vorschau-URL für direkte Anzeige
+    const { data: signed } = await supabase
+      .storage.from(BUCKET)
+      .createSignedUrl(path, 60);
 
-    let signedUrl = null;
-    if (!signedUrlError && signedUrlData) {
-      signedUrl = signedUrlData.signedUrl;
-    }
+    console.log("Upload completed successfully");
 
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        url: signedUrl,
-        filename: file.name,
-        path: uploadData.path,
-        type: dokument_typ
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+    return new Response(JSON.stringify({
+      success: true,
+      path,
+      url: signed?.signedUrl ?? null,
+      filename: file.name,
+      type: dokument_typ
+    }), { 
+      headers: { 
+        ...corsHeaders(req), 
+        "Content-Type": "application/json" 
+      } 
+    });
+
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("Upload error:", msg);
+    return new Response(JSON.stringify({ 
+      success: false, 
+      error: msg 
+    }), {
+      status: 400, 
+      headers: { 
+        ...corsHeaders(req), 
+        "Content-Type": "application/json" 
       }
-    );
-
-  } catch (error: any) {
-    console.error("Error in upload-fahrer-dokumente function:", error);
-    return new Response(
-      JSON.stringify({ 
-        error: error.message || "Unbekannter Fehler beim Upload" 
-      }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    });
   }
-};
-
-serve(handler);
+});
