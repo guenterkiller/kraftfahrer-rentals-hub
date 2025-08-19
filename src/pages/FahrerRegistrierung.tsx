@@ -247,16 +247,14 @@ const FahrerRegistrierung = () => {
     try {
       console.log("Sende Fahrer-Bewerbung über Edge Function...");
 
-      // First, create the driver profile
+      // First, create or fetch the driver profile via Edge Function (handles duplicates safely)
       const nameParts = `${formData.vorname} ${formData.nachname}`.trim().split(' ');
       const vorname = nameParts[0] || '';
       const nachname = nameParts.slice(1).join(' ') || '';
       
       const parsedRate = formData.stundensatz ? parseFloat(formData.stundensatz.replace(/[^\d.,]/g, '').replace(',', '.')) : null;
-      const fahrerId = crypto.randomUUID();
-      
-      const insertData = {
-        id: fahrerId,
+
+      const payload = {
         vorname,
         nachname,
         email: formData.email,
@@ -271,23 +269,21 @@ const FahrerRegistrierung = () => {
         verfuegbare_regionen: formData.verfuegbare_regionen,
         stundensatz: parsedRate,
         verfuegbarkeit: formData.verfuegbarkeit || null,
-        status: 'pending'
       };
 
-      console.log("Creating driver profile...", insertData);
-
-
-      // Create the driver profile (no SELECT to avoid exposing data)
-      const { error: insertError } = await supabase
-        .from('fahrer_profile')
-        .insert([insertData]);
-
-      if (insertError) {
-        console.error("Driver profile creation error:", insertError);
-        throw new Error("Fehler beim Erstellen des Fahrer-Profils");
+      const resp = await fetch('https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/create-or-get-fahrer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const out = await resp.json();
+      if (!resp.ok || !out?.success) {
+        console.error('Create-or-get error:', out);
+        throw new Error(out?.error || 'Fehler beim Erstellen des Fahrer-Profils');
       }
+      const fahrerId: string = out.id;
 
-      console.log("Driver profile created with ID:", fahrerId);
+      console.log("Driver profile ready with ID:", fahrerId);
       // Upload documents if any
       const uploadPromises: Promise<void>[] = [];
 

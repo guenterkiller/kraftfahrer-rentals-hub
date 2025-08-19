@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.upload-fahrer-dokumente]
 verify_jwt = false
+
+[functions.create-or-get-fahrer]
+verify_jwt = false
