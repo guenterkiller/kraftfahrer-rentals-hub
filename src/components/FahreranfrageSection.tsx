@@ -77,108 +77,47 @@ const FahreranfrageSection = () => {
       
       // Collect special requirements as array
       const anforderungen = Array.from(formData.getAll("anforderungen"));
-      const besonderheiten = anforderungen.length > 0 ? anforderungen.join(", ") : "";
-      
-      // Convert einsatzbeginn to proper ISO format if provided
-      let zeitraumFormatted = "Nach Absprache";
-      if (einsatzbeginn) {
-        try {
-          // Create ISO date string for the beginning of the day
-          const date = new Date(einsatzbeginn + "T08:00:00");
-          const isoDateString = date.toISOString();
-          
-          zeitraumFormatted = einsatzdauer 
-            ? `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')} für ${einsatzdauer}`
-            : `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')}`;
-        } catch (dateError) {
-          console.error("Date conversion error:", dateError);
-          zeitraumFormatted = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
-        }
-      } else if (einsatzdauer) {
-        zeitraumFormatted = `Dauer: ${einsatzdauer}`;
-      }
 
-      // Extract location from message or use a default
-      const einsatzort = nachricht.includes("Einsatzort") 
-        ? nachricht.split("Einsatzort")[1]?.split(/[,\n]/)[0]?.trim() || "Siehe Nachricht"
-        : "Siehe Nachricht";
-
-      // Prepare data for database insert with proper validation
-      const jobRequestData = {
-        customer_name: `${vorname} ${nachname}`.trim(),
-        customer_email: email.trim(),
-        customer_phone: telefon.trim(),
-        company: (formData.get('unternehmen') as string)?.trim() || null,
-        einsatzort: einsatzort.trim(),
-        zeitraum: zeitraumFormatted,
-        fahrzeugtyp: fahrzeugtyp || "Nicht angegeben",
-        fuehrerscheinklasse: "C+E", // Default, could be made dynamic
-        besonderheiten: besonderheiten || null,
+      // Prepare data for Edge Function
+      const requestData = {
+        vorname: vorname.trim(),
+        nachname: nachname.trim(),
+        email: email.trim(),
+        phone: telefon.trim(),
+        company: (formData.get('unternehmen') as string)?.trim() || '',
+        einsatzbeginn: einsatzbeginn || '',
+        einsatzdauer: einsatzdauer || '',
+        fahrzeugtyp: fahrzeugtyp || '',
+        anforderungen: anforderungen,
         nachricht: nachricht.trim(),
-        status: 'open'
+        datenschutz: datenschutz,
+        newsletter: formData.get("newsletter") === "on",
+        price_acknowledged: true,
+        price_ack_time: priceAckTime || new Date().toISOString(),
+        price_plan: pricePlan
       };
 
-      // Save job request to database
-      const { data: jobRequest, error: jobError } = await supabase
-        .from('job_requests')
-        .insert([jobRequestData])
-        .select()
-        .single();
-
-      if (jobError) {
-        console.error("Error saving job request:", jobError);
-        throw new Error("Failed to save job request");
-      }
-
-      console.log("Job request saved:", jobRequest);
-
-      // Send job alert emails to all drivers (only if job was saved successfully)
-      if (jobRequest && jobRequest.id) {
-        const alertResponse = await supabase.functions.invoke('send-job-alert-emails', {
-          body: {
-            job_id: jobRequest.id,
-            einsatzort: jobRequestData.einsatzort,
-            zeitraum: jobRequestData.zeitraum,
-            fahrzeugtyp: jobRequestData.fahrzeugtyp,
-            fuehrerscheinklasse: jobRequestData.fuehrerscheinklasse,
-            besonderheiten: jobRequestData.besonderheiten,
-            customer_name: jobRequestData.customer_name,
-            customer_email: jobRequestData.customer_email
-          }
-        });
-
-        if (alertResponse.error) {
-          console.error("Error sending job alert emails:", alertResponse.error);
-          // Don't fail the whole request if emails fail
-        }
-      }
-
-      // Also send the original customer notification email with correct data structure
-      const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
-body: {
-  vorname: vorname.trim(),
-  nachname: nachname.trim(),
-  email: email.trim(),
-  phone: telefon.trim(),
-  company: (formData.get('unternehmen') as string)?.trim() || '',
-  message: nachricht.trim(),
-  // Add fields that the function expects for job requests
-  einsatzbeginn: einsatzbeginn || '',
-  einsatzdauer: einsatzdauer || '',
-  fahrzeugtyp: fahrzeugtyp || '',
-  spezialanforderungen: anforderungen,
-  datenschutz: datenschutz,
-  newsletter: formData.get("newsletter") === "on",
-  // Price acknowledgement proof
-  price_acknowledged: true,
-  price_ack_time: priceAckTime || new Date().toISOString(),
-  price_plan: pricePlan
-}
+      // Call Edge Function instead of direct Supabase
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://hxnabnsoffzevqhruvar.supabase.co";
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc";
+      
+      const response = await fetch(`${supabaseUrl}/functions/v1/submit-fahrer-anfrage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${anonKey}`
+        },
+        body: JSON.stringify(requestData)
       });
 
-      if (customerResponse.error) {
-        console.error("Error sending customer email:", customerResponse.error);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Edge Function error:", errorData);
+        throw new Error(errorData.error || "Failed to submit request");
       }
+
+      const result = await response.json();
+      console.log("Edge Function success:", result);
 
       toast({
         title: "Anfrage gesendet!",
