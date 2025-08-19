@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.check-admin-login]
 verify_jwt = false
+
+[functions.upload-fahrer-dokumente]
+verify_jwt = false
