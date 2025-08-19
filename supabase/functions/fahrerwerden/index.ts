@@ -33,29 +33,98 @@ interface FahrerAnfrageRequest {
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { status: 204, headers: corsHeaders });
   }
 
   try {
+    console.log("fahrerwerden start", new Date().toISOString());
+    console.log("has RESEND key:", !!Deno.env.get("RESEND_API_KEY"));
     console.log("Fahrer-Anfrage submission received");
     
-    // Parse FormData instead of JSON
-    const formData = await req.formData();
+    const contentType = req.headers.get("content-type") || "";
+    console.log("Content-Type:", contentType);
     
-    // Extract form fields
-    const requestData: FahrerAnfrageRequest = {
-      name: formData.get("name") as string || "",
-      email: formData.get("email") as string || "",
-      phone: formData.get("phone") as string || "",
-      company: formData.get("company") as string || "",
-      message: formData.get("message") as string || "",
-      description: formData.get("description") as string || "",
-      license_classes: JSON.parse(formData.get("license_classes") as string || "[]"),
-      experience: formData.get("experience") as string || "",
-      specializations: JSON.parse(formData.get("specializations") as string || "[]"),
-      regions: JSON.parse(formData.get("regions") as string || "[]"),
-      hourly_rate: formData.get("hourly_rate") as string || "",
+    let formData: FormData | null = null;
+    let requestData: FahrerAnfrageRequest = {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      message: "",
+      description: "",
+      license_classes: [],
+      experience: "",
+      specializations: [],
+      regions: [],
+      hourly_rate: ""
     };
+    
+    try {
+      if (contentType.includes("multipart/form-data")) {
+        formData = await req.formData();
+        requestData = {
+          name: (formData.get("name") as string) || "",
+          email: (formData.get("email") as string) || "",
+          phone: (formData.get("phone") as string) || "",
+          company: (formData.get("company") as string) || "",
+          message: (formData.get("message") as string) || "",
+          description: (formData.get("description") as string) || "",
+          license_classes: JSON.parse((formData.get("license_classes") as string) || "[]"),
+          experience: (formData.get("experience") as string) || "",
+          specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
+          regions: JSON.parse((formData.get("regions") as string) || "[]"),
+          hourly_rate: (formData.get("hourly_rate") as string) || "",
+        };
+      } else if (contentType.includes("application/json")) {
+        const body = await req.json();
+        requestData = {
+          name: body.name ?? "",
+          email: body.email ?? "",
+          phone: body.phone ?? "",
+          company: body.company ?? "",
+          message: body.message ?? "",
+          description: body.description ?? "",
+          license_classes: Array.isArray(body.license_classes) ? body.license_classes : [],
+          experience: body.experience ?? "",
+          specializations: Array.isArray(body.specializations) ? body.specializations : [],
+          regions: Array.isArray(body.regions) ? body.regions : [],
+          hourly_rate: body.hourly_rate ?? "",
+        };
+      } else {
+        // Fallback: try to parse as FormData
+        try {
+          formData = await req.formData();
+          requestData = {
+            name: (formData.get("name") as string) || "",
+            email: (formData.get("email") as string) || "",
+            phone: (formData.get("phone") as string) || "",
+            company: (formData.get("company") as string) || "",
+            message: (formData.get("message") as string) || "",
+            description: (formData.get("description") as string) || "",
+            license_classes: JSON.parse((formData.get("license_classes") as string) || "[]"),
+            experience: (formData.get("experience") as string) || "",
+            specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
+            regions: JSON.parse((formData.get("regions") as string) || "[]"),
+            hourly_rate: (formData.get("hourly_rate") as string) || "",
+          };
+        } catch (_e) {
+          // ignore
+        }
+      }
+    } catch (parseErr) {
+      console.error("Parse error:", parseErr);
+    }
+
+    // Optional smoke test to validate logging without side effects
+    const url = new URL(req.url);
+    const smoke = req.headers.get("x-smoke-test") === "1" || url.searchParams.get("smoke") === "1";
+    if (smoke) {
+      console.log("Smoke test active → early 200 response");
+      return new Response(JSON.stringify({ success: true, smoke: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
     // Validation - only name, email, and phone are required
     if (!requestData.name || !requestData.email || !requestData.phone) {
@@ -107,7 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailSafe = requestData.email.replace(/[^a-zA-Z0-9@.-]/g, '_');
     
     // Upload Führerschein files
-    const fuehrerscheinFiles = formData.getAll("fuehrerschein") as File[];
+    const fuehrerscheinFiles = formData ? (formData.getAll("fuehrerschein") as File[]) : [];
     if (fuehrerscheinFiles.length > 0) {
       const fuehrerscheinPaths: string[] = [];
       for (let i = 0; i < fuehrerscheinFiles.length; i++) {
@@ -134,7 +203,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
     
     // Upload Fahrerkarte files
-    const fahrerkarteFiles = formData.getAll("fahrerkarte") as File[];
+    const fahrerkarteFiles = formData ? (formData.getAll("fahrerkarte") as File[]) : [];
     if (fahrerkarteFiles.length > 0) {
       const fahrerkartePaths: string[] = [];
       for (let i = 0; i < fahrerkarteFiles.length; i++) {
@@ -161,7 +230,7 @@ const handler = async (req: Request): Promise<Response> => {
     }
     
     // Upload Zertifikat files
-    const zertifikatFiles = formData.getAll("zertifikate") as File[];
+    const zertifikatFiles = formData ? (formData.getAll("zertifikate") as File[]) : [];
     if (zertifikatFiles.length > 0) {
       const zertifikatPaths: string[] = [];
       for (let i = 0; i < zertifikatFiles.length; i++) {
