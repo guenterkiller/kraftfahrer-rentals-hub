@@ -1,6 +1,50 @@
+Options -MultiViews
+
 RewriteEngine On
+
+# Bypass all rewrites for admin-check.html (serve static)
+RewriteRule ^admin-check\.html$ - [L]
+
+# MIME types for images
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+
+# Prevent partial content to avoid 206 issues for crawlers
+<IfModule mod_headers.c>
+  Header set Accept-Ranges none
+</IfModule>
+
+# Canonical 301 redirects for legacy .html URLs (one hop, HTTPS)
+# IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
+RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^impressum\.html$ https://kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteRule ^datenschutzerklaerung\.html$ https://kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://kraftfahrer-mieten.com/agb [R=301,L]
+# Referenzen variants (mobile/smartphone/printable .../default.html)
+RewriteRule ^referenzen/default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+# Generic: any other .html → sans extension, except admin-check.html
+RewriteCond %{REQUEST_URI} \.html$ [NC]
+RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
+RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
+
+# Remove legacy Fahrerbörse URLs
+Redirect gone /fahrerboerse
+Redirect gone /fahrerbörse
+
+# Force HTTPS for any remaining HTTP requests (no .html)
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
+
+# SPA fallback routing
 RewriteBase /
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule - [L]
+RewriteRule ^index\.html$ - [L]
+
+# Explicit SPA routes for admin (avoid any external redirects)
+RewriteRule ^admin$ /index.html [L]
+RewriteRule ^admin/login$ /index.html [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
 RewriteRule . /index.html [L]
