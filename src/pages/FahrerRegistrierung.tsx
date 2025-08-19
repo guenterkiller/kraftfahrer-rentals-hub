@@ -368,11 +368,16 @@ const FahrerRegistrierung = () => {
       setValidationErrors({});
       setFileErrors([]);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = typeof error === 'string'
+        ? error
+        : (error && typeof error === 'object' && 'message' in error
+          ? String((error as any).message)
+          : JSON.stringify(error));
       console.error("Fehler beim Senden:", error);
       toast({
         title: "Fehler bei der Registrierung",
-        description: error.message || "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+        description: message || "Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
         variant: "destructive",
       });
       // WICHTIG: Form-Daten bleiben erhalten bei Fehlern!
