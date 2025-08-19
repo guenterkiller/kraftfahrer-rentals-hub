@@ -1,4 +1,4 @@
-project_id = "wyovmwbtniqcomqpppkk"
+project_id = "hxnabnsoffzevqhruvar"
 
 [functions.send-job-alert-emails]
 verify_jwt = false
