@@ -48,7 +48,7 @@ export async function uploadViaEdge(
   fd.append("dokument_typ", typ);
   fd.append("file", file, safeName(file.name));
 
-  const url = `https://wyovmwbtniqcomqpppkk.supabase.co/functions/v1/upload-fahrer-dokumente`;
+  const url = `https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/upload-fahrer-dokumente`;
   const res = await fetch(url, { method: "POST", body: fd });
   const json = await res.json();
   
