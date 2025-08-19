@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.create-or-get-fahrer]
 verify_jwt = false
+
+[functions.get-document-preview]
+verify_jwt = false

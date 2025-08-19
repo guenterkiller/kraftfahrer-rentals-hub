@@ -514,12 +514,13 @@ const Admin = () => {
     
     try {
       for (const fahrer of fahrerData) {
-        const { data: storageFiles, error } = await supabase.storage
-          .from('driver-documents')
-          .list(`uploads/${fahrer.email}/`);
+        const { data: documents, error } = await supabase
+          .from('fahrer_dokumente')
+          .select('id')
+          .eq('fahrer_id', fahrer.id);
 
-        if (!error && storageFiles) {
-          counts[fahrer.id] = storageFiles.length;
+        if (!error && documents) {
+          counts[fahrer.id] = documents.length;
         } else {
           counts[fahrer.id] = 0;
         }
@@ -535,36 +536,32 @@ const Admin = () => {
     if (documents[fahrerId]) return; // Already loaded
 
     try {
-      console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerEmail);
+      console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerId);
       
-      // Lade Dokumente direkt aus Storage anhand des Pfads uploads/<email>/
-      const { data: storageFiles, error } = await supabase.storage
-        .from('driver-documents')
-        .list(`uploads/${fahrerEmail}/`);
+      // Load documents from fahrer_dokumente table
+      const { data: fahrerDokumente, error } = await supabase
+        .from('fahrer_dokumente')
+        .select('*')
+        .eq('fahrer_id', fahrerId)
+        .order('uploaded_at', { ascending: false });
 
       if (error) {
-        console.error("❌ Admin: Fehler beim Laden der Storage-Dokumente:", error);
+        console.error("❌ Admin: Fehler beim Laden der Dokumente:", error);
         return;
       }
 
-      console.log("✅ Admin: Storage-Dokumente geladen:", storageFiles);
+      console.log("✅ Admin: Dokumente aus Tabelle geladen:", fahrerDokumente);
       
-      // Konvertiere Storage-Files zu DocumentFile Format
-      const documentFiles: DocumentFile[] = storageFiles?.map(file => {
-        const { data: publicUrl } = supabase.storage
-          .from('driver-documents')
-          .getPublicUrl(`uploads/${fahrerEmail}/${file.name}`);
-        
-        return {
-          id: file.id || file.name,
-          filename: file.name,
-          filepath: `uploads/${fahrerEmail}/${file.name}`,
-          url: publicUrl.publicUrl,
-          type: file.name.toLowerCase().includes('.pdf') ? 'pdf' : 'image',
-          uploaded_at: file.updated_at || file.created_at || new Date().toISOString(),
-          fahrer_id: fahrerId
-        };
-      }) || [];
+      // Convert to DocumentFile format
+      const documentFiles: DocumentFile[] = fahrerDokumente?.map(doc => ({
+        id: doc.id,
+        filename: doc.filename,
+        filepath: doc.filepath,
+        url: doc.url, // This will be replaced with signed URL when needed
+        type: doc.type,
+        uploaded_at: doc.uploaded_at,
+        fahrer_id: doc.fahrer_id
+      })) || [];
 
       setDocuments(prev => ({
         ...prev,
@@ -586,16 +583,77 @@ const Admin = () => {
     setExpandedRows(newExpanded);
   };
 
-  const handlePreview = (doc: DocumentFile) => {
-    setPreviewDoc({
-      url: doc.url,
-      type: doc.type,
-      filename: doc.filename
-    });
+  const handlePreview = async (doc: DocumentFile) => {
+    try {
+      console.log(`📁 Previewing document: ${doc.filename} at ${doc.filepath}`);
+      
+      const { data, error } = await supabase.functions.invoke('get-document-preview', {
+        body: { filepath: doc.filepath, ttl: 600 }
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to create signed URL');
+      }
+      
+      const signedUrl = data.signedUrl;
+      console.log(`✅ Signed URL created for ${doc.filename}`);
+      
+      const isImage = doc.filename.toLowerCase().match(/\.(jpg|jpeg|png)$/);
+      
+      setPreviewDoc({
+        url: signedUrl,
+        type: isImage ? 'image' : 'pdf',
+        filename: doc.filename
+      });
+      
+    } catch (error) {
+      console.error('❌ Error creating signed URL:', error);
+      toast({
+        title: "Fehler",
+        description: "Dokument konnte nicht geladen werden.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleDownload = (doc: DocumentFile) => {
-    window.open(doc.url, '_blank');
+  const handleDownload = async (doc: DocumentFile) => {
+    try {
+      console.log(`📥 Downloading document: ${doc.filename} at ${doc.filepath}`);
+      
+      const { data, error } = await supabase.functions.invoke('get-document-preview', {
+        body: { filepath: doc.filepath, ttl: 300 }
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to create signed URL');
+      }
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = data.signedUrl;
+      link.download = doc.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      console.log(`✅ Download started for ${doc.filename}`);
+      
+    } catch (error) {
+      console.error('❌ Error downloading document:', error);
+      toast({
+        title: "Fehler",
+        description: "Dokument konnte nicht heruntergeladen werden.",
+        variant: "destructive",
+      });
+    }
   };
 
   const getStatusBadge = (status: string) => {
