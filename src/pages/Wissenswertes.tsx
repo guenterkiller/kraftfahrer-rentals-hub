@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Wissenswertes = () => {
   useSEO({
-    title: "Wissenswertes für Auftraggeber – Rechtliche Grundlagen | Fahrerexpress",
-    description: "Alles über die Beauftragung selbstständiger Fahrer: Rechtliche Hinweise, Scheinselbstständigkeit vermeiden, Versicherungsschutz & Vertragsgestaltung.",
-    keywords: "selbstständige Fahrer beauftragen, Scheinselbstständigkeit vermeiden, Arbeitnehmerüberlassung, Kraftfahrer rechtlich, Vertragsgestaltung Fahrer"
+    title: "Wissenswertes – Rechtliche Grundlagen für Ersatzfahrer & LKW-Fahrer | Fahrerexpress",
+    description: "Alles über die Beauftragung selbstständiger Fahrer und Ersatzfahrer: Rechtliche Hinweise, Scheinselbstständigkeit vermeiden, Versicherungsschutz & Vertragsgestaltung.",
+    keywords: "selbstständige Fahrer beauftragen, ersatzfahrer rechtlich, scheinselbstständigkeit vermeiden, arbeitnehmerüberlassung, kraftfahrer rechtlich, vertragsgestaltung fahrer"
   });
   return (
     <div className="min-h-screen bg-background">

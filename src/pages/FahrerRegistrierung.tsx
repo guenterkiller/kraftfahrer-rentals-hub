@@ -16,9 +16,9 @@ import { validateFiles, uploadViaEdge } from "@/utils/fileValidation";
 
 const FahrerRegistrierung = () => {
   useSEO({
-    title: "Fahrer werden – Jetzt als selbstständiger LKW-Fahrer registrieren",
-    description: "Werden Sie selbstständiger Partner bei Fahrerexpress. Mehr verdienen, selbst bestimmen, deutschlandweite Aufträge. Jetzt kostenlos registrieren!",
-    keywords: "selbstständiger LKW-Fahrer werden, Fahrer registrieren, selbstständig als Kraftfahrer, Fahrerexpress Partner werden"
+    title: "Fahrer werden – LKW-Fahrer & Ersatzfahrer Jobs bundesweit | Fahrerexpress",
+    description: "Werden Sie selbstständiger Partner bei Fahrerexpress. Mehr verdienen als Ersatzfahrer, selbst bestimmen, deutschlandweite Aufträge. Jetzt kostenlos registrieren!",
+    keywords: "selbstständiger LKW-Fahrer werden, ersatzfahrer jobs, fahrer registrieren, selbstständig als kraftfahrer, fahrerexpress partner werden, lkw fahrer gesucht"
   });
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);

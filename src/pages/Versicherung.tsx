@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Versicherung = () => {
   useSEO({
-    title: "Versicherungen für selbstständige LKW-Fahrer | Fahrerexpress",
-    description: "Schutz vor Altersarmut: Berufsunfähigkeitsversicherung, Krankentagegeld & Altersvorsorge für selbstständige Kraftfahrer. Jetzt absichern!",
-    keywords: "Versicherung selbstständige Fahrer, Berufsunfähigkeitsversicherung LKW-Fahrer, Krankentagegeld, Rürup-Rente, Altersvorsorge Kraftfahrer"
+    title: "Versicherungen – Schutz für selbstständige LKW-Fahrer & Ersatzfahrer | Fahrerexpress",
+    description: "Schutz vor Altersarmut: Berufsunfähigkeitsversicherung, Krankentagegeld & Altersvorsorge für selbstständige Kraftfahrer und Ersatzfahrer. Jetzt absichern!",
+    keywords: "Versicherung selbstständige Fahrer, Berufsunfähigkeitsversicherung LKW-Fahrer, Krankentagegeld, Rürup-Rente, Altersvorsorge Kraftfahrer, ersatzfahrer versicherung"
   });
   return (
     <div className="min-h-screen bg-background">

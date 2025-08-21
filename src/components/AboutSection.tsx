@@ -13,7 +13,7 @@ const AboutSection = () => {
                 <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg">
                   <img 
                     src="/lovable-uploads/78e60df8-7b75-4383-98da-b6043410d6c6.png" 
-                    alt="Günter Killer" 
+                    alt="Günter Killer - Erfahrener selbstständiger LKW-Fahrer und Gründer der Fahrerexpress-Agentur Frankfurt" 
                     className="w-full h-full object-cover"
                   />
                 </div>

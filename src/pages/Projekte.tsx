@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Projekte = () => {
   useSEO({
-    title: "Erfolgreiche Projekte & Einsatzbeispiele | Fahrerexpress",
-    description: "Referenzen unserer erfolgreichen Fahrereinsätze: München, Hamburg, Speyer. Zufriedene Kunden bei Bau, Logistik und Schwertransport.",
-    keywords: "Fahrerexpress Referenzen, erfolgreiche Projekte, Kundenbewertungen, Fahrereinsätze Deutschland, Fahrmischer München, Logistik Hamburg"
+    title: "Erfolgreiche Projekte – Ersatzfahrer & LKW-Fahrer Einsätze | Fahrerexpress",
+    description: "Referenzen unserer erfolgreichen Fahrereinsätze: München, Hamburg, Speyer. Zufriedene Kunden bei Bau, Logistik und Schwertransport mit Ersatzfahrern.",
+    keywords: "Fahrerexpress Referenzen, erfolgreiche projekte, kundenbewertungen, fahrereinsätze deutschland, fahrmischer münchen, logistik hamburg, ersatzfahrer referenzen"
   });
   const projekte = [
     {
@@ -140,7 +140,7 @@ const Projekte = () => {
                     <div className="md:w-1/3">
                       <img 
                         src={projekt.bild} 
-                        alt={projekt.title}
+                        alt={`${projekt.title} - Erfolgreicher Fahrereinsatz in ${projekt.ort} mit ${projekt.fahrzeugtyp} für ${projekt.kunde}`}
                         className="w-full h-64 md:h-full object-cover"
                       />
                     </div>

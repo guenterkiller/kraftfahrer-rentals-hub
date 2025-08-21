@@ -11,7 +11,7 @@ const HeroSection = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed md:bg-scroll"
         style={{ backgroundImage: `url(${heroImage})` }}
         role="img"
-        aria-label="Professioneller LKW-Fahrer bei der Arbeit"
+        aria-label="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
       >
         <div className="absolute inset-0 bg-black/50" />
       </div>

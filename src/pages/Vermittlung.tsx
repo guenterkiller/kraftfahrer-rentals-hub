@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlung = () => {
   useSEO({
-    title: "Vermittlung & Provision für selbstständige Fahrer | Fahrerexpress",
-    description: "Transparente Vermittlungskosten: 15% Provision nur bei erfolgreichem Einsatz. Keine Fixkosten, keine Mindestlaufzeit für Kraftfahrer.",
-    keywords: "Vermittlungsprovision, Fahrer Provision, Vermittlungskosten selbstständige Fahrer, 15 Prozent Provision"
+    title: "Vermittlung & Provision – Ersatzfahrer kurzfristig mieten | Fahrerexpress",
+    description: "Transparente Vermittlungskosten: 15% Provision nur bei erfolgreichem Einsatz. Keine Fixkosten, keine Mindestlaufzeit für Kraftfahrer und Ersatzfahrer.",
+    keywords: "Vermittlungsprovision, Fahrer Provision, Vermittlungskosten selbstständige Fahrer, 15 Prozent Provision, ersatzfahrer kosten"
   });
   return (
     <div className="min-h-screen bg-muted">
