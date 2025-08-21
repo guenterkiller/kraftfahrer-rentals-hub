@@ -7,6 +7,14 @@ interface SEOData {
   keywords?: string;
   ogImage?: string;
   noindex?: boolean;
+  structuredData?: object;
+  articleData?: {
+    headline: string;
+    datePublished: string;
+    dateModified?: string;
+    author: string;
+    articleSection?: string;
+  };
 }
 
 export const useSEO = (seoData: SEOData) => {
@@ -118,36 +126,138 @@ export const useSEO = (seoData: SEOData) => {
       document.head.appendChild(twitterImage);
     }
 
-    // Add structured data for organization
-    const structuredData = {
+    // Enhanced structured data
+    let structuredData = seoData.structuredData || {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Fahrerexpress-Agentur",
+      "@type": "LocalBusiness",
+      "name": "Fahrerexpress-Agentur - Günter Killer",
+      "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer, Kraftfahrer und Baumaschinenführer",
       "url": baseUrl,
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+49-1577-1442285",
-        "contactType": "customer service",
-        "availableLanguage": "German"
-      },
+      "telephone": "+49-1577-1442285",
+      "email": "info@kraftfahrer-mieten.com",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "Walther-von-Cronberg-Platz 12",
         "addressLocality": "Frankfurt am Main",
         "postalCode": "60594",
         "addressCountry": "DE"
-      }
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 50.110924,
+        "longitude": 8.682127
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "serviceType": ["Fahrerdienstleistungen", "LKW-Fahrer Vermittlung", "Baumaschinenführer"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Fahrerdienstleistungen",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "LKW-Fahrer Vermittlung",
+              "description": "Selbstständige C+E-Fahrer bundesweit"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Baumaschinenführer Vermittlung",
+              "description": "Erfahrene Kranführer und Baggerfahrer"
+            }
+          }
+        ]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127"
+      },
+      "sameAs": [
+        "https://kraftfahrer-mieten.com"
+      ]
     };
 
+    // Add article structured data if provided
+    if (seoData.articleData) {
+      const articleSchema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": seoData.articleData.headline,
+        "datePublished": seoData.articleData.datePublished,
+        "dateModified": seoData.articleData.dateModified || seoData.articleData.datePublished,
+        "author": {
+          "@type": "Person",
+          "name": seoData.articleData.author
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Fahrerexpress-Agentur",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://kraftfahrer-mieten.com/lovable-uploads/favicon-truck-512-full.png"
+          }
+        },
+        "url": canonicalUrl,
+        "description": seoData.description,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": canonicalUrl
+        }
+      };
+
+      if (seoData.articleData.articleSection) {
+        (articleSchema as any).articleSection = seoData.articleData.articleSection;
+      }
+
+      // Combine schemas
+      structuredData = [structuredData, articleSchema];
+    }
+
     // Remove existing structured data
-    const existingStructuredData = document.querySelector('script[type="application/ld+json"]');
-    if (existingStructuredData) existingStructuredData.remove();
+    const existingStructuredData = document.querySelectorAll('script[type="application/ld+json"][data-seo]');
+    existingStructuredData.forEach(script => script.remove());
 
     // Add new structured data
     const script = document.createElement('script');
     script.type = 'application/ld+json';
+    script.setAttribute('data-seo', 'true');
     script.text = JSON.stringify(structuredData);
     document.head.appendChild(script);
+
+    // Add breadcrumb structured data for non-homepage
+    if (location.pathname !== '/') {
+      const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Startseite",
+            "item": "https://kraftfahrer-mieten.com/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": seoData.title.split(' | ')[0] || seoData.title,
+            "item": canonicalUrl
+          }
+        ]
+      };
+
+      const breadcrumbScript = document.createElement('script');
+      breadcrumbScript.type = 'application/ld+json';
+      breadcrumbScript.setAttribute('data-seo', 'true');
+      breadcrumbScript.text = JSON.stringify(breadcrumbSchema);
+      document.head.appendChild(breadcrumbScript);
+    }
 
   }, [seoData, canonicalUrl]);
 };

@@ -1,17 +1,13 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
+# Roboter-Anweisungen für Suchmaschinen
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Wichtige Sitemaps
 Sitemap: https://kraftfahrer-mieten.com/sitemap.xml
+
+# Admin-Bereiche blockieren
+Disallow: /admin/
+Disallow: /admin-login/
+
+# Host-Directive für eindeutige Domain
+Host: https://kraftfahrer-mieten.com

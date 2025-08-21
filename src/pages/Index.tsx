@@ -14,35 +14,77 @@ const Index = () => {
     title: "LKW-Fahrer mieten – Selbstständige Fahrer bundesweit | Fahrerexpress",
     description: "Jetzt erfahrene LKW-Fahrer & Baumaschinenführer mieten. Flexibel, rechtskonform & bundesweit. Fahrerexpress – Ihre Lösung bei Fahrermangel.",
     keywords: "kraftfahrer mieten, selbständiger berufskraftfahrer gesucht, LKW-Fahrer mieten, selbstständige Kraftfahrer, Baumaschinenführer, bundesweite Vermittlung",
-    ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg"
+    ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "LKW-Fahrer mieten - Fahrerexpress",
+      "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer und Baumaschinenführer",
+      "url": "https://kraftfahrer-mieten.com/",
+      "mainEntity": {
+        "@type": "LocalBusiness",
+        "name": "Fahrerexpress-Agentur - Günter Killer",
+        "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer, Kraftfahrer und Baumaschinenführer",
+        "url": "https://kraftfahrer-mieten.com",
+        "telephone": "+49-1577-1442285",
+        "priceRange": "Faire Preise",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Walther-von-Cronberg-Platz 12",
+          "addressLocality": "Frankfurt am Main",
+          "postalCode": "60594",
+          "addressCountry": "DE"
+        }
+      }
+    }
   });
+
   return (
-    <div>
+    <div className="min-h-screen">
+      {/* Skip link for accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-50"
+      >
+        Zum Hauptinhalt springen
+      </a>
+      
       <Navigation />
-      <div id="home">
-        <HeroSection />
-      </div>
-      <div id="about">
-        <AboutSection />
-      </div>
-      <div id="services">
-        <ServicesSection />
-      </div>
-      <div id="pricing">
-        <PricingSection />
-      </div>
-      <div id="testimonials">
-        <TestimonialsSection />
-      </div>
-      <div id="jobalert">
-        <JobAlertSection />
-      </div>
-      <div id="fahreranfrage">
-        <FahreranfrageSection />
-      </div>
-      <div id="contact">
-        <ContactSection />
-      </div>
+      
+      {/* Main content with semantic structure */}
+      <main id="main-content" className="pt-16">
+        <section id="home" aria-label="Hero Bereich">
+          <HeroSection />
+        </section>
+        
+        <section id="about" aria-label="Über uns" className="scroll-mt-16">
+          <AboutSection />
+        </section>
+        
+        <section id="services" aria-label="Unsere Dienstleistungen" className="scroll-mt-16">
+          <ServicesSection />
+        </section>
+        
+        <section id="pricing" aria-label="Preise und Konditionen" className="scroll-mt-16">
+          <PricingSection />
+        </section>
+        
+        <section id="testimonials" aria-label="Kundenbewertungen" className="scroll-mt-16">
+          <TestimonialsSection />
+        </section>
+        
+        <section id="jobalert" aria-label="Job-Benachrichtigungen" className="scroll-mt-16">
+          <JobAlertSection />
+        </section>
+        
+        <section id="fahreranfrage" aria-label="Fahrer anfragen" className="scroll-mt-16">
+          <FahreranfrageSection />
+        </section>
+        
+        <section id="contact" aria-label="Kontakt" className="scroll-mt-16">
+          <ContactSection />
+        </section>
+      </main>
     </div>
   );
 };
