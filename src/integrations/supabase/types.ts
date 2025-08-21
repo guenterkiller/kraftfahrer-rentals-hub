@@ -298,7 +298,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          email_display?: never
+          email_display?: string | null
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string | null
@@ -307,14 +307,14 @@ export type Database = {
           spezialisierungen?: string[] | null
           status?: string | null
           stundensatz?: number | null
-          telefon_display?: never
+          telefon_display?: string | null
           updated_at?: string | null
           verfuegbare_regionen?: string[] | null
           vorname?: string | null
         }
         Update: {
           created_at?: string | null
-          email_display?: never
+          email_display?: string | null
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string | null
@@ -323,7 +323,7 @@ export type Database = {
           spezialisierungen?: string[] | null
           status?: string | null
           stundensatz?: number | null
-          telefon_display?: never
+          telefon_display?: string | null
           updated_at?: string | null
           verfuegbare_regionen?: string[] | null
           vorname?: string | null
