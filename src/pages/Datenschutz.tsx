@@ -7,8 +7,7 @@ const Datenschutz = () => {
   useSEO({
     title: "Datenschutzerklärung | Fahrerexpress-Agentur Frankfurt",
     description: "Datenschutzerklärung der Fahrerexpress-Agentur. Transparente Informationen über Datenverarbeitung, DSGVO-konform.",
-    keywords: "Datenschutz Fahrerexpress, DSGVO, Datenschutzerklärung",
-    noindex: true
+    keywords: "Datenschutz Fahrerexpress, DSGVO, Datenschutzerklärung"
   });
   return (
     <div>

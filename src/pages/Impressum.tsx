@@ -8,8 +8,7 @@ const Impressum = () => {
   useSEO({
     title: "Impressum | Fahrerexpress-Agentur Frankfurt",
     description: "Impressum der Fahrerexpress-Agentur Frankfurt. Kontaktdaten, Geschäftsführung und rechtliche Angaben gemäß TMG.",
-    keywords: "Impressum Fahrerexpress, Kontakt Frankfurt, Günter Killer, Fahrerexpress-Agentur",
-    noindex: true
+    keywords: "Impressum Fahrerexpress, Kontakt Frankfurt, Günter Killer, Fahrerexpress-Agentur"
   });
   return (
     <div className="min-h-screen bg-muted">
