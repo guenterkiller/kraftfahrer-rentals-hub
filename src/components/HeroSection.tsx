@@ -79,7 +79,7 @@ const HeroSection = () => {
             asChild
           >
             <Link to="/fahrer-registrierung" aria-label="Als Fahrer registrieren">
-              🚀 Fahrer werden
+              <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚀</span> Fahrer werden
             </Link>
           </Button>
         </div>
