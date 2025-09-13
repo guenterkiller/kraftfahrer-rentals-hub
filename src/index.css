@@ -139,3 +139,14 @@ img {
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom animations for IONOS compatibility */
+@keyframes drive {
+  0%, 100% { transform: translateX(0px); }
+  25% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+}
+
+.animate-drive {
+  animation: drive 2s ease-in-out infinite;
+}
