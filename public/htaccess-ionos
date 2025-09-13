@@ -1,5 +1,4 @@
-Options -MultiViews
-
+# IONOS-kompatible .htaccess Konfiguration
 RewriteEngine On
 
 # Bypass all rewrites for admin-check.html (serve static)
@@ -8,46 +7,77 @@ RewriteRule ^admin-check\.html$ - [L]
 # MIME types for images
 AddType image/jpeg .jpg .jpeg
 AddType image/png .png
+AddType image/webp .webp
+AddType image/svg+xml .svg
 
-# Prevent partial content to avoid 206 issues for crawlers
+# Security headers
 <IfModule mod_headers.c>
   Header set Accept-Ranges none
+  Header always set X-Content-Type-Options nosniff
+  Header always set X-Frame-Options DENY
+  Header always set X-XSS-Protection "1; mode=block"
 </IfModule>
 
-# Force HTTPS first, but with exceptions for admin routes
+# Compression für bessere Performance
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Cache-Kontrolle für statische Assets
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+</IfModule>
+
+# Force HTTPS (IONOS-spezifisch)
 RewriteCond %{HTTPS} off
-RewriteCond %{REQUEST_URI} !^/admin/?$
-RewriteCond %{REQUEST_URI} !^/admin/login/?$
 RewriteRule ^ https://kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
+
+# Remove legacy Fahrerbörse URLs
+Redirect 410 /fahrerboerse
+Redirect 410 /fahrerbörse
+
+# Canonical 301 redirects for legacy .html URLs
+RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
+RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^impressum\.html$ https://kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteRule ^datenschutzerklaerung\.html$ https://kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://kraftfahrer-mieten.com/agb [R=301,L]
+
+# Referenzen variants
+RewriteRule ^referenzen/default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+
+# Generic .html removal
+RewriteCond %{REQUEST_URI} \.html$ [NC]
+RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
+RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
 
 # SPA fallback routing
 RewriteBase /
 RewriteRule ^index\.html$ - [L]
 
-# Explicit SPA routes for admin (handle both HTTP and HTTPS)
+# Admin routes
 RewriteRule ^admin/?$ /index.html [L]
 RewriteRule ^admin/login/?$ /index.html [L]
 
-# Canonical 301 redirects for legacy .html URLs (one hop, HTTPS)
-# IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
-RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^impressum\.html$ https://kraftfahrer-mieten.com/impressum [R=301,L]
-RewriteRule ^datenschutzerklaerung\.html$ https://kraftfahrer-mieten.com/datenschutz [R=301,L]
-RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://kraftfahrer-mieten.com/agb [R=301,L]
-# Referenzen variants (mobile/smartphone/printable .../default.html)
-RewriteRule ^referenzen/default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
-RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
-# Generic: any other .html → sans extension, except admin-check.html
-RewriteCond %{REQUEST_URI} \.html$ [NC]
-RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
-
-# Remove legacy Fahrerbörse URLs
-Redirect gone /fahrerboerse
-Redirect gone /fahrerbörse
-
-# Final SPA fallback for all other routes
+# Catch-all SPA fallback
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
+RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|manifest\.json)
+RewriteCond %{REQUEST_URI} !^/(assets|uploads|public|lovable-uploads)/
 RewriteRule . /index.html [L]
