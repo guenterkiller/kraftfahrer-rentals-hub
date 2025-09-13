@@ -118,6 +118,17 @@ export default {
 						transform: 'translateY(0)',
 						opacity: '1'
 					}
+				},
+				'drive': {
+					'0%': {
+						transform: 'translateX(0px)'
+					},
+					'50%': {
+						transform: 'translateX(6px)'
+					},
+					'100%': {
+						transform: 'translateX(0px)'
+					}
 				}
 			},
 			animation: {

@@ -70,7 +70,7 @@ const HeroSection = () => {
               }}
               aria-label="Fahrer buchen - Zu Buchungsformular scrollen"
             >
-              🚚 Fahrer buchen
+              <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚚</span> Fahrer buchen
             </a>
           </Button>
           <Button 
