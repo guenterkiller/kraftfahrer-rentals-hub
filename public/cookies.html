@@ -1,0 +1,26 @@
+<!doctype html><html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cookie-Richtlinie & Einstellungen – fahrerexpress</title>
+<link rel="stylesheet" href="/styles/legal.css">
+</head><body>
+<main class="legal">
+  <h1>Cookie-Richtlinie</h1>
+  <p>Wir nutzen Cookies, um die Website bereitzustellen (essentiell). Analyse/Marketing setzen wir nur nach Einwilligung.</p>
+  <h2>Cookie-Kategorien</h2>
+  <ul>
+    <li><strong>Essentiell</strong> – erforderlich für Grundfunktionen (z. B. Consent-Status).</li>
+    <li><strong>Analyse</strong> – z. B. anonyme Nutzungsstatistik (optional).</li>
+    <li><strong>Marketing</strong> – z. B. externe Einbindungen/Tracking (optional).</li>
+  </ul>
+
+  <h2>Einwilligungen verwalten</h2>
+  <p><button id="open-consent">Cookie-Einstellungen öffnen</button></p>
+
+  <script>
+    document.getElementById('open-consent')?.addEventListener('click', () => {
+      window.localStorage.setItem('consent:open','1');
+      window.location.href = '/';
+    });
+  </script>
+  <p><a href="/">Zurück zur Startseite</a></p>
+</main></body></html>

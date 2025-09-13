@@ -126,6 +126,9 @@ const ContactSection = () => {
             <Link to="/datenschutz" className="hover:text-primary transition-colors">
               Datenschutz
             </Link>
+            <a href="/cookies.html" className="hover:text-primary transition-colors">
+              Cookie-Einstellungen
+            </a>
           </p>
         </div>
       </div>
