@@ -96,6 +96,7 @@ export type Database = {
           created_at: string
           dokumente: Json | null
           email: string
+          email_opt_out: boolean
           erfahrung_jahre: number | null
           fuehrerscheinklassen: string[] | null
           id: string
@@ -117,6 +118,7 @@ export type Database = {
           created_at?: string
           dokumente?: Json | null
           email: string
+          email_opt_out?: boolean
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string
@@ -138,6 +140,7 @@ export type Database = {
           created_at?: string
           dokumente?: Json | null
           email?: string
+          email_opt_out?: boolean
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string
@@ -152,6 +155,36 @@ export type Database = {
           verfuegbare_regionen?: string[] | null
           verfuegbarkeit?: string | null
           vorname?: string
+        }
+        Relationships: []
+      }
+      job_mail_log: {
+        Row: {
+          created_at: string | null
+          email: string
+          error: string | null
+          fahrer_id: string
+          id: string
+          job_request_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          error?: string | null
+          fahrer_id: string
+          id?: string
+          job_request_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          error?: string | null
+          fahrer_id?: string
+          id?: string
+          job_request_id?: string
+          status?: string
         }
         Relationships: []
       }

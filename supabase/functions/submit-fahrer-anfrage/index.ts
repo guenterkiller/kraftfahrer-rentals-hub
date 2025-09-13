@@ -8,21 +8,57 @@ const corsHeaders = {
 };
 
 interface FahrerAnfrageRequest {
-  vorname: string;
-  nachname: string;
-  email: string;
-  phone: string;
+  // Customer data - flexible format
+  vorname?: string;
+  nachname?: string;
+  customer?: {
+    firstName?: string;
+    lastName?: string;
+    name?: string;
+    email: string;
+    phone: string;
+  };
+  email?: string;
+  phone?: string;
   company?: string;
+  
+  // Job details
+  job?: {
+    company?: string;
+    einsatzort?: string;
+    einsatzbeginn?: string;
+    einsatzdauer?: string;
+    einsatzdauer_wochen?: number;
+    zeitraum?: string;
+    fahrzeugtyp?: string;
+    fuehrerscheinklasse?: string;
+    nachricht?: string;
+  };
   einsatzbeginn?: string;
   einsatzdauer?: string;
   fahrzeugtyp?: string;
-  anforderungen: string[];
-  nachricht: string;
-  datenschutz: boolean;
+  anforderungen?: string[];
+  nachricht?: string;
+  
+  // Consents
+  consents?: {
+    datenschutz_ok?: boolean;
+    newsletter_ok?: boolean;
+    price_confirmed?: boolean;
+    confirmed_at?: string;
+  };
+  datenschutz?: boolean;
   newsletter?: boolean;
-  price_acknowledged: boolean;
+  price_acknowledged?: boolean;
   price_ack_time?: string;
   price_plan?: string;
+  
+  // Meta
+  meta?: {
+    source?: string;
+    ip?: string;
+    userAgent?: string;
+  };
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -54,10 +90,61 @@ const handler = async (req: Request): Promise<Response> => {
     
     const requestData: FahrerAnfrageRequest = await req.json();
     
-    // Validate required fields
-    if (!requestData.vorname || !requestData.nachname || !requestData.email || 
-        !requestData.phone || !requestData.nachricht || !requestData.datenschutz) {
-      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+    // Flexible customer data extraction
+    const vorname = requestData.vorname || requestData.customer?.firstName || requestData.customer?.name?.split(' ')[0] || '';
+    const nachname = requestData.nachname || requestData.customer?.lastName || requestData.customer?.name?.split(' ').slice(1).join(' ') || '';
+    const email = requestData.email || requestData.customer?.email || '';
+    const phone = requestData.phone || requestData.customer?.phone || '';
+    const company = requestData.company || requestData.job?.company || '';
+    
+    // Flexible job data extraction
+    const einsatzort = requestData.job?.einsatzort || requestData.nachricht?.includes("Einsatzort") 
+      ? requestData.nachricht?.split("Einsatzort")[1]?.split(/[,\n]/)[0]?.trim() || "Siehe Nachricht"
+      : "Siehe Nachricht";
+    const fahrzeugtyp = requestData.fahrzeugtyp || requestData.job?.fahrzeugtyp || "Nicht angegeben";
+    const fuehrerscheinklasse = requestData.job?.fuehrerscheinklasse || "C+E";
+    const nachricht = requestData.nachricht || requestData.job?.nachricht || '';
+    
+    // Flexible consent extraction
+    const datenschutz = requestData.datenschutz || requestData.consents?.datenschutz_ok || false;
+    const newsletter = requestData.newsletter || requestData.consents?.newsletter_ok || false;
+    
+    // Validate required fields with clear error messages
+    if (!vorname || !nachname) {
+      return new Response(JSON.stringify({ 
+        error: 'Vor- und Nachname sind erforderlich', 
+        details: 'firstName/lastName or vorname/nachname must be provided' 
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    if (!email || !phone) {
+      return new Response(JSON.stringify({ 
+        error: 'E-Mail und Telefonnummer sind erforderlich',
+        details: 'email and phone must be provided'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    if (!nachricht) {
+      return new Response(JSON.stringify({ 
+        error: 'Nachricht ist erforderlich',
+        details: 'nachricht field must be provided'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    
+    if (!datenschutz) {
+      return new Response(JSON.stringify({ 
+        error: 'datenschutz_ok must be true',
+        details: 'DSGVO consent is required'
+      }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
@@ -65,39 +152,37 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Format zeitraum
     let zeitraumFormatted = "Nach Absprache";
-    if (requestData.einsatzbeginn) {
+    const einsatzbeginn = requestData.einsatzbeginn || requestData.job?.einsatzbeginn;
+    const einsatzdauer = requestData.einsatzdauer || requestData.job?.einsatzdauer;
+    
+    if (einsatzbeginn) {
       try {
-        const date = new Date(requestData.einsatzbeginn + "T08:00:00");
+        const date = new Date(einsatzbeginn + "T08:00:00");
         const isoDateString = date.toISOString();
         
-        zeitraumFormatted = requestData.einsatzdauer 
-          ? `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')} für ${requestData.einsatzdauer}`
+        zeitraumFormatted = einsatzdauer 
+          ? `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')} für ${einsatzdauer}`
           : `Ab ${new Date(isoDateString).toLocaleDateString('de-DE')}`;
       } catch (dateError) {
         console.error("Date conversion error:", dateError);
-        zeitraumFormatted = requestData.einsatzbeginn + (requestData.einsatzdauer ? ` für ${requestData.einsatzdauer}` : "");
+        zeitraumFormatted = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
       }
-    } else if (requestData.einsatzdauer) {
-      zeitraumFormatted = `Dauer: ${requestData.einsatzdauer}`;
+    } else if (einsatzdauer) {
+      zeitraumFormatted = `Dauer: ${einsatzdauer}`;
     }
-
-    // Extract location from message or use default
-    const einsatzort = requestData.nachricht.includes("Einsatzort") 
-      ? requestData.nachricht.split("Einsatzort")[1]?.split(/[,\n]/)[0]?.trim() || "Siehe Nachricht"
-      : "Siehe Nachricht";
 
     // Prepare data for database insert
     const jobRequestData = {
-      customer_name: `${requestData.vorname} ${requestData.nachname}`.trim(),
-      customer_email: requestData.email.trim(),
-      customer_phone: requestData.phone.trim(),
-      company: requestData.company?.trim() || null,
+      customer_name: `${vorname} ${nachname}`.trim(),
+      customer_email: email.trim(),
+      customer_phone: phone.trim(),
+      company: company?.trim() || null,
       einsatzort: einsatzort.trim(),
       zeitraum: zeitraumFormatted,
-      fahrzeugtyp: requestData.fahrzeugtyp || "Nicht angegeben",
-      fuehrerscheinklasse: "C+E",
-      besonderheiten: requestData.anforderungen.length > 0 ? requestData.anforderungen.join(", ") : null,
-      nachricht: requestData.nachricht.trim(),
+      fahrzeugtyp: fahrzeugtyp,
+      fuehrerscheinklasse: fuehrerscheinklasse,
+      besonderheiten: requestData.anforderungen?.length > 0 ? requestData.anforderungen.join(", ") : null,
+      nachricht: nachricht.trim(),
       status: 'open'
     };
 
@@ -152,20 +237,20 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
         body: {
-          vorname: requestData.vorname.trim(),
-          nachname: requestData.nachname.trim(),
-          email: requestData.email.trim(),
-          phone: requestData.phone.trim(),
-          company: requestData.company?.trim() || '',
-          message: requestData.nachricht.trim(),
-          einsatzbeginn: requestData.einsatzbeginn || '',
-          einsatzdauer: requestData.einsatzdauer || '',
-          fahrzeugtyp: requestData.fahrzeugtyp || '',
-          spezialanforderungen: requestData.anforderungen,
-          datenschutz: requestData.datenschutz,
-          newsletter: requestData.newsletter || false,
-          price_acknowledged: requestData.price_acknowledged,
-          price_ack_time: requestData.price_ack_time || new Date().toISOString(),
+          vorname: vorname.trim(),
+          nachname: nachname.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          company: company?.trim() || '',
+          message: nachricht.trim(),
+          einsatzbeginn: einsatzbeginn || '',
+          einsatzdauer: einsatzdauer || '',
+          fahrzeugtyp: fahrzeugtyp || '',
+          spezialanforderungen: requestData.anforderungen || [],
+          datenschutz: datenschutz,
+          newsletter: newsletter,
+          price_acknowledged: requestData.price_acknowledged || requestData.consents?.price_confirmed || false,
+          price_ack_time: requestData.price_ack_time || requestData.consents?.confirmed_at || new Date().toISOString(),
           price_plan: requestData.price_plan || 'Standard LKW-Fahrer'
         }
       });
