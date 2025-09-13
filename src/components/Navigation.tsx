@@ -71,7 +71,7 @@ const Navigation = () => {
                 }}
                 aria-label="Fahrer buchen - Zum Formular"
               >
-                <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚚</span> Fahrer buchen
+                <span className="inline-block animate-drive">🚚</span> Fahrer buchen
               </Link>
             </Button>
           </div>
@@ -130,7 +130,7 @@ const Navigation = () => {
                   role="menuitem"
                   aria-label="Fahrer buchen - Zum Formular"
                 >
-                  <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚚</span> Fahrer buchen
+                  <span className="inline-block animate-drive">🚚</span> Fahrer buchen
                 </Link>
               </Button>
             </div>
