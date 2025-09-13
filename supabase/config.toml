@@ -26,3 +26,6 @@ verify_jwt = false
 
 [functions.get-document-preview]
 verify_jwt = false
+
+[functions.broadcast-job-to-drivers]
+verify_jwt = false

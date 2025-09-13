@@ -120,27 +120,31 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Job request saved:", jobRequest);
 
-    // Send job alert emails to all drivers
+    // Send broadcast to drivers with new system
     if (jobRequest && jobRequest.id) {
       try {
-        const alertResponse = await supabase.functions.invoke('send-job-alert-emails', {
-          body: {
-            job_id: jobRequest.id,
-            einsatzort: jobRequestData.einsatzort,
-            zeitraum: jobRequestData.zeitraum,
-            fahrzeugtyp: jobRequestData.fahrzeugtyp,
-            fuehrerscheinklasse: jobRequestData.fuehrerscheinklasse,
-            besonderheiten: jobRequestData.besonderheiten,
-            customer_name: jobRequestData.customer_name,
-            customer_email: jobRequestData.customer_email
-          }
+        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/broadcast-job-to-drivers`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-internal-fn": Deno.env.get("INTERNAL_FN_SECRET")!,
+          },
+          body: JSON.stringify({
+            jobRequestId: jobRequest.id,
+            job: {
+              fahrzeugtyp: jobRequestData.fahrzeugtyp,
+              fuehrerscheinklasse: jobRequestData.fuehrerscheinklasse,
+            },
+            customer: {
+              name: jobRequestData.customer_name,
+              email: jobRequestData.customer_email,
+              phone: jobRequestData.customer_phone,
+            },
+          }),
         });
-
-        if (alertResponse.error) {
-          console.error("Error sending job alert emails:", alertResponse.error);
-        }
-      } catch (emailError) {
-        console.error("Error with job alert emails:", emailError);
+        console.log("Driver broadcast initiated");
+      } catch (broadcastError) {
+        console.error("Error with driver broadcast:", broadcastError);
       }
     }
 
