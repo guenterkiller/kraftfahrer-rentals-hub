@@ -161,30 +161,45 @@ export type Database = {
       job_mail_log: {
         Row: {
           created_at: string | null
+          driver_snapshot: Json | null
           email: string
           error: string | null
           fahrer_id: string
           id: string
           job_request_id: string
+          mail_template: string | null
+          meta: Json | null
+          reply_to: string | null
           status: string
+          subject: string | null
         }
         Insert: {
           created_at?: string | null
+          driver_snapshot?: Json | null
           email: string
           error?: string | null
           fahrer_id: string
           id?: string
           job_request_id: string
+          mail_template?: string | null
+          meta?: Json | null
+          reply_to?: string | null
           status: string
+          subject?: string | null
         }
         Update: {
           created_at?: string | null
+          driver_snapshot?: Json | null
           email?: string
           error?: string | null
           fahrer_id?: string
           id?: string
           job_request_id?: string
+          mail_template?: string | null
+          meta?: Json | null
+          reply_to?: string | null
           status?: string
+          subject?: string | null
         }
         Relationships: []
       }
@@ -372,6 +387,21 @@ export type Database = {
       is_admin_user: {
         Args: { user_uuid?: string }
         Returns: boolean
+      }
+      log_job_mail: {
+        Args: {
+          p_driver_snapshot?: Json
+          p_email: string
+          p_error?: string
+          p_fahrer_id: string
+          p_job_request_id: string
+          p_mail_template?: string
+          p_meta?: Json
+          p_reply_to?: string
+          p_status: string
+          p_subject?: string
+        }
+        Returns: undefined
       }
     }
     Enums: {

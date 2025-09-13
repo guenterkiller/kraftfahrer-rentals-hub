@@ -6,8 +6,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 const resend = new Resend(Deno.env.get("RESEND_API_KEY")!);
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SR = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const MAIL_FROM = Deno.env.get("MAIL_FROM")!;
-const ADMIN_TO = Deno.env.get("ADMIN_TO")!;
+const MAIL_FROM = Deno.env.get("MAIL_FROM") || "FahrerExpress <no-reply@kraftfahrer-mieten.com>";
+const ADMIN_TO = Deno.env.get("ADMIN_TO") || "info@kraftfahrer-mieten.com";
+const REPLY_TO = Deno.env.get("REPLY_TO") || "info@kraftfahrer-mieten.com";
 const INTERNAL_SECRET = Deno.env.get("INTERNAL_FN_SECRET")!;
 
 const supa = createClient(
@@ -106,21 +107,29 @@ serve(async (req) => {
           ...(ADMIN_TO && { bcc: [ADMIN_TO] }) // Optional admin copy
         });
         sent++;
-        await supa.from("job_mail_log").insert({ 
-          job_request_id: jobRequestId, 
-          fahrer_id: d.id, 
-          email, 
-          status: "sent" 
+        await supa.rpc("log_job_mail", {
+          p_job_request_id: jobRequestId,
+          p_fahrer_id: d.id,
+          p_email: email,
+          p_status: "sent",
+          p_subject: subject,
+          p_mail_template: "driver_broadcast",
+          p_reply_to: customer.email,
+          p_driver_snapshot: { vorname: d.vorname, nachname: d.nachname, fuehrerscheinklassen: d.fuehrerscheinklassen },
+          p_meta: { fahrzeugtyp: job.fahrzeugtyp, zeitraum: jr?.zeitraum, einsatzort: jr?.einsatzort }
         });
       } catch (e) {
         failed++;
         const errorMsg = (e && (e as any).message) ? (e as any).message : String(e);
-        await supa.from("job_mail_log").insert({ 
-          job_request_id: jobRequestId, 
-          fahrer_id: d.id, 
-          email, 
-          status: "failed", 
-          error: errorMsg 
+        await supa.rpc("log_job_mail", {
+          p_job_request_id: jobRequestId,
+          p_fahrer_id: d.id,
+          p_email: email,
+          p_status: "failed",
+          p_error: errorMsg,
+          p_subject: subject,
+          p_mail_template: "driver_broadcast",
+          p_reply_to: customer.email
         });
         console.error("driver mail failed", email, e);
       }
