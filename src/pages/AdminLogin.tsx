@@ -23,28 +23,61 @@ const AdminLogin = () => {
   const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 
   useEffect(() => {
-    // Bereits eingeloggt? -> Weiterleiten zum Dashboard
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user?.email) navigate("/admin");
-    });
+    // Check for existing admin session
+    const adminSession = localStorage.getItem('adminSession');
+    if (adminSession) {
+      try {
+        const session = JSON.parse(adminSession);
+        // Check if session is less than 24 hours old
+        if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
+          navigate("/admin");
+        } else {
+          localStorage.removeItem('adminSession');
+        }
+      } catch (e) {
+        localStorage.removeItem('adminSession');
+      }
+    }
   }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
+      console.log('Attempting admin login for:', email);
+      
       const { data, error } = await supabase.functions.invoke("check-admin-login", {
         body: { email, password },
       });
-      if (error || !data?.success) throw new Error(data?.message || error?.message || "Login fehlgeschlagen");
+      
+      console.log('Edge function response:', { data, error });
+      
+      if (error) {
+        console.error('Edge function error:', error);
+        throw new Error(error.message || "Verbindungsfehler zum Server");
+      }
+      
+      if (!data?.success) {
+        console.error('Login failed:', data?.error);
+        throw new Error(data?.error || "Login fehlgeschlagen");
+      }
 
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
-      if (authError) throw authError;
+      // Speichere Admin-Session im localStorage (da kein Supabase Auth User)
+      localStorage.setItem('adminSession', JSON.stringify({
+        email: email,
+        isAdmin: true,
+        loginTime: Date.now()
+      }));
 
       toast({ title: "Erfolgreich angemeldet" });
       navigate("/admin");
     } catch (err: any) {
-      toast({ title: "Login fehlgeschlagen", description: err.message || "Ungültige Anmeldedaten", variant: "destructive" });
+      console.error('Login error:', err);
+      toast({ 
+        title: "Login fehlgeschlagen", 
+        description: err.message || "Ungültige Anmeldedaten", 
+        variant: "destructive" 
+      });
     } finally {
       setLoading(false);
     }

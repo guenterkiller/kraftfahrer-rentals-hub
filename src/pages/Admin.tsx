@@ -48,9 +48,6 @@ const Admin = () => {
   });
 
   const [user, setUser] = useState<User | null>(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
@@ -126,7 +123,7 @@ const Admin = () => {
   const handleAutoLogout = async () => {
     if (user) {
       await logAdminEvent('auto_logout', user.email);
-      await supabase.auth.signOut();
+      localStorage.removeItem('adminSession');
       setUser(null);
       setFahrer([]);
       setDocuments({});
@@ -141,102 +138,41 @@ const Admin = () => {
     }
   };
 
-  const checkAuth = async () => {
-    console.log("🔍 Admin: Prüfe Authentifizierung...");
+  const checkAuth = () => {
+    console.log("🔍 Admin: Prüfe localStorage Authentifizierung...");
     
-    // Prüfe Session erst
-    const { data: { session } } = await supabase.auth.getSession();
-    console.log("🔐 Admin: Session Check:", session);
-    
-    if (session?.user && session.user.email === ADMIN_EMAIL) {
-      console.log("✅ Admin: Session gefunden für:", session.user.email);
-      setUser(session.user);
-      loadFahrerData();
+    const adminSession = localStorage.getItem('adminSession');
+    if (!adminSession) {
+      console.log("❌ Admin: Keine Session gefunden");
+      navigate('/admin/login');
       return;
     }
-    
-    // Fallback: getUser() wenn keine Session
-    const { data: { user }, error } = await supabase.auth.getUser();
-    console.log("🔐 Admin: getUser() Result:", { user, error });
-    console.log("🔐 Admin: User Email:", user?.email);
-    console.log("🔐 Admin: Expected Email:", ADMIN_EMAIL);
-    console.log("🔐 Admin: Email Match:", user?.email === ADMIN_EMAIL);
-    
-    if (user && user.email === ADMIN_EMAIL) {
-      console.log("✅ Admin: User authentifiziert:", user.email);
-      setUser(user);
-      loadFahrerData();
-    } else {
-      console.log("❌ Admin: Keine gültige Authentifizierung");
-      navigate('/admin/login');
-    }
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
 
     try {
-      // Prüfe zuerst über Edge Function
-      const { data, error } = await supabase.functions.invoke('check-admin-login', {
-        body: { email, password }
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (data?.success) {
-        // Führe echte Supabase Auth-Anmeldung durch
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
-
-        console.log("🔐 Admin: Supabase Auth Anmeldung:", { authData, authError });
-
-        if (authError) {
-          console.error("❌ Admin: Supabase Auth Fehler:", authError);
-          // Fallback: Verwende simulierte Session
-          const adminUser = {
-            id: 'admin',
-            email: data.user.email,
-            aud: 'authenticated',
-            role: 'authenticated',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          } as User;
-          
-          setUser(adminUser);
+      const session = JSON.parse(adminSession);
+      console.log("🔐 Admin: Session gefunden:", session);
+      
+      // Check if session is valid and not expired (24 hours)
+      if (session.isAdmin && session.email === ADMIN_EMAIL) {
+        if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
+          console.log("✅ Admin: Session gültig für:", session.email);
+          setUser({ email: session.email } as User);
+          loadFahrerData();
+          return;
         } else {
-          // Verwende echte Auth-Session
-          setUser(authData.user);
-          console.log("✅ Admin: Echte Auth-Session erstellt für:", authData.user.email);
+          console.log("⏰ Admin: Session abgelaufen");
+          localStorage.removeItem('adminSession');
         }
-
-        // Log erfolgreiches Login
-        await logAdminEvent('login', authData?.user?.email || email);
-        
-        loadFahrerData();
-        loadJobRequests();
-        toast({
-          title: "Erfolgreich angemeldet",
-          description: "Willkommen im Admin-Bereich"
-        });
-      } else {
-        throw new Error("Login fehlgeschlagen");
       }
-    } catch (error: any) {
-      console.error('Login error:', error);
-      toast({
-        title: "Login fehlgeschlagen",
-        description: error.message || "Ungültige Anmeldedaten",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
+    } catch (e) {
+      console.error("❌ Admin: Session parsing Fehler:", e);
+      localStorage.removeItem('adminSession');
     }
+    
+    console.log("❌ Admin: Ungültige oder abgelaufene Session");
+    navigate('/admin/login');
   };
+
 
   const loadJobRequests = async () => {
     try {
@@ -421,7 +357,8 @@ const Admin = () => {
       await logAdminEvent('manual_logout', user.email);
     }
     
-    await supabase.auth.signOut();
+    // Remove localStorage session instead of Supabase auth
+    localStorage.removeItem('adminSession');
     setUser(null);
     setFahrer([]);
     setDocuments({});
@@ -677,44 +614,9 @@ const Admin = () => {
   };
 
   if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-center">Admin Login</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <Input
-                  type="email"
-                  placeholder="E-Mail"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <Input
-                  type="password"
-                  placeholder="Passwort"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Button 
-                type="submit" 
-                className="w-full" 
-                disabled={loading}
-              >
-                {loading ? "Anmelden..." : "Anmelden"}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    // This should not happen as authentication is handled by AdminLogin page
+    navigate('/admin/login');
+    return null;
   }
 
   return (
