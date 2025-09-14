@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,24 +20,25 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
-
   useEffect(() => {
     // Check for existing admin session
-    const adminSession = localStorage.getItem('adminSession');
-    if (adminSession) {
-      try {
-        const session = JSON.parse(adminSession);
-        // Check if session is less than 24 hours old
-        if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
-          navigate("/admin");
-        } else {
-          localStorage.removeItem('adminSession');
+    const checkExistingSession = async () => {
+      const { data: session } = await supabase.auth.getSession();
+      if (session.session) {
+        // Check if user has admin role
+        try {
+          const { data, error } = await supabase.functions.invoke("admin-auth-check", {
+            headers: { Authorization: `Bearer ${session.session.access_token}` },
+          });
+          if (data?.success && !error) {
+            navigate("/admin");
+          }
+        } catch (e) {
+          // Session invalid, stay on login page
         }
-      } catch (e) {
-        localStorage.removeItem('adminSession');
       }
-    }
+    };
+    checkExistingSession();
   }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -46,23 +47,34 @@ const AdminLogin = () => {
     try {
       console.log('Attempting admin login for:', email);
       
-      const { data, error } = await supabase.functions.invoke("check-admin-login", {
-        body: { email, password },
+      // Sign in with Supabase Auth
+      const { error: authError } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password 
       });
       
-      console.log('Edge function response:', { data, error });
-      
-      if (error) {
-        console.error('Edge function error:', error);
-        throw new Error(error.message || "Verbindungsfehler zum Server");
-      }
-      
-      if (!data?.success) {
-        console.error('Login failed:', data?.error);
-        throw new Error(data?.error || "Login fehlgeschlagen");
+      if (authError) {
+        throw new Error(authError.message || "Anmeldung fehlgeschlagen");
       }
 
-      // Speichere Admin-Session im localStorage (da kein Supabase Auth User)
+      // Get session token and check admin role
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      
+      if (!token) {
+        throw new Error("Keine Session gefunden");
+      }
+
+      const { data, error } = await supabase.functions.invoke("admin-auth-check", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (error || !data?.success) {
+        console.error('Admin check failed:', error || data?.error);
+        await supabase.auth.signOut(); // Sign out if not admin
+        throw new Error("Keine Admin-Berechtigung");
+      }
+
       localStorage.setItem('adminSession', JSON.stringify({
         email: email,
         isAdmin: true,
@@ -84,33 +96,33 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      <div className={`w-full text-xs md:text-sm border-b px-3 py-2 ${envOk ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
-        {envOk ? '✅ Supabase ENV: konfiguriert' : '❌ Supabase Config fehlt'}
-        <span className="ml-2">URL: {SUPABASE_URL ? 'gesetzt' : 'leer'} | ANON: {SUPABASE_PUBLISHABLE_KEY ? 'gesetzt' : 'leer'}</span>
-      </div>
-
-      <div className="flex-1 flex items-center justify-center px-4">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-center">Admin Login</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <Input type="email" placeholder="E-Mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
-              <Input type="password" placeholder="Passwort" value={password} onChange={(e) => setPassword(e.target.value)} required />
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Anmelden..." : "Anmelden"}
-              </Button>
-              {!envOk && (
-                <p className="text-xs text-red-600 mt-2">
-                  Hinweis: In Lovable werden keine .env-Dateien genutzt. Die Supabase Publishable Keys dürfen im Frontend liegen. Stellen Sie sicher, dass die Auth-URLs im Supabase-Dashboard korrekt konfiguriert sind.
-                </p>
-              )}
-            </form>
-          </CardContent>
-        </Card>
-      </div>
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-center">Admin Login</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <Input 
+              type="email" 
+              placeholder="E-Mail" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              required 
+            />
+            <Input 
+              type="password" 
+              placeholder="Passwort" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Anmelden..." : "Anmelden"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };

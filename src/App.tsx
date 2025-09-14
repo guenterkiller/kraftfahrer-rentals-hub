@@ -16,6 +16,7 @@ import Vermittlung from "./pages/Vermittlung";
 import Versicherung from "./pages/Versicherung";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
+import AdminRoute from "./components/AdminRoute";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +35,7 @@ const App = () => (
           <Route path="/wissenswertes" element={<Wissenswertes />} />
           <Route path="/projekte" element={<Projekte />} />
           <Route path="/versicherung" element={<Versicherung />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />
