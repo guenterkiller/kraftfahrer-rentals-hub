@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -84,6 +85,13 @@ const Index = () => {
         <section id="contact" aria-label="Kontakt" className="scroll-mt-16">
           <ContactSection />
         </section>
+        
+        {/* Temporärer Admin-Link */}
+        <div className="bg-red-100 p-4 text-center">
+          <Link to="/admin/login" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+            🔐 Admin Login (Temporär)
+          </Link>
+        </div>
       </main>
     </div>
   );
