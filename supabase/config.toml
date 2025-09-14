@@ -1,5 +1,8 @@
 project_id = "hxnabnsoffzevqhruvar"
 
+[functions.admin-auth-check]
+verify_jwt = false
+
 [functions.send-job-alert-emails]
 verify_jwt = false
 
