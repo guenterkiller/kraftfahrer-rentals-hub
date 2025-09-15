@@ -1,10 +1,35 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Shield } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showAdminLink, setShowAdminLink] = useState(false);
+
+  // Check if current user is admin
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email === "guenter.killer@t-online.de") {
+        setShowAdminLink(true);
+      }
+    };
+    
+    checkAdminAccess();
+    
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user?.email === "guenter.killer@t-online.de") {
+        setShowAdminLink(true);
+      } else {
+        setShowAdminLink(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   // Close mobile menu on escape key press
   useEffect(() => {
@@ -74,6 +99,19 @@ const Navigation = () => {
                 <span className="inline-block animate-drive">🚚</span> Fahrer buchen
               </Link>
             </Button>
+            {showAdminLink && (
+              <Button 
+                size="sm" 
+                variant="outline"
+                className="border-red-500 text-red-600 hover:bg-red-50 transition-all duration-300 focus:ring-2 focus:ring-red-500/50 focus:outline-none" 
+                asChild
+              >
+                <Link to="/admin" aria-label="Admin-Bereich">
+                  <Shield className="w-4 h-4 mr-1" />
+                  Admin
+                </Link>
+              </Button>
+            )}
           </div>
           
           {/* Mobile Menu Button */}
@@ -133,6 +171,23 @@ const Navigation = () => {
                   <span className="inline-block animate-drive">🚚</span> Fahrer buchen
                 </Link>
               </Button>
+              {showAdminLink && (
+                <Button 
+                  variant="outline"
+                  className="w-full border-red-500 text-red-600 hover:bg-red-50 transition-all duration-300 focus:ring-2 focus:ring-red-500/50 focus:outline-none" 
+                  asChild
+                >
+                  <Link 
+                    to="/admin"
+                    onClick={() => setIsMenuOpen(false)}
+                    role="menuitem"
+                    aria-label="Admin-Bereich"
+                  >
+                    <Shield className="w-4 h-4 mr-1" />
+                    Admin
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         )}

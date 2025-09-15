@@ -60,6 +60,7 @@ const Admin = () => {
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [selectedDriverEmail, setSelectedDriverEmail] = useState<string>("");
   const [assigningDriver, setAssigningDriver] = useState(false);
+  const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -349,6 +350,51 @@ const Admin = () => {
       });
     } finally {
       setAssigningDriver(false);
+    }
+  };
+
+  const handleApproveDriver = async (driverId: string) => {
+    console.log('🚀 Starting driver approval process for:', driverId);
+    setApprovingDriver(driverId);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('approve-driver-and-send-jobs', {
+        body: { driverId }
+      });
+
+      if (error) {
+        console.error('❌ Error approving driver:', error);
+        toast({
+          title: "Fehler beim Freischalten",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Driver approved successfully:', data);
+      
+      // Update local state
+      setFahrer(prev => 
+        prev.map(f => 
+          f.id === driverId ? { ...f, status: 'active' } : f
+        )
+      );
+
+      toast({
+        title: "Fahrer erfolgreich freigeschaltet",
+        description: `Fahrer wurde freigeschaltet und ${data.sentJobs || 0} aktuelle Jobs per E-Mail gesendet.`,
+      });
+
+    } catch (error) {
+      console.error('❌ Unexpected error in handleApproveDriver:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setApprovingDriver(null);
     }
   };
 
@@ -683,7 +729,21 @@ const Admin = () => {
                       <TableCell>
                         {new Date(f.created_at).toLocaleDateString('de-DE')}
                       </TableCell>
-                      <TableCell>{getStatusBadge(f.status)}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(f.status)}
+                          {f.status === 'pending' && (
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                              onClick={() => handleApproveDriver(f.id)}
+                              disabled={approvingDriver === f.id}
+                            >
+                              {approvingDriver === f.id ? "Wird freigeschaltet..." : "Freischalten & Jobs senden"}
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <Button
                           size="sm"

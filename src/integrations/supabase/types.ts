@@ -304,6 +304,33 @@ export type Database = {
         }
         Relationships: []
       }
+      mail_log: {
+        Row: {
+          created_at: string
+          error_message: string | null
+          id: string
+          recipient: string
+          success: boolean
+          template: string
+        }
+        Insert: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          recipient: string
+          success?: boolean
+          template: string
+        }
+        Update: {
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          recipient?: string
+          success?: boolean
+          template?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null

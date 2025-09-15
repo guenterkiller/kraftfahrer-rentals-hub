@@ -85,14 +85,18 @@ const Index = () => {
         <section id="contact" aria-label="Kontakt" className="scroll-mt-16">
           <ContactSection />
         </section>
-        
-        {/* Temporärer Admin-Link */}
-        <div className="bg-red-100 p-4 text-center">
-          <Link to="/admin/login" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-            🔐 Admin Login (Temporär)
-          </Link>
-        </div>
       </main>
+      
+      {/* Fallback Admin-Badge (fixed position, bottom right) */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <Link 
+          to="/admin" 
+          className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-xs rounded-lg shadow-lg hover:bg-red-700 transition-colors"
+          title="Admin-Bereich (nur für Günter Killer)"
+        >
+          🔐 Admin
+        </Link>
+      </div>
     </div>
   );
 };

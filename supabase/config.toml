@@ -32,3 +32,6 @@ verify_jwt = false
 
 [functions.broadcast-job-to-drivers]
 verify_jwt = false
+
+[functions.approve-driver-and-send-jobs]
+verify_jwt = false
