@@ -824,7 +824,7 @@ const Admin = () => {
                             </Button>
                           )}
                           {(f.status === 'approved' || f.status === 'active') && (
-                            <span className="text-green-600 font-medium">✓ Aktiv</span>
+                            <span className="text-green-600 font-medium">✓ Genehmigt</span>
                           )}
                         </div>
                       </TableCell>
