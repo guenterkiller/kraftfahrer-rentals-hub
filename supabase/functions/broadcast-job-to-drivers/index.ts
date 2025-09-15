@@ -74,7 +74,7 @@ const handler = async (req: Request): Promise<Response> => {
       .from('fahrer_profile')
       .select('*')
       .in('status', ['active', 'approved'])
-      .neq('email_opt_out', true);
+      .or('email_opt_out.is.null,email_opt_out.eq.false');
 
     if (driversError) {
       console.error('❌ Error fetching drivers:', driversError);
