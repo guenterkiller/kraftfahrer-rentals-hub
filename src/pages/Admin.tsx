@@ -88,7 +88,7 @@ const Admin = () => {
       
       const timer = setTimeout(() => {
         handleAutoLogout();
-      }, 15 * 60 * 1000); // 15 Minuten
+      }, 60 * 60 * 1000); // 60 Minuten statt 15 Minuten
       
       setInactivityTimer(timer);
     };
@@ -735,21 +735,24 @@ const Admin = () => {
                       <TableCell>
                         {new Date(f.created_at).toLocaleDateString('de-DE')}
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {getStatusBadge(f.status)}
-                          {f.status === 'pending' && (
-                            <Button
-                              size="sm"
-                              className="bg-green-600 hover:bg-green-700 text-white"
-                              onClick={() => handleApproveDriver(f.id)}
-                              disabled={approvingDriver === f.id}
-                            >
-                              {approvingDriver === f.id ? "Wird freigeschaltet..." : "Freischalten & Jobs senden"}
-                            </Button>
-                          )}
-                        </div>
-                      </TableCell>
+                       <TableCell>
+                         <div className="flex items-center gap-2">
+                           {getStatusBadge(f.status)}
+                           {f.status === 'pending' && (
+                             <Button
+                               size="sm"
+                               className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 shadow-sm"
+                               onClick={() => handleApproveDriver(f.id)}
+                               disabled={approvingDriver === f.id}
+                             >
+                               {approvingDriver === f.id ? "✓ Freischaltung läuft..." : "🚀 Sofort freischalten"}
+                             </Button>
+                           )}
+                           {f.status === 'approved' && (
+                             <span className="text-green-600 font-medium">✓ Aktiv</span>
+                           )}
+                         </div>
+                       </TableCell>
                       <TableCell>
                         <Button
                           size="sm"

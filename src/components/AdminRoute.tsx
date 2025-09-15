@@ -18,7 +18,14 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           const session = JSON.parse(adminSession);
           const isValidSession = session.isAdmin && 
                                session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 24 * 60 * 60 * 1000; // 24 hours
+                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage statt 24 Stunden
+          
+          if (isValidSession) {
+            // Session aktualisieren um automatische Verlängerung zu ermöglichen
+            session.loginTime = Date.now();
+            localStorage.setItem('adminSession', JSON.stringify(session));
+          }
+          
           setIsAdmin(isValidSession);
         } else {
           setIsAdmin(false);
@@ -30,6 +37,13 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     };
 
     checkAdminAccess();
+    
+    // Regelmäßige Session-Überprüfung alle 5 Minuten
+    const sessionCheckInterval = setInterval(checkAdminAccess, 5 * 60 * 1000);
+    
+    return () => {
+      clearInterval(sessionCheckInterval);
+    };
   }, []);
 
   if (isAdmin === null) {
