@@ -422,34 +422,81 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to applicant
     const confirmationEmailResponse = await resend.emails.send({
-      from: "Fahrerexpress <noreply@kraftfahrer-mieten.com>",
+      from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
       to: [requestData.email],
-      subject: "Vielen Dank für Ihre Registrierung als Fahrer",
+      subject: "Ihre Fahrerregistrierung bei der Fahrerexpress-Agentur – Willkommen im Team",
       html: `
-        <h2>Vielen Dank für Ihre Anmeldung!</h2>
-
-        <p>Lieber Herr/Frau ${insertData.vorname} ${insertData.nachname},</p>
-
-        <p>vielen Dank, dass Sie sich bei uns als selbstständiger Kraftfahrer mit eigenem Gewerbe registriert haben.</p>
-
-        <p>Wir haben Ihre Angaben erhalten und melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind.</p>
-
-        <p>Falls Sie Ihre Angaben korrigieren oder ergänzen möchten, schreiben Sie uns bitte an:<br>
-        📧 info@kraftfahrer-mieten.com<br>
-        unter Angabe Ihres Namens und Ihrer Telefonnummer.</p>
-
-        <hr style="margin: 20px 0;">
-
-        <p><strong>📌 Wichtiger Hinweis zur Vermittlungsprovision:</strong><br>
-        Sie haben der Vermittlungsprovision in Höhe von 15 % auf vermittelte Einsätze zugestimmt.<br>
-        Die Abrechnung erfolgt je nach Einsatz monatlich oder fallbezogen.</p>
-
-        <p>Bei Rückfragen erreichen Sie uns jederzeit:<br>
-        📧 info@kraftfahrer-mieten.com<br>
-        📞 01577 1442285</p>
-
-        <p>Mit freundlichen Grüßen<br>
-        Ihr Fahrerexpress-Team</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">🚛 Willkommen bei der Fahrerexpress-Agentur</h2>
+          
+          <p>Sehr geehrte/r ${insertData.vorname} ${insertData.nachname},</p>
+          
+          <p>vielen Dank, dass Sie sich bei uns als selbstständiger Kraftfahrer mit eigenem Gewerbe registriert haben. <strong>Ihre Registrierung war erfolgreich!</strong></p>
+          
+          <div style="background-color: #e8f5e8; padding: 15px; margin: 20px 0; border-left: 4px solid #27ae60; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #27ae60;">✅ Nächste Schritte</h3>
+            <p style="margin: 0;">
+              Wir haben Ihre Angaben erhalten und melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind. Halten Sie Ihr Telefon bereit!
+            </p>
+          </div>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">💼 Vermittlung & Provision</h3>
+            <p style="margin-bottom: 15px;">
+              <strong>Wie funktioniert unsere Vermittlung?</strong><br>
+              Wenn Sie sich über unsere Seite als selbstständiger Fahrer eintragen, vermitteln wir Sie an Auftraggeber in ganz Deutschland.
+            </p>
+            
+            <div style="background-color: #fff3cd; padding: 12px; margin: 15px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
+              <p style="margin: 0; font-weight: 500; color: #856404;">
+                <strong>💰 Vermittlungskosten für Fahrer</strong><br>
+                Für die erfolgreiche Vermittlung eines Einsatzes berechnen wir nur dem vermittelten Fahrer eine Provision in Höhe von <strong>15 % des Nettohonorars</strong>. Die Vermittlung ist für Auftraggeber vollständig kostenlos.
+              </p>
+            </div>
+            
+            <ul style="margin: 15px 0; padding-left: 20px;">
+              <li><strong>Wann wird die Provision fällig?</strong> Die Provision wird ausschließlich bei tatsächlichem Einsatz fällig und kann entweder per Einbehalt oder separater Rechnung abgerechnet werden.</li>
+              <li><strong>Wie läuft die Abrechnung?</strong> Die Provision wird nach Einsatzabschluss per Rechnung gestellt – entweder pro Auftrag oder gesammelt am Monatsende.</li>
+              <li><strong>Gibt es eine Mindestlaufzeit?</strong> Nein. Sie können Ihre Teilnahme jederzeit beenden. Es entstehen keine Fixkosten oder Verpflichtungen.</li>
+            </ul>
+            
+            <div style="background-color: #d4edda; padding: 12px; margin: 15px 0; border-left: 4px solid #28a745; border-radius: 4px;">
+              <p style="margin: 0; color: #155724; font-weight: 500;">
+                <strong>✅ Was ist NICHT provisionspflichtig?</strong><br>
+                • Direktaufträge außerhalb unserer Vermittlung<br>
+                • Einsätze ohne vorherige Abstimmung mit Fahrerexpress
+              </p>
+            </div>
+          </div>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">📝 Ihre Daten ändern</h3>
+            <p style="margin: 0;">
+              Falls Sie Ihre Angaben korrigieren oder ergänzen möchten, schreiben Sie uns bitte an:<br>
+              📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: #3498db; text-decoration: none;">info@kraftfahrer-mieten.com</a><br>
+              unter Angabe Ihres Namens und Ihrer Telefonnummer.
+            </p>
+          </div>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">📞 Kontakt</h3>
+            <p style="margin: 0;">
+              Für Rückfragen zur Abrechnung oder allgemeine Fragen stehen wir Ihnen jederzeit zur Verfügung:<br>
+              📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: #3498db; text-decoration: none;">info@kraftfahrer-mieten.com</a><br>
+              📞 01577 1442285
+            </p>
+          </div>
+          
+          <p style="margin-top: 30px;">
+            Mit freundlichen Grüßen<br>
+            <strong>Ihr Fahrerexpress-Team</strong>
+          </p>
+          
+          <hr style="border: none; border-top: 1px solid #dee2e6; margin: 30px 0;">
+          <p style="font-size: 12px; color: #6c757d; text-align: center;">
+            Fahrerexpress-Agentur | info@kraftfahrer-mieten.com | 01577 1442285
+          </p>
+        </div>
       `,
     });
 
