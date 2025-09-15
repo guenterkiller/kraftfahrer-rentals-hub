@@ -1,0 +1,1 @@
+DELETE FROM job_requests WHERE id = 'f6346bf2-5f77-42d2-865e-dfb866ca4bb4';
