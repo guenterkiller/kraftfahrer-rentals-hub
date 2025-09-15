@@ -49,21 +49,33 @@ const AdminLogin = () => {
       
       // Simple admin check
       const ADMIN_EMAIL = "guenter.killer@t-online.de";
-      const ADMIN_PASSWORD = "admin123"; // Temporäres Passwort
+      const ADMIN_PASSWORD = "admin123";
       
       if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
         throw new Error("Ungültige Anmeldedaten");
       }
 
+      console.log('Login successful, storing session...');
+      
       // Store admin session info
-      localStorage.setItem('adminSession', JSON.stringify({
+      const sessionData = {
         email: email,
         isAdmin: true,
         loginTime: Date.now()
-      }));
+      };
+      
+      localStorage.setItem('adminSession', JSON.stringify(sessionData));
+      console.log('Session stored:', sessionData);
 
       toast({ title: "Erfolgreich angemeldet" });
-      navigate("/admin");
+      
+      console.log('Navigating to /admin...');
+      
+      // Force reload after navigation to ensure components re-check localStorage
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 500);
+      
     } catch (err: any) {
       console.error('Login error:', err);
       toast({ 
