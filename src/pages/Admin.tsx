@@ -426,24 +426,8 @@ const Admin = () => {
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
     try {
-      // Debug: Aktuellen Benutzer prüfen
-      const { data: user, error: userError } = await supabase.auth.getUser();
-      console.log("👤 Aktueller Benutzer:", user);
-      console.log("❗ Auth-Fehler:", userError);
-      console.log("🔑 User UID:", user?.user?.id);
-      
-      console.log("🔐 Admin: Auth Status:", { user: user?.user?.email, authError: userError });
-
-      if (!user?.user || user.user.email !== ADMIN_EMAIL) {
-        console.error("❌ Admin: Kein Zugriff - ungültiger Benutzer");
-        toast({
-          title: "Zugriff verweigert",
-          description: "Keine Berechtigung für den Admin-Bereich",
-          variant: "destructive"
-        });
-        navigate('/admin/login');
-        return;
-      }
+      // Skip Supabase Auth check - we're using localStorage now
+      console.log("🔐 Admin: Verwende localStorage Auth");
 
       const { data, error } = await supabase
         .from("fahrer_profile")
