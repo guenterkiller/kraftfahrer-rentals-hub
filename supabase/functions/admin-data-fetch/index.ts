@@ -95,7 +95,11 @@ Deno.serve(async (req) => {
 
       case 'document-counts':
         console.log('Fetching document counts...');
+        console.log('Received fahrerIds:', fahrerIds);
+        console.log('fahrerIds type:', typeof fahrerIds);
+        console.log('fahrerIds is Array:', Array.isArray(fahrerIds));
         if (!fahrerIds || !Array.isArray(fahrerIds)) {
+          console.log('❌ Invalid fahrerIds - not array or empty');
           return new Response(
             JSON.stringify({ error: 'Fahrer IDs erforderlich' }),
             { 
