@@ -913,46 +913,48 @@ const Admin = () => {
                           {req.status === 'angenommen' ? 'Angenommen' : 'Offen'}
                         </Badge>
                       </TableCell>
-                       <TableCell>
-                         <div className="flex flex-col gap-2">
-                           {req.status === 'angenommen' ? (
-                             <Button
-                               size="sm"
-                               variant="outline"
-                               disabled
-                               className="bg-gray-100 text-gray-500 cursor-not-allowed"
-                             >
-                               Angenommen
-                             </Button>
-                           ) : (
-                             <>
-                               <div className="flex gap-2">
-                                 <Button
-                                   size="sm"
-                                   onClick={() => handleAcceptJob(req.id)}
-                                 >
-                                   Annehmen
-                                 </Button>
-                                 <Button
-                                   size="sm"
-                                   variant="outline"
-                                   onClick={() => handleAssignDriver(req.id)}
-                                 >
-                                   Fahrer zuweisen
-                                 </Button>
-                               </div>
-                               <Button
-                                 size="sm"
-                                 className="bg-blue-600 hover:bg-blue-700 text-white w-full"
-                                 onClick={() => handleSendJobToAllDrivers(req.id)}
-                                 disabled={sendingJobToAll === req.id}
-                               >
-                                 {sendingJobToAll === req.id ? "📤 Wird gesendet..." : "📧 An alle Fahrer senden"}
-                               </Button>
-                             </>
-                           )}
-                         </div>
-                       </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col gap-2 min-w-[200px]">
+                            {req.status === 'angenommen' ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled
+                                className="bg-gray-100 text-gray-500 cursor-not-allowed w-full"
+                              >
+                                Angenommen
+                              </Button>
+                            ) : (
+                              <>
+                                <div className="flex gap-2">
+                                  <Button
+                                    size="sm"
+                                    onClick={() => handleAcceptJob(req.id)}
+                                    className="flex-1"
+                                  >
+                                    Annehmen
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleAssignDriver(req.id)}
+                                    className="flex-1"
+                                  >
+                                    Fahrer zuweisen
+                                  </Button>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  className="bg-blue-600 hover:bg-blue-700 text-white w-full"
+                                  onClick={() => handleSendJobToAllDrivers(req.id)}
+                                  disabled={sendingJobToAll === req.id}
+                                >
+                                  {sendingJobToAll === req.id ? "📤 Wird gesendet..." : "📧 An alle Fahrer senden"}
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
