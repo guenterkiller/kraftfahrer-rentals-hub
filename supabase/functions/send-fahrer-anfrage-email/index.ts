@@ -152,7 +152,7 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
         </ul>
         
         <p>Falls Sie Fragen haben, kontaktieren Sie uns gerne unter:<br>
-        📧 info@fahrerexpress.de<br>
+        📧 info@kraftfahrer-mieten.com<br>
         📞 Telefonisch erreichbar unter: 01577 1442285</p>
         
         <p>Mit freundlichen Grüßen<br>
