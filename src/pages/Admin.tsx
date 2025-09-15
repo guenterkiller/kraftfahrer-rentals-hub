@@ -823,9 +823,6 @@ const Admin = () => {
                               {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
                             </Button>
                           )}
-                          {(f.status === 'approved' || f.status === 'active') && (
-                            <span className="text-green-600 font-medium">✓ Genehmigt</span>
-                          )}
                         </div>
                       </TableCell>
                     </TableRow>
