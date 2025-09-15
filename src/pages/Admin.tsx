@@ -366,8 +366,17 @@ const Admin = () => {
     setApprovingDriver(driverId);
     
     try {
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Admin session not found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
+      
       const { data, error } = await supabase.functions.invoke('approve-driver-and-send-jobs', {
-        body: { driverId }
+        body: { email: adminEmail, driverId }
       });
 
       if (error) {

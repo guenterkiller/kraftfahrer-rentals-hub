@@ -28,40 +28,31 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log('🚀 approve-driver-and-send-jobs function called');
     
-    // Check authorization
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      console.error('❌ No authorization header');
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+    // Parse request body to get email and driverId
+    const { email, driverId }: { email?: string; driverId?: string } = await req.json();
+    
+    console.log('📧 Request from email:', email);
+    console.log('👤 Driver ID to approve:', driverId);
+    
+    // Check admin email authorization
+    const ADMIN_EMAIL = 'guenter.killer@t-online.de';
+    if (!email || email !== ADMIN_EMAIL) {
+      console.error('❌ Unauthorized email:', email);
+      return new Response(JSON.stringify({ error: 'Unauthorized - Invalid admin email' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
-
-    // Verify admin access
-    const { data: { user }, error: authError } = await supabase.auth.getUser(
-      authHeader.replace('Bearer ', '')
-    );
-
-    if (authError || !user || user.email !== 'guenter.killer@t-online.de') {
-      console.error('❌ Unauthorized user:', user?.email);
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
-    }
-
-    console.log('✅ Admin user verified:', user.email);
-
-    const { driverId }: ApproveDriverRequest = await req.json();
-    console.log('📋 Processing driver ID:', driverId);
 
     if (!driverId) {
-      return new Response(JSON.stringify({ error: 'Driver ID required' }), {
+      console.error('❌ Missing driver ID');
+      return new Response(JSON.stringify({ error: 'Driver ID is required' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
+
+    console.log('✅ Admin email verified:', email);
 
     // 1. Get driver details
     const { data: driver, error: driverError } = await supabase
