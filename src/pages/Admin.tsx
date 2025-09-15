@@ -28,6 +28,7 @@ interface FahrerProfile {
   verfuegbare_regionen: string[] | null;
   ort: string | null;
   plz: string | null;
+  beschreibung: string | null;
 }
 
 interface DocumentFile {
@@ -780,14 +781,11 @@ const Admin = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[120px]">Name</TableHead>
-                    <TableHead className="min-w-[200px]">E-Mail</TableHead>
-                    <TableHead className="min-w-[120px]">Telefon</TableHead>
-                    <TableHead className="min-w-[250px]">Bundesland</TableHead>
-                    <TableHead className="min-w-[140px]">Führerscheinklasse</TableHead>
-                    <TableHead className="min-w-[110px]">Registriert am</TableHead>
-                    <TableHead className="min-w-[120px]">Status</TableHead>
-                    <TableHead className="min-w-[120px]">Dokumente</TableHead>
+                    <TableHead className="min-w-[150px]">Name</TableHead>
+                    <TableHead className="min-w-[200px]">Bundesland</TableHead>
+                    <TableHead className="min-w-[120px]">Führerschein</TableHead>
+                    <TableHead className="min-w-[300px]">Nachricht</TableHead>
+                    <TableHead className="min-w-[150px]">Aktionen</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -796,8 +794,6 @@ const Admin = () => {
                       <TableCell className="font-medium">
                         {f.vorname} {f.nachname}
                       </TableCell>
-                      <TableCell>{f.email}</TableCell>
-                      <TableCell>{f.telefon}</TableCell>
                       <TableCell>
                         {f.verfuegbare_regionen?.length ? f.verfuegbare_regionen.join(", ") : 
                          f.ort ? f.ort : "Nicht angegeben"}
@@ -805,83 +801,28 @@ const Admin = () => {
                       <TableCell>
                         {f.fuehrerscheinklassen?.join(", ") || "-"}
                       </TableCell>
-                      <TableCell>
-                        {new Date(f.created_at).toLocaleDateString('de-DE')}
+                      <TableCell className="max-w-[300px]">
+                        <div className="text-sm">
+                          {f.beschreibung || "Keine Nachricht"}
+                        </div>
                       </TableCell>
-                       <TableCell>
-                         <div className="flex items-center gap-2">
-                           {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                           {f.status === 'pending' && (
-                             <Button
-                               size="sm"
-                               className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
-                               onClick={() => handleApproveDriver(f.id)}
-                               disabled={approvingDriver === f.id}
-                             >
-                               {approvingDriver === f.id ? "✓ Läuft..." : "🚀 + Jobs senden"}
-                             </Button>
-                           )}
-                           {(f.status === 'approved' || f.status === 'active') && (
-                             <span className="text-green-600 font-medium">✓ Aktiv</span>
-                           )}
-                         </div>
-                       </TableCell>
                       <TableCell>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => toggleRow(f.id, f.email)}
-                        >
-                          {documentCounts[f.id] || 0} Dateien
-                          {expandedRows.has(f.id) ? 
-                            <ChevronDown className="h-4 w-4 ml-1" /> : 
-                            <ChevronRight className="h-4 w-4 ml-1" />
-                          }
-                        </Button>
-                        {expandedRows.has(f.id) && (
-                          <div className="mt-4 p-4 bg-gray-50 rounded border">
-                            <h4 className="font-medium mb-3">Hochgeladene Dokumente:</h4>
-                            {documents[f.id]?.length > 0 ? (
-                              <div className="grid gap-2">
-                                {documents[f.id].map((doc, index) => (
-                                  <div 
-                                    key={index}
-                                    className="flex items-center justify-between p-3 bg-white rounded border"
-                                  >
-                                    <div className="flex items-center space-x-3">
-                                      {doc.type === 'pdf' ? (
-                                        <FileText className="h-5 w-5 text-red-500" />
-                                      ) : (
-                                        <Image className="h-5 w-5 text-blue-500" />
-                                      )}
-                                      <span className="font-medium">{doc.filename}</span>
-                                    </div>
-                                    <div className="flex space-x-2">
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => handlePreview(doc)}
-                                      >
-                                        <Eye className="h-4 w-4 mr-1" />
-                                        Vorschau
-                                      </Button>
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => handleDownload(doc)}
-                                      >
-                                        <Download className="h-4 w-4 mr-1" />
-                                        Download
-                                      </Button>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-gray-500 italic">Keine Dokumente hochgeladen</p>
-                            )}
-                          </div>
-                        )}
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                          {f.status === 'pending' && (
+                            <Button
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
+                              onClick={() => handleApproveDriver(f.id)}
+                              disabled={approvingDriver === f.id}
+                            >
+                              {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                            </Button>
+                          )}
+                          {(f.status === 'approved' || f.status === 'active') && (
+                            <span className="text-green-600 font-medium">✓ Aktiv</span>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
