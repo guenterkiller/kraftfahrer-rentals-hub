@@ -14,8 +14,9 @@ Deno.serve(async (req) => {
   try {
     console.log('Admin data fetch request received');
 
-    // Parse request body
-    const { email, dataType } = await req.json();
+    // Parse request body once
+    const requestBody = await req.json();
+    const { email, dataType, fahrerId, fahrerIds } = requestBody;
     console.log('Request for dataType:', dataType, 'by:', email);
 
     // Validate admin email
@@ -74,8 +75,6 @@ Deno.serve(async (req) => {
 
       case 'documents':
         console.log('Fetching driver documents...');
-        const body = await req.json();
-        const fahrerId = body.fahrerId;
         if (!fahrerId) {
           return new Response(
             JSON.stringify({ error: 'Fahrer ID erforderlich' }),
@@ -96,8 +95,6 @@ Deno.serve(async (req) => {
 
       case 'document-counts':
         console.log('Fetching document counts...');
-        const body2 = await req.json();
-        const fahrerIds = body2.fahrerIds;
         if (!fahrerIds || !Array.isArray(fahrerIds)) {
           return new Response(
             JSON.stringify({ error: 'Fahrer IDs erforderlich' }),
