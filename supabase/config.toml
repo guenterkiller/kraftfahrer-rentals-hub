@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.approve-driver-and-send-jobs]
 verify_jwt = false
+
+[functions.admin-data-fetch]
+verify_jwt = false

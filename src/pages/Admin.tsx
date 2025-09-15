@@ -159,6 +159,7 @@ const Admin = () => {
           console.log("✅ Admin: Session gültig für:", session.email);
           setUser({ email: session.email } as User);
           loadFahrerData();
+          loadJobRequests();
           return;
         } else {
           console.log("⏰ Admin: Session abgelaufen");
@@ -177,18 +178,25 @@ const Admin = () => {
 
   const loadJobRequests = async () => {
     try {
-      const { data, error } = await supabase
-        .from("job_requests")
-        .select("*")
-        .order('created_at', { ascending: false });
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) return;
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
 
-      if (error) {
-        console.error("❌ Admin: Fehler beim Laden der Fahreranfragen:", error);
+      // Use admin-data-fetch edge function
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { email: adminEmail, dataType: 'jobs' }
+      });
+
+      if (error || !response?.success) {
+        console.error("❌ Admin: Fehler beim Laden der Fahreranfragen:", error || response?.error);
         return;
       }
 
-      console.log("✅ Admin: Fahreranfragen erfolgreich geladen:", data);
-      setJobRequests(data || []);
+      console.log("✅ Admin: Fahreranfragen erfolgreich geladen:", response.data);
+      setJobRequests(response.data || []);
     } catch (error) {
       console.error("❌ Admin: Unerwarteter Fehler beim Laden der Fahreranfragen:", error);
     }
@@ -426,26 +434,34 @@ const Admin = () => {
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
     try {
-      // Skip Supabase Auth check - we're using localStorage now
-      console.log("🔐 Admin: Verwende localStorage Auth");
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        navigate('/admin/login');
+        return;
+      }
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
 
-      const { data, error } = await supabase
-        .from("fahrer_profile")
-        .select("*")
-        .order('created_at', { ascending: false });
+      // Use admin-data-fetch edge function with service role
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { email: adminEmail, dataType: 'fahrer' }
+      });
 
-      console.log("📊 Admin: Supabase Antwort:", { data, error });
-      console.log("📈 Admin: Anzahl Fahrer gefunden:", data?.length || 0);
-
-      if (error) {
-        console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
+      if (error || !response?.success) {
+        console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error || response?.error);
         toast({
           title: "Fehler beim Laden",
-          description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
+          description: `Fahrerdaten konnten nicht geladen werden: ${error?.message || response?.error}`,
           variant: "destructive"
         });
         return;
       }
+
+      const data = response.data;
+      console.log("📊 Admin: Fahrerdaten erfolgreich geladen:", data?.length || 0);
+      setFahrer(data || []);
 
       console.log("✅ Admin: Fahrerdaten erfolgreich geladen:", data);
       setFahrer(data || []);
