@@ -645,7 +645,7 @@ const Admin = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string, fahrerId?: string, onToggle?: () => void) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       pending: "outline",
       approved: "default",
@@ -657,6 +657,19 @@ const Admin = () => {
       approved: "Genehmigt",
       rejected: "Abgelehnt"
     };
+
+    if (status === 'pending' && onToggle) {
+      return (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-6 px-2 text-xs cursor-pointer hover:bg-green-50 hover:border-green-300 transition-colors"
+          onClick={onToggle}
+        >
+          {labels[status]} → Genehmigen
+        </Button>
+      );
+    }
 
     return (
       <Badge variant={variants[status] || "secondary"}>
@@ -737,15 +750,15 @@ const Admin = () => {
                       </TableCell>
                        <TableCell>
                          <div className="flex items-center gap-2">
-                           {getStatusBadge(f.status)}
+                           {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                            {f.status === 'pending' && (
                              <Button
                                size="sm"
-                               className="bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 shadow-sm"
+                               className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
                                onClick={() => handleApproveDriver(f.id)}
                                disabled={approvingDriver === f.id}
                              >
-                               {approvingDriver === f.id ? "✓ Freischaltung läuft..." : "🚀 Sofort freischalten"}
+                               {approvingDriver === f.id ? "✓ Läuft..." : "🚀 + Jobs senden"}
                              </Button>
                            )}
                            {f.status === 'approved' && (
