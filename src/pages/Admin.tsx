@@ -658,12 +658,14 @@ const Admin = () => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       pending: "outline",
       approved: "default",
+      active: "default",
       rejected: "destructive"
     };
     
     const labels: Record<string, string> = {
       pending: "Wartend",
       approved: "Genehmigt",
+      active: "Genehmigt",
       rejected: "Abgelehnt"
     };
 
@@ -770,7 +772,7 @@ const Admin = () => {
                                {approvingDriver === f.id ? "✓ Läuft..." : "🚀 + Jobs senden"}
                              </Button>
                            )}
-                           {f.status === 'approved' && (
+                           {(f.status === 'approved' || f.status === 'active') && (
                              <span className="text-green-600 font-medium">✓ Aktiv</span>
                            )}
                          </div>
