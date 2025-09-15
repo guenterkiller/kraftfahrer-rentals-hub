@@ -186,7 +186,7 @@ const handler = async (req: Request): Promise<Response> => {
         console.log(`📧 Sending email to: ${driver.email} (${i + 1}/${driversData.length})`);
         
         const emailResponse = await resend.emails.send({
-          from: 'Fahrerexpress-Agentur <noreply@kraftfahrer-mieten.com>',
+          from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
           to: [driver.email],
           subject: emailSubject,
           html: emailBody,
