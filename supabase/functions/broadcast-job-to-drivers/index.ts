@@ -186,7 +186,7 @@ const handler = async (req: Request): Promise<Response> => {
         console.log(`📧 Sending email to: ${driver.email} (${i + 1}/${driversData.length})`);
         
         const emailResponse = await resend.emails.send({
-          from: Deno.env.get('MAIL_FROM') || 'Fahrerexpress-Agentur <noreply@lovableproject.com>',
+          from: Deno.env.get('MAIL_FROM') || 'Fahrerexpress-Agentur <onboarding@resend.dev>',
           to: [driver.email],
           subject: emailSubject,
           html: emailBody,
