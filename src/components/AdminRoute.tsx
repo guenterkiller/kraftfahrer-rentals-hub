@@ -10,21 +10,19 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAdminAccess = async () => {
+    const checkAdminAccess = () => {
       try {
-        const { data: session } = await supabase.auth.getSession();
-        const token = session.session?.access_token;
-        
-        if (!token) {
+        // Check localStorage for admin session
+        const adminSession = localStorage.getItem('adminSession');
+        if (adminSession) {
+          const session = JSON.parse(adminSession);
+          const isValidSession = session.isAdmin && 
+                               session.email === "guenter.killer@t-online.de" &&
+                               (Date.now() - session.loginTime) < 24 * 60 * 60 * 1000; // 24 hours
+          setIsAdmin(isValidSession);
+        } else {
           setIsAdmin(false);
-          return;
         }
-
-        const { data, error } = await supabase.functions.invoke("admin-auth-check", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        setIsAdmin(!!data?.success && !error);
       } catch (error) {
         console.error('Admin check error:', error);
         setIsAdmin(false);

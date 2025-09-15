@@ -8,27 +8,34 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAdminLink, setShowAdminLink] = useState(false);
 
-  // Check if current user is admin
+  // Check if current user is admin using localStorage
   useEffect(() => {
-    const checkAdminAccess = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user?.email === "guenter.killer@t-online.de") {
-        setShowAdminLink(true);
-      }
-    };
-    
-    checkAdminAccess();
-    
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session?.user?.email === "guenter.killer@t-online.de") {
-        setShowAdminLink(true);
-      } else {
+    const checkAdminAccess = () => {
+      try {
+        // Check localStorage for admin session
+        const adminSession = localStorage.getItem('adminSession');
+        if (adminSession) {
+          const session = JSON.parse(adminSession);
+          const isValidSession = session.isAdmin && 
+                               session.email === "guenter.killer@t-online.de" &&
+                               (Date.now() - session.loginTime) < 24 * 60 * 60 * 1000; // 24 hours
+          setShowAdminLink(isValidSession);
+        } else {
+          setShowAdminLink(false);
+        }
+      } catch (error) {
+        console.error('Admin check error:', error);
         setShowAdminLink(false);
       }
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    checkAdminAccess();
+    
+    // Listen for storage changes (when user logs in/out in another tab)
+    const handleStorageChange = () => checkAdminAccess();
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
   // Close mobile menu on escape key press
