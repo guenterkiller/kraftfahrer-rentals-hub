@@ -776,17 +776,18 @@ const Admin = () => {
             </div>
           </CardHeader>
           <CardContent>
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>E-Mail</TableHead>
-                    <TableHead>Telefon</TableHead>
-                    <TableHead>Bundesland</TableHead>
-                    <TableHead>Führerscheinklasse</TableHead>
-                    <TableHead>Registriert am</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Dokumente</TableHead>
+                    <TableHead className="min-w-[120px]">Name</TableHead>
+                    <TableHead className="min-w-[200px]">E-Mail</TableHead>
+                    <TableHead className="min-w-[120px]">Telefon</TableHead>
+                    <TableHead className="min-w-[250px]">Bundesland</TableHead>
+                    <TableHead className="min-w-[140px]">Führerscheinklasse</TableHead>
+                    <TableHead className="min-w-[110px]">Registriert am</TableHead>
+                    <TableHead className="min-w-[120px]">Status</TableHead>
+                    <TableHead className="min-w-[120px]">Dokumente</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -886,6 +887,7 @@ const Admin = () => {
                   ))}
                 </TableBody>
               </Table>
+            </div>
           </CardContent>
         </Card>
 
