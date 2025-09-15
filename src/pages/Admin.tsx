@@ -869,7 +869,7 @@ const Admin = () => {
                           </div>
                           {req.nachricht && (
                             <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded max-w-xs">
-                              <strong>Nachricht:</strong> {req.nachricht.substring(0, 50)}...
+                              <strong>Nachricht:</strong> {req.nachricht}
                             </div>
                           )}
                           {req.besonderheiten && (
