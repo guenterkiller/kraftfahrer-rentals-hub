@@ -74,7 +74,8 @@ Deno.serve(async (req) => {
 
       case 'documents':
         console.log('Fetching driver documents...');
-        const { fahrerId } = await req.json();
+        const body = await req.json();
+        const fahrerId = body.fahrerId;
         if (!fahrerId) {
           return new Response(
             JSON.stringify({ error: 'Fahrer ID erforderlich' }),
@@ -91,6 +92,31 @@ Deno.serve(async (req) => {
           .order('uploaded_at', { ascending: false });
         data = docResult.data;
         error = docResult.error;
+        break;
+
+      case 'document-counts':
+        console.log('Fetching document counts...');
+        const body2 = await req.json();
+        const fahrerIds = body2.fahrerIds;
+        if (!fahrerIds || !Array.isArray(fahrerIds)) {
+          return new Response(
+            JSON.stringify({ error: 'Fahrer IDs erforderlich' }),
+            { 
+              status: 400, 
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+            }
+          );
+        }
+        
+        const counts = {};
+        for (const fahrerId of fahrerIds) {
+          const countResult = await supabase
+            .from("fahrer_dokumente")
+            .select("id", { count: 'exact' })
+            .eq('fahrer_id', fahrerId);
+          counts[fahrerId] = countResult.count || 0;
+        }
+        data = counts;
         break;
 
       default:

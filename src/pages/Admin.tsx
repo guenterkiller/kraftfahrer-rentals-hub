@@ -493,25 +493,26 @@ const Admin = () => {
   };
 
   const loadDocumentCounts = async (fahrerData: FahrerProfile[]) => {
-    const counts: Record<string, number> = {};
-    
     try {
-      for (const fahrer of fahrerData) {
-        const { data: documents, error } = await supabase
-          .from('fahrer_dokumente')
-          .select('id')
-          .eq('fahrer_id', fahrer.id);
-
-        if (!error && documents) {
-          counts[fahrer.id] = documents.length;
-        } else {
-          counts[fahrer.id] = 0;
-        }
-      }
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) return;
       
-      setDocumentCounts(counts);
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
+      const fahrerIds = fahrerData.map(f => f.id);
+
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { email: adminEmail, dataType: 'document-counts', fahrerIds }
+      });
+
+      if (error || !response?.success) {
+        console.error("❌ Admin: Fehler beim Laden der Dokumentanzahl:", error);
+        return;
+      }
+
+      setDocumentCounts(response.data);
     } catch (error) {
-      console.error("❌ Admin: Fehler beim Laden der Dokumentenzählung:", error);
+      console.error("❌ Admin: Fehler beim Laden der Dokumentanzahl:", error);
     }
   };
 
@@ -521,17 +522,22 @@ const Admin = () => {
     try {
       console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerId);
       
-      // Load documents from fahrer_dokumente table
-      const { data: fahrerDokumente, error } = await supabase
-        .from('fahrer_dokumente')
-        .select('*')
-        .eq('fahrer_id', fahrerId)
-        .order('uploaded_at', { ascending: false });
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) return;
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
 
-      if (error) {
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { email: adminEmail, dataType: 'documents', fahrerId }
+      });
+
+      if (error || !response?.success) {
         console.error("❌ Admin: Fehler beim Laden der Dokumente:", error);
         return;
       }
+
+      const fahrerDokumente = response.data;
 
       console.log("✅ Admin: Dokumente aus Tabelle geladen:", fahrerDokumente);
       
