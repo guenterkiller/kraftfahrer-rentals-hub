@@ -61,6 +61,7 @@ const Admin = () => {
   const [selectedDriverEmail, setSelectedDriverEmail] = useState<string>("");
   const [assigningDriver, setAssigningDriver] = useState(false);
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
+  const [sendingJobToAll, setSendingJobToAll] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -412,6 +413,53 @@ const Admin = () => {
       });
     } finally {
       setApprovingDriver(null);
+    }
+  };
+
+  const handleSendJobToAllDrivers = async (jobId: string) => {
+    console.log('📧 Sending job to all drivers:', jobId);
+    setSendingJobToAll(jobId);
+    
+    try {
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Admin session not found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
+      
+      const { data, error } = await supabase.functions.invoke('broadcast-job-to-drivers', {
+        body: { email: adminEmail, jobId }
+      });
+
+      if (error) {
+        console.error('❌ Error sending job to drivers:', error);
+        toast({
+          title: "Fehler beim Versenden",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Job sent to all drivers successfully:', data);
+      
+      toast({
+        title: "Job erfolgreich versendet",
+        description: `Job wurde an ${data.sentToCount || 0} aktive Fahrer gesendet.`,
+      });
+
+    } catch (error) {
+      console.error('❌ Unexpected error in handleSendJobToAllDrivers:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setSendingJobToAll(null);
     }
   };
 
@@ -911,36 +959,46 @@ const Admin = () => {
                       <TableCell>
                         {new Date(req.created_at).toLocaleDateString('de-DE')}
                       </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          {req.status === 'angenommen' ? (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              disabled
-                              className="bg-gray-100 text-gray-500 cursor-not-allowed"
-                            >
-                              Angenommen
-                            </Button>
-                          ) : (
-                            <>
-                              <Button
-                                size="sm"
-                                onClick={() => handleAcceptJob(req.id)}
-                              >
-                                Annehmen
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleAssignDriver(req.id)}
-                              >
-                                Fahrer zuweisen
-                              </Button>
-                            </>
-                          )}
-                        </div>
-                      </TableCell>
+                       <TableCell>
+                         <div className="flex flex-col gap-2">
+                           {req.status === 'angenommen' ? (
+                             <Button
+                               size="sm"
+                               variant="outline"
+                               disabled
+                               className="bg-gray-100 text-gray-500 cursor-not-allowed"
+                             >
+                               Angenommen
+                             </Button>
+                           ) : (
+                             <>
+                               <div className="flex gap-2">
+                                 <Button
+                                   size="sm"
+                                   onClick={() => handleAcceptJob(req.id)}
+                                 >
+                                   Annehmen
+                                 </Button>
+                                 <Button
+                                   size="sm"
+                                   variant="outline"
+                                   onClick={() => handleAssignDriver(req.id)}
+                                 >
+                                   Fahrer zuweisen
+                                 </Button>
+                               </div>
+                               <Button
+                                 size="sm"
+                                 className="bg-blue-600 hover:bg-blue-700 text-white w-full"
+                                 onClick={() => handleSendJobToAllDrivers(req.id)}
+                                 disabled={sendingJobToAll === req.id}
+                               >
+                                 {sendingJobToAll === req.id ? "📤 Wird gesendet..." : "📧 An alle Fahrer senden"}
+                               </Button>
+                             </>
+                           )}
+                         </div>
+                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
