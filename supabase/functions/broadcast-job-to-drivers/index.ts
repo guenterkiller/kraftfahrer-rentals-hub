@@ -174,18 +174,19 @@ const handler = async (req: Request): Promise<Response> => {
     </div>
     `;
 
-    // Send emails to all drivers
+    // Send emails to all drivers with rate limiting
     let sentCount = 0;
     let errorCount = 0;
     
     console.log('📤 Starting email sending process...');
     
-    for (const driver of driversData) {
+    for (let i = 0; i < driversData.length; i++) {
+      const driver = driversData[i];
       try {
-        console.log(`📧 Sending email to: ${driver.email}`);
+        console.log(`📧 Sending email to: ${driver.email} (${i + 1}/${driversData.length})`);
         
         const emailResponse = await resend.emails.send({
-          from: Deno.env.get('MAIL_FROM') || 'Fahrerexpress <noreply@fahrerexpress.de>',
+          from: Deno.env.get('MAIL_FROM') || 'Fahrerexpress-Agentur <noreply@lovableproject.com>',
           to: [driver.email],
           subject: emailSubject,
           html: emailBody,
@@ -234,6 +235,11 @@ const handler = async (req: Request): Promise<Response> => {
         } catch (logError) {
           console.error('Failed to log email error:', logError);
         }
+      }
+      
+      // Rate limiting: Wait 600ms between emails to avoid exceeding 2 requests per second
+      if (i < driversData.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 600));
       }
     }
 
