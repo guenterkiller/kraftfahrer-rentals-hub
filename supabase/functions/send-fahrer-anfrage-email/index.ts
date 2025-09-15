@@ -79,7 +79,7 @@ const userAgent = req.headers.get('user-agent') || 'unknown';
     // Send notification email to admin
     console.log("Sending admin notification email...");
     const adminEmailResponse = await resend.emails.send({
-      from: Deno.env.get("MAIL_FROM")!,
+      from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [Deno.env.get("ADMIN_TO")!],
       reply_to: requestData.email,
       subject: `Neue Fahreranfrage von ${requestData.vorname} ${requestData.nachname}`,
@@ -134,7 +134,7 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
     // Send confirmation email to client
     console.log("Sending confirmation email to client...");
     const clientEmailResponse = await resend.emails.send({
-      from: Deno.env.get("MAIL_FROM")!,
+      from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [requestData.email],
       subject: "Bestätigung Ihrer Fahrer-Anfrage",
       html: `
