@@ -852,6 +852,7 @@ const Admin = () => {
                     <TableRow>
                       <TableHead className="min-w-[200px]">Name & Details</TableHead>
                       <TableHead className="min-w-[150px]">Kontakt</TableHead>
+                      <TableHead className="min-w-[120px]">Einsatz</TableHead>
                       <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
                       <TableHead className="min-w-[80px]">Status</TableHead>
                       <TableHead className="min-w-[200px]">Aktionen</TableHead>
@@ -864,13 +865,11 @@ const Admin = () => {
                         <div className="space-y-2">
                           <div className="font-semibold">{req.customer_name}</div>
                           <div className="text-sm text-gray-600">
-                            <div><strong>Ort:</strong> {req.einsatzort}</div>
-                            <div><strong>Zeit:</strong> {req.zeitraum}</div>
                             <div><strong>Eingang:</strong> {new Date(req.created_at).toLocaleDateString('de-DE')}</div>
                           </div>
                           {req.nachricht && (
                             <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded max-w-xs">
-                              <strong>Nachricht:</strong> {req.nachricht.substring(0, 100)}...
+                              <strong>Nachricht:</strong> {req.nachricht.substring(0, 50)}...
                             </div>
                           )}
                           {req.besonderheiten && (
@@ -887,6 +886,15 @@ const Admin = () => {
                           {req.company && (
                             <div className="text-gray-500 text-xs">{req.company}</div>
                           )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div 
+                          className="text-sm cursor-help"
+                          title={`Ort: ${req.einsatzort}\nZeit: ${req.zeitraum}`}
+                        >
+                          <div className="font-medium truncate max-w-[100px]">{req.einsatzort}</div>
+                          <div className="text-gray-600 truncate max-w-[100px]">{req.zeitraum}</div>
                         </div>
                       </TableCell>
                       <TableCell>
