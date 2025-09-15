@@ -782,6 +782,7 @@ const Admin = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="min-w-[150px]">Name</TableHead>
+                    <TableHead className="min-w-[130px]">Telefon</TableHead>
                     <TableHead className="min-w-[200px]">Bundesland</TableHead>
                     <TableHead className="min-w-[120px]">Führerschein</TableHead>
                     <TableHead className="min-w-[300px]">Nachricht</TableHead>
@@ -793,6 +794,9 @@ const Admin = () => {
                     <TableRow key={f.id}>
                       <TableCell className="font-medium">
                         {f.vorname} {f.nachname}
+                      </TableCell>
+                      <TableCell>
+                        {f.telefon}
                       </TableCell>
                       <TableCell>
                         {f.verfuegbare_regionen?.length ? f.verfuegbare_regionen.join(", ") : 
