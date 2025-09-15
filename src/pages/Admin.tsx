@@ -852,7 +852,6 @@ const Admin = () => {
                     <TableRow>
                       <TableHead className="min-w-[200px]">Name & Details</TableHead>
                       <TableHead className="min-w-[150px]">Kontakt</TableHead>
-                      <TableHead className="min-w-[120px]">Einsatz</TableHead>
                       <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
                       <TableHead className="min-w-[80px]">Status</TableHead>
                       <TableHead className="min-w-[200px]">Aktionen</TableHead>
