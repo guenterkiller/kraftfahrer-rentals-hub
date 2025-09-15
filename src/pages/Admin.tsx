@@ -1054,7 +1054,7 @@ const Admin = () => {
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium mb-2 block">
-                Fahrer auswählen ({fahrer.length} registriert, {fahrer.filter(f => f.status === 'approved').length} genehmigt):
+                Fahrer auswählen ({fahrer.length} registriert, {fahrer.filter(f => f.status === 'approved' || f.status === 'active').length} verfügbar):
               </label>
               <Select value={selectedDriverEmail} onValueChange={setSelectedDriverEmail}>
                 <SelectTrigger className="bg-background border border-input">
@@ -1065,13 +1065,13 @@ const Admin = () => {
                     <SelectItem value="__no_drivers__" disabled>
                       Keine Fahrer gefunden
                     </SelectItem>
-                  ) : fahrer.filter(f => f.status === 'approved').length === 0 ? (
+                  ) : fahrer.filter(f => f.status === 'approved' || f.status === 'active').length === 0 ? (
                     <SelectItem value="__no_approved_drivers__" disabled>
                       Keine genehmigten Fahrer verfügbar
                     </SelectItem>
                   ) : (
-                    fahrer
-                      .filter(f => f.status === 'approved')
+                     fahrer
+                      .filter(f => f.status === 'approved' || f.status === 'active')
                       .map((f) => (
                         <SelectItem key={f.id} value={f.email}>
                           {f.vorname} {f.nachname} – {f.email}
