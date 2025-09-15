@@ -124,13 +124,6 @@ const AdminLogin = () => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Anmelden..." : "Anmelden"}
             </Button>
-            
-            {/* Hilfstext für Anmeldedaten */}
-            <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm text-blue-800">
-              <p className="font-medium">Login-Daten:</p>
-              <p>E-Mail: guenter.killer@t-online.de</p>
-              <p>Passwort: admin123</p>
-            </div>
           </form>
         </CardContent>
       </Card>
