@@ -136,27 +136,63 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
     const clientEmailResponse = await resend.emails.send({
       from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [requestData.email],
-      subject: "Bestätigung Ihrer Fahrer-Anfrage",
+      subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur – Eingangsbestätigung",
       html: `
-        <h2>Vielen Dank für Ihre Anfrage!</h2>
-        <p>Liebe/r ${requestData.vorname} ${requestData.nachname},</p>
-        <p>wir haben Ihre Anfrage für einen Fahrer erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
-        
-        <h3>📝 Ihre Anfrage im Überblick:</h3>
-        <ul>
-          ${requestData.fahrzeugtyp ? `<li><strong>Benötigter Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</li>` : ''}
-          ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
-          <li><strong>Gewünschte Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
-          <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) ? requestData.specializations.join(', ') : 'nicht angegeben'}</li>
-          <li><strong>Region:</strong> ${Array.isArray(requestData.regions) ? requestData.regions.join(', ') : 'nicht angegeben'}</li>
-        </ul>
-        
-        <p>Falls Sie Fragen haben, kontaktieren Sie uns gerne unter:<br>
-        📧 info@kraftfahrer-mieten.com<br>
-        📞 Telefonisch erreichbar unter: 01577 1442285</p>
-        
-        <p>Mit freundlichen Grüßen<br>
-        Ihr Fahrerexpress-Team</p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Ihre Fahrerbuchung bei der Fahrerexpress-Agentur</h2>
+          
+          <p>Sehr geehrte/r ${requestData.vorname} ${requestData.nachname},</p>
+          
+          <p>vielen Dank für Ihre Anfrage bei der Fahrerexpress-Agentur. Wir haben Ihre Buchungsanfrage erhalten und werden diese umgehend bearbeiten. <strong>Sobald ein Fahrer den Auftrag annimmt, bestätigen wir Ihnen die Buchung separat per E-Mail.</strong></p>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-left: 4px solid #3498db;">
+            <h3 style="margin-top: 0; color: #2c3e50;">📝 Ihre Anfrage im Überblick</h3>
+            <ul style="margin: 0; padding-left: 20px;">
+              ${requestData.fahrzeugtyp ? `<li><strong>Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</li>` : ''}
+              <li><strong>Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
+              <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) && requestData.specializations.length > 0 ? requestData.specializations.join(', ') : 'Standard'}</li>
+              <li><strong>Region:</strong> ${Array.isArray(requestData.regions) && requestData.regions.length > 0 ? requestData.regions.join(', ') : 'nach Vereinbarung'}</li>
+              ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
+            </ul>
+          </div>
+          
+          <div style="background-color: #fff3cd; padding: 15px; margin: 20px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #856404;">💰 Konditionen</h3>
+            <ul style="margin: 0; padding-left: 20px;">
+              <li><strong>Standard-LKW-Fahrer:</strong> 399,00 € netto / Tag (8 Std.)</li>
+              <li><strong>Spezialfahrer (ADR/Kran):</strong> 539,00 € netto / Tag (8 Std.)</li>
+              <li><strong>Baumaschinenführer:</strong> 489,00 € netto / Tag (8 Std.)</li>
+            </ul>
+            <p style="font-size: 14px; margin-top: 15px; color: #6c757d;">
+              <em>Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung nach tatsächlichem Einsatzumfang. Zuschläge für Überstunden, Nacht-, Sonn- und Feiertage laut gültiger Preisliste.</em>
+            </p>
+          </div>
+          
+          <div style="background-color: #d1ecf1; padding: 15px; margin: 20px 0; border-left: 4px solid #bee5eb; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #0c5460;">📌 Wichtiger Hinweis</h3>
+            <p style="margin: 0; font-weight: 500;">
+              Mit Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage gestellt. Verbindlich wird die Buchung erst, wenn ein Fahrer den Auftrag annimmt und wir dies schriftlich bestätigen.
+            </p>
+          </div>
+          
+          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">📞 Kontakt</h3>
+            <p style="margin: 0;">
+              📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: #3498db; text-decoration: none;">info@kraftfahrer-mieten.com</a><br>
+              📞 01577 1442285
+            </p>
+          </div>
+          
+          <p style="margin-top: 30px;">
+            Mit freundlichen Grüßen<br>
+            <strong>Ihr Fahrerexpress-Team</strong>
+          </p>
+          
+          <hr style="border: none; border-top: 1px solid #dee2e6; margin: 30px 0;">
+          <p style="font-size: 12px; color: #6c757d; text-align: center;">
+            Fahrerexpress-Agentur | info@kraftfahrer-mieten.com | 01577 1442285
+          </p>
+        </div>
       `,
     });
 
