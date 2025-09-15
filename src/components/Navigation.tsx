@@ -106,19 +106,6 @@ const Navigation = () => {
                 <span className="inline-block animate-drive">🚚</span> Fahrer buchen
               </Link>
             </Button>
-            {showAdminLink && (
-              <Button 
-                size="sm" 
-                variant="outline"
-                className="border-red-500 text-red-600 hover:bg-red-50 transition-all duration-300 focus:ring-2 focus:ring-red-500/50 focus:outline-none" 
-                asChild
-              >
-                <Link to="/admin" aria-label="Admin-Bereich">
-                  <Shield className="w-4 h-4 mr-1" />
-                  Admin
-                </Link>
-              </Button>
-            )}
           </div>
           
           {/* Mobile Menu Button */}
@@ -178,23 +165,6 @@ const Navigation = () => {
                   <span className="inline-block animate-drive">🚚</span> Fahrer buchen
                 </Link>
               </Button>
-              {showAdminLink && (
-                <Button 
-                  variant="outline"
-                  className="w-full border-red-500 text-red-600 hover:bg-red-50 transition-all duration-300 focus:ring-2 focus:ring-red-500/50 focus:outline-none" 
-                  asChild
-                >
-                  <Link 
-                    to="/admin"
-                    onClick={() => setIsMenuOpen(false)}
-                    role="menuitem"
-                    aria-label="Admin-Bereich"
-                  >
-                    <Shield className="w-4 h-4 mr-1" />
-                    Admin
-                  </Link>
-                </Button>
-              )}
             </div>
           </div>
         )}
