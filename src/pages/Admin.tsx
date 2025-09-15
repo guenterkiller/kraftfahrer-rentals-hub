@@ -783,7 +783,6 @@ const Admin = () => {
                   <TableRow>
                     <TableHead className="min-w-[150px]">Name</TableHead>
                     <TableHead className="min-w-[130px]">Telefon</TableHead>
-                    <TableHead className="min-w-[200px]">Bundesland</TableHead>
                     <TableHead className="min-w-[120px]">Führerschein</TableHead>
                     <TableHead className="min-w-[300px]">Nachricht</TableHead>
                     <TableHead className="min-w-[150px]">Aktionen</TableHead>
@@ -797,10 +796,6 @@ const Admin = () => {
                       </TableCell>
                       <TableCell>
                         {f.telefon}
-                      </TableCell>
-                      <TableCell>
-                        {f.verfuegbare_regionen?.length ? f.verfuegbare_regionen.join(", ") : 
-                         f.ort ? f.ort : "Nicht angegeben"}
                       </TableCell>
                       <TableCell>
                         {f.fuehrerscheinklassen?.join(", ") || "-"}
