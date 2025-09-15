@@ -47,34 +47,17 @@ const AdminLogin = () => {
     try {
       console.log('Attempting admin login for:', email);
       
-      // Sign in with Supabase Auth
-      const { error: authError } = await supabase.auth.signInWithPassword({ 
-        email, 
-        password 
-      });
-      
-      if (authError) {
-        throw new Error(authError.message || "Anmeldung fehlgeschlagen");
-      }
-
-      // Get session token and check admin role
-      const { data: sessionData } = await supabase.auth.getSession();
-      const token = sessionData.session?.access_token;
-      
-      if (!token) {
-        throw new Error("Keine Session gefunden");
-      }
-
-      const { data, error } = await supabase.functions.invoke("admin-auth-check", {
-        headers: { Authorization: `Bearer ${token}` },
+      // Use the check-admin-login edge function
+      const { data, error } = await supabase.functions.invoke("check-admin-login", {
+        body: { email, password }
       });
       
       if (error || !data?.success) {
-        console.error('Admin check failed:', error || data?.error);
-        await supabase.auth.signOut(); // Sign out if not admin
-        throw new Error("Keine Admin-Berechtigung");
+        console.error('Admin login failed:', error || data?.error);
+        throw new Error(data?.error || "Ungültige Anmeldedaten");
       }
 
+      // Store admin session info
       localStorage.setItem('adminSession', JSON.stringify({
         email: email,
         isAdmin: true,
