@@ -220,7 +220,8 @@ const Admin = () => {
             nachname,
             email
           )
-        `);
+        `)
+        .order('assigned_at', { ascending: false });
 
       if (assignmentsError) {
         console.error('❌ Error loading assignments:', assignmentsError);
@@ -228,6 +229,7 @@ const Admin = () => {
       }
 
       console.log('✅ Assignments loaded:', assignmentsData?.length || 0);
+      console.log('✅ Sample assignment:', assignmentsData?.[0]);
       setJobAssignments(assignmentsData || []);
     } catch (error) {
       console.error('Error loading assignments:', error);
@@ -242,17 +244,23 @@ const Admin = () => {
   // Hilfsmap: aktives Assignment je Job (confirmed > assigned)
   const activeByJob = React.useMemo(() => {
     const map = new Map<string, any>();
+    console.log('🔍 Creating activeByJob map with assignments:', jobAssignments.length);
     
     for (const a of jobAssignments) {
+      console.log(`🔍 Processing assignment: job_id=${a.job_id}, status=${a.status}, driver=${a.fahrer_profile?.vorname}`);
+      
       if (a.status === "confirmed") {
         map.set(a.job_id, a);
+        console.log(`✅ Set confirmed assignment for job ${a.job_id}`);
         continue;
       }
       if (a.status === "assigned" && !map.has(a.job_id)) {
         map.set(a.job_id, a);
+        console.log(`✅ Set assigned assignment for job ${a.job_id}`);
       }
     }
     
+    console.log('🔍 Final activeByJob map:', Array.from(map.entries()));
     return map;
   }, [jobAssignments]);
 
@@ -968,6 +976,8 @@ const Admin = () => {
                         <TableCell>
                           {(() => {
                             const a = activeByJob.get(req.id);
+                            console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
+                            
                             
                             if (!a) {
                               return (
