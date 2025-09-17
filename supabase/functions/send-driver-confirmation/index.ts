@@ -242,13 +242,21 @@ function validateCustomerAddress(job: any) {
     }
   }
   
-  // Note: In current schema we don't have separate address fields
-  // We should add these to job_requests table in the future
-  const missingAddressFields = ['Straße + Nr.', 'PLZ + Ort'];
+  // Check for basic contact information that we know exists
+  if (!job.customer_email) {
+    requiredFields.push('E-Mail');
+  }
+  
+  if (!job.customer_phone) {
+    requiredFields.push('Telefon');
+  }
+  
+  // For now, skip detailed address validation since we don't have separate address fields in the schema
+  // The job description should contain location information
   
   return {
-    isValid: requiredFields.length === 0 && missingAddressFields.length === 0,
-    missingFields: [...requiredFields, ...missingAddressFields]
+    isValid: requiredFields.length === 0,
+    missingFields: requiredFields
   };
 }
 
