@@ -922,33 +922,24 @@ const Admin = () => {
                            
                            if (assignment) {
                              return (
-                               <div className="space-y-1">
-                                 <div className="p-2 bg-blue-50 rounded">
-                                   <div className="font-medium text-blue-800">
-                                     {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
-                                   </div>
-                                   <div className="text-xs text-blue-600">
-                                     {assignment.rate_value}€/{assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}
-                                   </div>
-                                   <Badge 
-                                     variant={assignment.status === 'confirmed' ? 'default' : 'secondary'}
-                                     className="text-xs"
-                                   >
-                                     {assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
-                                   </Badge>
+                               <div className="p-2 bg-blue-50 rounded">
+                                 <div className="font-medium text-blue-800">
+                                   {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
                                  </div>
+                                 <div className="text-xs text-blue-600">
+                                   {assignment.rate_value}€/{assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}
+                                 </div>
+                                 <Badge 
+                                   variant={assignment.status === 'confirmed' ? 'default' : 'secondary'}
+                                   className="text-xs"
+                                 >
+                                   {assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
+                                 </Badge>
                                </div>
                              );
                            } else {
                              return (
-                               <Button 
-                                 size="sm" 
-                                 variant="outline"
-                                 onClick={() => handleAssignDriver(req.id)}
-                                 className="w-full"
-                               >
-                                 Zuweisen
-                               </Button>
+                               <span className="text-gray-500 text-sm">Nicht zugewiesen</span>
                              );
                            }
                          })()}
