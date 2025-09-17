@@ -177,20 +177,20 @@ function render(tpl: string, vars: Record<string, string | number | null | undef
 
 function ensure(v?: string | null) { return !!(v && v.trim().length); }
 
-// Hilfsfunktion für vollständige Adresse
+// Hilfsfunktion für vollständige Adresse (nur customer_* Felder verwenden)
 function buildFullAddress(jr: any): string {
-  // Versuche verschiedene Feldkombinationen für Adresse
-  const street = jr.strasse || jr.street || "";
-  const number = jr.hausnr || jr.hausnummer || jr.number || "";
-  const zip = jr.plz || jr.zip || jr.postal_code || "";
-  const city = jr.ort || jr.city || jr.stadt || "";
+  // Neue customer_* Felder verwenden
+  const street = jr.customer_street || "";
+  const number = jr.customer_house_number || "";
+  const zip = jr.customer_postal_code || "";
+  const city = jr.customer_city || "";
   
-  // Wenn strukturierte Felder vorhanden sind
-  if (street && zip && city) {
-    return `${street}${number ? ' ' + number : ''}, ${zip} ${city}`.trim();
+  // Vollständige Adresse zusammenbauen
+  if (street && number && zip && city) {
+    return `${street} ${number}, ${zip} ${city}`.trim();
   }
   
-  // Fallback: Einsatzort verwenden oder Platzhalter
+  // Fallback sollte nicht mehr nötig sein durch Validation
   return jr.einsatzort || "Adresse siehe Nachricht";
 }
 
@@ -297,7 +297,24 @@ serve(async (req) => {
       });
     }
 
-    // 2. Mindestens ein Kontakt (Telefon oder E-Mail) - bereits vorhanden aber erweitert
+    // 2. Anschrift Auftraggeber muss vollständig sein
+    if (!ensure(jr.customer_street) || !ensure(jr.customer_house_number) ||
+        !ensure(jr.customer_postal_code) || !ensure(jr.customer_city)) {
+      return new Response(JSON.stringify({ ok: false, error: "Anschrift Auftraggeber unvollständig." }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // PLZ muss 5-stellig sein
+    if (!/^\d{5}$/.test(jr.customer_postal_code)) {
+      return new Response(JSON.stringify({ ok: false, error: "PLZ muss 5-stellig sein." }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // 3. Mindestens ein Kontakt (Telefon oder E-Mail)
     if (!ensure(jr.customer_phone) && !ensure(jr.customer_email)) {
       return new Response(JSON.stringify({ ok: false, error: "Kontakt Auftraggeber fehlt (Telefon oder E-Mail)." }), { 
         status: 400,

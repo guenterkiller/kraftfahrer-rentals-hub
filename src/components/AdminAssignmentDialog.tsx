@@ -33,14 +33,55 @@ export function AdminAssignmentDialog({
   const [attachPdf, setAttachPdf] = useState(false);
   const [isAssigning, setIsAssigning] = useState(false);
   const [isLoadingDrivers, setIsLoadingDrivers] = useState(false);
+  const [addressIncomplete, setAddressIncomplete] = useState(false);
+  const [address, setAddress] = useState({
+    street: "",
+    houseNumber: "",
+    postalCode: "",
+    city: ""
+  });
   const { toast } = useToast();
 
-  // Load drivers when dialog opens
+  // Load drivers and check address when dialog opens
   useEffect(() => {
     if (open) {
       loadDrivers();
+      checkAddressComplete();
     }
-  }, [open]);
+  }, [open, jobId]);
+
+  const checkAddressComplete = async () => {
+    try {
+      // Check if address is complete using direct query
+      const { data: jobData, error } = await supabase
+        .from('job_requests')
+        .select('customer_street, customer_house_number, customer_postal_code, customer_city')
+        .eq('id', jobId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      
+      const isComplete = jobData && 
+        jobData.customer_street && jobData.customer_street.trim() !== '' &&
+        jobData.customer_house_number && jobData.customer_house_number.trim() !== '' &&
+        jobData.customer_postal_code && /^\d{5}$/.test(jobData.customer_postal_code) &&
+        jobData.customer_city && jobData.customer_city.trim() !== '';
+      
+      setAddressIncomplete(!isComplete);
+      
+      // Load existing address data (even if incomplete)
+      if (jobData) {
+        setAddress({
+          street: jobData.customer_street || "",
+          houseNumber: jobData.customer_house_number || "",
+          postalCode: jobData.customer_postal_code || "",
+          city: jobData.customer_city || ""
+        });
+      }
+    } catch (error) {
+      console.error('Error checking address:', error);
+    }
+  };
 
   const loadDrivers = async () => {
     setIsLoadingDrivers(true);
@@ -91,6 +132,18 @@ export function AdminAssignmentDialog({
     ? drivers.filter(d => d.status === 'active' || d.status === 'approved')
     : drivers;
 
+  const ensureAddress = async (jobId: string) => {
+    const { error } = await supabase.from('job_requests').update({
+      customer_street: address.street,
+      customer_house_number: address.houseNumber,
+      customer_postal_code: address.postalCode,
+      customer_city: address.city,
+    }).eq('id', jobId);
+    if (error) throw error;
+  };
+
+  const addressComplete = address.street && address.houseNumber && /^\d{5}$/.test(address.postalCode) && address.city;
+
   const handleAssign = async () => {
     if (!selectedDriverId || !rateValue) {
       toast({
@@ -101,9 +154,23 @@ export function AdminAssignmentDialog({
       return;
     }
 
+    if (addressIncomplete && !addressComplete) {
+      toast({
+        title: "Adresse unvollständig",
+        description: "Bitte füllen Sie die vollständige Anschrift aus.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsAssigning(true);
     
     try {
+      // Ensure address is complete if needed
+      if (addressIncomplete) {
+        await ensureAddress(jobId);
+      }
+
       // Zuweisen
       const { data, error } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
@@ -167,6 +234,8 @@ export function AdminAssignmentDialog({
       setEndDate("");
       setNote("");
       setAttachPdf(false);
+      setAddress({ street: "", houseNumber: "", postalCode: "", city: "" });
+      setAddressIncomplete(false);
       
       onAssignmentComplete();
       onClose();
@@ -203,6 +272,62 @@ export function AdminAssignmentDialog({
         </DialogHeader>
         
         <div className="space-y-4">
+          {/* Address Section - Show if incomplete */}
+          {addressIncomplete && (
+            <div className="p-4 border border-orange-200 bg-orange-50 rounded-lg">
+              <h3 className="font-medium text-orange-800 mb-3">Anschrift vervollständigen</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="address-street" className="text-sm">Straße *</Label>
+                  <Input
+                    id="address-street"
+                    value={address.street}
+                    onChange={(e) => setAddress({...address, street: e.target.value})}
+                    placeholder="Musterstraße"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="address-number" className="text-sm">Hausnummer *</Label>
+                  <Input
+                    id="address-number"
+                    value={address.houseNumber}
+                    onChange={(e) => setAddress({...address, houseNumber: e.target.value})}
+                    placeholder="123"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="address-zip" className="text-sm">PLZ *</Label>
+                  <Input
+                    id="address-zip"
+                    value={address.postalCode}
+                    onChange={(e) => setAddress({...address, postalCode: e.target.value})}
+                    placeholder="12345"
+                    pattern="[0-9]{5}"
+                    maxLength={5}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="address-city" className="text-sm">Ort *</Label>
+                  <Input
+                    id="address-city"
+                    value={address.city}
+                    onChange={(e) => setAddress({...address, city: e.target.value})}
+                    placeholder="Musterstadt"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              {!addressComplete && (
+                <p className="text-sm text-orange-600 mt-2">
+                  Alle Adressfelder müssen ausgefüllt sein. PLZ muss 5-stellig sein.
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Driver Filter Toggle */}
           <div className="flex items-center space-x-2 p-3 bg-muted rounded-lg">
             <Switch
@@ -328,7 +453,7 @@ export function AdminAssignmentDialog({
             </Button>
             <Button 
               onClick={handleAssign} 
-              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0}
+              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || (addressIncomplete && !addressComplete)}
               className="flex-1"
             >
               {isAssigning ? "Zuweisen..." : "Zuweisen"}

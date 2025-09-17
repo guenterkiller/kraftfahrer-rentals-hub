@@ -1022,28 +1022,39 @@ const Admin = () => {
                           <span className="text-xs text-gray-500">({req.fuehrerscheinklasse})</span>
                         </div>
                       </TableCell>
-                       <TableCell>
-                          <Badge 
-                            variant={
-                              req.status === 'confirmed' ? 'default' : 
-                              req.status === 'assigned' ? 'secondary' : 
-                              req.status === 'no_show' ? 'destructive' :
-                              'outline'
-                            }
-                            className={
-                              req.status === 'confirmed' 
-                                ? 'bg-green-100 text-green-800 border-green-200' 
-                                : req.status === 'assigned'
-                                ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                                : req.status === 'no_show'
-                                ? 'bg-red-100 text-red-800 border-red-200'
-                                : 'bg-blue-100 text-blue-800 border-blue-200'
-                            }
-                          >
-                            {req.status === 'confirmed' ? 'Bestätigt' : 
-                             req.status === 'assigned' ? 'Zugewiesen' : 
-                             req.status === 'no_show' ? 'No-Show' : 'Offen'}
-                          </Badge>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <Badge 
+                              variant={
+                                req.status === 'confirmed' ? 'default' : 
+                                req.status === 'assigned' ? 'secondary' : 
+                                req.status === 'no_show' ? 'destructive' :
+                                'outline'
+                              }
+                              className={
+                                req.status === 'confirmed' 
+                                  ? 'bg-green-100 text-green-800 border-green-200' 
+                                  : req.status === 'assigned'
+                                  ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
+                                  : req.status === 'no_show'
+                                  ? 'bg-red-100 text-red-800 border-red-200'
+                                  : 'bg-blue-100 text-blue-800 border-blue-200'
+                              }
+                            >
+                              {req.status === 'confirmed' ? 'Bestätigt' : 
+                               req.status === 'assigned' ? 'Zugewiesen' : 
+                               req.status === 'no_show' ? 'No-Show' : 'Offen'}
+                            </Badge>
+                            {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
+                              <Badge 
+                                variant="outline" 
+                                className="bg-orange-50 text-orange-700 border-orange-300 text-xs"
+                                title="Adresse unvollständig - muss vor Zuweisung ergänzt werden"
+                              >
+                                Adresse fehlt
+                              </Badge>
+                            )}
+                          </div>
                        </TableCell>
                         <TableCell>
                           {(() => {

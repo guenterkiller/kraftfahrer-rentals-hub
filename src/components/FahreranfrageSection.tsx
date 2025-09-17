@@ -55,14 +55,29 @@ const FahreranfrageSection = () => {
     const nachname = formData.get("nachname") as string;
     const email = formData.get("email") as string;
     const telefon = formData.get("phone") as string;
+    const customerStreet = formData.get("customer_street") as string;
+    const customerHouseNumber = formData.get("customer_house_number") as string;
+    const customerPostalCode = formData.get("customer_postal_code") as string;
+    const customerCity = formData.get("customer_city") as string;
     const nachricht = formData.get("nachricht") as string;
     const datenschutz = formData.get("datenschutz") === "on";
     const preiseOk = formData.get("preise_ok") === "on";
 
-    if (!vorname || !nachname || !email || !telefon || !nachricht || !datenschutz || !preiseOk) {
+    if (!vorname || !nachname || !email || !telefon || !customerStreet || !customerHouseNumber || !customerPostalCode || !customerCity || !nachricht || !datenschutz || !preiseOk) {
       toast({
         title: "Fehler",
         description: "Bitte füllen Sie alle Pflichtfelder aus und bestätigen Sie die Preise sowie die Datenschutzerklärung.",
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    // PLZ validation
+    if (!/^\d{5}$/.test(customerPostalCode)) {
+      toast({
+        title: "Fehler",
+        description: "Bitte geben Sie eine gültige 5-stellige Postleitzahl ein.",
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -85,6 +100,10 @@ const FahreranfrageSection = () => {
         email: email.trim(),
         phone: telefon.trim(),
         company: (formData.get('unternehmen') as string)?.trim() || '',
+        customer_street: customerStreet.trim(),
+        customer_house_number: customerHouseNumber.trim(),
+        customer_postal_code: customerPostalCode.trim(),
+        customer_city: customerCity.trim(),
         einsatzbeginn: einsatzbeginn || '',
         einsatzdauer: einsatzdauer || '',
         fahrzeugtyp: fahrzeugtyp || '',
@@ -274,6 +293,62 @@ const FahreranfrageSection = () => {
                   autoComplete="organization"
                   className="mt-1"
                 />
+              </div>
+
+              {/* Customer Address Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="customer_street">Straße *</Label>
+                  <Input
+                    type="text"
+                    id="customer_street"
+                    name="customer_street"
+                    autoComplete="address-line1"
+                    required
+                    className="mt-1"
+                    placeholder="Musterstraße"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="customer_house_number">Hausnummer *</Label>
+                  <Input
+                    type="text"
+                    id="customer_house_number"
+                    name="customer_house_number"
+                    required
+                    className="mt-1"
+                    placeholder="123"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="customer_postal_code">Postleitzahl *</Label>
+                  <Input
+                    type="text"
+                    id="customer_postal_code"
+                    name="customer_postal_code"
+                    autoComplete="postal-code"
+                    required
+                    pattern="[0-9]{5}"
+                    maxLength={5}
+                    className="mt-1"
+                    placeholder="12345"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="customer_city">Ort *</Label>
+                  <Input
+                    type="text"
+                    id="customer_city"
+                    name="customer_city"
+                    autoComplete="address-level2"
+                    required
+                    className="mt-1"
+                    placeholder="Musterstadt"
+                  />
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -22,6 +22,12 @@ interface FahrerAnfrageRequest {
   phone?: string;
   company?: string;
   
+  // Customer address fields
+  customer_street?: string;
+  customer_house_number?: string;
+  customer_postal_code?: string;
+  customer_city?: string;
+  
   // Job details
   job?: {
     company?: string;
@@ -97,6 +103,12 @@ const handler = async (req: Request): Promise<Response> => {
     const phone = requestData.phone || requestData.customer?.phone || '';
     const company = requestData.company || requestData.job?.company || '';
     
+    // Customer address data
+    const customer_street = requestData.customer_street?.trim() || '';
+    const customer_house_number = requestData.customer_house_number?.trim() || '';
+    const customer_postal_code = requestData.customer_postal_code?.trim() || '';
+    const customer_city = requestData.customer_city?.trim() || '';
+    
     // Flexible job data extraction
     const einsatzort = requestData.job?.einsatzort || requestData.nachricht?.includes("Einsatzort") 
       ? requestData.nachricht?.split("Einsatzort")[1]?.split(/[,\n]/)[0]?.trim() || "Siehe Nachricht"
@@ -150,6 +162,28 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // Validate customer address fields
+    if (!customer_street || !customer_house_number || !customer_postal_code || !customer_city) {
+      return new Response(JSON.stringify({ 
+        error: 'Vollständige Anschrift erforderlich',
+        details: 'customer_street, customer_house_number, customer_postal_code, customer_city are required'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Validate PLZ format
+    if (!/^\d{5}$/.test(customer_postal_code)) {
+      return new Response(JSON.stringify({ 
+        error: 'PLZ muss 5-stellig sein',
+        details: 'customer_postal_code must be exactly 5 digits'
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     // Format zeitraum
     let zeitraumFormatted = "Nach Absprache";
     const einsatzbeginn = requestData.einsatzbeginn || requestData.job?.einsatzbeginn;
@@ -177,6 +211,10 @@ const handler = async (req: Request): Promise<Response> => {
       customer_email: email.trim(),
       customer_phone: phone.trim(),
       company: company?.trim() || null,
+      customer_street: customer_street,
+      customer_house_number: customer_house_number,
+      customer_postal_code: customer_postal_code,
+      customer_city: customer_city,
       einsatzort: einsatzort.trim(),
       zeitraum: zeitraumFormatted,
       fahrzeugtyp: fahrzeugtyp,
