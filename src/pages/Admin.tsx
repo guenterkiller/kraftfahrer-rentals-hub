@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -231,6 +231,41 @@ const Admin = () => {
       console.error("❌ Admin: Unerwarteter Fehler beim Laden der Zuweisungen:", error);
     }
   };
+
+  // Hilfsmap: aktives Assignment je Job (confirmed > assigned)
+  const activeByJob = React.useMemo(() => {
+    const map = new Map<string, any>();
+    for (const a of jobAssignments) {
+      if (a.status === "confirmed") {
+        map.set(a.job_id, a);
+        continue;
+      }
+      if (a.status === "assigned" && !map.has(a.job_id)) {
+        map.set(a.job_id, a);
+      }
+    }
+    return map;
+  }, [jobAssignments]);
+
+  async function resendDriverConfirmationNew(assignmentId: string) {
+    try {
+      const { error } = await supabase.functions.invoke(
+        "send-driver-confirmation",
+        { body: { assignment_id: assignmentId, stage: "resend" } }
+      );
+      if (error) throw error;
+      toast({
+        title: "E-Mail erneut gesendet",
+        description: "Bestätigung wurde an den Fahrer gesendet."
+      });
+    } catch (e: any) {
+      toast({
+        title: "E-Mail-Versand fehlgeschlagen",
+        description: e.message ?? e,
+        variant: "destructive"
+      });
+    }
+  }
 
   const handleAcceptJob = async (jobId: string) => {
     try {
@@ -916,83 +951,43 @@ const Admin = () => {
                             req.status === 'assigned' ? 'Zugewiesen' : 'Offen'}
                          </Badge>
                        </TableCell>
-                       <TableCell>
-                         {(() => {
-                           const assignment = jobAssignments.find(a => a.job_id === req.id);
-                           
-                           if (assignment) {
-                             return (
-                               <div className="p-2 bg-blue-50 rounded">
-                                 <div className="font-medium text-blue-800">
-                                   {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
-                                 </div>
-                                 <div className="text-xs text-blue-600">
-                                   {assignment.rate_value}€/{assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}
-                                 </div>
-                                 <Badge 
-                                   variant={assignment.status === 'confirmed' ? 'default' : 'secondary'}
-                                   className="text-xs"
-                                 >
-                                   {assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
-                                 </Badge>
-                               </div>
-                             );
-                           } else {
-                             return (
-                               <span className="text-gray-500 text-sm">Nicht zugewiesen</span>
-                             );
-                           }
-                         })()}
-                       </TableCell>
-                       <TableCell>
-                         {(() => {
-                           const assignment = jobAssignments.find(a => a.job_id === req.id);
-                           console.log(`🔍 Job ${req.id}: Assignment gefunden:`, assignment);
-                           
-                           if (!assignment) {
-                             return (
-                               <div className="flex gap-2">
-                                 <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
-                                   Zuweisen
-                                 </Button>
-                               </div>
-                             );
-                           }
-                           
-                           if (assignment.status === "assigned") {
-                             return (
-                               <div className="flex flex-wrap gap-2">
-                                 <Button 
-                                   size="sm" 
-                                   onClick={() => confirmAndSend(assignment.id)}
-                                   disabled={confirmingAssignment === assignment.id}
-                                 >
-                                   {confirmingAssignment === assignment.id ? "Lädt..." : "Bestätigen & E-Mail senden"}
-                                 </Button>
-                                 <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
-                                   Ändern
-                                 </Button>
-                               </div>
-                             );
-                           }
-                           
-                           if (assignment.status === "confirmed") {
-                             return (
-                               <div className="flex flex-wrap gap-2">
-                                 <Button size="sm" onClick={() => resendDriverConfirmation(assignment.id)}>
-                                   Neu senden
-                                 </Button>
-                               </div>
-                             );
-                           }
-                           
-                           return (
-                             <div className="flex gap-2">
-                               <Badge variant="destructive">Storniert</Badge>
-                             </div>
-                           );
-                         })()}
-                       </TableCell>
+                        <TableCell>
+                          {(() => {
+                            const a = activeByJob.get(req.id);
+                            
+                            return (
+                              <>
+                                {!a && (
+                                  <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                    Zuweisen
+                                  </Button>
+                                )}
+
+                                {a && (
+                                  <div className="flex items-center gap-8">
+                                    {a.status === "confirmed" ? (
+                                      <Badge variant="default">Bestätigt</Badge>
+                                    ) : (
+                                      <Badge variant="secondary">Zugewiesen</Badge>
+                                    )}
+
+                                    <div className="flex items-center gap-2">
+                                      <Button size="sm" onClick={() => resendDriverConfirmationNew(a.id)}>
+                                        E-Mail erneut senden
+                                      </Button>
+                                      <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
+                                        Ändern
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
+                        </TableCell>
+                        <TableCell>
+                          {/* Aktionen-Spalte ist jetzt leer, da alles in Zuweisung-Spalte ist */}
+                        </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -103,6 +103,7 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
+      // Zuweisen
       const { data, error } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
         _driver_id: selectedDriverId,
@@ -117,22 +118,18 @@ export function AdminAssignmentDialog({
         throw error;
       }
 
-      // Log admin action
-      const adminSession = localStorage.getItem('adminSession');
-      if (adminSession) {
-        const session = JSON.parse(adminSession);
-        await supabase.from('admin_actions').insert({
-          action: 'assign_driver',
-          job_id: jobId,
-          assignment_id: data,
-          admin_email: session.email,
-          note: note || null
-        });
-      }
+      const assignmentId = data as string;
+
+      // Sofort E-Mail + PDF versenden
+      const { error: mailErr } = await supabase.functions.invoke(
+        "send-driver-confirmation",
+        { body: { assignment_id: assignmentId, stage: "assigned" } }
+      );
+      if (mailErr) throw mailErr;
 
       toast({
-        title: "Fahrer erfolgreich zugewiesen",
-        description: "Der Fahrer wurde dem Job zugewiesen."
+        title: "Zuweisung gespeichert & E-Mail versendet",
+        description: "Der Fahrer wurde zugewiesen und die E-Mail wurde versendet."
       });
 
       onAssignmentComplete();
