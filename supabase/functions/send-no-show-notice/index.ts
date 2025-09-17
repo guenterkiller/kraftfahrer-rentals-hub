@@ -79,8 +79,20 @@ const handler = async (req: Request): Promise<Response> => {
       return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     };
 
-    // Generate email content
+    // Generate email content with fee calculation
     const subject = `No-Show-Mitteilung – Fahrer ist nicht erschienen (${formatDate(assignmentData.start_date || job.created_at)} / ${job.company || job.customer_name})`;
+
+    const feeEur = assignmentData.no_show_fee_cents ? (assignmentData.no_show_fee_cents / 100).toFixed(2) : '150.00';
+    const tier = assignmentData.no_show_tier || 'standard';
+
+    const tierLabels: Record<string, string> = {
+      '<6h': 'kurzfristige Absage unter 6 Stunden',
+      '6-24h': 'Absage 6-24 Stunden vorher',
+      '24-48h': 'Absage 24-48 Stunden vorher',
+      '>=48h': 'rechtzeitige Absage über 48 Stunden',
+      'override': 'individuell festgelegt',
+      'standard': 'Standardpauschale'
+    };
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -113,7 +125,8 @@ const handler = async (req: Request): Promise<Response> => {
         <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin: 20px 0; border-radius: 4px;">
           <h3 style="margin-top: 0; color: #856404;">HINWEIS ZUM SCHADENSERSATZ</h3>
           <p>Gemäß unserer Einsatzbedingungen (siehe Bestätigung) können Sie bei schuldhaftem Nichterscheinen ersatzfähige Schäden geltend machen (z. B. Mehrkosten eines Ersatzfahrers, Ausfall-/Standkosten).</p>
-          <p><strong>Zusätzlich ist eine pauschale No-Show-Entschädigung von 150 € vorgesehen</strong>; Ihnen bleibt der Nachweis eines höheren Schadens unbenommen.</p>
+          <p><strong>Pauschale No-Show-Entschädigung: ${feeEur} € (${tierLabels[tier] || tier})</strong></p>
+          <p style="font-size: 14px; color: #666;">Dem Fahrer bleibt der Nachweis eines geringeren Schadens, dem Auftraggeber der Nachweis eines höheren Schadens vorbehalten.</p>
         </div>
 
         <p><strong>Wir kümmern uns umgehend um Ersatz</strong> und melden uns kurzfristig.</p>
@@ -161,7 +174,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`✅ No-Show notice email sent successfully: ${emailResponse.data?.id}`);
 
-    // Log successful email
+    // Log successful email with metadata
     await supabase.from('email_log').insert({
       template: 'no_show_notice',
       recipient: job.customer_email,
@@ -170,7 +183,12 @@ const handler = async (req: Request): Promise<Response> => {
       status: 'sent',
       message_id: emailResponse.data?.id,
       sent_at: new Date().toISOString(),
-      subject
+      subject,
+      meta: {
+        fee_eur: feeEur,
+        tier: tier,
+        tier_label: tierLabels[tier] || tier
+      }
     });
 
     console.log('✅ No-Show notice completed successfully');

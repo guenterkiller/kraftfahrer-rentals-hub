@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail } from "lucide-react";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
+import { NoShowDialog } from "@/components/NoShowDialog";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -65,6 +66,8 @@ const Admin = () => {
   const [sendingJobToAll, setSendingJobToAll] = useState<string | null>(null);
   const [confirmingAssignment, setConfirmingAssignment] = useState<string | null>(null);
   const [markingNoShow, setMarkingNoShow] = useState<string | null>(null);
+  const [noShowDialogOpen, setNoShowDialogOpen] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -515,63 +518,15 @@ const Admin = () => {
     }
   };
 
-  const handleMarkNoShow = async (assignmentId: string, reason?: string) => {
-    console.log('🚨 Marking assignment as No-Show:', assignmentId);
-    setMarkingNoShow(assignmentId);
-    
-    try {
-      // Mark No-Show in database
-      const { data, error } = await supabase.rpc('admin_mark_no_show', {
-        _assignment_id: assignmentId,
-        _reason: reason || 'Fahrer nicht erschienen'
-      });
+  const handleMarkNoShow = (assignment: any) => {
+    setSelectedAssignment(assignment);
+    setNoShowDialogOpen(true);
+  };
 
-      if (error) {
-        console.error('❌ Error marking No-Show:', error);
-        toast({
-          title: "Fehler beim Markieren",
-          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
-          variant: "destructive"
-        });
-        return;
-      }
-
-      console.log('✅ No-Show marked successfully, sending notice...');
-      
-      // Send No-Show notice email
-      const { data: emailData, error: emailError } = await supabase.functions.invoke('send-no-show-notice', {
-        body: { assignment_id: assignmentId }
-      });
-
-      if (emailError) {
-        console.error('❌ Error sending No-Show notice:', emailError);
-        toast({
-          title: "No-Show markiert, aber E-Mail fehlgeschlagen",
-          description: `No-Show wurde vermerkt, aber E-Mail konnte nicht gesendet werden: ${emailError.message}`,
-          variant: "destructive"
-        });
-      } else {
-        console.log('✅ No-Show notice sent successfully');
-        toast({
-          title: "No-Show erfolgreich vermerkt",
-          description: "No-Show wurde vermerkt und Auftraggeber informiert.",
-        });
-      }
-      
-      // Refresh data to show updated status
-      loadJobRequests();
-      loadJobAssignments();
-
-    } catch (error) {
-      console.error('❌ Unexpected error in handleMarkNoShow:', error);
-      toast({
-        title: "Unerwarteter Fehler",
-        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
-        variant: "destructive"
-      });
-    } finally {
-      setMarkingNoShow(null);
-    }
+  const handleNoShowSuccess = () => {
+    // Refresh data to show updated status
+    loadJobRequests();
+    loadJobAssignments();
   };
 
   const handleLogout = async () => {
@@ -1154,7 +1109,7 @@ const Admin = () => {
                         {assignment.job_requests.customer_name} - {assignment.job_requests.fahrzeugtyp}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
                         <Badge 
                           variant={
                             assignment.status === 'confirmed' ? 'default' :
@@ -1164,9 +1119,9 @@ const Admin = () => {
                         >
                           {assignment.status === 'assigned' ? 'Zugewiesen' :
                            assignment.status === 'confirmed' ? 'Bestätigt' : 
-                           assignment.status === 'no_show' ? 'No-Show' : 'Storniert'}
+                           assignment.status === 'no_show' ? `No-Show${assignment.no_show_fee_cents ? ` – ${(assignment.no_show_fee_cents / 100).toFixed(0)} €` : ''}` : 'Storniert'}
                         </Badge>
-                    </div>
+                      </div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -1205,13 +1160,18 @@ const Admin = () => {
                       <Button
                         size="sm"
                         variant="destructive"
-                        onClick={() => handleMarkNoShow(assignment.id)}
-                        disabled={markingNoShow === assignment.id}
+                        onClick={() => handleMarkNoShow(assignment)}
                         className="flex items-center gap-1"
                       >
                         <X className="h-4 w-4" />
-                        {markingNoShow === assignment.id ? "Markiere..." : "No-Show markieren"}
+                        No-Show markieren
                       </Button>
+                    </div>
+                  )}
+
+                  {assignment.status === 'no_show' && assignment.no_show_fee_cents && (
+                    <div className="text-sm text-red-600 font-medium">
+                      Schadensersatz: {(assignment.no_show_fee_cents / 100).toFixed(2)} € ({assignment.no_show_tier})
                     </div>
                   )}
 
@@ -1226,6 +1186,14 @@ const Admin = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* No-Show Dialog */}
+      <NoShowDialog
+        open={noShowDialogOpen}
+        onOpenChange={setNoShowDialogOpen}
+        assignment={selectedAssignment}
+        onSuccess={handleNoShowSuccess}
+      />
     </div>
   );
 };

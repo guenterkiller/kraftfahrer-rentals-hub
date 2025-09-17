@@ -383,11 +383,15 @@ export type Database = {
           id: string
           job_id: string
           no_show_at: string | null
+          no_show_fee_cents: number | null
+          no_show_fee_currency: string
           no_show_marked_by_admin: boolean
           no_show_reason: string | null
+          no_show_tier: string | null
           rate_type: string
           rate_value: number
           start_date: string | null
+          starts_at: string | null
           status: string
           updated_at: string
         }
@@ -406,11 +410,15 @@ export type Database = {
           id?: string
           job_id: string
           no_show_at?: string | null
+          no_show_fee_cents?: number | null
+          no_show_fee_currency?: string
           no_show_marked_by_admin?: boolean
           no_show_reason?: string | null
+          no_show_tier?: string | null
           rate_type?: string
           rate_value: number
           start_date?: string | null
+          starts_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -429,11 +437,15 @@ export type Database = {
           id?: string
           job_id?: string
           no_show_at?: string | null
+          no_show_fee_cents?: number | null
+          no_show_fee_currency?: string
           no_show_marked_by_admin?: boolean
           no_show_reason?: string | null
+          no_show_tier?: string | null
           rate_type?: string
           rate_value?: number
           start_date?: string | null
+          starts_at?: string | null
           status?: string
           updated_at?: string
         }
@@ -708,8 +720,21 @@ export type Database = {
         Returns: boolean
       }
       admin_mark_no_show: {
-        Args: { _assignment_id: string; _reason?: string }
+        Args:
+          | {
+              _assignment_id: string
+              _override_fee_eur?: number
+              _reason?: string
+            }
+          | { _assignment_id: string; _reason?: string }
         Returns: boolean
+      }
+      calc_no_show_fee_cents: {
+        Args: { _rate_type: string; _rate_value: number; _starts_at: string }
+        Returns: {
+          fee_cents: number
+          tier: string
+        }[]
       }
       get_fahrer_admin_summary: {
         Args: Record<PropertyKey, never>
