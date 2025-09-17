@@ -44,7 +44,21 @@ export function AdminAssignmentDialog({
   const loadDrivers = async () => {
     setIsLoadingDrivers(true);
     try {
-      const { data, error } = await supabase.rpc('get_fahrer_admin_summary');
+      // Get admin session
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Keine Admin-Session gefunden');
+      }
+      
+      const session = JSON.parse(adminSession);
+      
+      // Use the same edge function as the rest of the admin system
+      const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: {
+          email: session.email,
+          dataType: 'fahrer'
+        }
+      });
       
       if (error) {
         console.error("❌ Error loading drivers:", error);
@@ -56,8 +70,8 @@ export function AdminAssignmentDialog({
         return;
       }
       
-      console.log("✅ Drivers loaded successfully:", data?.length || 0);
-      setDrivers((data as any[]) || []);
+      console.log("✅ Drivers loaded successfully:", data?.data?.length || 0);
+      setDrivers((data?.data as any[]) || []);
       
     } catch (error) {
       console.error("❌ Unexpected error loading drivers:", error);
