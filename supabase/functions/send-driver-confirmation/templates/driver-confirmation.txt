@@ -1,0 +1,43 @@
+EINSATZBESTÄTIGUNG
+Fahrerexpress | kraftfahrer-mieten.com
+Datum: {{heute}}
+
+=====================================
+
+FAHRER-INFORMATION
+==================
+Name: {{fp.vorname}} {{fp.nachname}}
+
+AUFTRAGGEBER
+============
+Unternehmen: {{jr.firma_oder_name}}
+Ansprechpartner: {{jr.ansprechpartner}}
+Telefon: {{jr.telefon}}
+E-Mail: {{jr.email}}
+
+EINSATZ-DETAILS
+===============
+Zeitraum: {{einsatz_zeitraum}}
+Einsatzort: {{jr.einsatzort}}
+Fahrzeug: {{jr.fahrzeugtyp}}
+Besonderheiten: {{jr.besonderheiten}}
+Vergütung: {{ja.rate_value}} {{ja.rate_suffix}}
+
+RECHTLICHE HINWEISE
+===================
+
+No-Show-Klausel:
+Bei Nichterscheinen ohne rechtzeitige Absage (mindestens 48 Stunden vor Einsatzbeginn) behält sich der Auftraggeber vor, eine angemessene Ausfallpauschale zu erheben. Die Höhe richtet sich nach dem vereinbarten Tagessatz und der Kurzfristigkeit der Absage.
+
+Mehrwertsteuer:
+Die genannten Beträge verstehen sich zzgl. der gesetzlichen Mehrwertsteuer in Höhe von 19%, soweit diese anfällt.
+
+Einsatzbedingungen:
+Es gelten unsere allgemeinen Geschäftsbedingungen. Der Fahrer verpflichtet sich zur pünktlichen und zuverlässigen Ausführung des Auftrags.
+
+=====================================
+
+Fahrerexpress
+kraftfahrer-mieten.com
+E-Mail: info@kraftfahrer-mieten.com
+Telefon: +49-1577-1442285
