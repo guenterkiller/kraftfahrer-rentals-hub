@@ -939,22 +939,32 @@ const Admin = () => {
                                   ))
                                 }
                               </div>
-                            ) : (
-                              <div className="text-gray-500">Keine Zuweisung</div>
-                            )}
+                             ) : (
+                               <Button 
+                                 size="sm" 
+                                 variant="outline"
+                                 onClick={() => handleAssignDriver(req.id)}
+                                 className="w-full"
+                               >
+                                 Zuweisen
+                               </Button>
+                             )}
                           </div>
                         </TableCell>
                           <TableCell>
                             <div className="flex flex-col gap-2">
-                              <Button
-                                size="sm"
-                                onClick={() => handleAssignDriver(req.id)}
-                                className="w-full"
-                                disabled={jobAssignments.some(a => a.job_id === req.id)}
-                              >
-                                <Users className="h-4 w-4 mr-1" />
-                                {jobAssignments.some(a => a.job_id === req.id) ? "Bereits zugewiesen" : "Zuweisen"}
-                              </Button>
+                               {jobAssignments.some(a => a.job_id === req.id && a.status === 'assigned') && (
+                                 <Button
+                                   size="sm"
+                                   onClick={() => {
+                                     const assignment = jobAssignments.find(a => a.job_id === req.id);
+                                     if (assignment) handleConfirmAssignment(assignment.id);
+                                   }}
+                                   disabled={!!confirmingAssignment}
+                                 >
+                                   Bestätigen & E-Mail senden
+                                 </Button>
+                               )}
                             </div>
                           </TableCell>
                     </TableRow>

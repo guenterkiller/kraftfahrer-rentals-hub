@@ -57,7 +57,7 @@ export function AdminAssignmentDialog({
       }
       
       console.log("✅ Drivers loaded successfully:", data?.length || 0);
-      setDrivers(data || []);
+      setDrivers((data as any[]) || []);
       
     } catch (error) {
       console.error("❌ Unexpected error loading drivers:", error);
