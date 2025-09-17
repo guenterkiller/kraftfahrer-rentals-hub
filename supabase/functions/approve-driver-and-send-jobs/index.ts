@@ -107,7 +107,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('📋 Found jobs:', jobs?.length || 0);
 
     // 4. Prepare email content
-    const mailFrom = Deno.env.get('MAIL_FROM') || 'angebote@poolaufbau.com';
+    const mailFrom = Deno.env.get('MAIL_FROM') || 'Kraftfahrer-Mieten <onboarding@resend.dev>';
     const mailReplyTo = Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com';
 
     let emailContent = `Hallo ${driver.vorname} ${driver.nachname},
