@@ -301,6 +301,7 @@ const Admin = () => {
     setConfirmingAssignment(assignmentId);
     
     try {
+      // First confirm the assignment
       const { error } = await supabase.rpc('admin_confirm_assignment', {
         _assignment_id: assignmentId
       });
@@ -309,22 +310,22 @@ const Admin = () => {
         throw error;
       }
 
-      // Send order confirmation email
-      const { error: emailError } = await supabase.functions.invoke('send-order-confirmation', {
+      // Send driver confirmation email
+      const { error: driverEmailError } = await supabase.functions.invoke('send-driver-confirmation', {
         body: { assignmentId }
       });
 
-      if (emailError) {
-        console.error("❌ E-Mail-Fehler:", emailError);
+      if (driverEmailError) {
+        console.error("❌ Fahrer E-Mail-Fehler:", driverEmailError);
         toast({
           title: "Bestätigung gespeichert",
-          description: "Auftrag wurde bestätigt, aber E-Mail konnte nicht gesendet werden.",
+          description: "Auftrag wurde bestätigt, aber Fahrer-E-Mail konnte nicht gesendet werden.",
           variant: "destructive"
         });
       } else {
         toast({
-          title: "Auftrag bestätigt",
-          description: "Bestätigung wurde an den Auftraggeber gesendet."
+          title: "Auftrag bestätigt & E-Mail gesendet",
+          description: "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)."
         });
       }
 
