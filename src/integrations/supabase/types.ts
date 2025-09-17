@@ -576,6 +576,25 @@ export type Database = {
       }
     }
     Functions: {
+      get_fahrer_admin_summary: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          created_at: string | null
+          email_display: string | null
+          erfahrung_jahre: number | null
+          fuehrerscheinklassen: string[] | null
+          id: string | null
+          nachname: string | null
+          ort: string | null
+          spezialisierungen: string[] | null
+          status: string | null
+          stundensatz: number | null
+          telefon_display: string | null
+          updated_at: string | null
+          verfuegbare_regionen: string[] | null
+          vorname: string | null
+        }[]
+      }
       is_admin: {
         Args: { user_uuid: string }
         Returns: boolean
