@@ -122,12 +122,24 @@ export function AdminAssignmentDialog({
       console.log('✅ Assignment created with ID:', assignmentId);
 
       // Sofort E-Mail + PDF versenden
-      const { error: mailErr } = await supabase.functions.invoke(
+      const { data: mailData, error: mailErr } = await supabase.functions.invoke(
         "send-driver-confirmation",
         { body: { assignment_id: assignmentId, stage: "assigned" } }
       );
+      
       if (mailErr) {
         console.error('❌ E-Mail error:', mailErr);
+        
+        // Check if it's an address validation error
+        if (mailErr.message && mailErr.message.includes('Vollständige Anschrift')) {
+          toast({
+            title: "Adressdaten unvollständig",
+            description: "Bitte ergänzen Sie die vollständige Anschrift des Auftraggebers (Straße + Nr., PLZ + Ort) vor der Zuweisung.",
+            variant: "destructive"
+          });
+          return; // Don't throw, just show message and keep dialog open
+        }
+        
         throw mailErr;
       }
 
