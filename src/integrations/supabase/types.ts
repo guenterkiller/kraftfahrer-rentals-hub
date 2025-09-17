@@ -14,6 +14,105 @@ export type Database = {
   }
   public: {
     Tables: {
+      _backup_admin_log: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          event: string | null
+          id: string | null
+          ip_address: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          event?: string | null
+          id?: string | null
+          ip_address?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          event?: string | null
+          id?: string | null
+          ip_address?: string | null
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
+      _backup_job_mail_log: {
+        Row: {
+          created_at: string | null
+          driver_snapshot: Json | null
+          email: string | null
+          error: string | null
+          fahrer_id: string | null
+          id: string | null
+          job_request_id: string | null
+          mail_template: string | null
+          meta: Json | null
+          reply_to: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          driver_snapshot?: Json | null
+          email?: string | null
+          error?: string | null
+          fahrer_id?: string | null
+          id?: string | null
+          job_request_id?: string | null
+          mail_template?: string | null
+          meta?: Json | null
+          reply_to?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          driver_snapshot?: Json | null
+          email?: string | null
+          error?: string | null
+          fahrer_id?: string | null
+          id?: string | null
+          job_request_id?: string | null
+          mail_template?: string | null
+          meta?: Json | null
+          reply_to?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      _backup_mail_log: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string | null
+          recipient: string | null
+          success: boolean | null
+          template: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string | null
+          recipient?: string | null
+          success?: boolean | null
+          template?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string | null
+          recipient?: string | null
+          success?: boolean | null
+          template?: string | null
+        }
+        Relationships: []
+      }
       admin_actions: {
         Row: {
           action: string
@@ -21,7 +120,7 @@ export type Database = {
           assignment_id: string | null
           created_at: string
           id: string
-          job_id: string
+          job_id: string | null
           note: string | null
         }
         Insert: {
@@ -30,7 +129,7 @@ export type Database = {
           assignment_id?: string | null
           created_at?: string
           id?: string
-          job_id: string
+          job_id?: string | null
           note?: string | null
         }
         Update: {
@@ -39,7 +138,7 @@ export type Database = {
           assignment_id?: string | null
           created_at?: string
           id?: string
-          job_id?: string
+          job_id?: string | null
           note?: string | null
         }
         Relationships: [
@@ -58,33 +157,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      admin_log: {
-        Row: {
-          created_at: string
-          email: string
-          event: string
-          id: string
-          ip_address: string | null
-          timestamp: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          event: string
-          id?: string
-          ip_address?: string | null
-          timestamp?: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          event?: string
-          id?: string
-          ip_address?: string | null
-          timestamp?: string
-        }
-        Relationships: []
       }
       admin_settings: {
         Row: {
@@ -370,51 +442,6 @@ export type Database = {
           },
         ]
       }
-      job_mail_log: {
-        Row: {
-          created_at: string | null
-          driver_snapshot: Json | null
-          email: string
-          error: string | null
-          fahrer_id: string
-          id: string
-          job_request_id: string
-          mail_template: string | null
-          meta: Json | null
-          reply_to: string | null
-          status: string
-          subject: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          driver_snapshot?: Json | null
-          email: string
-          error?: string | null
-          fahrer_id: string
-          id?: string
-          job_request_id: string
-          mail_template?: string | null
-          meta?: Json | null
-          reply_to?: string | null
-          status: string
-          subject?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          driver_snapshot?: Json | null
-          email?: string
-          error?: string | null
-          fahrer_id?: string
-          id?: string
-          job_request_id?: string
-          mail_template?: string | null
-          meta?: Json | null
-          reply_to?: string | null
-          status?: string
-          subject?: string | null
-        }
-        Relationships: []
-      }
       job_requests: {
         Row: {
           besonderheiten: string | null
@@ -516,33 +543,6 @@ export type Database = {
         }
         Relationships: []
       }
-      mail_log: {
-        Row: {
-          created_at: string
-          error_message: string | null
-          id: string
-          recipient: string
-          success: boolean
-          template: string
-        }
-        Insert: {
-          created_at?: string
-          error_message?: string | null
-          id?: string
-          recipient: string
-          success?: boolean
-          template: string
-        }
-        Update: {
-          created_at?: string
-          error_message?: string | null
-          id?: string
-          recipient?: string
-          success?: boolean
-          template?: string
-        }
-        Relationships: []
-      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -566,7 +566,113 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      admin_log: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          event: string | null
+          id: string | null
+          ip_address: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          event?: never
+          id?: string | null
+          ip_address?: never
+          timestamp?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          event?: never
+          id?: string | null
+          ip_address?: never
+          timestamp?: string | null
+        }
+        Relationships: []
+      }
+      job_mail_log: {
+        Row: {
+          created_at: string | null
+          driver_snapshot: Json | null
+          email: string | null
+          error: string | null
+          fahrer_id: string | null
+          id: string | null
+          job_request_id: string | null
+          mail_template: string | null
+          meta: Json | null
+          reply_to: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          driver_snapshot?: never
+          email?: string | null
+          error?: never
+          fahrer_id?: never
+          id?: string | null
+          job_request_id?: string | null
+          mail_template?: string | null
+          meta?: never
+          reply_to?: never
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          driver_snapshot?: never
+          email?: string | null
+          error?: never
+          fahrer_id?: never
+          id?: string | null
+          job_request_id?: string | null
+          mail_template?: string | null
+          meta?: never
+          reply_to?: never
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_log_job_id_fkey"
+            columns: ["job_request_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mail_log: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string | null
+          recipient: string | null
+          success: boolean | null
+          template: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: never
+          id?: string | null
+          recipient?: string | null
+          success?: never
+          template?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: never
+          id?: string | null
+          recipient?: string | null
+          success?: never
+          template?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       admin_assign_driver: {
