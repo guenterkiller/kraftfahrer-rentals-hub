@@ -174,10 +174,13 @@ export type Database = {
         Row: {
           assignment_id: string | null
           created_at: string
+          delivery_mode: string
           error_message: string | null
           id: string
           job_id: string | null
           message_id: string | null
+          pdf_path: string | null
+          pdf_url: string | null
           recipient: string
           sent_at: string | null
           status: string
@@ -187,10 +190,13 @@ export type Database = {
         Insert: {
           assignment_id?: string | null
           created_at?: string
+          delivery_mode?: string
           error_message?: string | null
           id?: string
           job_id?: string | null
           message_id?: string | null
+          pdf_path?: string | null
+          pdf_url?: string | null
           recipient: string
           sent_at?: string | null
           status?: string
@@ -200,10 +206,13 @@ export type Database = {
         Update: {
           assignment_id?: string | null
           created_at?: string
+          delivery_mode?: string
           error_message?: string | null
           id?: string
           job_id?: string | null
           message_id?: string | null
+          pdf_path?: string | null
+          pdf_url?: string | null
           recipient?: string
           sent_at?: string | null
           status?: string

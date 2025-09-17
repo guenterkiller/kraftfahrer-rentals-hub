@@ -1,6 +1,6 @@
 // supabase/functions/send-driver-confirmation/index.ts
 // Deno Edge Function – sofortiger Versand der Fahrer-Einsatzbestätigung (E-Mail + PDF)
-// Erwartet: POST { assignment_id: string }
+// Erwartet: POST { assignment_id: string, mode?: 'inline' | 'both' | 'pdf-only' }
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
@@ -14,6 +14,13 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
   auth: { persistSession: false },
 });
+
+type DeliveryMode = 'inline' | 'both' | 'pdf-only';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
 
 // --- EMBEDDED TEMPLATES ---
 const htmlTpl = `<!DOCTYPE html>
@@ -32,6 +39,8 @@ const htmlTpl = `<!DOCTYPE html>
         .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
         .legal { margin-top: 30px; padding: 15px; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; }
         .legal h4 { color: #856404; margin-top: 0; }
+        .pdf-link { margin-top: 30px; padding: 15px; background-color: #e3f2fd; border: 1px solid #2196F3; border-radius: 4px; text-align: center; }
+        .pdf-link a { color: #1976D2; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -101,6 +110,8 @@ const htmlTpl = `<!DOCTYPE html>
         
         <p><strong>Einsatzbedingungen:</strong> Es gelten unsere allgemeinen Geschäftsbedingungen. Der Fahrer verpflichtet sich zur pünktlichen und zuverlässigen Ausführung des Auftrags.</p>
     </div>
+
+    {{pdf_link_section}}
 
     <div class="footer">
         <p><strong>Fahrerexpress</strong><br>
@@ -174,14 +185,27 @@ function withCurrency(n?: number | null) {
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
   try {
     if (req.method !== "POST") {
-      return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405 });
+      return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { 
+        status: 405,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
 
-    const { assignment_id } = await req.json();
+    const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = await req.json();
+    const deliveryMode: DeliveryMode = mode ?? 'inline';
+    
     if (!assignment_id) {
-      return new Response(JSON.stringify({ ok: false, error: "assignment_id required" }), { status: 400 });
+      return new Response(JSON.stringify({ ok: false, error: "assignment_id required" }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
 
     // Daten holen (Assignment + Job + Fahrer)
@@ -204,7 +228,10 @@ serve(async (req) => {
       .maybeSingle();
 
     if (error || !rows) {
-      return new Response(JSON.stringify({ ok: false, error: "assignment not found" }), { status: 404 });
+      return new Response(JSON.stringify({ ok: false, error: "assignment not found" }), { 
+        status: 404,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
 
     const ja = rows as any;
@@ -213,13 +240,22 @@ serve(async (req) => {
 
     // Pflicht-Validierungen (hard stop)
     if (!fp || !ensure(fp.email) || !ensure(fp.vorname) || !ensure(fp.nachname)) {
-      return new Response(JSON.stringify({ ok: false, error: "Fahrerdaten unvollständig." }), { status: 400 });
+      return new Response(JSON.stringify({ ok: false, error: "Fahrerdaten unvollständig." }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
     if (!jr) {
-      return new Response(JSON.stringify({ ok: false, error: "Auftragsdaten fehlen." }), { status: 400 });
+      return new Response(JSON.stringify({ ok: false, error: "Auftragsdaten fehlen." }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
     if (!ensure(jr.customer_phone) && !ensure(jr.customer_email)) {
-      return new Response(JSON.stringify({ ok: false, error: "Kontakt Auftraggeber fehlt (Telefon oder E-Mail)." }), { status: 400 });
+      return new Response(JSON.stringify({ ok: false, error: "Kontakt Auftraggeber fehlt (Telefon oder E-Mail)." }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
 
     const zeitraum = ja.start_date && ja.end_date
@@ -249,22 +285,42 @@ serve(async (req) => {
 
     // Anzeige für Satz
     const satzAnzeige = withCurrency(typeof ja.rate_value === "number" ? ja.rate_value : undefined);
-    const html = render(htmlTpl, { ...vars, "ja.rate_value": satzAnzeige });
-    const txt = render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige });
-
-    // PDF bauen (Simple PDF – Text-basiert; falls ihr bereits einen HTML→PDF nutzt, dort einbinden)
-    const pdfBytes = await htmlToSimplePdf(html, txt);
+    
+    // PDF bauen (Simple PDF – Text-basiert)
+    const pdfBytes = await htmlToSimplePdf(render(htmlTpl, { ...vars, "ja.rate_value": satzAnzeige, "pdf_link_section": "" }), render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige }));
 
     // PDF in private Bucket speichern
-    const filePath = `confirmations/assignments/${assignment_id}/driver-confirmation-${new Date().toISOString().slice(0,10)}.pdf`;
+    const filenameBase = `driver-confirmation-${new Date().toISOString().slice(0,10)}`;
+    const filePath = `confirmations/assignments/${assignment_id}/${filenameBase}.pdf`;
     const up = await sb.storage.from("confirmations").upload(filePath, pdfBytes, {
       contentType: "application/pdf",
       upsert: true,
     });
     if (up.error) {
-      // speichern ist nett, aber nicht kritisch für Mailversand → nur loggen
       console.error("PDF upload error", up.error);
     }
+
+    // Signierte URL erstellen (14 Tage gültig)
+    const { data: signedData } = await sb.storage.from("confirmations").createSignedUrl(filePath, 14 * 24 * 60 * 60);
+    const pdfUrl = signedData?.signedUrl ?? null;
+
+    // PDF-Link-Sektion für E-Mail
+    const pdfLinkSection = pdfUrl && deliveryMode !== 'pdf-only' 
+      ? `<div class="pdf-link">
+           <h4>📄 PDF-Download</h4>
+           <p><a href="${pdfUrl}" target="_blank">Einsatzbestätigung als PDF herunterladen</a></p>
+           <p style="font-size: 12px; color: #666;">Der Link ist 14 Tage gültig.</p>
+         </div>`
+      : '';
+
+    // HTML und Text für E-Mail bauen
+    const html = deliveryMode === 'pdf-only' 
+      ? '<div style="font-family: Arial, sans-serif; padding: 20px;"><h2>Einsatzbestätigung</h2><p>Die Einsatzbestätigung liegt als PDF im Anhang bei.</p><p>Fahrerexpress | kraftfahrer-mieten.com</p></div>'
+      : render(htmlTpl, { ...vars, "ja.rate_value": satzAnzeige, "pdf_link_section": pdfLinkSection });
+    
+    const txt = deliveryMode === 'pdf-only'
+      ? 'Einsatzbestätigung\n\nDie Einsatzbestätigung liegt als PDF im Anhang bei.\n\nFahrerexpress | kraftfahrer-mieten.com'
+      : render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige }) + (pdfUrl ? `\n\nPDF-Download: ${pdfUrl} (gültig 14 Tage)` : '');
 
     // E-Mail via Resend API senden (TO: Fahrer, BCC: Admin)
     const subject = `Einsatzbestätigung – ${vars["jr.firma_oder_name"]} – ${zeitraum}`;
@@ -276,8 +332,10 @@ serve(async (req) => {
     formData.set("html", html);
     formData.set("text", txt);
 
-    // PDF anhängen
-    formData.set("attachments", new File([pdfBytes], "Einsatzbestaetigung.pdf", { type: "application/pdf" }));
+    // PDF anhängen nur bei 'both' oder 'pdf-only'
+    if (deliveryMode === 'both' || deliveryMode === 'pdf-only') {
+      formData.set("attachments", new File([pdfBytes], `${filenameBase}.pdf`, { type: "application/pdf" }));
+    }
 
     const mailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -288,7 +346,7 @@ serve(async (req) => {
     let status: "sent" | "failed" = "sent";
     if (!mailRes.ok) status = "failed";
 
-    // email_log schreiben
+    // email_log schreiben mit neuen Feldern
     await sb.from("email_log").insert({
       template: "driver_confirmation_v2",
       subject,
@@ -296,17 +354,34 @@ serve(async (req) => {
       status,
       assignment_id,
       job_id: jr.id,
+      delivery_mode: deliveryMode,
+      pdf_path: filePath,
+      pdf_url: pdfUrl,
       sent_at: new Date().toISOString(),
     });
 
     if (!mailRes.ok) {
       const errTxt = await mailRes.text();
-      return new Response(JSON.stringify({ ok: false, error: `Mail error: ${errTxt}` }), { status: 500 });
+      return new Response(JSON.stringify({ ok: false, error: `Mail error: ${errTxt}` }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
 
-    return new Response(JSON.stringify({ ok: true, pdf_path: filePath }), { status: 200 });
+    return new Response(JSON.stringify({ 
+      ok: true, 
+      pdf_path: filePath, 
+      pdf_url: pdfUrl, 
+      delivery_mode: deliveryMode 
+    }), { 
+      status: 200,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
   } catch (e) {
     console.error(e);
-    return new Response(JSON.stringify({ ok: false, error: "unexpected error" }), { status: 500 });
+    return new Response(JSON.stringify({ ok: false, error: "unexpected error" }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
   }
 });

@@ -30,6 +30,7 @@ export function AdminAssignmentDialog({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [note, setNote] = useState("");
+  const [attachPdf, setAttachPdf] = useState(false);
   const [isAssigning, setIsAssigning] = useState(false);
   const [isLoadingDrivers, setIsLoadingDrivers] = useState(false);
   const { toast } = useToast();
@@ -129,7 +130,10 @@ export function AdminAssignmentDialog({
             'Content-Type': 'application/json',
             'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`
           },
-          body: JSON.stringify({ assignment_id: assignmentId }),
+          body: JSON.stringify({ 
+            assignment_id: assignmentId,
+            mode: attachPdf ? 'both' : 'inline'
+          }),
         });
         
         if (!res.ok) {
@@ -140,9 +144,10 @@ export function AdminAssignmentDialog({
             variant: "destructive"
           });
         } else {
+          const deliveryMode = attachPdf ? 'both' : 'inline';
           toast({
             title: "Zuweisung erfolgreich",
-            description: "Fahrer zugewiesen und Einsatzbestätigung versendet."
+            description: `Fahrer zugewiesen und Einsatzbestätigung versendet (${deliveryMode === 'both' ? 'mit PDF-Anhang' : 'mit PDF-Link'}).`
           });
         }
       } catch (emailErr: any) {
@@ -154,15 +159,19 @@ export function AdminAssignmentDialog({
         });
       }
 
-      onAssignmentComplete();
-      onClose();
-      
       // Reset form
       setSelectedDriverId("");
+      setRateType("hourly");
       setRateValue("");
       setStartDate("");
       setEndDate("");
       setNote("");
+      setAttachPdf(false);
+      
+      onAssignmentComplete();
+      onClose();
+      
+      setAttachPdf(false);
       
     } catch (error) {
       console.error('Assignment error:', error);
@@ -302,6 +311,15 @@ export function AdminAssignmentDialog({
               placeholder="Zusätzliche Informationen..."
               rows={3}
             />
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="attach-pdf"
+              checked={attachPdf}
+              onCheckedChange={setAttachPdf}
+            />
+            <Label htmlFor="attach-pdf">PDF als Anhang senden (sonst nur Link)</Label>
           </div>
 
           <div className="flex gap-2 pt-4">
