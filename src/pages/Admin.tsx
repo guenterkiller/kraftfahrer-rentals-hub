@@ -210,6 +210,7 @@ const Admin = () => {
 
   const loadJobAssignments = async () => {
     try {
+      console.log("🔍 Admin: Lade Zuweisungen...");
       const { data, error } = await supabase
         .from('job_assignments')
         .select(`
