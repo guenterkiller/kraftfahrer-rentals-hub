@@ -39,6 +39,14 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log("fahrerwerden start", new Date().toISOString());
     console.log("has RESEND key:", !!Deno.env.get("RESEND_API_KEY"));
+    
+    // Runtime guard for MAIL_FROM domain
+    const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+    const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
+    if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
+      throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
+    }
+    
     console.log("Fahrer-Anfrage submission received");
     
     const contentType = req.headers.get("content-type") || "";
@@ -387,7 +395,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to admin
     const adminEmailResponse = await resend.emails.send({
-      from: "Fahrerexpress <noreply@kraftfahrer-mieten.com>",
+      from: MAIL_FROM,
       to: ["info@kraftfahrer-mieten.com"],
       subject: "Neue Fahrer-Registrierung",
       html: `
@@ -422,7 +430,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to applicant
     const confirmationEmailResponse = await resend.emails.send({
-      from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
+      from: MAIL_FROM,
       to: [requestData.email],
       subject: "Ihre Fahrerregistrierung bei der Fahrerexpress-Agentur – Willkommen im Team",
       html: `

@@ -28,6 +28,13 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log('🚀 approve-driver-and-send-jobs function called');
     
+    // Runtime guard for MAIL_FROM domain
+    const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+    const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
+    if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
+      throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
+    }
+    
     // Parse request body to get email and driverId
     const { email, driverId }: { email?: string; driverId?: string } = await req.json();
     
@@ -107,7 +114,6 @@ const handler = async (req: Request): Promise<Response> => {
     console.log('📋 Found jobs:', jobs?.length || 0);
 
     // 4. Prepare email content
-    const mailFrom = Deno.env.get('MAIL_FROM') || 'Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>';
     const mailReplyTo = Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com';
 
     let emailContent = `Hallo ${driver.vorname} ${driver.nachname},
@@ -154,7 +160,7 @@ Günter Killer`;
 
     try {
       const emailResponse = await resend.emails.send({
-        from: mailFrom,
+        from: MAIL_FROM,
         to: [driver.email],
         reply_to: mailReplyTo,
         subject: 'Aktuelle Fahrergesuche – Fahrerexpress',

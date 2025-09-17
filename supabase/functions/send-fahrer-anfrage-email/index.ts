@@ -48,6 +48,13 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     console.log("Fahrer-Anfrage email sending received");
 
+    // Runtime guard for MAIL_FROM domain
+    const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+    const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
+    if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
+      throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
+    }
+
     const requestData: FahrerAnfrageEmailRequest = await req.json();
     console.log("Eingehende Anfrage:", requestData);
     
@@ -79,7 +86,7 @@ const userAgent = req.headers.get('user-agent') || 'unknown';
     // Send notification email to admin
     console.log("Sending admin notification email...");
     const adminEmailResponse = await resend.emails.send({
-      from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
+      from: MAIL_FROM,
       to: [Deno.env.get("ADMIN_TO")!],
       reply_to: requestData.email,
       subject: `Neue Fahreranfrage von ${requestData.vorname} ${requestData.nachname}`,
@@ -134,7 +141,7 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
     // Send confirmation email to client
     console.log("Sending confirmation email to client...");
     const clientEmailResponse = await resend.emails.send({
-      from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
+      from: MAIL_FROM,
       to: [requestData.email],
       subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur – Eingangsbestätigung",
       html: `

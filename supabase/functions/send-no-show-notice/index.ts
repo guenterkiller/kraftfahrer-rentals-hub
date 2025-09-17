@@ -22,6 +22,13 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const { assignment_id }: NoShowNoticeRequest = await req.json();
 
+    // Runtime guard for MAIL_FROM domain
+    const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+    const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
+    if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
+      throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
+    }
+
     // Initialize Supabase client
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -141,7 +148,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email
     const emailResponse = await resend.emails.send({
-      from: 'Fahrerexpress <info@kraftfahrer-mieten.com>',
+      from: MAIL_FROM,
       to: [job.customer_email],
       bcc: [adminEmail],
       replyTo: 'info@kraftfahrer-mieten.com',

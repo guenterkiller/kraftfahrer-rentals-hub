@@ -23,7 +23,20 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log('🔄 Processing driver assignment');
+    
+    // Runtime guard for MAIL_FROM domain
+    const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+    const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
+    if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
+      throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
+    }
+    
     const { jobId, driverEmail, driverName }: AssignDriverRequest = await req.json();
+    
+    if (!jobId || !driverEmail || !driverName) {
+      throw new Error('Missing required fields: jobId, driverEmail, driverName');
+    }
 
     console.log("📧 Assigning driver to job:", { jobId, driverEmail, driverName });
 
@@ -55,7 +68,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to driver
     const emailResponse = await resend.emails.send({
-      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
+      from: MAIL_FROM,
       to: [driverEmail],
       cc: ["info@kraftfahrer-mieten.com"],
       subject: "Neue Fahraufgabe über Fahrerexpress – Bitte Rückmeldung",
