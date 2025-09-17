@@ -303,7 +303,7 @@ const Admin = () => {
     setConfirmingAssignment(assignmentId);
     
     try {
-      // First confirm the assignment
+      // 1) DB-Status setzen
       const { error } = await supabase.rpc('admin_confirm_assignment', {
         _assignment_id: assignmentId
       });
@@ -312,9 +312,9 @@ const Admin = () => {
         throw error;
       }
 
-      // Send driver confirmation email
+      // 2) Mail + PDF senden (Edge Function mit service_role)
       const { error: driverEmailError } = await supabase.functions.invoke('send-driver-confirmation', {
-        body: { assignmentId }
+        body: { assignment_id: assignmentId }
       });
 
       if (driverEmailError) {
@@ -325,25 +325,14 @@ const Admin = () => {
           variant: "destructive"
         });
       } else {
+        // 3) UI refresh + Toast
         toast({
-          title: "Auftrag bestätigt & E-Mail gesendet",
+          title: "Bestätigt & E-Mail versendet",
           description: "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)."
         });
       }
 
-      // Log admin action
-      const adminSession = localStorage.getItem('adminSession');
-      if (adminSession) {
-        const session = JSON.parse(adminSession);
-        const assignment = jobAssignments.find(a => a.id === assignmentId);
-        await supabase.from('admin_actions').insert({
-          action: 'admin_confirm',
-          job_id: assignment?.job_id,
-          assignment_id: assignmentId,
-          admin_email: session.email
-        });
-      }
-
+      await loadJobRequests();
       await loadJobAssignments();
       
     } catch (error) {

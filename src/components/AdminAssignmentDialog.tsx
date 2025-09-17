@@ -147,11 +147,21 @@ export function AdminAssignmentDialog({
       
     } catch (error) {
       console.error('Assignment error:', error);
-      toast({
-        title: "Zuweisungsfehler",
-        description: error.message || "Fehler bei der Zuweisung.",
-        variant: "destructive"
-      });
+      
+      // Handle unique constraint violation (double assignment)
+      if (error.code === '23505' && error.message?.includes('ux_job_assignments_job_active')) {
+        toast({
+          title: "Doppelzuweisung verhindert",
+          description: "Für diesen Auftrag ist bereits ein aktiver Fahrer zugewiesen. Erst stornieren oder ersetzen.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Zuweisungsfehler",
+          description: error.message || "Fehler bei der Zuweisung.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setIsAssigning(false);
     }
