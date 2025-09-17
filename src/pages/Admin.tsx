@@ -71,6 +71,9 @@ const Admin = () => {
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
   const [contactDataDialogOpen, setContactDataDialogOpen] = useState(false);
   const [selectedContactJobId, setSelectedContactJobId] = useState<string>("");
+  const [contactDialogOpen, setContactDialogOpen] = useState(false);
+  const [contactJob, setContactJob] = useState<any | null>(null);
+  const [resendingJobId, setResendingJobId] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -571,6 +574,90 @@ const Admin = () => {
     // Refresh data to show updated status
     loadJobRequests();
     loadJobAssignments();
+  };
+
+  // Helper: Adresse vollständig?
+  const isAddressComplete = (job: any) => {
+    const street = job?.customer_street || "";
+    const house  = job?.customer_house_number || "";
+    const postal = job?.customer_postal_code || "";
+    const city   = job?.customer_city || "";
+    const postalOk = /^\d{5}$/.test(String(postal));
+    return Boolean(street?.trim() && house?.trim() && postalOk && city?.trim());
+  };
+
+  // Dialog öffnen/schließen
+  const openContactData = (job: any) => {
+    setContactJob(job);
+    setContactDialogOpen(true);
+  };
+  const closeContactData = () => {
+    setContactDialogOpen(false);
+    setContactJob(null);
+  };
+  const handleContactSaved = async () => {
+    closeContactData();
+    try {
+      await loadJobRequests(); // refresh data
+      toast({ title: "Daten aktualisiert", description: "Auftraggeber-Daten wurden gespeichert." });
+    } catch {
+      /* noop */
+    }
+  };
+
+  // Legacy function for compatibility
+  const handleOpenContactDialog = (jobId: string) => {
+    const job = jobRequests.find(j => j.id === jobId);
+    if (job) {
+      openContactData(job);
+    }
+  };
+
+  // Einsatzbestätigung erneut senden (falls Assignment vorhanden)
+  const resendConfirmation = async (jobId: string) => {
+    try {
+      setResendingJobId(jobId);
+      // neuestes aktives Assignment zum Job holen
+      const { data: a, error: aErr } = await supabase
+        .from("job_assignments")
+        .select("id,status")
+        .eq("job_id", jobId)
+        .in("status", ["assigned", "confirmed"])
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (aErr) throw aErr;
+      if (!a?.id) {
+        toast({
+          title: "Kein Assignment gefunden",
+          description: "Bitte zuerst einen Fahrer zuweisen.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const res = await fetch("/functions/v1/send-driver-confirmation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ assignment_id: a.id, mode: "inline" }),
+      });
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j?.error || "Versand fehlgeschlagen");
+      }
+      toast({ title: "Einsatzbestätigung gesendet", description: "E-Mail erfolgreich versendet." });
+      await loadJobRequests();
+      await loadJobAssignments();
+    } catch (e: any) {
+      console.error("Resend failed:", e);
+      toast({
+        title: "Versand fehlgeschlagen",
+        description: e?.message || "Bitte Adresse prüfen oder später erneut versuchen.",
+        variant: "destructive",
+      });
+    } finally {
+      setResendingJobId(null);
+    }
   };
 
   const handleLogout = async () => {
@@ -1103,37 +1190,38 @@ const Admin = () => {
                          </TableCell>
                          <TableCell>
                            <div className="flex items-center gap-2">
-                             {/* Data completion check */}
-                             {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
-                               <Button
-                                 size="sm"
-                                 variant="outline"
-                                 onClick={() => handleOpenContactDialog(req.id)}
-                                 className="text-orange-600 border-orange-300 hover:bg-orange-50"
-                               >
-                                 <Edit className="h-3 w-3 mr-1" />
-                                 Daten ergänzen
-                               </Button>
-                             )}
-                             
-                             {/* Resend email for existing assignments */}
-                             {(() => {
-                               const assignment = activeByJob.get(req.id);
-                               if (assignment) {
-                                 return (
-                                   <Button
-                                     size="sm"
-                                     variant="outline"
-                                     onClick={() => resendDriverConfirmationNew(assignment.id)}
-                                     className="text-blue-600 border-blue-300 hover:bg-blue-50"
-                                   >
-                                     <Mail className="h-3 w-3 mr-1" />
-                                     Erneut senden
-                                   </Button>
-                                 );
-                               }
-                               return null;
-                             })()}
+                              {/* Data completion check */}
+                              {!isAddressComplete(req) && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => openContactData(req)}
+                                  className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                >
+                                  <Edit className="h-3 w-3 mr-1" />
+                                  Daten ergänzen
+                                </Button>
+                              )}
+                              
+                              {/* Resend email for existing assignments */}
+                              {(() => {
+                                const assignment = activeByJob.get(req.id);
+                                if (assignment && isAddressComplete(req)) {
+                                  return (
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => resendConfirmation(req.id)}
+                                      disabled={resendingJobId === req.id}
+                                      className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                                    >
+                                      <Mail className="h-3 w-3 mr-1" />
+                                      {resendingJobId === req.id ? "Sende…" : "Erneut senden"}
+                                    </Button>
+                                  );
+                                }
+                                return null;
+                              })()}
                            </div>
                          </TableCell>
                     </TableRow>
@@ -1290,6 +1378,14 @@ const Admin = () => {
         onOpenChange={setNoShowDialogOpen}
         assignment={selectedAssignment}
         onSuccess={handleNoShowSuccess}
+      />
+
+      {/* Contact Data Dialog */}
+      <ContactDataDialog
+        open={contactDialogOpen}
+        jobId={contactJob?.id || ""}
+        onClose={closeContactData}
+        onDataUpdated={handleContactSaved}
       />
     </div>
   );
