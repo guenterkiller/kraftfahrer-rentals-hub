@@ -738,6 +738,10 @@ export type Database = {
           | { _assignment_id: string; _reason?: string }
         Returns: boolean
       }
+      admin_reset_jobs_by_email: {
+        Args: { _email: string }
+        Returns: Json
+      }
       calc_no_show_fee_cents: {
         Args: { _rate_type: string; _rate_value: number; _starts_at: string }
         Returns: {
