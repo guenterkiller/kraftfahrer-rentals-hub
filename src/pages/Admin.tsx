@@ -956,21 +956,27 @@ const Admin = () => {
                        <TableCell>
                          {(() => {
                            const assignment = jobAssignments.find(a => a.job_id === req.id);
+                           console.log(`🔍 Job ${req.id}: Assignment gefunden:`, assignment);
                            
                            if (!assignment) {
                              return (
-                               <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
-                                 Zuweisen
-                               </Button>
+                               <div className="flex gap-2">
+                                 <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                   Zuweisen
+                                 </Button>
+                               </div>
                              );
                            }
                            
                            if (assignment.status === "assigned") {
                              return (
-                               <div className="flex items-center gap-2">
-                                 <Badge variant="secondary">Zugewiesen</Badge>
-                                 <Button size="sm" onClick={() => confirmAndSend(assignment.id)}>
-                                   Bestätigen & E-Mail senden
+                               <div className="flex flex-wrap gap-2">
+                                 <Button 
+                                   size="sm" 
+                                   onClick={() => confirmAndSend(assignment.id)}
+                                   disabled={confirmingAssignment === assignment.id}
+                                 >
+                                   {confirmingAssignment === assignment.id ? "Lädt..." : "Bestätigen & E-Mail senden"}
                                  </Button>
                                  <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
                                    Ändern
@@ -981,8 +987,7 @@ const Admin = () => {
                            
                            if (assignment.status === "confirmed") {
                              return (
-                               <div className="flex items-center gap-2">
-                                 <Badge variant="default">Bestätigt</Badge>
+                               <div className="flex flex-wrap gap-2">
                                  <Button size="sm" onClick={() => resendDriverConfirmation(assignment.id)}>
                                    Neu senden
                                  </Button>
@@ -990,7 +995,11 @@ const Admin = () => {
                              );
                            }
                            
-                           return <Badge variant="destructive">Storniert</Badge>;
+                           return (
+                             <div className="flex gap-2">
+                               <Badge variant="destructive">Storniert</Badge>
+                             </div>
+                           );
                          })()}
                        </TableCell>
                     </TableRow>
