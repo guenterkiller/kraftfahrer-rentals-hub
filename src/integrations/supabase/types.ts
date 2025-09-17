@@ -149,13 +149,6 @@ export type Database = {
             referencedRelation: "fahrer_profile"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "fahrer_dokumente_fahrer_id_fkey"
-            columns: ["fahrer_id"]
-            isOneToOne: false
-            referencedRelation: "fahrer_profile_admin_summary"
-            referencedColumns: ["id"]
-          },
         ]
       }
       fahrer_profile: {
@@ -309,13 +302,6 @@ export type Database = {
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "fahrer_profile"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_assignments_driver_id_fkey"
-            columns: ["driver_id"]
-            isOneToOne: false
-            referencedRelation: "fahrer_profile_admin_summary"
             referencedColumns: ["id"]
           },
           {
@@ -523,77 +509,12 @@ export type Database = {
       }
     }
     Views: {
-      fahrer_profile_admin_summary: {
-        Row: {
-          created_at: string | null
-          email_display: string | null
-          erfahrung_jahre: number | null
-          fuehrerscheinklassen: string[] | null
-          id: string | null
-          nachname: string | null
-          ort: string | null
-          spezialisierungen: string[] | null
-          status: string | null
-          stundensatz: number | null
-          telefon_display: string | null
-          updated_at: string | null
-          verfuegbare_regionen: string[] | null
-          vorname: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email_display?: never
-          erfahrung_jahre?: number | null
-          fuehrerscheinklassen?: string[] | null
-          id?: string | null
-          nachname?: string | null
-          ort?: string | null
-          spezialisierungen?: string[] | null
-          status?: string | null
-          stundensatz?: number | null
-          telefon_display?: never
-          updated_at?: string | null
-          verfuegbare_regionen?: string[] | null
-          vorname?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email_display?: never
-          erfahrung_jahre?: number | null
-          fuehrerscheinklassen?: string[] | null
-          id?: string | null
-          nachname?: string | null
-          ort?: string | null
-          spezialisierungen?: string[] | null
-          status?: string | null
-          stundensatz?: number | null
-          telefon_display?: never
-          updated_at?: string | null
-          verfuegbare_regionen?: string[] | null
-          vorname?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_fahrer_admin_summary: {
         Args: Record<PropertyKey, never>
-        Returns: {
-          created_at: string | null
-          email_display: string | null
-          erfahrung_jahre: number | null
-          fuehrerscheinklassen: string[] | null
-          id: string | null
-          nachname: string | null
-          ort: string | null
-          spezialisierungen: string[] | null
-          status: string | null
-          stundensatz: number | null
-          telefon_display: string | null
-          updated_at: string | null
-          verfuegbare_regionen: string[] | null
-          vorname: string | null
-        }[]
+        Returns: unknown[]
       }
       is_admin: {
         Args: { user_uuid: string }
