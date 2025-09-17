@@ -1,496 +1,176 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.38.4";
-import { Resend } from "npm:resend@2.0.0";
+// supabase/functions/send-driver-confirmation/index.ts
+// Deno Edge Function – sofortiger Versand der Fahrer-Einsatzbestätigung (E-Mail + PDF)
+// Erwartet: POST { assignment_id: string }
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { htmlToSimplePdf } from "./pdf.ts"; // siehe pdf.ts weiter unten
 
-const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!; // Resend HTTP API
 
-interface DriverConfirmationRequest {
-  assignment_id: string;
-  stage?: string;
+const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
+  auth: { persistSession: false },
+});
+
+// --- TEMPLATES ---
+import htmlTpl from "./templates/driver-confirmation.html" assert { type: "text" };
+import txtTpl from "./templates/driver-confirmation.txt" assert { type: "text" };
+
+// simple replacer
+function render(tpl: string, vars: Record<string, string | number | null | undefined>) {
+  return tpl.replace(/{{\s*([^}]+)\s*}}/g, (_, k) => {
+    const v = vars[k.trim()];
+    return (v === undefined || v === null) ? "" : String(v);
+  });
 }
 
-const handler = async (req: Request): Promise<Response> => {
-  console.log('🚚 Driver confirmation request received');
+function ensure(v?: string | null) { return !!(v && v.trim().length); }
 
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+// derive display helpers
+function withCurrency(n?: number | null) {
+  if (typeof n === "number") {
+    return new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" }).format(n);
   }
+  return "nach Absprache";
+}
 
+serve(async (req) => {
   try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    );
+    if (req.method !== "POST") {
+      return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405 });
+    }
 
-    // Parse request
-    const { assignment_id, stage }: DriverConfirmationRequest = await req.json();
-    console.log('📋 Processing driver confirmation for assignment:', assignment_id, 'stage:', stage);
+    const { assignment_id } = await req.json();
+    if (!assignment_id) {
+      return new Response(JSON.stringify({ ok: false, error: "assignment_id required" }), { status: 400 });
+    }
 
-    // Fetch assignment with job and driver details
-    const { data: assignment, error: assignmentError } = await supabase
-      .from('job_assignments')
+    // Daten holen (Assignment + Job + Fahrer)
+    // Passen ggf. die Feldnamen an euer Schema an.
+    const { data: rows, error } = await sb
+      .from("job_assignments")
       .select(`
-        *,
-        job_requests!inner(*),
-        fahrer_profile!inner(*)
+        id, job_id, driver_id, status,
+        rate_type, rate_value, start_date, end_date, admin_note,
+        job_requests:job_id (
+          id, status, customer_name, company, customer_phone, customer_email,
+          einsatzort, fahrzeugtyp, besonderheiten, zeitraum
+        ),
+        fahrer_profile:driver_id (
+          id, vorname, nachname, email, telefon
+        )
       `)
-      .eq('id', assignment_id)
-      .single();
+      .eq("id", assignment_id)
+      .limit(1)
+      .maybeSingle();
 
-    if (assignmentError || !assignment) {
-      console.error('❌ Assignment not found:', assignmentError);
-      return new Response(JSON.stringify({ 
-        error: 'Assignment not found' 
-      }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+    if (error || !rows) {
+      return new Response(JSON.stringify({ ok: false, error: "assignment not found" }), { status: 404 });
     }
 
-    const job = assignment.job_requests;
-    const driver = assignment.fahrer_profile;
+    const ja = rows as any;
+    const jr = ja.job_requests;
+    const fp = ja.fahrer_profile;
 
-    // Validate required address fields for proper legal confirmation
-    const addressValidation = validateCustomerAddress(job);
-    if (!addressValidation.isValid) {
-      console.error('❌ Incomplete customer address:', addressValidation.missingFields);
-      return new Response(JSON.stringify({ 
-        error: 'Vollständige Anschrift des Auftraggebers erforderlich',
-        details: `Fehlende Felder: ${addressValidation.missingFields.join(', ')}`,
-        missingFields: addressValidation.missingFields
-      }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
+    // Pflicht-Validierungen (hard stop)
+    if (!fp || !ensure(fp.email) || !ensure(fp.vorname) || !ensure(fp.nachname)) {
+      return new Response(JSON.stringify({ ok: false, error: "Fahrerdaten unvollständig." }), { status: 400 });
+    }
+    if (!jr) {
+      return new Response(JSON.stringify({ ok: false, error: "Auftragsdaten fehlen." }), { status: 400 });
+    }
+    if (!ensure(jr.customer_phone) && !ensure(jr.customer_email)) {
+      return new Response(JSON.stringify({ ok: false, error: "Kontakt Auftraggeber fehlt (Telefon oder E-Mail)." }), { status: 400 });
     }
 
-    // Get admin email for BCC
-    const { data: adminSettings } = await supabase
-      .from('admin_settings')
-      .select('admin_email')
-      .single();
+    const zeitraum = ja.start_date && ja.end_date
+      ? new Intl.DateTimeFormat("de-DE").format(new Date(ja.start_date)) +
+        " – " + new Intl.DateTimeFormat("de-DE").format(new Date(ja.end_date))
+      : jr.zeitraum || "nach Absprache";
 
-    const adminEmail = adminSettings?.admin_email || 'info@kraftfahrer-mieten.com';
+    const adminEmailRes = await sb.from("admin_settings").select("admin_email").limit(1).maybeSingle();
+    const adminEmail = adminEmailRes.data?.admin_email ?? "info@kraftfahrer-mieten.com";
 
-    console.log('📧 Generating driver confirmation email for:', driver.email);
-
-    // Format start date for subject
-    const formatDateForSubject = (dateStr: string | null) => {
-      if (!dateStr) return 'nach Absprache';
-      try {
-        return new Date(dateStr).toLocaleDateString('de-DE');
-      } catch {
-        return 'nach Absprache';
-      }
+    const vars = {
+      "fp.vorname": fp.vorname,
+      "fp.nachname": fp.nachname,
+      "jr.firma_oder_name": jr.company || jr.customer_name || "",
+      "jr.ansprechpartner": jr.customer_name || "",
+      "jr.telefon": jr.customer_phone || "",
+      "jr.email": jr.customer_email || "",
+      "jr.einsatzort": jr.einsatzort || "Siehe Nachricht",
+      "jr.fahrzeugtyp": jr.fahrzeugtyp || "",
+      "jr.besonderheiten": jr.besonderheiten || "",
+      "ja.rate_type": ja.rate_type || "nach Absprache",
+      "ja.rate_value": ja.rate_value || "",
+      "ja.rate_suffix": ja.rate_type ? (ja.rate_type === "hourly" ? "€/Std" : ja.rate_type === "daily" ? "€/Tag" : "€") : "",
+      "einsatz_zeitraum": zeitraum,
+      "heute": new Intl.DateTimeFormat("de-DE").format(new Date()),
     };
 
-    const datumStart = formatDateForSubject(assignment.start_date);
-    const subject = `Einsatzbestätigung – ${job.company || job.customer_name} – ${job.einsatzort} am ${datumStart}`;
+    // Anzeige für Satz
+    const satzAnzeige = withCurrency(typeof ja.rate_value === "number" ? ja.rate_value : undefined);
+    const html = render(htmlTpl, { ...vars, "ja.rate_value": satzAnzeige });
+    const txt = render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige });
 
-    // Generate PDF content
-    const pdfHtml = generateDriverPDFContent({
-      job,
-      driver,
-      assignment,
-      confirmationDate: new Date().toLocaleDateString('de-DE')
+    // PDF bauen (Simple PDF – Text-basiert; falls ihr bereits einen HTML→PDF nutzt, dort einbinden)
+    const pdfBytes = await htmlToSimplePdf(html, txt);
+
+    // PDF in private Bucket speichern
+    const filePath = `confirmations/assignments/${assignment_id}/driver-confirmation-${new Date().toISOString().slice(0,10)}.pdf`;
+    const up = await sb.storage.from("confirmations").upload(filePath, pdfBytes, {
+      contentType: "application/pdf",
+      upsert: true,
+    });
+    if (up.error) {
+      // speichern ist nett, aber nicht kritisch für Mailversand → nur loggen
+      console.error("PDF upload error", up.error);
+    }
+
+    // E-Mail via Resend API senden (TO: Fahrer, BCC: Admin)
+    const subject = `Einsatzbestätigung – ${vars["jr.firma_oder_name"]} – ${zeitraum}`;
+    const formData = new FormData();
+    formData.set("from", MAIL_FROM);
+    formData.set("to", fp.email);
+    formData.set("bcc", adminEmail);
+    formData.set("subject", subject);
+    formData.set("html", html);
+    formData.set("text", txt);
+
+    // PDF anhängen
+    formData.set("attachments", new File([pdfBytes], "Einsatzbestaetigung.pdf", { type: "application/pdf" }));
+
+    const mailRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}` },
+      body: formData,
     });
 
-    // Generate email content
-    const emailHtml = generateDriverEmailContent({
-      job,
-      driver,
-      assignment,
-      confirmationDate: new Date().toLocaleDateString('de-DE')
+    let status: "sent" | "failed" = "sent";
+    if (!mailRes.ok) status = "failed";
+
+    // email_log schreiben
+    await sb.from("email_log").insert({
+      template: "driver_confirmation_v2",
+      subject,
+      recipient: fp.email,
+      status,
+      assignment_id,
+      job_id: jr.id,
+      sent_at: new Date().toISOString(),
     });
 
-    // Create email log entry
-    const { data: emailLogEntry, error: logError } = await supabase
-      .from('email_log')
-      .insert({
-        job_id: job.id,
-        assignment_id: assignment_id,
-        recipient: driver.email,
-        subject: subject,
-        template: 'driver_confirmation',
-        status: 'pending'
-      })
-      .select()
-      .single();
-
-    if (logError) {
-      console.error('❌ Failed to create email log:', logError);
+    if (!mailRes.ok) {
+      const errTxt = await mailRes.text();
+      return new Response(JSON.stringify({ ok: false, error: `Mail error: ${errTxt}` }), { status: 500 });
     }
 
-    try {
-      // Generate PDF
-      const pdfBuffer = await generatePDF(pdfHtml);
-      const pdfFilename = `driver-confirmation-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}.pdf`;
-
-      // Upload PDF to storage
-      const pdfPath = `assignments/${assignment_id}/${pdfFilename}`;
-      const { error: uploadError } = await supabase.storage
-        .from('confirmations')
-        .upload(pdfPath, pdfBuffer, {
-          contentType: 'application/pdf',
-          upsert: true
-        });
-
-      if (uploadError) {
-        console.error('❌ PDF upload failed:', uploadError);
-      }
-
-      // Send email with PDF attachment
-      const emailResponse = await resend.emails.send({
-        from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
-        to: [driver.email],
-        bcc: [adminEmail],
-        subject: subject,
-        html: emailHtml,
-        attachments: [
-          {
-            filename: pdfFilename,
-            content: pdfBuffer,
-            contentType: 'application/pdf'
-          }
-        ]
-      });
-
-      if (emailResponse.error) {
-        throw new Error(`Email sending failed: ${emailResponse.error.message}`);
-      }
-
-      console.log('✅ Driver confirmation email sent successfully:', emailResponse.data?.id);
-
-      // Update email log with success
-      if (emailLogEntry) {
-        await supabase
-          .from('email_log')
-          .update({
-            status: 'sent',
-            message_id: emailResponse.data?.id,
-            sent_at: new Date().toISOString()
-          })
-          .eq('id', emailLogEntry.id);
-      }
-
-      console.log('✅ Driver confirmation completed successfully');
-
-      return new Response(JSON.stringify({ 
-        success: true,
-        emailId: emailResponse.data?.id,
-        pdf_url: pdfPath,
-        message: 'Driver confirmation sent successfully'
-      }), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
-
-    } catch (emailError) {
-      console.error('❌ Email sending failed:', emailError);
-
-      // Update email log with error
-      if (emailLogEntry) {
-        await supabase
-          .from('email_log')
-          .update({
-            status: 'error',
-            error_message: emailError.message
-          })
-          .eq('id', emailLogEntry.id);
-      }
-
-      return new Response(JSON.stringify({ 
-        error: 'Failed to send driver confirmation email',
-        details: emailError.message
-      }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
-    }
-
-  } catch (error) {
-    console.error('❌ Unexpected error in send-driver-confirmation:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Internal server error',
-      details: error.message
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    });
+    return new Response(JSON.stringify({ ok: true, pdf_path: filePath }), { status: 200 });
+  } catch (e) {
+    console.error(e);
+    return new Response(JSON.stringify({ ok: false, error: "unexpected error" }), { status: 500 });
   }
-};
-
-function validateCustomerAddress(job: any) {
-  const requiredFields = [];
-  
-  // Check for company name or customer name
-  if (!job.company || job.company === 'Bitte wählen') {
-    if (!job.customer_name) {
-      requiredFields.push('Unternehmen/Name');
-    }
-  }
-  
-  // Check for basic contact information that we know exists
-  if (!job.customer_email) {
-    requiredFields.push('E-Mail');
-  }
-  
-  if (!job.customer_phone) {
-    requiredFields.push('Telefon');
-  }
-  
-  // For now, skip detailed address validation since we don't have separate address fields in the schema
-  // The job description should contain location information
-  
-  return {
-    isValid: requiredFields.length === 0,
-    missingFields: requiredFields
-  };
-}
-
-function generateDriverEmailContent({ job, driver, assignment, confirmationDate }) {
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return 'nach Absprache';
-    try {
-      return new Date(dateStr).toLocaleDateString('de-DE');
-    } catch {
-      return 'nach Absprache';
-    }
-  };
-
-  const formatTime = (dateStr: string | null) => {
-    if (!dateStr) return '';
-    try {
-      return new Date(dateStr).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    } catch {
-      return '';
-    }
-  };
-
-  const datumStart = formatDate(assignment.start_date);
-  const datumEnde = formatDate(assignment.end_date);
-  const uhrzeitStart = formatTime(assignment.start_date);
-  const uhrzeitEnde = formatTime(assignment.end_date);
-
-  const firmaOderName = job.company && job.company !== 'Bitte wählen' ? job.company : job.customer_name;
-  const rateDisplay = assignment.rate_type === 'daily' ? 'Tagessatz' : 
-                      assignment.rate_type === 'hourly' ? 'Stundensatz' : 
-                      'nach Absprache';
-
-  return `
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Einsatzbestätigung</title>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-    .header { background-color: #2563eb; color: white; padding: 20px; text-align: center; }
-    .content { padding: 20px; }
-    .section { margin-bottom: 20px; }
-    .highlight { background-color: #f0f9ff; border-left: 4px solid #2563eb; padding: 15px; margin: 20px 0; }
-    .important { background-color: #fef3c7; border: 1px solid #f59e0b; padding: 20px; margin: 20px 0; }
-    .footer { background-color: #f8fafc; padding: 20px; text-align: center; font-size: 12px; color: #64748b; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>Einsatzbestätigung</h1>
-    <p>Fahrerexpress | kraftfahrer-mieten.com</p>
-  </div>
-  
-  <div class="content">
-    <div class="section">
-      <p>Hallo ${driver.vorname} ${driver.nachname},</p>
-      
-      <p>hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
-    </div>
-
-    <div class="highlight">
-      <h3>AUFTRAGGEBER</h3>
-      <p>• <strong>Unternehmen/Name:</strong> ${firmaOderName}<br>
-      • <strong>Ansprechpartner:</strong> ${job.customer_name}<br>
-      • <strong>Anschrift:</strong> <em>Vollständige Anschrift wird ergänzt</em><br>
-      • <strong>Telefon:</strong> ${job.customer_phone}<br>
-      • <strong>E-Mail:</strong> ${job.customer_email}</p>
-    </div>
-
-    <div class="highlight">
-      <h3>EINSATZ</h3>
-      <p>• <strong>Datum/Zeitraum:</strong> ${datumStart} ${uhrzeitStart}${datumEnde !== datumStart ? ` – ${datumEnde} ${uhrzeitEnde}` : ''}<br>
-      • <strong>Einsatzort / Treffpunkt:</strong> ${job.einsatzort}<br>
-      • <strong>Fahrzeug/Typ:</strong> ${job.fahrzeugtyp}<br>
-      ${job.besonderheiten ? `• <strong>Besonderheiten:</strong> ${job.besonderheiten}<br>` : ''}</p>
-    </div>
-
-    <div class="highlight">
-      <h3>KONDITIONEN</h3>
-      <p>• <strong>Abrechnung:</strong> ${rateDisplay}<br>
-      • <strong>Satz:</strong> ${assignment.rate_value ? `${assignment.rate_value} €` : 'nach Absprache'} zzgl. gesetzlicher USt<br>
-      ${assignment.admin_note ? `• <strong>Sonstiges:</strong> ${assignment.admin_note}<br>` : ''}</p>
-    </div>
-
-    <div class="important">
-      <h3>VEREINBARUNGEN (Fahrerexpress)</h3>
-      <p><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
-      <p><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
-      <p><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
-      <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-      <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
-      <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
-      
-      <h4 style="margin-top: 30px; color: #d32f2f;">Nichterscheinen / kurzfristige Absage (No-Show)</h4>
-      <p><strong>Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</strong></p>
-      <p><strong>In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</strong></p>
-      <p>Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen.</p>
-      <p><strong>Höhere Gewalt</strong> (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
-      <p><strong>Fahrerexpress bemüht sich im No-Show-Fall unverzüglich um Ersatz.</strong></p>
-      <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-      <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an.</p>
-      <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
-    </div>
-
-    <div class="section">
-      <p><strong>Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</strong></p>
-      
-      <p>Viele Grüße<br><strong>Fahrerexpress | kraftfahrer-mieten.com</strong><br>
-      E-Mail: info@kraftfahrer-mieten.com | Tel: +49-1577-1442285</p>
-    </div>
-  </div>
-
-  <div class="footer">
-    <p>Fahrerexpress-Agentur – Günter Killer<br>
-    E-Mail: info@kraftfahrer-mieten.com | Web: kraftfahrer-mieten.com<br>
-    Bestätigung erstellt am: ${confirmationDate}</p>
-  </div>
-</body>
-</html>`;
-}
-
-function generateDriverPDFContent({ job, driver, assignment, confirmationDate }) {
-  const formatDate = (dateStr: string | null) => {
-    if (!dateStr) return 'nach Absprache';
-    try {
-      return new Date(dateStr).toLocaleDateString('de-DE');
-    } catch {
-      return 'nach Absprache';
-    }
-  };
-
-  const formatTime = (dateStr: string | null) => {
-    if (!dateStr) return '';
-    try {
-      return new Date(dateStr).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    } catch {
-      return '';
-    }
-  };
-
-  const datumStart = formatDate(assignment.start_date);
-  const datumEnde = formatDate(assignment.end_date);
-  const uhrzeitStart = formatTime(assignment.start_date);
-  const uhrzeitEnde = formatTime(assignment.end_date);
-
-  const firmaOderName = job.company && job.company !== 'Bitte wählen' ? job.company : job.customer_name;
-  const rateDisplay = assignment.rate_type === 'daily' ? 'Tagessatz' : 
-                      assignment.rate_type === 'hourly' ? 'Stundensatz' : 
-                      'nach Absprache';
-
-  return `
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <style>
-    body { font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #333; margin: 0; padding: 20px; }
-    .header { text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; }
-    .header h1 { color: #2563eb; margin: 0; font-size: 24px; }
-    .section { margin-bottom: 25px; }
-    .section h3 { color: #2563eb; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-bottom: 15px; }
-    .important { background-color: #fef3c7; border: 1px solid #f59e0b; padding: 15px; margin: 20px 0; }
-    .important h3 { color: #92400e; margin-top: 0; }
-    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 9px; color: #64748b; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>Einsatzbestätigung</h1>
-    <p style="font-size: 14px; margin: 10px 0 0 0;"><strong>Fahrerexpress | kraftfahrer-mieten.com</strong></p>
-    <p style="margin: 5px 0;">Bestätigung vom: ${confirmationDate}</p>
-  </div>
-
-  <div class="section">
-    <p>Hallo ${driver.vorname} ${driver.nachname},</p>
-    <p>hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
-  </div>
-
-  <div class="section">
-    <h3>AUFTRAGGEBER</h3>
-    <p>• <strong>Unternehmen/Name:</strong> ${firmaOderName}<br>
-    • <strong>Ansprechpartner:</strong> ${job.customer_name}<br>
-    • <strong>Anschrift:</strong> <em>Vollständige Anschrift wird ergänzt</em><br>
-    • <strong>Telefon:</strong> ${job.customer_phone}<br>
-    • <strong>E-Mail:</strong> ${job.customer_email}</p>
-  </div>
-
-  <div class="section">
-    <h3>EINSATZ</h3>
-    <p>• <strong>Datum/Zeitraum:</strong> ${datumStart} ${uhrzeitStart}${datumEnde !== datumStart ? ` – ${datumEnde} ${uhrzeitEnde}` : ''}<br>
-    • <strong>Einsatzort / Treffpunkt:</strong> ${job.einsatzort}<br>
-    • <strong>Fahrzeug/Typ:</strong> ${job.fahrzeugtyp}<br>
-    ${job.besonderheiten ? `• <strong>Besonderheiten:</strong> ${job.besonderheiten}<br>` : ''}</p>
-  </div>
-
-  <div class="section">
-    <h3>KONDITIONEN</h3>
-    <p>• <strong>Abrechnung:</strong> ${rateDisplay}<br>
-    • <strong>Satz:</strong> ${assignment.rate_value ? `${assignment.rate_value} €` : 'nach Absprache'}<br>
-    ${assignment.admin_note ? `• <strong>Sonstiges:</strong> ${assignment.admin_note}<br>` : ''}</p>
-  </div>
-
-  <div class="important">
-    <h3>VEREINBARUNGEN (Fahrerexpress)</h3>
-    <p><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
-    <p><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
-    <p><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
-    <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-    <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an.</p>
-    <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
-  </div>
-
-  <div class="section">
-    <p><strong>Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</strong></p>
-    <p>Viele Grüße<br><strong>Fahrerexpress | kraftfahrer-mieten.com</strong><br>
-    E-Mail: info@kraftfahrer-mieten.com | Tel: +49-1577-1442285</p>
-  </div>
-
-  <div class="footer">
-    <p>Fahrerexpress-Agentur – Günter Killer<br>
-    E-Mail: info@kraftfahrer-mieten.com | Web: kraftfahrer-mieten.com<br>
-    Bestätigung erstellt am: ${confirmationDate}</p>
-  </div>
-</body>
-</html>`;
-}
-
-async function generatePDF(htmlContent: string): Promise<Uint8Array> {
-  // For production, use a proper PDF generation library like puppeteer
-  // For now, we'll encode the HTML content as a simple fallback
-  const encoder = new TextEncoder();
-  return encoder.encode(htmlContent);
-}
-
-serve(handler);
+});

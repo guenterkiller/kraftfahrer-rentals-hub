@@ -121,51 +121,38 @@ export function AdminAssignmentDialog({
       const assignmentId = data as string;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // Sofort E-Mail + PDF versenden
-      const { data: mailData, error: mailErr } = await supabase.functions.invoke(
-        "send-driver-confirmation",
-        { body: { assignment_id: assignmentId, stage: "assigned" } }
-      );
-      
-      if (mailErr) {
-        console.error('❌ E-Mail error:', mailErr);
+      // Sofort E-Mail + PDF auslösen:
+      try {
+        const res = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-driver-confirmation`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`
+          },
+          body: JSON.stringify({ assignment_id: assignmentId }),
+        });
         
-        // Try to parse error details from response
-        let errorMessage = mailErr.message || "Unbekannter Fehler";
-        let detailedError = "";
-        
-        // Check if it's an address validation error
-        if (mailErr.context?.body) {
-          try {
-            const errorBody = typeof mailErr.context.body === 'string' 
-              ? JSON.parse(mailErr.context.body) 
-              : mailErr.context.body;
-            
-            if (errorBody.error && errorBody.error.includes('Vollständige Anschrift')) {
-              errorMessage = "Adressdaten unvollständig";
-              detailedError = errorBody.details || "Bitte ergänzen Sie die vollständige Anschrift des Auftraggebers (Straße + Nr., PLZ + Ort) vor der Zuweisung.";
-              
-              toast({
-                title: errorMessage,
-                description: detailedError,
-                variant: "destructive"
-              });
-              return; // Don't throw, just show message and keep dialog open
-            }
-          } catch (parseError) {
-            console.error('Error parsing response:', parseError);
-          }
+        if (!res.ok) {
+          const { error: errTxt } = await res.json().catch(() => ({ error: 'Unbekannter Fehler' }));
+          toast({
+            title: "E-Mail-Versand fehlgeschlagen",
+            description: `${errTxt}`,
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Zuweisung erfolgreich",
+            description: "Fahrer zugewiesen und Einsatzbestätigung versendet."
+          });
         }
-        
-        throw mailErr;
+      } catch (emailErr: any) {
+        console.error('Email sending error:', emailErr);
+        toast({
+          title: "E-Mail-Versand fehlgeschlagen", 
+          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden",
+          variant: "destructive"
+        });
       }
-
-      console.log('✅ E-Mail sent successfully');
-
-      toast({
-        title: "Zuweisung gespeichert & E-Mail versendet",
-        description: "Der Fahrer wurde zugewiesen und die E-Mail wurde versendet."
-      });
 
       onAssignmentComplete();
       onClose();
