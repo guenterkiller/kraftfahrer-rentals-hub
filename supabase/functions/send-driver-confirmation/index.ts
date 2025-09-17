@@ -8,7 +8,7 @@ import { htmlToSimplePdf } from "./pdf.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "Kraftfahrer-Mieten <onboarding@resend.dev>";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 
 const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
