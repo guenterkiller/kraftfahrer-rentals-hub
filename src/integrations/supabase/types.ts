@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_actions: {
+        Row: {
+          action: string
+          admin_email: string
+          assignment_id: string | null
+          created_at: string
+          id: string
+          job_id: string
+          note: string | null
+        }
+        Insert: {
+          action: string
+          admin_email: string
+          assignment_id?: string | null
+          created_at?: string
+          id?: string
+          job_id: string
+          note?: string | null
+        }
+        Update: {
+          action?: string
+          admin_email?: string
+          assignment_id?: string | null
+          created_at?: string
+          id?: string
+          job_id?: string
+          note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_actions_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "job_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "admin_actions_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_log: {
         Row: {
           created_at: string
@@ -250,8 +295,12 @@ export type Database = {
       job_assignments: {
         Row: {
           accepted_at: string | null
+          admin_note: string | null
           assigned_at: string
+          cancelled_at: string | null
+          cancelled_reason: string | null
           confirmed_at: string | null
+          confirmed_by_admin: boolean
           created_at: string
           declined_at: string | null
           driver_id: string
@@ -266,8 +315,12 @@ export type Database = {
         }
         Insert: {
           accepted_at?: string | null
+          admin_note?: string | null
           assigned_at?: string
+          cancelled_at?: string | null
+          cancelled_reason?: string | null
           confirmed_at?: string | null
+          confirmed_by_admin?: boolean
           created_at?: string
           declined_at?: string | null
           driver_id: string
@@ -282,8 +335,12 @@ export type Database = {
         }
         Update: {
           accepted_at?: string | null
+          admin_note?: string | null
           assigned_at?: string
+          cancelled_at?: string | null
+          cancelled_reason?: string | null
           confirmed_at?: string | null
+          confirmed_by_admin?: boolean
           created_at?: string
           declined_at?: string | null
           driver_id?: string
@@ -512,6 +569,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_assign_driver: {
+        Args: {
+          _driver_id: string
+          _end_date?: string
+          _job_id: string
+          _note?: string
+          _rate_type: string
+          _rate_value: number
+          _start_date?: string
+        }
+        Returns: string
+      }
+      admin_cancel_assignment: {
+        Args: { _assignment_id: string; _reason?: string }
+        Returns: boolean
+      }
+      admin_confirm_assignment: {
+        Args: { _assignment_id: string }
+        Returns: boolean
+      }
       get_fahrer_admin_summary: {
         Args: Record<PropertyKey, never>
         Returns: unknown[]

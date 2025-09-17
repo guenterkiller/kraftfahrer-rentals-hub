@@ -10,7 +10,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image } from "lucide-react";
+import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail } from "lucide-react";
+import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -55,14 +56,14 @@ const Admin = () => {
   const [documents, setDocuments] = useState<Record<string, DocumentFile[]>>({});
   const [documentCounts, setDocumentCounts] = useState<Record<string, number>>({});
   const [jobRequests, setJobRequests] = useState<any[]>([]);
+  const [jobAssignments, setJobAssignments] = useState<any[]>([]);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
-  const [selectedDriverEmail, setSelectedDriverEmail] = useState<string>("");
-  const [assigningDriver, setAssigningDriver] = useState(false);
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
   const [sendingJobToAll, setSendingJobToAll] = useState<string | null>(null);
+  const [confirmingAssignment, setConfirmingAssignment] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -158,10 +159,11 @@ const Admin = () => {
       // Check if session is valid and not expired (24 hours)
       if (session.isAdmin && session.email === ADMIN_EMAIL) {
         if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
-          console.log("✅ Admin: Session gültig für:", session.email);
+      console.log("✅ Admin: Session gültig für:", session.email);
           setUser({ email: session.email } as User);
           loadFahrerData();
           loadJobRequests();
+          loadJobAssignments();
           return;
         } else {
           console.log("⏰ Admin: Session abgelaufen");
@@ -201,6 +203,29 @@ const Admin = () => {
       setJobRequests(response.data || []);
     } catch (error) {
       console.error("❌ Admin: Unerwarteter Fehler beim Laden der Fahreranfragen:", error);
+    }
+  };
+
+  const loadJobAssignments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('job_assignments')
+        .select(`
+          *,
+          job_requests!inner(*),
+          fahrer_profile!inner(*)
+        `)
+        .order('assigned_at', { ascending: false });
+
+      if (error) {
+        console.error("❌ Admin: Fehler beim Laden der Zuweisungen:", error);
+        return;
+      }
+
+      console.log("✅ Admin: Zuweisungen erfolgreich geladen:", data);
+      setJobAssignments(data || []);
+    } catch (error) {
+      console.error("❌ Admin: Unerwarteter Fehler beim Laden der Zuweisungen:", error);
     }
   };
 
@@ -263,103 +288,70 @@ const Admin = () => {
 
   const handleAssignDriver = (jobId: string) => {
     console.log("🎯 Opening assign dialog for job:", jobId);
-    console.log("📋 Available drivers:", fahrer.length);
-    console.log("✅ Approved drivers:", fahrer.filter(f => f.status === 'approved').length);
-    console.log("👥 Driver list:", fahrer.map(f => ({ name: `${f.vorname} ${f.nachname}`, email: f.email, status: f.status })));
-    
     setSelectedJobId(jobId);
     setAssignDialogOpen(true);
   };
 
-  const assignDriverToJob = async () => {
-    console.log("🚀 Starting driver assignment...");
-    console.log("📋 Selected Job ID:", selectedJobId);
-    console.log("👤 Selected Driver Email:", selectedDriverEmail);
-    
-    if (!selectedJobId || !selectedDriverEmail) {
-      console.error("❌ Missing job ID or driver email");
-      toast({
-        title: "Fehler",
-        description: "Bitte wählen Sie einen Fahrer aus",
-        variant: "destructive"
-      });
-      return;
-    }
+  const handleAssignmentComplete = async () => {
+    await loadJobRequests();
+    await loadJobAssignments();
+  };
 
-    setAssigningDriver(true);
+  const handleConfirmAssignment = async (assignmentId: string) => {
+    setConfirmingAssignment(assignmentId);
     
     try {
-      const selectedDriver = fahrer.find(f => f.email === selectedDriverEmail);
-      console.log("🔍 Found driver:", selectedDriver);
-      
-      if (!selectedDriver) {
-        console.error("❌ Driver not found in fahrer list");
-        toast({
-          title: "Fehler",
-          description: "Ausgewählter Fahrer nicht gefunden",
-          variant: "destructive"
-        });
-        setAssigningDriver(false);
-        return;
-      }
-
-      console.log("📧 Invoking edge function...");
-      const { data, error } = await supabase.functions.invoke('assign-driver-to-job', {
-        body: {
-          jobId: selectedJobId,
-          driverEmail: selectedDriverEmail,
-          driverName: `${selectedDriver.vorname} ${selectedDriver.nachname}`
-        }
+      const { error } = await supabase.rpc('admin_confirm_assignment', {
+        _assignment_id: assignmentId
       });
-
-      console.log("📨 Function response:", { data, error });
 
       if (error) {
-        console.error("❌ Edge function error:", error);
-        toast({
-          title: "Fehler beim E-Mail-Versand",
-          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
-          variant: "destructive"
-        });
-        setAssigningDriver(false);
-        return;
+        throw error;
       }
 
-      // Update job status to assigned
-      console.log("📝 Updating job status...");
-      const { error: updateError } = await supabase
-        .from('job_requests')
-        .update({ status: 'assigned' })
-        .eq('id', selectedJobId);
-
-      if (updateError) {
-        console.error("❌ Job update error:", updateError);
-        // Don't fail completely, just log the error
-      }
-
-      console.log("✅ Assignment successful!");
-      toast({
-        title: "Fahrer erfolgreich zugewiesen",
-        description: `${selectedDriver.vorname} ${selectedDriver.nachname} wurde per E-Mail benachrichtigt`
+      // Send order confirmation email
+      const { error: emailError } = await supabase.functions.invoke('send-order-confirmation', {
+        body: { assignmentId }
       });
 
-      // Close modal and reset states
-      setAssignDialogOpen(false);
-      setSelectedJobId("");
-      setSelectedDriverEmail("");
-      
-      // Reload job requests to show updated status
-      await loadJobRequests();
+      if (emailError) {
+        console.error("❌ E-Mail-Fehler:", emailError);
+        toast({
+          title: "Bestätigung gespeichert",
+          description: "Auftrag wurde bestätigt, aber E-Mail konnte nicht gesendet werden.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Auftrag bestätigt",
+          description: "Bestätigung wurde an den Auftraggeber gesendet."
+        });
+      }
 
+      // Log admin action
+      const adminSession = localStorage.getItem('adminSession');
+      if (adminSession) {
+        const session = JSON.parse(adminSession);
+        const assignment = jobAssignments.find(a => a.id === assignmentId);
+        await supabase.from('admin_actions').insert({
+          action: 'admin_confirm',
+          job_id: assignment?.job_id,
+          assignment_id: assignmentId,
+          admin_email: session.email
+        });
+      }
+
+      await loadJobAssignments();
+      
     } catch (error) {
-      console.error("❌ Unexpected error in assignDriverToJob:", error);
+      console.error('Confirmation error:', error);
       toast({
-        title: "Unerwarteter Fehler",
-        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        title: "Bestätigungsfehler",
+        description: error.message || "Fehler bei der Bestätigung.",
         variant: "destructive"
       });
     } finally {
-      setAssigningDriver(false);
+      setConfirmingAssignment(null);
     }
   };
 
@@ -855,8 +847,8 @@ const Admin = () => {
                       <TableHead className="min-w-[120px]">Einsatz</TableHead>
                       <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
                       <TableHead className="min-w-[80px]">Status</TableHead>
-                      <TableHead className="min-w-[120px]">Zuweisung</TableHead>
-                      <TableHead className="min-w-[200px]">Aktionen</TableHead>
+                       <TableHead className="min-w-[150px]">Zuweisung</TableHead>
+                       <TableHead className="min-w-[150px]">Aktionen</TableHead>
                     </TableRow>
                   </TableHeader>
                 <TableBody>
@@ -923,73 +915,53 @@ const Admin = () => {
                             req.status === 'assigned' ? 'Zugewiesen' : 'Offen'}
                          </Badge>
                        </TableCell>
-                       <TableCell>
-                         <div className="text-sm">
-                           {req.status === 'assigned' && (
-                             <div className="text-amber-600 font-medium">
-                               Warten auf Fahrer-Antwort
-                             </div>
-                           )}
-                           {req.status === 'confirmed' && (
-                             <div className="space-y-1">
-                               <div className="text-green-600 font-medium">Auftrag bestätigt</div>
-                               <div className="flex gap-1">
-                                 <Button size="sm" variant="outline" className="text-xs">
-                                   PDF ansehen
-                                 </Button>
-                                 <Button size="sm" variant="outline" className="text-xs">
-                                   Neu senden
-                                 </Button>
-                               </div>
-                             </div>
-                           )}
-                           {req.status === 'open' && (
-                             <div className="text-gray-500">Keine Zuweisung</div>
-                           )}
-                         </div>
-                       </TableCell>
                         <TableCell>
-                          <div className="flex flex-col gap-2 min-w-[200px]">
-                            {req.status === 'angenommen' ? (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                disabled
-                                className="bg-gray-100 text-gray-500 cursor-not-allowed w-full"
-                              >
-                                Angenommen
-                              </Button>
+                          <div className="text-sm">
+                            {jobAssignments.some(a => a.job_id === req.id) ? (
+                              <div className="space-y-1">
+                                {jobAssignments
+                                  .filter(a => a.job_id === req.id)
+                                  .map(assignment => (
+                                    <div key={assignment.id} className="p-2 bg-blue-50 rounded">
+                                      <div className="font-medium text-blue-800">
+                                        {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
+                                      </div>
+                                      <div className="text-xs text-blue-600">
+                                        {assignment.rate_value}€/{assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}
+                                      </div>
+                                      <Badge 
+                                        variant={assignment.status === 'confirmed' ? 'default' : 'secondary'}
+                                        className="text-xs"
+                                      >
+                                        {assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
+                                      </Badge>
+                                    </div>
+                                  ))
+                                }
+                              </div>
                             ) : (
-                              <>
-                                <div className="flex gap-2">
-                                  <Button
-                                    size="sm"
-                                    onClick={() => handleAcceptJob(req.id)}
-                                    className="flex-1"
-                                  >
-                                    Annehmen
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => handleAssignDriver(req.id)}
-                                    className="flex-1"
-                                  >
-                                    Fahrer zuweisen
-                                  </Button>
-                                </div>
-                                <Button
-                                  size="sm"
-                                  className="bg-blue-600 hover:bg-blue-700 text-white w-full"
-                                  onClick={() => handleSendJobToAllDrivers(req.id)}
-                                  disabled={sendingJobToAll === req.id}
-                                >
-                                  {sendingJobToAll === req.id ? "📤 Wird gesendet..." : "📧 An alle Fahrer senden"}
-                                </Button>
-                              </>
+                              <div className="text-gray-500">Keine Zuweisung</div>
                             )}
                           </div>
                         </TableCell>
+                         <TableCell>
+                           <div className="flex flex-col gap-2">
+                             {!jobAssignments.some(a => a.job_id === req.id) ? (
+                               <Button
+                                 size="sm"
+                                 onClick={() => handleAssignDriver(req.id)}
+                                 className="w-full"
+                               >
+                                 <Users className="h-4 w-4 mr-1" />
+                                 Zuweisen
+                               </Button>
+                             ) : (
+                               <div className="text-sm text-green-600 font-medium">
+                                 Zugewiesen
+                               </div>
+                             )}
+                           </div>
+                         </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -1026,66 +998,96 @@ const Admin = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Assign Driver Dialog */}
-      <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Fahrer zuweisen & benachrichtigen</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Fahrer auswählen ({fahrer.length} registriert, {fahrer.filter(f => f.status === 'approved' || f.status === 'active').length} verfügbar):
-              </label>
-              <Select value={selectedDriverEmail} onValueChange={setSelectedDriverEmail}>
-                <SelectTrigger className="bg-background border border-input">
-                  <SelectValue placeholder="Fahrer wählen..." />
-                </SelectTrigger>
-                <SelectContent className="bg-background border border-input z-50">
-                  {fahrer.length === 0 ? (
-                    <SelectItem value="__no_drivers__" disabled>
-                      Keine Fahrer gefunden
-                    </SelectItem>
-                  ) : fahrer.filter(f => f.status === 'approved' || f.status === 'active').length === 0 ? (
-                    <SelectItem value="__no_approved_drivers__" disabled>
-                      Keine genehmigten Fahrer verfügbar
-                    </SelectItem>
-                  ) : (
-                     fahrer
-                      .filter(f => f.status === 'approved' || f.status === 'active')
-                      .map((f) => (
-                        <SelectItem key={f.id} value={f.email}>
-                          {f.vorname} {f.nachname} – {f.email}
-                        </SelectItem>
-                      ))
+      {/* Admin Assignment Dialog */}
+      <AdminAssignmentDialog
+        open={assignDialogOpen}
+        onClose={() => setAssignDialogOpen(false)}
+        jobId={selectedJobId}
+        drivers={fahrer}
+        onAssignmentComplete={handleAssignmentComplete}
+      />
+
+      {/* Job Assignments Section */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Zuweisungen ({jobAssignments.length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {jobAssignments.length === 0 ? (
+            <p className="text-muted-foreground text-center py-8">
+              Keine Zuweisungen vorhanden.
+            </p>
+          ) : (
+            <div className="space-y-4">
+              {jobAssignments.map((assignment) => (
+                <div key={assignment.id} className="border rounded-lg p-4 space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-semibold">
+                        {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        {assignment.job_requests.customer_name} - {assignment.job_requests.fahrzeugtyp}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge 
+                        variant={
+                          assignment.status === 'confirmed' ? 'default' :
+                          assignment.status === 'assigned' ? 'secondary' : 'destructive'
+                        }
+                      >
+                        {assignment.status === 'assigned' ? 'Zugewiesen' :
+                         assignment.status === 'confirmed' ? 'Bestätigt' : 'Storniert'}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="font-medium">Satz:</span> {assignment.rate_value}€ ({assignment.rate_type === 'hourly' ? 'Stunde' : 'Tag'})
+                    </div>
+                    {assignment.start_date && (
+                      <div>
+                        <span className="font-medium">Start:</span> {new Date(assignment.start_date).toLocaleDateString('de-DE')}
+                      </div>
+                    )}
+                  </div>
+
+                  {assignment.admin_note && (
+                    <div className="text-sm">
+                      <span className="font-medium">Notiz:</span> {assignment.admin_note}
+                    </div>
                   )}
-                </SelectContent>
-              </Select>
-              
-              {/* Debug Info */}
-              <div className="text-xs text-gray-500 mt-2">
-                Verfügbare Fahrer: {fahrer.map(f => `${f.vorname} ${f.nachname} (${f.status})`).join(', ') || 'Keine gefunden'}
-              </div>
+
+                  {assignment.status === 'assigned' && (
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleConfirmAssignment(assignment.id)}
+                        disabled={confirmingAssignment === assignment.id}
+                        className="flex items-center gap-1"
+                      >
+                        <Check className="h-4 w-4" />
+                        {confirmingAssignment === assignment.id ? "Bestätige..." : "Bestätigen & E-Mail senden"}
+                      </Button>
+                    </div>
+                  )}
+
+                  {assignment.status === 'confirmed' && (
+                    <div className="text-sm text-muted-foreground">
+                      Bestätigt am: {new Date(assignment.confirmed_at).toLocaleString('de-DE')}
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-            
-            <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setAssignDialogOpen(false)}
-                disabled={assigningDriver}
-              >
-                Abbrechen
-              </Button>
-              <Button
-                onClick={assignDriverToJob}
-                disabled={!selectedDriverEmail || assigningDriver}
-              >
-                {assigningDriver ? "Wird zugewiesen..." : "Zuweisen & E-Mail senden"}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
