@@ -299,51 +299,59 @@ const Admin = () => {
     await loadJobAssignments();
   };
 
-  const handleConfirmAssignment = async (assignmentId: string) => {
+  const confirmAndSend = async (assignmentId: string) => {
     setConfirmingAssignment(assignmentId);
     
     try {
-      // 1) DB-Status setzen
-      const { error } = await supabase.rpc('admin_confirm_assignment', {
-        _assignment_id: assignmentId
+      // 1) DB-Status auf confirmed
+      const { error: rpcErr } = await supabase.rpc("admin_confirm_assignment", {
+        _assignment_id: assignmentId,
       });
+      if (rpcErr) throw rpcErr;
 
-      if (error) {
-        throw error;
-      }
+      // 2) E-Mail + PDF an Fahrer (BCC an Admin)
+      const { error: fnErr } = await supabase.functions.invoke(
+        "send-driver-confirmation",
+        { body: { assignment_id: assignmentId } }
+      );
+      if (fnErr) throw fnErr;
 
-      // 2) Mail + PDF senden (Edge Function mit service_role)
-      const { error: driverEmailError } = await supabase.functions.invoke('send-driver-confirmation', {
-        body: { assignment_id: assignmentId }
+      toast({
+        title: "Bestätigt & E-Mail versendet",
+        description: "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)."
       });
-
-      if (driverEmailError) {
-        console.error("❌ Fahrer E-Mail-Fehler:", driverEmailError);
-        toast({
-          title: "Bestätigung gespeichert",
-          description: "Auftrag wurde bestätigt, aber Fahrer-E-Mail konnte nicht gesendet werden.",
-          variant: "destructive"
-        });
-      } else {
-        // 3) UI refresh + Toast
-        toast({
-          title: "Bestätigt & E-Mail versendet",
-          description: "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)."
-        });
-      }
-
       await loadJobRequests();
       await loadJobAssignments();
-      
-    } catch (error) {
-      console.error('Confirmation error:', error);
+    } catch (err: any) {
+      console.error(err);
       toast({
-        title: "Bestätigungsfehler",
-        description: error.message || "Fehler bei der Bestätigung.",
+        title: "Fehler",
+        description: err?.message ?? "Bestätigen/E-Mail fehlgeschlagen",
         variant: "destructive"
       });
     } finally {
       setConfirmingAssignment(null);
+    }
+  };
+
+  const resendDriverConfirmation = async (assignmentId: string) => {
+    try {
+      const { error } = await supabase.functions.invoke(
+        "send-driver-confirmation",
+        { body: { assignment_id: assignmentId, resend: true } }
+      );
+      if (error) throw error;
+      toast({
+        title: "E-Mail erneut gesendet",
+        description: "Bestätigung wurde an den Fahrer gesendet."
+      });
+    } catch (err: any) {
+      console.error(err);
+      toast({
+        title: "Fehler",
+        description: err?.message ?? "Erneuter Versand fehlgeschlagen",
+        variant: "destructive"
+      });
     }
   };
 
@@ -943,22 +951,46 @@ const Admin = () => {
                              )}
                           </div>
                         </TableCell>
-                          <TableCell>
-                            <div className="flex flex-col gap-2">
-                               {jobAssignments.some(a => a.job_id === req.id && a.status === 'assigned') && (
-                                 <Button
-                                   size="sm"
-                                   onClick={() => {
-                                     const assignment = jobAssignments.find(a => a.job_id === req.id);
-                                     if (assignment) handleConfirmAssignment(assignment.id);
-                                   }}
-                                   disabled={!!confirmingAssignment}
-                                 >
+                       <TableCell>
+                         {(() => {
+                           const assignment = jobAssignments.find(a => a.job_id === req.id);
+                           
+                           if (!assignment) {
+                             return (
+                               <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                 Zuweisen
+                               </Button>
+                             );
+                           }
+                           
+                           if (assignment.status === "assigned") {
+                             return (
+                               <div className="flex items-center gap-2">
+                                 <Badge variant="secondary">Zugewiesen</Badge>
+                                 <Button size="sm" onClick={() => confirmAndSend(assignment.id)}>
                                    Bestätigen & E-Mail senden
                                  </Button>
-                               )}
-                            </div>
-                          </TableCell>
+                                 <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
+                                   Ändern
+                                 </Button>
+                               </div>
+                             );
+                           }
+                           
+                           if (assignment.status === "confirmed") {
+                             return (
+                               <div className="flex items-center gap-2">
+                                 <Badge variant="default">Bestätigt</Badge>
+                                 <Button size="sm" onClick={() => resendDriverConfirmation(assignment.id)}>
+                                   Neu senden
+                                 </Button>
+                               </div>
+                             );
+                           }
+                           
+                           return <Badge variant="destructive">Storniert</Badge>;
+                         })()}
+                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -1061,15 +1093,15 @@ const Admin = () => {
 
                   {assignment.status === 'assigned' && (
                     <div className="flex gap-2 pt-2">
-                      <Button
-                        size="sm"
-                        onClick={() => handleConfirmAssignment(assignment.id)}
-                        disabled={confirmingAssignment === assignment.id}
-                        className="flex items-center gap-1"
-                      >
-                        <Check className="h-4 w-4" />
-                        {confirmingAssignment === assignment.id ? "Bestätige..." : "Bestätigen & E-Mail senden"}
-                      </Button>
+                       <Button
+                         size="sm"
+                         onClick={() => confirmAndSend(assignment.id)}
+                         disabled={confirmingAssignment === assignment.id}
+                         className="flex items-center gap-1"
+                       >
+                         <Check className="h-4 w-4" />
+                         {confirmingAssignment === assignment.id ? "Bestätige..." : "Bestätigen & E-Mail senden"}
+                       </Button>
                     </div>
                   )}
 
