@@ -55,7 +55,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email to driver
     const emailResponse = await resend.emails.send({
-      from: "info@kraftfahrer-mieten.com",
+      from: "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>",
       to: [driverEmail],
       cc: ["info@kraftfahrer-mieten.com"],
       subject: "Neue Fahraufgabe über Fahrerexpress – Bitte Rückmeldung",
