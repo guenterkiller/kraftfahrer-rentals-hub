@@ -324,23 +324,35 @@ serve(async (req) => {
 
     // E-Mail via Resend API senden (TO: Fahrer, BCC: Admin)
     const subject = `Einsatzbestätigung – ${vars["jr.firma_oder_name"]} – ${zeitraum}`;
-    const formData = new FormData();
-    formData.set("from", MAIL_FROM);
-    formData.set("to", fp.email);
-    formData.set("bcc", adminEmail);
-    formData.set("subject", subject);
-    formData.set("html", html);
-    formData.set("text", txt);
+    
+    // Build email payload for Resend API
+    const emailPayload: any = {
+      from: MAIL_FROM,
+      to: [fp.email],
+      bcc: [adminEmail],
+      subject,
+      html,
+      text: txt,
+    };
 
     // PDF anhängen nur bei 'both' oder 'pdf-only'
     if (deliveryMode === 'both' || deliveryMode === 'pdf-only') {
-      formData.set("attachments", new File([pdfBytes], `${filenameBase}.pdf`, { type: "application/pdf" }));
+      // Convert PDF bytes to base64 for Resend API
+      const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
+      emailPayload.attachments = [{
+        filename: `${filenameBase}.pdf`,
+        content: pdfBase64,
+        content_type: "application/pdf"
+      }];
     }
 
     const mailRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: { Authorization: `Bearer ${RESEND_API_KEY}` },
-      body: formData,
+      headers: { 
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(emailPayload),
     });
 
     let status: "sent" | "failed" = "sent";
