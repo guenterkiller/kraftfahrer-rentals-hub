@@ -1,6 +1,12 @@
 project_id = "hxnabnsoffzevqhruvar"
 
-[functions.send-order-confirmation]
+[functions.handle-driver-response]
+verify_jwt = false
+
+[functions.send-job-alert-emails]
+verify_jwt = false
+
+[functions.broadcast-job-to-drivers]
 verify_jwt = false
 
 [functions.admin-auth-check]
