@@ -339,15 +339,25 @@ function generateDriverEmailContent({ job, driver, assignment, confirmationDate 
     <div class="highlight">
       <h3>KONDITIONEN</h3>
       <p>• <strong>Abrechnung:</strong> ${rateDisplay}<br>
-      • <strong>Satz:</strong> ${assignment.rate_value ? `${assignment.rate_value} €` : 'nach Absprache'}<br>
+      • <strong>Satz:</strong> ${assignment.rate_value ? `${assignment.rate_value} €` : 'nach Absprache'} zzgl. gesetzlicher USt<br>
       ${assignment.admin_note ? `• <strong>Sonstiges:</strong> ${assignment.admin_note}<br>` : ''}</p>
     </div>
 
     <div class="important">
       <h3>VEREINBARUNGEN (Fahrerexpress)</h3>
       <p><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
-      <p><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
+      <p><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
       <p><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
+      <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
+      <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
+      <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
+      
+      <h4 style="margin-top: 30px; color: #d32f2f;">Nichterscheinen / kurzfristige Absage (No-Show)</h4>
+      <p><strong>Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</strong></p>
+      <p><strong>In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</strong></p>
+      <p>Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen.</p>
+      <p><strong>Höhere Gewalt</strong> (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
+      <p><strong>Fahrerexpress bemüht sich im No-Show-Fall unverzüglich um Ersatz.</strong></p>
       <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
       <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an.</p>
       <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>

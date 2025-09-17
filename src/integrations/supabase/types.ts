@@ -280,6 +280,7 @@ export type Database = {
           fuehrerscheinklassen: string[] | null
           id: string
           nachname: string
+          no_show_count: number
           ort: string | null
           plz: string | null
           spezialisierungen: string[] | null
@@ -302,6 +303,7 @@ export type Database = {
           fuehrerscheinklassen?: string[] | null
           id?: string
           nachname: string
+          no_show_count?: number
           ort?: string | null
           plz?: string | null
           spezialisierungen?: string[] | null
@@ -324,6 +326,7 @@ export type Database = {
           fuehrerscheinklassen?: string[] | null
           id?: string
           nachname?: string
+          no_show_count?: number
           ort?: string | null
           plz?: string | null
           spezialisierungen?: string[] | null
@@ -379,6 +382,9 @@ export type Database = {
           end_date: string | null
           id: string
           job_id: string
+          no_show_at: string | null
+          no_show_marked_by_admin: boolean
+          no_show_reason: string | null
           rate_type: string
           rate_value: number
           start_date: string | null
@@ -399,6 +405,9 @@ export type Database = {
           end_date?: string | null
           id?: string
           job_id: string
+          no_show_at?: string | null
+          no_show_marked_by_admin?: boolean
+          no_show_reason?: string | null
           rate_type?: string
           rate_value: number
           start_date?: string | null
@@ -419,6 +428,9 @@ export type Database = {
           end_date?: string | null
           id?: string
           job_id?: string
+          no_show_at?: string | null
+          no_show_marked_by_admin?: boolean
+          no_show_reason?: string | null
           rate_type?: string
           rate_value?: number
           start_date?: string | null
@@ -693,6 +705,10 @@ export type Database = {
       }
       admin_confirm_assignment: {
         Args: { _assignment_id: string }
+        Returns: boolean
+      }
+      admin_mark_no_show: {
+        Args: { _assignment_id: string; _reason?: string }
         Returns: boolean
       }
       get_fahrer_admin_summary: {

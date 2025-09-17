@@ -64,6 +64,7 @@ const Admin = () => {
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
   const [sendingJobToAll, setSendingJobToAll] = useState<string | null>(null);
   const [confirmingAssignment, setConfirmingAssignment] = useState<string | null>(null);
+  const [markingNoShow, setMarkingNoShow] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -514,6 +515,65 @@ const Admin = () => {
     }
   };
 
+  const handleMarkNoShow = async (assignmentId: string, reason?: string) => {
+    console.log('🚨 Marking assignment as No-Show:', assignmentId);
+    setMarkingNoShow(assignmentId);
+    
+    try {
+      // Mark No-Show in database
+      const { data, error } = await supabase.rpc('admin_mark_no_show', {
+        _assignment_id: assignmentId,
+        _reason: reason || 'Fahrer nicht erschienen'
+      });
+
+      if (error) {
+        console.error('❌ Error marking No-Show:', error);
+        toast({
+          title: "Fehler beim Markieren",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ No-Show marked successfully, sending notice...');
+      
+      // Send No-Show notice email
+      const { data: emailData, error: emailError } = await supabase.functions.invoke('send-no-show-notice', {
+        body: { assignment_id: assignmentId }
+      });
+
+      if (emailError) {
+        console.error('❌ Error sending No-Show notice:', emailError);
+        toast({
+          title: "No-Show markiert, aber E-Mail fehlgeschlagen",
+          description: `No-Show wurde vermerkt, aber E-Mail konnte nicht gesendet werden: ${emailError.message}`,
+          variant: "destructive"
+        });
+      } else {
+        console.log('✅ No-Show notice sent successfully');
+        toast({
+          title: "No-Show erfolgreich vermerkt",
+          description: "No-Show wurde vermerkt und Auftraggeber informiert.",
+        });
+      }
+      
+      // Refresh data to show updated status
+      loadJobRequests();
+      loadJobAssignments();
+
+    } catch (error) {
+      console.error('❌ Unexpected error in handleMarkNoShow:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setMarkingNoShow(null);
+    }
+  };
+
   const handleLogout = async () => {
     if (user) {
       await logAdminEvent('manual_logout', user.email);
@@ -756,16 +816,18 @@ const Admin = () => {
   const getStatusBadge = (status: string, fahrerId?: string, onToggle?: () => void) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       pending: "outline",
-      approved: "default",
+      approved: "default", 
       active: "default",
-      rejected: "destructive"
+      rejected: "destructive",
+      no_show: "destructive"
     };
     
     const labels: Record<string, string> = {
       pending: "Wartend",
       approved: "Genehmigt",
       active: "Genehmigt",
-      rejected: "Abgelehnt"
+      rejected: "Abgelehnt",
+      no_show: "No-Show"
     };
 
     if (status === 'pending' && onToggle) {
@@ -955,23 +1017,27 @@ const Admin = () => {
                         </div>
                       </TableCell>
                        <TableCell>
-                         <Badge 
-                           variant={
-                             req.status === 'confirmed' ? 'default' : 
-                             req.status === 'assigned' ? 'secondary' : 
-                             'outline'
-                           }
-                           className={
-                             req.status === 'confirmed' 
-                               ? 'bg-green-100 text-green-800 border-green-200' 
-                               : req.status === 'assigned'
-                               ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                               : 'bg-blue-100 text-blue-800 border-blue-200'
-                           }
-                         >
-                           {req.status === 'confirmed' ? 'Bestätigt' : 
-                            req.status === 'assigned' ? 'Zugewiesen' : 'Offen'}
-                         </Badge>
+                          <Badge 
+                            variant={
+                              req.status === 'confirmed' ? 'default' : 
+                              req.status === 'assigned' ? 'secondary' : 
+                              req.status === 'no_show' ? 'destructive' :
+                              'outline'
+                            }
+                            className={
+                              req.status === 'confirmed' 
+                                ? 'bg-green-100 text-green-800 border-green-200' 
+                                : req.status === 'assigned'
+                                ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
+                                : req.status === 'no_show'
+                                ? 'bg-red-100 text-red-800 border-red-200'
+                                : 'bg-blue-100 text-blue-800 border-blue-200'
+                            }
+                          >
+                            {req.status === 'confirmed' ? 'Bestätigt' : 
+                             req.status === 'assigned' ? 'Zugewiesen' : 
+                             req.status === 'no_show' ? 'No-Show' : 'Offen'}
+                          </Badge>
                        </TableCell>
                         <TableCell>
                           {(() => {
@@ -1089,15 +1155,17 @@ const Admin = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={
-                          assignment.status === 'confirmed' ? 'default' :
-                          assignment.status === 'assigned' ? 'secondary' : 'destructive'
-                        }
-                      >
-                        {assignment.status === 'assigned' ? 'Zugewiesen' :
-                         assignment.status === 'confirmed' ? 'Bestätigt' : 'Storniert'}
-                      </Badge>
+                        <Badge 
+                          variant={
+                            assignment.status === 'confirmed' ? 'default' :
+                            assignment.status === 'assigned' ? 'secondary' : 
+                            assignment.status === 'no_show' ? 'destructive' : 'destructive'
+                          }
+                        >
+                          {assignment.status === 'assigned' ? 'Zugewiesen' :
+                           assignment.status === 'confirmed' ? 'Bestätigt' : 
+                           assignment.status === 'no_show' ? 'No-Show' : 'Storniert'}
+                        </Badge>
                     </div>
                   </div>
                   
@@ -1129,6 +1197,21 @@ const Admin = () => {
                          <Check className="h-4 w-4" />
                          {confirmingAssignment === assignment.id ? "Bestätige..." : "Bestätigen & E-Mail senden"}
                        </Button>
+                    </div>
+                  )}
+
+                  {assignment.status === 'confirmed' && (
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleMarkNoShow(assignment.id)}
+                        disabled={markingNoShow === assignment.id}
+                        className="flex items-center gap-1"
+                      >
+                        <X className="h-4 w-4" />
+                        {markingNoShow === assignment.id ? "Markiere..." : "No-Show markieren"}
+                      </Button>
                     </div>
                   )}
 
