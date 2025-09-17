@@ -29,19 +29,17 @@ const htmlTpl = `<!DOCTYPE html>
     <meta charset="UTF-8">
     <title>Einsatzbestätigung</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #2196F3; margin: 0; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; line-height: 1.6; }
+        .header { margin-bottom: 30px; }
+        .header h1 { color: #2196F3; margin: 0 0 10px 0; }
         .section { margin-bottom: 25px; padding: 15px; border-left: 4px solid #2196F3; background-color: #f8f9fa; }
         .section h3 { margin-top: 0; color: #1976D2; }
-        .info-row { margin: 8px 0; }
-        .label { font-weight: bold; display: inline-block; width: 140px; }
-        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #666; }
-        .agreements { margin-top: 30px; padding: 15px; background-color: #fff8e1; border: 1px solid #ffcc02; border-radius: 4px; }
-        .agreements h4 { color: #f57c00; margin-top: 0; }
-        .agreements ol { padding-left: 20px; }
+        .bullet-list { margin: 10px 0; padding-left: 0; }
+        .bullet-list li { list-style: none; margin: 8px 0; }
+        .bullet-list li:before { content: "• "; font-weight: bold; color: #2196F3; }
         .no-show { margin-top: 30px; padding: 15px; background-color: #ffebee; border: 1px solid #f44336; border-radius: 4px; }
         .no-show h4 { color: #d32f2f; margin-top: 0; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 14px; color: #666; }
         .pdf-link { margin-top: 30px; padding: 15px; background-color: #e3f2fd; border: 1px solid #2196F3; border-radius: 4px; text-align: center; }
         .pdf-link a { color: #1976D2; text-decoration: none; font-weight: bold; }
     </style>
@@ -49,174 +47,125 @@ const htmlTpl = `<!DOCTYPE html>
 <body>
     <div class="header">
         <h1>Einsatzbestätigung</h1>
-        <p>Fahrerexpress | kraftfahrer-mieten.com</p>
-        <p>Datum: {{heute}}</p>
+        <p>Hallo {{fp.vorname}} {{fp.nachname}},<br>
+        hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
     </div>
 
     <div class="section">
-        <h3>Fahrer-Information</h3>
-        <div class="info-row">
-            <span class="label">Name:</span>
-            {{fp.vorname}} {{fp.nachname}}
-        </div>
+        <h3>AUFTRAGGEBER (Kunde)</h3>
+        <ul class="bullet-list">
+            <li>Unternehmen/Name: {{jr.firma_oder_name}}</li>
+            <li>Ansprechpartner: {{jr.ansprechpartner}}</li>
+            <li>Anschrift: {{jr.anschrift_vollstaendig}}</li>
+            <li>Telefon: {{jr.telefon}}</li>
+            <li>E-Mail: {{jr.email}}</li>
+        </ul>
     </div>
 
     <div class="section">
-        <h3>Auftraggeber</h3>
-        <div class="info-row">
-            <span class="label">Unternehmen/Name:</span>
-            {{jr.firma_oder_name}}
-        </div>
-        <div class="info-row">
-            <span class="label">Ansprechpartner:</span>
-            {{jr.ansprechpartner}}
-        </div>
-        <div class="info-row">
-            <span class="label">Telefon:</span>
-            {{jr.telefon}}
-        </div>
-        <div class="info-row">
-            <span class="label">E-Mail:</span>
-            {{jr.email}}
-        </div>
+        <h3>EINSATZ</h3>
+        <ul class="bullet-list">
+            <li>Datum/Zeitraum: {{einsatz_zeitraum}}</li>
+            <li>Einsatzort/Treffpunkt: {{jr.einsatzort}}</li>
+            <li>Fahrzeug/Typ: {{jr.fahrzeugtyp}}</li>
+            <li>Besonderheiten: {{jr.besonderheiten}}</li>
+        </ul>
     </div>
 
     <div class="section">
-        <h3>Einsatz-Details</h3>
-        <div class="info-row">
-            <span class="label">Zeitraum:</span>
-            {{einsatz_zeitraum}}
-        </div>
-        <div class="info-row">
-            <span class="label">Einsatzort/Treffpunkt:</span>
-            {{jr.einsatzort}}
-        </div>
-        <div class="info-row">
-            <span class="label">Fahrzeug/Typ:</span>
-            {{jr.fahrzeugtyp}}
-        </div>
-        <div class="info-row">
-            <span class="label">Besonderheiten:</span>
-            {{jr.besonderheiten}}
-        </div>
+        <h3>KONDITIONEN (zwischen Auftraggeber und Fahrer)</h3>
+        <ul class="bullet-list">
+            <li>Vergütung: {{ja.rate_value}} {{ust_hinweis}}</li>
+            <li>Abrechnung/Zahlung: Der Fahrer rechnet direkt mit dem Auftraggeber ab. Zahlungsziel: 14 Tage, ohne Abzug.</li>
+            <li>Spesen/Extras: Nur, wenn vorab schriftlich vereinbart.</li>
+        </ul>
     </div>
 
     <div class="section">
-        <h3>Konditionen</h3>
-        <div class="info-row">
-            <span class="label">Abrechnung:</span>
-            {{ja.rate_type_display}}
-        </div>
-        <div class="info-row">
-            <span class="label">Satz:</span>
-            {{ja.rate_value}} (zzgl. gesetzlicher USt)
-        </div>
-    </div>
-
-    <div class="agreements">
-        <h4>Vereinbarungen (Fahrerexpress)</h4>
-        <ol>
-            <li><strong>Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</li>
-            <li><strong>Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</li>
-            <li><strong>Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</li>
-            <li><strong>Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</li>
-            <li><strong>Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</li>
-            <li><strong>Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</li>
-        </ol>
+        <h3>ROLLE VON FAHREREXPRESS (Vermittlung)</h3>
+        <ul class="bullet-list">
+            <li>Fahrerexpress ist Vermittler; es entsteht kein Arbeitsverhältnis mit Fahrerexpress und keine Arbeitnehmerüberlassung.</li>
+            <li>Vermittlungsprovision: 15 % des Nettohonorars, nur bei tatsächlichem Einsatz. Die Provision wird Fahrerexpress dem Fahrer gesondert in Rechnung stellen.</li>
+            <li>Folgeaufträge mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</li>
+            <li>Informationspflicht: Direkt vereinbarte Folgeeinsätze sind Fahrerexpress unverzüglich mitzuteilen.</li>
+            <li>Vertragsstrafe: Bei Verstoß gegen Folgeauftrags-/Informationspflicht 2.500 € je Verstoß; weitergehender Schaden bleibt vorbehalten.</li>
+        </ul>
     </div>
 
     <div class="no-show">
         <h4>Nichterscheinen / kurzfristige Absage (No-Show)</h4>
-        <p>Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er kurzfristig ab, gilt dies als No-Show. Der pauschalierte Schadensersatz richtet sich nach der verbleibenden Vorlaufzeit bis Einsatzbeginn:</p>
-        <ul>
-            <li><strong>&lt; 6 Stunden:</strong> 100 % des vereinbarten Tagesäquivalents (mind. 350 €, max. 900 €)</li>
-            <li><strong>6–24 Stunden:</strong> 60 % (mind. 300 €)</li>
-            <li><strong>24–48 Stunden:</strong> 30 % (mind. 250 €)</li>
-        </ul>
-        <p style="font-size: 14px;">Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen. Höhere Gewalt (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
+        <p>Erscheint der Fahrer ohne triftigen Grund nicht zum Einsatzbeginn oder sagt er ≤ 24 h vorher ab, gilt dies als No-Show.</p>
+        <p>In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz von 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</p>
+        <p style="font-size: 14px;">Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen. Höhere Gewalt (z. B. Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
+        <p>Fahrerexpress bemüht sich im No-Show-Fall um Ersatz.</p>
     </div>
 
     <div class="section">
-        <h3>Mehrwertsteuer</h3>
-        <p>Die Beträge verstehen sich zzgl. gesetzlicher Umsatzsteuer.</p>
+        <h3>Rechtliches</h3>
+        <ul class="bullet-list">
+            <li>Rechtsverhältnis: Einsatz als selbstständiger Unternehmer; der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</li>
+            <li>Umsatzsteuer: {{ust_hinweis_lang}}</li>
+            <li>Vertragsschluss: Mit Bestätigung/Antritt des Einsatzes kommt der Vertrag zwischen Auftraggeber (Kunde) und Fahrer zustande.</li>
+        </ul>
     </div>
+
+    <p><strong>Bitte prüfen Sie die Angaben; Abweichungen umgehend melden.</strong></p>
 
     {{pdf_link_section}}
 
     <div class="footer">
-        <p><strong>Fahrerexpress</strong><br>
-        kraftfahrer-mieten.com<br>
-        E-Mail: info@kraftfahrer-mieten.com<br>
-        Telefon: +49-1577-1442285</p>
+        <p><strong>Viele Grüße</strong><br>
+        Fahrerexpress | kraftfahrer-mieten.com<br>
+        E-Mail: info@kraftfahrer-mieten.com | Tel: +49 1577 1442285</p>
     </div>
 </body>
 </html>`;
 
-const txtTpl = `EINSATZBESTÄTIGUNG
+const txtTpl = `Hallo {{fp.vorname}} {{fp.nachname}},
+hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.
+
+AUFTRAGGEBER (Kunde)
+• Unternehmen/Name: {{jr.firma_oder_name}}
+• Ansprechpartner: {{jr.ansprechpartner}}
+• Anschrift: {{jr.anschrift_vollstaendig}}
+• Telefon: {{jr.telefon}}
+• E-Mail: {{jr.email}}
+
+EINSATZ
+• Datum/Zeitraum: {{einsatz_zeitraum}}
+• Einsatzort/Treffpunkt: {{jr.einsatzort}}
+• Fahrzeug/Typ: {{jr.fahrzeugtyp}}
+• Besonderheiten: {{jr.besonderheiten}}
+
+KONDITIONEN (zwischen Auftraggeber und Fahrer)
+• Vergütung: {{ja.rate_value}} {{ust_hinweis}}
+• Abrechnung/Zahlung: Der Fahrer rechnet direkt mit dem Auftraggeber ab. Zahlungsziel: 14 Tage, ohne Abzug.
+• Spesen/Extras: Nur, wenn vorab schriftlich vereinbart.
+
+ROLLE VON FAHREREXPRESS (Vermittlung)
+• Fahrerexpress ist Vermittler; es entsteht kein Arbeitsverhältnis mit Fahrerexpress und keine Arbeitnehmerüberlassung.
+• Vermittlungsprovision: 15 % des Nettohonorars, nur bei tatsächlichem Einsatz. Die Provision wird Fahrerexpress dem Fahrer gesondert in Rechnung stellen.
+• Folgeaufträge mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.
+• Informationspflicht: Direkt vereinbarte Folgeeinsätze sind Fahrerexpress unverzüglich mitzuteilen.
+• Vertragsstrafe: Bei Verstoß gegen Folgeauftrags-/Informationspflicht 2.500 € je Verstoß; weitergehender Schaden bleibt vorbehalten.
+
+Nichterscheinen / kurzfristige Absage (No-Show)
+
+Erscheint der Fahrer ohne triftigen Grund nicht zum Einsatzbeginn oder sagt er ≤ 24 h vorher ab, gilt dies als No-Show.
+In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz von 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).
+Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen. Höhere Gewalt (z. B. Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.
+Fahrerexpress bemüht sich im No-Show-Fall um Ersatz.
+
+Rechtliches
+• Rechtsverhältnis: Einsatz als selbstständiger Unternehmer; der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.
+• Umsatzsteuer: {{ust_hinweis_lang}}
+• Vertragsschluss: Mit Bestätigung/Antritt des Einsatzes kommt der Vertrag zwischen Auftraggeber (Kunde) und Fahrer zustande.
+
+Bitte prüfen Sie die Angaben; Abweichungen umgehend melden.
+
+Viele Grüße
 Fahrerexpress | kraftfahrer-mieten.com
-Datum: {{heute}}
-
-=====================================
-
-FAHRER-INFORMATION
-==================
-Name: {{fp.vorname}} {{fp.nachname}}
-
-AUFTRAGGEBER
-============
-Unternehmen/Name: {{jr.firma_oder_name}}
-Ansprechpartner: {{jr.ansprechpartner}}
-Telefon: {{jr.telefon}}
-E-Mail: {{jr.email}}
-
-EINSATZ-DETAILS
-===============
-Zeitraum: {{einsatz_zeitraum}}
-Einsatzort/Treffpunkt: {{jr.einsatzort}}
-Fahrzeug/Typ: {{jr.fahrzeugtyp}}
-Besonderheiten: {{jr.besonderheiten}}
-
-KONDITIONEN
-===========
-Abrechnung: {{ja.rate_type_display}}
-Satz: {{ja.rate_value}} (zzgl. gesetzlicher USt)
-
-VEREINBARUNGEN (FAHREREXPRESS)
-==============================
-
-1. Vermittlungsprovision: 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.
-
-2. Abrechnung/Zahlung: Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.
-
-3. Folgeaufträge: Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.
-
-4. Informationspflicht: Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.
-
-5. Vertragsstrafe: Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.
-
-6. Rechtsverhältnis: Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.
-
-NICHTERSCHEINEN / KURZFRISTIGE ABSAGE (NO-SHOW)
-===============================================
-
-Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er kurzfristig ab, gilt dies als No-Show. Der pauschalierte Schadensersatz richtet sich nach der verbleibenden Vorlaufzeit bis Einsatzbeginn:
-
-< 6 Stunden: 100 % des vereinbarten Tagesäquivalents (mind. 350 €, max. 900 €)
-6–24 Stunden: 60 % (mind. 300 €)  
-24–48 Stunden: 30 % (mind. 250 €)
-
-Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen. Höhere Gewalt (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.
-
-MEHRWERTSTEUER
-==============
-Die Beträge verstehen sich zzgl. gesetzlicher Umsatzsteuer.
-
-=====================================
-
-Fahrerexpress
-kraftfahrer-mieten.com
-E-Mail: info@kraftfahrer-mieten.com
-Telefon: +49-1577-1442285`;
+E-Mail: info@kraftfahrer-mieten.com | Tel: +49 1577 1442285`;
 
 // simple replacer
 function render(tpl: string, vars: Record<string, string | number | null | undefined>) {
@@ -227,6 +176,23 @@ function render(tpl: string, vars: Record<string, string | number | null | undef
 }
 
 function ensure(v?: string | null) { return !!(v && v.trim().length); }
+
+// Hilfsfunktion für vollständige Adresse
+function buildFullAddress(jr: any): string {
+  // Versuche verschiedene Feldkombinationen für Adresse
+  const street = jr.strasse || jr.street || "";
+  const number = jr.hausnr || jr.hausnummer || jr.number || "";
+  const zip = jr.plz || jr.zip || jr.postal_code || "";
+  const city = jr.ort || jr.city || jr.stadt || "";
+  
+  // Wenn strukturierte Felder vorhanden sind
+  if (street && zip && city) {
+    return `${street}${number ? ' ' + number : ''}, ${zip} ${city}`.trim();
+  }
+  
+  // Fallback: Einsatzort verwenden oder Platzhalter
+  return jr.einsatzort || "Adresse siehe Nachricht";
+}
 
 // derive display helpers
 function withCurrency(n?: number | null, rateType?: string) {
@@ -352,16 +318,15 @@ serve(async (req) => {
       "fp.nachname": fp.nachname,
       "jr.firma_oder_name": jr.company || jr.customer_name || "",
       "jr.ansprechpartner": jr.customer_name || "",
+      "jr.anschrift_vollstaendig": buildFullAddress(jr),
       "jr.telefon": jr.customer_phone || "",
       "jr.email": jr.customer_email || "",
       "jr.einsatzort": jr.einsatzort || "Siehe Nachricht",
       "jr.fahrzeugtyp": jr.fahrzeugtyp || "",
       "jr.besonderheiten": jr.besonderheiten || "",
-      "ja.rate_type": ja.rate_type || "nach Absprache",
-      "ja.rate_type_display": ja.rate_type === "hourly" ? "Stundensatz" : ja.rate_type === "daily" ? "Tagessatz" : "nach Absprache",
-      "ja.rate_value": ja.rate_value || "",
       "einsatz_zeitraum": zeitraum,
-      "heute": new Intl.DateTimeFormat("de-DE").format(new Date()),
+      "ust_hinweis": "zzgl. gesetzlicher USt",
+      "ust_hinweis_lang": "Die Vergütung versteht sich zuzüglich der gesetzlichen Umsatzsteuer.",
     };
 
     // Anzeige für Satz (korrekt formatiert, ohne doppeltes €)
@@ -403,8 +368,8 @@ serve(async (req) => {
       ? 'Einsatzbestätigung\n\nDie Einsatzbestätigung liegt als PDF im Anhang bei.\n\nFahrerexpress | kraftfahrer-mieten.com'
       : render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige }) + (pdfUrl ? `\n\nPDF-Download: ${pdfUrl} (gültig 14 Tage)` : '');
 
-    // E-Mail via Resend API senden (TO: Fahrer, BCC: Admin)
-    const subject = `Einsatzbestätigung – ${vars["jr.firma_oder_name"]} – ${jr.einsatzort || "Einsatz"} – ${zeitraum}`;
+    // E-Mail via Resend API senden (TO: Fahrer, BCC: Admin)  
+    const subject = `Einsatzbestätigung – ${vars["jr.firma_oder_name"]} – ${jr.einsatzort || jr.ort || "Einsatz"} – ${zeitraum}`;
     
     // Build email payload for Resend API
     const emailPayload: any = {
