@@ -10,8 +10,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail } from "lucide-react";
+import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit } from "lucide-react";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
+import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
@@ -68,6 +69,8 @@ const Admin = () => {
   const [markingNoShow, setMarkingNoShow] = useState<string | null>(null);
   const [noShowDialogOpen, setNoShowDialogOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
+  const [contactDataDialogOpen, setContactDataDialogOpen] = useState(false);
+  const [selectedContactJobId, setSelectedContactJobId] = useState<string>("");
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -1022,7 +1025,7 @@ const Admin = () => {
                           <span className="text-xs text-gray-500">({req.fuehrerscheinklasse})</span>
                         </div>
                       </TableCell>
-                        <TableCell>
+                       <TableCell>
                           <div className="space-y-1">
                             <Badge 
                               variant={
@@ -1097,10 +1100,42 @@ const Admin = () => {
                               </div>
                             );
                           })()}
-                        </TableCell>
-                        <TableCell>
-                          {/* Aktionen-Spalte ist jetzt leer, da alles in Zuweisung-Spalte ist */}
-                        </TableCell>
+                         </TableCell>
+                         <TableCell>
+                           <div className="flex items-center gap-2">
+                             {/* Data completion check */}
+                             {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
+                               <Button
+                                 size="sm"
+                                 variant="outline"
+                                 onClick={() => handleOpenContactDialog(req.id)}
+                                 className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                               >
+                                 <Edit className="h-3 w-3 mr-1" />
+                                 Daten ergänzen
+                               </Button>
+                             )}
+                             
+                             {/* Resend email for existing assignments */}
+                             {(() => {
+                               const assignment = activeByJob.get(req.id);
+                               if (assignment) {
+                                 return (
+                                   <Button
+                                     size="sm"
+                                     variant="outline"
+                                     onClick={() => resendDriverConfirmationNew(assignment.id)}
+                                     className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                                   >
+                                     <Mail className="h-3 w-3 mr-1" />
+                                     Erneut senden
+                                   </Button>
+                                 );
+                               }
+                               return null;
+                             })()}
+                           </div>
+                         </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

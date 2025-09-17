@@ -33,53 +33,52 @@ export function AdminAssignmentDialog({
   const [attachPdf, setAttachPdf] = useState(false);
   const [isAssigning, setIsAssigning] = useState(false);
   const [isLoadingDrivers, setIsLoadingDrivers] = useState(false);
-  const [addressIncomplete, setAddressIncomplete] = useState(false);
-  const [address, setAddress] = useState({
-    street: "",
-    houseNumber: "",
-    postalCode: "",
-    city: ""
-  });
+  
+  // Customer contact data state
+  const [jobData, setJobData] = useState<any>(null);
+  const [cName, setCName] = useState("");
+  const [contact, setContact] = useState("");
+  const [street, setStreet] = useState("");
+  const [house, setHouse] = useState("");
+  const [postal, setPostal] = useState("");
+  const [city, setCity] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
+  
   const { toast } = useToast();
 
-  // Load drivers and check address when dialog opens
+  // Load drivers and job data when dialog opens
   useEffect(() => {
     if (open) {
       loadDrivers();
-      checkAddressComplete();
+      loadJobData();
     }
   }, [open, jobId]);
 
-  const checkAddressComplete = async () => {
+  const loadJobData = async () => {
     try {
-      // Check if address is complete using direct query
-      const { data: jobData, error } = await supabase
+      const { data: job, error } = await supabase
         .from('job_requests')
-        .select('customer_street, customer_house_number, customer_postal_code, customer_city')
+        .select('*')
         .eq('id', jobId)
         .maybeSingle();
       
       if (error) throw error;
       
-      const isComplete = jobData && 
-        jobData.customer_street && jobData.customer_street.trim() !== '' &&
-        jobData.customer_house_number && jobData.customer_house_number.trim() !== '' &&
-        jobData.customer_postal_code && /^\d{5}$/.test(jobData.customer_postal_code) &&
-        jobData.customer_city && jobData.customer_city.trim() !== '';
-      
-      setAddressIncomplete(!isComplete);
-      
-      // Load existing address data (even if incomplete)
-      if (jobData) {
-        setAddress({
-          street: jobData.customer_street || "",
-          houseNumber: jobData.customer_house_number || "",
-          postalCode: jobData.customer_postal_code || "",
-          city: jobData.customer_city || ""
-        });
+      if (job) {
+        setJobData(job);
+        setCName(job.customer_name || job.company || "");
+        setContact(job.customer_name || "");
+        setStreet(job.customer_street || "");
+        setHouse(job.customer_house_number || "");
+        setPostal(job.customer_postal_code || "");
+        setCity(job.customer_city || "");
+        setPhone(job.customer_phone || "");
+        setEmail(job.customer_email || "");
       }
     } catch (error) {
-      console.error('Error checking address:', error);
+      console.error('Error loading job data:', error);
     }
   };
 
@@ -132,19 +131,43 @@ export function AdminAssignmentDialog({
     ? drivers.filter(d => d.status === 'active' || d.status === 'approved')
     : drivers;
 
-  const ensureAddress = async (jobId: string) => {
-    const { error } = await supabase.from('job_requests').update({
-      customer_street: address.street,
-      customer_house_number: address.houseNumber,
-      customer_postal_code: address.postalCode,
-      customer_city: address.city,
-    }).eq('id', jobId);
-    if (error) throw error;
+  // Validation logic
+  const postalOk = /^\d{5}$/.test(postal);
+  const hasContactWay = (phone?.trim()?.length || 0) > 0 || (email?.trim()?.length || 0) > 0;
+  const customerAddressComplete = street && house && postalOk && city;
+  const needsFix = !(customerAddressComplete && cName && contact && hasContactWay);
+
+  const saveContactIfNeeded = async () => {
+    if (!needsFix) return;
+    
+    try {
+      const { error } = await supabase.rpc('admin_update_job_contact', {
+        _job_id: jobId,
+        _firma_oder_name: cName,
+        _ansprechpartner: contact,
+        _street: street,
+        _house: house,
+        _postal: postal,
+        _city: city,
+        _phone: phone,
+        _email: email,
+      });
+      
+      if (error) throw error;
+      
+      setLastSaved(new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
+      toast({
+        title: "Daten gespeichert",
+        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
+      });
+      
+    } catch (error: any) {
+      console.error('Error saving contact data:', error);
+      throw error;
+    }
   };
 
-  const addressComplete = address.street && address.houseNumber && /^\d{5}$/.test(address.postalCode) && address.city;
-
-  const handleAssign = async () => {
+  const handleAssignAndSend = async () => {
     if (!selectedDriverId || !rateValue) {
       toast({
         title: "Eingabefehler",
@@ -154,10 +177,10 @@ export function AdminAssignmentDialog({
       return;
     }
 
-    if (addressIncomplete && !addressComplete) {
+    if (needsFix) {
       toast({
-        title: "Adresse unvollständig",
-        description: "Bitte füllen Sie die vollständige Anschrift aus.",
+        title: "Daten unvollständig",
+        description: "Bitte Auftraggeber-Daten vollständig eintragen (Straße, Nr., PLZ (5-stellig), Ort sowie Ansprechpartner und mind. Telefon oder E-Mail).",
         variant: "destructive"
       });
       return;
@@ -166,12 +189,10 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
-      // Ensure address is complete if needed
-      if (addressIncomplete) {
-        await ensureAddress(jobId);
-      }
+      // Save contact data if needed
+      await saveContactIfNeeded();
 
-      // Zuweisen
+      // 1) Assign driver
       const { data, error } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
         _driver_id: selectedDriverId,
@@ -189,13 +210,13 @@ export function AdminAssignmentDialog({
       const assignmentId = data as string;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // Sofort E-Mail + PDF auslösen:
+      // 2) Send confirmation email
       try {
         const res = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-driver-confirmation`, {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTGC6GPW77TOsFdy1cpPW4dzc`
           },
           body: JSON.stringify({ 
             assignment_id: assignmentId,
@@ -205,23 +226,19 @@ export function AdminAssignmentDialog({
         
         if (!res.ok) {
           const { error: errTxt } = await res.json().catch(() => ({ error: 'Unbekannter Fehler' }));
-          toast({
-            title: "E-Mail-Versand fehlgeschlagen",
-            description: `${errTxt}`,
-            variant: "destructive"
-          });
-        } else {
-          const deliveryMode = attachPdf ? 'both' : 'inline';
-          toast({
-            title: "Zuweisung erfolgreich",
-            description: `Fahrer zugewiesen und Einsatzbestätigung versendet (${deliveryMode === 'both' ? 'mit PDF-Anhang' : 'mit PDF-Link'}).`
-          });
+          throw new Error(errTxt);
         }
+
+        toast({
+          title: "Erfolgreich zugewiesen",
+          description: "Fahrer zugewiesen und Einsatzbestätigung versendet.",
+        });
+        
       } catch (emailErr: any) {
         console.error('Email sending error:', emailErr);
         toast({
           title: "E-Mail-Versand fehlgeschlagen", 
-          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden",
+          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden: " + emailErr.message,
           variant: "destructive"
         });
       }
@@ -234,13 +251,9 @@ export function AdminAssignmentDialog({
       setEndDate("");
       setNote("");
       setAttachPdf(false);
-      setAddress({ street: "", houseNumber: "", postalCode: "", city: "" });
-      setAddressIncomplete(false);
       
       onAssignmentComplete();
       onClose();
-      
-      setAttachPdf(false);
       
     } catch (error) {
       console.error('Assignment error:', error);
@@ -264,67 +277,150 @@ export function AdminAssignmentDialog({
     }
   };
 
+  const handleSaveDataOnly = async () => {
+    try {
+      await saveContactIfNeeded();
+    } catch (error: any) {
+      toast({
+        title: "Fehler beim Speichern",
+        description: error.message || "Daten konnten nicht gespeichert werden.",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Fahrer zuweisen</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4">
-          {/* Address Section - Show if incomplete */}
-          {addressIncomplete && (
+          {/* Customer Data Section - Show if incomplete */}
+          {needsFix && (
             <div className="p-4 border border-orange-200 bg-orange-50 rounded-lg">
-              <h3 className="font-medium text-orange-800 mb-3">Anschrift vervollständigen</h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium text-orange-800">Auftraggeber-Daten (Pflicht)</h3>
+                {lastSaved && (
+                  <span className="text-sm text-green-600">Gespeichert • zuletzt um {lastSaved}</span>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <Label htmlFor="address-street" className="text-sm">Straße *</Label>
+                  <Label htmlFor="cname" className="text-sm">Firma/Name *</Label>
                   <Input
-                    id="address-street"
-                    value={address.street}
-                    onChange={(e) => setAddress({...address, street: e.target.value})}
+                    id="cname"
+                    value={cName}
+                    onChange={(e) => setCName(e.target.value)}
+                    placeholder="Firma oder Vollname"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="contact" className="text-sm">Ansprechpartner *</Label>
+                  <Input
+                    id="contact"
+                    value={contact}
+                    onChange={(e) => setContact(e.target.value)}
+                    placeholder="Name der Kontaktperson"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <Label htmlFor="street" className="text-sm">Straße *</Label>
+                  <Input
+                    id="street"
+                    value={street}
+                    onChange={(e) => setStreet(e.target.value)}
                     placeholder="Musterstraße"
                     className="mt-1"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="address-number" className="text-sm">Hausnummer *</Label>
+                  <Label htmlFor="house" className="text-sm">Hausnummer *</Label>
                   <Input
-                    id="address-number"
-                    value={address.houseNumber}
-                    onChange={(e) => setAddress({...address, houseNumber: e.target.value})}
+                    id="house"
+                    value={house}
+                    onChange={(e) => setHouse(e.target.value)}
                     placeholder="123"
                     className="mt-1"
                   />
                 </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <Label htmlFor="address-zip" className="text-sm">PLZ *</Label>
+                  <Label htmlFor="postal" className="text-sm">PLZ *</Label>
                   <Input
-                    id="address-zip"
-                    value={address.postalCode}
-                    onChange={(e) => setAddress({...address, postalCode: e.target.value})}
+                    id="postal"
+                    value={postal}
+                    onChange={(e) => setPostal(e.target.value)}
                     placeholder="12345"
                     pattern="[0-9]{5}"
                     maxLength={5}
-                    className="mt-1"
+                    className={`mt-1 ${!postalOk && postal ? 'border-red-300' : ''}`}
                   />
+                  {postal && !postalOk && (
+                    <p className="text-xs text-red-600 mt-1">PLZ muss 5-stellig sein</p>
+                  )}
                 </div>
                 <div>
-                  <Label htmlFor="address-city" className="text-sm">Ort *</Label>
+                  <Label htmlFor="city" className="text-sm">Ort *</Label>
                   <Input
-                    id="address-city"
-                    value={address.city}
-                    onChange={(e) => setAddress({...address, city: e.target.value})}
+                    id="city"
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
                     placeholder="Musterstadt"
                     className="mt-1"
                   />
                 </div>
               </div>
-              {!addressComplete && (
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label htmlFor="phone" className="text-sm">Telefon</Label>
+                  <Input
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+49 123 456789"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email" className="text-sm">E-Mail</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="kontakt@firma.de"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+              
+              {!hasContactWay && (
                 <p className="text-sm text-orange-600 mt-2">
-                  Alle Adressfelder müssen ausgefüllt sein. PLZ muss 5-stellig sein.
+                  Mindestens Telefon oder E-Mail muss angegeben werden.
                 </p>
               )}
+              
+              <div className="flex justify-end mt-3">
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={handleSaveDataOnly}
+                  disabled={needsFix}
+                >
+                  Daten speichern
+                </Button>
+              </div>
             </div>
           )}
 
@@ -452,11 +548,11 @@ export function AdminAssignmentDialog({
               Abbrechen
             </Button>
             <Button 
-              onClick={handleAssign} 
-              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || (addressIncomplete && !addressComplete)}
+              onClick={handleAssignAndSend} 
+              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || needsFix}
               className="flex-1"
             >
-              {isAssigning ? "Zuweisen..." : "Zuweisen"}
+              {isAssigning ? "Zuweisen..." : "Zuweisen & Bestätigung senden"}
             </Button>
           </div>
         </div>

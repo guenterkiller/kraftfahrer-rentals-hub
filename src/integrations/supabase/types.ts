@@ -754,6 +754,20 @@ export type Database = {
         Args: { _email: string }
         Returns: Json
       }
+      admin_update_job_contact: {
+        Args: {
+          _ansprechpartner: string
+          _city: string
+          _email: string
+          _firma_oder_name: string
+          _house: string
+          _job_id: string
+          _phone: string
+          _postal: string
+          _street: string
+        }
+        Returns: boolean
+      }
       calc_no_show_fee_cents: {
         Args: { _rate_type: string; _rate_value: number; _starts_at: string }
         Returns: {
