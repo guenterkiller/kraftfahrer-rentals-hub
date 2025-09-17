@@ -41,6 +41,63 @@ export type Database = {
         }
         Relationships: []
       }
+      email_log: {
+        Row: {
+          assignment_id: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          job_id: string | null
+          message_id: string | null
+          recipient: string
+          sent_at: string | null
+          status: string
+          subject: string | null
+          template: string
+        }
+        Insert: {
+          assignment_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_id?: string | null
+          message_id?: string | null
+          recipient: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template: string
+        }
+        Update: {
+          assignment_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_id?: string | null
+          message_id?: string | null
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_log_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "job_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_log_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fahrer_dokumente: {
         Row: {
           created_at: string
@@ -157,6 +214,106 @@ export type Database = {
           vorname?: string
         }
         Relationships: []
+      }
+      feature_flags: {
+        Row: {
+          created_at: string
+          description: string | null
+          enabled: boolean
+          flag_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          flag_name: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          flag_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      job_assignments: {
+        Row: {
+          accepted_at: string | null
+          assigned_at: string
+          confirmed_at: string | null
+          created_at: string
+          declined_at: string | null
+          driver_id: string
+          end_date: string | null
+          id: string
+          job_id: string
+          rate_type: string
+          rate_value: number
+          start_date: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          assigned_at?: string
+          confirmed_at?: string | null
+          created_at?: string
+          declined_at?: string | null
+          driver_id: string
+          end_date?: string | null
+          id?: string
+          job_id: string
+          rate_type?: string
+          rate_value: number
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          assigned_at?: string
+          confirmed_at?: string | null
+          created_at?: string
+          declined_at?: string | null
+          driver_id?: string
+          end_date?: string | null
+          id?: string
+          job_id?: string
+          rate_type?: string
+          rate_value?: number
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_assignments_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_assignments_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile_admin_summary"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_assignments_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       job_mail_log: {
         Row: {

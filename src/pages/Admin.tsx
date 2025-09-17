@@ -855,6 +855,7 @@ const Admin = () => {
                       <TableHead className="min-w-[120px]">Einsatz</TableHead>
                       <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
                       <TableHead className="min-w-[80px]">Status</TableHead>
+                      <TableHead className="min-w-[120px]">Zuweisung</TableHead>
                       <TableHead className="min-w-[200px]">Aktionen</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -903,18 +904,50 @@ const Admin = () => {
                           <span className="text-xs text-gray-500">({req.fuehrerscheinklasse})</span>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        <Badge 
-                          variant={req.status === 'angenommen' ? 'default' : 'outline'}
-                          className={
-                            req.status === 'angenommen' 
-                              ? 'bg-green-100 text-green-800 border-green-200' 
-                              : 'bg-blue-100 text-blue-800 border-blue-200'
-                          }
-                        >
-                          {req.status === 'angenommen' ? 'Angenommen' : 'Offen'}
-                        </Badge>
-                      </TableCell>
+                       <TableCell>
+                         <Badge 
+                           variant={
+                             req.status === 'confirmed' ? 'default' : 
+                             req.status === 'assigned' ? 'secondary' : 
+                             'outline'
+                           }
+                           className={
+                             req.status === 'confirmed' 
+                               ? 'bg-green-100 text-green-800 border-green-200' 
+                               : req.status === 'assigned'
+                               ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
+                               : 'bg-blue-100 text-blue-800 border-blue-200'
+                           }
+                         >
+                           {req.status === 'confirmed' ? 'Bestätigt' : 
+                            req.status === 'assigned' ? 'Zugewiesen' : 'Offen'}
+                         </Badge>
+                       </TableCell>
+                       <TableCell>
+                         <div className="text-sm">
+                           {req.status === 'assigned' && (
+                             <div className="text-amber-600 font-medium">
+                               Warten auf Fahrer-Antwort
+                             </div>
+                           )}
+                           {req.status === 'confirmed' && (
+                             <div className="space-y-1">
+                               <div className="text-green-600 font-medium">Auftrag bestätigt</div>
+                               <div className="flex gap-1">
+                                 <Button size="sm" variant="outline" className="text-xs">
+                                   PDF ansehen
+                                 </Button>
+                                 <Button size="sm" variant="outline" className="text-xs">
+                                   Neu senden
+                                 </Button>
+                               </div>
+                             </div>
+                           )}
+                           {req.status === 'open' && (
+                             <div className="text-gray-500">Keine Zuweisung</div>
+                           )}
+                         </div>
+                       </TableCell>
                         <TableCell>
                           <div className="flex flex-col gap-2 min-w-[200px]">
                             {req.status === 'angenommen' ? (
