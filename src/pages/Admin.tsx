@@ -113,10 +113,12 @@ const Admin = () => {
 
   const logAdminEvent = async (event: string, email?: string) => {
     try {
-      await supabase.from('admin_log').insert({
-        email: email || user?.email || 'unknown',
-        event,
-        timestamp: new Date().toISOString()
+      // Log in admin_actions (admin_log is now a view)
+      await supabase.from('admin_actions').insert({
+        job_id: null, // System event without job context
+        action: event,
+        admin_email: email || user?.email || 'unknown',
+        note: `Admin event: ${event}`
       });
       console.log(`📝 Admin-Log: ${event} für ${email || user?.email}`);
     } catch (error) {
