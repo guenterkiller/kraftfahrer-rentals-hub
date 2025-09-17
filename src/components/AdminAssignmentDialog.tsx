@@ -33,6 +33,10 @@ export function AdminAssignmentDialog({
   const { toast } = useToast();
 
   const activeDrivers = drivers.filter(d => d.status === 'active' || d.status === 'approved');
+  
+  console.log("🎯 AdminAssignmentDialog: Available drivers:", drivers.length);
+  console.log("🎯 AdminAssignmentDialog: Active drivers:", activeDrivers.length);
+  console.log("🎯 AdminAssignmentDialog: Driver statuses:", drivers.map(d => ({ name: d.vorname + " " + d.nachname, status: d.status })));
 
   const handleAssign = async () => {
     if (!selectedDriverId || !rateValue) {
@@ -116,11 +120,17 @@ export function AdminAssignmentDialog({
                 <SelectValue placeholder="Fahrer wählen..." />
               </SelectTrigger>
               <SelectContent>
-                {activeDrivers.map(driver => (
-                  <SelectItem key={driver.id} value={driver.id}>
-                    {driver.vorname} {driver.nachname} ({driver.email})
+                {activeDrivers.length === 0 ? (
+                  <SelectItem value="" disabled>
+                    Keine aktiven Fahrer verfügbar. Bitte zuerst Fahrer genehmigen.
                   </SelectItem>
-                ))}
+                ) : (
+                  activeDrivers.map(driver => (
+                    <SelectItem key={driver.id} value={driver.id}>
+                      {driver.vorname} {driver.nachname} ({driver.email})
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
