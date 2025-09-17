@@ -575,8 +575,8 @@ export type Database = {
           _end_date?: string
           _job_id: string
           _note?: string
-          _rate_type: string
-          _rate_value: number
+          _rate_type?: string
+          _rate_value?: number
           _start_date?: string
         }
         Returns: string
