@@ -62,6 +62,20 @@ const handler = async (req: Request): Promise<Response> => {
     const job = assignment.job_requests;
     const driver = assignment.fahrer_profile;
 
+    // Validate required address fields for proper legal confirmation
+    const addressValidation = validateCustomerAddress(job);
+    if (!addressValidation.isValid) {
+      console.error('❌ Incomplete customer address:', addressValidation.missingFields);
+      return new Response(JSON.stringify({ 
+        error: 'Vollständige Anschrift des Auftraggebers erforderlich',
+        details: `Fehlende Felder: ${addressValidation.missingFields.join(', ')}`,
+        missingFields: addressValidation.missingFields
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     // Get admin email for BCC
     const { data: adminSettings } = await supabase
       .from('admin_settings')
@@ -218,6 +232,26 @@ const handler = async (req: Request): Promise<Response> => {
   }
 };
 
+function validateCustomerAddress(job: any) {
+  const requiredFields = [];
+  
+  // Check for company name or customer name
+  if (!job.company || job.company === 'Bitte wählen') {
+    if (!job.customer_name) {
+      requiredFields.push('Unternehmen/Name');
+    }
+  }
+  
+  // Note: In current schema we don't have separate address fields
+  // We should add these to job_requests table in the future
+  const missingAddressFields = ['Straße + Nr.', 'PLZ + Ort'];
+  
+  return {
+    isValid: requiredFields.length === 0 && missingAddressFields.length === 0,
+    missingFields: [...requiredFields, ...missingAddressFields]
+  };
+}
+
 function generateDriverEmailContent({ job, driver, assignment, confirmationDate }) {
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return 'nach Absprache';
@@ -281,6 +315,7 @@ function generateDriverEmailContent({ job, driver, assignment, confirmationDate 
       <h3>AUFTRAGGEBER</h3>
       <p>• <strong>Unternehmen/Name:</strong> ${firmaOderName}<br>
       • <strong>Ansprechpartner:</strong> ${job.customer_name}<br>
+      • <strong>Anschrift:</strong> <em>Vollständige Anschrift wird ergänzt</em><br>
       • <strong>Telefon:</strong> ${job.customer_phone}<br>
       • <strong>E-Mail:</strong> ${job.customer_email}</p>
     </div>
@@ -301,17 +336,17 @@ function generateDriverEmailContent({ job, driver, assignment, confirmationDate 
     </div>
 
     <div class="important">
-      <h3>WICHTIG – VEREINBARUNGEN (gemäß kraftfahrer-mieten.com)</h3>
+      <h3>VEREINBARUNGEN (Fahrerexpress)</h3>
       <p><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
-      <p><strong>2) Abrechnung:</strong> Pro Auftrag nach Einsatzende oder gesammelt zum Monatsende.</p>
+      <p><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
       <p><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
-      <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind uns unaufgefordert mitzuteilen.</p>
+      <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
       <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an.</p>
-      <p><strong>6) Keine Festanstellung:</strong> Sie handeln als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
+      <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
     </div>
 
     <div class="section">
-      <p>Fragen oder Änderungen? Bitte melden Sie sich direkt bei uns.</p>
+      <p><strong>Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</strong></p>
       
       <p>Viele Grüße<br><strong>Fahrerexpress | kraftfahrer-mieten.com</strong><br>
       E-Mail: info@kraftfahrer-mieten.com | Tel: +49-1577-1442285</p>
@@ -388,6 +423,7 @@ function generateDriverPDFContent({ job, driver, assignment, confirmationDate })
     <h3>AUFTRAGGEBER</h3>
     <p>• <strong>Unternehmen/Name:</strong> ${firmaOderName}<br>
     • <strong>Ansprechpartner:</strong> ${job.customer_name}<br>
+    • <strong>Anschrift:</strong> <em>Vollständige Anschrift wird ergänzt</em><br>
     • <strong>Telefon:</strong> ${job.customer_phone}<br>
     • <strong>E-Mail:</strong> ${job.customer_email}</p>
   </div>
@@ -408,17 +444,17 @@ function generateDriverPDFContent({ job, driver, assignment, confirmationDate })
   </div>
 
   <div class="important">
-    <h3>WICHTIG – VEREINBARUNGEN (gemäß kraftfahrer-mieten.com)</h3>
+    <h3>VEREINBARUNGEN (Fahrerexpress)</h3>
     <p><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
-    <p><strong>2) Abrechnung:</strong> Pro Auftrag nach Einsatzende oder gesammelt zum Monatsende.</p>
+    <p><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
     <p><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
-    <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind uns unaufgefordert mitzuteilen.</p>
+    <p><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
     <p><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an.</p>
-    <p><strong>6) Keine Festanstellung:</strong> Sie handeln als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
+    <p><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
   </div>
 
   <div class="section">
-    <p>Fragen oder Änderungen? Bitte melden Sie sich direkt bei uns.</p>
+    <p><strong>Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</strong></p>
     <p>Viele Grüße<br><strong>Fahrerexpress | kraftfahrer-mieten.com</strong><br>
     E-Mail: info@kraftfahrer-mieten.com | Tel: +49-1577-1442285</p>
   </div>
