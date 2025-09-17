@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -12,7 +13,6 @@ interface AdminAssignmentDialogProps {
   open: boolean;
   onClose: () => void;
   jobId: string;
-  drivers: Array<{ id: string; vorname: string; nachname: string; email: string; status: string }>;
   onAssignmentComplete: () => void;
 }
 
@@ -20,9 +20,10 @@ export function AdminAssignmentDialog({
   open, 
   onClose, 
   jobId, 
-  drivers, 
   onAssignmentComplete 
 }: AdminAssignmentDialogProps) {
+  const [drivers, setDrivers] = useState<Array<{ id: string; vorname: string; nachname: string; email: string; status: string }>>([]);
+  const [showOnlyApproved, setShowOnlyApproved] = useState(true);
   const [selectedDriverId, setSelectedDriverId] = useState("");
   const [rateType, setRateType] = useState<"hourly" | "daily">("hourly");
   const [rateValue, setRateValue] = useState("");
@@ -30,13 +31,50 @@ export function AdminAssignmentDialog({
   const [endDate, setEndDate] = useState("");
   const [note, setNote] = useState("");
   const [isAssigning, setIsAssigning] = useState(false);
+  const [isLoadingDrivers, setIsLoadingDrivers] = useState(false);
   const { toast } = useToast();
 
-  const activeDrivers = drivers.filter(d => d.status === 'active' || d.status === 'approved');
-  
-  console.log("🎯 AdminAssignmentDialog: Available drivers:", drivers.length);
-  console.log("🎯 AdminAssignmentDialog: Active drivers:", activeDrivers.length);
-  console.log("🎯 AdminAssignmentDialog: Driver statuses:", drivers.map(d => ({ name: d.vorname + " " + d.nachname, status: d.status })));
+  // Load drivers when dialog opens
+  useEffect(() => {
+    if (open) {
+      loadDrivers();
+    }
+  }, [open]);
+
+  const loadDrivers = async () => {
+    setIsLoadingDrivers(true);
+    try {
+      const { data, error } = await supabase.rpc('get_fahrer_admin_summary');
+      
+      if (error) {
+        console.error("❌ Error loading drivers:", error);
+        toast({
+          title: "Fehler beim Laden der Fahrer",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      console.log("✅ Drivers loaded successfully:", data?.length || 0);
+      setDrivers(data || []);
+      
+    } catch (error) {
+      console.error("❌ Unexpected error loading drivers:", error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: "Fahrer konnten nicht geladen werden.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoadingDrivers(false);
+    }
+  };
+
+  // Filter drivers based on toggle
+  const filteredDrivers = showOnlyApproved 
+    ? drivers.filter(d => d.status === 'active' || d.status === 'approved')
+    : drivers;
 
   const handleAssign = async () => {
     if (!selectedDriverId || !rateValue) {
@@ -113,26 +151,58 @@ export function AdminAssignmentDialog({
         </DialogHeader>
         
         <div className="space-y-4">
+          {/* Driver Filter Toggle */}
+          <div className="flex items-center space-x-2 p-3 bg-muted rounded-lg">
+            <Switch
+              id="show-approved"
+              checked={showOnlyApproved}
+              onCheckedChange={setShowOnlyApproved}
+            />
+            <Label htmlFor="show-approved" className="text-sm">
+              Nur freigeschaltete Fahrer anzeigen ({filteredDrivers.length} von {drivers.length})
+            </Label>
+          </div>
+
           <div>
             <Label>Fahrer auswählen</Label>
-            <Select value={selectedDriverId} onValueChange={setSelectedDriverId}>
-              <SelectTrigger>
-                <SelectValue placeholder="Fahrer wählen..." />
-              </SelectTrigger>
-              <SelectContent>
-                {activeDrivers.length === 0 ? (
-                  <SelectItem value="" disabled>
-                    Keine aktiven Fahrer verfügbar. Bitte zuerst Fahrer genehmigen.
-                  </SelectItem>
-                ) : (
-                  activeDrivers.map(driver => (
-                    <SelectItem key={driver.id} value={driver.id}>
-                      {driver.vorname} {driver.nachname} ({driver.email})
-                    </SelectItem>
-                  ))
+            {isLoadingDrivers ? (
+              <div className="p-3 text-center text-muted-foreground">
+                Lade Fahrer...
+              </div>
+            ) : filteredDrivers.length === 0 ? (
+              <div className="space-y-3">
+                <div className="p-3 text-center text-muted-foreground border rounded">
+                  {drivers.length === 0 
+                    ? "Keine Fahrer gefunden. Bitte zuerst Fahrer anlegen."
+                    : "Keine freigeschalteten Fahrer. Filter ausschalten oder Fahrer genehmigen."
+                  }
+                </div>
+                {drivers.length > 0 && showOnlyApproved && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowOnlyApproved(false)}
+                    className="w-full"
+                  >
+                    Alle Fahrer anzeigen
+                  </Button>
                 )}
-              </SelectContent>
-            </Select>
+              </div>
+            ) : (
+              <Select value={selectedDriverId} onValueChange={setSelectedDriverId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Fahrer wählen..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredDrivers.map(driver => (
+                    <SelectItem key={driver.id} value={driver.id}>
+                      {driver.vorname} {driver.nachname} ({driver.email}) - {driver.status}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -197,7 +267,7 @@ export function AdminAssignmentDialog({
             </Button>
             <Button 
               onClick={handleAssign} 
-              disabled={isAssigning || !selectedDriverId || !rateValue}
+              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0}
               className="flex-1"
             >
               {isAssigning ? "Zuweisen..." : "Zuweisen"}

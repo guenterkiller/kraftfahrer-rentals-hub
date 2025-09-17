@@ -944,24 +944,19 @@ const Admin = () => {
                             )}
                           </div>
                         </TableCell>
-                         <TableCell>
-                           <div className="flex flex-col gap-2">
-                             {!jobAssignments.some(a => a.job_id === req.id) ? (
-                               <Button
-                                 size="sm"
-                                 onClick={() => handleAssignDriver(req.id)}
-                                 className="w-full"
-                               >
-                                 <Users className="h-4 w-4 mr-1" />
-                                 Zuweisen
-                               </Button>
-                             ) : (
-                               <div className="text-sm text-green-600 font-medium">
-                                 Zugewiesen
-                               </div>
-                             )}
-                           </div>
-                         </TableCell>
+                          <TableCell>
+                            <div className="flex flex-col gap-2">
+                              <Button
+                                size="sm"
+                                onClick={() => handleAssignDriver(req.id)}
+                                className="w-full"
+                                disabled={jobAssignments.some(a => a.job_id === req.id)}
+                              >
+                                <Users className="h-4 w-4 mr-1" />
+                                {jobAssignments.some(a => a.job_id === req.id) ? "Bereits zugewiesen" : "Zuweisen"}
+                              </Button>
+                            </div>
+                          </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -1003,7 +998,6 @@ const Admin = () => {
         open={assignDialogOpen}
         onClose={() => setAssignDialogOpen(false)}
         jobId={selectedJobId}
-        drivers={fahrer}
         onAssignmentComplete={handleAssignmentComplete}
       />
 
