@@ -471,6 +471,47 @@ const Admin = () => {
     }
   };
 
+  const handleResetDriverStatus = async (driverId: string, driverName: string) => {
+    try {
+      const response = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/reset-driver-status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`
+        },
+        body: JSON.stringify({
+          driverId: driverId,
+          newStatus: 'pending'
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        // Update local state
+        setFahrer(prev => 
+          prev.map(f => 
+            f.id === driverId ? { ...f, status: 'pending' } : f
+          )
+        );
+
+        toast({
+          title: "Status zurückgesetzt",
+          description: `${driverName} wurde auf "Wartend" zurückgesetzt.`,
+        });
+      } else {
+        throw new Error(result.error || 'Unknown error');
+      }
+    } catch (error) {
+      console.error('❌ Error resetting driver status:', error);
+      toast({
+        title: "Fehler",
+        description: `Status konnte nicht zurückgesetzt werden: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleSendJobToAllDrivers = async (jobId: string) => {
     console.log('📧 Sending job to all drivers:', jobId);
     setSendingJobToAll(jobId);
@@ -875,17 +916,27 @@ const Admin = () => {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                          {f.status === 'pending' && (
-                            <Button
-                              size="sm"
-                              className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
-                              onClick={() => handleApproveDriver(f.id)}
-                              disabled={approvingDriver === f.id}
-                            >
-                              {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
-                            </Button>
-                          )}
-                        </div>
+                           {f.status === 'pending' && (
+                             <Button
+                               size="sm"
+                               className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
+                               onClick={() => handleApproveDriver(f.id)}
+                               disabled={approvingDriver === f.id}
+                             >
+                               {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                             </Button>
+                           )}
+                           {f.status === 'active' && (
+                             <Button
+                               size="sm"
+                               variant="outline"
+                               className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                               onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
+                             >
+                               ↻ Zurücksetzen
+                             </Button>
+                           )}
+                         </div>
                       </TableCell>
                     </TableRow>
                   ))}
