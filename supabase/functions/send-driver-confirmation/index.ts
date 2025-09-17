@@ -10,7 +10,8 @@ const corsHeaders = {
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
 interface DriverConfirmationRequest {
-  assignmentId: string;
+  assignment_id: string;
+  stage?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -34,8 +35,8 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     // Parse request
-    const { assignmentId }: DriverConfirmationRequest = await req.json();
-    console.log('📋 Processing driver confirmation for assignment:', assignmentId);
+    const { assignment_id, stage }: DriverConfirmationRequest = await req.json();
+    console.log('📋 Processing driver confirmation for assignment:', assignment_id, 'stage:', stage);
 
     // Fetch assignment with job and driver details
     const { data: assignment, error: assignmentError } = await supabase
@@ -45,7 +46,7 @@ const handler = async (req: Request): Promise<Response> => {
         job_requests!inner(*),
         fahrer_profile!inner(*)
       `)
-      .eq('id', assignmentId)
+      .eq('id', assignment_id)
       .single();
 
     if (assignmentError || !assignment) {
@@ -105,7 +106,7 @@ const handler = async (req: Request): Promise<Response> => {
       .from('email_log')
       .insert({
         job_id: job.id,
-        assignment_id: assignmentId,
+        assignment_id: assignment_id,
         recipient: driver.email,
         subject: subject,
         template: 'driver_confirmation',
@@ -124,7 +125,7 @@ const handler = async (req: Request): Promise<Response> => {
       const pdfFilename = `driver-confirmation-${new Date().toISOString().slice(0, 10).replace(/-/g, '')}.pdf`;
 
       // Upload PDF to storage
-      const pdfPath = `assignments/${assignmentId}/${pdfFilename}`;
+      const pdfPath = `assignments/${assignment_id}/${pdfFilename}`;
       const { error: uploadError } = await supabase.storage
         .from('confirmations')
         .upload(pdfPath, pdfBuffer, {
