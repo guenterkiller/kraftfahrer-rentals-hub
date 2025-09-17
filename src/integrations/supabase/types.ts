@@ -41,6 +41,18 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_settings: {
+        Row: {
+          admin_email: string
+        }
+        Insert: {
+          admin_email: string
+        }
+        Update: {
+          admin_email?: string
+        }
+        Relationships: []
+      }
       email_log: {
         Row: {
           assignment_id: string | null
