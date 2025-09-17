@@ -119,13 +119,19 @@ export function AdminAssignmentDialog({
       }
 
       const assignmentId = data as string;
+      console.log('✅ Assignment created with ID:', assignmentId);
 
       // Sofort E-Mail + PDF versenden
       const { error: mailErr } = await supabase.functions.invoke(
         "send-driver-confirmation",
         { body: { assignment_id: assignmentId, stage: "assigned" } }
       );
-      if (mailErr) throw mailErr;
+      if (mailErr) {
+        console.error('❌ E-Mail error:', mailErr);
+        throw mailErr;
+      }
+
+      console.log('✅ E-Mail sent successfully');
 
       toast({
         title: "Zuweisung gespeichert & E-Mail versendet",

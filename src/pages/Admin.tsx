@@ -210,48 +210,49 @@ const Admin = () => {
 
   const loadJobAssignments = async () => {
     try {
-      console.log("🔍 Admin: Lade Zuweisungen...");
-      const { data, error } = await supabase
+      console.log('🔄 Loading job assignments...');
+      const { data: assignmentsData, error: assignmentsError } = await supabase
         .from('job_assignments')
         .select(`
           *,
-          job_requests!inner(*),
-          fahrer_profile!inner(*)
-        `)
-        .order('assigned_at', { ascending: false });
+          fahrer_profile:driver_id (
+            vorname,
+            nachname,
+            email
+          )
+        `);
 
-      if (error) {
-        console.error("❌ Admin: Fehler beim Laden der Zuweisungen:", error);
-        return;
+      if (assignmentsError) {
+        console.error('❌ Error loading assignments:', assignmentsError);
+        throw assignmentsError;
       }
 
-      console.log("✅ Admin: Zuweisungen erfolgreich geladen:", data);
-      setJobAssignments(data || []);
+      console.log('✅ Assignments loaded:', assignmentsData?.length || 0);
+      setJobAssignments(assignmentsData || []);
     } catch (error) {
-      console.error("❌ Admin: Unerwarteter Fehler beim Laden der Zuweisungen:", error);
+      console.error('Error loading assignments:', error);
+      toast({
+        title: "Fehler beim Laden der Zuweisungen",
+        description: "Die Zuweisungen konnten nicht geladen werden.",
+        variant: "destructive"
+      });
     }
   };
 
   // Hilfsmap: aktives Assignment je Job (confirmed > assigned)
   const activeByJob = React.useMemo(() => {
     const map = new Map<string, any>();
-    console.log('🔍 Creating activeByJob map with assignments:', jobAssignments.length);
     
     for (const a of jobAssignments) {
-      console.log(`🔍 Processing assignment: job_id=${a.job_id}, status=${a.status}`);
-      
       if (a.status === "confirmed") {
         map.set(a.job_id, a);
-        console.log(`✅ Set confirmed assignment for job ${a.job_id}`);
         continue;
       }
       if (a.status === "assigned" && !map.has(a.job_id)) {
         map.set(a.job_id, a);
-        console.log(`✅ Set assigned assignment for job ${a.job_id}`);
       }
     }
     
-    console.log('🔍 Final activeByJob map size:', map.size);
     return map;
   }, [jobAssignments]);
 
@@ -339,8 +340,13 @@ const Admin = () => {
   };
 
   const handleAssignmentComplete = async () => {
-    await loadJobRequests();
-    await loadJobAssignments();
+    console.log('🔄 Assignment completed, reloading data...');
+    // Reload in parallel for better performance
+    await Promise.all([
+      loadJobRequests(),
+      loadJobAssignments()
+    ]);
+    console.log('✅ Data reloaded after assignment');
   };
 
   const confirmAndSend = async (assignmentId: string) => {
@@ -962,10 +968,8 @@ const Admin = () => {
                         <TableCell>
                           {(() => {
                             const a = activeByJob.get(req.id);
-                            console.log(`🔍 Job ${req.id}: activeByJob lookup result:`, a ? `Found ${a.status}` : 'Not found');
                             
                             if (!a) {
-                              console.log(`🔍 Job ${req.id}: No active assignment, showing Zuweisen button`);
                               return (
                                 <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
                                   Zuweisen
@@ -973,7 +977,6 @@ const Admin = () => {
                               );
                             }
 
-                            console.log(`🔍 Job ${req.id}: Active assignment found with status ${a.status}`);
                             return (
                               <div className="flex items-center gap-4">
                                 <div className="flex items-center gap-2">
