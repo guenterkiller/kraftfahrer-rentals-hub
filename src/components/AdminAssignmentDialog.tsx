@@ -130,14 +130,31 @@ export function AdminAssignmentDialog({
       if (mailErr) {
         console.error('❌ E-Mail error:', mailErr);
         
+        // Try to parse error details from response
+        let errorMessage = mailErr.message || "Unbekannter Fehler";
+        let detailedError = "";
+        
         // Check if it's an address validation error
-        if (mailErr.message && mailErr.message.includes('Vollständige Anschrift')) {
-          toast({
-            title: "Adressdaten unvollständig",
-            description: "Bitte ergänzen Sie die vollständige Anschrift des Auftraggebers (Straße + Nr., PLZ + Ort) vor der Zuweisung.",
-            variant: "destructive"
-          });
-          return; // Don't throw, just show message and keep dialog open
+        if (mailErr.context?.body) {
+          try {
+            const errorBody = typeof mailErr.context.body === 'string' 
+              ? JSON.parse(mailErr.context.body) 
+              : mailErr.context.body;
+            
+            if (errorBody.error && errorBody.error.includes('Vollständige Anschrift')) {
+              errorMessage = "Adressdaten unvollständig";
+              detailedError = errorBody.details || "Bitte ergänzen Sie die vollständige Anschrift des Auftraggebers (Straße + Nr., PLZ + Ort) vor der Zuweisung.";
+              
+              toast({
+                title: errorMessage,
+                description: detailedError,
+                variant: "destructive"
+              });
+              return; // Don't throw, just show message and keep dialog open
+            }
+          } catch (parseError) {
+            console.error('Error parsing response:', parseError);
+          }
         }
         
         throw mailErr;
