@@ -916,31 +916,31 @@ const Admin = () => {
                             req.status === 'assigned' ? 'Zugewiesen' : 'Offen'}
                          </Badge>
                        </TableCell>
-                        <TableCell>
-                          <div className="text-sm">
-                            {jobAssignments.some(a => a.job_id === req.id) ? (
-                              <div className="space-y-1">
-                                {jobAssignments
-                                  .filter(a => a.job_id === req.id)
-                                  .map(assignment => (
-                                    <div key={assignment.id} className="p-2 bg-blue-50 rounded">
-                                      <div className="font-medium text-blue-800">
-                                        {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
-                                      </div>
-                                      <div className="text-xs text-blue-600">
-                                        {assignment.rate_value}€/{assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}
-                                      </div>
-                                      <Badge 
-                                        variant={assignment.status === 'confirmed' ? 'default' : 'secondary'}
-                                        className="text-xs"
-                                      >
-                                        {assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
-                                      </Badge>
-                                    </div>
-                                  ))
-                                }
-                              </div>
-                             ) : (
+                       <TableCell>
+                         {(() => {
+                           const assignment = jobAssignments.find(a => a.job_id === req.id);
+                           
+                           if (assignment) {
+                             return (
+                               <div className="space-y-1">
+                                 <div className="p-2 bg-blue-50 rounded">
+                                   <div className="font-medium text-blue-800">
+                                     {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
+                                   </div>
+                                   <div className="text-xs text-blue-600">
+                                     {assignment.rate_value}€/{assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}
+                                   </div>
+                                   <Badge 
+                                     variant={assignment.status === 'confirmed' ? 'default' : 'secondary'}
+                                     className="text-xs"
+                                   >
+                                     {assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
+                                   </Badge>
+                                 </div>
+                               </div>
+                             );
+                           } else {
+                             return (
                                <Button 
                                  size="sm" 
                                  variant="outline"
@@ -949,9 +949,10 @@ const Admin = () => {
                                >
                                  Zuweisen
                                </Button>
-                             )}
-                          </div>
-                        </TableCell>
+                             );
+                           }
+                         })()}
+                       </TableCell>
                        <TableCell>
                          {(() => {
                            const assignment = jobAssignments.find(a => a.job_id === req.id);
