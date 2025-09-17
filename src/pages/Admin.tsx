@@ -235,15 +235,23 @@ const Admin = () => {
   // Hilfsmap: aktives Assignment je Job (confirmed > assigned)
   const activeByJob = React.useMemo(() => {
     const map = new Map<string, any>();
+    console.log('🔍 Creating activeByJob map with assignments:', jobAssignments.length);
+    
     for (const a of jobAssignments) {
+      console.log(`🔍 Processing assignment: job_id=${a.job_id}, status=${a.status}`);
+      
       if (a.status === "confirmed") {
         map.set(a.job_id, a);
+        console.log(`✅ Set confirmed assignment for job ${a.job_id}`);
         continue;
       }
       if (a.status === "assigned" && !map.has(a.job_id)) {
         map.set(a.job_id, a);
+        console.log(`✅ Set assigned assignment for job ${a.job_id}`);
       }
     }
+    
+    console.log('🔍 Final activeByJob map size:', map.size);
     return map;
   }, [jobAssignments]);
 
@@ -954,34 +962,43 @@ const Admin = () => {
                         <TableCell>
                           {(() => {
                             const a = activeByJob.get(req.id);
+                            console.log(`🔍 Job ${req.id}: activeByJob lookup result:`, a ? `Found ${a.status}` : 'Not found');
                             
+                            if (!a) {
+                              console.log(`🔍 Job ${req.id}: No active assignment, showing Zuweisen button`);
+                              return (
+                                <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                  Zuweisen
+                                </Button>
+                              );
+                            }
+
+                            console.log(`🔍 Job ${req.id}: Active assignment found with status ${a.status}`);
                             return (
-                              <>
-                                {!a && (
-                                  <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
-                                    Zuweisen
-                                  </Button>
-                                )}
-
-                                {a && (
-                                  <div className="flex items-center gap-8">
-                                    {a.status === "confirmed" ? (
-                                      <Badge variant="default">Bestätigt</Badge>
-                                    ) : (
-                                      <Badge variant="secondary">Zugewiesen</Badge>
-                                    )}
-
-                                    <div className="flex items-center gap-2">
-                                      <Button size="sm" onClick={() => resendDriverConfirmationNew(a.id)}>
-                                        E-Mail erneut senden
-                                      </Button>
-                                      <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
-                                        Ändern
-                                      </Button>
-                                    </div>
+                              <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-blue-800">
+                                    {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
+                                  </span>
+                                  <div className="text-xs text-blue-600">
+                                    {a.rate_value}€/{a.rate_type === 'hourly' ? 'Std' : 'Tag'}
                                   </div>
-                                )}
-                              </>
+                                  {a.status === "confirmed" ? (
+                                    <Badge variant="default">Bestätigt</Badge>
+                                  ) : (
+                                    <Badge variant="secondary">Zugewiesen</Badge>
+                                  )}
+                                </div>
+
+                                <div className="flex items-center gap-2">
+                                  <Button size="sm" onClick={() => resendDriverConfirmationNew(a.id)}>
+                                    E-Mail erneut senden
+                                  </Button>
+                                  <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
+                                    Ändern
+                                  </Button>
+                                </div>
+                              </div>
                             );
                           })()}
                         </TableCell>
