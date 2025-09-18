@@ -611,113 +611,7 @@ export type Database = {
       }
     }
     Views: {
-      admin_log: {
-        Row: {
-          created_at: string | null
-          email: string | null
-          event: string | null
-          id: string | null
-          ip_address: string | null
-          timestamp: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email?: string | null
-          event?: never
-          id?: string | null
-          ip_address?: never
-          timestamp?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string | null
-          event?: never
-          id?: string | null
-          ip_address?: never
-          timestamp?: string | null
-        }
-        Relationships: []
-      }
-      job_mail_log: {
-        Row: {
-          created_at: string | null
-          driver_snapshot: Json | null
-          email: string | null
-          error: string | null
-          fahrer_id: string | null
-          id: string | null
-          job_request_id: string | null
-          mail_template: string | null
-          meta: Json | null
-          reply_to: string | null
-          status: string | null
-          subject: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          driver_snapshot?: never
-          email?: string | null
-          error?: never
-          fahrer_id?: never
-          id?: string | null
-          job_request_id?: string | null
-          mail_template?: never
-          meta?: never
-          reply_to?: never
-          status?: string | null
-          subject?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          driver_snapshot?: never
-          email?: string | null
-          error?: never
-          fahrer_id?: never
-          id?: string | null
-          job_request_id?: string | null
-          mail_template?: never
-          meta?: never
-          reply_to?: never
-          status?: string | null
-          subject?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "email_log_job_id_fkey"
-            columns: ["job_request_id"]
-            isOneToOne: false
-            referencedRelation: "job_requests"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mail_log: {
-        Row: {
-          created_at: string | null
-          error_message: string | null
-          id: string | null
-          recipient: string | null
-          success: boolean | null
-          template: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          error_message?: never
-          id?: string | null
-          recipient?: string | null
-          success?: never
-          template?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          error_message?: never
-          id?: string | null
-          recipient?: string | null
-          success?: never
-          template?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       admin_assign_driver: {
@@ -807,7 +701,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin_user: {
-        Args: { user_uuid?: string }
+        Args: Record<PropertyKey, never>
         Returns: boolean
       }
       log_job_mail: {
