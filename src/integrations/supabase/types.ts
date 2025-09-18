@@ -661,7 +661,7 @@ export type Database = {
           fahrer_id?: never
           id?: string | null
           job_request_id?: string | null
-          mail_template?: string | null
+          mail_template?: never
           meta?: never
           reply_to?: never
           status?: string | null
@@ -675,7 +675,7 @@ export type Database = {
           fahrer_id?: never
           id?: string | null
           job_request_id?: string | null
-          mail_template?: string | null
+          mail_template?: never
           meta?: never
           reply_to?: never
           status?: string | null
