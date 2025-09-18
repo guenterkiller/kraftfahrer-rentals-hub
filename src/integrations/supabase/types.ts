@@ -775,6 +775,10 @@ export type Database = {
           tier: string
         }[]
       }
+      debug_echo_ids: {
+        Args: { _driver_id: string; _job_id: string }
+        Returns: Json
+      }
       is_admin: {
         Args: { user_uuid: string }
         Returns: boolean

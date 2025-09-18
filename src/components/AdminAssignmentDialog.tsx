@@ -205,43 +205,108 @@ export function AdminAssignmentDialog({
         return;
       }
 
-      // 1) Save address data (using RPC admin_update_job_contact)
-      await supabase.rpc('admin_update_job_contact', {
-        _job_id: jobId,
-        _firma_oder_name: cName,
-        _ansprechpartner: contact,
-        _street: street,
-        _house: house,
-        _postal: postal,
-        _city: city,
-        _phone: phone,
-        _email: email,
+      // 1) DEBUG: Log input values
+      console.log('🔍 PRE-Zuweisen', { 
+        jobId, 
+        selectedDriverId, 
+        rateType, 
+        rateValue,
+        jobIdType: typeof jobId,
+        driverIdType: typeof selectedDriverId
       });
 
-      // 2) Re-fetch job to ensure DB values are correct
-      const { data: fresh, error: fetchError } = await supabase
+      // 2) DEBUG: Test parameter passing with echo function
+      const { data: echoData, error: echoError } = await supabase.rpc('debug_echo_ids', {
+        _job_id: jobId,
+        _driver_id: selectedDriverId
+      });
+      
+      if (echoError) {
+        console.error('❌ Echo test failed:', echoError);
+      } else {
+        console.log('📡 Echo test result:', echoData);
+      }
+
+      // 3) PREFLIGHT: Check if job exists and is accessible
+      const { data: job, error: jobError } = await supabase
         .from('job_requests')
-        .select('customer_street,customer_house_number,customer_postal_code,customer_city')
+        .select('id, customer_postal_code, customer_street, customer_house_number, customer_city, status')
         .eq('id', jobId)
         .maybeSingle();
 
-      if (fetchError) throw fetchError;
-      if (!fresh) throw new Error('Job nicht gefunden');
-
-      // 3) Validate (5-digit postal code, no empty strings)
-      if (!/^\d{5}$/.test(fresh.customer_postal_code) ||
-          !fresh.customer_street?.trim() ||
-          !fresh.customer_house_number?.trim() ||
-          !fresh.customer_city?.trim()) {
+      if (jobError) {
+        console.error('❌ Preflight job check failed:', jobError);
+        throw new Error(`Preflight job error: ${jobError.message}`);
+      }
+      
+      if (!job) {
+        console.error('❌ Preflight: Job not found:', jobId);
         toast({
-          title: "Bitte vollständige Anschrift (5-stellige PLZ) eintragen.",
-          description: "Die Adresse muss komplett ausgefüllt sein bevor zugewiesen werden kann.",
+          title: "Preflight Fehler",
+          description: "Job nicht gefunden in der Datenbank",
           variant: "destructive"
         });
         return;
       }
 
-      // 4) Assign driver (using RPC admin_assign_driver)
+      console.log('✅ Preflight: Job found:', job);
+
+      // 4) PREFLIGHT: Check address completeness
+      const postalOk = /^\d{5}$/.test(job.customer_postal_code || '');
+      if (!postalOk || !job.customer_street || !job.customer_house_number || !job.customer_city) {
+        console.error('❌ Preflight: Address incomplete:', {
+          postal: job.customer_postal_code,
+          street: job.customer_street,
+          house: job.customer_house_number,
+          city: job.customer_city
+        });
+        toast({
+          title: "Preflight Fehler",
+          description: "Adresse unvollständig - bitte erst vervollständigen",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Preflight: Address complete');
+
+      // 5) PREFLIGHT: Check if driver exists
+      const { data: driver, error: driverError } = await supabase
+        .from('fahrer_profile')
+        .select('id, vorname, nachname, status')
+        .eq('id', selectedDriverId)
+        .maybeSingle();
+
+      if (driverError || !driver) {
+        console.error('❌ Preflight: Driver not found:', selectedDriverId, driverError);
+        toast({
+          title: "Preflight Fehler", 
+          description: "Fahrer nicht gefunden in der Datenbank",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Preflight: Driver found:', driver);
+
+      // 6) Save address data if needed (using RPC admin_update_job_contact)
+      if (needsFix) {
+        await supabase.rpc('admin_update_job_contact', {
+          _job_id: jobId,
+          _firma_oder_name: cName,
+          _ansprechpartner: contact,
+          _street: street,
+          _house: house,
+          _postal: postal,
+          _city: city,
+          _phone: phone,
+          _email: email,
+        });
+        console.log('✅ Contact data updated');
+      }
+
+      // 7) NOW call the assignment RPC
+      console.log('🚀 Calling admin_assign_driver...');
       const { data: assignmentId, error: assignErr } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
         _driver_id: selectedDriverId,
@@ -253,8 +318,13 @@ export function AdminAssignmentDialog({
       });
 
       if (assignErr || !assignmentId) {
-        console.error('Assignment error:', assignErr);
-        throw new Error(assignErr?.message || 'Assignment fehlgeschlagen - keine ID erhalten');
+        console.error('❌ Assignment error:', assignErr);
+        toast({
+          title: "Assignment Fehler",
+          description: assignErr?.message || 'Assignment fehlgeschlagen - keine ID erhalten',
+          variant: "destructive"
+        });
+        return;
       }
 
       console.log('✅ Assignment created with ID:', assignmentId);
