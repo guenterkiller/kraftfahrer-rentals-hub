@@ -356,6 +356,17 @@ export function AdminAssignmentDialog({
 
       if (assignErr || !assignmentId) {
         console.error('❌ Assignment error:', assignErr);
+        
+        // Spezielle Behandlung für "bereits zugewiesenen Job"
+        if (assignErr?.message?.includes('already has an active assignment')) {
+          toast({
+            title: "⚠️ Job bereits zugewiesen",
+            description: "Dieser Job hat bereits eine aktive Zuweisung. Bitte stornieren Sie die bestehende Zuweisung zuerst.",
+            variant: "destructive"
+          });
+          return;
+        }
+        
         toast({
           title: "Assignment Fehler",
           description: assignErr?.message || 'Assignment fehlgeschlagen - keine ID erhalten',
