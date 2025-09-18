@@ -229,6 +229,8 @@ function withCurrency(n?: number | null, rateType?: string) {
 }
 
 serve(async (req) => {
+  console.log("Edge Function gestartet", new Date().toISOString());
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -447,35 +449,70 @@ serve(async (req) => {
       }];
     }
 
-    const mailRes = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { 
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(emailPayload),
-    });
+    try {
+      console.log("Starte Mailversand für Assignment:", assignment_id);
+      
+      const mailRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { 
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(emailPayload),
+      });
 
-    let status: "sent" | "failed" = "sent";
-    if (!mailRes.ok) status = "failed";
+      let status: "sent" | "failed" = "sent";
+      let errorMessage: string | null = null;
+      
+      if (!mailRes.ok) {
+        status = "failed";
+        const errTxt = await mailRes.text();
+        errorMessage = `Mail API error (${mailRes.status}): ${errTxt}`;
+        console.error("Mailversand-Fehler:", errorMessage);
+      } else {
+        console.log("Mail erfolgreich verschickt");
+      }
 
-    // email_log schreiben mit neuen Feldern
-    await sb.from("email_log").insert({
-      template: "driver_confirmation_v2",
-      subject,
-      recipient: fp.email,
-      status,
-      assignment_id,
-      job_id: jr.id,
-      delivery_mode: deliveryMode,
-      pdf_path: filePath,
-      pdf_url: pdfUrl,
-      sent_at: new Date().toISOString(),
-    });
+      // email_log schreiben mit neuen Feldern
+      await sb.from("email_log").insert({
+        template: "driver_confirmation_v2",
+        subject,
+        recipient: fp.email,
+        status,
+        error_message: errorMessage,
+        assignment_id,
+        job_id: jr.id,
+        delivery_mode: deliveryMode,
+        pdf_path: filePath,
+        pdf_url: pdfUrl,
+        sent_at: new Date().toISOString(),
+      });
 
-    if (!mailRes.ok) {
-      const errTxt = await mailRes.text();
-      return new Response(JSON.stringify({ ok: false, error: `Mail error: ${errTxt}` }), { 
+      if (!mailRes.ok) {
+        return new Response(JSON.stringify({ ok: false, error: errorMessage }), { 
+          status: 500,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+      }
+    } catch (e) {
+      const mailError = e instanceof Error ? e.message : "Unbekannter Mailversand-Fehler";
+      console.error("Mailversand-Fehler:", mailError);
+      
+      // Fehler trotzdem in email_log dokumentieren
+      await sb.from("email_log").insert({
+        template: "driver_confirmation_v2",
+        subject,
+        recipient: fp.email,
+        status: "failed",
+        error_message: mailError,
+        assignment_id,
+        job_id: jr.id,
+        delivery_mode: deliveryMode,
+        pdf_path: filePath,
+        pdf_url: pdfUrl,
+      });
+      
+      return new Response(JSON.stringify({ ok: false, error: mailError }), { 
         status: 500,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
