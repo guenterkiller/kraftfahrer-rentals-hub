@@ -64,8 +64,6 @@ const AdminLogin = () => {
         throw new Error('Kein Admin-Recht');
       }
 
-      // Optional: für UI-Deko localStorage setzen
-      localStorage.setItem('admin_email', email);
       console.log('Admin login successful');
 
       toast({ title: "Erfolgreich angemeldet" });

@@ -122,18 +122,15 @@ export function AdminAssignmentDialog({
   const loadDrivers = async () => {
     setIsLoadingDrivers(true);
     try {
-      // Get admin session
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Keine Admin-Session gefunden');
+      // Use Supabase RPC to verify admin rights
+      const { data: isAdmin, error: adminError } = await supabase.rpc('is_admin_user');
+      if (!isAdmin || adminError) {
+        throw new Error('Keine Admin-Berechtigung');
       }
-      
-      const session = JSON.parse(adminSession);
       
       // Use the same edge function as the rest of the admin system
       const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
         body: {
-          email: session.email,
           dataType: 'fahrer'
         }
       });
