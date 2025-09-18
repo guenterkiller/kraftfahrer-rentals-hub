@@ -11,7 +11,7 @@ export async function isFeatureFlagEnabled(flagName: string): Promise<boolean> {
       .from('feature_flags')
       .select('enabled')
       .eq('flag_name', flagName)
-      .maybeSingle();
+      .single();
 
     if (error) {
       console.error(`Error checking feature flag ${flagName}:`, error);

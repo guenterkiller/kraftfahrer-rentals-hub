@@ -58,47 +58,15 @@ export function AdminAssignmentDialog({
 
   const loadJobData = async () => {
     try {
-      // Check admin session first
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "Nicht eingeloggt",
-          description: "Bitte melden Sie sich erneut an.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log('🔐 Auth user:', user?.email);
-
-      const { data: isAdmin, error: adminError } = await supabase.rpc('is_admin_user');
-      console.log('🔐 is_admin_user():', isAdmin, adminError);
-
-      if (!isAdmin) {
-        toast({
-          title: "Keine Admin-Berechtigung",
-          description: "Zugriff verweigert.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // Use SECURITY DEFINER function to get job data
-      const { data: job, error } = await supabase.rpc('admin_get_job', { _job_id: jobId });
-
-      if (error) {
-        console.error('❌ Fehler beim Laden der Job-Daten:', error);
-        toast({
-          title: "Fehler beim Laden der Job-Daten",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
-      }
-
+      const { data: job, error } = await supabase
+        .from('job_requests')
+        .select('*')
+        .eq('id', jobId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      
       if (job) {
-        console.log('📋 Job data loaded via RPC:', job);
         setJobData(job);
         setCName(job.customer_name || job.company || "");
         setContact(job.customer_name || "");
@@ -110,27 +78,25 @@ export function AdminAssignmentDialog({
         setEmail(job.customer_email || "");
       }
     } catch (error) {
-      console.error('❌ Unerwarteter Fehler beim Laden der Job-Daten:', error);
-      toast({
-        title: "Unerwarteter Fehler",
-        description: `${error}`,
-        variant: "destructive"
-      });
+      console.error('Error loading job data:', error);
     }
   };
 
   const loadDrivers = async () => {
     setIsLoadingDrivers(true);
     try {
-      // Use Supabase RPC to verify admin rights
-      const { data: isAdmin, error: adminError } = await supabase.rpc('is_admin_user');
-      if (!isAdmin || adminError) {
-        throw new Error('Keine Admin-Berechtigung');
+      // Get admin session
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Keine Admin-Session gefunden');
       }
+      
+      const session = JSON.parse(adminSession);
       
       // Use the same edge function as the rest of the admin system
       const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
         body: {
+          email: session.email,
           dataType: 'fahrer'
         }
       });
@@ -211,133 +177,23 @@ export function AdminAssignmentDialog({
       return;
     }
 
+    if (needsFix) {
+      toast({
+        title: "Daten unvollständig",
+        description: "Bitte Auftraggeber-Daten vollständig eintragen (Straße, Nr., PLZ (5-stellig), Ort sowie Ansprechpartner und mind. Telefon oder E-Mail).",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsAssigning(true);
     
     try {
-      // Session & Admin-Check VOR jedem Admin-Flow
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "❌ Nicht eingeloggt",
-          description: "Bitte loggen Sie sich erneut ein.",
-          variant: "destructive"
-        });
-        return;
-      }
+      // Save contact data if needed
+      await saveContactIfNeeded();
 
-      const { data: isAdmin, error: adminCheckError } = await supabase.rpc('is_admin_user');
-      if (adminCheckError || !isAdmin) {
-        toast({
-          title: "❌ Kein Admin-Recht",
-          description: "Sie haben keine Berechtigung für diese Aktion.",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      // 1) DEBUG: Log input values
-      console.log('🔍 PRE-Zuweisen', { 
-        jobId, 
-        selectedDriverId, 
-        rateType, 
-        rateValue,
-        jobIdType: typeof jobId,
-        driverIdType: typeof selectedDriverId
-      });
-
-      // 2) DEBUG: Test parameter passing with echo function
-      const { data: echoData, error: echoError } = await supabase.rpc('debug_echo_ids', {
-        _job_id: jobId,
-        _driver_id: selectedDriverId
-      });
-      
-      if (echoError) {
-        console.error('❌ Echo test failed:', echoError);
-      } else {
-        console.log('📡 Echo test result:', echoData);
-      }
-
-      // 3) PREFLIGHT: Check if job exists and is accessible
-      const { data: job, error: jobError } = await supabase
-        .from('job_requests')
-        .select('id, customer_postal_code, customer_street, customer_house_number, customer_city, status')
-        .eq('id', jobId)
-        .maybeSingle();
-
-      if (jobError) {
-        console.error('❌ Preflight job check failed:', jobError);
-        throw new Error(`Preflight job error: ${jobError.message}`);
-      }
-      
-      if (!job) {
-        console.error('❌ Preflight: Job not found:', jobId);
-        toast({
-          title: "Preflight Fehler",
-          description: "Job nicht gefunden in der Datenbank",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      console.log('✅ Preflight: Job found:', job);
-
-      // 4) PREFLIGHT: Check address completeness
-      const postalOk = /^\d{5}$/.test(job.customer_postal_code || '');
-      if (!postalOk || !job.customer_street || !job.customer_house_number || !job.customer_city) {
-        console.error('❌ Preflight: Address incomplete:', {
-          postal: job.customer_postal_code,
-          street: job.customer_street,
-          house: job.customer_house_number,
-          city: job.customer_city
-        });
-        toast({
-          title: "Preflight Fehler",
-          description: "Adresse unvollständig - bitte erst vervollständigen",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      console.log('✅ Preflight: Address complete');
-
-      // 5) PREFLIGHT: Check if driver exists
-      const { data: driver, error: driverError } = await supabase
-        .from('fahrer_profile')
-        .select('id, vorname, nachname, status')
-        .eq('id', selectedDriverId)
-        .maybeSingle();
-
-      if (driverError || !driver) {
-        console.error('❌ Preflight: Driver not found:', selectedDriverId, driverError);
-        toast({
-          title: "Preflight Fehler", 
-          description: "Fahrer nicht gefunden in der Datenbank",
-          variant: "destructive"
-        });
-        return;
-      }
-
-      console.log('✅ Preflight: Driver found:', driver);
-
-      // 6) Save address data if needed (using RPC admin_update_job_contact)
-      if (needsFix) {
-        await supabase.rpc('admin_update_job_contact', {
-          _job_id: jobId,
-          _firma_oder_name: cName,
-          _ansprechpartner: contact,
-          _street: street,
-          _house: house,
-          _postal: postal,
-          _city: city,
-          _phone: phone,
-          _email: email,
-        });
-        console.log('✅ Contact data updated');
-      }
-
-      // 7) NOW call the assignment RPC
-      console.log('🚀 Calling admin_assign_driver...');
-      const { data: assignmentId, error: assignErr } = await supabase.rpc('admin_assign_driver', {
+      // 1) Assign driver
+      const { data, error } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
         _driver_id: selectedDriverId,
         _rate_type: rateType,
@@ -347,48 +203,43 @@ export function AdminAssignmentDialog({
         _note: note || null
       });
 
-      if (assignErr || !assignmentId) {
-        console.error('❌ Assignment error:', assignErr);
-        
-        // Spezielle Behandlung für "bereits zugewiesenen Job"
-        if (assignErr?.message?.includes('already has an active assignment')) {
-          toast({
-            title: "⚠️ Job bereits zugewiesen",
-            description: "Dieser Job hat bereits eine aktive Zuweisung. Bitte stornieren Sie die bestehende Zuweisung zuerst.",
-            variant: "destructive"
-          });
-          return;
-        }
-        
-        toast({
-          title: "Assignment Fehler",
-          description: assignErr?.message || 'Assignment fehlgeschlagen - keine ID erhalten',
-          variant: "destructive"
-        });
-        return;
+      if (error) {
+        throw error;
       }
 
+      const assignmentId = data as string;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 5) Send confirmation email using supabase.functions.invoke
-      const { error: mailErr } = await supabase.functions.invoke('send-driver-confirmation', {
-        body: { 
-          assignment_id: assignmentId,
-          mode: attachPdf ? 'both' : 'inline'
+      // 2) Send confirmation email
+      try {
+        const res = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-driver-confirmation`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTGC6GPW77TOsFdy1cpPW4dzc`
+          },
+          body: JSON.stringify({ 
+            assignment_id: assignmentId,
+            mode: attachPdf ? 'both' : 'inline'
+          }),
+        });
+        
+        if (!res.ok) {
+          const { error: errTxt } = await res.json().catch(() => ({ error: 'Unbekannter Fehler' }));
+          throw new Error(errTxt);
         }
-      });
 
-      if (mailErr) {
-        console.error('Email sending error:', mailErr);
+        toast({
+          title: "Erfolgreich zugewiesen",
+          description: "Fahrer zugewiesen und Einsatzbestätigung versendet.",
+        });
+        
+      } catch (emailErr: any) {
+        console.error('Email sending error:', emailErr);
         toast({
           title: "E-Mail-Versand fehlgeschlagen", 
-          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden: " + mailErr.message,
+          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden: " + emailErr.message,
           variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Zugewiesen & Bestätigung gesendet",
-          description: "Fahrer wurde erfolgreich zugewiesen und Einsatzbestätigung versendet.",
         });
       }
 
@@ -404,7 +255,7 @@ export function AdminAssignmentDialog({
       onAssignmentComplete();
       onClose();
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('Assignment error:', error);
       
       // Handle unique constraint violation (double assignment)
@@ -698,7 +549,7 @@ export function AdminAssignmentDialog({
             </Button>
             <Button 
               onClick={handleAssignAndSend} 
-              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0}
+              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || needsFix}
               className="flex-1"
             >
               {isAssigning ? "Zuweisen..." : "Zuweisen & Bestätigung senden"}

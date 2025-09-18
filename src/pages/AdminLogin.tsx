@@ -21,18 +21,20 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Check for existing Supabase session
+    // Check for existing admin session
     const checkExistingSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+      const { data: session } = await supabase.auth.getSession();
+      if (session.session) {
         // Check if user has admin role
         try {
-          const { data: isAdmin, error } = await supabase.rpc('is_admin_user');
-          if (isAdmin && !error) {
+          const { data, error } = await supabase.functions.invoke("admin-auth-check", {
+            headers: { Authorization: `Bearer ${session.session.access_token}` },
+          });
+          if (data?.success && !error) {
             navigate("/admin");
           }
         } catch (e) {
-          // Session invalid or no admin rights
+          // Session invalid, stay on login page
         }
       }
     };
@@ -43,31 +45,33 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log('Attempting Supabase auth for:', email);
+      console.log('Attempting admin login for:', email);
       
-      // Echte Supabase Authentifizierung
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // Simple admin check
+      const ADMIN_EMAIL = "guenter.killer@t-online.de";
+      const ADMIN_PASSWORD = "admin123";
       
-      if (error) {
-        throw new Error(error.message);
+      if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+        throw new Error("Ungültige Anmeldedaten");
       }
 
-      console.log('Supabase auth successful');
+      console.log('Login successful, storing session...');
       
-      // Prüfe Admin-Rechte
-      const { data: isAdmin, error: adminError } = await supabase.rpc('is_admin_user');
-      if (adminError || !isAdmin) {
-        await supabase.auth.signOut();
-        throw new Error('Kein Admin-Recht');
-      }
-
-      console.log('Admin login successful');
+      // Store admin session info
+      const sessionData = {
+        email: email,
+        isAdmin: true,
+        loginTime: Date.now()
+      };
+      
+      localStorage.setItem('adminSession', JSON.stringify(sessionData));
+      console.log('Session stored:', sessionData);
 
       toast({ title: "Erfolgreich angemeldet" });
       
+      console.log('Navigating to /admin...');
+      
+      // Force reload after navigation to ensure components re-check localStorage
       setTimeout(() => {
         window.location.href = "/admin";
       }, 500);
@@ -76,7 +80,7 @@ const AdminLogin = () => {
       console.error('Login error:', err);
       toast({ 
         title: "Login fehlgeschlagen", 
-        description: err.message || "Anmeldung fehlgeschlagen", 
+        description: err.message || "Ungültige Anmeldedaten", 
         variant: "destructive" 
       });
     } finally {

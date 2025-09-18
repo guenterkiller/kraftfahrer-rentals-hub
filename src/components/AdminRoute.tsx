@@ -10,27 +10,26 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAdminAccess = async () => {
+    const checkAdminAccess = () => {
       try {
-        // Prüfe echte Supabase Session
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
+        // Check localStorage for admin session
+        const adminSession = localStorage.getItem('adminSession');
+        if (adminSession) {
+          const session = JSON.parse(adminSession);
+          const isValidSession = session.isAdmin && 
+                               session.email === "guenter.killer@t-online.de" &&
+                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage statt 24 Stunden
+          
+          if (isValidSession) {
+            // Session aktualisieren um automatische Verlängerung zu ermöglichen
+            session.loginTime = Date.now();
+            localStorage.setItem('adminSession', JSON.stringify(session));
+          }
+          
+          setIsAdmin(isValidSession);
+        } else {
           setIsAdmin(false);
-          return;
         }
-
-        // Prüfe Admin-Rechte über RPC
-        const { data: isAdminRPC, error } = await supabase.rpc('is_admin_user');
-        console.log('AdminRoute check - Session:', !!session, 'isAdmin:', isAdminRPC, 'error:', error);
-        
-        if (error) {
-          console.error('Admin RPC error:', error);
-          setIsAdmin(false);
-          return;
-        }
-
-        setIsAdmin(isAdminRPC === true);
-        
       } catch (error) {
         console.error('Admin check error:', error);
         setIsAdmin(false);

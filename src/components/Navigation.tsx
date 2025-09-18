@@ -8,15 +8,18 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showAdminLink, setShowAdminLink] = useState(false);
 
-  // Check if current user is admin using Supabase Auth
+  // Check if current user is admin using localStorage
   useEffect(() => {
-    const checkAdminAccess = async () => {
+    const checkAdminAccess = () => {
       try {
-        // Check Supabase session and admin rights
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          const { data: isAdmin } = await supabase.rpc('is_admin_user');
-          setShowAdminLink(!!isAdmin);
+        // Check localStorage for admin session
+        const adminSession = localStorage.getItem('adminSession');
+        if (adminSession) {
+          const session = JSON.parse(adminSession);
+          const isValidSession = session.isAdmin && 
+                               session.email === "guenter.killer@t-online.de" &&
+                               (Date.now() - session.loginTime) < 24 * 60 * 60 * 1000; // 24 hours
+          setShowAdminLink(isValidSession);
         } else {
           setShowAdminLink(false);
         }
