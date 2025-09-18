@@ -775,10 +775,6 @@ export type Database = {
           tier: string
         }[]
       }
-      get_fahrer_admin_summary: {
-        Args: Record<PropertyKey, never>
-        Returns: unknown[]
-      }
       is_admin: {
         Args: { user_uuid: string }
         Returns: boolean
