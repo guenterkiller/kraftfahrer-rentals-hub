@@ -7,13 +7,9 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { htmlToSimplePdf } from "./pdf.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>";
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
-
-const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
-  auth: { persistSession: false },
-});
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!
 
 type DeliveryMode = 'inline' | 'both' | 'pdf-only';
 
@@ -224,6 +220,21 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // 1) ANON KEY verwenden + Authorization aus Request weiterreichen
+  const supa = createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
+    { global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } } }
+  );
+
+  // 2) JWT prüfen
+  const { data: { user } } = await supa.auth.getUser();
+  if (!user) return new Response('unauthorized', { status: 401, headers: corsHeaders });
+
+  // 3) Adminrecht prüfen
+  const { data: ok, error: adminErr } = await supa.rpc('is_admin_user');
+  if (adminErr || !ok) return new Response('forbidden', { status: 403, headers: corsHeaders });
+
   try {
     if (req.method !== "POST") {
       return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { 
@@ -244,7 +255,7 @@ serve(async (req) => {
 
     // Daten holen (Assignment + Job + Fahrer)
     // Passen ggf. die Feldnamen an euer Schema an.
-    const { data: rows, error } = await sb
+    const { data: rows, error } = await supa
       .from("job_assignments")
       .select(`
         id, job_id, driver_id, status,
@@ -327,7 +338,7 @@ serve(async (req) => {
         " – " + new Intl.DateTimeFormat("de-DE").format(new Date(ja.end_date))
       : jr.zeitraum || "nach Absprache";
 
-    const adminEmailRes = await sb.from("admin_settings").select("admin_email").limit(1).maybeSingle();
+    const adminEmailRes = await supa.from("admin_settings").select("admin_email").limit(1).maybeSingle();
     const adminEmail = adminEmailRes.data?.admin_email ?? "info@kraftfahrer-mieten.com";
 
     const vars = {
@@ -355,7 +366,7 @@ serve(async (req) => {
     // PDF in private Bucket speichern
     const filenameBase = `driver-confirmation-${new Date().toISOString().slice(0,10)}`;
     const filePath = `confirmations/assignments/${assignment_id}/${filenameBase}.pdf`;
-    const up = await sb.storage.from("confirmations").upload(filePath, pdfBytes, {
+    const up = await supa.storage.from("confirmations").upload(filePath, pdfBytes, {
       contentType: "application/pdf",
       upsert: true,
     });
@@ -364,7 +375,7 @@ serve(async (req) => {
     }
 
     // Signierte URL erstellen (14 Tage gültig)
-    const { data: signedData } = await sb.storage.from("confirmations").createSignedUrl(filePath, 14 * 24 * 60 * 60);
+    const { data: signedData } = await supa.storage.from("confirmations").createSignedUrl(filePath, 14 * 24 * 60 * 60);
     const pdfUrl = signedData?.signedUrl ?? null;
 
     // PDF-Link-Sektion für E-Mail
@@ -422,7 +433,7 @@ serve(async (req) => {
     if (!mailRes.ok) status = "failed";
 
     // email_log schreiben mit neuen Feldern
-    await sb.from("email_log").insert({
+    await supa.from("email_log").insert({
       template: "driver_confirmation_v2",
       subject,
       recipient: fp.email,
