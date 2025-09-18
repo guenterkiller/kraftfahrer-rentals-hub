@@ -10,7 +10,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAdminAccess = () => {
+    const checkAdminAccess = async () => {
       try {
         // Check localStorage for admin session
         const adminSession = localStorage.getItem('adminSession');
@@ -18,15 +18,25 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           const session = JSON.parse(adminSession);
           const isValidSession = session.isAdmin && 
                                session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage statt 24 Stunden
+                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage
           
           if (isValidSession) {
-            // Session aktualisieren um automatische Verlängerung zu ermöglichen
+            // Session aktualisieren
             session.loginTime = Date.now();
             localStorage.setItem('adminSession', JSON.stringify(session));
+            
+            // WICHTIG: Auch Supabase-RPC testen
+            try {
+              const { data: isAdminRPC } = await supabase.rpc('is_admin_user');
+              console.log('is_admin_user RPC result:', isAdminRPC);
+              setIsAdmin(isValidSession && isAdminRPC === true);
+            } catch (rpcError) {
+              console.error('RPC error:', rpcError);
+              setIsAdmin(isValidSession); // Fallback zu localStorage
+            }
+          } else {
+            setIsAdmin(false);
           }
-          
-          setIsAdmin(isValidSession);
         } else {
           setIsAdmin(false);
         }
