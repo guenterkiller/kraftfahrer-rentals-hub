@@ -12,34 +12,25 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   useEffect(() => {
     const checkAdminAccess = async () => {
       try {
-        // Check localStorage for admin session
-        const adminSession = localStorage.getItem('adminSession');
-        if (adminSession) {
-          const session = JSON.parse(adminSession);
-          const isValidSession = session.isAdmin && 
-                               session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage
-          
-          if (isValidSession) {
-            // Session aktualisieren
-            session.loginTime = Date.now();
-            localStorage.setItem('adminSession', JSON.stringify(session));
-            
-            // WICHTIG: Auch Supabase-RPC testen
-            try {
-              const { data: isAdminRPC } = await supabase.rpc('is_admin_user');
-              console.log('is_admin_user RPC result:', isAdminRPC);
-              setIsAdmin(isValidSession && isAdminRPC === true);
-            } catch (rpcError) {
-              console.error('RPC error:', rpcError);
-              setIsAdmin(isValidSession); // Fallback zu localStorage
-            }
-          } else {
-            setIsAdmin(false);
-          }
-        } else {
+        // Prüfe echte Supabase Session
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
           setIsAdmin(false);
+          return;
         }
+
+        // Prüfe Admin-Rechte über RPC
+        const { data: isAdminRPC, error } = await supabase.rpc('is_admin_user');
+        console.log('AdminRoute check - Session:', !!session, 'isAdmin:', isAdminRPC, 'error:', error);
+        
+        if (error) {
+          console.error('Admin RPC error:', error);
+          setIsAdmin(false);
+          return;
+        }
+
+        setIsAdmin(isAdminRPC === true);
+        
       } catch (error) {
         console.error('Admin check error:', error);
         setIsAdmin(false);

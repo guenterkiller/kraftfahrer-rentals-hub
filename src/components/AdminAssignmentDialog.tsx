@@ -217,26 +217,22 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
-      // Check admin session first
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
+      // Session & Admin-Check VOR jedem Admin-Flow
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
         toast({
-          title: "Nicht eingeloggt",
-          description: "Bitte melden Sie sich erneut an.",
+          title: "❌ Nicht eingeloggt",
+          description: "Bitte loggen Sie sich erneut ein.",
           variant: "destructive"
         });
         return;
       }
-      
-      const session = JSON.parse(adminSession);
-      const isValidSession = session.isAdmin && 
-                           session.email === "guenter.killer@t-online.de" &&
-                           (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000;
-      
-      if (!isValidSession) {
+
+      const { data: isAdmin, error: adminCheckError } = await supabase.rpc('is_admin_user');
+      if (adminCheckError || !isAdmin) {
         toast({
-          title: "Session abgelaufen",
-          description: "Bitte melden Sie sich erneut an.",
+          title: "❌ Kein Admin-Recht",
+          description: "Sie haben keine Berechtigung für diese Aktion.",
           variant: "destructive"
         });
         return;
