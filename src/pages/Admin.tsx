@@ -636,15 +636,13 @@ const Admin = () => {
         return;
       }
 
-      const res = await fetch("/functions/v1/send-driver-confirmation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ assignment_id: a.id, mode: "inline" }),
-      });
-      if (!res.ok) {
-        const j = await res.json().catch(() => ({}));
-        throw new Error(j?.error || "Versand fehlgeschlagen");
-      }
+      // Use Supabase client for proper authentication
+      const { error } = await supabase.functions.invoke(
+        "send-driver-confirmation",
+        { body: { assignment_id: a.id, mode: "inline" } }
+      );
+      if (error) throw error;
+      
       toast({ title: "Einsatzbestätigung gesendet", description: "E-Mail erfolgreich versendet." });
       await loadJobRequests();
       await loadJobAssignments();
