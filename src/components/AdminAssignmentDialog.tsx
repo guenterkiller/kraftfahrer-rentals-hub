@@ -223,9 +223,10 @@ export function AdminAssignmentDialog({
         .from('job_requests')
         .select('customer_street,customer_house_number,customer_postal_code,customer_city')
         .eq('id', jobId)
-        .single();
+        .maybeSingle();
 
       if (fetchError) throw fetchError;
+      if (!fresh) throw new Error('Job nicht gefunden');
 
       // 3) Validate (5-digit postal code, no empty strings)
       if (!/^\d{5}$/.test(fresh.customer_postal_code) ||
@@ -251,8 +252,9 @@ export function AdminAssignmentDialog({
         _note: note || null
       });
 
-      if (assignErr) {
-        throw assignErr;
+      if (assignErr || !assignmentId) {
+        console.error('Assignment error:', assignErr);
+        throw new Error(assignErr?.message || 'Assignment fehlgeschlagen - keine ID erhalten');
       }
 
       console.log('✅ Assignment created with ID:', assignmentId);
