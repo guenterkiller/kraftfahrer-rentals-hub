@@ -233,6 +233,19 @@ serve(async (req) => {
 
   // 3) Adminrecht prüfen
   const { data: ok, error: adminErr } = await supa.rpc('is_admin_user');
+  
+  // Debug logging to admin_actions
+  await supa.from('admin_actions').insert({
+    action: 'debug_send_driver_conf',
+    admin_email: 'guenter.killer@t-online.de',
+    note: JSON.stringify({ 
+      hasAuth: !!req.headers.get('Authorization'), 
+      user: user?.id, 
+      isAdmin: ok,
+      adminErr: adminErr?.message 
+    })
+  });
+  
   if (adminErr || !ok) return new Response('forbidden', { status: 403, headers: corsHeaders });
 
   try {
