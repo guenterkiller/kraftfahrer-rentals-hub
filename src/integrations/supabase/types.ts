@@ -740,6 +740,29 @@ export type Database = {
         Args: { _assignment_id: string }
         Returns: boolean
       }
+      admin_get_job: {
+        Args: { _job_id: string }
+        Returns: {
+          besonderheiten: string | null
+          company: string | null
+          created_at: string
+          customer_city: string | null
+          customer_email: string
+          customer_house_number: string | null
+          customer_name: string
+          customer_phone: string
+          customer_postal_code: string | null
+          customer_street: string | null
+          einsatzort: string
+          fahrzeugtyp: string
+          fuehrerscheinklasse: string
+          id: string
+          nachricht: string
+          status: string
+          updated_at: string
+          zeitraum: string
+        }
+      }
       admin_mark_no_show: {
         Args:
           | {

@@ -58,15 +58,47 @@ export function AdminAssignmentDialog({
 
   const loadJobData = async () => {
     try {
-      const { data: job, error } = await supabase
-        .from('job_requests')
-        .select('*')
-        .eq('id', jobId)
-        .maybeSingle();
-      
-      if (error) throw error;
-      
+      // Check admin session first
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Nicht eingeloggt",
+          description: "Bitte melden Sie sich erneut an.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('🔐 Auth user:', user?.email);
+
+      const { data: isAdmin, error: adminError } = await supabase.rpc('is_admin_user');
+      console.log('🔐 is_admin_user():', isAdmin, adminError);
+
+      if (!isAdmin) {
+        toast({
+          title: "Keine Admin-Berechtigung",
+          description: "Zugriff verweigert.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Use SECURITY DEFINER function to get job data
+      const { data: job, error } = await supabase.rpc('admin_get_job', { _job_id: jobId });
+
+      if (error) {
+        console.error('❌ Fehler beim Laden der Job-Daten:', error);
+        toast({
+          title: "Fehler beim Laden der Job-Daten",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
+
       if (job) {
+        console.log('📋 Job data loaded via RPC:', job);
         setJobData(job);
         setCName(job.customer_name || job.company || "");
         setContact(job.customer_name || "");
@@ -78,7 +110,12 @@ export function AdminAssignmentDialog({
         setEmail(job.customer_email || "");
       }
     } catch (error) {
-      console.error('Error loading job data:', error);
+      console.error('❌ Unerwarteter Fehler beim Laden der Job-Daten:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `${error}`,
+        variant: "destructive"
+      });
     }
   };
 
