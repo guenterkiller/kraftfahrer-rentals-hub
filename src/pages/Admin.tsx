@@ -74,6 +74,11 @@ const Admin = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const handleOpenContactDialog = (jobId: string) => {
+    setSelectedContactJobId(jobId);
+    setContactDataDialogOpen(true);
+  };
+
   const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 
   const ADMIN_EMAIL = "guenter.killer@t-online.de";
