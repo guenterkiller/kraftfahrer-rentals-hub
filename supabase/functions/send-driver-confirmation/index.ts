@@ -244,8 +244,7 @@ serve(async (req) => {
       });
     }
 
-    // Authentifizierung prüfen - da Admin über localStorage arbeitet, 
-    // prüfen wir die Admin-Email direkt über den Request body oder Header
+    // Authentifizierung prüfen - korrekte JWT Validierung
     const authHeader = req.headers.get('Authorization');
     if (!authHeader || !authHeader.includes('eyJ')) {
       console.error('Missing or invalid authorization header');
@@ -255,22 +254,31 @@ serve(async (req) => {
       });
     }
 
-    // Da das Admin-System localStorage-basiert ist, verwenden wir Service Role für Admin-Check
-    // In einer späteren Version könnte dies über echte Supabase Auth gemacht werden
-    const { data: adminSettings } = await sb.from('admin_settings').select('admin_email').limit(1).maybeSingle();
-    const expectedAdminEmail = adminSettings?.admin_email || 'guenter.killer@t-online.de';
+    // Supabase Client mit Authorization Header
+    const supa = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false }
+    });
     
-    // Zusätzliche Validierung: X-Admin-Email Header prüfen
-    const adminEmailHeader = req.headers.get('x-admin-email');
-    if (!adminEmailHeader || adminEmailHeader !== expectedAdminEmail) {
-      console.error('Admin email validation failed:', { provided: adminEmailHeader, expected: expectedAdminEmail });
-      return new Response(JSON.stringify({ ok: false, error: "Forbidden - Invalid admin" }), { 
+    const { data: { user } } = await supa.auth.getUser();
+    if (!user) {
+      console.error('No user found in JWT');
+      return new Response(JSON.stringify({ ok: false, error: "Unauthorized" }), { 
+        status: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+    
+    const { data: ok } = await supa.rpc('is_admin_user');
+    if (!ok) {
+      console.error('User is not admin:', user.email);
+      return new Response(JSON.stringify({ ok: false, error: "Forbidden" }), { 
         status: 403,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    console.log('Authenticated admin:', adminEmailHeader);
+    console.log('Authenticated admin:', user.email);
 
     const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = await req.json();
     const deliveryMode: DeliveryMode = mode ?? 'inline';
