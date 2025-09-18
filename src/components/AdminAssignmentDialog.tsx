@@ -180,11 +180,25 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
-      // Check session first
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      // Check admin session first
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
         toast({
           title: "Nicht eingeloggt",
+          description: "Bitte melden Sie sich erneut an.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      const session = JSON.parse(adminSession);
+      const isValidSession = session.isAdmin && 
+                           session.email === "guenter.killer@t-online.de" &&
+                           (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000;
+      
+      if (!isValidSession) {
+        toast({
+          title: "Session abgelaufen",
           description: "Bitte melden Sie sich erneut an.",
           variant: "destructive"
         });
