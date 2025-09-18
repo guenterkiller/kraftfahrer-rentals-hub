@@ -177,23 +177,57 @@ export function AdminAssignmentDialog({
       return;
     }
 
-    if (needsFix) {
-      toast({
-        title: "Daten unvollständig",
-        description: "Bitte Auftraggeber-Daten vollständig eintragen (Straße, Nr., PLZ (5-stellig), Ort sowie Ansprechpartner und mind. Telefon oder E-Mail).",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsAssigning(true);
     
     try {
-      // Save contact data if needed
-      await saveContactIfNeeded();
+      // Check session first
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Nicht eingeloggt",
+          description: "Bitte melden Sie sich erneut an.",
+          variant: "destructive"
+        });
+        return;
+      }
 
-      // 1) Assign driver
-      const { data, error } = await supabase.rpc('admin_assign_driver', {
+      // 1) Save address data (using RPC admin_update_job_contact)
+      await supabase.rpc('admin_update_job_contact', {
+        _job_id: jobId,
+        _firma_oder_name: cName,
+        _ansprechpartner: contact,
+        _street: street,
+        _house: house,
+        _postal: postal,
+        _city: city,
+        _phone: phone,
+        _email: email,
+      });
+
+      // 2) Re-fetch job to ensure DB values are correct
+      const { data: fresh, error: fetchError } = await supabase
+        .from('job_requests')
+        .select('customer_street,customer_house_number,customer_postal_code,customer_city')
+        .eq('id', jobId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // 3) Validate (5-digit postal code, no empty strings)
+      if (!/^\d{5}$/.test(fresh.customer_postal_code) ||
+          !fresh.customer_street?.trim() ||
+          !fresh.customer_house_number?.trim() ||
+          !fresh.customer_city?.trim()) {
+        toast({
+          title: "Bitte vollständige Anschrift (5-stellige PLZ) eintragen.",
+          description: "Die Adresse muss komplett ausgefüllt sein bevor zugewiesen werden kann.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // 4) Assign driver (using RPC admin_assign_driver)
+      const { data: assignmentId, error: assignErr } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
         _driver_id: selectedDriverId,
         _rate_type: rateType,
@@ -203,43 +237,31 @@ export function AdminAssignmentDialog({
         _note: note || null
       });
 
-      if (error) {
-        throw error;
+      if (assignErr) {
+        throw assignErr;
       }
 
-      const assignmentId = data as string;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 2) Send confirmation email
-      try {
-        const res = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/send-driver-confirmation`, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTGC6GPW77TOsFdy1cpPW4dzc`
-          },
-          body: JSON.stringify({ 
-            assignment_id: assignmentId,
-            mode: attachPdf ? 'both' : 'inline'
-          }),
-        });
-        
-        if (!res.ok) {
-          const { error: errTxt } = await res.json().catch(() => ({ error: 'Unbekannter Fehler' }));
-          throw new Error(errTxt);
+      // 5) Send confirmation email using supabase.functions.invoke
+      const { error: mailErr } = await supabase.functions.invoke('send-driver-confirmation', {
+        body: { 
+          assignment_id: assignmentId,
+          mode: attachPdf ? 'both' : 'inline'
         }
+      });
 
-        toast({
-          title: "Erfolgreich zugewiesen",
-          description: "Fahrer zugewiesen und Einsatzbestätigung versendet.",
-        });
-        
-      } catch (emailErr: any) {
-        console.error('Email sending error:', emailErr);
+      if (mailErr) {
+        console.error('Email sending error:', mailErr);
         toast({
           title: "E-Mail-Versand fehlgeschlagen", 
-          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden: " + emailErr.message,
+          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden: " + mailErr.message,
           variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Zugewiesen & Bestätigung gesendet",
+          description: "Fahrer wurde erfolgreich zugewiesen und Einsatzbestätigung versendet.",
         });
       }
 
@@ -255,7 +277,7 @@ export function AdminAssignmentDialog({
       onAssignmentComplete();
       onClose();
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Assignment error:', error);
       
       // Handle unique constraint violation (double assignment)
@@ -549,7 +571,7 @@ export function AdminAssignmentDialog({
             </Button>
             <Button 
               onClick={handleAssignAndSend} 
-              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || needsFix}
+              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0}
               className="flex-1"
             >
               {isAssigning ? "Zuweisen..." : "Zuweisen & Bestätigung senden"}
