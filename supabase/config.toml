@@ -47,6 +47,3 @@ verify_jwt = false
 
 [functions.admin-data-fetch]
 verify_jwt = false
-
-[functions.send-driver-confirmation]
-verify_jwt = false

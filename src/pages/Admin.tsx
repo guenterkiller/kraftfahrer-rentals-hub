@@ -636,10 +636,15 @@ const Admin = () => {
         return;
       }
 
-      // Use Supabase client for proper authentication
+      // Use Supabase client for proper authentication with admin email header
       const { error } = await supabase.functions.invoke(
         "send-driver-confirmation",
-        { body: { assignment_id: a.id, mode: "inline" } }
+        { 
+          body: { assignment_id: a.id, mode: "inline" },
+          headers: {
+            'x-admin-email': ADMIN_EMAIL
+          }
+        }
       );
       if (error) throw error;
       

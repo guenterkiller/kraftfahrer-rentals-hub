@@ -7,10 +7,20 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { htmlToSimplePdf } from "./pdf.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 
+// Client für Authentifizierung (mit JWT aus Request)
+function createAuthenticatedClient(authHeader: string | null) {
+  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    global: { headers: { Authorization: authHeader ?? '' } },
+    auth: { persistSession: false }
+  });
+}
+
+// Service Role Client für privilegierte Operationen
 const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
   auth: { persistSession: false },
 });
@@ -231,6 +241,34 @@ serve(async (req) => {
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
+
+    // Authentifizierung prüfen - da Admin über localStorage arbeitet, 
+    // prüfen wir die Admin-Email direkt über den Request body oder Header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.includes('eyJ')) {
+      console.error('Missing or invalid authorization header');
+      return new Response(JSON.stringify({ ok: false, error: "Unauthorized - Missing JWT" }), { 
+        status: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // Da das Admin-System localStorage-basiert ist, verwenden wir Service Role für Admin-Check
+    // In einer späteren Version könnte dies über echte Supabase Auth gemacht werden
+    const { data: adminSettings } = await sb.from('admin_settings').select('admin_email').limit(1).maybeSingle();
+    const expectedAdminEmail = adminSettings?.admin_email || 'guenter.killer@t-online.de';
+    
+    // Zusätzliche Validierung: X-Admin-Email Header prüfen
+    const adminEmailHeader = req.headers.get('x-admin-email');
+    if (!adminEmailHeader || adminEmailHeader !== expectedAdminEmail) {
+      console.error('Admin email validation failed:', { provided: adminEmailHeader, expected: expectedAdminEmail });
+      return new Response(JSON.stringify({ ok: false, error: "Forbidden - Invalid admin" }), { 
+        status: 403,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    console.log('Authenticated admin:', adminEmailHeader);
 
     const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = await req.json();
     const deliveryMode: DeliveryMode = mode ?? 'inline';
