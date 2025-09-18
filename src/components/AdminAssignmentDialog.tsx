@@ -189,11 +189,18 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
+      // Preflight checks
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error('Nicht eingeloggt');
+
+      const { data: isAdmin } = await supabase.rpc('is_admin_user');
+      if (!isAdmin) throw new Error('Kein Admin-Recht');
+
       // Save contact data if needed
       await saveContactIfNeeded();
 
-      // 1) Assign driver
-      const { data, error } = await supabase.rpc('admin_assign_driver', {
+      // 1) Zuweisen (RPC)
+      const { data: assignmentId, error: rpcErr } = await supabase.rpc('admin_assign_driver', {
         _job_id: jobId,
         _driver_id: selectedDriverId,
         _rate_type: rateType,
@@ -202,26 +209,21 @@ export function AdminAssignmentDialog({
         _end_date: endDate || null,
         _note: note || null
       });
+      
+      if (rpcErr || !assignmentId) throw rpcErr ?? new Error('Zuweisung fehlgeschlagen');
 
-      if (error) {
-        throw error;
-      }
-
-      const assignmentId = data as string;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 2) Send confirmation email
+      // 2) E-Mail versenden (Edge Function, JWT geht automatisch mit)
       try {
-        const { data: res, error: emailError } = await supabase.functions.invoke('send-driver-confirmation', {
+        const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
           body: { 
-            assignment_id: assignmentId,
-            mode: attachPdf ? 'both' : 'inline'
-          },
+            assignment_id: assignmentId, 
+            mode: attachPdf ? 'both' : 'inline' 
+          }
         });
         
-        if (emailError) {
-          throw new Error(emailError.message || 'E-Mail-Versand fehlgeschlagen');
-        }
+        if (error) throw error;
 
         toast({
           title: "Erfolgreich zugewiesen",
