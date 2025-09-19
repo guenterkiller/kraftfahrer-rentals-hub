@@ -11,7 +11,8 @@ const corsHeaders = {
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 serve(async (req) => {
-  console.log(`📧 send-driver-confirmation called: ${req.method} ${req.url}`);
+  const FUNCTION_VERSION = "v2.0-new-template";
+  console.log(`📧 send-driver-confirmation ${FUNCTION_VERSION} called: ${req.method} ${req.url}`);
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -47,7 +48,10 @@ serve(async (req) => {
 
     // Check required fields
     const { assignment_id } = bodyData;
+    console.log(`📧 Received assignment_id: ${assignment_id}`);
+    
     if (!assignment_id) {
+      console.log('📧 ERROR: assignment_id missing from payload');
       return new Response(JSON.stringify({ ok: false, error: "assignment_id required" }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
@@ -92,11 +96,21 @@ serve(async (req) => {
 
     if (assignmentError || !assignment) {
       console.error('📧 Assignment not found:', assignmentError);
+      console.error('📧 Query result:', assignment);
       return new Response(JSON.stringify({ ok: false, error: "assignment not found" }), { 
         status: 404,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
+
+    console.log('📧 Assignment data loaded:', {
+      assignment_id: assignment.id,
+      job_title: assignment.job_requests?.fahrzeugtyp,
+      location: assignment.job_requests?.einsatzort,
+      start_date: assignment.start_date,
+      end_date: assignment.end_date,
+      rate: `${assignment.rate_value} ${assignment.rate_type}`
+    });
 
     const driver = assignment.fahrer_profile;
     const job = assignment.job_requests;
@@ -159,9 +173,19 @@ serve(async (req) => {
     
     // Create dynamic subject with date
     const startDateFormatted = assignment.start_date 
-      ? new Date(assignment.start_date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
-      : 'bald';
-    const emailSubject = `📢 Einsatz bestätigt: ${jobTitle} am ${startDateFormatted}`;
+      ? new Date(assignment.start_date).toLocaleDateString('de-DE', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric',
+          timeZone: 'Europe/Berlin'
+        })
+      : null;
+      
+    const emailSubject = startDateFormatted 
+      ? `📢 Einsatz bestätigt: ${jobTitle} am ${startDateFormatted}`
+      : `📢 Einsatz bestätigt: ${jobTitle}`;
+      
+    console.log(`📧 Generated subject: "${emailSubject}"`);
 
     // Create modern email content
     const emailContent = `
@@ -236,6 +260,9 @@ serve(async (req) => {
       delivery_mode: 'inline',
       message_id: emailResult.data?.id
     });
+
+    console.log(`📧 Email logged successfully with subject: "${emailSubject}"`);
+    console.log(`📧 Function ${FUNCTION_VERSION} completed successfully`);
 
     return new Response(JSON.stringify({ 
       ok: true, 
