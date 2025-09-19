@@ -275,6 +275,7 @@ serve(async (req) => {
 
   const supa = createClient(supabaseUrl, supabaseServiceKey);
 
+  try {
     console.log('📧 Starting main processing logic');
 
     const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = bodyData;
