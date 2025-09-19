@@ -68,14 +68,25 @@ export function AdminAssignmentDialog({
       
       if (job) {
         setJobData(job);
-        setCName(job.customer_name || job.company || "");
-        setContact(job.customer_name || "");
-        setStreet(job.customer_street || "");
-        setHouse(job.customer_house_number || "");
-        setPostal(job.customer_postal_code || "");
-        setCity(job.customer_city || "");
-        setPhone(job.customer_phone || "");
-        setEmail(job.customer_email || "");
+        
+        // Helper function to clean placeholder values
+        const cleanValue = (value: string | null, fallback = "") => {
+          if (!value || value === 'Bitte wählen' || value === 'Siehe Nachricht' || 
+              value === 'nachzutragen' || value === 'Nachzutragen' ||
+              value.trim() === '') {
+            return fallback;
+          }
+          return value.trim();
+        };
+        
+        setCName(cleanValue(job.customer_name) || cleanValue(job.company) || "");
+        setContact(cleanValue(job.customer_name) || "");
+        setStreet(cleanValue(job.customer_street) || "");
+        setHouse(cleanValue(job.customer_house_number) || "");
+        setPostal(cleanValue(job.customer_postal_code) || "");
+        setCity(cleanValue(job.customer_city) || "");
+        setPhone(cleanValue(job.customer_phone) || "");
+        setEmail(cleanValue(job.customer_email) || "");
       }
     } catch (error) {
       console.error('Error loading job data:', error);
@@ -135,7 +146,12 @@ export function AdminAssignmentDialog({
   const postalOk = /^\d{5}$/.test(postal);
   const hasContactWay = (phone?.trim()?.length || 0) > 0 || (email?.trim()?.length || 0) > 0;
   const customerAddressComplete = street && house && postalOk && city;
-  const needsFix = !(customerAddressComplete && cName && contact && hasContactWay);
+  
+  // Check if we have meaningful data (not placeholders)
+  const hasValidCompanyName = cName && cName !== 'Bitte wählen' && cName.trim() !== '';
+  const hasValidContact = contact && contact !== 'Bitte wählen' && contact.trim() !== '';
+  
+  const needsFix = !(customerAddressComplete && hasValidCompanyName && hasValidContact && hasContactWay);
 
   const saveContactIfNeeded = async () => {
     if (!needsFix) return;
