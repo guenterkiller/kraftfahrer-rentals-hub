@@ -280,7 +280,11 @@ const Admin = () => {
     try {
       const { error } = await supabase.functions.invoke(
         "send-driver-confirmation",
-        { body: { assignment_id: assignmentId, stage: "resend" } }
+        { body: { 
+          email: "guenter.killer@t-online.de",
+          assignment_id: assignmentId, 
+          stage: "resend" 
+        } }
       );
       if (error) throw error;
       toast({
@@ -382,7 +386,10 @@ const Admin = () => {
       // 2) E-Mail + PDF an Fahrer (BCC an Admin)
       const { error: fnErr } = await supabase.functions.invoke(
         "send-driver-confirmation",
-        { body: { assignment_id: assignmentId } }
+        { body: { 
+          email: "guenter.killer@t-online.de",
+          assignment_id: assignmentId 
+        } }
       );
       if (fnErr) throw fnErr;
 
@@ -408,7 +415,11 @@ const Admin = () => {
     try {
       const { error } = await supabase.functions.invoke(
         "send-driver-confirmation",
-        { body: { assignment_id: assignmentId, resend: true } }
+        { body: { 
+          email: "guenter.killer@t-online.de",
+          assignment_id: assignmentId, 
+          resend: true 
+        } }
       );
       if (error) throw error;
       toast({

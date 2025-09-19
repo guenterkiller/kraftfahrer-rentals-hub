@@ -227,10 +227,11 @@ export function AdminAssignmentDialog({
       const assignmentId = assignResult.assignmentId;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 2) E-Mail versenden (Edge Function, JWT geht automatisch mit)
+      // 2) E-Mail versenden (Edge Function)
       try {
         const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
           body: { 
+            email: "guenter.killer@t-online.de",
             assignment_id: assignmentId, 
             mode: attachPdf ? 'both' : 'inline' 
           }

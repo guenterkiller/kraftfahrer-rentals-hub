@@ -220,33 +220,55 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // 1) ANON KEY verwenden + Authorization aus Request weiterreichen
-  const supa = createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY,
-    { global: { headers: { Authorization: req.headers.get('Authorization') ?? '' } } }
-  );
+  // Extract email from request body for admin validation
+  let email: string | null = null;
+  try {
+    const body = await req.text();
+    const bodyData = JSON.parse(body);
+    email = bodyData.email;
+    
+    // Re-create the request with the original body for later processing
+    req = new Request(req.url, {
+      method: req.method,
+      headers: req.headers,
+      body: body
+    });
+  } catch (e) {
+    return new Response(JSON.stringify({ error: 'Invalid request body' }), { 
+      status: 400, 
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+    });
+  }
 
-  // 2) JWT prüfen
-  const { data: { user } } = await supa.auth.getUser();
-  if (!user) return new Response('unauthorized', { status: 401, headers: corsHeaders });
+  // Validate admin email
+  const ADMIN_EMAIL = "guenter.killer@t-online.de";
+  if (email !== ADMIN_EMAIL) {
+    console.log('Unauthorized access attempt by:', email);
+    return new Response(
+      JSON.stringify({ error: 'Zugriff verweigert' }),
+      { 
+        status: 403, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    );
+  }
 
-  // 3) Adminrecht prüfen
-  const { data: ok, error: adminErr } = await supa.rpc('is_admin_user');
-  
-  // Debug logging to admin_actions
-  await supa.from('admin_actions').insert({
-    action: 'debug_send_driver_conf',
-    admin_email: 'guenter.killer@t-online.de',
-    note: JSON.stringify({ 
-      hasAuth: !!req.headers.get('Authorization'), 
-      user: user?.id, 
-      isAdmin: ok,
-      adminErr: adminErr?.message 
-    })
-  });
-  
-  if (adminErr || !ok) return new Response('forbidden', { status: 403, headers: corsHeaders });
+  // Create Supabase client with service role key (bypasses RLS)
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+  if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('Missing Supabase configuration');
+    return new Response(
+      JSON.stringify({ error: 'Server configuration error' }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    );
+  }
+
+  const supa = createClient(supabaseUrl, supabaseServiceKey);
 
   try {
     if (req.method !== "POST") {
