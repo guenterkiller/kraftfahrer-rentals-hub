@@ -216,16 +216,29 @@ function withCurrency(n?: number | null, rateType?: string) {
 }
 
 serve(async (req) => {
+  console.log(`📧 send-driver-confirmation called: ${req.method} ${req.url}`);
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
+    console.log('📧 Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders });
+  }
+
+  if (req.method !== "POST") {
+    console.log(`📧 Method not allowed: ${req.method}`);
+    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { 
+      status: 405,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
   }
 
   // Parse request body once and store the data
   let bodyData: any;
   try {
     bodyData = await req.json();
+    console.log('📧 Request body parsed successfully');
   } catch (e) {
+    console.error('📧 Error parsing request body:', e);
     return new Response(JSON.stringify({ error: 'Invalid request body' }), { 
       status: 400, 
       headers: { 'Content-Type': 'application/json', ...corsHeaders } 
@@ -262,13 +275,7 @@ serve(async (req) => {
 
   const supa = createClient(supabaseUrl, supabaseServiceKey);
 
-  try {
-    if (req.method !== "POST") {
-      return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { 
-        status: 405,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
-    }
+    console.log('📧 Starting main processing logic');
 
     const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = bodyData;
     const deliveryMode: DeliveryMode = mode ?? 'inline';
