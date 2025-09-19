@@ -17,6 +17,7 @@ interface UpdateContactRequest {
   city: string;
   phone: string;
   contactEmail: string;
+  einsatzort?: string; // Optional location field
 }
 
 serve(async (req) => {
@@ -34,7 +35,7 @@ serve(async (req) => {
 
   try {
     const body: UpdateContactRequest = await req.json();
-    const { email, jobId, cName, contact, street, house, postal, city, phone, contactEmail } = body;
+    const { email, jobId, cName, contact, street, house, postal, city, phone, contactEmail, einsatzort } = body;
 
     console.log('📝 Admin update contact request:', {
       email,
@@ -54,20 +55,27 @@ serve(async (req) => {
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Update job contact data
+    // Update job contact data and location
+    const updateData: any = {
+      customer_name: cName,
+      company: cName,
+      customer_street: street,
+      customer_house_number: house,
+      customer_postal_code: postal,
+      customer_city: city,
+      customer_phone: phone,
+      customer_email: contactEmail,
+      updated_at: new Date().toISOString()
+    };
+
+    // Add einsatzort if provided
+    if (einsatzort) {
+      updateData.einsatzort = einsatzort;
+    }
+
     const { error } = await supabase
       .from('job_requests')
-      .update({
-        customer_name: cName,
-        company: cName,
-        customer_street: street,
-        customer_house_number: house,
-        customer_postal_code: postal,
-        customer_city: city,
-        customer_phone: phone,
-        customer_email: contactEmail,
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq('id', jobId);
 
     if (error) {

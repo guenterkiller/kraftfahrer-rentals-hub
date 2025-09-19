@@ -44,6 +44,7 @@ export function AdminAssignmentDialog({
   const [city, setCity] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [einsatzort, setEinsatzort] = useState("");
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   
   const { toast } = useToast();
@@ -87,6 +88,7 @@ export function AdminAssignmentDialog({
         setCity(cleanValue(job.customer_city) || "");
         setPhone(cleanValue(job.customer_phone) || "");
         setEmail(cleanValue(job.customer_email) || "");
+        setEinsatzort(cleanValue(job.einsatzort) || "");
       }
     } catch (error) {
       console.error('Error loading job data:', error);
@@ -201,6 +203,7 @@ export function AdminAssignmentDialog({
           city: city,
           phone: phone,
           contactEmail: email,
+          einsatzort: einsatzort, // Add location field
         }
       });
 
@@ -469,6 +472,17 @@ export function AdminAssignmentDialog({
                     className="mt-1"
                   />
                 </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="einsatzort" className="text-sm">Einsatzort / Treffpunkt</Label>
+                <Input
+                  id="einsatzort"
+                  value={einsatzort}
+                  onChange={(e) => setEinsatzort(e.target.value)}
+                  placeholder="Arbeitsort oder Treffpunkt eingeben"
+                  className="mt-1"
+                />
               </div>
               
               {!hasContactWay && (
