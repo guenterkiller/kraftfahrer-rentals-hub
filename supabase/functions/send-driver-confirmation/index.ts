@@ -189,9 +189,9 @@ serve(async (req) => {
     <div style="max-width: 700px; margin: 0 auto;">
         
         <!-- Blue Header -->
-        <div style="background-color: #4472c4; color: white; padding: 20px; text-align: center; margin-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 28px; font-weight: bold;">Einsatzbestätigung</h1>
-            <p style="margin: 5px 0 0 0; font-size: 16px;">Fahrerexpress | kraftfahrer-mieten.com</p>
+        <div style="background-color: #4472c4; color: white; padding: 30px; text-align: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 36px; font-weight: bold; letter-spacing: 1px;">EINSATZBESTÄTIGUNG</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">Fahrerexpress | kraftfahrer-mieten.com</p>
         </div>
         
         <!-- Content -->
