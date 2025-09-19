@@ -183,6 +183,17 @@ serve(async (req) => {
     const contactPhone = cleanValue(job?.customer_phone, 'wird ergänzt');
     const contactEmail = cleanValue(job?.customer_email, 'wird ergänzt');
     const companyName = cleanValue(job?.company || job?.customer_name, 'wird ergänzt');
+    
+    console.log('📧 Email data prepared:', {
+      jobTitle,
+      location,
+      dateRange,
+      contactPerson,
+      contactPhone,
+      contactEmail,
+      companyName,
+      raw_job_data: job
+    });
     const confirmUrl = `https://kraftfahrer-mieten.com/driver/assignments/${assignment_id}/confirm`;
     
     // Create subject in exact format: "Einsatzbestätigung – {fahrzeugtyp} – {einsatzort} am {zeitraum}"
