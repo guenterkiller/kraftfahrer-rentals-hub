@@ -1,17 +1,6 @@
-// supabase/functions/send-driver-confirmation/index.ts
-// Deno Edge Function – sofortiger Versand der Fahrer-Einsatzbestätigung (E-Mail + PDF)
-// Erwartet: POST { assignment_id: string, mode?: 'inline' | 'both' | 'pdf-only' }
-
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
-import { htmlToSimplePdf } from "./pdf.ts";
-
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
-const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>";
-const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!
-
-type DeliveryMode = 'inline' | 'both' | 'pdf-only';
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,201 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
-// --- EMBEDDED TEMPLATES ---
-const htmlTpl = `<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Einsatzbestätigung</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; color: #333; line-height: 1.6; }
-        .header { margin-bottom: 30px; }
-        .header h1 { color: #2196F3; margin: 0 0 10px 0; }
-        .section { margin-bottom: 25px; padding: 15px; border-left: 4px solid #2196F3; background-color: #f8f9fa; }
-        .section h3 { margin-top: 0; color: #1976D2; }
-        .bullet-list { margin: 10px 0; padding-left: 0; }
-        .bullet-list li { list-style: none; margin: 8px 0; }
-        .bullet-list li:before { content: "• "; font-weight: bold; color: #2196F3; }
-        .no-show { margin-top: 30px; padding: 15px; background-color: #ffebee; border: 1px solid #f44336; border-radius: 4px; }
-        .no-show h4 { color: #d32f2f; margin-top: 0; }
-        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 14px; color: #666; }
-        .pdf-link { margin-top: 30px; padding: 15px; background-color: #e3f2fd; border: 1px solid #2196F3; border-radius: 4px; text-align: center; }
-        .pdf-link a { color: #1976D2; text-decoration: none; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Einsatzbestätigung</h1>
-        <p>Hallo {{fp.vorname}} {{fp.nachname}},<br>
-        hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
-    </div>
-
-    <div class="section">
-        <h3>AUFTRAGGEBER (Kunde)</h3>
-        <ul class="bullet-list">
-            <li>Unternehmen/Name: {{jr.firma_oder_name}}</li>
-            <li>Ansprechpartner: {{jr.ansprechpartner}}</li>
-            <li>Anschrift: {{jr.anschrift_vollstaendig}}</li>
-            <li>Telefon: {{jr.telefon}}</li>
-            <li>E-Mail: {{jr.email}}</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h3>EINSATZ</h3>
-        <ul class="bullet-list">
-            <li>Datum/Zeitraum: {{einsatz_zeitraum}}</li>
-            <li>Einsatzort/Treffpunkt: {{jr.einsatzort}}</li>
-            <li>Fahrzeug/Typ: {{jr.fahrzeugtyp}}</li>
-            <li>Besonderheiten: {{jr.besonderheiten}}</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h3>KONDITIONEN (zwischen Auftraggeber und Fahrer)</h3>
-        <ul class="bullet-list">
-            <li>Vergütung: {{ja.rate_value}} {{ust_hinweis}}</li>
-            <li>Abrechnung/Zahlung: Der Fahrer rechnet direkt mit dem Auftraggeber ab. Zahlungsziel: 14 Tage, ohne Abzug.</li>
-            <li>Spesen/Extras: Nur, wenn vorab schriftlich vereinbart.</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h3>ROLLE VON FAHREREXPRESS (Vermittlung)</h3>
-        <ul class="bullet-list">
-            <li>Fahrerexpress ist Vermittler; es entsteht kein Arbeitsverhältnis mit Fahrerexpress und keine Arbeitnehmerüberlassung.</li>
-            <li>Vermittlungsprovision: 15 % des Nettohonorars, nur bei tatsächlichem Einsatz. Die Provision wird Fahrerexpress dem Fahrer gesondert in Rechnung stellen.</li>
-            <li>Folgeaufträge mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</li>
-            <li>Informationspflicht: Direkt vereinbarte Folgeeinsätze sind Fahrerexpress unverzüglich mitzuteilen.</li>
-            <li>Vertragsstrafe: Bei Verstoß gegen Folgeauftrags-/Informationspflicht 2.500 € je Verstoß; weitergehender Schaden bleibt vorbehalten.</li>
-        </ul>
-    </div>
-
-    <div class="no-show">
-        <h4>Nichterscheinen / kurzfristige Absage (No-Show)</h4>
-        <p>Erscheint der Fahrer ohne triftigen Grund nicht zum Einsatzbeginn oder sagt er ≤ 24 h vorher ab, gilt dies als No-Show.</p>
-        <p>In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz von 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</p>
-        <p style="font-size: 14px;">Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen. Höhere Gewalt (z. B. Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
-        <p>Fahrerexpress bemüht sich im No-Show-Fall um Ersatz.</p>
-    </div>
-
-    <div class="section">
-        <h3>Rechtliches</h3>
-        <ul class="bullet-list">
-            <li>Rechtsverhältnis: Einsatz als selbstständiger Unternehmer; der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</li>
-            <li>Umsatzsteuer: {{ust_hinweis_lang}}</li>
-            <li>Vertragsschluss: Mit Bestätigung/Antritt des Einsatzes kommt der Vertrag zwischen Auftraggeber (Kunde) und Fahrer zustande.</li>
-        </ul>
-    </div>
-
-    <p><strong>Bitte prüfen Sie die Angaben; Abweichungen umgehend melden.</strong></p>
-
-    {{pdf_link_section}}
-
-    <div class="footer">
-        <p><strong>Viele Grüße</strong><br>
-        Fahrerexpress | kraftfahrer-mieten.com<br>
-        E-Mail: info@kraftfahrer-mieten.com | Tel: +49 1577 1442285</p>
-    </div>
-</body>
-</html>`;
-
-const txtTpl = `Hallo {{fp.vorname}} {{fp.nachname}},
-hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.
-
-AUFTRAGGEBER (Kunde)
-• Unternehmen/Name: {{jr.firma_oder_name}}
-• Ansprechpartner: {{jr.ansprechpartner}}
-• Anschrift: {{jr.anschrift_vollstaendig}}
-• Telefon: {{jr.telefon}}
-• E-Mail: {{jr.email}}
-
-EINSATZ
-• Datum/Zeitraum: {{einsatz_zeitraum}}
-• Einsatzort/Treffpunkt: {{jr.einsatzort}}
-• Fahrzeug/Typ: {{jr.fahrzeugtyp}}
-• Besonderheiten: {{jr.besonderheiten}}
-
-KONDITIONEN (zwischen Auftraggeber und Fahrer)
-• Vergütung: {{ja.rate_value}} {{ust_hinweis}}
-• Abrechnung/Zahlung: Der Fahrer rechnet direkt mit dem Auftraggeber ab. Zahlungsziel: 14 Tage, ohne Abzug.
-• Spesen/Extras: Nur, wenn vorab schriftlich vereinbart.
-
-ROLLE VON FAHREREXPRESS (Vermittlung)
-• Fahrerexpress ist Vermittler; es entsteht kein Arbeitsverhältnis mit Fahrerexpress und keine Arbeitnehmerüberlassung.
-• Vermittlungsprovision: 15 % des Nettohonorars, nur bei tatsächlichem Einsatz. Die Provision wird Fahrerexpress dem Fahrer gesondert in Rechnung stellen.
-• Folgeaufträge mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.
-• Informationspflicht: Direkt vereinbarte Folgeeinsätze sind Fahrerexpress unverzüglich mitzuteilen.
-• Vertragsstrafe: Bei Verstoß gegen Folgeauftrags-/Informationspflicht 2.500 € je Verstoß; weitergehender Schaden bleibt vorbehalten.
-
-Nichterscheinen / kurzfristige Absage (No-Show)
-
-Erscheint der Fahrer ohne triftigen Grund nicht zum Einsatzbeginn oder sagt er ≤ 24 h vorher ab, gilt dies als No-Show.
-In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz von 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).
-Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen. Höhere Gewalt (z. B. Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.
-Fahrerexpress bemüht sich im No-Show-Fall um Ersatz.
-
-Rechtliches
-• Rechtsverhältnis: Einsatz als selbstständiger Unternehmer; der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.
-• Umsatzsteuer: {{ust_hinweis_lang}}
-• Vertragsschluss: Mit Bestätigung/Antritt des Einsatzes kommt der Vertrag zwischen Auftraggeber (Kunde) und Fahrer zustande.
-
-Bitte prüfen Sie die Angaben; Abweichungen umgehend melden.
-
-Viele Grüße
-Fahrerexpress | kraftfahrer-mieten.com
-E-Mail: info@kraftfahrer-mieten.com | Tel: +49 1577 1442285`;
-
-// simple replacer
-function render(tpl: string, vars: Record<string, string | number | null | undefined>) {
-  return tpl.replace(/{{\s*([^}]+)\s*}}/g, (_, k) => {
-    const v = vars[k.trim()];
-    return (v === undefined || v === null) ? "" : String(v);
-  });
-}
-
-function ensure(v?: string | null) { return !!(v && v.trim().length); }
-
-// Hilfsfunktion für vollständige Adresse (nur customer_* Felder verwenden)
-function buildFullAddress(jr: any): string {
-  // Neue customer_* Felder verwenden
-  const street = jr.customer_street || "";
-  const number = jr.customer_house_number || "";
-  const zip = jr.customer_postal_code || "";
-  const city = jr.customer_city || "";
-  
-  // Vollständige Adresse zusammenbauen
-  if (street && number && zip && city) {
-    return `${street} ${number}, ${zip} ${city}`.trim();
-  }
-  
-  // Fallback sollte nicht mehr nötig sein durch Validation
-  return jr.einsatzort || "Adresse siehe Nachricht";
-}
-
-// derive display helpers
-function withCurrency(n?: number | null, rateType?: string) {
-  if (typeof n === "number") {
-    const formatted = new Intl.NumberFormat("de-DE", { 
-      style: "currency", 
-      currency: "EUR" 
-    }).format(n);
-    
-    // Verhindere doppeltes € - formatiere mit Suffix
-    const baseAmount = new Intl.NumberFormat("de-DE", { 
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(n);
-    
-    if (rateType === "hourly") {
-      return `${baseAmount} €/Std`;
-    } else if (rateType === "daily") {
-      return `${baseAmount} €/Tag`;
-    }
-    return `${baseAmount} €`;
-  }
-  return "nach Absprache";
-}
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 serve(async (req) => {
   console.log(`📧 send-driver-confirmation called: ${req.method} ${req.url}`);
@@ -232,55 +27,26 @@ serve(async (req) => {
     });
   }
 
-  // Parse request body once and store the data
-  let bodyData: any;
   try {
-    bodyData = await req.json();
+    // Parse request body
+    const bodyData = await req.json();
     console.log('📧 Request body parsed successfully');
-  } catch (e) {
-    console.error('📧 Error parsing request body:', e);
-    return new Response(JSON.stringify({ error: 'Invalid request body' }), { 
-      status: 400, 
-      headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-    });
-  }
 
-  // Validate admin email
-  const ADMIN_EMAIL = "guenter.killer@t-online.de";
-  if (bodyData.email !== ADMIN_EMAIL) {
-    console.log('Unauthorized access attempt by:', bodyData.email);
-    return new Response(
-      JSON.stringify({ error: 'Zugriff verweigert' }),
-      { 
-        status: 403, 
-        headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-      }
-    );
-  }
+    // Validate admin email
+    const ADMIN_EMAIL = "guenter.killer@t-online.de";
+    if (bodyData.email !== ADMIN_EMAIL) {
+      console.log('Unauthorized access attempt by:', bodyData.email);
+      return new Response(
+        JSON.stringify({ error: 'Zugriff verweigert' }),
+        { 
+          status: 403, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        }
+      );
+    }
 
-  // Create Supabase client with service role key (bypasses RLS)
-  const supabaseUrl = Deno.env.get('SUPABASE_URL');
-  const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-  if (!supabaseUrl || !supabaseServiceKey) {
-    console.error('Missing Supabase configuration');
-    return new Response(
-      JSON.stringify({ error: 'Server configuration error' }),
-      { 
-        status: 500, 
-        headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-      }
-    );
-  }
-
-  const supa = createClient(supabaseUrl, supabaseServiceKey);
-
-  try {
-    console.log('📧 Starting main processing logic');
-
-    const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = bodyData;
-    const deliveryMode: DeliveryMode = mode ?? 'inline';
-    
+    // Check required fields
+    const { assignment_id } = bodyData;
     if (!assignment_id) {
       return new Response(JSON.stringify({ ok: false, error: "assignment_id required" }), { 
         status: 400,
@@ -288,9 +54,26 @@ serve(async (req) => {
       });
     }
 
-    // Daten holen (Assignment + Job + Fahrer)
-    // Passen ggf. die Feldnamen an euer Schema an.
-    const { data: rows, error } = await supa
+    // Create Supabase client with service role key
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing Supabase configuration');
+      return new Response(
+        JSON.stringify({ error: 'Server configuration error' }),
+        { 
+          status: 500, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        }
+      );
+    }
+
+    const supa = createClient(supabaseUrl, supabaseServiceKey);
+    console.log('📧 Starting main processing logic');
+
+    // Get assignment data
+    const { data: assignment, error: assignmentError } = await supa
       .from("job_assignments")
       .select(`
         id, job_id, driver_id, status,
@@ -304,210 +87,92 @@ serve(async (req) => {
         )
       `)
       .eq("id", assignment_id)
-      .limit(1)
       .maybeSingle();
 
-    if (error || !rows) {
+    if (assignmentError || !assignment) {
+      console.error('📧 Assignment not found:', assignmentError);
       return new Response(JSON.stringify({ ok: false, error: "assignment not found" }), { 
         status: 404,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    const ja = rows as any;
-    const jr = ja.job_requests;
-    const fp = ja.fahrer_profile;
+    const driver = assignment.fahrer_profile;
+    const job = assignment.job_requests;
 
-    // Pflicht-Validierungen (hard stop)
-    if (!fp || !ensure(fp.email) || !ensure(fp.vorname) || !ensure(fp.nachname)) {
-      return new Response(JSON.stringify({ ok: false, error: "Fahrerdaten unvollständig." }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
-    }
-    if (!jr) {
-      return new Response(JSON.stringify({ ok: false, error: "Auftragsdaten fehlen." }), { 
+    if (!driver || !driver.email || !driver.vorname || !driver.nachname) {
+      console.error('📧 Driver data incomplete:', driver);
+      return new Response(JSON.stringify({ ok: false, error: "Fahrerdaten unvollständig" }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    // NEUE VALIDIERUNGEN (Blocker vor Versand)
-    
-    // 1. Auftraggeber-Name darf kein Platzhalter sein (außer für Test-Admin)
-    const companyName = jr.company || jr.customer_name || "";
-    const isTestData = bodyData.email === "guenter.killer@t-online.de" && 
-                       (companyName.toLowerCase().includes("bitte wählen") || 
-                        companyName.toLowerCase().includes("bitte waehlen"));
-    
-    if (!companyName || (!isTestData && (companyName.toLowerCase().includes("bitte wählen") || companyName.toLowerCase().includes("bitte waehlen")))) {
-      console.log(`📧 Company name validation failed: "${companyName}"`);
-      return new Response(JSON.stringify({ ok: false, error: "Auftraggeber-Name ist unvollständig (Platzhalter erkannt)." }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
-    }
+    console.log(`📧 Sending email to driver: ${driver.email}`);
 
-    // 2. Anschrift Auftraggeber muss vollständig sein (außer für Test-Admin)
-    if (!isTestData && (!ensure(jr.customer_street) || !ensure(jr.customer_house_number) ||
-        !ensure(jr.customer_postal_code) || !ensure(jr.customer_city))) {
-      console.log(`📧 Address validation failed for non-test data`);
-      return new Response(JSON.stringify({ ok: false, error: "Anschrift Auftraggeber unvollständig." }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
-    }
+    // Create simple email content
+    const emailContent = `
+      <h1>Einsatzbestätigung</h1>
+      <p>Hallo ${driver.vorname} ${driver.nachname},</p>
+      <p>hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
+      
+      <h3>Einsatzdetails:</h3>
+      <ul>
+        <li><strong>Fahrzeugtyp:</strong> ${job?.fahrzeugtyp || 'Nicht angegeben'}</li>
+        <li><strong>Einsatzort:</strong> ${job?.einsatzort || 'Siehe Nachricht'}</li>
+        <li><strong>Zeitraum:</strong> ${job?.zeitraum || 'Nach Absprache'}</li>
+        <li><strong>Vergütung:</strong> ${assignment.rate_value || 'nach Absprache'} €/${assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}</li>
+      </ul>
 
-    // PLZ muss 5-stellig sein (außer für Test-Admin)
-    if (!isTestData && jr.customer_postal_code && !/^\d{5}$/.test(jr.customer_postal_code)) {
-      console.log(`📧 PLZ validation failed: "${jr.customer_postal_code}"`);
-      return new Response(JSON.stringify({ ok: false, error: "PLZ muss 5-stellig sein." }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
-    }
+      <p>Bei Fragen stehen wir Ihnen gerne zur Verfügung.</p>
+      
+      <p>Mit freundlichen Grüßen<br>
+      Ihr Kraftfahrer-Mieten Team</p>
+    `;
 
-    // 3. Mindestens ein Kontakt (Telefon oder E-Mail) - außer für Test-Admin
-    if (!isTestData && !ensure(jr.customer_phone) && !ensure(jr.customer_email)) {
-      console.log(`📧 Contact validation failed`);
-      return new Response(JSON.stringify({ ok: false, error: "Kontakt Auftraggeber fehlt (Telefon oder E-Mail)." }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json', ...corsHeaders }
-      });
-    }
-
-    const zeitraum = ja.start_date && ja.end_date
-      ? new Intl.DateTimeFormat("de-DE").format(new Date(ja.start_date)) +
-        " – " + new Intl.DateTimeFormat("de-DE").format(new Date(ja.end_date))
-      : jr.zeitraum || "nach Absprache";
-
-    const adminEmailRes = await supa.from("admin_settings").select("admin_email").limit(1).maybeSingle();
-    const adminEmail = adminEmailRes.data?.admin_email ?? "info@kraftfahrer-mieten.com";
-
-    const vars = {
-      "fp.vorname": fp.vorname,
-      "fp.nachname": fp.nachname,
-      "jr.firma_oder_name": jr.company || jr.customer_name || "",
-      "jr.ansprechpartner": jr.customer_name || "",
-      "jr.anschrift_vollstaendig": buildFullAddress(jr),
-      "jr.telefon": jr.customer_phone || "",
-      "jr.email": jr.customer_email || "",
-      "jr.einsatzort": jr.einsatzort || "Siehe Nachricht",
-      "jr.fahrzeugtyp": jr.fahrzeugtyp || "",
-      "jr.besonderheiten": jr.besonderheiten || "",
-      "einsatz_zeitraum": zeitraum,
-      "ust_hinweis": "zzgl. gesetzlicher USt",
-      "ust_hinweis_lang": "Die Vergütung versteht sich zuzüglich der gesetzlichen Umsatzsteuer.",
-    };
-
-    // Anzeige für Satz (korrekt formatiert, ohne doppeltes €)
-    const satzAnzeige = withCurrency(typeof ja.rate_value === "number" ? ja.rate_value : undefined, ja.rate_type);
-    
-    // PDF bauen (Simple PDF – Text-basiert)
-    const pdfBytes = await htmlToSimplePdf(render(htmlTpl, { ...vars, "ja.rate_value": satzAnzeige, "pdf_link_section": "" }), render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige }));
-
-    // PDF in private Bucket speichern
-    const filenameBase = `driver-confirmation-${new Date().toISOString().slice(0,10)}`;
-    const filePath = `confirmations/assignments/${assignment_id}/${filenameBase}.pdf`;
-    const up = await supa.storage.from("confirmations").upload(filePath, pdfBytes, {
-      contentType: "application/pdf",
-      upsert: true,
-    });
-    if (up.error) {
-      console.error("PDF upload error", up.error);
-    }
-
-    // Signierte URL erstellen (14 Tage gültig)
-    const { data: signedData } = await supa.storage.from("confirmations").createSignedUrl(filePath, 14 * 24 * 60 * 60);
-    const pdfUrl = signedData?.signedUrl ?? null;
-
-    // PDF-Link-Sektion für E-Mail
-    const pdfLinkSection = pdfUrl && deliveryMode !== 'pdf-only' 
-      ? `<div class="pdf-link">
-           <h4>📄 PDF-Download</h4>
-           <p><a href="${pdfUrl}" target="_blank">Einsatzbestätigung als PDF herunterladen</a></p>
-           <p style="font-size: 12px; color: #666;">Der Link ist 14 Tage gültig.</p>
-         </div>`
-      : '';
-
-    // HTML und Text für E-Mail bauen
-    const html = deliveryMode === 'pdf-only' 
-      ? '<div style="font-family: Arial, sans-serif; padding: 20px;"><h2>Einsatzbestätigung</h2><p>Die Einsatzbestätigung liegt als PDF im Anhang bei.</p><p>Fahrerexpress | kraftfahrer-mieten.com</p></div>'
-      : render(htmlTpl, { ...vars, "ja.rate_value": satzAnzeige, "pdf_link_section": pdfLinkSection });
-    
-    const txt = deliveryMode === 'pdf-only'
-      ? 'Einsatzbestätigung\n\nDie Einsatzbestätigung liegt als PDF im Anhang bei.\n\nFahrerexpress | kraftfahrer-mieten.com'
-      : render(txtTpl, { ...vars, "ja.rate_value": satzAnzeige }) + (pdfUrl ? `\n\nPDF-Download: ${pdfUrl} (gültig 14 Tage)` : '');
-
-    // E-Mail via Resend API senden (TO: Fahrer, BCC: Admin)  
-    const subject = `Einsatzbestätigung – ${vars["jr.firma_oder_name"]} – ${jr.einsatzort || jr.ort || "Einsatz"} – ${zeitraum}`;
-    
-    // Build email payload for Resend API
-    const emailPayload: any = {
-      from: MAIL_FROM,
-      to: [fp.email],
-      bcc: [adminEmail],
-      subject,
-      html,
-      text: txt,
-    };
-
-    // PDF anhängen nur bei 'both' oder 'pdf-only'
-    if (deliveryMode === 'both' || deliveryMode === 'pdf-only') {
-      // Convert PDF bytes to base64 for Resend API
-      const pdfBase64 = btoa(String.fromCharCode(...new Uint8Array(pdfBytes)));
-      emailPayload.attachments = [{
-        filename: `${filenameBase}.pdf`,
-        content: pdfBase64,
-        content_type: "application/pdf"
-      }];
-    }
-
-    const mailRes = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { 
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(emailPayload),
+    // Send email using Resend
+    const emailResult = await resend.emails.send({
+      from: 'Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>',
+      to: [driver.email],
+      bcc: ['guenter.killer@t-online.de'],
+      subject: 'Einsatzbestätigung - Ihr Fahrauftrag',
+      html: emailContent,
     });
 
-    let status: "sent" | "failed" = "sent";
-    if (!mailRes.ok) status = "failed";
-
-    // email_log schreiben mit neuen Feldern
-    await supa.from("email_log").insert({
-      template: "driver_confirmation_v2",
-      subject,
-      recipient: fp.email,
-      status,
-      assignment_id,
-      job_id: jr.id,
-      delivery_mode: deliveryMode,
-      pdf_path: filePath,
-      pdf_url: pdfUrl,
-      sent_at: new Date().toISOString(),
-    });
-
-    if (!mailRes.ok) {
-      const errTxt = await mailRes.text();
-      return new Response(JSON.stringify({ ok: false, error: `Mail error: ${errTxt}` }), { 
+    if (emailResult.error) {
+      console.error('📧 Email sending failed:', emailResult.error);
+      return new Response(JSON.stringify({ ok: false, error: `Mail error: ${emailResult.error.message}` }), { 
         status: 500,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
+    console.log('📧 Email sent successfully:', emailResult.data?.id);
+
+    // Log the email
+    await supa.from('email_log').insert({
+      assignment_id: assignment_id,
+      job_id: assignment.job_id,
+      recipient: driver.email,
+      status: 'sent',
+      subject: 'Einsatzbestätigung - Ihr Fahrauftrag',
+      template: 'driver_confirmation',
+      delivery_mode: 'inline',
+      message_id: emailResult.data?.id
+    });
+
     return new Response(JSON.stringify({ 
       ok: true, 
-      pdf_path: filePath, 
-      pdf_url: pdfUrl, 
-      delivery_mode: deliveryMode 
+      message: "E-Mail erfolgreich versendet",
+      email_id: emailResult.data?.id,
+      delivery_mode: 'inline'
     }), { 
       status: 200,
       headers: { 'Content-Type': 'application/json', ...corsHeaders }
     });
-  } catch (e) {
-    console.error(e);
+
+  } catch (error) {
+    console.error('📧 Unexpected error:', error);
     return new Response(JSON.stringify({ ok: false, error: "unexpected error" }), { 
       status: 500,
       headers: { 'Content-Type': 'application/json', ...corsHeaders }
