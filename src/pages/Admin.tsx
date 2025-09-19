@@ -492,17 +492,30 @@ const Admin = () => {
 
   const handleResetJobsByEmail = async () => {
     try {
-      const { data, error } = await supabase.rpc('admin_reset_jobs_by_email', {
-        _email: ADMIN_EMAIL
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Admin session not found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
+
+      const { data, error } = await supabase.functions.invoke('admin-reset-jobs', {
+        body: { email: adminEmail }
       });
 
       if (error) {
         throw error;
       }
 
+      if (!data.success) {
+        throw new Error(data.error || 'Reset fehlgeschlagen');
+      }
+
       toast({
         title: "Jobs zurückgesetzt",
-        description: `${(data as any)?.jobs_updated || 0} Jobs auf "offen" gesetzt und ${(data as any)?.assignments_deleted || 0} Zuweisungen gelöscht.`,
+        description: data.message,
       });
 
       // Reload data
