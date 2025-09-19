@@ -171,19 +171,8 @@ serve(async (req) => {
     const contactPhone = job?.customer_phone || null;
     const confirmUrl = `https://kraftfahrer-mieten.com/driver/assignments/${assignment_id}/confirm`;
     
-    // Create dynamic subject with date
-    const startDateFormatted = assignment.start_date 
-      ? new Date(assignment.start_date).toLocaleDateString('de-DE', { 
-          day: '2-digit', 
-          month: '2-digit', 
-          year: 'numeric',
-          timeZone: 'Europe/Berlin'
-        })
-      : null;
-      
-    const emailSubject = startDateFormatted 
-      ? `Einsatzbestätigung: ${jobTitle} am ${startDateFormatted}`
-      : `Einsatzbestätigung: ${jobTitle}`;
+    // Create subject in exact format: "Einsatzbestätigung – {fahrzeugtyp} – {einsatzort} am {zeitraum}"
+    const emailSubject = `Einsatzbestätigung – ${jobTitle} – ${location} am ${dateRange}`;
       
     console.log(`📧 Generated subject: "${emailSubject}"`);
 
@@ -262,7 +251,7 @@ serve(async (req) => {
 
     // Send email using Resend
     const emailResult = await resend.emails.send({
-      from: 'Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>',
+      from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [driver.email],
       bcc: ['guenter.killer@t-online.de'],
       subject: emailSubject,
