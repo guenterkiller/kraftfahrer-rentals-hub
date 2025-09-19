@@ -182,25 +182,25 @@ export function AdminAssignmentDialog({
         _email: email,
       });
       
-      const { error } = await supabase.rpc('admin_update_job_contact', {
-        _job_id: jobId,
-        _firma_oder_name: cName,
-        _ansprechpartner: contact,
-        _street: street,
-        _house: house,
-        _postal: postal,
-        _city: city,
-        _phone: phone,
-        _email: email,
-      });
+      // Use direct Supabase update instead of RPC function
+      const { error } = await supabase
+        .from('job_requests')
+        .update({
+          customer_name: cName,
+          company: cName,
+          customer_street: street,
+          customer_house_number: house,
+          customer_postal_code: postal,
+          customer_city: city,
+          customer_phone: phone,
+          customer_email: email,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', jobId);
       
       if (error) throw error;
       
       setLastSaved(new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
-      toast({
-        title: "Daten gespeichert",
-        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
-      });
       
     } catch (error: any) {
       console.error('Error saving contact data:', error);
@@ -246,6 +246,10 @@ export function AdminAssignmentDialog({
 
       // Always save contact data before assignment to ensure fresh data
       await saveContactData();
+      toast({
+        title: "Daten gespeichert",
+        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
+      });
 
       // 1) Zuweisen über Edge Function (verwendet Service Role)
       const { data: assignResult, error: assignError } = await supabase.functions.invoke('admin-assign-driver', {
@@ -330,7 +334,11 @@ export function AdminAssignmentDialog({
 
   const handleSaveDataOnly = async () => {
     try {
-      await saveContactIfNeeded();
+      await saveContactData();
+      toast({
+        title: "Daten gespeichert",
+        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
+      });
     } catch (error: any) {
       toast({
         title: "Fehler beim Speichern",
