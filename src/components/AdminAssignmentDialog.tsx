@@ -153,34 +153,34 @@ export function AdminAssignmentDialog({
   
   const needsFix = !(customerAddressComplete && hasValidCompanyName && hasValidContact && hasContactWay);
 
-  const saveContactIfNeeded = async () => {
-    if (!needsFix) return;
-    
+  const saveContactData = async () => {
     try {
       const { error } = await supabase.rpc('admin_update_job_contact', {
         _job_id: jobId,
-        _firma_oder_name: cName,
-        _ansprechpartner: contact,
-        _street: street,
-        _house: house,
-        _postal: postal,
-        _city: city,
-        _phone: phone,
-        _email: email,
+        _firma_oder_name: cName || 'Firma/Name',
+        _ansprechpartner: contact || 'Ansprechpartner',
+        _street: street || 'Straße',
+        _house: house || '1',
+        _postal: postal || '00000',
+        _city: city || 'Stadt',
+        _phone: phone || '+49',
+        _email: email || 'email@example.com',
       });
       
       if (error) throw error;
       
       setLastSaved(new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
-      toast({
-        title: "Daten gespeichert",
-        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
-      });
+      console.log('✅ Contact data saved successfully');
       
     } catch (error: any) {
-      console.error('Error saving contact data:', error);
+      console.error('❌ Error saving contact data:', error);
       throw error;
     }
+  };
+
+  const saveContactIfNeeded = async () => {
+    if (!needsFix) return;
+    await saveContactData();
   };
 
   const handleAssignAndSend = async () => {
@@ -219,8 +219,8 @@ export function AdminAssignmentDialog({
         throw new Error('Admin-Session abgelaufen');
       }
 
-      // Save contact data if needed
-      await saveContactIfNeeded();
+      // Save contact data before assignment (always save to ensure current data)
+      await saveContactData();
 
       // 1) Zuweisen über Edge Function (verwendet Service Role)
       const { data: assignResult, error: assignError } = await supabase.functions.invoke('admin-assign-driver', {
@@ -305,7 +305,11 @@ export function AdminAssignmentDialog({
 
   const handleSaveDataOnly = async () => {
     try {
-      await saveContactIfNeeded();
+      await saveContactData();
+      toast({
+        title: "Daten gespeichert",
+        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
+      });
     } catch (error: any) {
       toast({
         title: "Fehler beim Speichern",
