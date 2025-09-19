@@ -162,11 +162,10 @@ export function AdminAssignmentDialog({
     hasContactWay
   });
   
-  const needsFix = !(customerAddressComplete && hasValidCompanyName && hasValidContact && hasContactWay);
+  const allDataComplete = customerAddressComplete && hasValidCompanyName && hasValidContact && hasContactWay;
 
   const saveContactIfNeeded = async () => {
-    console.log('🔍 saveContactIfNeeded called, needsFix:', needsFix);
-    if (!needsFix) return;
+    console.log('🔍 saveContactIfNeeded called, allDataComplete:', allDataComplete);
     await saveContactData();
   };
 
@@ -228,7 +227,7 @@ export function AdminAssignmentDialog({
       return;
     }
 
-    if (needsFix) {
+    if (!allDataComplete) {
       toast({
         title: "Daten unvollständig",
         description: "Bitte Auftraggeber-Daten vollständig eintragen (Straße, Nr., PLZ (5-stellig), Ort sowie Ansprechpartner und mind. Telefon oder E-Mail).",
@@ -342,21 +341,6 @@ export function AdminAssignmentDialog({
     }
   };
 
-  const handleSaveDataOnly = async () => {
-    try {
-      await saveContactData();
-      toast({
-        title: "Daten gespeichert",
-        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Fehler beim Speichern",
-        description: error.message || "Daten konnten nicht gespeichert werden.",
-        variant: "destructive"
-      });
-    }
-  };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
@@ -366,15 +350,14 @@ export function AdminAssignmentDialog({
         </DialogHeader>
         
         <div className="space-y-4">
-          {/* Customer Data Section - Show if incomplete */}
-          {needsFix && (
-            <div className="p-4 border border-orange-200 bg-orange-50 rounded-lg">
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-medium text-orange-800">Auftraggeber-Daten (Pflicht)</h3>
-                {lastSaved && (
-                  <span className="text-sm text-green-600">Gespeichert • zuletzt um {lastSaved}</span>
-                )}
-              </div>
+          {/* Customer Data Section - Always show */}
+          <div className="p-4 border border-gray-200 bg-gray-50 rounded-lg">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="font-medium text-gray-800">Auftraggeber-Daten</h3>
+              {lastSaved && (
+                <span className="text-sm text-green-600">Gespeichert • zuletzt um {lastSaved}</span>
+              )}
+            </div>
               
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
@@ -486,23 +469,11 @@ export function AdminAssignmentDialog({
               </div>
               
               {!hasContactWay && (
-                <p className="text-sm text-orange-600 mt-2">
+                <p className="text-sm text-red-600 mt-2">
                   Mindestens Telefon oder E-Mail muss angegeben werden.
                 </p>
               )}
-              
-              <div className="flex justify-end mt-3">
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={handleSaveDataOnly}
-                  disabled={needsFix}
-                >
-                  Daten speichern
-                </Button>
-              </div>
             </div>
-          )}
 
           {/* Driver Filter Toggle */}
           <div className="flex items-center space-x-2 p-3 bg-muted rounded-lg">
@@ -629,7 +600,7 @@ export function AdminAssignmentDialog({
             </Button>
             <Button 
               onClick={handleAssignAndSend} 
-              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || needsFix}
+              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || !allDataComplete}
               className="flex-1"
             >
               {isAssigning ? "Zuweisen..." : "Zuweisen & Bestätigung senden"}
