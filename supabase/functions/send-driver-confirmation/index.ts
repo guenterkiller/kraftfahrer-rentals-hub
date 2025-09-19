@@ -182,52 +182,54 @@ serve(async (req) => {
       : null;
       
     const emailSubject = startDateFormatted 
-      ? `📢 Einsatz bestätigt: ${jobTitle} am ${startDateFormatted}`
-      : `📢 Einsatz bestätigt: ${jobTitle}`;
+      ? `Einsatzbestätigung: ${jobTitle} am ${startDateFormatted}`
+      : `Einsatzbestätigung: ${jobTitle}`;
       
     console.log(`📧 Generated subject: "${emailSubject}"`);
 
     // Create modern email content
     const emailContent = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-        <h1 style="color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">Einsatzbestätigung</h1>
-        
-        <p>Hallo ${driver.vorname} ${driver.nachname},</p>
-        <p>wir bestätigen Ihren Einsatz als selbstständiger Fahrer.</p>
-        
-        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="margin-top: 0; color: #1e40af;">📋 Einsatzdetails</h3>
-          <ul style="list-style: none; padding: 0;">
-            <li style="margin: 8px 0;"><strong>• Auftrag:</strong> ${jobTitle}</li>
-            <li style="margin: 8px 0;"><strong>• Fahrzeugtyp:</strong> ${vehicleType}</li>
-            <li style="margin: 8px 0;"><strong>• Einsatzort:</strong> ${location}</li>
-            <li style="margin: 8px 0;"><strong>• Zeitraum:</strong> ${dateRange}</li>
-            <li style="margin: 8px 0;"><strong>• Vergütung:</strong> ${rateFormatted}</li>
-          </ul>
-        </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einsatzbestätigung</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <p>Hallo ${driver.vorname} ${driver.nachname},</p>
 
-        ${contactPerson || contactPhone ? `
-        <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <h4 style="margin-top: 0; color: #92400e;">👤 Ansprechpartner</h4>
-          <p style="margin: 5px 0;">• ${contactPerson || '—'}${contactPhone ? ` – ${contactPhone}` : ''}</p>
-        </div>
-        ` : ''}
+    <p>wir best&auml;tigen Ihren Einsatz als selbstst&auml;ndiger Fahrer.</p>
 
-        ${notes ? `
-        <div style="background-color: #ecfdf5; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <h4 style="margin-top: 0; color: #065f46;">📝 Hinweise</h4>
-          <p style="margin: 5px 0; white-space: pre-line;">${notes}</p>
-        </div>
-        ` : ''}
+    <h3 style="margin:0 0 6px 0;">Einsatzdetails</h3>
+    <ul style="margin:8px 0 16px 16px; padding:0;">
+      <li><strong>Auftrag:</strong> ${jobTitle}</li>
+      <li><strong>Fahrzeugtyp:</strong> ${vehicleType}</li>
+      <li><strong>Einsatzort:</strong> ${location}</li>
+      <li><strong>Zeitraum:</strong> ${dateRange}</li>
+      <li><strong>Vergütung:</strong> ${rateFormatted}</li>
+    </ul>
 
-        <div style="background-color: #dbeafe; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
-          <p style="margin: 0 0 10px 0;">Bitte bestätigen Sie Ihre Einsatzbereitschaft im Portal:</p>
-          <a href="${confirmUrl}" style="display: inline-block; background-color: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Einsatz bestätigen</a>
-        </div>
+    <h3 style="margin:0 0 6px 0;">Ansprechpartner</h3>
+    <p style="margin:8px 0 16px 0;">
+      ${contactPerson || '—'}${contactPhone ? ` – ${contactPhone}` : ''}
+    </p>
 
-        <p style="margin-top: 30px;">Viele Grüße<br>
-        <strong>Ihr Kraftfahrer-Mieten Team</strong></p>
-      </div>
+    ${notes ? `
+    <h3 style="margin:0 0 6px 0;">Hinweise</h3>
+    <p style="margin:8px 0 16px 0;">${notes}</p>
+    ` : ''}
+
+    <p style="margin:16px 0;">
+      Bitte best&auml;tigen Sie Ihre Einsatzbereitschaft im Portal:<br>
+      <a href="${confirmUrl}" style="color:#0b5fff;">Einsatz jetzt best&auml;tigen</a>
+    </p>
+
+    <p>Bei R&uuml;ckfragen sind wir gern f&uuml;r Sie da.<br>
+    Mit freundlichen Gr&uuml;&szlig;en<br>
+    <strong>Fahrerexpress-Agentur – Kraftfahrer-Mieten</strong></p>
+</body>
+</html>
     `;
 
     // Send email using Resend
