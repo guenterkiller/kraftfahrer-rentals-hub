@@ -490,6 +490,37 @@ const Admin = () => {
     }
   };
 
+  const handleResetJobsByEmail = async () => {
+    try {
+      const { data, error } = await supabase.rpc('admin_reset_jobs_by_email', {
+        _email: ADMIN_EMAIL
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Jobs zurückgesetzt",
+        description: `${(data as any)?.jobs_updated || 0} Jobs auf "offen" gesetzt und ${(data as any)?.assignments_deleted || 0} Zuweisungen gelöscht.`,
+      });
+
+      // Reload data
+      await Promise.all([
+        loadJobRequests(),
+        loadJobAssignments()
+      ]);
+
+    } catch (error) {
+      console.error('❌ Error resetting jobs:', error);
+      toast({
+        title: "Fehler beim Zurücksetzen",
+        description: `Fehler: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleResetDriverStatus = async (driverId: string, driverName: string) => {
     try {
       const response = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/reset-driver-status`, {
@@ -970,13 +1001,22 @@ const Admin = () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Eingegangene Fahreranfragen ({jobRequests.length})</CardTitle>
-              <Button 
-                onClick={loadJobRequests} 
-                variant="outline" 
-                size="sm"
-              >
-                Aktualisieren
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={handleResetJobsByEmail} 
+                  variant="destructive" 
+                  size="sm"
+                >
+                  Test zurücksetzen
+                </Button>
+                <Button 
+                  onClick={loadJobRequests} 
+                  variant="outline" 
+                  size="sm"
+                >
+                  Aktualisieren
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
