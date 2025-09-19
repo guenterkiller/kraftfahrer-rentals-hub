@@ -72,7 +72,7 @@ serve(async (req) => {
     const supa = createClient(supabaseUrl, supabaseServiceKey);
     console.log('📧 Starting main processing logic');
 
-    // Get assignment data
+    // Get assignment data with complete job and driver information
     const { data: assignment, error: assignmentError } = await supa
       .from("job_assignments")
       .select(`
@@ -80,7 +80,8 @@ serve(async (req) => {
         rate_type, rate_value, start_date, end_date, admin_note,
         job_requests:job_id (
           id, status, customer_name, company, customer_phone, customer_email,
-          einsatzort, fahrzeugtyp, besonderheiten, zeitraum
+          einsatzort, fahrzeugtyp, besonderheiten, zeitraum,
+          customer_street, customer_house_number, customer_postal_code, customer_city
         ),
         fahrer_profile:driver_id (
           id, vorname, nachname, email, telefon
@@ -110,24 +111,99 @@ serve(async (req) => {
 
     console.log(`📧 Sending email to driver: ${driver.email}`);
 
-    // Create simple email content
-    const emailContent = `
-      <h1>Einsatzbestätigung</h1>
-      <p>Hallo ${driver.vorname} ${driver.nachname},</p>
-      <p>hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
-      
-      <h3>Einsatzdetails:</h3>
-      <ul>
-        <li><strong>Fahrzeugtyp:</strong> ${job?.fahrzeugtyp || 'Nicht angegeben'}</li>
-        <li><strong>Einsatzort:</strong> ${job?.einsatzort || 'Siehe Nachricht'}</li>
-        <li><strong>Zeitraum:</strong> ${job?.zeitraum || 'Nach Absprache'}</li>
-        <li><strong>Vergütung:</strong> ${assignment.rate_value || 'nach Absprache'} €/${assignment.rate_type === 'hourly' ? 'Std' : 'Tag'}</li>
-      </ul>
+    // Helper function to format rate
+    function formatRate(rateType: string | null, rateValue: number | null, currency = 'EUR'): string | null {
+      if (!rateType || rateValue == null) return null;
+      const v = Number(rateValue).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const unit = rateType === 'hourly' ? 'Std'
+                 : rateType === 'daily'  ? 'Tag'
+                 : rateType === 'weekly' ? 'Woche'
+                 : 'pauschal';
+      return `${v} ${currency}/${unit}`;
+    }
 
-      <p>Bei Fragen stehen wir Ihnen gerne zur Verfügung.</p>
+    // Helper function to format date range
+    function formatDateRange(startDate: string | null, endDate: string | null): string {
+      if (!startDate && !endDate) return '—';
       
-      <p>Mit freundlichen Grüßen<br>
-      Ihr Kraftfahrer-Mieten Team</p>
+      const formatDate = (dateStr: string) => {
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('de-DE', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      };
+
+      if (startDate && endDate) {
+        return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+      } else if (startDate) {
+        return `ab ${formatDate(startDate)}`;
+      } else {
+        return '—';
+      }
+    }
+
+    // Prepare email data
+    const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
+    const location = job?.einsatzort || '—';
+    const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || job?.zeitraum || '—';
+    const rateFormatted = formatRate(assignment.rate_type, assignment.rate_value) || 'nach Absprache';
+    const vehicleType = job?.fahrzeugtyp || '—';
+    const notes = job?.besonderheiten?.trim() || null;
+    const contactPerson = job?.customer_name || null;
+    const contactPhone = job?.customer_phone || null;
+    const confirmUrl = `https://kraftfahrer-mieten.com/driver/assignments/${assignment_id}/confirm`;
+    
+    // Create dynamic subject with date
+    const startDateFormatted = assignment.start_date 
+      ? new Date(assignment.start_date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+      : 'bald';
+    const emailSubject = `📢 Einsatz bestätigt: ${jobTitle} am ${startDateFormatted}`;
+
+    // Create modern email content
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <h1 style="color: #2563eb; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">Einsatzbestätigung</h1>
+        
+        <p>Hallo ${driver.vorname} ${driver.nachname},</p>
+        <p>wir bestätigen Ihren Einsatz als selbstständiger Fahrer.</p>
+        
+        <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="margin-top: 0; color: #1e40af;">📋 Einsatzdetails</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin: 8px 0;"><strong>• Auftrag:</strong> ${jobTitle}</li>
+            <li style="margin: 8px 0;"><strong>• Fahrzeugtyp:</strong> ${vehicleType}</li>
+            <li style="margin: 8px 0;"><strong>• Einsatzort:</strong> ${location}</li>
+            <li style="margin: 8px 0;"><strong>• Zeitraum:</strong> ${dateRange}</li>
+            <li style="margin: 8px 0;"><strong>• Vergütung:</strong> ${rateFormatted}</li>
+          </ul>
+        </div>
+
+        ${contactPerson || contactPhone ? `
+        <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="margin-top: 0; color: #92400e;">👤 Ansprechpartner</h4>
+          <p style="margin: 5px 0;">• ${contactPerson || '—'}${contactPhone ? ` – ${contactPhone}` : ''}</p>
+        </div>
+        ` : ''}
+
+        ${notes ? `
+        <div style="background-color: #ecfdf5; padding: 15px; border-radius: 8px; margin: 20px 0;">
+          <h4 style="margin-top: 0; color: #065f46;">📝 Hinweise</h4>
+          <p style="margin: 5px 0; white-space: pre-line;">${notes}</p>
+        </div>
+        ` : ''}
+
+        <div style="background-color: #dbeafe; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+          <p style="margin: 0 0 10px 0;">Bitte bestätigen Sie Ihre Einsatzbereitschaft im Portal:</p>
+          <a href="${confirmUrl}" style="display: inline-block; background-color: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Einsatz bestätigen</a>
+        </div>
+
+        <p style="margin-top: 30px;">Viele Grüße<br>
+        <strong>Ihr Kraftfahrer-Mieten Team</strong></p>
+      </div>
     `;
 
     // Send email using Resend
@@ -135,7 +211,7 @@ serve(async (req) => {
       from: 'Kraftfahrer-Mieten <info@kraftfahrer-mieten.com>',
       to: [driver.email],
       bcc: ['guenter.killer@t-online.de'],
-      subject: 'Einsatzbestätigung - Ihr Fahrauftrag',
+      subject: emailSubject,
       html: emailContent,
     });
 
@@ -155,7 +231,7 @@ serve(async (req) => {
       job_id: assignment.job_id,
       recipient: driver.email,
       status: 'sent',
-      subject: 'Einsatzbestätigung - Ihr Fahrauftrag',
+      subject: emailSubject,
       template: 'driver_confirmation',
       delivery_mode: 'inline',
       message_id: emailResult.data?.id
