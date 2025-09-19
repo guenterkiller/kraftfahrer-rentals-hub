@@ -16,6 +16,7 @@ type DeliveryMode = 'inline' | 'both' | 'pdf-only';
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
 // --- EMBEDDED TEMPLATES ---
@@ -227,7 +228,7 @@ serve(async (req) => {
   } catch (e) {
     return new Response(JSON.stringify({ error: 'Invalid request body' }), { 
       status: 400, 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      headers: { 'Content-Type': 'application/json', ...corsHeaders } 
     });
   }
 
@@ -239,7 +240,7 @@ serve(async (req) => {
       JSON.stringify({ error: 'Zugriff verweigert' }),
       { 
         status: 403, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { 'Content-Type': 'application/json', ...corsHeaders } 
       }
     );
   }
@@ -254,7 +255,7 @@ serve(async (req) => {
       JSON.stringify({ error: 'Server configuration error' }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        headers: { 'Content-Type': 'application/json', ...corsHeaders } 
       }
     );
   }
