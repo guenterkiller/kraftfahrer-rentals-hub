@@ -172,17 +172,17 @@ serve(async (req) => {
       return value.trim();
     }
 
-    // Prepare email data with cleaned values
-    const jobTitle = cleanValue(job?.fahrzeugtyp, 'Fahrauftrag');
-    const location = cleanValue(job?.einsatzort, 'wird noch bekannt gegeben');
-    const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || cleanValue(job?.zeitraum, 'nach Absprache');
+    // Prepare email data - use original values directly, only clean if actually empty/placeholder
+    const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
+    const location = job?.einsatzort || 'wird noch bekannt gegeben';
+    const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || job?.zeitraum || 'nach Absprache';
     const rateFormatted = formatRate(assignment.rate_type, assignment.rate_value) || 'nach Absprache';
-    const vehicleType = cleanValue(job?.fahrzeugtyp, 'wird bekannt gegeben');
+    const vehicleType = job?.fahrzeugtyp || 'wird bekannt gegeben';
     const notes = job?.besonderheiten?.trim() || null;
-    const contactPerson = cleanValue(job?.customer_name, 'wird ergänzt');
-    const contactPhone = cleanValue(job?.customer_phone, 'wird ergänzt');
-    const contactEmail = cleanValue(job?.customer_email, 'wird ergänzt');
-    const companyName = cleanValue(job?.company || job?.customer_name, 'wird ergänzt');
+    const contactPerson = job?.customer_name || 'wird ergänzt';
+    const contactPhone = job?.customer_phone || 'wird ergänzt';
+    const contactEmail = job?.customer_email || 'wird ergänzt';
+    const companyName = job?.company || job?.customer_name || 'wird ergänzt';
     
     console.log('📧 Email data prepared:', {
       jobTitle,
