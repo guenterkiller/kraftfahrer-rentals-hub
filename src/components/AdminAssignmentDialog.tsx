@@ -151,12 +151,34 @@ export function AdminAssignmentDialog({
   const hasValidCompanyName = cName && cName !== 'Bitte wählen' && cName.trim() !== '';
   const hasValidContact = contact && contact !== 'Bitte wählen' && contact.trim() !== '';
   
+  console.log('🔍 Validation check:', {
+    cName, 
+    contact, 
+    hasValidCompanyName, 
+    hasValidContact, 
+    customerAddressComplete, 
+    hasContactWay
+  });
+  
   const needsFix = !(customerAddressComplete && hasValidCompanyName && hasValidContact && hasContactWay);
 
   const saveContactIfNeeded = async () => {
+    console.log('🔍 saveContactIfNeeded called, needsFix:', needsFix);
     if (!needsFix) return;
     
     try {
+      console.log('🔍 Saving contact data:', {
+        _job_id: jobId,
+        _firma_oder_name: cName,
+        _ansprechpartner: contact,
+        _street: street,
+        _house: house,
+        _postal: postal,
+        _city: city,
+        _phone: phone,
+        _email: email,
+      });
+      
       const { error } = await supabase.rpc('admin_update_job_contact', {
         _job_id: jobId,
         _firma_oder_name: cName,
