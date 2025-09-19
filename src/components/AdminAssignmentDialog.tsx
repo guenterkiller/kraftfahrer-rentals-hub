@@ -165,7 +165,10 @@ export function AdminAssignmentDialog({
   const saveContactIfNeeded = async () => {
     console.log('🔍 saveContactIfNeeded called, needsFix:', needsFix);
     if (!needsFix) return;
-    
+    await saveContactData();
+  };
+
+  const saveContactData = async () => {
     try {
       console.log('🔍 Saving contact data:', {
         _job_id: jobId,
@@ -241,8 +244,8 @@ export function AdminAssignmentDialog({
         throw new Error('Admin-Session abgelaufen');
       }
 
-      // Save contact data if needed
-      await saveContactIfNeeded();
+      // Always save contact data before assignment to ensure fresh data
+      await saveContactData();
 
       // 1) Zuweisen über Edge Function (verwendet Service Role)
       const { data: assignResult, error: assignError } = await supabase.functions.invoke('admin-assign-driver', {
