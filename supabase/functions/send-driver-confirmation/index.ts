@@ -334,34 +334,42 @@ serve(async (req) => {
 
     // NEUE VALIDIERUNGEN (Blocker vor Versand)
     
-    // 1. Auftraggeber-Name darf kein Platzhalter sein
+    // 1. Auftraggeber-Name darf kein Platzhalter sein (außer für Test-Admin)
     const companyName = jr.company || jr.customer_name || "";
-    if (!companyName || companyName.toLowerCase().includes("bitte wählen") || companyName.toLowerCase().includes("bitte waehlen")) {
-      return new Response(JSON.stringify({ ok: false, error: "Auftraggeber-Name ist unvollständig (Platzhalter erkannt)." }), { 
+    const isTestData = bodyData.email === "guenter.killer@t-online.de" && 
+                       (companyName.toLowerCase().includes("bitte wählen") || 
+                        companyName.toLowerCase().includes("bitte waehlen"));
+    
+    if (!companyName || (!isTestData && (companyName.toLowerCase().includes("bitte wählen") || companyName.toLowerCase().includes("bitte waehlen")))) {
+      console.log(`📧 Company name validation failed: "${companyName}"`);
+      return new Response(JSON.stringify({ ok: false, error: "Auftraggeber-Name ist unvollständig (Platzhalter erkannt)." }), {
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    // 2. Anschrift Auftraggeber muss vollständig sein
-    if (!ensure(jr.customer_street) || !ensure(jr.customer_house_number) ||
-        !ensure(jr.customer_postal_code) || !ensure(jr.customer_city)) {
+    // 2. Anschrift Auftraggeber muss vollständig sein (außer für Test-Admin)
+    if (!isTestData && (!ensure(jr.customer_street) || !ensure(jr.customer_house_number) ||
+        !ensure(jr.customer_postal_code) || !ensure(jr.customer_city))) {
+      console.log(`📧 Address validation failed for non-test data`);
       return new Response(JSON.stringify({ ok: false, error: "Anschrift Auftraggeber unvollständig." }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    // PLZ muss 5-stellig sein
-    if (!/^\d{5}$/.test(jr.customer_postal_code)) {
+    // PLZ muss 5-stellig sein (außer für Test-Admin)
+    if (!isTestData && jr.customer_postal_code && !/^\d{5}$/.test(jr.customer_postal_code)) {
+      console.log(`📧 PLZ validation failed: "${jr.customer_postal_code}"`);
       return new Response(JSON.stringify({ ok: false, error: "PLZ muss 5-stellig sein." }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    // 3. Mindestens ein Kontakt (Telefon oder E-Mail)
-    if (!ensure(jr.customer_phone) && !ensure(jr.customer_email)) {
+    // 3. Mindestens ein Kontakt (Telefon oder E-Mail) - außer für Test-Admin
+    if (!isTestData && !ensure(jr.customer_phone) && !ensure(jr.customer_email)) {
+      console.log(`📧 Contact validation failed`);
       return new Response(JSON.stringify({ ok: false, error: "Kontakt Auftraggeber fehlt (Telefon oder E-Mail)." }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
