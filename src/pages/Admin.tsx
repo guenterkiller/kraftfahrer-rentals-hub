@@ -1172,18 +1172,6 @@ const Admin = () => {
                          </TableCell>
                          <TableCell>
                            <div className="flex items-center gap-2">
-                             {/* Data completion check */}
-                             {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
-                               <Button
-                                 size="sm"
-                                 variant="outline"
-                                 onClick={() => handleOpenContactDialog(req.id)}
-                                 className="text-orange-600 border-orange-300 hover:bg-orange-50"
-                               >
-                                 <Edit className="h-3 w-3 mr-1" />
-                                 Daten ergänzen
-                               </Button>
-                             )}
                              
                              {/* Resend email for existing assignments */}
                              {(() => {
