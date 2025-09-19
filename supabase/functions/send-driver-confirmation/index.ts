@@ -176,7 +176,7 @@ serve(async (req) => {
       
     console.log(`📧 Generated subject: "${emailSubject}"`);
 
-    // Create clean email content matching traditional style
+    // Create email content exactly matching the style from images
     const emailContent = `
 <!DOCTYPE html>
 <html>
@@ -186,21 +186,21 @@ serve(async (req) => {
     <title>Einsatzbestätigung</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.4; color: #000; margin: 0; padding: 20px; background-color: #ffffff;">
-    <div style="max-width: 700px; margin: 0 auto; background-color: white;">
+    <div style="max-width: 700px; margin: 0 auto;">
         
-        <!-- Header -->
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="margin: 0; font-size: 24px; font-weight: bold; color: #000;">Einsatzbestätigung</h1>
-            <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Fahrerexpress | kraftfahrer-mieten.com</p>
+        <!-- Blue Header -->
+        <div style="background-color: #4472c4; color: white; padding: 20px; text-align: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 28px; font-weight: bold;">Einsatzbestätigung</h1>
+            <p style="margin: 5px 0 0 0; font-size: 16px;">Fahrerexpress | kraftfahrer-mieten.com</p>
         </div>
         
         <!-- Content -->
-        <div style="padding: 0;">
-            <p style="margin: 0 0 15px 0; font-size: 14px;">Hallo ${driver.vorname} ${driver.nachname},</p>
-            <p style="margin: 0 0 25px 0; font-size: 14px;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
+        <div style="padding: 0 20px;">
+            <p style="margin: 0 0 10px 0; font-size: 14px;">Hallo ${driver.vorname} ${driver.nachname},</p>
+            <p style="margin: 0 0 20px 0; font-size: 14px;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
             
             <!-- AUFTRAGGEBER Section -->
-            <div style="margin-bottom: 25px;">
+            <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">AUFTRAGGEBER</h3>
                 <div style="color: #000; font-size: 14px;">
                     <p style="margin: 3px 0;"><strong>• Unternehmen/Name:</strong> ${job?.customer_name || contactPerson || '—'}</p>
@@ -213,7 +213,7 @@ serve(async (req) => {
             </div>
             
             <!-- EINSATZ Section -->
-            <div style="margin-bottom: 25px;">
+            <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">EINSATZ</h3>
                 <div style="color: #000; font-size: 14px;">
                     <p style="margin: 3px 0;"><strong>• Datum/Zeitraum:</strong> ${dateRange}</p>
@@ -224,7 +224,7 @@ serve(async (req) => {
             </div>
             
             <!-- KONDITIONEN Section -->
-            <div style="margin-bottom: 25px;">
+            <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">KONDITIONEN</h3>
                 <div style="color: #000; font-size: 14px;">
                     <p style="margin: 3px 0;"><strong>• Abrechnung:</strong> ${assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'}</p>
@@ -232,8 +232,8 @@ serve(async (req) => {
                 </div>
             </div>
             
-            <!-- VEREINBARUNGEN Section -->
-            <div style="margin-bottom: 25px;">
+            <!-- VEREINBARUNGEN Section - Yellow background -->
+            <div style="background-color: #fff2cc; border-left: 4px solid #d6b656; padding: 15px; margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">VEREINBARUNGEN (Fahrerexpress)</h3>
                 <div style="color: #000; font-size: 13px;">
                     <p style="margin: 8px 0;"><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
@@ -246,8 +246,8 @@ serve(async (req) => {
             </div>
             
             <!-- NO-SHOW Section -->
-            <div style="margin-bottom: 25px;">
-                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
+            <div style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0; color: #cc0000; font-size: 16px; font-weight: bold;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
                 <div style="color: #000; font-size: 13px;">
                     <p style="margin: 8px 0;">Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</p>
                     <p style="margin: 8px 0;">In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</p>
@@ -258,29 +258,23 @@ serve(async (req) => {
             </div>
             
             <!-- Footer Message -->
-            <div style="margin-top: 30px; padding: 15px 0; border-top: 1px solid #ccc;">
+            <div style="margin-top: 30px; padding-top: 15px;">
                 <p style="margin: 0 0 15px 0; font-size: 14px; color: #000;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
                 
                 <p style="margin: 15px 0 5px 0; font-size: 14px; color: #000;">Viele Grüße<br>
                 <strong>Fahrerexpress | kraftfahrer-mieten.com</strong></p>
+                
+                <p style="margin: 15px 0 5px 0; font-size: 14px; color: #000;">
+                    E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #4472c4; text-decoration: none;">info@kraftfahrer-mieten.com</a> | Tel: +49-1577-1442285
+                </p>
             </div>
         </div>
         
-        <!-- Contact Footer -->
-        <div style="padding: 20px 0; border-top: 1px solid #ccc; text-align: left; font-size: 12px; color: #666;">
-            <p style="margin: 0 0 5px 0;">
-                E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #000; text-decoration: none;">info@kraftfahrer-mieten.com</a> | 
-                Tel: <a href="tel:+4915771442285" style="color: #000; text-decoration: none;">+49-1577-1442285</a>
-            </p>
-            <p style="margin: 0 0 5px 0;">
-                <strong>Fahrerexpress-Agentur – Günter Killer</strong>
-            </p>
-            <p style="margin: 0 0 5px 0;">
-                Web: <a href="https://kraftfahrer-mieten.com" style="color: #000; text-decoration: none;">kraftfahrer-mieten.com</a>
-            </p>
-            <p style="margin: 10px 0 0 0; font-size: 11px; color: #999;">
-                Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}
-            </p>
+        <!-- Bottom signature -->
+        <div style="text-align: center; margin-top: 30px; padding: 15px; font-size: 12px; color: #666; border-top: 1px solid #ccc;">
+            <p style="margin: 0;"><strong>Fahrerexpress-Agentur – Günter Killer</strong></p>
+            <p style="margin: 0;">E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #4472c4; text-decoration: none;">info@kraftfahrer-mieten.com</a> | Web: <a href="https://kraftfahrer-mieten.com" style="color: #4472c4; text-decoration: none;">kraftfahrer-mieten.com</a></p>
+            <p style="margin: 10px 0 0 0;">Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
         </div>
     </div>
 </body>
