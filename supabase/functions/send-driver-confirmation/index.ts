@@ -176,7 +176,7 @@ serve(async (req) => {
       
     console.log(`📧 Generated subject: "${emailSubject}"`);
 
-    // Create modern email content with blue header styling
+    // Create clean email content matching traditional style
     const emailContent = `
 <!DOCTYPE html>
 <html>
@@ -185,101 +185,100 @@ serve(async (req) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Einsatzbestätigung</title>
 </head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4;">
-    <!-- Email Container -->
-    <div style="max-width: 600px; margin: 20px auto; background-color: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+<body style="font-family: Arial, sans-serif; line-height: 1.4; color: #000; margin: 0; padding: 20px; background-color: #ffffff;">
+    <div style="max-width: 700px; margin: 0 auto; background-color: white;">
         
-        <!-- Blue Header -->
-        <div style="background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 30px 40px; text-align: center;">
-            <h1 style="margin: 0; font-size: 28px; font-weight: bold;">Einsatzbestätigung</h1>
-            <p style="margin: 8px 0 0 0; font-size: 16px; opacity: 0.9;">Fahrerexpress | kraftfahrer-mieten.com</p>
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="margin: 0; font-size: 24px; font-weight: bold; color: #000;">Einsatzbestätigung</h1>
+            <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">Fahrerexpress | kraftfahrer-mieten.com</p>
         </div>
         
         <!-- Content -->
-        <div style="padding: 40px;">
-            <p style="margin: 0 0 15px 0; font-size: 16px;">Hallo ${driver.vorname} ${driver.nachname},</p>
-            <p style="margin: 0 0 30px 0; font-size: 16px;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
+        <div style="padding: 0;">
+            <p style="margin: 0 0 15px 0; font-size: 14px;">Hallo ${driver.vorname} ${driver.nachname},</p>
+            <p style="margin: 0 0 25px 0; font-size: 14px;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
             
             <!-- AUFTRAGGEBER Section -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #f8fafc; border-left: 4px solid #2563eb; border-radius: 0 4px 4px 0;">
-                <h3 style="margin: 0 0 15px 0; color: #1e40af; font-size: 18px; font-weight: bold;">AUFTRAGGEBER</h3>
-                <div style="color: #374151;">
-                    <p style="margin: 8px 0;"><strong>• Unternehmen/Name:</strong> ${job?.customer_name || contactPerson || '—'}</p>
-                    <p style="margin: 8px 0;"><strong>• Ansprechpartner:</strong> ${contactPerson || '—'}</p>
-                    <p style="margin: 8px 0;"><strong>• Anschrift:</strong> ${job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ? 
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">AUFTRAGGEBER</h3>
+                <div style="color: #000; font-size: 14px;">
+                    <p style="margin: 3px 0;"><strong>• Unternehmen/Name:</strong> ${job?.customer_name || contactPerson || '—'}</p>
+                    <p style="margin: 3px 0;"><strong>• Ansprechpartner:</strong> ${contactPerson || '—'}</p>
+                    <p style="margin: 3px 0;"><strong>• Anschrift:</strong> ${job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ? 
                         `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'Vollständige Anschrift wird ergänzt'}</p>
-                    <p style="margin: 8px 0;"><strong>• Telefon:</strong> ${contactPhone || '—'}</p>
-                    <p style="margin: 8px 0;"><strong>• E-Mail:</strong> ${job?.customer_email || '—'}</p>
+                    <p style="margin: 3px 0;"><strong>• Telefon:</strong> ${contactPhone || '—'}</p>
+                    <p style="margin: 3px 0;"><strong>• E-Mail:</strong> ${job?.customer_email || '—'}</p>
                 </div>
             </div>
             
             <!-- EINSATZ Section -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #f8fafc; border-left: 4px solid #2563eb; border-radius: 0 4px 4px 0;">
-                <h3 style="margin: 0 0 15px 0; color: #1e40af; font-size: 18px; font-weight: bold;">EINSATZ</h3>
-                <div style="color: #374151;">
-                    <p style="margin: 8px 0;"><strong>• Datum/Zeitraum:</strong> ${dateRange}</p>
-                    <p style="margin: 8px 0;"><strong>• Einsatzort / Treffpunkt:</strong> ${location}</p>
-                    <p style="margin: 8px 0;"><strong>• Fahrzeug/Typ:</strong> ${vehicleType}</p>
-                    <p style="margin: 8px 0;"><strong>• Besonderheiten:</strong> ${job?.besonderheiten || notes || '—'}</p>
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">EINSATZ</h3>
+                <div style="color: #000; font-size: 14px;">
+                    <p style="margin: 3px 0;"><strong>• Datum/Zeitraum:</strong> ${dateRange}</p>
+                    <p style="margin: 3px 0;"><strong>• Einsatzort / Treffpunkt:</strong> ${location}</p>
+                    <p style="margin: 3px 0;"><strong>• Fahrzeug/Typ:</strong> ${vehicleType}</p>
+                    <p style="margin: 3px 0;"><strong>• Besonderheiten:</strong> ${job?.besonderheiten || notes || '—'}</p>
                 </div>
             </div>
             
             <!-- KONDITIONEN Section -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #f8fafc; border-left: 4px solid #2563eb; border-radius: 0 4px 4px 0;">
-                <h3 style="margin: 0 0 15px 0; color: #1e40af; font-size: 18px; font-weight: bold;">KONDITIONEN</h3>
-                <div style="color: #374151;">
-                    <p style="margin: 8px 0;"><strong>• Abrechnung:</strong> ${assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'}</p>
-                    <p style="margin: 8px 0;"><strong>• Satz:</strong> ${rateFormatted} zzgl. gesetzlicher USt</p>
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">KONDITIONEN</h3>
+                <div style="color: #000; font-size: 14px;">
+                    <p style="margin: 3px 0;"><strong>• Abrechnung:</strong> ${assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'}</p>
+                    <p style="margin: 3px 0;"><strong>• Satz:</strong> ${rateFormatted} zzgl. gesetzlicher USt</p>
                 </div>
             </div>
             
             <!-- VEREINBARUNGEN Section -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 0 4px 4px 0;">
-                <h3 style="margin: 0 0 15px 0; color: #92400e; font-size: 18px; font-weight: bold;">VEREINBARUNGEN (Fahrerexpress)</h3>
-                <div style="color: #374151; font-size: 15px;">
-                    <p style="margin: 12px 0;"><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
-                    <p style="margin: 12px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
-                    <p style="margin: 12px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
-                    <p style="margin: 12px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-                    <p style="margin: 12px 0;"><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
-                    <p style="margin: 12px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">VEREINBARUNGEN (Fahrerexpress)</h3>
+                <div style="color: #000; font-size: 13px;">
+                    <p style="margin: 8px 0;"><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
+                    <p style="margin: 8px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
+                    <p style="margin: 8px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
+                    <p style="margin: 8px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
+                    <p style="margin: 8px 0;"><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
+                    <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
                 </div>
             </div>
             
             <!-- NO-SHOW Section -->
-            <div style="margin-bottom: 30px; padding: 20px; background-color: #fef2f2; border-left: 4px solid #ef4444; border-radius: 0 4px 4px 0;">
-                <h3 style="margin: 0 0 15px 0; color: #dc2626; font-size: 18px; font-weight: bold;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
-                <div style="color: #374151; font-size: 15px;">
-                    <p style="margin: 12px 0;">Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</p>
-                    <p style="margin: 12px 0;">In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</p>
-                    <p style="margin: 12px 0;">Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen.</p>
-                    <p style="margin: 12px 0;"><strong>Höhere Gewalt</strong> (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
-                    <p style="margin: 12px 0;">Fahrerexpress bemüht sich im No-Show-Fall unverzüglich um Ersatz.</p>
+            <div style="margin-bottom: 25px;">
+                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
+                <div style="color: #000; font-size: 13px;">
+                    <p style="margin: 8px 0;">Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</p>
+                    <p style="margin: 8px 0;">In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</p>
+                    <p style="margin: 8px 0;">Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen.</p>
+                    <p style="margin: 8px 0;"><strong>Höhere Gewalt</strong> (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
+                    <p style="margin: 8px 0;">Fahrerexpress bemüht sich im No-Show-Fall unverzüglich um Ersatz.</p>
                 </div>
             </div>
             
             <!-- Footer Message -->
-            <div style="margin-top: 40px; padding: 20px 0; border-top: 2px solid #e5e7eb;">
-                <p style="margin: 0 0 20px 0; font-size: 16px; color: #374151;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
+            <div style="margin-top: 30px; padding: 15px 0; border-top: 1px solid #ccc;">
+                <p style="margin: 0 0 15px 0; font-size: 14px; color: #000;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
                 
-                <p style="margin: 20px 0 10px 0; font-size: 16px; color: #374151;">Viele Grüße<br>
-                <strong style="color: #1e40af;">Fahrerexpress | kraftfahrer-mieten.com</strong></p>
+                <p style="margin: 15px 0 5px 0; font-size: 14px; color: #000;">Viele Grüße<br>
+                <strong>Fahrerexpress | kraftfahrer-mieten.com</strong></p>
             </div>
         </div>
         
         <!-- Contact Footer -->
-        <div style="background-color: #f8fafc; padding: 25px 40px; border-top: 1px solid #e5e7eb; text-align: center;">
-            <p style="margin: 0 0 8px 0; font-size: 14px; color: #6b7280;">
-                E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #2563eb; text-decoration: none;">info@kraftfahrer-mieten.com</a> | 
-                Tel: <a href="tel:+4915771442285" style="color: #2563eb; text-decoration: none;">+49-1577-1442285</a>
+        <div style="padding: 20px 0; border-top: 1px solid #ccc; text-align: left; font-size: 12px; color: #666;">
+            <p style="margin: 0 0 5px 0;">
+                E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #000; text-decoration: none;">info@kraftfahrer-mieten.com</a> | 
+                Tel: <a href="tel:+4915771442285" style="color: #000; text-decoration: none;">+49-1577-1442285</a>
             </p>
-            <p style="margin: 0 0 8px 0; font-size: 14px; color: #6b7280;">
+            <p style="margin: 0 0 5px 0;">
                 <strong>Fahrerexpress-Agentur – Günter Killer</strong>
             </p>
-            <p style="margin: 0 0 8px 0; font-size: 14px; color: #6b7280;">
-                Web: <a href="https://kraftfahrer-mieten.com" style="color: #2563eb; text-decoration: none;">kraftfahrer-mieten.com</a>
+            <p style="margin: 0 0 5px 0;">
+                Web: <a href="https://kraftfahrer-mieten.com" style="color: #000; text-decoration: none;">kraftfahrer-mieten.com</a>
             </p>
-            <p style="margin: 15px 0 0 0; font-size: 12px; color: #9ca3af;">
+            <p style="margin: 10px 0 0 0; font-size: 11px; color: #999;">
                 Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}
             </p>
         </div>
