@@ -220,19 +220,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  // Extract email from request body for admin validation
-  let email: string | null = null;
+  // Parse request body once and store the data
+  let bodyData: any;
   try {
-    const body = await req.text();
-    const bodyData = JSON.parse(body);
-    email = bodyData.email;
-    
-    // Re-create the request with the original body for later processing
-    req = new Request(req.url, {
-      method: req.method,
-      headers: req.headers,
-      body: body
-    });
+    bodyData = await req.json();
   } catch (e) {
     return new Response(JSON.stringify({ error: 'Invalid request body' }), { 
       status: 400, 
@@ -242,8 +233,8 @@ serve(async (req) => {
 
   // Validate admin email
   const ADMIN_EMAIL = "guenter.killer@t-online.de";
-  if (email !== ADMIN_EMAIL) {
-    console.log('Unauthorized access attempt by:', email);
+  if (bodyData.email !== ADMIN_EMAIL) {
+    console.log('Unauthorized access attempt by:', bodyData.email);
     return new Response(
       JSON.stringify({ error: 'Zugriff verweigert' }),
       { 
@@ -278,7 +269,7 @@ serve(async (req) => {
       });
     }
 
-    const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = await req.json();
+    const { assignment_id, mode }: { assignment_id: string; mode?: DeliveryMode } = bodyData;
     const deliveryMode: DeliveryMode = mode ?? 'inline';
     
     if (!assignment_id) {
