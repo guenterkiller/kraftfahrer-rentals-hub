@@ -11,9 +11,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit } from "lucide-react";
-import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
+import { CreateJobDialog } from "@/components/CreateJobDialog";
+import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -71,12 +72,25 @@ const Admin = () => {
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
   const [contactDataDialogOpen, setContactDataDialogOpen] = useState(false);
   const [selectedContactJobId, setSelectedContactJobId] = useState<string>("");
+  const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const handleOpenContactDialog = (jobId: string) => {
     setSelectedContactJobId(jobId);
     setContactDataDialogOpen(true);
+  };
+
+  const handleCreateJob = () => {
+    setCreateJobDialogOpen(true);
+  };
+
+  const handleJobCreated = (jobId: string) => {
+    // Refresh job requests after creating
+    loadJobRequests();
+    // Immediately open assignment dialog for the new job
+    setSelectedJobId(jobId);
+    setAssignDialogOpen(true);
   };
 
   const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
@@ -1016,6 +1030,14 @@ const Admin = () => {
               <CardTitle>Eingegangene Fahreranfragen ({jobRequests.length})</CardTitle>
               <div className="flex gap-2">
                 <Button 
+                  onClick={handleCreateJob} 
+                  variant="default" 
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  + Neuen Auftrag anlegen
+                </Button>
+                <Button 
                   onClick={handleResetJobsByEmail} 
                   variant="destructive" 
                   size="sm"
@@ -1340,6 +1362,21 @@ const Admin = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Create Job Dialog */}
+      <CreateJobDialog
+        open={createJobDialogOpen}
+        onClose={() => setCreateJobDialogOpen(false)}
+        onJobCreated={handleJobCreated}
+      />
+
+      {/* Contact Data Dialog */}
+      <ContactDataDialog
+        open={contactDataDialogOpen}
+        onClose={() => setContactDataDialogOpen(false)}
+        jobId={selectedContactJobId}
+        onDataUpdated={() => loadJobRequests()}
+      />
 
       {/* No-Show Dialog */}
       <NoShowDialog
