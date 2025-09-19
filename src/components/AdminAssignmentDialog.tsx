@@ -189,7 +189,7 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
-      // Check admin session from localStorage (like the main admin system)
+      // Get admin session
       const adminSession = localStorage.getItem('adminSession');
       if (!adminSession) throw new Error('Admin-Session nicht gefunden');
       
@@ -206,19 +206,25 @@ export function AdminAssignmentDialog({
       // Save contact data if needed
       await saveContactIfNeeded();
 
-      // 1) Zuweisen (RPC)
-      const { data: assignmentId, error: rpcErr } = await supabase.rpc('admin_assign_driver', {
-        _job_id: jobId,
-        _driver_id: selectedDriverId,
-        _rate_type: rateType,
-        _rate_value: parseFloat(rateValue),
-        _start_date: startDate || null,
-        _end_date: endDate || null,
-        _note: note || null
+      // 1) Zuweisen über Edge Function (verwendet Service Role)
+      const { data: assignResult, error: assignError } = await supabase.functions.invoke('admin-assign-driver', {
+        body: {
+          email: session.email,
+          jobId: jobId,
+          driverId: selectedDriverId,
+          rateType: rateType,
+          rateValue: parseFloat(rateValue),
+          startDate: startDate || null,
+          endDate: endDate || null,
+          note: note || null
+        }
       });
       
-      if (rpcErr || !assignmentId) throw rpcErr ?? new Error('Zuweisung fehlgeschlagen');
+      if (assignError || !assignResult?.success) {
+        throw new Error(assignError?.message || assignResult?.error || 'Zuweisung fehlgeschlagen');
+      }
 
+      const assignmentId = assignResult.assignmentId;
       console.log('✅ Assignment created with ID:', assignmentId);
 
       // 2) E-Mail versenden (Edge Function, JWT geht automatisch mit)
