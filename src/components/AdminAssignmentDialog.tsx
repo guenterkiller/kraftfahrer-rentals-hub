@@ -189,12 +189,19 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
-      // Preflight checks
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Nicht eingeloggt');
-
-      const { data: isAdmin } = await supabase.rpc('is_admin_user');
-      if (!isAdmin) throw new Error('Kein Admin-Recht');
+      // Check admin session from localStorage (like the main admin system)
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) throw new Error('Admin-Session nicht gefunden');
+      
+      const session = JSON.parse(adminSession);
+      if (!session.isAdmin || session.email !== 'guenter.killer@t-online.de') {
+        throw new Error('Kein Admin-Recht');
+      }
+      
+      // Check if session is still valid (24 hours)
+      if (Date.now() - session.loginTime > 24 * 60 * 60 * 1000) {
+        throw new Error('Admin-Session abgelaufen');
+      }
 
       // Save contact data if needed
       await saveContactIfNeeded();
