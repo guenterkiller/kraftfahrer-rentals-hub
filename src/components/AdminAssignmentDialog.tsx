@@ -170,35 +170,42 @@ export function AdminAssignmentDialog({
 
   const saveContactData = async () => {
     try {
-      console.log('🔍 Saving contact data:', {
-        _job_id: jobId,
-        _firma_oder_name: cName,
-        _ansprechpartner: contact,
-        _street: street,
-        _house: house,
-        _postal: postal,
-        _city: city,
-        _phone: phone,
-        _email: email,
+      console.log('🔍 Saving contact data via edge function:', {
+        jobId,
+        cName,
+        contact,
+        street,
+        house,
+        postal,
+        city,
+        phone,
+        email,
       });
       
-      // Use direct Supabase update instead of RPC function
-      const { error } = await supabase
-        .from('job_requests')
-        .update({
-          customer_name: cName,
-          company: cName,
-          customer_street: street,
-          customer_house_number: house,
-          customer_postal_code: postal,
-          customer_city: city,
-          customer_phone: phone,
-          customer_email: email,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', jobId);
+      // Get admin session
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) throw new Error('Admin-Session nicht gefunden');
       
+      const session = JSON.parse(adminSession);
+      
+      // Use edge function with service role to update contact data
+      const { data, error } = await supabase.functions.invoke('admin-update-contact', {
+        body: {
+          email: session.email,
+          jobId: jobId,
+          cName: cName,
+          contact: contact,
+          street: street,
+          house: house,
+          postal: postal,
+          city: city,
+          phone: phone,
+          contactEmail: email,
+        }
+      });
+
       if (error) throw error;
+      if (!data?.success) throw new Error('Failed to update contact data');
       
       setLastSaved(new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
       
