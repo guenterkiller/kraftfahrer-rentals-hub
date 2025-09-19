@@ -160,15 +160,29 @@ serve(async (req) => {
       }
     }
 
-    // Prepare email data
-    const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
-    const location = job?.einsatzort || '—';
-    const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || job?.zeitraum || '—';
+    // Helper function to clean placeholder values
+    function cleanValue(value: string | null | undefined, fallback = '—'): string {
+      if (!value || value.trim() === '' || 
+          value === 'Bitte wählen' || 
+          value === 'Siehe Nachricht' || 
+          value === 'nachzutragen' ||
+          value === 'Nachzutragen') {
+        return fallback;
+      }
+      return value.trim();
+    }
+
+    // Prepare email data with cleaned values
+    const jobTitle = cleanValue(job?.fahrzeugtyp, 'Fahrauftrag');
+    const location = cleanValue(job?.einsatzort, 'wird noch bekannt gegeben');
+    const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || cleanValue(job?.zeitraum, 'nach Absprache');
     const rateFormatted = formatRate(assignment.rate_type, assignment.rate_value) || 'nach Absprache';
-    const vehicleType = job?.fahrzeugtyp || '—';
+    const vehicleType = cleanValue(job?.fahrzeugtyp, 'wird bekannt gegeben');
     const notes = job?.besonderheiten?.trim() || null;
-    const contactPerson = job?.customer_name || null;
-    const contactPhone = job?.customer_phone || null;
+    const contactPerson = cleanValue(job?.customer_name, 'wird ergänzt');
+    const contactPhone = cleanValue(job?.customer_phone, 'wird ergänzt');
+    const contactEmail = cleanValue(job?.customer_email, 'wird ergänzt');
+    const companyName = cleanValue(job?.company || job?.customer_name, 'wird ergänzt');
     const confirmUrl = `https://kraftfahrer-mieten.com/driver/assignments/${assignment_id}/confirm`;
     
     // Create subject in exact format: "Einsatzbestätigung – {fahrzeugtyp} – {einsatzort} am {zeitraum}"
@@ -203,12 +217,12 @@ serve(async (req) => {
             <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">AUFTRAGGEBER</h3>
                 <div style="color: #000; font-size: 14px;">
-                    <p style="margin: 3px 0;"><strong>• Unternehmen/Name:</strong> ${job?.customer_name || contactPerson || '—'}</p>
-                    <p style="margin: 3px 0;"><strong>• Ansprechpartner:</strong> ${contactPerson || '—'}</p>
+                    <p style="margin: 3px 0;"><strong>• Unternehmen/Name:</strong> ${companyName}</p>
+                    <p style="margin: 3px 0;"><strong>• Ansprechpartner:</strong> ${contactPerson}</p>
                     <p style="margin: 3px 0;"><strong>• Anschrift:</strong> ${job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ? 
-                        `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'Vollständige Anschrift wird ergänzt'}</p>
-                    <p style="margin: 3px 0;"><strong>• Telefon:</strong> ${contactPhone || '—'}</p>
-                    <p style="margin: 3px 0;"><strong>• E-Mail:</strong> ${job?.customer_email || '—'}</p>
+                        `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'wird ergänzt'}</p>
+                    <p style="margin: 3px 0;"><strong>• Telefon:</strong> ${contactPhone}</p>
+                    <p style="margin: 3px 0;"><strong>• E-Mail:</strong> ${contactEmail}</p>
                 </div>
             </div>
             
