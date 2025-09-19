@@ -197,37 +197,65 @@ serve(async (req) => {
     <title>Einsatzbestätigung</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h2 style="color: #0b5fff; margin-bottom: 20px;">Einsatzbestätigung</h2>
+    <p style="margin-bottom: 5px;"><strong>Fahrerexpress | kraftfahrer-mieten.com</strong></p>
+    
     <p>Hallo ${driver.vorname} ${driver.nachname},</p>
-
-    <p>wir best&auml;tigen Ihren Einsatz als selbstst&auml;ndiger Fahrer.</p>
-
-    <h3 style="margin:0 0 6px 0;">Einsatzdetails</h3>
-    <ul style="margin:8px 0 16px 16px; padding:0;">
-      <li><strong>Auftrag:</strong> ${jobTitle}</li>
-      <li><strong>Fahrzeugtyp:</strong> ${vehicleType}</li>
-      <li><strong>Einsatzort:</strong> ${location}</li>
-      <li><strong>Zeitraum:</strong> ${dateRange}</li>
-      <li><strong>Vergütung:</strong> ${rateFormatted}</li>
+    <p>hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
+    
+    <h3 style="color: #0b5fff; margin-top: 25px; margin-bottom: 10px;">AUFTRAGGEBER</h3>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li><strong>Unternehmen/Name:</strong> ${job?.customer_name || contactPerson || '—'}</li>
+        <li><strong>Ansprechpartner:</strong> ${contactPerson || '—'}</li>
+        <li><strong>Anschrift:</strong> ${job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ? 
+            `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'Vollständige Anschrift wird ergänzt'}</li>
+        <li><strong>Telefon:</strong> ${contactPhone || '—'}</li>
+        <li><strong>E-Mail:</strong> ${job?.customer_email || '—'}</li>
     </ul>
-
-    <h3 style="margin:0 0 6px 0;">Ansprechpartner</h3>
-    <p style="margin:8px 0 16px 0;">
-      ${contactPerson || '—'}${contactPhone ? ` – ${contactPhone}` : ''}
+    
+    <h3 style="color: #0b5fff; margin-top: 25px; margin-bottom: 10px;">EINSATZ</h3>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li><strong>Datum/Zeitraum:</strong> ${dateRange}</li>
+        <li><strong>Einsatzort / Treffpunkt:</strong> ${location}</li>
+        <li><strong>Fahrzeug/Typ:</strong> ${vehicleType}</li>
+        <li><strong>Besonderheiten:</strong> ${job?.besonderheiten || notes || '—'}</li>
+    </ul>
+    
+    <h3 style="color: #0b5fff; margin-top: 25px; margin-bottom: 10px;">KONDITIONEN</h3>
+    <ul style="margin: 10px 0; padding-left: 20px;">
+        <li><strong>Abrechnung:</strong> ${assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'}</li>
+        <li><strong>Satz:</strong> ${rateFormatted} zzgl. gesetzlicher USt</li>
+    </ul>
+    
+    <h3 style="color: #0b5fff; margin-top: 25px; margin-bottom: 10px;">VEREINBARUNGEN (Fahrerexpress)</h3>
+    <p style="margin: 10px 0;"><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
+    <p style="margin: 10px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
+    <p style="margin: 10px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
+    <p style="margin: 10px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
+    <p style="margin: 10px 0;"><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
+    <p style="margin: 10px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
+    
+    <h3 style="color: #0b5fff; margin-top: 25px; margin-bottom: 10px;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
+    <p style="margin: 10px 0;">Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</p>
+    <p style="margin: 10px 0;">In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ zulässig: 30 % des vereinbarten Tages-/Einsatzsatzes, max. 250 €).</p>
+    <p style="margin: 10px 0;">Dem Fahrer bleibt der Nachweis vorbehalten, dass kein oder ein geringerer Schaden entstanden ist; dem Auftraggeber bleibt der Nachweis eines höheren Schadens unbenommen.</p>
+    <p style="margin: 10px 0;">Höhere Gewalt (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen; die Verhinderung ist unverzüglich mitzuteilen.</p>
+    <p style="margin: 10px 0;">Fahrerexpress bemüht sich im No-Show-Fall unverzüglich um Ersatz.</p>
+    
+    <p style="margin-top: 30px;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
+    
+    <p style="margin-top: 20px;">Viele Grüße<br>
+    <strong>Fahrerexpress | kraftfahrer-mieten.com</strong></p>
+    
+    <p style="margin-top: 15px; font-size: 14px;">
+    E-Mail: info@kraftfahrer-mieten.com | Tel: +49-1577-1442285<br>
+    Fahrerexpress-Agentur – Günter Killer<br>
+    E-Mail: info@kraftfahrer-mieten.com | Web: kraftfahrer-mieten.com
     </p>
-
-    ${notes ? `
-    <h3 style="margin:0 0 6px 0;">Hinweise</h3>
-    <p style="margin:8px 0 16px 0;">${notes}</p>
-    ` : ''}
-
-    <p style="margin:16px 0;">
-      Bitte best&auml;tigen Sie Ihre Einsatzbereitschaft im Portal:<br>
-      <a href="${confirmUrl}" style="color:#0b5fff;">Einsatz jetzt best&auml;tigen</a>
+    
+    <p style="margin-top: 20px; font-size: 12px; color: #666;">
+    Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}
     </p>
-
-    <p>Bei R&uuml;ckfragen sind wir gern f&uuml;r Sie da.<br>
-    Mit freundlichen Gr&uuml;&szlig;en<br>
-    <strong>Fahrerexpress-Agentur – Kraftfahrer-Mieten</strong></p>
 </body>
 </html>
     `;
