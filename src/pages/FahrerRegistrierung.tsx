@@ -844,7 +844,7 @@ const FahrerRegistrierung = () => {
                           required 
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
-                          Ich bin selbstständig tätig und stimme der Vermittlungsprovision von 15 % pro vermitteltem Einsatz zu. *{" "}
+                          Ich bin selbstständig tätig und stimme der Vermittlungsprovision von 15 % des gesamten Nettohonorars (einschließlich Nebenkosten wie Fahrt-/Übernachtung/Mehrstunden) pro vermitteltem Einsatz zu. *{" "}
                           <Link to="/vermittlung" className="text-primary hover:underline">
                             Mehr Informationen
                           </Link>

@@ -236,6 +236,9 @@ const FahreranfrageSection = () => {
                     <p className="mt-3 text-sm text-muted-foreground">
                       Alle Preise zzgl. MwSt., Fahrtkosten und evtl. Übernachtung nach Aufwand. Mit Absenden des Formulars buchen Sie verbindlich zum angegebenen Tagespreis.
                     </p>
+                    <p className="mt-2 text-sm text-muted-foreground font-medium">
+                      Hinweis: Die Vermittlungsprovision bezieht sich auf das gesamte Nettohonorar des Einsatzes einschließlich berechtigter Nebenkosten (z. B. Fahrt-/Übernachtung/Mehrstunden).
+                    </p>
                   </div>
                 </div>
               </div>

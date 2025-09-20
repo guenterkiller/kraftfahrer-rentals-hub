@@ -46,7 +46,7 @@ const Vermittlung = () => {
                 <CardContent>
                   <h3 className="text-lg font-semibold mb-3">Vermittlungskosten für Fahrer</h3>
                   <p className="mb-3">
-                    Für die erfolgreiche Vermittlung eines Einsatzes berechnen wir <strong>nur dem vermittelten Fahrer</strong> eine Provision in Höhe von <strong>15 % des Nettohonorars</strong>. Die Vermittlung ist für Auftraggeber vollständig kostenlos.
+                    Für die erfolgreiche Vermittlung eines Einsatzes berechnen wir <strong>nur dem vermittelten Fahrer</strong> eine Provision in Höhe von <strong>15 % des gesamten Nettohonorars einschließlich berechtigter Nebenkosten (z. B. Fahrt-/Kilometerkosten, Übernachtung, Spesen, Mehrstunden)</strong>. Die Vermittlung ist für Auftraggeber vollständig kostenlos.
                   </p>
                   <p>
                     Die Provision wird ausschließlich bei tatsächlichem Einsatz fällig und kann entweder per Einbehalt oder separater Rechnung abgerechnet werden.

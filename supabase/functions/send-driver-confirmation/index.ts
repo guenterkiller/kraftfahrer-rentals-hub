@@ -262,10 +262,12 @@ serve(async (req) => {
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">VEREINBARUNGEN (Fahrerexpress)</h3>
                 <div style="color: #000; font-size: 13px;">
                     <p style="margin: 8px 0;"><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
+                    <p style="margin: 8px 0;"><strong>1a) Provisionsbasis:</strong> Die Provision bemisst sich auf das gesamte vom Fahrer dem Auftraggeber berechnete Nettohonorar, einschließlich im Zusammenhang mit dem Einsatz abgerechneter Nebenkosten (z. B. Fahrt-/Kilometerkosten, Übernachtung, Spesen, Mehrstunden), soweit der Fahrer diese dem Auftraggeber in Rechnung stellt.</p>
                     <p style="margin: 8px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
                     <p style="margin: 8px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
                     <p style="margin: 8px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
                     <p style="margin: 8px 0;"><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
+                    <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
                     <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
                 </div>
             </div>
