@@ -81,7 +81,7 @@ export function AdminAssignmentDialog({
         };
         
         setCName(cleanValue(job.customer_name) || cleanValue(job.company) || "");
-        setContact(""); // Contact person should be entered separately
+        setContact(cleanValue(job.customer_name) || ""); // Use customer name as contact if available
         setStreet(cleanValue(job.customer_street) || "");
         setHouse(cleanValue(job.customer_house_number) || "");
         setPostal(cleanValue(job.customer_postal_code) || "");
