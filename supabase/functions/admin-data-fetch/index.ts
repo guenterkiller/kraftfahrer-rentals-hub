@@ -120,6 +120,17 @@ Deno.serve(async (req) => {
         data = counts;
         break;
 
+      case 'emails':
+        console.log('Fetching email logs...');
+        const emailResult = await supabase
+          .from("email_log")
+          .select("*")
+          .order('created_at', { ascending: false })
+          .limit(50);
+        data = emailResult.data;
+        error = emailResult.error;
+        break;
+
       default:
         return new Response(
           JSON.stringify({ error: 'Ungültiger Datentyp' }),

@@ -32,15 +32,23 @@ export function EmailLogView() {
 
   const loadEmailLogs = async () => {
     try {
-      const { data, error } = await supabase
-        .from('email_log')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('No admin session found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      
+      const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: {
+          email: session.email,
+          dataType: 'emails'
+        }
+      });
 
       if (error) throw error;
 
-      setEmailLogs(data || []);
+      setEmailLogs(data?.data || []);
     } catch (error) {
       console.error('Error loading email logs:', error);
       toast({
