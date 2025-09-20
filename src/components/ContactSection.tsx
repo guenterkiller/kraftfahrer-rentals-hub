@@ -37,6 +37,22 @@ const ContactSection = () => {
                 <Mail className="h-5 w-5 text-primary mt-1" />
                 <div>
                   <p className="font-semibold">E-Mail</p>
+                  <p className="text-xs text-muted-foreground mb-1">
+                    <strong>Hinweis:</strong> Für <strong>zeitkritische Aufträge</strong> nutzen Sie bitte{" "}
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const element = document.querySelector('#fahreranfrage');
+                        if (element) {
+                          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }}
+                      className="text-blue-600 underline hover:text-blue-800"
+                    >
+                      „Fahrer buchen"
+                    </button>.
+                    E-Mails werden manuell erfasst und können Verzögerungen verursachen.
+                  </p>
                   <p className="text-muted-foreground">info@kraftfahrer-mieten.com</p>
                 </div>
               </div>
@@ -85,7 +101,8 @@ const ContactSection = () => {
               <Button 
                 size="lg" 
                 asChild
-                className="w-full"
+                className="w-full min-h-[44px]"
+                aria-label="Jetzt Fahrer buchen – schnelles Formular"
               >
                 <a 
                   href="#fahreranfrage"
@@ -97,7 +114,7 @@ const ContactSection = () => {
                     }
                   }}
                 >
-                  Fahrer buchen
+                  Jetzt Fahrer buchen
                 </a>
               </Button>
             </CardContent>

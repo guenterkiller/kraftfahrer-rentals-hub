@@ -10,6 +10,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Info } from "lucide-react";
+import BookingPriorityBanner from "@/components/BookingPriorityBanner";
+import BookingAdvantagesInfo from "@/components/BookingAdvantagesInfo";
+import BookingFAQ from "@/components/BookingFAQ";
 const FahreranfrageSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -161,6 +164,7 @@ const FahreranfrageSection = () => {
   return (
     <section className="py-16 px-4">
       <div className="max-w-4xl mx-auto">
+        <BookingPriorityBanner />
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Fahrer buchen
@@ -497,6 +501,8 @@ const FahreranfrageSection = () => {
             </form>
           </CardContent>
         </Card>
+        <BookingAdvantagesInfo />
+        <BookingFAQ />
       </div>
     </section>
   );
