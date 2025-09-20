@@ -74,6 +74,7 @@ const Admin = () => {
   const [contactDataDialogOpen, setContactDataDialogOpen] = useState(false);
   const [selectedContactJobId, setSelectedContactJobId] = useState<string>("");
   const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
+  const [completingOldJobs, setCompletingOldJobs] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -84,6 +85,55 @@ const Admin = () => {
 
   const handleCreateJob = () => {
     setCreateJobDialogOpen(true);
+  };
+
+  const handleCompleteOldJobs = async (daysOld: number = 30) => {
+    setCompletingOldJobs(true);
+    
+    try {
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Admin session not found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      const adminEmail = session.email;
+
+      const { data, error } = await supabase.functions.invoke('admin-complete-old-jobs', {
+        body: { email: adminEmail, daysOld }
+      });
+
+      if (error) {
+        console.error('❌ Error completing old jobs:', error);
+        toast({
+          title: "Fehler beim Abschließen",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Old jobs completed successfully:', data);
+      
+      // Refresh job requests to show updated status
+      await loadJobRequests();
+
+      toast({
+        title: "Alte Aufträge abgeschlossen",
+        description: data.message || `${data.data?.updated_count || 0} alte Aufträge wurden als erledigt markiert.`,
+      });
+
+    } catch (error) {
+      console.error('❌ Unexpected error in handleCompleteOldJobs:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setCompletingOldJobs(false);
+    }
   };
 
   const handleJobCreated = (jobId: string) => {
@@ -1029,7 +1079,7 @@ const Admin = () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Eingegangene Fahreranfragen ({jobRequests.length})</CardTitle>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 <Button 
                   onClick={handleCreateJob} 
                   variant="default" 
@@ -1037,6 +1087,15 @@ const Admin = () => {
                   className="bg-green-600 hover:bg-green-700"
                 >
                   + Neuen Auftrag anlegen
+                </Button>
+                <Button 
+                  onClick={() => handleCompleteOldJobs(30)}
+                  size="sm"
+                  variant="outline"
+                  disabled={completingOldJobs}
+                  className="bg-green-50 hover:bg-green-100 text-green-700 border-green-300"
+                >
+                  {completingOldJobs ? 'Wird abgeschlossen...' : 'Alte Aufträge abschließen (30 Tage)'}
                 </Button>
                 <Button 
                   onClick={handleResetJobsByEmail} 
@@ -1120,25 +1179,29 @@ const Admin = () => {
                        <TableCell>
                           <div className="space-y-1">
                             <Badge 
-                              variant={
-                                req.status === 'confirmed' ? 'default' : 
-                                req.status === 'assigned' ? 'secondary' : 
-                                req.status === 'no_show' ? 'destructive' :
-                                'outline'
-                              }
-                              className={
-                                req.status === 'confirmed' 
-                                  ? 'bg-green-100 text-green-800 border-green-200' 
-                                  : req.status === 'assigned'
-                                  ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                                  : req.status === 'no_show'
-                                  ? 'bg-red-100 text-red-800 border-red-200'
-                                  : 'bg-blue-100 text-blue-800 border-blue-200'
-                              }
+                               variant={
+                                 req.status === 'confirmed' ? 'default' : 
+                                 req.status === 'assigned' ? 'secondary' : 
+                                 req.status === 'no_show' ? 'destructive' :
+                                 req.status === 'completed' ? 'secondary' :
+                                 'outline'
+                               }
+                               className={
+                                 req.status === 'confirmed' 
+                                   ? 'bg-green-100 text-green-800 border-green-200' 
+                                   : req.status === 'assigned'
+                                   ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
+                                   : req.status === 'no_show'
+                                   ? 'bg-red-100 text-red-800 border-red-200'
+                                   : req.status === 'completed'
+                                   ? 'bg-gray-100 text-gray-700 border-gray-300'
+                                   : 'bg-blue-100 text-blue-800 border-blue-200'
+                               }
                             >
                               {req.status === 'confirmed' ? 'Bestätigt' : 
-                               req.status === 'assigned' ? 'Zugewiesen' : 
-                               req.status === 'no_show' ? 'No-Show' : 'Offen'}
+                                req.status === 'assigned' ? 'Zugewiesen' : 
+                                req.status === 'no_show' ? 'No-Show' :
+                                req.status === 'completed' ? 'Erledigt' : 'Offen'}
                             </Badge>
                             {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
                               <Badge 

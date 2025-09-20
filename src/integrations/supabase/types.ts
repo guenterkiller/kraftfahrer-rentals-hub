@@ -479,6 +479,7 @@ export type Database = {
         Row: {
           besonderheiten: string | null
           company: string | null
+          completed_at: string | null
           created_at: string
           customer_city: string | null
           customer_email: string
@@ -499,6 +500,7 @@ export type Database = {
         Insert: {
           besonderheiten?: string | null
           company?: string | null
+          completed_at?: string | null
           created_at?: string
           customer_city?: string | null
           customer_email: string
@@ -519,6 +521,7 @@ export type Database = {
         Update: {
           besonderheiten?: string | null
           company?: string | null
+          completed_at?: string | null
           created_at?: string
           customer_city?: string | null
           customer_email?: string
@@ -639,6 +642,7 @@ export type Database = {
         Returns: {
           besonderheiten: string | null
           company: string | null
+          completed_at: string | null
           created_at: string
           customer_city: string | null
           customer_email: string
@@ -666,6 +670,10 @@ export type Database = {
             }
           | { _assignment_id: string; _reason?: string }
         Returns: boolean
+      }
+      admin_mark_old_jobs_completed: {
+        Args: { _days_old?: number }
+        Returns: Json
       }
       admin_reset_jobs_by_email: {
         Args: { _email: string }
