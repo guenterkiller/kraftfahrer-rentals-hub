@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import LazyImage from "@/components/LazyImage";
 
 const AboutSection = () => {
   return (
@@ -11,7 +12,7 @@ const AboutSection = () => {
             <CardContent className="p-8">
               <div className="flex flex-col md:flex-row items-center gap-8">
                 <div className="w-32 h-32 rounded-full overflow-hidden shadow-lg">
-                  <img 
+                  <LazyImage 
                     src="/lovable-uploads/78e60df8-7b75-4383-98da-b6043410d6c6.png" 
                     alt="Günter Killer - Erfahrener selbstständiger LKW-Fahrer und Gründer der Fahrerexpress-Agentur Frankfurt" 
                     className="w-full h-full object-cover"
