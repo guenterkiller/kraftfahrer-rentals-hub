@@ -59,13 +59,26 @@ export function AdminAssignmentDialog({
 
   const loadJobData = async () => {
     try {
-      const { data: job, error } = await supabase
-        .from('job_requests')
-        .select('*')
-        .eq('id', jobId)
-        .maybeSingle();
+      // Get admin session
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Keine Admin-Session gefunden');
+      }
+      
+      const session = JSON.parse(adminSession);
+      
+      // Use admin-data-fetch instead of direct Supabase query
+      const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: {
+          email: session.email,
+          dataType: 'jobs'
+        }
+      });
       
       if (error) throw error;
+      
+      // Find the specific job from the response
+      const job = data?.data?.find((j: any) => j.id === jobId);
       
       if (job) {
         console.log('🔍 Raw job data loaded:', {
