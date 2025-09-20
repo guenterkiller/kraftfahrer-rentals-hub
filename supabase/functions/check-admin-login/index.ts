@@ -44,8 +44,8 @@ Deno.serve(async (req) => {
     }
 
     // Check if email matches exactly
-    const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL');
-    if (!ADMIN_EMAIL || email !== ADMIN_EMAIL) {
+    const ADMIN_EMAIL = 'guenter.killer@t-online.de';
+    if (email !== ADMIN_EMAIL) {
       console.log('Email does not match admin email');
       return new Response(
         JSON.stringify({ error: 'Zugriff verweigert - ungültige Anmeldedaten' }),
