@@ -68,6 +68,13 @@ export function AdminAssignmentDialog({
       if (error) throw error;
       
       if (job) {
+        console.log('🔍 Raw job data loaded:', {
+          customer_name: job.customer_name,
+          company: job.company,
+          customer_email: job.customer_email,
+          customer_phone: job.customer_phone
+        });
+        
         setJobData(job);
         
         // Helper function to clean placeholder values
@@ -80,8 +87,18 @@ export function AdminAssignmentDialog({
           return value.trim();
         };
         
-        setCName(cleanValue(job.customer_name) || cleanValue(job.company) || "");
-        setContact(cleanValue(job.customer_name) || ""); // Use customer name as contact if available
+        const cNameValue = cleanValue(job.customer_name) || cleanValue(job.company) || "";
+        const contactValue = cleanValue(job.customer_name) || "";
+        
+        console.log('🔍 Processed values:', {
+          cNameValue,
+          contactValue,
+          cleanedCustomerName: cleanValue(job.customer_name),
+          cleanedCompany: cleanValue(job.company)
+        });
+        
+        setCName(cNameValue);
+        setContact(contactValue);
         setStreet(cleanValue(job.customer_street) || "");
         setHouse(cleanValue(job.customer_house_number) || "");
         setPostal(cleanValue(job.customer_postal_code) || "");
