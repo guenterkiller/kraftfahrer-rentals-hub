@@ -15,6 +15,7 @@ import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
+import { EmailLogView } from "@/components/EmailLogView";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -1362,6 +1363,9 @@ const Admin = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Email Log View */}
+      <EmailLogView />
 
       {/* Create Job Dialog */}
       <CreateJobDialog
