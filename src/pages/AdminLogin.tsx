@@ -47,11 +47,12 @@ const AdminLogin = () => {
     try {
       console.log('Attempting admin login for:', email);
       
-      // Simple admin check
-      const ADMIN_EMAIL = "guenter.killer@t-online.de";
-      const ADMIN_PASSWORD = "admin123";
+      // Verify credentials via edge function
+      const { data, error } = await supabase.functions.invoke("check-admin-login", {
+        body: { email, password }
+      });
       
-      if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+      if (error || !data?.success) {
         throw new Error("Ungültige Anmeldedaten");
       }
 
