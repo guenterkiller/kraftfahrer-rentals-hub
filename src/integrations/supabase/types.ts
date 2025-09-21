@@ -742,6 +742,10 @@ export type Database = {
         }
         Returns: string
       }
+      subscribe_to_job_alerts: {
+        Args: { _email: string }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
