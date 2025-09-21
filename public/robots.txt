@@ -3,11 +3,11 @@ User-agent: *
 Allow: /
 
 # Wichtige Sitemaps
-Sitemap: https://kraftfahrer-mieten.com/sitemap.xml
+Sitemap: https://www.kraftfahrer-mieten.com/sitemap.xml
 
 # Admin-Bereiche blockieren
 Disallow: /admin/
 Disallow: /admin-login/
 
 # Host-Directive für eindeutige Domain
-Host: https://kraftfahrer-mieten.com
+Host: https://www.kraftfahrer-mieten.com
