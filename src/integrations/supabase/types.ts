@@ -727,6 +727,21 @@ export type Database = {
         }
         Returns: undefined
       }
+      submit_job_request: {
+        Args: {
+          _besonderheiten?: string
+          _company?: string
+          _customer_email: string
+          _customer_name: string
+          _customer_phone: string
+          _einsatzort: string
+          _fahrzeugtyp: string
+          _fuehrerscheinklasse?: string
+          _nachricht: string
+          _zeitraum: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
