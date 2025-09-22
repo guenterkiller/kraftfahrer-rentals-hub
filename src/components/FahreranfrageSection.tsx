@@ -167,11 +167,15 @@ const FahreranfrageSection = () => {
       <div className="max-w-4xl mx-auto">
         <BookingPriorityBanner />
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Fahrer buchen
-          </h2>
-          <p className="text-lg text-gray-600">
-            Beschreiben Sie Ihren Fahrbedarf - wir finden den passenden Fahrer für Sie
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            LKW-Fahrer buchen & Kraftfahrer mieten
+          </h1>
+          <p className="text-lg text-gray-600 mb-4">
+            Berufskraftfahrer kurzfristig buchen - deutschlandweit verfügbar
+          </p>
+          <p className="text-base text-gray-500">
+            Ob LKW-Fahrer (C/CE), Fahrmischerfahrer, Baumaschinenführer oder ADR-Fahrer – 
+            finden Sie schnell den passenden Fahrer für Ihren Einsatz
           </p>
         </div>
 
@@ -193,11 +197,31 @@ const FahreranfrageSection = () => {
                 <div className="font-medium text-blue-600 mb-1">
                   Agenturabrechnung – Vertragspartner ist Fahrerexpress
                 </div>
-                <p className="text-sm text-blue-600">
+                <p className="text-sm text-blue-600 mb-2">
                   Fahrerexpress tritt als Hauptauftragnehmer auf und rechnet direkt mit Ihnen ab.
-                  Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt.
-                  Hinweis: Es handelt sich um eine Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
+                  Die Fahrleistung wird von einem selbstständigen LKW-Fahrer / Kraftfahrer / Baumaschinenführer als Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt.
                 </p>
+                <div className="text-xs text-blue-700 bg-blue-100 rounded px-2 py-1 inline-block">
+                  <strong>Hinweis:</strong> Es handelt sich um eine Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
+                </div>
+                
+                {/* Mobile Tooltip */}
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button type="button" className="md:hidden ml-2 text-blue-500 text-xs underline" aria-label="Weitere Details">
+                        Details anzeigen
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <div className="text-xs">
+                        <p><strong>Abrechnungsmodell:</strong> Fahrerexpress rechnet direkt mit Ihnen ab.</p>
+                        <p><strong>Leistung:</strong> Ein selbstständiger Fahrer erbringt die Leistung als Subunternehmer.</p>
+                        <p><strong>Rechtsform:</strong> Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.</p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <input type="hidden" name="billing_model" value="agency" />
               </div>
 
@@ -211,7 +235,7 @@ const FahreranfrageSection = () => {
                     <TooltipProvider delayDuration={100}>
                       <ul className="space-y-1">
                         <li className="text-base md:text-lg flex items-center">
-                          <span>– Standard LKW-Fahrer: <span className="font-semibold text-primary text-lg md:text-xl">399 € netto / Tag</span> (8 Std.)</span>
+                          <span>– Standard LKW-Fahrer (C+E): <span className="font-semibold text-primary text-lg md:text-xl">399 € netto / Tag</span> (8 Std.)</span>
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <button type="button" className="ml-2 inline-flex items-center text-muted-foreground hover:text-foreground" aria-label="Preisdetails">
@@ -523,6 +547,105 @@ const FahreranfrageSection = () => {
           </CardContent>
         </Card>
         <BookingAdvantagesInfo />
+        
+        {/* SEO-optimized Info Block */}
+        <div className="rounded-xl border border-muted p-6 mt-8 bg-gradient-to-r from-background to-muted/30">
+          <h3 className="text-xl font-bold mb-4 text-foreground">
+            Schnell den passenden Fahrer finden
+          </h3>
+          <p className="text-muted-foreground leading-relaxed">
+            Ob <strong>LKW-Fahrer (C/CE)</strong>, <strong>Fahrmischerfahrer</strong>, <strong>Kraftfahrer für Fernverkehr</strong>, 
+            <strong>Baumaschinenführer</strong> oder <strong>Spezialfahrer mit ADR/Kran</strong> – über Fahrerexpress können Sie 
+            <strong>kurzfristig und deutschlandweit</strong> selbstständige Fahrer buchen. Alle Fahrer erbringen ihre Leistung 
+            als selbstständige Subunternehmer – <strong>ohne Arbeitnehmerüberlassung</strong>, rechtssicher und transparent.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-sm">
+            <div className="text-center p-2 bg-background rounded border">
+              <div className="font-semibold text-primary">C+E Fahrer</div>
+              <div className="text-xs text-muted-foreground">Sattelzug & LKW</div>
+            </div>
+            <div className="text-center p-2 bg-background rounded border">
+              <div className="font-semibold text-primary">ADR-Fahrer</div>
+              <div className="text-xs text-muted-foreground">Gefahrgut</div>
+            </div>
+            <div className="text-center p-2 bg-background rounded border">
+              <div className="font-semibold text-primary">Kranfahrer</div>
+              <div className="text-xs text-muted-foreground">Mobile Krane</div>
+            </div>
+            <div className="text-center p-2 bg-background rounded border">
+              <div className="font-semibold text-primary">Baumaschinisten</div>
+              <div className="text-xs text-muted-foreground">Bagger & Co.</div>
+            </div>
+          </div>
+        </div>
+
+        {/* SEO FAQ Section */}
+        <div className="mt-8 space-y-4">
+          <h3 className="text-2xl font-bold text-center mb-6">Häufige Fragen zum Fahrer buchen</h3>
+          
+          <div className="space-y-4">
+            <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors">
+              <summary className="font-semibold cursor-pointer flex items-center justify-between group-open:text-primary">
+                Kann ich kurzfristig einen LKW-Fahrer buchen?
+                <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="mt-3 text-muted-foreground">
+                Ja, über Fahrerexpress sind bundesweit kurzfristige Fahrereinsätze möglich. 
+                Unsere registrierten <strong>Berufskraftfahrer</strong> erhalten sofort eine Benachrichtigung 
+                über neue Aufträge und können oft innerhalb weniger Stunden verfügbar sein.
+              </div>
+            </details>
+
+            <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors">
+              <summary className="font-semibold cursor-pointer flex items-center justify-between group-open:text-primary">
+                Welche Fahrer kann ich mieten?
+                <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="mt-3 text-muted-foreground">
+                Sie können verschiedene Fahrertypen buchen: <strong>LKW-Fahrer (C+E)</strong>, <strong>Kraftfahrer</strong>, 
+                <strong>Fahrmischerfahrer</strong>, <strong>Baumaschinenführer</strong> sowie <strong>Spezialfahrer mit ADR-Schein oder Kranführerschein</strong>. 
+                Alle Fahrer verfügen über die erforderlichen Qualifikationen und Führerscheinklassen.
+              </div>
+            </details>
+
+            <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors">
+              <summary className="font-semibold cursor-pointer flex items-center justify-between group-open:text-primary">
+                Handelt es sich um Zeitarbeit oder Arbeitnehmerüberlassung?
+                <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="mt-3 text-muted-foreground">
+                <strong>Nein.</strong> Alle Fahrer sind selbstständig tätig und erbringen ihre Leistung als 
+                Subunternehmer im Rahmen von <strong>Dienst-/Werkverträgen</strong>. Es handelt sich ausdrücklich 
+                <strong>nicht um Arbeitnehmerüberlassung</strong> oder Zeitarbeit.
+              </div>
+            </details>
+
+            <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors">
+              <summary className="font-semibold cursor-pointer flex items-center justify-between group-open:text-primary">
+                Wie schnell finde ich einen verfügbaren Fahrer?
+                <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="mt-3 text-muted-foreground">
+                Nach Ihrer Buchung werden sofort alle passenden <strong>Kraftfahrer in Ihrer Region</strong> 
+                benachrichtigt. In der Regel erhalten wir innerhalb von 1-4 Stunden Rückmeldungen von 
+                verfügbaren Fahrern. Bei dringenden Anfragen kontaktieren wir Sie umgehend telefonisch.
+              </div>
+            </details>
+
+            <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors">
+              <summary className="font-semibold cursor-pointer flex items-center justify-between group-open:text-primary">
+                In welchen Regionen kann ich Fahrer buchen?
+                <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div className="mt-3 text-muted-foreground">
+                Wir vermitteln <strong>Fahrer deutschlandweit</strong>. Besonders stark vertreten sind wir in 
+                den Ballungsräumen München, Hamburg, Frankfurt, Berlin, Köln/Düsseldorf und Stuttgart. 
+                Auch für ländliche Regionen finden wir in der Regel passende Kraftfahrer.
+              </div>
+            </details>
+          </div>
+        </div>
+
         <BookingFAQ />
       </div>
     </section>
