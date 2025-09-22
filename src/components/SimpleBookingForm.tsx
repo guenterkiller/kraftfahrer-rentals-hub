@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const OriginalBookingForm = () => {
+const SimpleBookingForm = () => {
   const [loading, setLoading] = useState(false);
   const [agreedToPrices, setAgreedToPrices] = useState(false);
   const [agreedToData, setAgreedToData] = useState(false);
@@ -86,6 +86,13 @@ const OriginalBookingForm = () => {
     }
   };
 
+  const scrollToForm = () => {
+    const element = document.querySelector('#booking-form');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="py-16 bg-white" id="fahreranfrage">
       <div className="container mx-auto px-4">
@@ -106,12 +113,7 @@ const OriginalBookingForm = () => {
                 <Button 
                   className="mt-3 bg-blue-600 hover:bg-blue-700"
                   type="button"
-                  onClick={() => {
-                    const element = document.querySelector('#booking-form');
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
+                  onClick={scrollToForm}
                 >
                   Jetzt Fahrer buchen
                 </Button>
@@ -274,7 +276,7 @@ const OriginalBookingForm = () => {
                         checked={nightShift}
                         onCheckedChange={(checked) => setNightShift(checked as boolean)}
                       />
-                      <Label htmlFor="nacht">Nachtschicht möglich</Label>
+                      <Label htmlFor="nacht">Nachtschift möglich</Label>
                     </div>
                   </div>
                 </div>
@@ -337,7 +339,7 @@ const OriginalBookingForm = () => {
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Fahrer buchen</div>
-                      <div className="text-sm">ab 399 € netto</div>
+                      <div className="text-sm opacity-90">ab 399 € netto</div>
                     </div>
                   )}
                 </Button>
@@ -350,4 +352,4 @@ const OriginalBookingForm = () => {
   );
 };
 
-export default OriginalBookingForm;
+export default SimpleBookingForm;

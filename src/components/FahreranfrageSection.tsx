@@ -1,10 +1,10 @@
-import OriginalBookingForm from "@/components/OriginalBookingForm";
+import SimpleBookingForm from "@/components/SimpleBookingForm";
 import BookingAdvantagesInfo from "@/components/BookingAdvantagesInfo";
 
 const FahreranfrageSection = () => {
   return (
     <div>
-      <OriginalBookingForm />
+      <SimpleBookingForm />
       <div className="container mx-auto px-4">
         <BookingAdvantagesInfo />
       </div>
