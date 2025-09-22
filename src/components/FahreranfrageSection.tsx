@@ -144,7 +144,7 @@ const FahreranfrageSection = () => {
 
       toast({
         title: "Anfrage gesendet!",
-        description: "Vielen Dank für Ihre Anfrage. Alle verfügbaren Fahrer wurden benachrichtigt. Wir melden uns zeitnah bei Ihnen.",
+        description: "Vielen Dank für Ihre Anfrage. Ihre Anfrage wurde strukturiert erfasst und wird zügig disponiert. Wir melden uns zeitnah bei Ihnen.",
       });
       
       // Reset form
@@ -176,6 +176,9 @@ const FahreranfrageSection = () => {
           <p className="text-base text-gray-500">
             Ob LKW-Fahrer (C/CE), Fahrmischerfahrer, Baumaschinenführer oder ADR-Fahrer – 
             finden Sie schnell den passenden Fahrer für Ihren Einsatz
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            <strong>Hinweis:</strong> Viele Fahrer sind Mo–Fr im Einsatz – neue Einsätze sind meist ab kommender Kalenderwoche planbar.
           </p>
         </div>
 
@@ -555,9 +558,8 @@ const FahreranfrageSection = () => {
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Ob <strong>LKW-Fahrer (C/CE) Vermittlung</strong>, <strong>Fahrmischerfahrer</strong>, <strong>Kraftfahrer für Fernverkehr</strong>, 
-            <strong>Baumaschinenführer</strong> oder <strong>Spezialfahrer mit ADR/Kran</strong> – über Fahrerexpress können Sie 
-            <strong>Berufskraftfahrer kurzfristig</strong> und <strong>deutschlandweit</strong> selbstständige Fahrer buchen. Alle Fahrer erbringen ihre Leistung 
-            als selbstständige Subunternehmer – <strong>ohne Arbeitnehmerüberlassung</strong>, rechtssicher und transparent.
+            <strong>Baumaschinenführer</strong> oder <strong>Spezialfahrer mit ADR/Kran</strong> – über Fahrerexpress können Sie kurzfristig und deutschlandweit selbstständige Fahrer buchen. Alle Fahrer erbringen ihre Leistung 
+            als selbstständige Subunternehmer – <strong>Dienst-/Werkleistung, keine Arbeitnehmerüberlassung</strong>, rechtssicher und transparent.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-sm">
             <div className="text-center p-2 bg-background rounded border">
@@ -591,8 +593,8 @@ const FahreranfrageSection = () => {
               </summary>
               <div className="mt-3 text-muted-foreground">
                 Ja, über Fahrerexpress sind bundesweit kurzfristige Fahrereinsätze möglich. 
-                Unsere registrierten <strong>Berufskraftfahrer</strong> und <strong>LKW-Fahrer Vermittlung</strong> 
-                erhalten sofort eine Benachrichtigung über neue Aufträge und können oft innerhalb weniger Stunden verfügbar sein.
+                Viele Fahrer sind montags bis freitags im Einsatz. Kurzfristige Starts sind meist ab der kommenden Kalenderwoche möglich. 
+                Je früher die Anfrage, desto besser die Planbarkeit.
               </div>
             </details>
 
@@ -626,9 +628,8 @@ const FahreranfrageSection = () => {
                 <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
               </summary>
               <div className="mt-3 text-muted-foreground">
-                Nach Ihrer Buchung werden sofort alle passenden <strong>Kraftfahrer in Ihrer Region</strong> 
-                benachrichtigt. In der Regel erhalten wir innerhalb von 1-4 Stunden Rückmeldungen von 
-                verfügbaren Fahrern. Bei dringenden Anfragen kontaktieren wir Sie umgehend telefonisch.
+                Ihre Anfrage wird strukturiert erfasst und zügig disponiert. Schnelle Disposition – wir weisen den passenden Fahrer über den Adminbereich zu. 
+                Viele Fahrer sind Mo–Fr im Einsatz – neue Einsätze sind meist ab kommender Kalenderwoche planbar.
               </div>
             </details>
 

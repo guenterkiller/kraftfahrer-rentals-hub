@@ -18,9 +18,8 @@ const BookingPriorityBanner = () => {
             Schneller zum Fahrer: Bitte „Fahrer buchen" nutzen
           </h2>
           <p className="text-sm text-gray-700 mt-1">
-            Damit Ihr Auftrag <strong>ohne Verzögerung</strong> bearbeitet wird, nutzen Sie bitte den Button{" "}
-            <strong>„Fahrer buchen"</strong>. Ihre Anfrage wird automatisch erfasst, an passende Fahrer weitergeleitet 
-            und direkt bestätigt. E-Mail-Anfragen führen oft zu Verzögerungen, da wir den Auftrag manuell anlegen müssen.
+            Ihre Anfrage wird strukturiert erfasst und zügig disponiert. So vermeiden wir Rückfragen und können den passenden Fahrer schnell zuweisen.
+            <strong>Hinweis:</strong> Viele Fahrer sind Mo–Fr im Einsatz – neue Einsätze sind meist ab kommender Woche planbar.
           </p>
           <Button 
             className="mt-3 bg-blue-600 hover:bg-blue-700"

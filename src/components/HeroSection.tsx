@@ -33,15 +33,15 @@ const HeroSection = () => {
         </div>
         
         <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-4xl mx-auto leading-relaxed px-4 drop-shadow-sm animate-fade-in">
-          Sie möchten kurzfristig einen Fahrer mieten? Fahrerexpress vermittelt bundesweit 
+          Sie möchten einen Fahrer mieten? Fahrerexpress vermittelt bundesweit 
           selbstständige Fahrer für alle Fahrzeugtypen – flexibel, zuverlässig 
-          und ohne Arbeitnehmerüberlassung.
+          und ohne Arbeitnehmerüberlassung. Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 animate-slide-up">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
             <Clock className="h-5 w-5 text-primary-foreground" aria-hidden="true" />
-            <span className="text-sm md:text-base font-medium">Kurzfristig verfügbar</span>
+            <span className="text-sm md:text-base font-medium">Planbare Verfügbarkeit</span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
             <Users className="h-5 w-5 text-primary-foreground" aria-hidden="true" />

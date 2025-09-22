@@ -9,7 +9,7 @@ const BookingAdvantagesInfo = () => {
         </li>
         <li className="flex items-start gap-2">
           <span className="text-blue-600 font-semibold">⚡</span>
-          <span><strong>Sofortige Fahrerzuweisung</strong> – passende Fahrer erhalten umgehend eine Benachrichtigung</span>
+          <span><strong>Schnelle Disposition</strong> – wir weisen den passenden Fahrer über den Adminbereich zu</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="text-purple-600 font-semibold">🧾</span>
