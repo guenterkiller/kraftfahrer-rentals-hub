@@ -1256,7 +1256,7 @@ const Admin = () => {
                             );
                           })()}
                          </TableCell>
-                         <TableCell>
+                    <TableCell>{job.status}</TableCell>
                            <div className="flex items-center gap-2">
                              
                              {/* Resend email for existing assignments */}
@@ -1278,8 +1278,8 @@ const Admin = () => {
                                return null;
                              })()}
                            </div>
-                         </TableCell>
-                    </TableRow>
+                          </TableCell>
+                        </TableRow>
                   ))}
                 </TableBody>
                 </Table>
