@@ -173,24 +173,24 @@ const handler = async (req: Request): Promise<Response> => {
         
         const billingText = job.billing_model === 'agency' 
           ? {
-              subject: "Auftrag angenommen - Subunternehmer-Einsatz über Fahrerexpress",
+              subject: "Dienst-/Werkvertrag angenommen - Subunternehmer-Einsatz",
               content: `
-                <h2>✅ Auftrag erfolgreich angenommen!</h2>
+                <h2>✅ Dienst-/Werkvertrag erfolgreich angenommen!</h2>
                 <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                  <h3 style="color: #1e40af;">Agenturabrechnung - Subunternehmer-Einsatz</h3>
-                  <p><strong>Sie haben den Auftrag als Subunternehmer von Fahrerexpress angenommen.</strong></p>
-                  <p>Sie stellen Ihre Rechnung an Fahrerexpress, abzüglich vereinbarter Provision. Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um eine Dienst-/Werkleistung.</p>
+                  <h3 style="color: #1e40af;">Agenturabrechnung - Subunternehmer-Modell</h3>
+                  <p><strong>Sie haben den Einsatz als selbstständiger Subunternehmer angenommen.</strong></p>
+                  <p>Sie stellen Ihre Rechnung an Fahrerexpress, abzüglich der vereinbarten Provision/Marge. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis.</p>
                 </div>
               `
             }
           : {
-              subject: "Auftrag angenommen - Direktabrechnung mit Auftraggeber",
+              subject: "Vermittlungsauftrag angenommen - Direktabrechnung",
               content: `
-                <h2>✅ Auftrag erfolgreich angenommen!</h2>
+                <h2>✅ Vermittlungsauftrag erfolgreich angenommen!</h2>
                 <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                  <h3 style="color: #15803d;">Direktabrechnung</h3>
+                  <h3 style="color: #15803d;">Vermittlung (Direktabrechnung)</h3>
                   <p><strong>Sie rechnen direkt mit dem Auftraggeber ab.</strong></p>
-                  <p>Fahrerexpress stellt Ihnen eine Vermittlungsprovision gemäß Vereinbarung in Rechnung.</p>
+                  <p>Fahrerexpress stellt Ihnen die vereinbarte Vermittlungsprovision in Rechnung.</p>
                 </div>
               `
             };
@@ -228,12 +228,12 @@ const handler = async (req: Request): Promise<Response> => {
       // Return HTML response for GET requests (email links)
       if (req.method === 'GET') {
         const billingDisplay = job.billing_model === 'agency' 
-          ? 'Agenturabrechnung - Subunternehmer-Einsatz'
-          : 'Direktabrechnung mit Auftraggeber';
+          ? 'Agenturabrechnung - Subunternehmer-Modell'
+          : 'Vermittlung - Direktabrechnung';
           
         const billingDescription = job.billing_model === 'agency'
-          ? 'Sie arbeiten als Subunternehmer für Fahrerexpress und stellen Ihre Rechnung an uns.'
-          : 'Sie rechnen direkt mit dem Auftraggeber ab und zahlen eine Vermittlungsprovision an Fahrerexpress.';
+          ? 'Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.'
+          : 'Sie rechnen direkt mit dem Auftraggeber ab. Fahrerexpress stellt Ihnen die vereinbarte Vermittlungsprovision in Rechnung.';
         
         const html = `
           <!DOCTYPE html>

@@ -51,20 +51,20 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
 
   const billingInfo = job.billing_model === 'agency' 
     ? {
-        title: "Agenturabrechnung – Vertrag mit Fahrerexpress",
-        description: "Dieser Auftrag wird über Fahrerexpress abgerechnet.",
+        title: "Agenturabrechnung (Subunternehmer-Modell)",
+        description: "Sie erhalten eine Rechnung von Fahrerexpress. Die Leistung wird durch einen selbstständigen Subunternehmer erbracht. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.",
         alertColor: "bg-yellow-50 border-yellow-200",
         iconColor: "text-yellow-600",
         consentRequired: true,
-        consentText: `Subunternehmer-Einsatz: Dieser Auftrag wird über Fahrerexpress abgerechnet. Ich erbringe die Leistung als selbstständiger Subunternehmer von Fahrerexpress und stelle meine Rechnung an Fahrerexpress. Die vereinbarte Provision/Marge wird von Fahrerexpress einbehalten. Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um eine Dienst-/Werkleistung.`
+        consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer. Ich stelle meine Rechnung an Fahrerexpress, abzüglich der vereinbarten Provision/Marge. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
       }
     : {
-        title: "Direktabrechnung – Vertrag mit Auftraggeber",
-        description: "Sie rechnen direkt mit dem Auftraggeber ab.",
+        title: "Vermittlung (Direktabrechnung)",
+        description: "Du rechnest direkt mit dem Auftraggeber ab. Fahrerexpress erhält eine Vermittlungsprovision.",
         alertColor: "bg-green-50 border-green-200",
         iconColor: "text-green-600",
         consentRequired: false,
-        consentText: "Direktabrechnung: Ich rechne direkt mit dem Auftraggeber ab. Fahrerexpress stellt mir eine Vermittlungsprovision gemäß Vereinbarung in Rechnung."
+        consentText: "Du rechnest direkt mit dem Auftraggeber ab. Fahrerexpress stellt dir die vereinbarte Vermittlungsprovision in Rechnung."
       };
 
   return (
@@ -175,7 +175,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
-          <Button
+            <Button
             onClick={handleAccept}
             disabled={isSubmitting || (billingInfo.consentRequired && !termsAccepted)}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white"
@@ -187,8 +187,8 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
               <>
                 <CheckCircle className="w-4 h-4 mr-2" />
                 {job.billing_model === 'agency' 
-                  ? 'Auftrag als Subunternehmer annehmen'
-                  : 'Auftrag mit Direktabrechnung annehmen'
+                  ? 'Dienst-/Werkvertrag als Subunternehmer annehmen'
+                  : 'Vermittlungsauftrag annehmen'
                 }
               </>
             )}
