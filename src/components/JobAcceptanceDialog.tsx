@@ -52,11 +52,11 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
   const billingInfo = job.billing_model === 'agency' 
     ? {
         title: "Agenturabrechnung (Subunternehmer-Modell)",
-        description: "Sie erhalten eine Rechnung von Fahrerexpress. Die Leistung wird durch einen selbstständigen Subunternehmer erbracht. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.",
+        description: "Du erbringst die Leistung als selbstständiger Unternehmer/Subunternehmer im Rahmen eines Werk-/Dienstvertrags. Deine Rechnung stellst du an Fahrerexpress; die vereinbarte Provision/Marge wird berücksichtigt. Hinweis: Kein Arbeitsverhältnis, keine Arbeitnehmerüberlassung.",
         alertColor: "bg-yellow-50 border-yellow-200",
         iconColor: "text-yellow-600",
         consentRequired: true,
-        consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer. Ich stelle meine Rechnung an Fahrerexpress, abzüglich der vereinbarten Provision/Marge. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
+        consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags. Ich stelle meine Rechnung an Fahrerexpress, abzüglich der vereinbarten Provision/Marge. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
       }
     : {
         title: "Vermittlung (Direktabrechnung)",
