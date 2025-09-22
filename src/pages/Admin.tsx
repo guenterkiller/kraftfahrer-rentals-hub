@@ -75,6 +75,7 @@ const Admin = () => {
   const [selectedContactJobId, setSelectedContactJobId] = useState<string>("");
   const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
   const [completingOldJobs, setCompletingOldJobs] = useState(false);
+  const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -85,6 +86,47 @@ const Admin = () => {
 
   const handleCreateJob = () => {
     setCreateJobDialogOpen(true);
+  };
+
+  const handleMarkJobCompleted = async (jobId: string) => {
+    setMarkingCompleted(jobId);
+    
+    try {
+      // Get admin email from localStorage
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Admin session not found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      
+      const { data, error } = await supabase.functions.invoke('admin-mark-job-completed', {
+        body: { 
+          email: session.email,
+          jobId: jobId
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Auftrag als erledigt markiert",
+        description: "Der Auftrag wurde erfolgreich als erledigt markiert. Alle Kundendaten bleiben erhalten."
+      });
+
+      // Reload job requests to show updated status
+      await loadJobRequests();
+      
+    } catch (error: any) {
+      console.error('Error marking job as completed:', error);
+      toast({
+        title: "Fehler",
+        description: error.message || "Fehler beim Markieren des Auftrags als erledigt",
+        variant: "destructive"
+      });
+    } finally {
+      setMarkingCompleted(null);
+    }
   };
 
   const handleCompleteOldJobs = async (daysOld: number = 30) => {
@@ -1259,27 +1301,56 @@ const Admin = () => {
                             );
                           })()}
                         </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            {(() => {
-                              const assignment = activeByJob.get(req.id);
-                              if (assignment) {
-                                return (
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => resendDriverConfirmationNew(assignment.id)}
-                                    className="text-blue-600 border-blue-300 hover:bg-blue-50"
-                                  >
-                                    <Mail className="h-3 w-3 mr-1" />
-                                    Erneut senden
-                                  </Button>
-                                );
-                              }
-                              return null;
-                            })()}
-                          </div>
-                        </TableCell>
+                         <TableCell>
+                           <div className="flex items-center gap-2">
+                             {(() => {
+                               const assignment = activeByJob.get(req.id);
+                               if (assignment) {
+                                 return (
+                                   <Button
+                                     size="sm"
+                                     variant="outline"
+                                     onClick={() => resendDriverConfirmationNew(assignment.id)}
+                                     className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                                   >
+                                     <Mail className="h-3 w-3 mr-1" />
+                                     Erneut senden
+                                   </Button>
+                                 );
+                               }
+                               
+                               // Show "Mark as Completed" button for open jobs
+                               if (req.status === 'open') {
+                                 return (
+                                   <Button
+                                     size="sm"
+                                     variant="outline"
+                                     onClick={() => handleMarkJobCompleted(req.id)}
+                                     disabled={markingCompleted === req.id}
+                                     className="text-green-600 border-green-300 hover:bg-green-50"
+                                   >
+                                     <Check className="h-3 w-3 mr-1" />
+                                     {markingCompleted === req.id ? 'Wird markiert...' : 'Als erledigt markieren'}
+                                   </Button>
+                                 );
+                               }
+                               
+                               return null;
+                             })()}
+                             
+                             {req.status !== 'completed' && !req.customer_street && (
+                               <Button
+                                 size="sm"
+                                 variant="outline"
+                                 onClick={() => handleOpenContactDialog(req.id)}
+                                 className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                               >
+                                 <Edit className="h-3 w-3 mr-1" />
+                                 Adresse ergänzen
+                               </Button>
+                             )}
+                           </div>
+                         </TableCell>
                       </TableRow>
                   ))}
                 </TableBody>
