@@ -91,6 +91,39 @@ const Vermittlung = () => {
                 </CardContent>
               </Card>
 
+              <Card>
+                <CardHeader>
+                  <CardTitle>Abgrenzung zur Arbeitnehmerüberlassung</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4">
+                    Die Beauftragung selbstständiger Fahrer ist keine Arbeitnehmerüberlassung, wenn folgende Kriterien erfüllt sind:
+                  </p>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 font-semibold">✓</span>
+                      <span>Der Fahrer erbringt die Leistung als selbstständiger Unternehmer auf Basis eines Dienst-/Werkvertrags</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 font-semibold">✓</span>
+                      <span>Das Fahrzeug wird vom Auftraggeber gestellt, die Fahrleistung erfolgt jedoch eigenverantwortlich</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 font-semibold">✓</span>
+                      <span>Der Fahrer bleibt weisungsunabhängig in der Ausführung und trägt ein eigenes Unternehmerrisiko</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 font-semibold">✓</span>
+                      <span>Der Fahrer kann eigene Arbeitskräfte/Subunternehmer einsetzen</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-green-600 font-semibold">✓</span>
+                      <span>Keine Eingliederung in die Betriebsorganisation des Auftraggebers</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+
               <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                 <p className="text-sm">
                   Für Rückfragen zur Abrechnung stehen wir Ihnen jederzeit zur Verfügung:{" "}
