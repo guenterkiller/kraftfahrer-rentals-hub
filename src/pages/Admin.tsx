@@ -76,6 +76,45 @@ const Admin = () => {
   const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
   const [completingOldJobs, setCompletingOldJobs] = useState(false);
   const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
+  
+  const handleMarkJobOpen = async (jobId: string) => {
+    setMarkingCompleted(jobId);
+    
+    try {
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) {
+        throw new Error('Admin session not found');
+      }
+      
+      const session = JSON.parse(adminSession);
+      
+      const { data, error } = await supabase.functions.invoke('admin-mark-job-open', {
+        body: { 
+          email: session.email,
+          jobId: jobId
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Auftrag wieder geöffnet",
+        description: "Der Auftrag wurde als offen markiert."
+      });
+
+      await loadJobRequests();
+      
+    } catch (error: any) {
+      console.error('Error marking job as open:', error);
+      toast({
+        title: "Fehler",
+        description: error.message || "Fehler beim Öffnen des Auftrags",
+        variant: "destructive"
+      });
+    } finally {
+      setMarkingCompleted(null);
+    }
+  };
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -1168,18 +1207,33 @@ const Admin = () => {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="min-w-[200px]">Name & Details</TableHead>
-                      <TableHead className="min-w-[150px]">Kontakt</TableHead>
-                      <TableHead className="min-w-[120px]">Einsatz</TableHead>
-                      <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
-                      <TableHead className="min-w-[80px]">Status</TableHead>
-                       <TableHead className="min-w-[150px]">Zuweisung</TableHead>
-                       <TableHead className="min-w-[150px]">Aktionen</TableHead>
+                       <TableHead className="min-w-[50px]">Erledigt</TableHead>
+                       <TableHead className="min-w-[200px]">Name & Details</TableHead>
+                       <TableHead className="min-w-[150px]">Kontakt</TableHead>
+                       <TableHead className="min-w-[120px]">Einsatz</TableHead>
+                       <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
+                       <TableHead className="min-w-[80px]">Status</TableHead>
+                        <TableHead className="min-w-[150px]">Zuweisung</TableHead>
                     </TableRow>
                   </TableHeader>
                 <TableBody>
                   {jobRequests.map((req) => (
-                    <TableRow key={req.id}>
+                     <TableRow key={req.id}>
+                       <TableCell className="text-center">
+                         <input
+                           type="checkbox"
+                           checked={req.status === 'completed'}
+                           onChange={(e) => {
+                             if (e.target.checked) {
+                               handleMarkJobCompleted(req.id);
+                             } else {
+                               handleMarkJobOpen(req.id);
+                             }
+                           }}
+                           disabled={markingCompleted === req.id}
+                           className="w-4 h-4 cursor-pointer"
+                         />
+                       </TableCell>
                       <TableCell className="font-medium">
                         <div className="space-y-2">
                           <div className="font-semibold">{req.customer_name}</div>
@@ -1265,41 +1319,13 @@ const Admin = () => {
                             const a = activeByJob.get(req.id);
                             console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
                             
-                             if (!a) {
-                               return (
-                                 <div className="flex items-center gap-2">
-                                   <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
-                                     Zuweisen
-                                   </Button>
-                                    {req.status === 'open' && (
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => {
-                                          console.log('Button clicked for job:', req.id, 'Status:', req.status);
-                                          handleMarkJobCompleted(req.id);
-                                        }}
-                                        disabled={markingCompleted === req.id}
-                                        className="text-green-600 border-green-300 hover:bg-green-50"
-                                      >
-                                        <Check className="h-3 w-3 mr-1" />
-                                        {markingCompleted === req.id ? 'Wird markiert...' : 'Als erledigt markieren'}
-                                      </Button>
-                                    )}
-                                    {/* DEBUG: Immer einen Test-Button anzeigen */}
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => {
-                                        console.log('TEST: Job status is:', req.status, 'for customer:', req.customer_name);
-                                      }}
-                                      className="text-blue-600 border-blue-300 hover:bg-blue-50 ml-2"
-                                    >
-                                      DEBUG: Status = {req.status}
-                                    </Button>
-                                 </div>
-                               );
-                             }
+                              if (!a) {
+                                return (
+                                  <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                    Zuweisen
+                                  </Button>
+                                );
+                              }
 
                             return (
                               <div className="flex items-center gap-4">

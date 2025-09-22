@@ -18,6 +18,9 @@ verify_jwt = false
 [functions.admin-mark-job-completed]
 verify_jwt = false
 
+[functions.admin-mark-job-open]
+verify_jwt = false
+
 [functions.admin-reset-jobs]
 verify_jwt = false
 
