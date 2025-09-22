@@ -1204,7 +1204,7 @@ const Admin = () => {
               <p className="text-gray-500 italic">Keine Anfragen vorhanden.</p>
             ) : (
               <div className="overflow-x-auto">
-                <Table>
+                  <Table>
                   <TableHeader>
                     <TableRow>
                        <TableHead className="min-w-[50px]">Erledigt</TableHead>
@@ -1213,7 +1213,7 @@ const Admin = () => {
                        <TableHead className="min-w-[120px]">Einsatz</TableHead>
                        <TableHead className="min-w-[100px]">Fahrzeugtyp</TableHead>
                        <TableHead className="min-w-[80px]">Status</TableHead>
-                        <TableHead className="min-w-[150px]">Zuweisung</TableHead>
+                        <TableHead className="min-w-[150px]">Zuweisung & Aktionen</TableHead>
                     </TableRow>
                   </TableHeader>
                 <TableBody>
@@ -1231,7 +1231,7 @@ const Admin = () => {
                              }
                            }}
                            disabled={markingCompleted === req.id}
-                           className="w-4 h-4 cursor-pointer"
+                           className="w-5 h-5 cursor-pointer accent-blue-600 disabled:cursor-not-allowed"
                          />
                        </TableCell>
                       <TableCell className="font-medium">
@@ -1321,14 +1321,27 @@ const Admin = () => {
                             
                               if (!a) {
                                 return (
-                                  <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
-                                    Zuweisen
-                                  </Button>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                      Zuweisen
+                                    </Button>
+                                    {!req.customer_street && (
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => handleOpenContactDialog(req.id)}
+                                        className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                      >
+                                        <Edit className="h-3 w-3 mr-1" />
+                                        Adresse ergänzen
+                                      </Button>
+                                    )}
+                                  </div>
                                 );
                               }
 
                             return (
-                              <div className="flex items-center gap-4">
+                              <div className="space-y-2">
                                 <div className="flex items-center gap-2">
                                   <span className="font-medium text-blue-800">
                                     {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
@@ -1343,7 +1356,7 @@ const Admin = () => {
                                   )}
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 flex-wrap">
                                   <Button size="sm" onClick={() => resendDriverConfirmationNew(a.id)}>
                                     E-Mail erneut senden
                                   </Button>
@@ -1355,56 +1368,6 @@ const Admin = () => {
                             );
                           })()}
                         </TableCell>
-                         <TableCell>
-                           <div className="flex items-center gap-2">
-                             {(() => {
-                               const assignment = activeByJob.get(req.id);
-                               if (assignment) {
-                                 return (
-                                   <Button
-                                     size="sm"
-                                     variant="outline"
-                                     onClick={() => resendDriverConfirmationNew(assignment.id)}
-                                     className="text-blue-600 border-blue-300 hover:bg-blue-50"
-                                   >
-                                     <Mail className="h-3 w-3 mr-1" />
-                                     Erneut senden
-                                   </Button>
-                                 );
-                               }
-                               
-                               // Show "Mark as Completed" button for open jobs
-                               if (req.status === 'open') {
-                                 return (
-                                   <Button
-                                     size="sm"
-                                     variant="outline"
-                                     onClick={() => handleMarkJobCompleted(req.id)}
-                                     disabled={markingCompleted === req.id}
-                                     className="text-green-600 border-green-300 hover:bg-green-50"
-                                   >
-                                     <Check className="h-3 w-3 mr-1" />
-                                     {markingCompleted === req.id ? 'Wird markiert...' : 'Als erledigt markieren'}
-                                   </Button>
-                                 );
-                               }
-                               
-                               return null;
-                             })()}
-                             
-                             {req.status !== 'completed' && !req.customer_street && (
-                               <Button
-                                 size="sm"
-                                 variant="outline"
-                                 onClick={() => handleOpenContactDialog(req.id)}
-                                 className="text-orange-600 border-orange-300 hover:bg-orange-50"
-                               >
-                                 <Edit className="h-3 w-3 mr-1" />
-                                 Adresse ergänzen
-                               </Button>
-                             )}
-                           </div>
-                         </TableCell>
                       </TableRow>
                   ))}
                 </TableBody>
