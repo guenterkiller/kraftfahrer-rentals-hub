@@ -1271,18 +1271,32 @@ const Admin = () => {
                                    <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
                                      Zuweisen
                                    </Button>
-                                   {req.status === 'open' && (
-                                     <Button
-                                       size="sm"
-                                       variant="outline"
-                                       onClick={() => handleMarkJobCompleted(req.id)}
-                                       disabled={markingCompleted === req.id}
-                                       className="text-green-600 border-green-300 hover:bg-green-50"
-                                     >
-                                       <Check className="h-3 w-3 mr-1" />
-                                       {markingCompleted === req.id ? 'Wird markiert...' : 'Als erledigt markieren'}
-                                     </Button>
-                                   )}
+                                    {req.status === 'open' && (
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => {
+                                          console.log('Button clicked for job:', req.id, 'Status:', req.status);
+                                          handleMarkJobCompleted(req.id);
+                                        }}
+                                        disabled={markingCompleted === req.id}
+                                        className="text-green-600 border-green-300 hover:bg-green-50"
+                                      >
+                                        <Check className="h-3 w-3 mr-1" />
+                                        {markingCompleted === req.id ? 'Wird markiert...' : 'Als erledigt markieren'}
+                                      </Button>
+                                    )}
+                                    {/* DEBUG: Immer einen Test-Button anzeigen */}
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => {
+                                        console.log('TEST: Job status is:', req.status, 'for customer:', req.customer_name);
+                                      }}
+                                      className="text-blue-600 border-blue-300 hover:bg-blue-50 ml-2"
+                                    >
+                                      DEBUG: Status = {req.status}
+                                    </Button>
                                  </div>
                                );
                              }
