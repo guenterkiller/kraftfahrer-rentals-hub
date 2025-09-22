@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const EnhancedBookingForm = () => {
+const BookingForm = () => {
   const [startDate, setStartDate] = useState<Date>();
   const [vehicleTypes, setVehicleTypes] = useState<string[]>([]);
   const [qualifications, setQualifications] = useState<string[]>([]);
@@ -78,10 +78,19 @@ const EnhancedBookingForm = () => {
     try {
       const response = await supabase.functions.invoke('submit-fahrer-anfrage', {
         body: {
+          // Complete customer data
           company: formData.get('company'),
           contact_person: formData.get('contact_person'),
           email: formData.get('email'),
           phone: formData.get('phone'),
+          
+          // Customer address
+          customer_street: formData.get('customer_street'),
+          customer_house_number: formData.get('customer_house_number'),
+          customer_postal_code: formData.get('customer_postal_code'),
+          customer_city: formData.get('customer_city'),
+          
+          // Job details
           start_date: startDate?.toISOString(),
           calendar_week: startDate ? format(startDate, 'I', { locale: de }) : null,
           vehicle_types: vehicleTypes,
@@ -89,9 +98,16 @@ const EnhancedBookingForm = () => {
           duration: formData.get('duration'),
           location: formData.get('location'),
           description: formData.get('description'),
-          allow_whatsapp: allowWhatsApp,
           hourly_rate: formData.get('hourly_rate'),
-          status: 'lead' // Initial CRM status
+          
+          // Contact preferences
+          allow_whatsapp: allowWhatsApp,
+          
+          // Billing model
+          billing_model: formData.get('billing_model'),
+          
+          // CRM status
+          status: 'lead'
         }
       });
 
@@ -124,14 +140,14 @@ const EnhancedBookingForm = () => {
   return (
     <section className="py-16 bg-white" id="fahreranfrage">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <Card>
             <CardHeader>
               <CardTitle className="text-2xl text-center">
-                Fahrer buchen – schnelles Formular
+                Fahrer buchen – Vollständige Anfrage
               </CardTitle>
               <p className="text-center text-muted-foreground">
-                Strukturierte Erfassung für zügige Disposition
+                Alle erforderlichen Daten für die Fahrerzuweisung und Abrechnung
               </p>
             </CardHeader>
             <CardContent>
@@ -139,7 +155,7 @@ const EnhancedBookingForm = () => {
                 {/* Company & Contact */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="company">Unternehmen *</Label>
+                    <Label htmlFor="company">Unternehmen/Firma *</Label>
                     <Input id="company" name="company" required />
                   </div>
                   <div>
@@ -157,6 +173,36 @@ const EnhancedBookingForm = () => {
                   <div>
                     <Label htmlFor="phone">Telefon *</Label>
                     <Input id="phone" name="phone" type="tel" required />
+                  </div>
+                </div>
+
+                {/* Customer Address */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Firmenanschrift</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <Label htmlFor="customer_street">Straße *</Label>
+                      <Input id="customer_street" name="customer_street" required />
+                    </div>
+                    <div>
+                      <Label htmlFor="customer_house_number">Hausnummer *</Label>
+                      <Input id="customer_house_number" name="customer_house_number" required />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="customer_postal_code">PLZ *</Label>
+                      <Input 
+                        id="customer_postal_code" 
+                        name="customer_postal_code" 
+                        pattern="[0-9]{5}"
+                        required 
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="customer_city">Ort *</Label>
+                      <Input id="customer_city" name="customer_city" required />
+                    </div>
                   </div>
                 </div>
 
@@ -253,8 +299,8 @@ const EnhancedBookingForm = () => {
                 {/* Duration & Location */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="duration">Voraussichtliche Dauer</Label>
-                    <Select name="duration">
+                    <Label htmlFor="duration">Voraussichtliche Dauer *</Label>
+                    <Select name="duration" required>
                       <SelectTrigger>
                         <SelectValue placeholder="Auswählen" />
                       </SelectTrigger>
@@ -286,13 +332,27 @@ const EnhancedBookingForm = () => {
                   />
                 </div>
 
+                {/* Billing Model */}
+                <div>
+                  <Label htmlFor="billing_model">Abrechnungsmodell *</Label>
+                  <Select name="billing_model" required>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Bitte wählen" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="direkt">Direkt (Sie zahlen direkt an den Fahrer)</SelectItem>
+                      <SelectItem value="agentur">Über Agentur (Rechnung von Fahrerexpress)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 {/* Description */}
                 <div>
                   <Label htmlFor="description">Weitere Details zum Einsatz</Label>
                   <Textarea 
                     id="description" 
                     name="description"
-                    placeholder="Spezielle Anforderungen, Arbeitszeiten, etc."
+                    placeholder="Spezielle Anforderungen, Arbeitszeiten, besondere Hinweise etc."
                     className="min-h-[100px]"
                   />
                 </div>
@@ -309,7 +369,7 @@ const EnhancedBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-primary hover:bg-primary/90"
-                  disabled={loading || vehicleTypes.length === 0}
+                  disabled={loading || vehicleTypes.length === 0 || !startDate}
                 >
                   {loading ? "Wird gesendet..." : "Jetzt Fahrer anfragen"}
                 </Button>
@@ -322,4 +382,4 @@ const EnhancedBookingForm = () => {
   );
 };
 
-export default EnhancedBookingForm;
+export default BookingForm;
