@@ -9,7 +9,6 @@ import Datenschutz from "./pages/Datenschutz";
 import NotFound from "./pages/NotFound";
 import FahrerRegistrierung from "./pages/FahrerRegistrierung";
 import FahrerAdmin from "./pages/FahrerAdmin";
-
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
@@ -18,6 +17,10 @@ import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import DriverJobResponse from "./pages/DriverJobResponse";
 import AdminRoute from "./components/AdminRoute";
+import LKWFahrerBuchen from "./pages/LKWFahrerBuchen";
+import KraftfahrerMieten from "./pages/KraftfahrerMieten";
+import FahrmischerfahrerGesucht from "./pages/FahrmischerfahrerGesucht";
+import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 
 
 const queryClient = new QueryClient();
@@ -30,6 +33,10 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/lkw-fahrer-buchen" element={<LKWFahrerBuchen />} />
+          <Route path="/kraftfahrer-mieten" element={<KraftfahrerMieten />} />
+          <Route path="/fahrmischerfahrer-gesucht" element={<FahrmischerfahrerGesucht />} />
+          <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
           
