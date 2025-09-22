@@ -64,7 +64,7 @@ const LazyImage = ({
           isLoaded ? 'opacity-100' : 'opacity-0'
         } ${className}`}
         decoding="async"
-        fetchPriority={priority ? 'high' : 'auto'}
+        {...(priority && { fetchPriority: 'high' as any })}
       />
     </div>
   );
