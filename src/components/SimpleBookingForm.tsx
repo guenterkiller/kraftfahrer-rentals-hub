@@ -106,9 +106,7 @@ const SimpleBookingForm = () => {
                   Schneller zum Fahrer: Bitte „Fahrer buchen" nutzen
                 </h2>
                 <p className="text-sm text-gray-700 mt-1">
-                  Damit Ihr Auftrag ohne Verzögerung bearbeitet wird, nutzen Sie bitte den Button „Fahrer buchen". 
-                  Ihre Anfrage wird automatisch erfasst, an passende Fahrer weitergeleitet und direkt bestätigt. 
-                  E-Mail-Anfragen führen oft zu Verzögerungen, da wir den Auftrag manuell anlegen müssen.
+                  Ihre Anfrage wird strukturiert erfasst und zügig disponiert. So vermeiden wir Rückfragen und können den passenden Fahrer schnell zuweisen.
                 </p>
                 <Button 
                   className="mt-3 bg-blue-600 hover:bg-blue-700"
@@ -131,6 +129,15 @@ const SimpleBookingForm = () => {
               </p>
             </CardHeader>
             <CardContent>
+              {/* Billing Model Info */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold text-blue-800 mb-2">Abrechnungsmodell: Agenturabrechnung – Vertragspartner ist Fahrerexpress</h3>
+                <p className="text-sm text-blue-700">
+                  Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt. 
+                  Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
+                </p>
+              </div>
+
               {/* Pricing Info */}
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                 <div className="flex items-start gap-2">
@@ -276,7 +283,7 @@ const SimpleBookingForm = () => {
                         checked={nightShift}
                         onCheckedChange={(checked) => setNightShift(checked as boolean)}
                       />
-                      <Label htmlFor="nacht">Nachtschift möglich</Label>
+                      <Label htmlFor="nacht">Nachtschicht möglich</Label>
                     </div>
                   </div>
                 </div>
@@ -312,7 +319,7 @@ const SimpleBookingForm = () => {
                       required
                     />
                     <Label htmlFor="data">
-                      Ich stimme der Verarbeitung meiner Daten zu. * 
+                      Ich stimme der Verarbeitung meiner Daten zu. *
                       <a href="/datenschutz" className="text-blue-600 hover:underline ml-1">
                         Datenschutzerklärung
                       </a>

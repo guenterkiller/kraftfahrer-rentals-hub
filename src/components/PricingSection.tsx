@@ -244,8 +244,8 @@ const PricingSection = () => {
               <p className="text-muted-foreground">Keine Sozialabgaben, kein Lohnnebenkostenrisiko</p>
             </div>
             <div>
-              <h5 className="font-semibold mb-2">Flexible Verfügbarkeit:</h5>
-              <p className="text-muted-foreground">Kurzfristige Verfügbarkeit</p>
+              <h5 className="font-semibold mb-2">Planbare Verfügbarkeit:</h5>
+              <p className="text-muted-foreground">Einsätze meist ab kommender Kalenderwoche</p>
             </div>
             <div>
               <h5 className="font-semibold mb-2">Rechnung:</h5>
