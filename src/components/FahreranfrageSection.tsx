@@ -1,12 +1,10 @@
-import BookingForm from "@/components/BookingForm";
-import BookingPriorityBanner from "@/components/BookingPriorityBanner";
+import OriginalBookingForm from "@/components/OriginalBookingForm";
 import BookingAdvantagesInfo from "@/components/BookingAdvantagesInfo";
 
 const FahreranfrageSection = () => {
   return (
     <div>
-      <BookingPriorityBanner />
-      <BookingForm />
+      <OriginalBookingForm />
       <div className="container mx-auto px-4">
         <BookingAdvantagesInfo />
       </div>
