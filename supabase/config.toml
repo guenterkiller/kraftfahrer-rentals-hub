@@ -9,7 +9,19 @@ verify_jwt = false
 [functions.admin-data-fetch]
 verify_jwt = false
 
+[functions.admin-complete-old-jobs]
+verify_jwt = false
+
+[functions.admin-create-job]
+verify_jwt = false
+
+[functions.admin-mark-job-completed]
+verify_jwt = false
+
 [functions.admin-reset-jobs]
+verify_jwt = false
+
+[functions.admin-update-contact]
 verify_jwt = false
 
 [functions.approve-driver-and-send-jobs]
