@@ -296,6 +296,10 @@ const Admin = () => {
             vorname,
             nachname,
             email
+          ),
+          job_requests:job_id (
+            customer_name,
+            fahrzeugtyp
           )
         `)
         .order('assigned_at', { ascending: false });
