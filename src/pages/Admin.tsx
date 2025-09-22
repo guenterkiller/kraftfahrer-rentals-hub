@@ -1213,12 +1213,11 @@ const Admin = () => {
                               </Badge>
                             )}
                           </div>
-                       </TableCell>
+                        </TableCell>
                         <TableCell>
                           {(() => {
                             const a = activeByJob.get(req.id);
                             console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
-                            
                             
                             if (!a) {
                               return (
@@ -1255,31 +1254,29 @@ const Admin = () => {
                               </div>
                             );
                           })()}
-                         </TableCell>
-                    <TableCell>{job.status}</TableCell>
-                           <div className="flex items-center gap-2">
-                             
-                             {/* Resend email for existing assignments */}
-                             {(() => {
-                               const assignment = activeByJob.get(req.id);
-                               if (assignment) {
-                                 return (
-                                   <Button
-                                     size="sm"
-                                     variant="outline"
-                                     onClick={() => resendDriverConfirmationNew(assignment.id)}
-                                     className="text-blue-600 border-blue-300 hover:bg-blue-50"
-                                   >
-                                     <Mail className="h-3 w-3 mr-1" />
-                                     Erneut senden
-                                   </Button>
-                                 );
-                               }
-                               return null;
-                             })()}
-                           </div>
-                          </TableCell>
-                        </TableRow>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            {(() => {
+                              const assignment = activeByJob.get(req.id);
+                              if (assignment) {
+                                return (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => resendDriverConfirmationNew(assignment.id)}
+                                    className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                                  >
+                                    <Mail className="h-3 w-3 mr-1" />
+                                    Erneut senden
+                                  </Button>
+                                );
+                              }
+                              return null;
+                            })()}
+                          </div>
+                        </TableCell>
+                      </TableRow>
                   ))}
                 </TableBody>
                 </Table>
