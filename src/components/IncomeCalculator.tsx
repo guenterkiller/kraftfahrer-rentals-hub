@@ -9,7 +9,7 @@ import { TrendingUp } from "lucide-react";
 const IncomeCalculator = () => {
   const [workDays, setWorkDays] = useState<number>(20);
   const [profile, setProfile] = useState<string>("standard");
-  const [calculated, setCalculated] = useState<boolean>(false);
+  const [result, setResult] = useState<any>(null);
 
   const calculateIncome = () => {
     const dailyRates = {
@@ -27,17 +27,16 @@ const IncomeCalculator = () => {
     
     const netIncome = grossIncome - socialContributions - insurance - reserves;
     
-    setCalculated(true);
-    return {
+    const calculatedResult = {
       grossIncome,
       socialContributions,
       insurance,
       reserves,
       netIncome
     };
+    
+    setResult(calculatedResult);
   };
-
-  const result = calculated ? calculateIncome() : null;
 
   return (
     <Card className="max-w-md mx-auto mb-8">
