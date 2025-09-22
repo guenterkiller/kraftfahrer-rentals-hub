@@ -64,22 +64,44 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Generate response URLs
+    // Generate response URLs with billing model
     const baseUrl = 'https://kraftfahrer-mieten.com';
-    const acceptUrl = `${baseUrl}/driver/response?job=${jobId}&driver=${driverId}&action=accept&billing=${billingModel}`;
-    const declineUrl = `${baseUrl}/driver/response?job=${jobId}&driver=${driverId}&action=decline`;
+    const acceptUrl = `${baseUrl}/driver/accept?job=${jobId}&driver=${driverId}&action=accept&billing=${billingModel}`;
+    const declineUrl = `${baseUrl}/driver/accept?job=${jobId}&driver=${driverId}&action=decline`;
 
-    // Generate email content based on billing model
+    // Generate rechtssichere email content based on billing model
     const billingInfo = billingModel === 'agency' 
       ? {
           title: "Agenturabrechnung – Vertrag mit Fahrerexpress",
-          description: "Sie nehmen den Einsatz als Subunternehmer von Fahrerexpress an. Sie stellen Ihre Rechnung an Fahrerexpress, abzüglich vereinbarter Provision.",
-          acceptText: "Ich nehme den Auftrag als Subunternehmer von Fahrerexpress an"
+          description: "Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringe die Leistung als selbstständiger Subunternehmer von Fahrerexpress.",
+          consentText: `
+            <div style="background: #fff3cd; border: 2px solid #856404; padding: 20px; margin: 20px 0; border-radius: 8px;">
+              <h4 style="color: #856404; margin-top: 0;">⚠️ Wichtiger Hinweis - Rechtliche Zustimmung erforderlich:</h4>
+              <p style="font-weight: bold; color: #856404;">
+                <strong>Subunternehmer-Einsatz:</strong> Dieser Auftrag wird über Fahrerexpress abgerechnet. 
+                Ich erbringe die Leistung als selbstständiger Subunternehmer von Fahrerexpress und stelle meine Rechnung an Fahrerexpress. 
+                Die vereinbarte Provision/Marge wird von Fahrerexpress einbehalten. 
+                Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um eine Dienst-/Werkleistung.
+              </p>
+              <p style="color: #856404; font-size: 14px;">
+                Mit Klick auf "Annehmen" bestätigen Sie diese Bedingungen.
+              </p>
+            </div>
+          `,
+          acceptText: "✅ Auftrag als Subunternehmer annehmen"
         }
       : {
           title: "Direktabrechnung – Vertrag mit Auftraggeber", 
           description: "Sie rechnen direkt mit dem Auftraggeber ab. Fahrerexpress berechnet Ihnen eine Vermittlungsprovision.",
-          acceptText: "Ich nehme den Auftrag mit direkter Abrechnung an"
+          consentText: `
+            <div style="background: #d1f7d1; border: 2px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px;">
+              <h4 style="color: #155724; margin-top: 0;">ℹ️ Direktabrechnung:</h4>
+              <p style="font-weight: bold; color: #155724;">
+                Ich rechne direkt mit dem Auftraggeber ab. Fahrerexpress stellt mir eine Vermittlungsprovision gemäß Vereinbarung in Rechnung.
+              </p>
+            </div>
+          `,
+          acceptText: "✅ Auftrag mit Direktabrechnung annehmen"
         };
 
     const emailHtml = `
@@ -90,6 +112,8 @@ const handler = async (req: Request): Promise<Response> => {
           <h3 style="color: #2563eb; margin-top: 0;">${billingInfo.title}</h3>
           <p style="margin: 10px 0; font-weight: bold;">${billingInfo.description}</p>
         </div>
+
+        ${billingInfo.consentText}
 
         <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px;">
           <h3>Auftragsdetails:</h3>
@@ -106,7 +130,7 @@ const handler = async (req: Request): Promise<Response> => {
         <div style="margin: 30px 0; text-align: center;">
           <a href="${acceptUrl}" 
              style="background: #16a34a; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 10px;">
-            ✅ ${billingInfo.acceptText}
+            ${billingInfo.acceptText}
           </a>
           <br>
           <a href="${declineUrl}" 
@@ -116,13 +140,10 @@ const handler = async (req: Request): Promise<Response> => {
         </div>
 
         <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px;"><strong>Wichtiger Hinweis:</strong></p>
+          <p style="margin: 0; font-size: 14px;"><strong>Rechtlicher Hinweis:</strong></p>
           <p style="margin: 5px 0 0 0; font-size: 14px;">
             Mit dem Klick auf "Annehmen" bestätigen Sie, dass Sie die Bedingungen des gewählten Abrechnungsmodells verstehen und akzeptieren.
-            ${billingModel === 'agency' 
-              ? 'Sie werden als Subunternehmer für Fahrerexpress tätig und rechnen mit uns ab.'
-              : 'Sie rechnen direkt mit dem Auftraggeber ab und zahlen eine Vermittlungsprovision an Fahrerexpress.'
-            }
+            Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um Dienst-/Werkverträge.
           </p>
         </div>
 

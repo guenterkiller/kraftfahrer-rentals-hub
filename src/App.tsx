@@ -16,6 +16,7 @@ import Vermittlung from "./pages/Vermittlung";
 import Versicherung from "./pages/Versicherung";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
+import DriverJobResponse from "./pages/DriverJobResponse";
 import AdminRoute from "./components/AdminRoute";
 
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/versicherung" element={<Versicherung />} />
           <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/driver/accept" element={<DriverJobResponse />} />
           
           <Route path="/impressum" element={<Impressum />} />
           <Route path="/datenschutz" element={<Datenschutz />} />

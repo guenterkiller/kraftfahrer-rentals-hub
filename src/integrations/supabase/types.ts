@@ -475,16 +475,70 @@ export type Database = {
           },
         ]
       }
+      job_driver_acceptances: {
+        Row: {
+          accepted_at: string
+          billing_model: Database["public"]["Enums"]["billing_model_enum"]
+          driver_id: string
+          id: string
+          ip: unknown | null
+          job_id: string
+          terms_version: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          accepted_at?: string
+          billing_model: Database["public"]["Enums"]["billing_model_enum"]
+          driver_id: string
+          id?: string
+          ip?: unknown | null
+          job_id: string
+          terms_version?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          accepted_at?: string
+          billing_model?: Database["public"]["Enums"]["billing_model_enum"]
+          driver_id?: string
+          id?: string
+          ip?: unknown | null
+          job_id?: string
+          terms_version?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_driver_acceptances_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_driver_acceptances_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_requests: {
         Row: {
           besonderheiten: string | null
-          billing_model: string
+          billing_model:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
           company: string | null
           completed_at: string | null
           created_at: string
           customer_city: string | null
           customer_email: string
           customer_house_number: string | null
+          customer_invoice_id: string | null
+          customer_invoice_status:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           customer_name: string
           customer_phone: string
           customer_postal_code: string | null
@@ -494,19 +548,30 @@ export type Database = {
           fuehrerscheinklasse: string
           id: string
           nachricht: string
+          payout_status: string | null
           status: string
+          subcontractor_invoice_id: string | null
+          subcontractor_invoice_status:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           updated_at: string
           zeitraum: string
         }
         Insert: {
           besonderheiten?: string | null
-          billing_model?: string
+          billing_model?:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
           company?: string | null
           completed_at?: string | null
           created_at?: string
           customer_city?: string | null
           customer_email: string
           customer_house_number?: string | null
+          customer_invoice_id?: string | null
+          customer_invoice_status?:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           customer_name: string
           customer_phone: string
           customer_postal_code?: string | null
@@ -516,19 +581,30 @@ export type Database = {
           fuehrerscheinklasse?: string
           id?: string
           nachricht: string
+          payout_status?: string | null
           status?: string
+          subcontractor_invoice_id?: string | null
+          subcontractor_invoice_status?:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           updated_at?: string
           zeitraum: string
         }
         Update: {
           besonderheiten?: string | null
-          billing_model?: string
+          billing_model?:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
           company?: string | null
           completed_at?: string | null
           created_at?: string
           customer_city?: string | null
           customer_email?: string
           customer_house_number?: string | null
+          customer_invoice_id?: string | null
+          customer_invoice_status?:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           customer_name?: string
           customer_phone?: string
           customer_postal_code?: string | null
@@ -538,7 +614,12 @@ export type Database = {
           fuehrerscheinklasse?: string
           id?: string
           nachricht?: string
+          payout_status?: string | null
           status?: string
+          subcontractor_invoice_id?: string | null
+          subcontractor_invoice_status?:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           updated_at?: string
           zeitraum?: string
         }
@@ -644,13 +725,19 @@ export type Database = {
         Args: { _job_id: string }
         Returns: {
           besonderheiten: string | null
-          billing_model: string
+          billing_model:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
           company: string | null
           completed_at: string | null
           created_at: string
           customer_city: string | null
           customer_email: string
           customer_house_number: string | null
+          customer_invoice_id: string | null
+          customer_invoice_status:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           customer_name: string
           customer_phone: string
           customer_postal_code: string | null
@@ -660,7 +747,12 @@ export type Database = {
           fuehrerscheinklasse: string
           id: string
           nachricht: string
+          payout_status: string | null
           status: string
+          subcontractor_invoice_id: string | null
+          subcontractor_invoice_status:
+            | Database["public"]["Enums"]["invoice_status"]
+            | null
           updated_at: string
           zeitraum: string
         }
@@ -752,7 +844,8 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      billing_model_enum: "direct" | "agency"
+      invoice_status: "draft" | "sent" | "paid" | "overdue" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -879,6 +972,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      billing_model_enum: ["direct", "agency"],
+      invoice_status: ["draft", "sent", "paid", "overdue", "cancelled"],
+    },
   },
 } as const
