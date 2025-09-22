@@ -105,7 +105,13 @@ const OriginalBookingForm = () => {
                 </p>
                 <Button 
                   className="mt-3 bg-blue-600 hover:bg-blue-700"
-                  onClick={() => document.querySelector('#booking-form')?.scrollIntoView({ behavior: 'smooth' })}
+                  type="button"
+                  onClick={() => {
+                    const element = document.querySelector('#booking-form');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
                 >
                   Jetzt Fahrer buchen
                 </Button>
@@ -328,7 +334,12 @@ const OriginalBookingForm = () => {
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
                   disabled={loading || !agreedToPrices || !agreedToData}
                 >
-                  {loading ? "Wird gesendet..." : "Fahrer buchen\nab 399 € netto"}
+                  {loading ? "Wird gesendet..." : (
+                    <div className="text-center">
+                      <div>Fahrer buchen</div>
+                      <div className="text-sm">ab 399 € netto</div>
+                    </div>
+                  )}
                 </Button>
               </form>
             </CardContent>
