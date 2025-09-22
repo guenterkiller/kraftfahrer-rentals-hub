@@ -223,7 +223,7 @@ const handler = async (req: Request): Promise<Response> => {
       besonderheiten: requestData.anforderungen?.length > 0 ? requestData.anforderungen.join(", ") : null,
       nachricht: nachricht.trim(),
       status: 'open',
-      billing_model: requestData.billing_model || 'direct'
+      billing_model: requestData.billing_model || 'agency'
     };
 
     console.log('Inserting job request:', jobRequestData);
