@@ -116,7 +116,8 @@ const FahreranfrageSection = () => {
         newsletter: formData.get("newsletter") === "on",
         price_acknowledged: true,
         price_ack_time: priceAckTime || new Date().toISOString(),
-        price_plan: pricePlan
+        price_plan: pricePlan,
+        billing_model: formData.get("billing_model") as string || 'direct'
       };
 
       // Call Edge Function instead of direct Supabase
@@ -183,6 +184,40 @@ const FahreranfrageSection = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Billing Model Selection */}
+              <div className="rounded-lg border border-primary/20 bg-muted/40 p-4 md:p-5">
+                <h3 className="font-bold text-lg mb-3">Abrechnungsmodell wählen</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="radio"
+                      id="billing_direct"
+                      name="billing_model"
+                      value="direct"
+                      defaultChecked
+                      className="mt-1"
+                    />
+                    <Label htmlFor="billing_direct" className="flex-1 cursor-pointer">
+                      <div className="font-medium">Direktabrechnung mit Fahrer</div>
+                      <div className="text-sm text-muted-foreground">Sie rechnen direkt mit dem Fahrer ab. Fahrerexpress erhält eine Vermittlungsprovision.</div>
+                    </Label>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="radio"
+                      id="billing_agency"
+                      name="billing_model"
+                      value="agency"
+                      className="mt-1"
+                    />
+                    <Label htmlFor="billing_agency" className="flex-1 cursor-pointer">
+                      <div className="font-medium">Abrechnung über Fahrerexpress</div>
+                      <div className="text-sm text-muted-foreground">Fahrerexpress stellt Ihnen die Rechnung. Der Fahrer rechnet als Subunternehmer mit uns ab.</div>
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
               {/* Preisbox */}
               <div role="note" aria-label="Ihr Fahrerpreis" className="rounded-lg border border-primary/20 bg-muted/40 p-4 md:p-5 relative">
                 <div className="absolute inset-x-0 top-0 h-1 bg-primary rounded-t-lg" />

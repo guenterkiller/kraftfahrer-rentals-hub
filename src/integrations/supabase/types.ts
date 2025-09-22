@@ -478,6 +478,7 @@ export type Database = {
       job_requests: {
         Row: {
           besonderheiten: string | null
+          billing_model: string
           company: string | null
           completed_at: string | null
           created_at: string
@@ -499,6 +500,7 @@ export type Database = {
         }
         Insert: {
           besonderheiten?: string | null
+          billing_model?: string
           company?: string | null
           completed_at?: string | null
           created_at?: string
@@ -520,6 +522,7 @@ export type Database = {
         }
         Update: {
           besonderheiten?: string | null
+          billing_model?: string
           company?: string | null
           completed_at?: string | null
           created_at?: string
@@ -641,6 +644,7 @@ export type Database = {
         Args: { _job_id: string }
         Returns: {
           besonderheiten: string | null
+          billing_model: string
           company: string | null
           completed_at: string | null
           created_at: string

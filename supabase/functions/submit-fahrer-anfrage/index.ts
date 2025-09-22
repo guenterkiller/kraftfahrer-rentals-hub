@@ -58,6 +58,7 @@ interface FahrerAnfrageRequest {
   price_acknowledged?: boolean;
   price_ack_time?: string;
   price_plan?: string;
+  billing_model?: string;
   
   // Meta
   meta?: {
@@ -221,7 +222,8 @@ const handler = async (req: Request): Promise<Response> => {
       fuehrerscheinklasse: fuehrerscheinklasse,
       besonderheiten: requestData.anforderungen?.length > 0 ? requestData.anforderungen.join(", ") : null,
       nachricht: nachricht.trim(),
-      status: 'open'
+      status: 'open',
+      billing_model: requestData.billing_model || 'direct'
     };
 
     console.log('Inserting job request:', jobRequestData);

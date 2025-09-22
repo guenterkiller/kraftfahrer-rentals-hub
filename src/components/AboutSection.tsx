@@ -25,10 +25,10 @@ const AboutSection = () => {
                     Fahrerexpress-Agentur
                   </p>
                   <p className="text-lg mb-4">
-                    Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
+                    Flexibel. Zuverlässig. Deutschlandweit.
                   </p>
                   <p className="text-muted-foreground mb-4">
-                    Flexibel. Zuverlässig. Deutschlandweit.
+                    Wir vermitteln bundesweit selbstständige Fahrer – für Transporte, Bauprojekte und Spezialaufgaben. Flexibel, zuverlässig und ohne Arbeitnehmerüberlassung.
                   </p>
                   <div className="text-sm text-muted-foreground">
                     <p>📱 Mobil: 01577 1442285</p>

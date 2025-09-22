@@ -28,13 +28,13 @@ const HeroSection = () => {
             Flexibel. Zuverlässig. Deutschlandweit.
           </h2>
           <p className="text-base sm:text-lg md:text-xl drop-shadow-sm">
-            Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
+            Wir vermitteln bundesweit selbstständige Fahrer – für Transporte, Bauprojekte und Spezialaufgaben
           </p>
         </div>
         
         <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-4xl mx-auto leading-relaxed px-4 drop-shadow-sm animate-fade-in">
-          Sie möchten kurzfristig einen LKW-Fahrer mieten? Fahrerexpress vermittelt bundesweit 
-          selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer – flexibel, zuverlässig 
+          Sie möchten kurzfristig einen Fahrer mieten? Fahrerexpress vermittelt bundesweit 
+          selbstständige Fahrer für alle Fahrzeugtypen – flexibel, zuverlässig 
           und ohne Arbeitnehmerüberlassung.
         </p>
         
