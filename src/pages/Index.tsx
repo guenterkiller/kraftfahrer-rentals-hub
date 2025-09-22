@@ -8,6 +8,17 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import JobAlertSection from "@/components/JobAlertSection";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
+import AvailabilityCheckTeaser from "@/components/AvailabilityCheckTeaser";
+import PriceCalculator from "@/components/PriceCalculator";
+import CaseStudies from "@/components/CaseStudies";
+import RiskShield from "@/components/RiskShield";
+import ResponseTimeInfo from "@/components/ResponseTimeInfo";
+import IncomeCalculator from "@/components/IncomeCalculator";
+import WeeklyJobsExamples from "@/components/WeeklyJobsExamples";
+import DriverSpotlight from "@/components/DriverSpotlight";
+import HowItWorksTimeline from "@/components/HowItWorksTimeline";
+import IndustriesRow from "@/components/IndustriesRow";
+import WhatsAppContact from "@/components/WhatsAppContact";
 import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
@@ -62,17 +73,48 @@ const Index = () => {
           <AboutSection />
         </section>
         
+        {/* Conversion elements for customers */}
+        <section className="scroll-mt-16">
+          <div className="container mx-auto px-4">
+            <AvailabilityCheckTeaser />
+            <PriceCalculator />
+          </div>
+        </section>
+        
         <section id="services" aria-label="Unsere Dienstleistungen" className="scroll-mt-16">
           <ServicesSection />
         </section>
+        
+        <CaseStudies />
         
         <section id="pricing" aria-label="Preise und Konditionen" className="scroll-mt-16">
           <PricingSection />
         </section>
         
+        <section className="scroll-mt-16">
+          <div className="container mx-auto px-4">
+            <RiskShield />
+            <ResponseTimeInfo />
+          </div>
+        </section>
+        
         <section id="testimonials" aria-label="Kundenbewertungen" className="scroll-mt-16">
           <TestimonialsSection />
         </section>
+        
+        <HowItWorksTimeline />
+        <IndustriesRow />
+        
+        {/* Driver-focused content */}
+        <WeeklyJobsExamples />
+        
+        <section className="scroll-mt-16">
+          <div className="container mx-auto px-4">
+            <IncomeCalculator />
+          </div>
+        </section>
+        
+        <DriverSpotlight />
         
         <section id="jobalert" aria-label="Job-Benachrichtigungen" className="scroll-mt-16">
           <JobAlertSection />
@@ -86,6 +128,8 @@ const Index = () => {
           <ContactSection />
         </section>
       </main>
+      
+      <WhatsAppContact />
       
       {/* Fallback Admin-Badge (fixed position, bottom right) */}
       <div className="fixed bottom-4 right-4 z-40">
