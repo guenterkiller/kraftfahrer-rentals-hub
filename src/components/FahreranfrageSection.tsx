@@ -194,8 +194,9 @@ const FahreranfrageSection = () => {
                   Agenturabrechnung – Vertragspartner ist Fahrerexpress
                 </div>
                 <p className="text-sm text-blue-600">
-                  Fahrerexpress tritt als Hauptauftragnehmer auf und rechnet mit Ihnen ab. 
-                  Der Fahrer arbeitet als Subunternehmer für Fahrerexpress.
+                  Fahrerexpress tritt als Hauptauftragnehmer auf und rechnet direkt mit Ihnen ab.
+                  Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt.
+                  Hinweis: Es handelt sich um eine Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
                 </p>
                 <input type="hidden" name="billing_model" value="agency" />
               </div>
