@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -1218,22 +1219,21 @@ const Admin = () => {
                   </TableHeader>
                 <TableBody>
                   {jobRequests.map((req) => (
-                     <TableRow key={req.id}>
-                       <TableCell className="text-center">
-                         <input
-                           type="checkbox"
-                           checked={req.status === 'completed'}
-                           onChange={(e) => {
-                             if (e.target.checked) {
-                               handleMarkJobCompleted(req.id);
-                             } else {
-                               handleMarkJobOpen(req.id);
-                             }
-                           }}
-                           disabled={markingCompleted === req.id}
-                           className="w-5 h-5 cursor-pointer accent-blue-600 disabled:cursor-not-allowed"
-                         />
-                       </TableCell>
+                      <TableRow key={req.id}>
+                        <TableCell className="text-center">
+                          <Checkbox
+                            checked={req.status === 'completed'}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                handleMarkJobCompleted(req.id);
+                              } else {
+                                handleMarkJobOpen(req.id);
+                              }
+                            }}
+                            disabled={markingCompleted === req.id}
+                            className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                          />
+                        </TableCell>
                       <TableCell className="font-medium">
                         <div className="space-y-2">
                           <div className="font-semibold">{req.customer_name}</div>
