@@ -1223,12 +1223,14 @@ const Admin = () => {
                         <TableCell className="text-center">
                           <Checkbox
                             checked={req.status === 'completed'}
-                            onCheckedChange={(checked) => {
+                            onCheckedChange={async (checked) => {
                               if (checked) {
-                                handleMarkJobCompleted(req.id);
+                                await handleMarkJobCompleted(req.id);
                               } else {
-                                handleMarkJobOpen(req.id);
+                                await handleMarkJobOpen(req.id);
                               }
+                              // Force refresh after status change
+                              await loadJobRequests();
                             }}
                             disabled={markingCompleted === req.id}
                             className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
