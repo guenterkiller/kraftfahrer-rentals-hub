@@ -1265,13 +1265,27 @@ const Admin = () => {
                             const a = activeByJob.get(req.id);
                             console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
                             
-                            if (!a) {
-                              return (
-                                <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
-                                  Zuweisen
-                                </Button>
-                              );
-                            }
+                             if (!a) {
+                               return (
+                                 <div className="flex items-center gap-2">
+                                   <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                     Zuweisen
+                                   </Button>
+                                   {req.status === 'open' && (
+                                     <Button
+                                       size="sm"
+                                       variant="outline"
+                                       onClick={() => handleMarkJobCompleted(req.id)}
+                                       disabled={markingCompleted === req.id}
+                                       className="text-green-600 border-green-300 hover:bg-green-50"
+                                     >
+                                       <Check className="h-3 w-3 mr-1" />
+                                       {markingCompleted === req.id ? 'Wird markiert...' : 'Als erledigt markieren'}
+                                     </Button>
+                                   )}
+                                 </div>
+                               );
+                             }
 
                             return (
                               <div className="flex items-center gap-4">
