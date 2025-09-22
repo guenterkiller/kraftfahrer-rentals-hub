@@ -168,10 +168,10 @@ const FahreranfrageSection = () => {
         <BookingPriorityBanner />
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            LKW-Fahrer buchen & Kraftfahrer mieten
+            LKW-Fahrer buchen ab 399 € – Kraftfahrer mieten deutschlandweit
           </h1>
           <p className="text-lg text-gray-600 mb-4">
-            Berufskraftfahrer kurzfristig buchen - deutschlandweit verfügbar
+            Berufskraftfahrer kurzfristig buchen – LKW-Fahrer Vermittlung bundesweit verfügbar
           </p>
           <p className="text-base text-gray-500">
             Ob LKW-Fahrer (C/CE), Fahrmischerfahrer, Baumaschinenführer oder ADR-Fahrer – 
@@ -550,13 +550,13 @@ const FahreranfrageSection = () => {
         
         {/* SEO-optimized Info Block */}
         <div className="rounded-xl border border-muted p-6 mt-8 bg-gradient-to-r from-background to-muted/30">
-          <h3 className="text-xl font-bold mb-4 text-foreground">
-            Schnell den passenden Fahrer finden
-          </h3>
+          <h2 className="text-xl font-bold mb-4 text-foreground">
+            Fahrer mieten deutschlandweit – kurzfristig verfügbar
+          </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Ob <strong>LKW-Fahrer (C/CE)</strong>, <strong>Fahrmischerfahrer</strong>, <strong>Kraftfahrer für Fernverkehr</strong>, 
+            Ob <strong>LKW-Fahrer (C/CE) Vermittlung</strong>, <strong>Fahrmischerfahrer</strong>, <strong>Kraftfahrer für Fernverkehr</strong>, 
             <strong>Baumaschinenführer</strong> oder <strong>Spezialfahrer mit ADR/Kran</strong> – über Fahrerexpress können Sie 
-            <strong>kurzfristig und deutschlandweit</strong> selbstständige Fahrer buchen. Alle Fahrer erbringen ihre Leistung 
+            <strong>Berufskraftfahrer kurzfristig</strong> und <strong>deutschlandweit</strong> selbstständige Fahrer buchen. Alle Fahrer erbringen ihre Leistung 
             als selbstständige Subunternehmer – <strong>ohne Arbeitnehmerüberlassung</strong>, rechtssicher und transparent.
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4 text-sm">
@@ -581,7 +581,7 @@ const FahreranfrageSection = () => {
 
         {/* SEO FAQ Section */}
         <div className="mt-8 space-y-4">
-          <h3 className="text-2xl font-bold text-center mb-6">Häufige Fragen zum Fahrer buchen</h3>
+          <h2 className="text-2xl font-bold text-center mb-6">LKW-Fahrer buchen – Häufige Fragen zur Kraftfahrer Vermittlung</h2>
           
           <div className="space-y-4">
             <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors">
@@ -591,8 +591,8 @@ const FahreranfrageSection = () => {
               </summary>
               <div className="mt-3 text-muted-foreground">
                 Ja, über Fahrerexpress sind bundesweit kurzfristige Fahrereinsätze möglich. 
-                Unsere registrierten <strong>Berufskraftfahrer</strong> erhalten sofort eine Benachrichtigung 
-                über neue Aufträge und können oft innerhalb weniger Stunden verfügbar sein.
+                Unsere registrierten <strong>Berufskraftfahrer</strong> und <strong>LKW-Fahrer Vermittlung</strong> 
+                erhalten sofort eine Benachrichtigung über neue Aufträge und können oft innerhalb weniger Stunden verfügbar sein.
               </div>
             </details>
 
@@ -602,9 +602,9 @@ const FahreranfrageSection = () => {
                 <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
               </summary>
               <div className="mt-3 text-muted-foreground">
-                Sie können verschiedene Fahrertypen buchen: <strong>LKW-Fahrer (C+E)</strong>, <strong>Kraftfahrer</strong>, 
-                <strong>Fahrmischerfahrer</strong>, <strong>Baumaschinenführer</strong> sowie <strong>Spezialfahrer mit ADR-Schein oder Kranführerschein</strong>. 
-                Alle Fahrer verfügen über die erforderlichen Qualifikationen und Führerscheinklassen.
+                Sie können verschiedene Fahrertypen buchen: <strong>LKW-Fahrer (C+E) Vermittlung</strong>, <strong>Kraftfahrer mieten</strong>, 
+                <strong>Fahrmischerfahrer gesucht</strong>, <strong>Baumaschinenführer buchen</strong> sowie <strong>Spezialfahrer mit ADR-Schein oder Kranführerschein</strong>. 
+                Alle <strong>Berufskraftfahrer kurzfristig</strong> verfügbar und verfügen über die erforderlichen Qualifikationen und Führerscheinklassen.
               </div>
             </details>
 

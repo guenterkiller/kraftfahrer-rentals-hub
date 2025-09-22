@@ -12,8 +12,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
   useSEO({
-    title: "LKW-Fahrer buchen & Kraftfahrer mieten – Kurzfristig deutschlandweit | Fahrerexpress",
-    description: "LKW-Fahrer buchen ✓ Kraftfahrer mieten ✓ Berufskraftfahrer kurzfristig buchen ✓ C+E Fahrer, ADR-Fahrer, Baumaschinenführer deutschlandweit verfügbar. Keine Arbeitnehmerüberlassung.",
+    title: "LKW-Fahrer buchen & Kraftfahrer mieten – Fahrerexpress Agentur",
+    description: "Kurzfristig bundesweit Fahrer buchen – LKW-Fahrer, Kraftfahrer, Fahrmischerfahrer, ADR- und Kranfahrer. Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
     keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, Fahrer gesucht, Berufskraftfahrer kurzfristig buchen, C+E Fahrer buchen, ADR-Fahrer mieten, Kranfahrer buchen, Fahrmischerfahrer gesucht, Baumaschinenführer buchen, Fahrer mieten deutschlandweit",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     structuredData: {
