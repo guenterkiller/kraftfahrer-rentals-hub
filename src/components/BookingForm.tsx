@@ -78,36 +78,37 @@ const BookingForm = () => {
     try {
       const response = await supabase.functions.invoke('submit-fahrer-anfrage', {
         body: {
-          // Complete customer data
-          company: formData.get('company'),
-          contact_person: formData.get('contact_person'),
+          // Extract vorname/nachname from contact_person
+          vorname: (formData.get('contact_person') as string)?.split(' ')[0] || '',
+          nachname: (formData.get('contact_person') as string)?.split(' ').slice(1).join(' ') || '',
           email: formData.get('email'),
           phone: formData.get('phone'),
+          company: formData.get('company'),
           
-          // Customer address
+          // Customer address (correct format)
           customer_street: formData.get('customer_street'),
           customer_house_number: formData.get('customer_house_number'),
           customer_postal_code: formData.get('customer_postal_code'),
           customer_city: formData.get('customer_city'),
           
           // Job details
-          start_date: startDate?.toISOString(),
-          calendar_week: startDate ? format(startDate, 'I', { locale: de }) : null,
-          vehicle_types: vehicleTypes,
-          qualifications: qualifications,
-          duration: formData.get('duration'),
-          location: formData.get('location'),
-          description: formData.get('description'),
-          hourly_rate: formData.get('hourly_rate'),
+          einsatzbeginn: startDate?.toISOString().split('T')[0],
+          einsatzdauer: formData.get('duration'),
+          fahrzeugtyp: vehicleTypes.join(', '),
+          anforderungen: qualifications,
+          nachricht: [
+            formData.get('description'),
+            `Einsatzort: ${formData.get('location')}`,
+            formData.get('hourly_rate') ? `Gewünschter Stundensatz: ${formData.get('hourly_rate')}€` : '',
+            allowWhatsApp ? 'WhatsApp-Kontakt erwünscht' : ''
+          ].filter(Boolean).join('\n'),
           
-          // Contact preferences
-          allow_whatsapp: allowWhatsApp,
+          // Required consents
+          datenschutz: true, // User submits form = consent
+          newsletter: false,
           
           // Billing model
-          billing_model: formData.get('billing_model'),
-          
-          // CRM status
-          status: 'lead'
+          billing_model: formData.get('billing_model') || 'agency'
         }
       });
 

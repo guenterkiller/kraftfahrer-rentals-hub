@@ -53,36 +53,33 @@ const SimpleBookingForm = () => {
           customer_house_number: formData.get('hausnummer'),
           customer_postal_code: formData.get('plz'),
           customer_city: formData.get('ort'),
-          start_date: formData.get('einsatzbeginn'),
-          duration: formData.get('einsatzdauer'),
-          vehicle_type: formData.get('fahrzeugtyp'),
-          description: formData.get('beschreibung'),
-          special_requirements: {
-            adr_required: adrRequired,
-            crane_required: craneRequired,
-            long_distance: longDistance,
-            night_shift: nightShift,
-            weekend_work: weekendWork,
-            heavy_lift: heavyLift,
-            special_license: specialLicense,
-            construction_site: constructionSite,
-            temperature_controlled: temperatureControlled,
-            oversize_load: oversizeLoad,
-            forklift: forklift,
-            tank_silo: tankSilo,
-            international: international,
-            languages: languages,
-            bf3_certified: bf3Certified,
-            escort_experience: escortExperience,
-            requires_bf2: requiresBf2,
-            requires_bf3: requiresBf3
-          },
-          consents: {
-            prices: agreedToPrices,
-            data_processing: agreedToData,
-            newsletter: newsletter
-          },
-          status: 'lead'
+          einsatzbeginn: formData.get('einsatzbeginn'),
+          einsatzdauer: formData.get('einsatzdauer'),
+          fahrzeugtyp: formData.get('fahrzeugtyp'),
+          nachricht: formData.get('beschreibung'),
+          anforderungen: [
+            adrRequired && 'ADR-Schein',
+            craneRequired && 'Kran-Erfahrung',
+            longDistance && 'Langstrecke',
+            nightShift && 'Nachtschicht',
+            weekendWork && 'Wochenendarbeit',
+            heavyLift && 'Schwerlast',
+            specialLicense && 'Sonderführerschein',
+            constructionSite && 'Baustelle',
+            temperatureControlled && 'Kühltransport',
+            oversizeLoad && 'Übermaß',
+            forklift && 'Stapler',
+            tankSilo && 'Tank/Silo',
+            international && 'International',
+            languages && 'Fremdsprachen',
+            bf3Certified && 'BF3-zertifiziert',
+            escortExperience && 'Begleitung',
+            requiresBf2 && 'BF2 erforderlich',
+            requiresBf3 && 'BF3 erforderlich'
+          ].filter(Boolean),
+          datenschutz: agreedToData,
+          newsletter: newsletter,
+          billing_model: 'agency'
         }
       });
 
