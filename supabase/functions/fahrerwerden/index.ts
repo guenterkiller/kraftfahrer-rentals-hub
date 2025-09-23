@@ -448,73 +448,63 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
-          <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt</h2>
+          <h1 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt</h1>
           
           <p>Sehr geehrte/r ${insertData.vorname} ${insertData.nachname},</p>
           
           <p>vielen Dank für Ihre Registrierung als selbstständige/r Kraftfahrer/in (Unternehmer/in) bei der Fahrerexpress-Agentur. Ihre Angaben sind bei uns eingegangen.</p>
           
-          <div style="background-color: #e8f5e8; padding: 15px; margin: 20px 0; border-left: 4px solid #27ae60; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #27ae60;">✅ Nächste Schritte</h3>
-            <p style="margin: 0;">Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind. Eine Zuteilung erfolgt nach Verfügbarkeit; eine Einsatzgarantie besteht nicht.</p>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">NÄCHSTE SCHRITTE</h2>
+          <p>Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind. Die Zuteilung erfolgt nach Verfügbarkeit; eine Einsatzgarantie besteht nicht.</p>
           
-          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #2c3e50;">💼 Vermittlung & rechtlicher Rahmen</h3>
-            <ul>
-              <li>Wir vermitteln Dienst-/Werkleistungen zwischen Ihnen und Auftraggebern in Deutschland.</li>
-              <li>Keine Arbeitnehmerüberlassung (AÜG). Es entsteht kein Arbeitsverhältnis mit Fahrerexpress.</li>
-              <li>Dieses Angebot richtet sich ausschließlich an Unternehmer i.S.d. § 14 BGB.</li>
-            </ul>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">VERMITTLUNG & RECHTLICHER RAHMEN</h2>
+          <ul>
+            <li>Vermittlung von Dienst-/Werkleistungen zwischen Ihnen und Auftraggebern in Deutschland.</li>
+            <li>Keine Arbeitnehmerüberlassung (AÜG); es entsteht kein Arbeitsverhältnis mit Fahrerexpress.</li>
+            <li>Angebot richtet sich ausschließlich an Unternehmer i. S. d. § 14 BGB (kein Widerrufsrecht für Verbraucher).</li>
+          </ul>
           
-          <div style="background-color: #fff3cd; padding: 15px; margin: 20px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #856404;">💰 Provision & Abrechnung</h3>
-            <ul>
-              <li><strong>Provision:</strong> 15 % des Nettohonorars zzgl. gesetzlicher USt (Bemessungsgrundlage: Leistungsentgelt; Spesen/Übernachtung/Fahrtkosten sind nicht provisionspflichtig, sofern nicht abweichend vereinbart).</li>
-              <li><strong>Fälligkeit:</strong> nur bei tatsächlich ausgeführtem Einsatz.</li>
-              <li><strong>Abrechnung:</strong> per Einbehalt oder Rechnung nach Einsatz bzw. als monatliche Sammelrechnung (Zahlungsziel z. B. 14 Tage).</li>
-            </ul>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">PROVISION & ABRECHNUNG</h2>
+          <ul>
+            <li><strong>Provision:</strong> 15 % des Nettohonorars zzgl. gesetzlicher USt (Bemessungsgrundlage: Leistungsentgelt; Spesen/Übernachtung/Fahrtkosten sind nicht provisionspflichtig, sofern nicht abweichend vereinbart).</li>
+            <li><strong>Fälligkeit:</strong> nur bei tatsächlich ausgeführtem Einsatz.</li>
+            <li><strong>Abrechnung:</strong> per Einbehalt oder Rechnung (einzeln oder monatliche Sammelrechnung); Zahlungsziel 14 Tage netto.</li>
+          </ul>
           
-          <div style="background-color: #f8d7da; padding: 15px; margin: 20px 0; border-left: 4px solid #dc3545; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #721c24;">🔒 Kundenschutz / Umgehungsverbot</h3>
-            <p>Für Folgeeinsätze mit demselben Auftraggeber, die auf unsere Erstvermittlung zurückgehen, ist die Provision für 12 Monate ab dem ersten Einsatz ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über uns erfolgt.</p>
-            <p style="margin: 0;">Nicht provisionspflichtig sind Direktaufträge außerhalb unserer Vermittlung mit anderen Auftraggebern.</p>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">KUNDSCHUTZ / UMGEHUNGSVERBOT</h2>
+          <ul>
+            <li>Für Folgeeinsätze mit demselben Auftraggeber, die auf unsere Erstvermittlung zurückgehen, ist die Provision für 12 Monate ab dem ersten Einsatz ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über uns erfolgt.</li>
+            <li>Gilt auch für verbundene Unternehmen des Auftraggebers sowie bei Umgehung über Dritte.</li>
+            <li>Nicht provisionspflichtig: Direktaufträge außerhalb unserer Vermittlung mit anderen Auftraggebern.</li>
+          </ul>
           
-          <div style="background-color: #d1ecf1; padding: 15px; margin: 20px 0; border-left: 4px solid #17a2b8; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #0c5460;">🧾 Pflichten als Selbstständige/r</h3>
-            <p>Sie handeln als eigenständige/r Unternehmer/in und sorgen eigenverantwortlich für:</p>
-            <ul>
-              <li>gültige Führerscheine/Schulungen (z. B. ADR, Kran, BF3),</li>
-              <li>notwendige Versicherungen (z. B. Betriebshaftpflicht),</li>
-              <li>Steuern/Abgaben sowie eine ordnungsgemäße Rechnungsstellung an den Auftraggeber.</li>
-            </ul>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">PFLICHTEN ALS SELBSTSTÄNDIGE/R</h2>
+          <ul>
+            <li>Gültige Führerscheine/Schulungen (z. B. ADR, Kran, BF3).</li>
+            <li>Erforderliche Versicherungen (z. B. Betriebshaftpflicht).</li>
+            <li>Steuern/Abgaben sowie ordnungsgemäße Rechnungsstellung an den Auftraggeber.</li>
+          </ul>
           
-          <div style="background-color: #e2e3e5; padding: 15px; margin: 20px 0; border-left: 4px solid #6c757d; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #495057;">🔐 Datenschutz</h3>
-            <ul>
-              <li>Wir verarbeiten Ihre Daten zur Vermittlung und Abwicklung von Einsätzen (Rechtsgrundlage: Art. 6 Abs. 1 b DSGVO; ggf. berechtigtes Interesse Art. 6 Abs. 1 f).</li>
-              <li>Weitere Informationen (Speicherdauer, Empfänger, Rechte) finden Sie in unserer Datenschutzerklärung: <a href="/datenschutz" style="color: #3498db;">Datenschutzerklärung</a>.</li>
-              <li>Änderungen Ihrer Daten: info@kraftfahrer-mieten.com.</li>
-            </ul>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">DATENSCHUTZ</h2>
+          <p>Wir verarbeiten Ihre Daten zur Vermittlung und Abwicklung von Einsätzen (Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO; ggf. berechtigtes Interesse Art. 6 Abs. 1 lit. f).<br>
+          Details (Speicherdauer, Empfänger, Rechte): <a href="https://kraftfahrer-mieten.com/datenschutz" style="color: #3498db;">https://kraftfahrer-mieten.com/datenschutz</a><br>
+          Änderungen Ihrer Daten: info@kraftfahrer-mieten.com</p>
           
-          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #2c3e50;">📞 Kontakt</h3>
-            <p>Fahrerexpress-Agentur<br>
-            E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #3498db;">info@kraftfahrer-mieten.com</a> · Tel.: 01577 144 2285</p>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">KONTAKT</h2>
+          <p>Fahrerexpress-Agentur – Günter Killer<br>
+          Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main, Deutschland<br>
+          Mobil: +49 (0)1577 144 2285<br>
+          E-Mail: info@kraftfahrer-mieten.com<br>
+          Web: <a href="https://www.kraftfahrer-mieten.com" style="color: #3498db;">https://www.kraftfahrer-mieten.com</a></p>
           
-          <hr style="border: none; border-top: 1px solid #dee2e6; margin: 30px 0;">
-          <div style="font-size: 12px; color: #6c757d;">
-            <p><strong>Impressum:</strong><br>
-            Fahrerexpress-Agentur {{Rechtsform}} · {{Straße, Nr.}} · {{PLZ, Ort}}<br>
-            Inhaber/Geschäftsführer: {{Name}} · USt-ID: {{DE…}}<br>
-            <a href="/impressum" style="color: #3498db;">Link zum vollständigen Impressum</a></p>
-          </div>
+          <h2 style="color: #2c3e50; margin-top: 30px;">IMPRESSUM</h2>
+          <p>Fahrerexpress-Agentur – Günter Killer<br>
+          Selbstständiger Berufskraftfahrer (C+E) – deutschlandweit im Einsatz<br>
+          Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main, Deutschland<br>
+          USt-IdNr.: DE207642217<br>
+          Verantwortlich i. S. d. § 18 Abs. 2 MStV: Günter Killer, Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main<br>
+          Vermittlungsbedingungen/AGB: <a href="https://kraftfahrer-mieten.com/agb" style="color: #3498db;">https://kraftfahrer-mieten.com/agb</a><br>
+          Vollständiges Impressum: <a href="https://kraftfahrer-mieten.com/impressum" style="color: #3498db;">https://kraftfahrer-mieten.com/impressum</a></p>
         </div>
       `,
     });
