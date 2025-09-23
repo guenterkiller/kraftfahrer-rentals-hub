@@ -28,6 +28,9 @@ interface FahrerAnfrageRequest {
   specializations?: string[];
   regions?: string[];
   hourly_rate?: string;
+  bf2_erlaubnis?: string;
+  bf3_erlaubnis?: string;
+  spezialanforderungen?: string[] | string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -64,7 +67,10 @@ const handler = async (req: Request): Promise<Response> => {
       experience: "",
       specializations: [],
       regions: [],
-      hourly_rate: ""
+      hourly_rate: "",
+      bf2_erlaubnis: "",
+      bf3_erlaubnis: "",
+      spezialanforderungen: []
     };
     
     try {
@@ -82,6 +88,9 @@ const handler = async (req: Request): Promise<Response> => {
           specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
           regions: JSON.parse((formData.get("regions") as string) || "[]"),
           hourly_rate: (formData.get("hourly_rate") as string) || "",
+          bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
+          bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
+          spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
         };
       } else if (contentType.includes("application/json")) {
         const body = await req.json();
@@ -114,6 +123,9 @@ const handler = async (req: Request): Promise<Response> => {
             specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
             regions: JSON.parse((formData.get("regions") as string) || "[]"),
             hourly_rate: (formData.get("hourly_rate") as string) || "",
+            bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
+            bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
+            spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
           };
         } catch (_e) {
           // ignore
