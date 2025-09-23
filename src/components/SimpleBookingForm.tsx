@@ -18,6 +18,12 @@ const SimpleBookingForm = () => {
   const [craneRequired, setCraneRequired] = useState(false);
   const [longDistance, setLongDistance] = useState(false);
   const [nightShift, setNightShift] = useState(false);
+  const [weekendWork, setWeekendWork] = useState(false);
+  const [heavyLift, setHeavyLift] = useState(false);
+  const [specialLicense, setSpecialLicense] = useState(false);
+  const [constructionSite, setConstructionSite] = useState(false);
+  const [temperatureControlled, setTemperatureControlled] = useState(false);
+  const [oversizeLoad, setOversizeLoad] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,7 +52,13 @@ const SimpleBookingForm = () => {
             adr_required: adrRequired,
             crane_required: craneRequired,
             long_distance: longDistance,
-            night_shift: nightShift
+            night_shift: nightShift,
+            weekend_work: weekendWork,
+            heavy_lift: heavyLift,
+            special_license: specialLicense,
+            construction_site: constructionSite,
+            temperature_controlled: temperatureControlled,
+            oversize_load: oversizeLoad
           },
           consents: {
             prices: agreedToPrices,
@@ -73,6 +85,12 @@ const SimpleBookingForm = () => {
       setCraneRequired(false);
       setLongDistance(false);
       setNightShift(false);
+      setWeekendWork(false);
+      setHeavyLift(false);
+      setSpecialLicense(false);
+      setConstructionSite(false);
+      setTemperatureControlled(false);
+      setOversizeLoad(false);
 
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -284,6 +302,54 @@ const SimpleBookingForm = () => {
                         onCheckedChange={(checked) => setNightShift(checked as boolean)}
                       />
                       <Label htmlFor="nacht">Nachtschicht möglich</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="weekend" 
+                        checked={weekendWork}
+                        onCheckedChange={(checked) => setWeekendWork(checked as boolean)}
+                      />
+                      <Label htmlFor="weekend">Wochenendarbeit erforderlich</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="heavylift" 
+                        checked={heavyLift}
+                        onCheckedChange={(checked) => setHeavyLift(checked as boolean)}
+                      />
+                      <Label htmlFor="heavylift">Schwerlasttransporte</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="speciallicense" 
+                        checked={specialLicense}
+                        onCheckedChange={(checked) => setSpecialLicense(checked as boolean)}
+                      />
+                      <Label htmlFor="speciallicense">Sonderführerschein erforderlich</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="construction" 
+                        checked={constructionSite}
+                        onCheckedChange={(checked) => setConstructionSite(checked as boolean)}
+                      />
+                      <Label htmlFor="construction">Baustellen-Erfahrung</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="temperature" 
+                        checked={temperatureControlled}
+                        onCheckedChange={(checked) => setTemperatureControlled(checked as boolean)}
+                      />
+                      <Label htmlFor="temperature">Kühltransporte</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="oversize" 
+                        checked={oversizeLoad}
+                        onCheckedChange={(checked) => setOversizeLoad(checked as boolean)}
+                      />
+                      <Label htmlFor="oversize">Überbreite/Überlänge</Label>
                     </div>
                   </div>
                 </div>
