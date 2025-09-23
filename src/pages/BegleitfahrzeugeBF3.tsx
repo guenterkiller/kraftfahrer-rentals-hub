@@ -5,6 +5,24 @@ const BegleitfahrzeugeBF3 = () => {
     title: "BF3-Begleitfahrzeuge buchen – Schwertransport Begleitung | Fahrerexpress",
     description: "BF3-Begleitfahrzeuge für Schwertransporte kurzfristig buchen. Qualifizierte Fahrer mit BF3-Berechtigung für Großraum- und Schwertransport-Begleitung bundesweit.",
     keywords: "BF3 Begleitfahrzeuge, Schwertransport Begleitung, BF3 Berechtigung, Begleitfahrer buchen, Wechselverkehrszeichenanlage, Großraum Transport, Schwerlast Begleitung",
+    faqData: [
+      {
+        question: "Brauchen die Fahrer ein eigenes Begleitfahrzeug?",
+        answer: "Nein, die Fahrzeuge werden in der Regel durch den Auftraggeber gestellt. Unsere BF3-Fahrer bringen die Qualifikation und Erfahrung mit, das entsprechend ausgerüstete Begleitfahrzeug stellen Sie."
+      },
+      {
+        question: "Was ist ein BF3-Begleitfahrzeug?",
+        answer: "BF3-Begleitfahrzeuge sind speziell ausgerüstete Fahrzeuge mit Wechselverkehrszeichenanlage (WVZA) für die Begleitung von Schwer- und Großraumtransporten. Gemäß StVO § 46 für Transporte über 3,50m Breite."
+      },
+      {
+        question: "Welche Qualifikationen haben die BF3-Fahrer?",
+        answer: "Gültige BF3-Berechtigung nach Richtlinie für die Ausbildung und Prüfung von Begleitfahrzeugführern. Regelmäßige Fortbildungen und mehrjährige Erfahrung im Schwertransport-Begleitwesen."
+      },
+      {
+        question: "Für welche Transporte wird BF3 benötigt?",
+        answer: "Breite über 3,50m: Baumaschinen, Fertigteile, Windkraftanlagen. Besondere Gefahren: Tiefbettransporte, außergewöhnliche Ladung. Gemäß behördlicher Genehmigung und Routenfestlegung."
+      }
+    ],
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",

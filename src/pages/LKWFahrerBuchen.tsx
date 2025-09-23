@@ -5,6 +5,24 @@ const LKWFahrerBuchen = () => {
     title: "LKW-Fahrer buchen ab 399 € – deutschlandweit & kurzfristig | Fahrerexpress",
     description: "LKW-Fahrer (C/CE) kurzfristig buchen. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung. Tankwagenfahrer ADR, Kranfahrer, Fahrmischerfahrer.",
     keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen, Tankwagenfahrer buchen, ADR-Fahrer mieten, Kranfahrer buchen, Fahrmischerfahrer gesucht",
+    faqData: [
+      {
+        question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
+        answer: "Nein. Es handelt sich um eine Dienst-/Werkleistung ohne AÜG-Überlassung. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
+      },
+      {
+        question: "Wie schnell kann ein LKW-Fahrer starten?",
+        answer: "Meist binnen 24–48 Stunden. Bei dringenden Anfragen oft noch am selben Tag. Unsere registrierten C+E-Fahrer erhalten sofort eine Benachrichtigung."
+      },
+      {
+        question: "Welche Führerscheinklassen sind verfügbar?",
+        answer: "Hauptsächlich C+E (Sattelzug), aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Kranführerschein oder Fahrmischer-Qualifikation."
+      },
+      {
+        question: "Wie läuft die Abrechnung?",
+        answer: "Sie erhalten eine Rechnung von Fahrerexpress. Der LKW-Fahrer stellt seine Leistung als Subunternehmer über uns in Rechnung. Transparente Tagespreise ohne versteckte Kosten."
+      }
+    ],
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",

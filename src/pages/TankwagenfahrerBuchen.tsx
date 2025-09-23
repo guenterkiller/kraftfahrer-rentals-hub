@@ -5,6 +5,24 @@ const TankwagenfahrerBuchen = () => {
     title: "Tankwagenfahrer buchen mit ADR-Schein – Gefahrgut Transport | Fahrerexpress",
     description: "ADR-Tankwagenfahrer für Mineralöl, Chemie & Lebensmittel kurzfristig buchen. Gefahrgut-Transport bundesweit, transparente Preise, rechtssicher.",
     keywords: "Tankwagenfahrer buchen, ADR-Fahrer mieten, Gefahrgut Transport, Tankwagen ADR, Mineralöl Transport, Chemie Tankwagen",
+    faqData: [
+      {
+        question: "Haben die Fahrer einen gültigen ADR-Schein?",
+        answer: "Ja, alle Tankwagenfahrer verfügen über aktuelle ADR-Scheine für alle relevanten Gefahrgutklassen. Spezialisierung auf Mineralöl, Chemie und Lebensmitteltransporte mit regelmäßigen Fortbildungen."
+      },
+      {
+        question: "Wie schnell ist ein Tankwagenfahrer verfügbar?",
+        answer: "Bei dringenden Anfragen oft binnen 24 Stunden. Unser Pool an ADR-Fahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+      },
+      {
+        question: "Sind die Fahrer versichert für Gefahrgut?",
+        answer: "Ja, vollständig versichert. Alle Tankwagenfahrer verfügen über entsprechende Berufshaftpflicht und ADR-Versicherungen für Gefahrguttransporte."
+      },
+      {
+        question: "Welche Fahrzeugtypen können gefahren werden?",
+        answer: "Alle gängigen Tankwagen und Silofahrzeuge. Von kleineren Tankwagen bis zu großvolumigen Sattelzug-Tankaufliegern – je nach Transportanforderung."
+      }
+    ],
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",

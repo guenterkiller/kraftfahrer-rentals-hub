@@ -5,6 +5,24 @@ const KranfahrerBuchen = () => {
     title: "Kranfahrer buchen – Mobilkran & Baustellen | Fahrerexpress",
     description: "Erfahrene Kranfahrer kurzfristig mieten – mit Kranschein, bundesweit verfügbar, rechtssicher als Subunternehmer.",
     keywords: "Kranfahrer buchen, Mobilkran Fahrer, Kranoperateur, Kranschein Fahrer, Baustellen Kranfahrer",
+    faqData: [
+      {
+        question: "Welche Krantypen können bedient werden?",
+        answer: "Alle gängigen Mobilkrane und Autokrane. Von kleineren Mobilkranen bis zu großen Teleskopkranen – je nach Hebekapazität und Einsatzbereich. Unsere Fahrer haben Erfahrung mit verschiedensten Krantypen."
+      },
+      {
+        question: "Welche Kranscheine haben die Fahrer?",
+        answer: "Aktuelle Kranführerscheine für verschiedene Krantypen. Mobilkran, Turmdrehkran und Ladekran-Qualifikationen je nach Anforderung."
+      },
+      {
+        question: "Wie schnell ist ein Kranfahrer verfügbar?",
+        answer: "Bei dringenden Anfragen oft binnen 24 Stunden. Unser Pool an Kranfahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+      },
+      {
+        question: "Sind die Kranfahrer versichert?",
+        answer: "Ja, vollständig versichert. Alle Kranfahrer verfügen über entsprechende Berufshaftpflicht und Maschinenversicherungen."
+      }
+    ],
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",

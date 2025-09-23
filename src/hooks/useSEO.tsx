@@ -8,6 +8,10 @@ interface SEOData {
   ogImage?: string;
   noindex?: boolean;
   structuredData?: object;
+  faqData?: Array<{
+    question: string;
+    answer: string;
+  }>;
   articleData?: {
     headline: string;
     datePublished: string;
@@ -257,6 +261,28 @@ export const useSEO = (seoData: SEOData) => {
       breadcrumbScript.setAttribute('data-seo', 'true');
       breadcrumbScript.text = JSON.stringify(breadcrumbSchema);
       document.head.appendChild(breadcrumbScript);
+    }
+
+    // Add FAQ structured data if provided
+    if (seoData.faqData && seoData.faqData.length > 0) {
+      const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": seoData.faqData.map((faq, index) => ({
+          "@type": "Question",
+          "name": faq.question,
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": faq.answer.replace(/<[^>]*>/g, '') // Remove HTML tags for schema
+          }
+        }))
+      };
+
+      const faqScript = document.createElement('script');
+      faqScript.type = 'application/ld+json';
+      faqScript.setAttribute('data-seo', 'true');
+      faqScript.text = JSON.stringify(faqSchema);
+      document.head.appendChild(faqScript);
     }
 
   }, [seoData, canonicalUrl]);

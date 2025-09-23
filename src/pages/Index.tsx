@@ -18,6 +18,24 @@ const Index = () => {
     description: "Kurzfristig bundesweit Fahrer buchen – LKW-Fahrer, Kraftfahrer, Fahrmischerfahrer, ADR- und Kranfahrer. Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
     keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, Fahrer gesucht, Berufskraftfahrer kurzfristig buchen, C+E Fahrer buchen, ADR-Fahrer mieten, Kranfahrer buchen, Fahrmischerfahrer gesucht, Baumaschinenführer buchen, Fahrer mieten deutschlandweit",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
+    faqData: [
+      {
+        question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
+        answer: "Nein, ausschließlich selbstständige Fahrer ohne AÜG. Es handelt sich um eine rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer."
+      },
+      {
+        question: "Wie schnell können Fahrer verfügbar sein?",
+        answer: "Bei dringenden Anfragen oft binnen 24-48 Stunden. Unser Pool registrierter Fahrer ermöglicht kurzfristige Einsätze deutschlandweit."
+      },
+      {
+        question: "Welche Führerscheinklassen sind verfügbar?",
+        answer: "C+E (Sattelzug), C, C1+E, ADR-Schein, Kranführerschein, Fahrmischer-Qualifikation und weitere Spezialführerscheine je nach Anfrage."
+      },
+      {
+        question: "Sind die Fahrer versichert?",
+        answer: "Ja, alle Fahrer verfügen über entsprechende Berufshaftpflicht- und Fahrzeugversicherungen. Vollständiger Versicherungsschutz garantiert."
+      }
+    ],
     structuredData: {
       "@context": "https://schema.org",
       "@type": "WebPage",
