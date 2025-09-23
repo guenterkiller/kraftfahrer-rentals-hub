@@ -92,6 +92,8 @@ const FahrerRegistrierung = () => {
     "Erfahrung im Schwertransport-Begleitwesen vorhanden"
   ];
   const bundeslaender = [
+    "deutschlandweit",
+    "europaweit",
     "Baden-Württemberg", "Bayern", "Berlin", "Brandenburg", "Bremen",
     "Hamburg", "Hessen", "Mecklenburg-Vorpommern", "Niedersachsen",
     "Nordrhein-Westfalen", "Rheinland-Pfalz", "Saarland", "Sachsen",
