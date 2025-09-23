@@ -1,5 +1,4 @@
 import LandingPageLayout from "@/components/LandingPageLayout";
-import tankwagenHero from "@/assets/tankwagen-fahrer-hero.jpg";
 
 const TankwagenfahrerBuchen = () => {
   const seoData = {
@@ -41,9 +40,7 @@ const TankwagenfahrerBuchen = () => {
       "ADR-Schein aktuell & gültig",
       "Mineralöl, Chemie & Lebensmittel", 
       "Bundesweite Verfügbarkeit"
-    ],
-    heroImage: tankwagenHero,
-    heroImageAlt: "Tankwagenfahrer buchen deutschlandweit - ADR Gefahrgut Transport"
+    ]
   };
 
   const faqData = {
