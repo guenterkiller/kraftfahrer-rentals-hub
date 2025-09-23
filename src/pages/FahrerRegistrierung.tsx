@@ -18,7 +18,36 @@ const FahrerRegistrierung = () => {
   useSEO({
     title: "Fahrer werden – LKW-Fahrer & Ersatzfahrer Jobs bundesweit | Fahrerexpress",
     description: "Werden Sie selbstständiger Partner bei Fahrerexpress. Mehr verdienen als Ersatzfahrer, selbst bestimmen, deutschlandweite Aufträge. Jetzt kostenlos registrieren!",
-    keywords: "selbstständiger LKW-Fahrer werden, ersatzfahrer jobs, fahrer registrieren, selbstständig als kraftfahrer, fahrerexpress partner werden, lkw fahrer gesucht"
+    keywords: "selbstständiger LKW-Fahrer werden, ersatzfahrer jobs, fahrer registrieren, selbstständig als kraftfahrer, fahrerexpress partner werden, lkw fahrer gesucht",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": "Selbstständige LKW-Fahrer (C+E) deutschlandweit gesucht",
+      "description": "Werden Sie Partner bei Fahrerexpress und übernehmen Sie Fahraufträge als selbstständiger Unternehmer. Flexible Arbeitszeiten, faire Bezahlung, deutschlandweite Einsätze.",
+      "datePosted": "2025-01-01",
+      "employmentType": "CONTRACTOR",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": "Fahrerexpress-Agentur",
+        "sameAs": "https://kraftfahrer-mieten.com"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "addressLocality": "Deutschlandweit",
+        "addressCountry": "DE"
+      },
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "EUR",
+        "value": {
+          "@type": "QuantitativeValue",
+          "minValue": 25,
+          "maxValue": 50,
+          "unitText": "HOUR"
+        }
+      },
+      "qualifications": "Führerschein CE, Fahrerkarte, Berufserfahrung mindestens 2 Jahre"
+    }
   });
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);

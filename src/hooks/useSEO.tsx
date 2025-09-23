@@ -133,7 +133,7 @@ export const useSEO = (seoData: SEOData) => {
     // Enhanced structured data
     let structuredData = seoData.structuredData || {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@type": ["LocalBusiness", "EmploymentAgency"],
       "name": "Fahrerexpress-Agentur - Günter Killer",
       "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer, Kraftfahrer und Baumaschinenführer",
       "url": baseUrl,
@@ -155,7 +155,7 @@ export const useSEO = (seoData: SEOData) => {
         "@type": "Country",
         "name": "Deutschland"
       },
-      "serviceType": ["Fahrerdienstleistungen", "LKW-Fahrer Vermittlung", "Baumaschinenführer"],
+      "serviceType": ["Fahrerdienstleistungen", "LKW-Fahrer Vermittlung", "Baumaschinenführer", "Personalvermittlung Kraftfahrer"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Fahrerdienstleistungen",
@@ -174,6 +174,14 @@ export const useSEO = (seoData: SEOData) => {
               "@type": "Service",
               "name": "Baumaschinenführer Vermittlung",
               "description": "Erfahrene Kranführer und Baggerfahrer"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "ADR-Fahrer Vermittlung",
+              "description": "Spezialisierte Gefahrgut-Transporteure"
             }
           }
         ]

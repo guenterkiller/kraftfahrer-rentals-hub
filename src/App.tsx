@@ -26,6 +26,8 @@ import ADRFahrerBuchen from "./pages/ADRFahrerBuchen";
 import KranfahrerBuchen from "./pages/KranfahrerBuchen";
 import FahrmischerfahrerBuchen from "./pages/FahrmischerfahrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
+import PreiseUndAblauf from "./pages/PreiseUndAblauf";
+import BF3Ablauf from "./pages/BF3Ablauf";
 
 
 const queryClient = new QueryClient();
@@ -48,6 +50,8 @@ const App = () => (
           <Route path="/kranfahrer-buchen" element={<KranfahrerBuchen />} />
           <Route path="/fahrmischerfahrer-buchen" element={<FahrmischerfahrerBuchen />} />
           <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
+          <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
+          <Route path="/bf3-ablauf-kosten" element={<BF3Ablauf />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
           
