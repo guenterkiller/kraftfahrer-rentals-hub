@@ -42,48 +42,60 @@ const SimpleBookingForm = () => {
     const formData = new FormData(e.currentTarget);
     
     try {
-      const response = await supabase.functions.invoke('submit-fahrer-anfrage', {
-        body: {
-          vorname: formData.get('vorname'),
-          nachname: formData.get('nachname'),
-          email: formData.get('email'),
-          phone: formData.get('telefon'),
-          company: formData.get('unternehmen'),
-          customer_street: formData.get('strasse'),
-          customer_house_number: formData.get('hausnummer'),
-          customer_postal_code: formData.get('plz'),
-          customer_city: formData.get('ort'),
-          einsatzbeginn: formData.get('einsatzbeginn'),
-          einsatzdauer: formData.get('einsatzdauer'),
-          fahrzeugtyp: formData.get('fahrzeugtyp'),
-          nachricht: formData.get('beschreibung'),
-          anforderungen: [
-            adrRequired && 'ADR-Schein',
-            craneRequired && 'Kran-Erfahrung',
-            longDistance && 'Langstrecke',
-            nightShift && 'Nachtschicht',
-            weekendWork && 'Wochenendarbeit',
-            heavyLift && 'Schwerlast',
-            specialLicense && 'Sonderführerschein',
-            constructionSite && 'Baustelle',
-            temperatureControlled && 'Kühltransport',
-            oversizeLoad && 'Übermaß',
-            forklift && 'Stapler',
-            tankSilo && 'Tank/Silo',
-            international && 'International',
-            languages && 'Fremdsprachen',
-            bf3Certified && 'BF3-zertifiziert',
-            escortExperience && 'Begleitung',
-            requiresBf2 && 'BF2 erforderlich',
-            requiresBf3 && 'BF3 erforderlich'
-          ].filter(Boolean),
-          datenschutz: agreedToData,
-          newsletter: newsletter,
-          billing_model: 'agency'
-        }
+      const payload = {
+        vorname: formData.get('vorname'),
+        nachname: formData.get('nachname'),
+        email: formData.get('email'),
+        phone: formData.get('telefon'),
+        company: formData.get('unternehmen'),
+        customer_street: formData.get('strasse'),
+        customer_house_number: formData.get('hausnummer'),
+        customer_postal_code: formData.get('plz'),
+        customer_city: formData.get('ort'),
+        einsatzbeginn: formData.get('einsatzbeginn'),
+        einsatzdauer: formData.get('einsatzdauer'),
+        fahrzeugtyp: formData.get('fahrzeugtyp'),
+        nachricht: formData.get('beschreibung'),
+        anforderungen: [
+          adrRequired && 'ADR-Schein',
+          craneRequired && 'Kran-Erfahrung',
+          longDistance && 'Langstrecke',
+          nightShift && 'Nachtschicht',
+          weekendWork && 'Wochenendarbeit',
+          heavyLift && 'Schwerlast',
+          specialLicense && 'Sonderführerschein',
+          constructionSite && 'Baustelle',
+          temperatureControlled && 'Kühltransport',
+          oversizeLoad && 'Übermaß',
+          forklift && 'Stapler',
+          tankSilo && 'Tank/Silo',
+          international && 'International',
+          languages && 'Fremdsprachen',
+          bf3Certified && 'BF3-zertifiziert',
+          escortExperience && 'Begleitung',
+          requiresBf2 && 'BF2 erforderlich',
+          requiresBf3 && 'BF3 erforderlich'
+        ].filter(Boolean),
+        datenschutz: agreedToData,
+        newsletter: newsletter,
+        billing_model: 'agency'
+      };
+
+      console.log('Sending payload:', payload);
+
+      const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
+        body: payload,
+        headers: { 'Content-Type': 'application/json' }
       });
 
-      if (response.error) throw response.error;
+      if (error) {
+        // Enhanced error logging to see exact server response
+        console.error('Function error:', error);
+        // @ts-ignore
+        const responseText = await error.context?.response?.text?.();
+        console.error('Function error body:', responseText || error.message);
+        throw new Error(responseText || error.message);
+      }
 
       toast({
         title: "Anfrage erfolgreich gesendet!",
