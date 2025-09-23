@@ -69,7 +69,10 @@ const FahrerRegistrierung = () => {
     "Kran",
     "Schwertransport",
     "Gefahrgut",
-    "Kühlfahrzeuge"
+    "Kühlfahrzeuge",
+    "Schwerlasttransporte",
+    "Tankwagen",
+    "Silofahrzeuge"
   ];
   
   // Spezialanforderungen - was der Fahrer hat/kann/bereit ist zu machen
@@ -78,16 +81,13 @@ const FahrerRegistrierung = () => {
     "Langstreckenfahrten möglich",
     "Wochenendfahrten möglich", 
     "Sonderführerschein vorhanden",
-    "Kühltransporte möglich",
     "Mitnahmestapler / Gabelstapler möglich",
     "Auslandseinsätze möglich",
     "Berechtigung für BF3-Schulungen vorhanden",
     "Kran-Erfahrung vorhanden",
     "Nachtschicht möglich",
-    "Schwerlasttransporte möglich",
     "Baustellen-Erfahrung vorhanden",
     "Überbreite/Überlänge möglich",
-    "Tank- oder Silotransporte möglich",
     "Sprachkenntnisse vorhanden (Deutsch, Englisch)",
     "Erfahrung im Schwertransport-Begleitwesen vorhanden"
   ];
