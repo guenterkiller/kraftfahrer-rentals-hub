@@ -112,6 +112,7 @@ const AdminLogin = () => {
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               required 
+              disabled={loading}
             />
             <Input 
               type="password" 
@@ -121,6 +122,7 @@ const AdminLogin = () => {
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
+              disabled={loading}
             />
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Anmelden..." : "Anmelden"}
