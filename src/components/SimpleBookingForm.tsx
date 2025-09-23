@@ -100,8 +100,7 @@ const SimpleBookingForm = () => {
       console.log('Consent states - prices:', agreedToPrices, 'data:', agreedToData);
 
       const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
-        body: payload,
-        headers: { 'Content-Type': 'application/json' }
+        body: payload
       });
 
       if (error) {
