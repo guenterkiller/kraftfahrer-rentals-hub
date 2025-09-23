@@ -91,7 +91,9 @@ const SimpleBookingForm = () => {
       });
 
       // Reset form
-      e.currentTarget.reset();
+      if (e.currentTarget) {
+        e.currentTarget.reset();
+      }
       setAgreedToPrices(false);
       setAgreedToData(false);
       setNewsletter(false);
