@@ -72,24 +72,24 @@ const FahrerRegistrierung = () => {
     "Kühlfahrzeuge"
   ];
   
-  // Neue Spezialanforderungen basierend auf den Screenshots
+  // Spezialanforderungen - was der Fahrer hat/kann/bereit ist zu machen
   const spezialanforderungen = [
-    "ADR-Schein erforderlich",
-    "Langstreckenfahrten",
-    "Wochenendarbeit erforderlich", 
-    "Sonderführerschein erforderlich",
-    "Kühltransporte",
-    "Mitnahmestapler / Gabelstapler",
+    "ADR-Schein im Besitz",
+    "Langstreckenfahrten möglich",
+    "Wochenendfahrten möglich", 
+    "Sonderführerschein vorhanden",
+    "Kühltransporte möglich",
+    "Mitnahmestapler / Gabelstapler möglich",
     "Auslandseinsätze möglich",
     "Berechtigung für BF3-Schulungen vorhanden",
-    "Kran-Erfahrung erforderlich",
+    "Kran-Erfahrung vorhanden",
     "Nachtschicht möglich",
-    "Schwerlasttransporte",
-    "Baustellen-Erfahrung",
-    "Überbreite/Überlänge",
-    "Tank- oder Silotransporte",
-    "Sprachkenntnisse (Deutsch, Englisch)",
-    "Erfahrung im Schwertransport-Begleitwesen"
+    "Schwerlasttransporte möglich",
+    "Baustellen-Erfahrung vorhanden",
+    "Überbreite/Überlänge möglich",
+    "Tank- oder Silotransporte möglich",
+    "Sprachkenntnisse vorhanden (Deutsch, Englisch)",
+    "Erfahrung im Schwertransport-Begleitwesen vorhanden"
   ];
   const bundeslaender = [
     "Baden-Württemberg", "Bayern", "Berlin", "Brandenburg", "Bremen",
