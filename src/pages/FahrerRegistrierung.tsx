@@ -290,6 +290,16 @@ const FahrerRegistrierung = () => {
 
       const result = await response.json();
       
+      if (response.status === 409) {
+        toast({
+          title: "E-Mail bereits registriert",
+          description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail-Adresse.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+      
       if (!response.ok || !result?.success) {
         console.error('Fahrerwerden error:', result);
         throw new Error(result?.error || 'Fehler bei der Registrierung');
