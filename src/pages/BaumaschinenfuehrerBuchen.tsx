@@ -1,4 +1,5 @@
 import LandingPageLayout from "@/components/LandingPageLayout";
+import baggerHero from "@/assets/bagger-fahrer-hero.jpg";
 
 const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
@@ -34,7 +35,9 @@ const BaumaschinenfuehrerBuchen = () => {
       "Erfahrene Maschinisten",
       "Tages- bis Projekt-Einsätze", 
       "Deutschlandweit verfügbar"
-    ]
+    ],
+    heroImage: baggerHero,
+    heroImageAlt: "Baumaschinenführer buchen deutschlandweit - Bagger im Aushub Erdarbeiten"
   };
 
   const faqData = {
