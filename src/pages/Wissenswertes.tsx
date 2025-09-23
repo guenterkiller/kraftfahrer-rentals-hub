@@ -40,7 +40,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Kurzfristige Einsätze möglich, keine langen Vorlaufzeiten oder Kündigungsfristen.
+                    Kurzfristig (24–72 h) planbar, ohne lange Vertragsbindung.
                   </p>
                 </CardContent>
               </Card>
@@ -282,7 +282,7 @@ const Wissenswertes = () => {
                 <CardContent>
                   <p className="text-muted-foreground">
                     In der Regel können erfahrene selbstständige Fahrer sehr kurzfristig eingesetzt werden. 
-                    Bei Fahrerexpress versuchen wir, auch Same-Day-Anfragen zu bedienen, sofern entsprechende 
+                    In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen.
                     Fahrer verfügbar sind.
                   </p>
                 </CardContent>

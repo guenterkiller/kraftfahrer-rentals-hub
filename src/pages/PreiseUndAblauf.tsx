@@ -136,6 +136,12 @@ const PreiseUndAblauf = () => {
                     <p className="text-sm">Selbstständige Fahrer, kein Personalleasing. Günstigere Alternative zur Zeitarbeit.</p>
                   </div>
                 </div>
+                
+                {/* Timing Notice */}
+                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h4 className="font-semibold mb-2 text-yellow-800">📅 Planung & Timing</h4>
+                  <p className="text-sm">Disposition in der Regel 24–72 h vor Einsatzstart; keine Same-Day-Besetzung.</p>
+                </div>
               </CardContent>
             </Card>
 
@@ -172,7 +178,7 @@ const PreiseUndAblauf = () => {
                   </CardHeader>
                   <CardContent className="text-center">
                     <p>Der Fahrer kontaktiert Sie direkt, um Details zu klären. Pünktlich zum vereinbarten Termin am Einsatzort.</p>
-                    <Badge variant="secondary" className="mt-3">⏱️ Sofort einsatzbereit</Badge>
+                    <Badge variant="secondary" className="mt-3">⏱️ Planbar innerhalb 24-72h</Badge>
                   </CardContent>
                 </Card>
               </div>
@@ -191,7 +197,7 @@ const PreiseUndAblauf = () => {
                 
                 <div>
                   <h4 className="font-semibold mb-2">Wie schnell kann ein Fahrer verfügbar sein?</h4>
-                  <p className="text-muted-foreground">Bei Standardanfragen meist innerhalb von 2-4 Stunden. Für Spezialeinsätze (ADR, Kran) benötigen wir 6-12 Stunden Vorlauf.</p>
+                  <p className="text-muted-foreground">In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen.</p>
                 </div>
                 
                 <div>

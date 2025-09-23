@@ -74,7 +74,7 @@ const BegleitfahrzeugeBF3 = () => {
       },
       {
         question: "Wie schnell ist ein BF3-Begleitfahrzeug verfügbar?",
-        answer: "Bei dringenden Anfragen oft <strong>binnen 12-24 Stunden</strong>. Unser Pool an BF3-Fahrern ermöglicht kurzfristige Einsätze deutschlandweit, auch am Wochenende und an Feiertagen."
+        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Ausrüstung ist im BF3-Fahrzeug enthalten?",

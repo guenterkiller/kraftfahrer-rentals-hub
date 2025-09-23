@@ -16,7 +16,7 @@ const FahrmischerfahrerBuchen = () => {
       },
       {
         question: "Wie schnell ist ein Fahrmischerfahrer verfügbar?",
-        answer: "Bei dringenden Anfragen oft binnen 24 Stunden. Unser Pool an Fahrmischerfahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Fahrmischer können gefahren werden?",
@@ -70,7 +70,7 @@ const FahrmischerfahrerBuchen = () => {
       },
       {
         question: "Wie schnell ist ein Fahrmischerfahrer verfügbar?",
-        answer: "Bei dringenden Anfragen oft <strong>binnen 24 Stunden</strong>. Unser Pool an Fahrmischerfahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Sind die Fahrmischerfahrer versichert?",

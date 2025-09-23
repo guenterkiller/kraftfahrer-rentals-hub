@@ -76,7 +76,7 @@ const ContactSection = () => {
                   <p className="text-muted-foreground">
                     Mo-Fr: 8:00 - 18:00 Uhr<br />
                     Sa: 9:00 - 14:00 Uhr<br />
-                    Notfall: 24/7 verfügbar
+                    24/7 erreichbar für zeitkritische Abstimmungen – Einsatzstart frühestens am nächsten Werktag nach Bestätigung
                   </p>
                 </div>
               </div>

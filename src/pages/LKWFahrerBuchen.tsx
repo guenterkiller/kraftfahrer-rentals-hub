@@ -12,7 +12,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "Meist binnen 24–48 Stunden. Bei dringenden Anfragen oft noch am selben Tag. Unsere registrierten C+E-Fahrer erhalten sofort eine Benachrichtigung."
+        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -57,7 +57,7 @@ const LKWFahrerBuchen = () => {
     bullets: [
       "C/CE-Fahrer für Nah- & Fernverkehr",
       "ADR / Kran / Fahrmischer verfügbar", 
-      "Heute anfragen, kurzfristig starten"
+      "Kurzfristig (24-72h) verfügbar"
     ]
   };
 
@@ -70,7 +70,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "Meist binnen <strong>24–48 Stunden</strong>. Bei dringenden Anfragen oft noch am selben Tag. Unsere registrierten C+E-Fahrer erhalten sofort eine Benachrichtigung."
+        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",

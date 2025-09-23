@@ -12,7 +12,7 @@ const TankwagenfahrerBuchen = () => {
       },
       {
         question: "Wie schnell ist ein Tankwagenfahrer verfügbar?",
-        answer: "Bei dringenden Anfragen oft binnen 24 Stunden. Unser Pool an ADR-Fahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Sind die Fahrer versichert für Gefahrgut?",
@@ -70,7 +70,7 @@ const TankwagenfahrerBuchen = () => {
       },
       {
         question: "Wie schnell ist ein Tankwagenfahrer verfügbar?",
-        answer: "Bei dringenden Anfragen oft <strong>binnen 24 Stunden</strong>. Unser Pool an ADR-Fahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Sind die Fahrer versichert für Gefahrgut?",

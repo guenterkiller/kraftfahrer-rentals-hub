@@ -25,7 +25,7 @@ const Index = () => {
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",
-        answer: "Bei dringenden Anfragen oft binnen 24-48 Stunden. Unser Pool registrierter Fahrer ermöglicht kurzfristige Einsätze deutschlandweit."
+        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",

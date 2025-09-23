@@ -52,7 +52,7 @@ const ADRFahrerBuchen = () => {
       },
       {
         question: "Wie schnell ist ein ADR-Fahrer verfügbar?",
-        answer: "Bei dringenden Anfragen oft <strong>binnen 24 Stunden</strong>. Unser Pool an ADR-Fahrern ermöglicht kurzfristige Einsätze deutschlandweit."
+        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Sind die Fahrer für Gefahrgut versichert?",

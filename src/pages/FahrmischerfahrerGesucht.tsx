@@ -54,7 +54,7 @@ const FahrmischerfahrerGesucht = () => {
       },
       {
         question: "Wie kurzfristig sind Fahrmischerfahrer verfügbar?",
-        answer: "Meist <strong>binnen 24-48 Stunden</strong>. Bei dringenden Betonierungs-Terminen kontaktieren wir sofort verfügbare Fahrmischerfahrer in Ihrer Region."
+        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       }
     ]
   };

@@ -367,6 +367,16 @@ const BookingForm = () => {
                   </p>
                 </div>
 
+                {/* Timing Notice */}
+                <div className="bg-yellow-50 p-4 rounded-lg text-sm border border-yellow-200">
+                  <p className="font-medium mb-2">⏰ Wichtige Timing-Hinweise:</p>
+                  <ul className="space-y-1">
+                    <li>• <strong>Frühester Einsatz:</strong> nächster Werktag nach schriftlicher Bestätigung (werktags)</li>
+                    <li>• <strong>Same-Day nicht möglich</strong> - Planung benötigt 24–72h Vorlauf</li>
+                    <li>• <strong>Weite Einsätze (&gt;150 km):</strong> Anreise am Vortag empfohlen; Übernachtung nach Vereinbarung</li>
+                  </ul>
+                </div>
+
                 <Button 
                   type="submit" 
                   className="w-full bg-primary hover:bg-primary/90"
