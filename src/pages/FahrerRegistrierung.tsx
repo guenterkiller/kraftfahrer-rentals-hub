@@ -62,7 +62,7 @@ const FahrerRegistrierung = () => {
 
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
   const spezialisierungen = [
-    "Baustellen-LKW",
+    "LKW CE",
     "Fernfahrt",
     "Fahrmischer",
     "Kipper",
