@@ -5,6 +5,7 @@ import { CheckCircle, Phone, Mail } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import ContactSection from "@/components/ContactSection";
+import DriverTypesSection from "@/components/DriverTypesSection";
 import { useSEO } from "@/hooks/useSEO";
 
 interface LandingPageLayoutProps {
@@ -118,6 +119,9 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
             </div>
           </div>
         </section>
+
+        {/* Driver Types Section */}
+        <DriverTypesSection />
 
         {/* FAQ Section */}
         <section className="py-16 px-4">

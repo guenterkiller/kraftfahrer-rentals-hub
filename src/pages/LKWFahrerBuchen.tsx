@@ -3,8 +3,8 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 const LKWFahrerBuchen = () => {
   const seoData = {
     title: "LKW-Fahrer buchen ab 399 € – deutschlandweit & kurzfristig | Fahrerexpress",
-    description: "LKW-Fahrer (C/CE) kurzfristig buchen. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.",
-    keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen",
+    description: "LKW-Fahrer (C/CE) kurzfristig buchen. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung. Tankwagenfahrer ADR, Kranfahrer, Fahrmischerfahrer.",
+    keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen, Tankwagenfahrer buchen, ADR-Fahrer mieten, Kranfahrer buchen, Fahrmischerfahrer gesucht",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -67,9 +67,9 @@ const LKWFahrerBuchen = () => {
 
   const relatedServices = [
     {
-      title: "Kraftfahrer mieten",
-      path: "/kraftfahrer-mieten",
-      description: "Berufskraftfahrer für alle Fahrzeugklassen"
+      title: "Tankwagenfahrer buchen",
+      path: "/tankwagenfahrer-buchen",
+      description: "ADR-Fahrer für Mineralöl, Chemie & Lebensmittel"
     },
     {
       title: "Fahrmischerfahrer",
@@ -80,6 +80,11 @@ const LKWFahrerBuchen = () => {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
       description: "Bagger, Radlader, Kran-Operateure"
+    },
+    {
+      title: "Kraftfahrer mieten",
+      path: "/kraftfahrer-mieten",
+      description: "Berufskraftfahrer für alle Fahrzeugklassen"
     }
   ];
 
