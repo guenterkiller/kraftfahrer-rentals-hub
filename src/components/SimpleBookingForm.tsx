@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -428,7 +429,13 @@ const SimpleBookingForm = () => {
 
                 {/* Begleitfahrzeuge Requirements */}
                 <div>
-                  <Label className="text-base font-medium">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-1">
+                      <Car className="w-4 h-4 text-warning" />
+                      <ShieldAlert className="w-4 h-4 text-warning" />
+                    </div>
+                    <Label className="text-base font-medium">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                  </div>
                   <p className="text-sm text-muted-foreground mb-3">
                     Unsere Fahrer unterstützen Sie bei der Begleitung von Großraum- und Schwertransporten. 
                     Ob BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage.
@@ -440,7 +447,10 @@ const SimpleBookingForm = () => {
                         checked={requiresBf2}
                         onCheckedChange={(checked) => setRequiresBf2(checked as boolean)}
                       />
-                      <Label htmlFor="requiresbf2">Ja, BF2 (Rundumkennleuchte)</Label>
+                      <div className="flex items-center gap-2">
+                        <Car className="w-4 h-4 text-orange-500" />
+                        <Label htmlFor="requiresbf2">Ja, BF2 (Rundumkennleuchte)</Label>
+                      </div>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox 
@@ -448,7 +458,10 @@ const SimpleBookingForm = () => {
                         checked={requiresBf3}
                         onCheckedChange={(checked) => setRequiresBf3(checked as boolean)}
                       />
-                      <Label htmlFor="requiresbf3">Ja, BF3/BF4 (Wechselverkehrszeichenanlage)</Label>
+                      <div className="flex items-center gap-2">
+                        <Construction className="w-4 h-4 text-orange-600" />
+                        <Label htmlFor="requiresbf3">Ja, BF3/BF4 (Wechselverkehrszeichenanlage)</Label>
+                      </div>
                     </div>
                   </div>
                 </div>
