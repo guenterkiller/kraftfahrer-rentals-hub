@@ -71,6 +71,9 @@ const SimpleBookingForm = () => {
         einsatzdauer: formData.get('einsatzdauer') as string,
         fahrzeugtyp: fahrzeugtyp || 'lkw',
         nachricht: formData.get('beschreibung') as string,
+        datenschutz: agreedToData,
+        newsletter: false,
+        billing_model: 'agency',
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Kran-Erfahrung',
@@ -90,10 +93,7 @@ const SimpleBookingForm = () => {
           escortExperience && 'Begleitung',
           requiresBf2 && 'BF2 erforderlich',
           requiresBf3 && 'BF3 erforderlich'
-        ].filter(Boolean),
-        datenschutz: agreedToData,
-        newsletter: newsletter,
-        billing_model: 'agency'
+        ].filter(Boolean)
       };
 
       console.log('Sending payload:', payload);
