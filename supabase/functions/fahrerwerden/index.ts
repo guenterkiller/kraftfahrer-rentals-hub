@@ -447,65 +447,49 @@ const handler = async (req: Request): Promise<Response> => {
       to: [requestData.email],
       subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
-          <h1 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt</h1>
-          
-          <p>Sehr geehrte/r ${insertData.vorname} ${insertData.nachname},</p>
-          
-          <p>vielen Dank für Ihre Registrierung als selbstständige/r Kraftfahrer/in (Unternehmer/in) bei der Fahrerexpress-Agentur. Ihre Angaben sind bei uns eingegangen.</p>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">NÄCHSTE SCHRITTE</h2>
-          <p>Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind. Die Zuteilung erfolgt nach Verfügbarkeit; eine Einsatzgarantie besteht nicht.</p>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">VERMITTLUNG & RECHTLICHER RAHMEN</h2>
-          <ul>
-            <li>Vermittlung von Dienst-/Werkleistungen zwischen Ihnen und Auftraggebern in Deutschland.</li>
-            <li>Keine Arbeitnehmerüberlassung (AÜG); es entsteht kein Arbeitsverhältnis mit Fahrerexpress.</li>
-            <li>Angebot richtet sich ausschließlich an Unternehmer i. S. d. § 14 BGB (kein Widerrufsrecht für Verbraucher).</li>
-          </ul>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">PROVISION & ABRECHNUNG</h2>
-          <ul>
-            <li><strong>Provision:</strong> 15 % des Nettohonorars zzgl. gesetzlicher USt (Bemessungsgrundlage: Leistungsentgelt; Spesen/Übernachtung/Fahrtkosten sind nicht provisionspflichtig, sofern nicht abweichend vereinbart).</li>
-            <li><strong>Fälligkeit:</strong> nur bei tatsächlich ausgeführtem Einsatz.</li>
-            <li><strong>Abrechnung:</strong> per Einbehalt oder Rechnung (einzeln oder monatliche Sammelrechnung); Zahlungsziel 14 Tage netto.</li>
-          </ul>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">KUNDSCHUTZ / UMGEHUNGSVERBOT</h2>
-          <ul>
-            <li>Für Folgeeinsätze mit demselben Auftraggeber, die auf unsere Erstvermittlung zurückgehen, ist die Provision für 12 Monate ab dem ersten Einsatz ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über uns erfolgt.</li>
-            <li>Gilt auch für verbundene Unternehmen des Auftraggebers sowie bei Umgehung über Dritte.</li>
-            <li>Nicht provisionspflichtig: Direktaufträge außerhalb unserer Vermittlung mit anderen Auftraggebern.</li>
-          </ul>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">PFLICHTEN ALS SELBSTSTÄNDIGE/R</h2>
-          <ul>
-            <li>Gültige Führerscheine/Schulungen (z. B. ADR, Kran, BF3).</li>
-            <li>Erforderliche Versicherungen (z. B. Betriebshaftpflicht).</li>
-            <li>Steuern/Abgaben sowie ordnungsgemäße Rechnungsstellung an den Auftraggeber.</li>
-          </ul>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">DATENSCHUTZ</h2>
-          <p>Wir verarbeiten Ihre Daten zur Vermittlung und Abwicklung von Einsätzen (Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO; ggf. berechtigtes Interesse Art. 6 Abs. 1 lit. f).<br>
-          Details (Speicherdauer, Empfänger, Rechte): <a href="https://kraftfahrer-mieten.com/datenschutz" style="color: #3498db;">https://kraftfahrer-mieten.com/datenschutz</a><br>
-          Änderungen Ihrer Daten: info@kraftfahrer-mieten.com</p>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">KONTAKT</h2>
-          <p>Fahrerexpress-Agentur – Günter Killer<br>
-          Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main, Deutschland<br>
-          Mobil: +49 (0)1577 144 2285<br>
-          E-Mail: info@kraftfahrer-mieten.com<br>
-          Web: <a href="https://www.kraftfahrer-mieten.com" style="color: #3498db;">https://www.kraftfahrer-mieten.com</a></p>
-          
-          <h2 style="color: #2c3e50; margin-top: 30px;">IMPRESSUM</h2>
-          <p>Fahrerexpress-Agentur – Günter Killer<br>
-          Selbstständiger Berufskraftfahrer (C+E) – deutschlandweit im Einsatz<br>
-          Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main, Deutschland<br>
-          USt-IdNr.: DE207642217<br>
-          Verantwortlich i. S. d. § 18 Abs. 2 MStV: Günter Killer, Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main<br>
-          Vermittlungsbedingungen/AGB: <a href="https://kraftfahrer-mieten.com/agb" style="color: #3498db;">https://kraftfahrer-mieten.com/agb</a><br>
-          Vollständiges Impressum: <a href="https://kraftfahrer-mieten.com/impressum" style="color: #3498db;">https://kraftfahrer-mieten.com/impressum</a></p>
-        </div>
+        <h2>🚛 Willkommen bei der Fahrerexpress-Agentur</h2>
+        <p>Sehr geehrte/r ${insertData.vorname} ${insertData.nachname},</p>
+
+        <p>vielen Dank für Ihre Registrierung als selbstständige/r Kraftfahrer/in (Unternehmer/in) bei der Fahrerexpress-Agentur. Ihre Angaben sind bei uns eingegangen.</p>
+
+        <h3>✅ Nächste Schritte</h3>
+        <p>Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind. Eine Zuteilung erfolgt nach Verfügbarkeit; eine Einsatzgarantie besteht nicht.</p>
+
+        <h3>💼 Vermittlung & rechtlicher Rahmen</h3>
+        <p>• Wir vermitteln Dienst-/Werkleistungen zwischen Ihnen und Auftraggebern in Deutschland.<br>
+        • Keine Arbeitnehmerüberlassung (AÜG). Es entsteht kein Arbeitsverhältnis mit Fahrerexpress.<br>
+        • Dieses Angebot richtet sich ausschließlich an Unternehmer i.S.d. § 14 BGB.</p>
+
+        <h3>💰 Provision & Abrechnung</h3>
+        <p>• <strong>Provision:</strong> 15 % des Nettohonorars zzgl. gesetzlicher USt (Bemessungsgrundlage: Leistungsentgelt; Spesen/Übernachtung/Fahrtkosten sind nicht provisionspflichtig, sofern nicht abweichend vereinbart).<br>
+        • <strong>Fälligkeit:</strong> nur bei tatsächlich ausgeführtem Einsatz.<br>
+        • <strong>Abrechnung:</strong> per Einbehalt oder Rechnung nach Einsatz bzw. als monatliche Sammelrechnung (Zahlungsziel z. B. 14 Tage).</p>
+
+        <h3>🔒 Kundenschutz / Umgehungsverbot</h3>
+        <p>Für Folgeeinsätze mit demselben Auftraggeber, die auf unsere Erstvermittlung zurückgehen, ist die Provision für 12 Monate ab dem ersten Einsatz ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über uns erfolgt.<br>
+        Nicht provisionspflichtig sind Direktaufträge außerhalb unserer Vermittlung mit anderen Auftraggebern.</p>
+
+        <h3>🧾 Pflichten des/der Fahrers/in</h3>
+        <p>Sie handeln als eigenständige/r Unternehmer/in und sorgen eigenverantwortlich für:<br>
+        • gültige Führerscheine/Schulungen (z. B. ADR, Kran, BF3),<br>
+        • notwendige Versicherungen (z. B. Betriebshaftpflicht),<br>
+        • Steuern/Abgaben sowie eine ordnungsgemäße Rechnungsstellung an den Auftraggeber.</p>
+
+        <h3>🔐 Datenschutz</h3>
+        <p>• Wir verarbeiten Ihre Daten zur Vermittlung und Abwicklung von Einsätzen (Rechtsgrundlage: Art. 6 Abs. 1 b DSGVO; ggf. berechtigtes Interesse Art. 6 Abs. 1 f).<br>
+        • Weitere Informationen (Speicherdauer, Empfänger, Rechte) finden Sie in unserer Datenschutzerklärung: <a href="https://kraftfahrer-mieten.com/datenschutz">https://kraftfahrer-mieten.com/datenschutz</a>.<br>
+        • Änderungen Ihrer Daten: info@kraftfahrer-mieten.com.</p>
+
+        <h3>📞 Kontakt</h3>
+        <p>Fahrerexpress-Agentur<br>  
+        E-Mail: info@kraftfahrer-mieten.com · Tel.: 01577 144 2285</p>
+
+        <hr>
+        <p><strong>Impressum:</strong><br>  
+        Fahrerexpress-Agentur – Günter Killer<br>
+        Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main<br>  
+        Inhaber/Geschäftsführer: Günter Killer · USt-ID: DE207642217<br>  
+        <a href="https://kraftfahrer-mieten.com/impressum">Vollständiges Impressum</a></p>
       `,
     });
 
