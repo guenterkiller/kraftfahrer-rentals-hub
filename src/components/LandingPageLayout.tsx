@@ -172,15 +172,6 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
           <FahreranfrageSection />
         </section>
 
-        {/* Legal Disclaimer */}
-        <section className="py-8 px-4 bg-muted/30">
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="text-sm text-muted-foreground font-medium">
-              Dienst-/Werkleistung durch selbstständige Subunternehmer – keine Arbeitnehmerüberlassung.
-            </p>
-          </div>
-        </section>
-
         {/* Contact Section */}
         <section id="contact" className="scroll-mt-16">
           <ContactSection />

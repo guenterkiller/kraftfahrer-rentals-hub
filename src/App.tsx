@@ -22,9 +22,6 @@ import KraftfahrerMieten from "./pages/KraftfahrerMieten";
 import FahrmischerfahrerGesucht from "./pages/FahrmischerfahrerGesucht";
 import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import TankwagenfahrerBuchen from "./pages/TankwagenfahrerBuchen";
-import ADRFahrerBuchen from "./pages/ADRFahrerBuchen";
-import KranfahrerBuchen from "./pages/KranfahrerBuchen";
-import FahrmischerfahrerBuchen from "./pages/FahrmischerfahrerBuchen";
 
 
 const queryClient = new QueryClient();
@@ -43,9 +40,6 @@ const App = () => (
           <Route path="/fahrmischerfahrer-gesucht" element={<FahrmischerfahrerGesucht />} />
           <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
           <Route path="/tankwagenfahrer-buchen" element={<TankwagenfahrerBuchen />} />
-          <Route path="/adr-fahrer-buchen" element={<ADRFahrerBuchen />} />
-          <Route path="/kranfahrer-buchen" element={<KranfahrerBuchen />} />
-          <Route path="/fahrmischerfahrer-buchen" element={<FahrmischerfahrerBuchen />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
           

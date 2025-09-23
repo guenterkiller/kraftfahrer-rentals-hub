@@ -2,9 +2,9 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
-    title: "Baumaschinenführer buchen ab 489 € – Baggerfahrer & Radlader deutschlandweit",
-    description: "Jetzt deutschlandweit Baumaschinenführer buchen: Baggerfahrer, Radladerfahrer, Mischmeister für Flüssigboden. Geräte stellt der Auftraggeber. Rechtssicher & kurzfristig verfügbar.",
-    keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer buchen, Baumaschinenführer Subunternehmer, Mischmeister Flüssigboden deutschlandweit, Kranführer buchen, Maschinisten mieten",
+    title: "Baumaschinenführer buchen – Bagger, Radlader, Kran | Fahrerexpress",
+    description: "Baumaschinenführer kurzfristig: Bagger, Radlader, Kran. Selbstständige Subunternehmer, bundesweit, ohne AÜG – rechtssicherer Werk-/Dienstvertrag.",
+    keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer, Kranführer buchen, Maschinisten mieten, Baumaschinenoperateur",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -28,8 +28,8 @@ const BaumaschinenfuehrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Baumaschinenführer buchen – Baggerfahrer & Radlader deutschlandweit",
-    intro: "Deutschlandweit Baumaschinenführer für Erdarbeiten, Aushub und Verladung buchen. Baggerfahrer, Radladerfahrer und Mischmeister für Flüssigbodenanlagen als selbstständige Subunternehmer – Sie stellen die Geräte, wir den qualifizierten Fahrer.",
+    h1: "Baumaschinenführer buchen – Bagger & Radlader",
+    intro: "Für Erd- und Tiefbauprojekte vermitteln wir selbstständige Baumaschinenführer (Bagger, Radlader, Kran). Einsatz im Werk-/Dienstvertrag, Abrechnung über Fahrerexpress, keine Arbeitnehmerüberlassung.",
     bullets: [
       "Erfahrene Maschinisten",
       "Tages- bis Projekt-Einsätze", 
@@ -50,7 +50,7 @@ const BaumaschinenfuehrerBuchen = () => {
       },
       {
         question: "Welche Baumaschinen können bedient werden?",
-        answer: "Hauptsächlich <strong>Bagger (Mobilbagger, Raupenbagger)</strong>, <strong>Radlader</strong>, <strong>Mobilkrane</strong>, <strong>Mischmeister für Flüssigboden</strong> und weitere Erdbaumaschinen je nach Qualifikation. <em>Immer mit Ihren Geräten/Maschinen – keine Maschinenvermietung.</em>"
+        answer: "Hauptsächlich <strong>Bagger (Mobilbagger, Raupenbagger)</strong>, <strong>Radlader</strong>, <strong>Mobilkrane</strong> und weitere Erdbaumaschinen je nach Qualifikation."
       },
       {
         question: "Wie lange dauern typische Einsätze?",

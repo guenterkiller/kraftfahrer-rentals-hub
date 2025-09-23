@@ -13,7 +13,7 @@ const ServicesSection = () => {
     {
       icon: Truck,
       title: "Fahrzeugüberführungen",
-      description: "Fahrzeugüberführungen und Auslieferungen mit Ihren Fahrzeugen (LKW, Bus, Wohnmobil, Sonderfahrzeuge)"
+      description: "Fahrzeugüberführungen und Auslieferungen auf eigener Achse (LKW, Bus, Wohnmobil, Sonderfahrzeuge)"
     },
     {
       icon: Wrench,
@@ -105,61 +105,7 @@ const ServicesSection = () => {
           </Card>
         </div>
 
-        {/* Baumaschinenführer & Subunternehmer Details */}
-        <div className="mb-16">
-          <Card className="max-w-4xl mx-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Wrench className="h-6 w-6 text-primary" />
-                Baumaschinenführer & Subunternehmer
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
-                Wir vermitteln deutschlandweit selbstständige Baumaschinenführer als Subunternehmer – 
-                immer mit Geräten, die vom Auftraggeber gestellt werden.
-              </p>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Baggerfahrer für Aushub & Erdarbeiten</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Radladerfahrer für Verladearbeiten</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Mischmeister für Flüssigbodenanlagen</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Weitere Baumaschinenführer nach Bedarf</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="bg-muted/50 p-4 rounded-lg">
-                  <p className="text-sm font-medium mb-2">Wichtiger Hinweis:</p>
-                  <p className="text-sm text-muted-foreground">
-                    Alle Einsätze erfolgen als Dienst-/Werkleistung durch selbstständige Subunternehmer. 
-                    Keine Arbeitnehmerüberlassung, keine Maschinenvermietung – Sie stellen die Geräte, 
-                    wir den passenden Fahrer.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="text-center pt-4">
-                <Button asChild>
-                  <Link to="/baumaschinenfuehrer-buchen">Jetzt Baumaschinenführer buchen</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Original services overview */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {services.map((service, index) => (
             <Card key={index} className="text-center hover:shadow-lg transition-shadow">

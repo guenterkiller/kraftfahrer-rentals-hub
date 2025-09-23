@@ -138,7 +138,7 @@ const Wissenswertes = () => {
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
                     <li>✓ Der Fahrer arbeitet eigenverantwortlich und weisungsunabhängig</li>
-                    <li>✓ Sie stellen das Fahrzeug/die Geräte, er bringt die Fachkompetenz</li>
+                    <li>✓ Er nutzt eigene Betriebsmittel (Fahrzeug, Werkzeuge)</li>
                     <li>✓ Er trägt ein unternehmerisches Risiko</li>
                     <li>✓ Er kann eigene Arbeitskräfte einsetzen</li>
                     <li>✓ Er ist nicht in die Betriebsorganisation eingegliedert</li>
@@ -302,7 +302,7 @@ const Wissenswertes = () => {
                 </CardContent>
               </Card>
 
-                <Card>
+              <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">
                     Muss ich ein Fahrzeug zur Verfügung stellen?
@@ -310,9 +310,9 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Ja, in der Regel stellen Sie als Auftraggeber das Fahrzeug zur Verfügung. 
-                    Die selbstständigen Fahrer bringen ihre Erfahrung und Qualifikation mit, 
-                    fahren aber Ihr Firmenfahrzeug. Dies ist rechtlich zulässig und üblich in der Branche.
+                    Das hängt von der Vereinbarung ab. Viele selbstständige Fahrer verfügen über 
+                    eigene Fahrzeuge. In anderen Fällen können Sie Ihr Firmenfahrzeug zur Verfügung 
+                    stellen. Beides ist möglich und rechtlich zulässig.
                   </p>
                 </CardContent>
               </Card>
