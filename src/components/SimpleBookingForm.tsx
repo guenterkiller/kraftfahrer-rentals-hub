@@ -28,6 +28,10 @@ const SimpleBookingForm = () => {
   const [tankSilo, setTankSilo] = useState(false);
   const [international, setInternational] = useState(false);
   const [languages, setLanguages] = useState(false);
+  const [bf3Certified, setBf3Certified] = useState(false);
+  const [escortExperience, setEscortExperience] = useState(false);
+  const [requiresBf2, setRequiresBf2] = useState(false);
+  const [requiresBf3, setRequiresBf3] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,7 +70,11 @@ const SimpleBookingForm = () => {
             forklift: forklift,
             tank_silo: tankSilo,
             international: international,
-            languages: languages
+            languages: languages,
+            bf3_certified: bf3Certified,
+            escort_experience: escortExperience,
+            requires_bf2: requiresBf2,
+            requires_bf3: requiresBf3
           },
           consents: {
             prices: agreedToPrices,
@@ -103,6 +111,10 @@ const SimpleBookingForm = () => {
       setTankSilo(false);
       setInternational(false);
       setLanguages(false);
+      setBf3Certified(false);
+      setEscortExperience(false);
+      setRequiresBf2(false);
+      setRequiresBf3(false);
 
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -394,6 +406,49 @@ const SimpleBookingForm = () => {
                         onCheckedChange={(checked) => setLanguages(checked as boolean)}
                       />
                       <Label htmlFor="languages">Sprachkenntnisse (Deutsch, Englisch)</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="bf3certified" 
+                        checked={bf3Certified}
+                        onCheckedChange={(checked) => setBf3Certified(checked as boolean)}
+                      />
+                      <Label htmlFor="bf3certified">Berechtigung für BF3-Schulungen vorhanden</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="escortexperience" 
+                        checked={escortExperience}
+                        onCheckedChange={(checked) => setEscortExperience(checked as boolean)}
+                      />
+                      <Label htmlFor="escortexperience">Erfahrung im Schwertransport-Begleitwesen</Label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Begleitfahrzeuge Requirements */}
+                <div>
+                  <Label className="text-base font-medium">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Unsere Fahrer unterstützen Sie bei der Begleitung von Großraum- und Schwertransporten. 
+                    Ob BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="requiresbf2" 
+                        checked={requiresBf2}
+                        onCheckedChange={(checked) => setRequiresBf2(checked as boolean)}
+                      />
+                      <Label htmlFor="requiresbf2">Ja, BF2 (Rundumkennleuchte)</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="requiresbf3" 
+                        checked={requiresBf3}
+                        onCheckedChange={(checked) => setRequiresBf3(checked as boolean)}
+                      />
+                      <Label htmlFor="requiresbf3">Ja, BF3/BF4 (Wechselverkehrszeichenanlage)</Label>
                     </div>
                   </div>
                 </div>
