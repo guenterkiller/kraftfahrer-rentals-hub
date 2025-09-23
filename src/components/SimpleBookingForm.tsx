@@ -24,6 +24,10 @@ const SimpleBookingForm = () => {
   const [constructionSite, setConstructionSite] = useState(false);
   const [temperatureControlled, setTemperatureControlled] = useState(false);
   const [oversizeLoad, setOversizeLoad] = useState(false);
+  const [forklift, setForklift] = useState(false);
+  const [tankSilo, setTankSilo] = useState(false);
+  const [international, setInternational] = useState(false);
+  const [languages, setLanguages] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,7 +62,11 @@ const SimpleBookingForm = () => {
             special_license: specialLicense,
             construction_site: constructionSite,
             temperature_controlled: temperatureControlled,
-            oversize_load: oversizeLoad
+            oversize_load: oversizeLoad,
+            forklift: forklift,
+            tank_silo: tankSilo,
+            international: international,
+            languages: languages
           },
           consents: {
             prices: agreedToPrices,
@@ -91,6 +99,10 @@ const SimpleBookingForm = () => {
       setConstructionSite(false);
       setTemperatureControlled(false);
       setOversizeLoad(false);
+      setForklift(false);
+      setTankSilo(false);
+      setInternational(false);
+      setLanguages(false);
 
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -270,7 +282,7 @@ const SimpleBookingForm = () => {
                 {/* Special Requirements */}
                 <div>
                   <Label className="text-base font-medium">Spezialanforderungen</Label>
-                  <div className="space-y-2 mt-2">
+                  <div className="grid md:grid-cols-2 gap-x-8 gap-y-2 mt-2">
                     <div className="flex items-center space-x-2">
                       <Checkbox 
                         id="adr" 
@@ -350,6 +362,38 @@ const SimpleBookingForm = () => {
                         onCheckedChange={(checked) => setOversizeLoad(checked as boolean)}
                       />
                       <Label htmlFor="oversize">Überbreite/Überlänge</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="forklift" 
+                        checked={forklift}
+                        onCheckedChange={(checked) => setForklift(checked as boolean)}
+                      />
+                      <Label htmlFor="forklift">Mitnahmestapler / Gabelstapler</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="tanksilo" 
+                        checked={tankSilo}
+                        onCheckedChange={(checked) => setTankSilo(checked as boolean)}
+                      />
+                      <Label htmlFor="tanksilo">Tank- oder Silotransporte</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="international" 
+                        checked={international}
+                        onCheckedChange={(checked) => setInternational(checked as boolean)}
+                      />
+                      <Label htmlFor="international">Auslandseinsätze möglich</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="languages" 
+                        checked={languages}
+                        onCheckedChange={(checked) => setLanguages(checked as boolean)}
+                      />
+                      <Label htmlFor="languages">Sprachkenntnisse (Deutsch, Englisch)</Label>
                     </div>
                   </div>
                 </div>
