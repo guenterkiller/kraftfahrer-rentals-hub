@@ -25,6 +25,7 @@ import TankwagenfahrerBuchen from "./pages/TankwagenfahrerBuchen";
 import ADRFahrerBuchen from "./pages/ADRFahrerBuchen";
 import KranfahrerBuchen from "./pages/KranfahrerBuchen";
 import FahrmischerfahrerBuchen from "./pages/FahrmischerfahrerBuchen";
+import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
           <Route path="/adr-fahrer-buchen" element={<ADRFahrerBuchen />} />
           <Route path="/kranfahrer-buchen" element={<KranfahrerBuchen />} />
           <Route path="/fahrmischerfahrer-buchen" element={<FahrmischerfahrerBuchen />} />
+          <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           <Route path="/fahrer-admin" element={<FahrerAdmin />} />
           

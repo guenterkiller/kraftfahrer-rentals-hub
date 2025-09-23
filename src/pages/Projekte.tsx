@@ -140,7 +140,7 @@ const Projekte = () => {
                     <div className="md:w-1/3">
                       <img 
                         src={projekt.bild} 
-                        alt={`${projekt.title} - Erfolgreicher Fahrereinsatz in ${projekt.ort} mit ${projekt.fahrzeugtyp} für ${projekt.kunde}`}
+                        alt={`${projekt.title} - Erfolgreicher ${projekt.fahrzeugtyp}-Fahrereinsatz in ${projekt.ort} für ${projekt.kunde} durch Fahrerexpress vermittelt`}
                         className="w-full h-64 md:h-full object-cover"
                       />
                     </div>

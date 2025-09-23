@@ -65,7 +65,7 @@ const DriverTypesSection = () => {
               <div className="relative h-48 overflow-hidden">
                 <img 
                   src={type.image} 
-                  alt={type.title}
+                  alt={`${type.title} - Professionelle Fahrer für ${type.title.toLowerCase()} deutschlandweit verfügbar über Fahrerexpress`}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
@@ -109,12 +109,16 @@ const DriverTypesSection = () => {
           <h3 className="text-xl font-semibold mb-4">
             Weitere Fahrerarten – schnell & bundesweit verfügbar
           </h3>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
+           <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <Link to="/begleitfahrzeuge-bf3" className="text-primary hover:underline">
+              BF3-Begleitfahrzeuge buchen
+            </Link>
+            <span className="text-muted-foreground">•</span>
             <Link to="/tankwagenfahrer-buchen" className="text-primary hover:underline">
               Tankwagenfahrer buchen
             </Link>
             <span className="text-muted-foreground">•</span>
-            <Link to="/adr-fahrer-mieten" className="text-primary hover:underline">
+            <Link to="/adr-fahrer-buchen" className="text-primary hover:underline">
               ADR-Fahrer mieten
             </Link>
             <span className="text-muted-foreground">•</span>
@@ -122,7 +126,7 @@ const DriverTypesSection = () => {
               Kranfahrer / Mobilkran buchen
             </Link>
             <span className="text-muted-foreground">•</span>
-            <Link to="/fahrmischerfahrer-gesucht" className="text-primary hover:underline">
+            <Link to="/fahrmischerfahrer-buchen" className="text-primary hover:underline">
               Fahrmischerfahrer gesucht
             </Link>
           </div>
