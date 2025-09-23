@@ -281,6 +281,8 @@ export type Database = {
         Row: {
           adresse: string | null
           beschreibung: string | null
+          bf2_erlaubnis: boolean | null
+          bf3_erlaubnis: boolean | null
           created_at: string
           dokumente: Json | null
           email: string
@@ -292,6 +294,7 @@ export type Database = {
           no_show_count: number
           ort: string | null
           plz: string | null
+          spezialanforderungen: string[] | null
           spezialisierungen: string[] | null
           status: string | null
           stundensatz: number | null
@@ -304,6 +307,8 @@ export type Database = {
         Insert: {
           adresse?: string | null
           beschreibung?: string | null
+          bf2_erlaubnis?: boolean | null
+          bf3_erlaubnis?: boolean | null
           created_at?: string
           dokumente?: Json | null
           email: string
@@ -315,6 +320,7 @@ export type Database = {
           no_show_count?: number
           ort?: string | null
           plz?: string | null
+          spezialanforderungen?: string[] | null
           spezialisierungen?: string[] | null
           status?: string | null
           stundensatz?: number | null
@@ -327,6 +333,8 @@ export type Database = {
         Update: {
           adresse?: string | null
           beschreibung?: string | null
+          bf2_erlaubnis?: boolean | null
+          bf3_erlaubnis?: boolean | null
           created_at?: string
           dokumente?: Json | null
           email?: string
@@ -338,6 +346,7 @@ export type Database = {
           no_show_count?: number
           ort?: string | null
           plz?: string | null
+          spezialanforderungen?: string[] | null
           spezialisierungen?: string[] | null
           status?: string | null
           stundensatz?: number | null

@@ -296,39 +296,19 @@ const handler = async (req: Request): Promise<Response> => {
       stundensatz: parsedRate,
       status: 'pending',
       dokumente: uploadedFiles,
-      // Add BF2/BF3 fields and special requirements to beschreibung
-      ...(() => {
-        const additionalInfo = [];
-        
-        if (requestData.bf2_erlaubnis === 'true') {
-          additionalInfo.push('BF2-Erlaubnis (Rundumkennleuchte) vorhanden');
-        }
-        
-        if (requestData.bf3_erlaubnis === 'true') {
-          additionalInfo.push('BF3/BF4-Erlaubnis (Wechselverkehrszeichenanlage) vorhanden');
-        }
-        
-        if (requestData.spezialanforderungen) {
-          try {
-            const spezialanforderungen = Array.isArray(requestData.spezialanforderungen) 
-              ? requestData.spezialanforderungen 
-              : JSON.parse(requestData.spezialanforderungen);
-            if (spezialanforderungen.length > 0) {
-              additionalInfo.push(`Spezialanforderungen: ${spezialanforderungen.join(', ')}`);
-            }
-          } catch (e) {
-            console.warn('Could not parse spezialanforderungen:', requestData.spezialanforderungen);
-          }
-        }
-        
-        if (additionalInfo.length > 0) {
-          const currentDesc = requestData.description || '';
-          const newDesc = currentDesc + (currentDesc ? '\n\n' : '') + additionalInfo.join('\n');
-          return { beschreibung: newDesc };
-        }
-        
-        return {};
-      })()
+      bf2_erlaubnis: requestData.bf2_erlaubnis === 'true',
+      bf3_erlaubnis: requestData.bf3_erlaubnis === 'true',
+      spezialanforderungen: Array.isArray(requestData.spezialanforderungen) 
+        ? requestData.spezialanforderungen 
+        : (requestData.spezialanforderungen ? 
+           (() => {
+             try {
+               return JSON.parse(requestData.spezialanforderungen);
+             } catch (e) {
+               console.warn('Could not parse spezialanforderungen:', requestData.spezialanforderungen);
+               return [];
+             }
+           })() : [])
     };
     
     console.log("Insert data being sent:", JSON.stringify(insertData, null, 2));
