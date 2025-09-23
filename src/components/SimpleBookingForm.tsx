@@ -37,9 +37,16 @@ const SimpleBookingForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('Form submission started');
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
+    
+    // Debug form data
+    console.log('Form data entries:');
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
     
     try {
       const payload = {
@@ -82,6 +89,7 @@ const SimpleBookingForm = () => {
       };
 
       console.log('Sending payload:', payload);
+      console.log('Consent states - prices:', agreedToPrices, 'data:', agreedToData);
 
       const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
         body: payload,
