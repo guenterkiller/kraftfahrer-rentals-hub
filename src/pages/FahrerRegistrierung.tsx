@@ -39,6 +39,11 @@ const FahrerRegistrierung = () => {
     verfuegbarkeit: "",
     beschreibung: "",
     vermittlungszustimmung: false,
+    // Neue BF2/BF3 Erlaubnisse
+    bf2_erlaubnis: false,
+    bf3_erlaubnis: false,
+    // Spezialanforderungen
+    spezialanforderungen: [] as string[],
   });
 
   // File upload states
@@ -65,6 +70,26 @@ const FahrerRegistrierung = () => {
     "Schwertransport",
     "Gefahrgut",
     "Kühlfahrzeuge"
+  ];
+  
+  // Neue Spezialanforderungen basierend auf den Screenshots
+  const spezialanforderungen = [
+    "ADR-Schein erforderlich",
+    "Langstreckenfahrten",
+    "Wochenendarbeit erforderlich", 
+    "Sonderführerschein erforderlich",
+    "Kühltransporte",
+    "Mitnahmestapler / Gabelstapler",
+    "Auslandseinsätze möglich",
+    "Berechtigung für BF3-Schulungen vorhanden",
+    "Kran-Erfahrung erforderlich",
+    "Nachtschicht möglich",
+    "Schwerlasttransporte",
+    "Baustellen-Erfahrung",
+    "Überbreite/Überlänge",
+    "Tank- oder Silotransporte",
+    "Sprachkenntnisse (Deutsch, Englisch)",
+    "Erfahrung im Schwertransport-Begleitwesen"
   ];
   const bundeslaender = [
     "Baden-Württemberg", "Bayern", "Berlin", "Brandenburg", "Bremen",
@@ -262,6 +287,10 @@ const FahrerRegistrierung = () => {
       formDataToSend.append("specializations", JSON.stringify(formData.spezialisierungen));
       formDataToSend.append("regions", JSON.stringify(formData.verfuegbare_regionen));
       formDataToSend.append("hourly_rate", formData.stundensatz || "");
+      // Neue Felder für BF2/BF3 und Spezialanforderungen
+      formDataToSend.append("bf2_erlaubnis", formData.bf2_erlaubnis.toString());
+      formDataToSend.append("bf3_erlaubnis", formData.bf3_erlaubnis.toString());
+      formDataToSend.append("spezialanforderungen", JSON.stringify(formData.spezialanforderungen));
 
       // Add file uploads
       if (selectedFiles.fuehrerschein) {
@@ -334,6 +363,9 @@ const FahrerRegistrierung = () => {
         verfuegbarkeit: "",
         beschreibung: "",
         vermittlungszustimmung: false,
+        bf2_erlaubnis: false,
+        bf3_erlaubnis: false,
+        spezialanforderungen: [],
       });
       setSelectedFiles({
         fuehrerschein: null,
@@ -628,6 +660,64 @@ const FahrerRegistrierung = () => {
                           <Label htmlFor={spez} className="text-sm">{spez}</Label>
                         </div>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Spezialanforderungen */}
+                  <div>
+                    <Label>Spezialanforderungen</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                      {spezialanforderungen.map((anforderung) => (
+                        <div key={anforderung} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={anforderung}
+                            checked={formData.spezialanforderungen.includes(anforderung)}
+                            onCheckedChange={(checked) => 
+                              handleCheckboxChange('spezialanforderungen', anforderung, checked as boolean)
+                            }
+                          />
+                          <Label htmlFor={anforderung} className="text-sm">{anforderung}</Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* BF2/BF3 Erlaubnisse */}
+                  <div className="bg-muted/30 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-lg">🚛</span>
+                      <Label className="text-base font-semibold">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Unsere Fahrer unterstützen Sie bei der Begleitung von Großraum- und Schwertransporten. Ob BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage.
+                    </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="bf2_erlaubnis"
+                          checked={formData.bf2_erlaubnis}
+                          onCheckedChange={(checked) => 
+                            handleInputChange('bf2_erlaubnis', checked as boolean)
+                          }
+                        />
+                        <Label htmlFor="bf2_erlaubnis" className="text-sm flex items-center gap-2">
+                          <span className="text-orange-500">🔶</span>
+                          Ja, BF2 (Rundumkennleuchte)
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="bf3_erlaubnis"
+                          checked={formData.bf3_erlaubnis}
+                          onCheckedChange={(checked) => 
+                            handleInputChange('bf3_erlaubnis', checked as boolean)
+                          }
+                        />
+                        <Label htmlFor="bf3_erlaubnis" className="text-sm flex items-center gap-2">
+                          <span className="text-red-500">🔶</span>
+                          Ja, BF3/BF4 (Wechselverkehrszeichenanlage)
+                        </Label>
+                      </div>
                     </div>
                   </div>
 
