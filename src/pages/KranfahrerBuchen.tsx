@@ -1,4 +1,5 @@
 import LandingPageLayout from "@/components/LandingPageLayout";
+import kranHero from "@/assets/kranfahrer-hero.jpg";
 
 const KranfahrerBuchen = () => {
   const seoData = {
@@ -40,7 +41,9 @@ const KranfahrerBuchen = () => {
       "Kranschein & Zertifizierung",
       "Mobilkran-Expertise",
       "Bundesweite Verfügbarkeit"
-    ]
+    ],
+    heroImage: kranHero,
+    heroImageAlt: "Kranfahrer buchen deutschlandweit - Mobilkran Heben Baustelle"
   };
 
   const faqData = {
