@@ -14,34 +14,33 @@ Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfü
 
 💼 **Vermittlung & rechtlicher Rahmen**
 
-- Wir vermitteln Dienst-/Werkleistungen zwischen Ihnen und unseren Auftraggebern.
+- Wir vermitteln Dienst-/Werkleistungen zwischen Ihnen und Auftraggebern in Deutschland.
 - Keine Arbeitnehmerüberlassung (AÜG). Es entsteht kein Arbeitsverhältnis mit Fahrerexpress.
 - Dieses Angebot richtet sich ausschließlich an Unternehmer i.S.d. § 14 BGB.
 
 💰 **Provision & Abrechnung**
 
-- **Provision:** 15 % des Nettohonorars zzgl. gesetzlicher USt (Honorarbasis ohne Spesen/Übernachtung/Fahrtkosten, sofern nicht anders vereinbart).
-- **Fälligkeit:** Nur bei tatsächlich ausgeführtem Einsatz.
-- **Abrechnung:** per Einbehalt oder Rechnung nach Einsatz bzw. als monatliche Sammelrechnung.
-- **Keine Mindestlaufzeit, keine Fixkosten.** Kündigung/Beendigung jederzeit möglich.
+- **Provision:** 15 % des Nettohonorars zzgl. gesetzlicher USt (Bemessungsgrundlage: Leistungsentgelt; Spesen/Übernachtung/Fahrtkosten sind nicht provisionspflichtig, sofern nicht abweichend vereinbart).
+- **Fälligkeit:** nur bei tatsächlich ausgeführtem Einsatz.
+- **Abrechnung:** per Einbehalt oder Rechnung nach Einsatz bzw. als monatliche Sammelrechnung (Zahlungsziel z. B. 14 Tage).
 
 🔒 **Kundenschutz / Umgehungsverbot**
 
-Für Folgeeinsätze mit demselben Auftraggeber, die durch unsere Erstvermittlung zustande kamen, ist die Provision für einen Zeitraum von 12 Monaten nach dem ersten Einsatz ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über uns erfolgt.  
+Für Folgeeinsätze mit demselben Auftraggeber, die auf unsere Erstvermittlung zurückgehen, ist die Provision für 12 Monate ab dem ersten Einsatz ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über uns erfolgt.  
 Nicht provisionspflichtig sind Direktaufträge außerhalb unserer Vermittlung mit anderen Auftraggebern.
 
 🧾 **Pflichten des/der Fahrers/in**
 
 Sie handeln als eigenständige/r Unternehmer/in und sorgen eigenverantwortlich für:
-- gültige Führerscheine/Schulungen (z. B. ADR, BF3),
+- gültige Führerscheine/Schulungen (z. B. ADR, Kran, BF3),
 - notwendige Versicherungen (z. B. Betriebshaftpflicht),
-- Steuern/Sozialabgaben und die ordnungsgemäße Rechnungsstellung an den Auftraggeber.
+- Steuern/Abgaben sowie eine ordnungsgemäße Rechnungsstellung an den Auftraggeber.
 
 🔐 **Datenschutz**
 
 - Wir verarbeiten Ihre Daten zur Vermittlung und Abwicklung von Einsätzen (Rechtsgrundlage: Art. 6 Abs. 1 b DSGVO; ggf. berechtigtes Interesse Art. 6 Abs. 1 f).
-- Weitere Informationen zu Speicherdauer, Empfängern und Ihren Rechten (Auskunft, Berichtigung, Löschung, Widerspruch) finden Sie hier: [Link zur Datenschutzerklärung]
-- Für Änderungen Ihrer Daten: info@kraftfahrer-mieten.com
+- Weitere Informationen (Speicherdauer, Empfänger, Rechte) finden Sie in unserer Datenschutzerklärung: {{Link zur Datenschutzerklärung}}.
+- Änderungen Ihrer Daten: info@kraftfahrer-mieten.com.
 
 📞 **Kontakt**
 
@@ -50,9 +49,9 @@ E-Mail: info@kraftfahrer-mieten.com · Tel.: 01577 144 2285
 
 ---
 **Impressum:**  
-Fahrerexpress-Agentur · Walther-von-Cronberg-Platz 12 · 60594 Frankfurt am Main  
-Inhaber: Günter Killer · USt-ID: DE123456789  
-[Link zum vollständigen Impressum]
+Fahrerexpress-Agentur {{Rechtsform}} · {{Straße, Nr.}} · {{PLZ, Ort}}  
+Inhaber/Geschäftsführer: {{Name}} · USt-ID: {{DE…}}  
+{{Link zum vollständigen Impressum}}
 
 ---
 
