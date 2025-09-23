@@ -33,6 +33,7 @@ const SimpleBookingForm = () => {
   const [escortExperience, setEscortExperience] = useState(false);
   const [requiresBf2, setRequiresBf2] = useState(false);
   const [requiresBf3, setRequiresBf3] = useState(false);
+  const [fahrzeugtyp, setFahrzeugtyp] = useState('');
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,20 +50,27 @@ const SimpleBookingForm = () => {
     }
     
     try {
+      // Check form validity first
+      const form = e.currentTarget;
+      if (!form.checkValidity()) {
+        console.log('Form is not valid');
+        return;
+      }
+
       const payload = {
-        vorname: formData.get('vorname'),
-        nachname: formData.get('nachname'),
-        email: formData.get('email'),
-        phone: formData.get('telefon'),
-        company: formData.get('unternehmen'),
-        customer_street: formData.get('strasse'),
-        customer_house_number: formData.get('hausnummer'),
-        customer_postal_code: formData.get('plz'),
-        customer_city: formData.get('ort'),
-        einsatzbeginn: formData.get('einsatzbeginn'),
-        einsatzdauer: formData.get('einsatzdauer'),
-        fahrzeugtyp: formData.get('fahrzeugtyp'),
-        nachricht: formData.get('beschreibung'),
+        vorname: formData.get('vorname') as string,
+        nachname: formData.get('nachname') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('telefon') as string,
+        company: formData.get('unternehmen') as string,
+        customer_street: formData.get('strasse') as string,
+        customer_house_number: formData.get('hausnummer') as string,
+        customer_postal_code: formData.get('plz') as string,
+        customer_city: formData.get('ort') as string,
+        einsatzbeginn: formData.get('einsatzbeginn') as string,
+        einsatzdauer: formData.get('einsatzdauer') as string,
+        fahrzeugtyp: fahrzeugtyp || 'lkw',
+        nachricht: formData.get('beschreibung') as string,
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Kran-Erfahrung',
@@ -135,6 +143,7 @@ const SimpleBookingForm = () => {
       setEscortExperience(false);
       setRequiresBf2(false);
       setRequiresBf3(false);
+      setFahrzeugtyp('');
 
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -295,8 +304,8 @@ const SimpleBookingForm = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="fahrzeugtyp">Benötigter Fahrzeugtyp</Label>
-                  <Select name="fahrzeugtyp">
+                  <Label htmlFor="fahrzeugtyp">Benötigter Fahrzeugtyp *</Label>
+                  <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
                       <SelectValue placeholder="Bitte wählen" />
                     </SelectTrigger>
@@ -538,7 +547,7 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || !agreedToPrices || !agreedToData}
+                  disabled={loading || !agreedToPrices || !agreedToData || !fahrzeugtyp}
                 >
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
