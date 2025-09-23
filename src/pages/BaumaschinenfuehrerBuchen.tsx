@@ -2,8 +2,8 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
-    title: "Baumaschinenführer buchen – Bagger, Radlader, Kran | Fahrerexpress",
-    description: "Baumaschinenführer kurzfristig: Bagger, Radlader, Kran, Mischmeister Flüssigboden. Selbstständige Subunternehmer mit Ihren Maschinen, bundesweit, ohne AÜG.",
+    title: "Baumaschinenführer buchen ab 489 € – Baggerfahrer & Radlader deutschlandweit",
+    description: "Jetzt deutschlandweit Baumaschinenführer buchen: Baggerfahrer, Radladerfahrer, Mischmeister für Flüssigboden. Geräte stellt der Auftraggeber. Rechtssicher & kurzfristig verfügbar.",
     keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer buchen, Baumaschinenführer Subunternehmer, Mischmeister Flüssigboden deutschlandweit, Kranführer buchen, Maschinisten mieten",
     structuredData: {
       "@context": "https://schema.org",
@@ -28,8 +28,8 @@ const BaumaschinenfuehrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Baumaschinenführer buchen – Bagger, Radlader & Mischmeister",
-    intro: "Für Erd-, Tiefbau- und Spezialprojekte vermitteln wir selbstständige Baumaschinenführer und Mischmeister (Bagger, Radlader, Kran, Flüssigboden). Einsatz mit Ihren Maschinen/Geräten im Werk-/Dienstvertrag – keine Maschinenvermietung, ausschließlich qualifizierte Subunternehmer.",
+    h1: "Baumaschinenführer buchen – Baggerfahrer & Radlader deutschlandweit",
+    intro: "Deutschlandweit Baumaschinenführer für Erdarbeiten, Aushub und Verladung buchen. Baggerfahrer, Radladerfahrer und Mischmeister für Flüssigbodenanlagen als selbstständige Subunternehmer – Sie stellen die Geräte, wir den qualifizierten Fahrer.",
     bullets: [
       "Erfahrene Maschinisten",
       "Tages- bis Projekt-Einsätze", 
