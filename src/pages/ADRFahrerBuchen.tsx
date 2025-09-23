@@ -1,5 +1,4 @@
 import LandingPageLayout from "@/components/LandingPageLayout";
-import adrHero from "@/assets/adr-fahrer-hero.jpg";
 
 const ADRFahrerBuchen = () => {
   const seoData = {
@@ -41,9 +40,7 @@ const ADRFahrerBuchen = () => {
       "ADR-Schein aktuell & gültig",
       "Gefahrgut-Transport Expertise",
       "Bundesweite Verfügbarkeit"
-    ],
-    heroImage: adrHero,
-    heroImageAlt: "ADR-Fahrer buchen deutschlandweit - Gefahrgut Transport mit orange Warntafel"
+    ]
   };
 
   const faqData = {

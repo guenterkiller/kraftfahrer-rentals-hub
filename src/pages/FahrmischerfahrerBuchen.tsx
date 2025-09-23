@@ -1,5 +1,4 @@
 import LandingPageLayout from "@/components/LandingPageLayout";
-import fahrmischerHero from "@/assets/fahrmischer-hero.jpg";
 
 const FahrmischerfahrerBuchen = () => {
   const seoData = {
@@ -41,9 +40,7 @@ const FahrmischerfahrerBuchen = () => {
       "Erfahrene Mischmeister",
       "Betonlogistik-Expertise",
       "Bundesweite Verfügbarkeit"
-    ],
-    heroImage: fahrmischerHero,
-    heroImageAlt: "Fahrmischerfahrer buchen deutschlandweit - Betonmischer auf Baustelle"
+    ]
   };
 
   const faqData = {
