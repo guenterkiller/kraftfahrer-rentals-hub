@@ -138,7 +138,7 @@ const Wissenswertes = () => {
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
                     <li>✓ Der Fahrer arbeitet eigenverantwortlich und weisungsunabhängig</li>
-                    <li>✓ Er nutzt eigene Betriebsmittel (Fahrzeug, Werkzeuge)</li>
+                    <li>✓ Sie stellen das Fahrzeug/die Geräte, er bringt die Fachkompetenz</li>
                     <li>✓ Er trägt ein unternehmerisches Risiko</li>
                     <li>✓ Er kann eigene Arbeitskräfte einsetzen</li>
                     <li>✓ Er ist nicht in die Betriebsorganisation eingegliedert</li>

@@ -13,7 +13,7 @@ const ServicesSection = () => {
     {
       icon: Truck,
       title: "Fahrzeugüberführungen",
-      description: "Fahrzeugüberführungen und Auslieferungen auf eigener Achse (LKW, Bus, Wohnmobil, Sonderfahrzeuge)"
+      description: "Fahrzeugüberführungen und Auslieferungen mit Ihren Fahrzeugen (LKW, Bus, Wohnmobil, Sonderfahrzeuge)"
     },
     {
       icon: Wrench,
