@@ -294,7 +294,26 @@ const SimpleBookingForm = () => {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="einsatzbeginn">Gewünschter Einsatzbeginn</Label>
-                    <Input id="einsatzbeginn" name="einsatzbeginn" placeholder="tt.mm.jjjj" type="date" />
+                    <Input 
+                      id="einsatzbeginn" 
+                      name="einsatzbeginn" 
+                      type="date" 
+                      min={(() => {
+                        const today = new Date();
+                        let nextWorkday = new Date(today);
+                        nextWorkday.setDate(today.getDate() + 1);
+                        
+                        // Skip weekend to Monday
+                        while (nextWorkday.getDay() === 0 || nextWorkday.getDay() === 6) {
+                          nextWorkday.setDate(nextWorkday.getDate() + 1);
+                        }
+                        
+                        return nextWorkday.toISOString().split('T')[0];
+                      })()}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Frühester Einsatz: nächster Werktag (24–72 h Vorlauf); kein Same-Day
+                    </p>
                   </div>
                   <div>
                     <Label htmlFor="einsatzdauer">Einsatzdauer</Label>

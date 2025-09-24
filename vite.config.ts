@@ -33,4 +33,20 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ['react', 'react-dom']
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'ui-vendor': ['lucide-react'],
+          'charts-vendor': ['recharts'],
+          'router-vendor': ['react-router-dom'],
+          'form-vendor': ['react-hook-form', '@hookform/resolvers'],
+          'date-vendor': ['date-fns'],
+          'misc-vendor': ['clsx', 'class-variance-authority', 'tailwind-merge']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  },
 }));

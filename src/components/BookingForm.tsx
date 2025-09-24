@@ -247,7 +247,18 @@ const BookingForm = () => {
                         mode="single"
                         selected={startDate}
                         onSelect={setStartDate}
-                        disabled={(date) => date < new Date()}
+                        disabled={(date) => {
+                          const today = new Date();
+                          let nextWorkday = new Date(today);
+                          nextWorkday.setDate(today.getDate() + 1);
+                          
+                          // Skip weekend to Monday
+                          while (nextWorkday.getDay() === 0 || nextWorkday.getDay() === 6) {
+                            nextWorkday.setDate(nextWorkday.getDate() + 1);
+                          }
+                          
+                          return date < nextWorkday;
+                        }}
                         initialFocus
                         className={cn("p-3 pointer-events-auto")}
                       />
