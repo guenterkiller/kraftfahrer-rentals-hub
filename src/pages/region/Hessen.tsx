@@ -66,7 +66,7 @@ const Hessen = () => {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Landesweite Fahrerexpress-Vermittlung für Transporte, Bauprojekte und Spezialaufgaben. 
-              Von Frankfurt über Kassel bis Darmstadt – mit 24-72h Vorlauf.
+              Von Frankfurt über Kassel bis Darmstadt – mit 24-72h Vorlauf. 🇪🇺 EU/EWR-Fahrer verfügbar.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">

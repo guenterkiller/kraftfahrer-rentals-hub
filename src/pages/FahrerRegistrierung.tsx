@@ -46,7 +46,12 @@ const FahrerRegistrierung = () => {
           "unitText": "HOUR"
         }
       },
-      "qualifications": "Führerschein CE, Fahrerkarte, Berufserfahrung mindestens 2 Jahre"
+      "qualifications": "Führerschein CE, Fahrerkarte, Berufserfahrung mindestens 2 Jahre",
+      "applicantLocationRequirements": {
+        "@type": "Country",
+        "name": "Deutschland, EU-Staaten, EWR-Staaten"
+      },
+      "jobLocationType": "MULTIPLE_LOCATIONS"
     }
   });
   const { toast } = useToast();
@@ -73,6 +78,8 @@ const FahrerRegistrierung = () => {
     bf3_erlaubnis: false,
     // Spezialanforderungen
     spezialanforderungen: [] as string[],
+    // EU/EWR Firmensitz
+    firmensitz_land: "",
   });
 
   // File upload states
@@ -127,6 +134,14 @@ const FahrerRegistrierung = () => {
     "Hamburg", "Hessen", "Mecklenburg-Vorpommern", "Niedersachsen",
     "Nordrhein-Westfalen", "Rheinland-Pfalz", "Saarland", "Sachsen",
     "Sachsen-Anhalt", "Schleswig-Holstein", "Thüringen"
+  ];
+
+  const euLaender = [
+    "Deutschland", "Österreich", "Schweiz", "Belgien", "Niederlande", 
+    "Frankreich", "Italien", "Spanien", "Portugal", "Polen", "Tschechien", 
+    "Slowakei", "Ungarn", "Slowenien", "Kroatien", "Dänemark", "Schweden", 
+    "Finnland", "Norwegen", "Island", "Luxemburg", "Irland", "Griechenland", 
+    "Bulgarien", "Rumänien", "Estland", "Lettland", "Litauen", "Malta", "Zypern"
   ];
 
   const handleCheckboxChange = (field: string, value: string, checked: boolean) => {
@@ -322,6 +337,7 @@ const FahrerRegistrierung = () => {
       formDataToSend.append("bf2_erlaubnis", formData.bf2_erlaubnis.toString());
       formDataToSend.append("bf3_erlaubnis", formData.bf3_erlaubnis.toString());
       formDataToSend.append("spezialanforderungen", JSON.stringify(formData.spezialanforderungen));
+      formDataToSend.append("firmensitz_land", formData.firmensitz_land || "");
 
       // Add file uploads
       if (selectedFiles.fuehrerschein) {
@@ -397,6 +413,7 @@ const FahrerRegistrierung = () => {
         bf2_erlaubnis: false,
         bf3_erlaubnis: false,
         spezialanforderungen: [],
+        firmensitz_land: "",
       });
       setSelectedFiles({
         fuehrerschein: null,
@@ -444,7 +461,7 @@ const FahrerRegistrierung = () => {
             {/* Werbetext für selbstständige Fahrer */}
             <Card className="mb-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
               <CardContent className="p-8">
-                <div className="space-y-6">
+                  <div className="space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
                       💬 Warum selbstständige fahrer bei uns mehr erreichen
@@ -453,6 +470,11 @@ const FahrerRegistrierung = () => {
                       Stell dir vor, du bestimmst selbst, wann, wo und für wen du fährst – ganz ohne Disponenten, 
                       Schichtpläne oder endlose Diskussionen mit der Dispo.
                     </p>
+                    <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
+                      <p className="text-sm font-medium text-primary">
+                        🇪🇺 EU/EWR-Fahrer willkommen: Fahrer aus allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
@@ -531,6 +553,39 @@ const FahrerRegistrierung = () => {
               </CardContent>
             </Card>
 
+            {/* Voraussetzungen Section */}
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Voraussetzungen für die Registrierung
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <span>Gültiger Führerschein (C, CE, oder entsprechende Klassen)</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <span>Fahrerkarte (digitaler Tachograph)</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <span>Mindestens 2 Jahre Berufserfahrung als Kraftfahrer</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <span>Selbstständige Gewerbeanmeldung oder Bereitschaft zur Anmeldung</span>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
+                    <span className="font-medium">🇪🇺 EU/EWR-Bürger: Fahrer aus Deutschland, allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl text-center">
@@ -600,6 +655,23 @@ const FahrerRegistrierung = () => {
                         <p className="text-sm text-destructive mt-1">{validationErrors.telefon}</p>
                       )}
                     </div>
+                  </div>
+
+                  {/* EU/EWR Firmensitz */}
+                  <div>
+                    <Label htmlFor="firmensitz_land">Firmensitz (Land) – optional</Label>
+                    <Select onValueChange={(value) => handleInputChange('firmensitz_land', value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Land auswählen (optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {euLaender.map((land) => (
+                          <SelectItem key={land} value={land}>
+                            {land}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Adresse */}
@@ -995,6 +1067,40 @@ const FahrerRegistrierung = () => {
                     {isLoading ? "Registrierung läuft..." : "Jetzt registrieren"}
                   </Button>
                 </form>
+              </CardContent>
+            </Card>
+
+            {/* FAQ Section */}
+            <Card className="mt-8">
+              <CardHeader>
+                <CardTitle className="text-xl">
+                  Häufig gestellte Fragen zur Fahrer-Registrierung
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="border-b pb-4">
+                    <h4 className="font-semibold mb-2">Können sich Fahrer aus EU-Ländern registrieren?</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Ja, Fahrer aus allen EU-Staaten und dem Europäischen Wirtschaftsraum (EWR) können sich bei uns registrieren. 
+                      Die Fahrerlaubnis muss in Deutschland anerkannt sein oder entsprechend umgeschrieben werden.
+                    </p>
+                  </div>
+                  <div className="border-b pb-4">
+                    <h4 className="font-semibold mb-2">Wie schnell kann ich nach der Registrierung Aufträge erhalten?</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Nach erfolgreicher Prüfung Ihrer Unterlagen (24-72 Stunden) können Sie Aufträge erhalten. 
+                      Wir garantieren keinen Same-Day-Service, sondern setzen auf planbare Qualität.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Muss ich ein Gewerbe anmelden?</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Ja, für die selbstständige Tätigkeit als Kraftfahrer ist eine Gewerbeanmeldung erforderlich. 
+                      Wir helfen gerne bei Fragen zur Anmeldung und den steuerlichen Aspekten.
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 

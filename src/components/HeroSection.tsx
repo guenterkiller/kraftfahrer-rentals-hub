@@ -32,11 +32,17 @@ const HeroSection = () => {
           </p>
         </div>
         
-        <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-8 max-w-4xl mx-auto leading-relaxed px-4 drop-shadow-sm animate-fade-in">
+        <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 max-w-4xl mx-auto leading-relaxed px-4 drop-shadow-sm animate-fade-in">
           Sie möchten einen Fahrer mieten? Fahrerexpress vermittelt bundesweit 
           selbstständige Fahrer für alle Fahrzeugtypen – flexibel, zuverlässig 
           und rechtssicher. Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
         </p>
+        
+        <div className="bg-white/10 backdrop-blur-sm px-4 py-2 mb-8 max-w-2xl mx-auto rounded-lg border border-white/20 animate-fade-in">
+          <p className="text-sm md:text-base text-white/90">
+            🇪🇺 <strong>EU/EWR-Fahrer verfügbar:</strong> Qualifizierte Kraftfahrer aus Deutschland und der gesamten Europäischen Union
+          </p>
+        </div>
         
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center mb-12 animate-slide-up">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">

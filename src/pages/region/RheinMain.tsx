@@ -66,7 +66,7 @@ const RheinMain = () => {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Metropolregion-Spezialist für Fahrerdienstleistungen. Von Frankfurt über Wiesbaden bis Mainz – 
-              kurze Wege, dichte Infrastruktur, 24-72h Vorlauf.
+              kurze Wege, dichte Infrastruktur, 24-72h Vorlauf. 🇪🇺 EU/EWR-Fahrer verfügbar.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">

@@ -66,7 +66,7 @@ const Frankfurt = () => {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Professionelle Fahrer für Transporte, Bauprojekte und Spezialaufgaben im Rhein-Main-Gebiet. 
-              Flexibel, zuverlässig und rechtssicher – mit 24-72h Vorlauf.
+              Flexibel, zuverlässig und rechtssicher – mit 24-72h Vorlauf. 🇪🇺 EU/EWR-Fahrer verfügbar.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">
