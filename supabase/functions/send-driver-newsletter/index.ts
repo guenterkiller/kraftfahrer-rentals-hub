@@ -26,11 +26,11 @@ serve(async (req) => {
       );
     }
 
-    // Get all active drivers
+    // Get all active drivers (both 'active' and 'approved' status)
     const { data: drivers, error: driversError } = await supabase
       .from('fahrer_profile')
       .select('email, vorname, nachname')
-      .eq('status', 'aktiv');
+      .in('status', ['active', 'approved']);
 
     if (driversError) {
       console.error('Error fetching drivers:', driversError);
