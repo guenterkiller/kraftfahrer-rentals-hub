@@ -74,7 +74,7 @@ Ihr Fahrerexpress Team
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            from: 'Fahrerexpress <noreply@fahrerexpress.de>',
+            from: `Fahrerexpress <${Deno.env.get('MAIL_FROM')}>`,
             reply_to: 'info@kraftfahrer-mieten.com',
             to: [driver.email],
             subject: subject,
