@@ -50,9 +50,13 @@ serve(async (req) => {
 
     console.log(`Found ${drivers.length} active drivers:`, drivers.map(d => `${d.vorname} ${d.nachname} (${d.status})`));
 
-    // Send emails to all drivers
+    // Send emails to all drivers with rate limiting (max 2 per second)
     let sentCount = 0;
-    const emailPromises = drivers.map(async (driver) => {
+    let errorCount = 0;
+
+    for (let i = 0; i < drivers.length; i++) {
+      const driver = drivers[i];
+      
       try {
         const emailBody = `
 Hallo ${driver.vorname} ${driver.nachname},
@@ -79,17 +83,59 @@ Ihr Fahrerexpress Team
         });
 
         if (response.ok) {
+          const result = await response.json();
           sentCount++;
-          console.log(`Email sent successfully to ${driver.email}`);
+          console.log(`Email sent successfully to ${driver.email}:`, result);
+          
+          // Log email sending success
+          await supabase
+            .from('email_log')
+            .insert({
+              recipient: driver.email,
+              subject,
+              template: 'newsletter',
+              status: 'sent',
+              sent_at: new Date().toISOString(),
+              message_id: result.id,
+            });
         } else {
-          console.error(`Failed to send email to ${driver.email}:`, await response.text());
+          const errorText = await response.text();
+          console.error(`Failed to send email to ${driver.email}:`, errorText);
+          errorCount++;
+          
+          // Log email sending failure
+          await supabase
+            .from('email_log')
+            .insert({
+              recipient: driver.email,
+              subject,
+              template: 'newsletter',
+              status: 'failed',
+              error_message: errorText,
+            });
         }
       } catch (error) {
         console.error(`Error sending email to ${driver.email}:`, error);
+        errorCount++;
+        
+        // Log email sending failure
+        await supabase
+          .from('email_log')
+          .insert({
+            recipient: driver.email,
+            subject,
+            template: 'newsletter',
+            status: 'failed',
+            error_message: error.message,
+          });
       }
-    });
 
-    await Promise.all(emailPromises);
+      // Rate limiting: Wait 600ms between emails (max 2 per second)
+      // Skip delay for the last email
+      if (i < drivers.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+    }
 
     return new Response(
       JSON.stringify({ 
