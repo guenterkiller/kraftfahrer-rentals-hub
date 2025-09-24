@@ -26,11 +26,11 @@ serve(async (req) => {
       );
     }
 
-    // Get all active drivers (both 'active' and 'approved' status)
+    // Get all active drivers (both German and English status)
     const { data: drivers, error: driversError } = await supabase
       .from('fahrer_profile')
-      .select('email, vorname, nachname')
-      .in('status', ['active', 'approved']);
+      .select('email, vorname, nachname, status')
+      .in('status', ['active', 'approved', 'aktiv']);
 
     if (driversError) {
       console.error('Error fetching drivers:', driversError);
@@ -41,11 +41,14 @@ serve(async (req) => {
     }
 
     if (!drivers || drivers.length === 0) {
+      console.log('No active drivers found with status: active, approved, or aktiv');
       return new Response(
         JSON.stringify({ sentCount: 0, message: 'No active drivers found' }),
         { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    console.log(`Found ${drivers.length} active drivers:`, drivers.map(d => `${d.vorname} ${d.nachname} (${d.status})`));
 
     // Send emails to all drivers
     let sentCount = 0;
