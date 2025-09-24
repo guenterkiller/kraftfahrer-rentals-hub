@@ -17,6 +17,7 @@ import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
+import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -77,6 +78,7 @@ const Admin = () => {
   const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
   const [completingOldJobs, setCompletingOldJobs] = useState(false);
   const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
+  const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   
   const handleMarkJobOpen = async (jobId: string) => {
     setMarkingCompleted(jobId);
@@ -1088,14 +1090,25 @@ const Admin = () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Registrierte Fahrer ({fahrer.length})</CardTitle>
-              <Button 
-                onClick={loadFahrerData} 
-                variant="outline" 
-                size="sm"
-                disabled={isLoadingData}
-              >
-                {isLoadingData ? "Lädt..." : "Aktualisieren"}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => setNewsletterDialogOpen(true)}
+                  variant="default"
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Rundschreiben
+                </Button>
+                <Button 
+                  onClick={loadFahrerData} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isLoadingData}
+                >
+                  {isLoadingData ? "Lädt..." : "Aktualisieren"}
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -1585,6 +1598,12 @@ const Admin = () => {
         onOpenChange={setNoShowDialogOpen}
         assignment={selectedAssignment}
         onSuccess={handleNoShowSuccess}
+      />
+
+      {/* Driver Newsletter Dialog */}
+      <DriverNewsletterDialog
+        open={newsletterDialogOpen}
+        onOpenChange={setNewsletterDialogOpen}
       />
     </div>
   );
