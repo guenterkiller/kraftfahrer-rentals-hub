@@ -68,7 +68,7 @@ Ihr Fahrerexpress Team
           },
           body: JSON.stringify({
             from: 'Fahrerexpress <noreply@fahrerexpress.de>',
-            reply_to: 'guenter.killer@t-online.de',
+            reply_to: 'info@kraftfahrer-mieten.com',
             to: [driver.email],
             subject: subject,
             text: emailBody,
