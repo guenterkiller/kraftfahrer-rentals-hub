@@ -10,39 +10,51 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAdminAccess = () => {
+    const checkAdminAccess = async () => {
       try {
-        // Check localStorage for admin session
-        const adminSession = localStorage.getItem('adminSession');
-        if (adminSession) {
-          const session = JSON.parse(adminSession);
-          const isValidSession = session.isAdmin && 
-                               session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage statt 24 Stunden
-          
-          if (isValidSession) {
-            // Session aktualisieren um automatische Verlängerung zu ermöglichen
-            session.loginTime = Date.now();
-            localStorage.setItem('adminSession', JSON.stringify(session));
-          }
-          
-          setIsAdmin(isValidSession);
-        } else {
+        // Get current Supabase session
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError || !sessionData.session) {
           setIsAdmin(false);
+          return;
         }
+
+        // Verify admin status with server-side function
+        const { data, error } = await supabase.functions.invoke("admin-auth-check", {
+          headers: { 
+            Authorization: `Bearer ${sessionData.session.access_token}` 
+          },
+        });
+
+        if (error || !data?.success) {
+          console.log('Admin check failed:', error?.message || data?.error);
+          setIsAdmin(false);
+          return;
+        }
+
+        setIsAdmin(true);
       } catch (error) {
-        console.error('Admin check error:', error);
+        console.error('Admin access check error:', error);
         setIsAdmin(false);
       }
     };
 
     checkAdminAccess();
     
-    // Regelmäßige Session-Überprüfung alle 5 Minuten
-    const sessionCheckInterval = setInterval(checkAdminAccess, 5 * 60 * 1000);
+    // Set up auth state listener for real-time updates
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (event === 'SIGNED_OUT' || !session) {
+          setIsAdmin(false);
+        } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          checkAdminAccess();
+        }
+      }
+    );
     
     return () => {
-      clearInterval(sessionCheckInterval);
+      subscription.unsubscribe();
     };
   }, []);
 

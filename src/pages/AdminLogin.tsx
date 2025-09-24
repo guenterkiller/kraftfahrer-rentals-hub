@@ -45,37 +45,31 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log('Attempting admin login for:', email);
-      
-      // Use the check-admin-login edge function
-      const { data, error } = await supabase.functions.invoke('check-admin-login', {
-        body: { email, password }
+      // Sign in with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError || !authData.session) {
+        throw new Error("Ungültige Anmeldedaten");
+      }
+
+      // Verify admin role with server-side function
+      const { data, error } = await supabase.functions.invoke("admin-auth-check", {
+        headers: { 
+          Authorization: `Bearer ${authData.session.access_token}` 
+        },
       });
 
       if (error || !data?.success) {
-        throw new Error(data?.error || "Ungültige Anmeldedaten");
+        // Sign out if not admin
+        await supabase.auth.signOut();
+        throw new Error("Keine Admin-Berechtigung");
       }
 
-      console.log('Login successful, storing session...');
-      
-      // Store admin session info
-      const sessionData = {
-        email: email,
-        isAdmin: true,
-        loginTime: Date.now()
-      };
-      
-      localStorage.setItem('adminSession', JSON.stringify(sessionData));
-      console.log('Session stored:', sessionData);
-
       toast({ title: "Erfolgreich angemeldet" });
-      
-      console.log('Navigating to /admin...');
-      
-      // Force reload after navigation to ensure components re-check localStorage
-      setTimeout(() => {
-        window.location.href = "/admin";
-      }, 500);
+      navigate("/admin");
       
     } catch (err: any) {
       console.error('Login error:', err);
