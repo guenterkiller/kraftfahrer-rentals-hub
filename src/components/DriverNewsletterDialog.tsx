@@ -37,9 +37,16 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
 
       if (error) throw error;
 
+      console.log('Newsletter response:', data);
+
+      // Zeige detaillierte Ergebnisse
+      const successMessage = data.errorCount > 0 
+        ? `Rundschreiben an ${data.sentCount} von ${data.totalDrivers} Fahrern erfolgreich versendet (${data.errorCount} fehlgeschlagen)`
+        : `Rundschreiben erfolgreich an alle ${data.sentCount} Fahrer versendet`;
+
       toast({
         title: "Rundschreiben versendet",
-        description: `Nachricht an ${data.sentCount} Fahrer versendet`
+        description: successMessage
       });
 
       setSubject("");
