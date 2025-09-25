@@ -21,23 +21,30 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Check for existing admin session
-    const checkExistingSession = async () => {
-      const { data: session } = await supabase.auth.getSession();
-      if (session.session) {
-        // Check if user has admin role
-        try {
-          const { data, error } = await supabase.functions.invoke("admin-auth-check", {
-            headers: { Authorization: `Bearer ${session.session.access_token}` },
-          });
-          if (data?.success && !error) {
+    // Check for existing admin session in localStorage
+    const checkExistingSession = () => {
+      try {
+        const adminSession = localStorage.getItem('adminSession');
+        if (adminSession) {
+          const session = JSON.parse(adminSession);
+          const isValidSession = session.isAdmin && 
+                               session.email === "guenter.killer@t-online.de" &&
+                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000;
+          
+          if (isValidSession) {
+            console.log('Valid admin session found, redirecting to /admin');
             navigate("/admin");
+          } else {
+            console.log('Invalid or expired admin session');
+            localStorage.removeItem('adminSession');
           }
-        } catch (e) {
-          // Session invalid, stay on login page
         }
+      } catch (error) {
+        console.error('Error checking existing session:', error);
+        localStorage.removeItem('adminSession');
       }
     };
+    
     checkExistingSession();
   }, [navigate]);
 
