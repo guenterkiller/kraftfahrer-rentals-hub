@@ -27,10 +27,12 @@ serve(async (req) => {
     }
 
     // Get all active drivers (both German and English status)
+    // Include drivers with status: active, approved, aktiv
     const { data: drivers, error: driversError } = await supabase
       .from('fahrer_profile')
-      .select('email, vorname, nachname, status')
-      .in('status', ['active', 'approved', 'aktiv']);
+      .select('email, vorname, nachname, status, email_opt_out')
+      .in('status', ['active', 'approved', 'aktiv'])
+      .eq('email_opt_out', false); // Only drivers who haven't opted out
 
     if (driversError) {
       console.error('Error fetching drivers:', driversError);
@@ -48,7 +50,8 @@ serve(async (req) => {
       );
     }
 
-    console.log(`Found ${drivers.length} active drivers:`, drivers.map(d => `${d.vorname} ${d.nachname} (${d.status})`));
+    console.log(`Found ${drivers.length} eligible drivers:`);
+    drivers.forEach(d => console.log(`- ${d.vorname} ${d.nachname} (${d.status}) - ${d.email}`));
 
     // Send emails to all drivers with rate limiting (max 2 per second)
     let sentCount = 0;
@@ -57,7 +60,17 @@ serve(async (req) => {
     for (let i = 0; i < drivers.length; i++) {
       const driver = drivers[i];
       
+      console.log(`Attempting to send email ${i + 1}/${drivers.length} to ${driver.email} (${driver.vorname} ${driver.nachname})`);
+      
       try {
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(driver.email)) {
+          console.error(`Invalid email format for ${driver.email}`);
+          errorCount++;
+          continue;
+        }
+
         const emailBody = `
 Hallo ${driver.vorname} ${driver.nachname},
 
@@ -67,25 +80,32 @@ Mit freundlichen Grüßen
 Ihr Fahrerexpress Team
         `.trim();
 
+        const emailPayload = {
+          from: `Fahrerexpress <${Deno.env.get('MAIL_FROM')}>`,
+          reply_to: 'info@kraftfahrer-mieten.com',
+          to: [driver.email],
+          subject: subject,
+          text: emailBody,
+        };
+
+        console.log(`Sending email to ${driver.email} with payload:`, emailPayload);
+
         const response = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${Deno.env.get('RESEND_API_KEY')}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            from: `Fahrerexpress <${Deno.env.get('MAIL_FROM')}>`,
-            reply_to: 'info@kraftfahrer-mieten.com',
-            to: [driver.email],
-            subject: subject,
-            text: emailBody,
-          }),
+          body: JSON.stringify(emailPayload),
         });
 
+        const responseText = await response.text();
+        console.log(`Response for ${driver.email}: Status ${response.status}, Body: ${responseText}`);
+
         if (response.ok) {
-          const result = await response.json();
+          const result = JSON.parse(responseText);
           sentCount++;
-          console.log(`Email sent successfully to ${driver.email}:`, result);
+          console.log(`✅ Email sent successfully to ${driver.email}:`, result);
           
           // Log email sending success
           await supabase
@@ -99,8 +119,7 @@ Ihr Fahrerexpress Team
               message_id: result.id,
             });
         } else {
-          const errorText = await response.text();
-          console.error(`Failed to send email to ${driver.email}:`, errorText);
+          console.error(`❌ Failed to send email to ${driver.email}: Status ${response.status}, Response: ${responseText}`);
           errorCount++;
           
           // Log email sending failure
@@ -111,11 +130,11 @@ Ihr Fahrerexpress Team
               subject,
               template: 'newsletter',
               status: 'failed',
-              error_message: errorText,
+              error_message: `HTTP ${response.status}: ${responseText}`,
             });
         }
       } catch (error) {
-        console.error(`Error sending email to ${driver.email}:`, error);
+        console.error(`❌ Exception sending email to ${driver.email}:`, error);
         errorCount++;
         
         // Log email sending failure
@@ -130,18 +149,21 @@ Ihr Fahrerexpress Team
           });
       }
 
-      // Rate limiting: Wait 600ms between emails (max 2 per second)
-      // Skip delay for the last email
+      // Rate limiting: Wait 1 second between emails to avoid rate limits
       if (i < drivers.length - 1) {
-        await new Promise(resolve => setTimeout(resolve, 600));
+        console.log(`Waiting 1 second before next email...`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
+
+    console.log(`Newsletter sending complete: ${sentCount} sent, ${errorCount} failed out of ${drivers.length} total drivers`);
 
     return new Response(
       JSON.stringify({ 
         sentCount, 
+        errorCount,
         totalDrivers: drivers.length,
-        message: `Newsletter sent to ${sentCount} out of ${drivers.length} drivers` 
+        message: `Newsletter sent to ${sentCount} out of ${drivers.length} drivers (${errorCount} failed)` 
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
