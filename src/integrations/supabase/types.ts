@@ -116,7 +116,7 @@ export type Database = {
       admin_actions: {
         Row: {
           action: string
-          admin_email: string
+          admin_email: string | null
           assignment_id: string | null
           created_at: string
           id: string
@@ -125,7 +125,7 @@ export type Database = {
         }
         Insert: {
           action: string
-          admin_email: string
+          admin_email?: string | null
           assignment_id?: string | null
           created_at?: string
           id?: string
@@ -134,7 +134,7 @@ export type Database = {
         }
         Update: {
           action?: string
-          admin_email?: string
+          admin_email?: string | null
           assignment_id?: string | null
           created_at?: string
           id?: string
