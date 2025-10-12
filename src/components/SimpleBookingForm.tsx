@@ -212,33 +212,50 @@ const SimpleBookingForm = () => {
               <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                 <div className="flex items-start gap-2">
                   <span className="text-2xl">💰</span>
-                  <div>
-                    <h3 className="font-semibold text-green-800 mb-2">💰 Ihr Fahrerpreis</h3>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-green-800 mb-2">Ihr Fahrerpreis</h3>
                     <p className="text-sm text-green-800 mb-3">
-                      Alle angegebenen Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong>, zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung über <strong>Fahrerexpress</strong> (Agenturabrechnung, § 84 HGB – keine Arbeitnehmerüberlassung).
+                      Alle Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong>, zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung über <strong>Fahrerexpress</strong> (Dienst-/Werkleistung, keine Arbeitnehmerüberlassung; § 84 HGB).
                     </p>
-                    <ul className="text-sm space-y-2 text-green-800">
-                      <li>
-                        <strong>Standard-LKW-Fahrer (bis 7,5 t / 12 t)</strong> – <strong>359 € / Tag</strong><br />
-                        Bei garantierten Projekten ab 4 Wochen: <strong>349 € / Tag</strong>
-                      </li>
-                      <li>
-                        <strong>LKW-Fahrer (CE, 40 t / Hängerzug)</strong> – <strong>399 € / Tag</strong><br />
-                        Projektpreis ab 4 Wochen: <strong>379 € / Tag</strong>
-                      </li>
-                      <li>
-                        <strong>Baumaschinenführer</strong> – <strong>489 € / Tag</strong><br />
-                        Projektpreis ab 4 Wochen: <strong>469 € / Tag</strong>
-                      </li>
-                      <li>
-                        <strong>Spezialfahrer (ADR, Kran, Schwertransport)</strong> – <strong>539 € / Tag</strong><br />
-                        Projektpreis ab 4 Wochen: <strong>519 € / Tag</strong>
-                      </li>
-                    </ul>
-                    <p className="text-xs text-green-700 mt-3">
-                      Wochenend-Einsätze +25 % | Nachtarbeit (22–6 Uhr) +20 % | Übernachtungspauschale 85 € / Nacht (oder nach Nachweis).<br />
-                      Mit Absenden des Formulars erteilen Sie einen <strong>verbindlichen Vermittlungsauftrag</strong> zu den genannten Konditionen.
+                    
+                    <div role="region" aria-label="Preisstaffelung" className="overflow-x-auto">
+                      <table className="w-full text-sm text-green-800" aria-label="Preisstaffelung für längere Einsätze">
+                        <thead>
+                          <tr className="border-b border-green-300">
+                            <th className="text-left py-2 pr-4">Kategorie</th>
+                            <th className="text-left py-2 px-2">Standardpreis</th>
+                            <th className="text-left py-2 pl-2">Projektpreis (ab 4 Wochen)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b border-green-200">
+                            <td className="py-2 pr-4">Standard-LKW (bis 7,5 t / 12 t)</td>
+                            <td className="py-2 px-2"><strong>359 € / Tag</strong></td>
+                            <td className="py-2 pl-2"><strong>349 € / Tag</strong></td>
+                          </tr>
+                          <tr className="border-b border-green-200">
+                            <td className="py-2 pr-4">LKW (CE, 40 t / Hängerzug)</td>
+                            <td className="py-2 px-2"><strong>399 € / Tag</strong></td>
+                            <td className="py-2 pl-2"><strong>379 € / Tag</strong></td>
+                          </tr>
+                          <tr className="border-b border-green-200">
+                            <td className="py-2 pr-4">Baumaschinenführer</td>
+                            <td className="py-2 px-2"><strong>489 € / Tag</strong></td>
+                            <td className="py-2 pl-2"><strong>469 € / Tag</strong></td>
+                          </tr>
+                          <tr className="border-b border-green-200">
+                            <td className="py-2 pr-4">Spezialfahrer (ADR / Kran / Schwertransport)</td>
+                            <td className="py-2 px-2"><strong>539 € / Tag</strong></td>
+                            <td className="py-2 pl-2"><strong>519 € / Tag</strong></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <p className="text-sm text-green-800 mt-3">
+                      Wochenend +25 % | Nachtarbeit (22–6 Uhr) +20 % | Übernachtung 85 € / Nacht (oder nach Nachweis).
                     </p>
+                    <hr className="my-3 border-green-300" />
                   </div>
                 </div>
               </div>
@@ -335,6 +352,9 @@ const SimpleBookingForm = () => {
 
                 <div>
                   <Label htmlFor="fahrzeugtyp">Benötigter Fahrertyp / Qualifikation *</Label>
+                  <p className="text-sm opacity-80 mb-2" aria-live="polite">
+                    Beispielauswahl: <em>7,5 t</em>, <em>40 t (CE)</em>, <em>Baumaschinenführer</em>, <em>ADR/Kran</em>.
+                  </p>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
                       <SelectValue placeholder="Bitte wählen (z. B. LKW 7,5 t, CE, ADR, Baumaschinenführer …)" />
