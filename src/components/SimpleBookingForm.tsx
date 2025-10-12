@@ -215,45 +215,23 @@ const SimpleBookingForm = () => {
                   <div className="flex-1">
                     <h3 className="font-semibold text-green-800 mb-2">Ihr Fahrerpreis</h3>
                     <p className="text-sm text-green-800 mb-3">
-                      Alle Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong>, zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung über <strong>Fahrerexpress</strong> (Dienst-/Werkleistung, keine Arbeitnehmerüberlassung; § 84 HGB).
+                      Unsere Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. 
+                      Abrechnung über <strong>Fahrerexpress</strong> (Dienst-/Werkleistung, keine Arbeitnehmerüberlassung gemäß § 84 HGB).
                     </p>
-                    
-                    <div role="region" aria-label="Preisstaffelung" className="overflow-x-auto">
-                      <table className="w-full text-sm text-green-800" aria-label="Preisstaffelung für längere Einsätze">
-                        <thead>
-                          <tr className="border-b border-green-300">
-                            <th className="text-left py-2 pr-4">Kategorie</th>
-                            <th className="text-left py-2 px-2">Standardpreis</th>
-                            <th className="text-left py-2 pl-2">Projektpreis (ab 4 Wochen)</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr className="border-b border-green-200">
-                            <td className="py-2 pr-4">Standard-LKW (bis 7,5 t / 12 t)</td>
-                            <td className="py-2 px-2"><strong>359 € / Tag</strong></td>
-                            <td className="py-2 pl-2"><strong>349 € / Tag</strong></td>
-                          </tr>
-                          <tr className="border-b border-green-200">
-                            <td className="py-2 pr-4">LKW (CE, 40 t / Hängerzug)</td>
-                            <td className="py-2 px-2"><strong>399 € / Tag</strong></td>
-                            <td className="py-2 pl-2"><strong>379 € / Tag</strong></td>
-                          </tr>
-                          <tr className="border-b border-green-200">
-                            <td className="py-2 pr-4">Baumaschinenführer</td>
-                            <td className="py-2 px-2"><strong>489 € / Tag</strong></td>
-                            <td className="py-2 pl-2"><strong>469 € / Tag</strong></td>
-                          </tr>
-                          <tr className="border-b border-green-200">
-                            <td className="py-2 pr-4">Spezialfahrer (ADR / Kran / Schwertransport)</td>
-                            <td className="py-2 px-2"><strong>539 € / Tag</strong></td>
-                            <td className="py-2 pl-2"><strong>519 € / Tag</strong></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
 
-                    <p className="text-sm text-green-800 mt-3">
-                      Wochenend +25 % | Nachtarbeit (22–6 Uhr) +20 % | Übernachtung 85 € / Nacht (oder nach Nachweis).
+                    <p className="text-green-800 mb-3">
+                      <strong>Standard-LKW-Fahrer</strong> ab <strong>359 € / Tag</strong>
+                      {' | '}
+                      <strong>Baumaschinenführer</strong> ab <strong>489 € / Tag</strong>
+                      {' | '}
+                      <strong>Spezialfahrer (ADR/Kran)</strong> ab <strong>539 € / Tag</strong>
+                    </p>
+
+                    <p className="text-sm opacity-80 text-green-800">
+                      Projektpreise für längere Einsätze finden Sie unter{' '}
+                      <a href="/preise" className="underline hover:no-underline font-medium">
+                        Preise & Konditionen →
+                      </a>
                     </p>
                     <hr className="my-3 border-green-300" />
                   </div>
