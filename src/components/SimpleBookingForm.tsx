@@ -213,19 +213,31 @@ const SimpleBookingForm = () => {
                 <div className="flex items-start gap-2">
                   <span className="text-2xl">💰</span>
                   <div>
-                    <h3 className="font-semibold text-green-800 mb-2">Ihr Fahrerpreis</h3>
-                    <div className="text-sm space-y-1">
-                      <p>– Standard LKW-Fahrer: <strong>399 € netto / Tag (8 Std.)</strong></p>
-                      <p>– Spezialfahrer (ADR/Kran): <strong>539 € netto / Tag (8 Std.)</strong></p>
-                      <p>– Baumaschinenführer: <strong>489 € netto / Tag (8 Std.)</strong></p>
-                    </div>
-                    <p className="text-xs text-green-700 mt-2">
-                      Alle Preise zzgl. MwSt., Fahrtkosten und evtl. Übernachtung nach Aufwand. 
-                      Mit Absenden des Formulars buchen Sie verbindlich zum angegebenen Tagespreis.
+                    <h3 className="font-semibold text-green-800 mb-2">💰 Ihr Fahrerpreis</h3>
+                    <p className="text-sm text-green-800 mb-3">
+                      Alle angegebenen Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong>, zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung über <strong>Fahrerexpress</strong> (Agenturabrechnung, § 84 HGB – keine Arbeitnehmerüberlassung).
                     </p>
-                    <p className="text-xs text-green-600 mt-1">
-                      <strong>Hinweis:</strong> Die Vermittlungsprovision bezieht sich auf das gesamte Nettohonorar 
-                      des Einsatzes einschließlich berechtigter Nebenkosten (z. B. Fahrt-/Übernachtung/Mehrstunden).
+                    <ul className="text-sm space-y-2 text-green-800">
+                      <li>
+                        <strong>Standard-LKW-Fahrer (bis 7,5 t / 12 t)</strong> – <strong>359 € / Tag</strong><br />
+                        Bei garantierten Projekten ab 4 Wochen: <strong>349 € / Tag</strong>
+                      </li>
+                      <li>
+                        <strong>LKW-Fahrer (CE, 40 t / Hängerzug)</strong> – <strong>399 € / Tag</strong><br />
+                        Projektpreis ab 4 Wochen: <strong>379 € / Tag</strong>
+                      </li>
+                      <li>
+                        <strong>Baumaschinenführer</strong> – <strong>489 € / Tag</strong><br />
+                        Projektpreis ab 4 Wochen: <strong>469 € / Tag</strong>
+                      </li>
+                      <li>
+                        <strong>Spezialfahrer (ADR, Kran, Schwertransport)</strong> – <strong>539 € / Tag</strong><br />
+                        Projektpreis ab 4 Wochen: <strong>519 € / Tag</strong>
+                      </li>
+                    </ul>
+                    <p className="text-xs text-green-700 mt-3">
+                      Wochenend-Einsätze +25 % | Nachtarbeit (22–6 Uhr) +20 % | Übernachtungspauschale 85 € / Nacht (oder nach Nachweis).<br />
+                      Mit Absenden des Formulars erteilen Sie einen <strong>verbindlichen Vermittlungsauftrag</strong> zu den genannten Konditionen.
                     </p>
                   </div>
                 </div>
