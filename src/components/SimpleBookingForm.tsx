@@ -334,10 +334,10 @@ const SimpleBookingForm = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="fahrzeugtyp">Benötigter Fahrzeugtyp *</Label>
+                  <Label htmlFor="fahrzeugtyp">Benötigter Fahrertyp / Qualifikation *</Label>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
-                      <SelectValue placeholder="Bitte wählen" />
+                      <SelectValue placeholder="Bitte wählen (z. B. LKW 7,5 t, CE, ADR, Baumaschinenführer …)" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="lkw">LKW (C/CE)</SelectItem>
