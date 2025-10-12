@@ -86,6 +86,91 @@ const PricingSection = () => {
           ))}
         </div>
 
+        {/* Preisstaffelung für längere Einsätze */}
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/50 dark:to-emerald-950/50 p-8 rounded-lg max-w-6xl mx-auto mb-12 border border-green-200 dark:border-green-800">
+          <div className="flex items-center gap-3 mb-4">
+            <TrendingUp className="h-6 w-6 text-green-600 dark:text-green-400" />
+            <h3 className="text-2xl font-bold">Preisstaffelung für längere Einsätze</h3>
+          </div>
+          
+          <p className="text-muted-foreground mb-6">
+            Unsere Standardpreise gelten für einzelne oder kurzfristige Einsätze (z. B. Tages- oder Wocheneinsätze).
+            Bei garantierten, durchgehenden Projekten über mehrere Wochen bieten wir auf Anfrage projektbezogene Konditionen an.
+          </p>
+
+          {/* Pricing Table */}
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full border-collapse bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+              <thead>
+                <tr className="bg-green-100 dark:bg-green-900/30">
+                  <th className="p-3 text-left font-semibold border-b border-green-200 dark:border-green-700">Fahrerprofil</th>
+                  <th className="p-3 text-center font-semibold border-b border-green-200 dark:border-green-700">Standard-Tagessatz (netto)</th>
+                  <th className="p-3 text-center font-semibold border-b border-green-200 dark:border-green-700">Projektpreis ab 4 Wochen</th>
+                  <th className="p-3 text-left font-semibold border-b border-green-200 dark:border-green-700">Beschreibung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <td className="p-3 font-medium">Standard-LKW-Fahrer (bis 7,5 t / 12 t)</td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-primary">359 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-green-600 dark:text-green-400">349 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-sm text-muted-foreground">CE- oder C-Führerschein, Modul 95, Fahrerkarte, Nahverkehr / Verteiler / Baustelle</td>
+                </tr>
+                <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <td className="p-3 font-medium">LKW-Fahrer (CE, 40 t / Hängerzug)</td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-primary">399 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-green-600 dark:text-green-400">379 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-sm text-muted-foreground">Baustellenverkehr, Logistik, Überführungen, Fernverkehr</td>
+                </tr>
+                <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <td className="p-3 font-medium">Baumaschinenführer</td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-primary">489 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-green-600 dark:text-green-400">469 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-sm text-muted-foreground">Bagger-, Radlader- oder Kranerfahrung</td>
+                </tr>
+                <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <td className="p-3 font-medium">Spezialfahrer (ADR, Kran, Schwertransport)</td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-primary">539 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-green-600 dark:text-green-400">519 € / Tag</div>
+                  </td>
+                  <td className="p-3 text-sm text-muted-foreground">Gefahrgut, Kran- oder Spezialfahrten</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800 mb-6">
+            <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+              💡 Projektpreise gelten nur bei fester Wochenplanung (mind. 4 Wochen, 5 Tage/Woche). Alle Preise zzgl. 19 % MwSt.
+            </p>
+          </div>
+
+          {/* Ergänzender Text */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h4 className="font-semibold mb-3 text-lg">Staffelpreise mit Planungssicherheit</h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Unsere Staffelpreise richten sich nach der tatsächlichen Laufzeit und Planungssicherheit des Einsatzes.
+              Damit profitieren Auftraggeber bei längeren Projekten von planbaren Konditionen – ohne versteckte Kosten, ohne Arbeitgeberpflichten.
+              Jeder Fahrer arbeitet auf selbstständiger Basis gemäß § 84 HGB.
+            </p>
+          </div>
+        </div>
+
         {/* Preiskalkulation */}
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 p-8 rounded-lg max-w-4xl mx-auto mb-12 border border-blue-200 dark:border-blue-800">
           <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
