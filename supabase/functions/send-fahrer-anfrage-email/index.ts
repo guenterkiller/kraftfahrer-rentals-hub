@@ -143,59 +143,52 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
     const clientEmailResponse = await resend.emails.send({
       from: MAIL_FROM,
       to: [requestData.email],
-      subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur – Eingangsbestätigung",
+      subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
-          <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Ihre Fahrerbuchung bei der Fahrerexpress-Agentur</h2>
-          
           <p>Sehr geehrte/r ${requestData.vorname} ${requestData.nachname},</p>
           
-          <p>vielen Dank für Ihre Anfrage bei der Fahrerexpress-Agentur. Wir haben Ihre Buchungsanfrage erhalten und werden diese umgehend bearbeiten. <strong>Sobald ein Fahrer den Auftrag annimmt, bestätigen wir Ihnen die Buchung separat per E-Mail.</strong></p>
+          <p>vielen Dank für Ihre Anfrage bei der Fahrerexpress-Agentur – Günter Killer.<br>
+          Wir haben Ihre Buchungsanfrage erhalten und werden diese umgehend bearbeiten. Sobald ein Fahrer den Auftrag annimmt, bestätigen wir Ihnen die Buchung separat per E-Mail.</p>
           
-          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-left: 4px solid #3498db;">
-            <h3 style="margin-top: 0; color: #2c3e50;">📝 Ihre Anfrage im Überblick</h3>
-            <ul style="margin: 0; padding-left: 20px;">
-              ${requestData.fahrzeugtyp ? `<li><strong>Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp}</li>` : ''}
-              <li><strong>Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
-              <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) && requestData.specializations.length > 0 ? requestData.specializations.join(', ') : 'Standard'}</li>
-              <li><strong>Region:</strong> ${Array.isArray(requestData.regions) && requestData.regions.length > 0 ? requestData.regions.join(', ') : 'nach Vereinbarung'}</li>
-              ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
-            </ul>
-          </div>
+          <h3 style="color: #2c3e50; margin-top: 25px;">📝 Ihre Anfrage im Überblick</h3>
+          <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+            <li><strong>Fahrertyp / Qualifikation:</strong> ${requestData.fahrzeugtyp || 'nicht angegeben'}</li>
+            <li><strong>Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
+            <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) && requestData.specializations.length > 0 ? requestData.specializations.join(', ') : 'Standard'}</li>
+            <li><strong>Region:</strong> ${Array.isArray(requestData.regions) && requestData.regions.length > 0 ? requestData.regions.join(', ') : 'nach Vereinbarung'}</li>
+            ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
+          </ul>
           
-          <div style="background-color: #fff3cd; padding: 15px; margin: 20px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #856404;">💰 Konditionen</h3>
-            <ul style="margin: 0; padding-left: 20px;">
-              <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
-              <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
-              <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
-              <li><strong>Spezialfahrer (ADR, Schwertransport):</strong> 539 € netto / Tag (8 Std.)</li>
-            </ul>
-            <p style="margin: 10px 0 0 0; padding-left: 20px; font-size: 14px;">
-              <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, Spezialfahrer 519 €
-            </p>
-            <p style="font-size: 14px; margin-top: 10px; padding-left: 20px;">
-              Kurzzeiteinsätze (4–6 h) auf Anfrage zum erhöhten Stundensatz.
-            </p>
-            <p style="font-size: 14px; margin-top: 15px; color: #6c757d;">
-              <em>Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung nach tatsächlichem Einsatzumfang. Zuschläge für Überstunden, Nacht-, Sonn- und Feiertage laut gültiger Preisliste.</em>
-            </p>
-          </div>
+          <h3 style="color: #2c3e50; margin-top: 25px;">💰 Konditionen</h3>
+          <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+            <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
+            <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
+            <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
+            <li><strong>LKW mit Ladekran:</strong> 539 € netto / Tag (8 Std.)</li>
+          </ul>
           
-          <div style="background-color: #d1ecf1; padding: 15px; margin: 20px 0; border-left: 4px solid #bee5eb; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #0c5460;">📌 Wichtiger Hinweis</h3>
-            <p style="margin: 0; font-weight: 500;">
-              Mit Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage gestellt. Verbindlich wird die Buchung erst, wenn ein Fahrer den Auftrag annimmt und wir dies schriftlich bestätigen.
+          <p style="margin: 15px 0 10px 20px; font-size: 14px; line-height: 1.6;">
+            <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, LKW mit Ladekran 519 €<br>
+            <strong>Kurzzeiteinsätze (4–6 h)</strong> auf Anfrage zum erhöhten Stundensatz.<br>
+            Abrechnung zum Tagessatz (8 Std.); Mehrstunden, Nacht-, Sonn- und Feiertagszuschläge gemäß Preisliste.<br>
+            <em>Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung.</em>
+          </p>
+          
+          <div style="background-color: #fff3cd; padding: 15px; margin: 25px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #856404;">⚠️ Wichtiger Hinweis</h3>
+            <p style="margin: 0; font-weight: 500; line-height: 1.6;">
+              Fahrerexpress vermittelt ausschließlich <strong>selbstständige Fahrerleistungen als Dienst-/Werkvertrag (§ 84 HGB)</strong>.<br>
+              Es erfolgt <strong>keine Fahrzeug- oder Maschinenvermietung</strong>.<br>
+              Das erforderliche Fahrzeug oder Gerät wird <strong>vom Auftraggeber gestellt</strong>.
             </p>
           </div>
           
-          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #2c3e50;">📞 Kontakt</h3>
-            <p style="margin: 0;">
-              📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: #3498db; text-decoration: none;">info@kraftfahrer-mieten.com</a><br>
-              📞 01577 1442285
-            </p>
-          </div>
+          <h3 style="color: #2c3e50; margin-top: 25px;">📞 Kontakt</h3>
+          <p style="margin: 10px 0; line-height: 1.6;">
+            📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: #3498db; text-decoration: none;">info@kraftfahrer-mieten.com</a><br>
+            📞 <a href="tel:015771442285" style="color: #3498db; text-decoration: none;">01577 1442285</a>
+          </p>
           
           <p style="margin-top: 30px;">
             Mit freundlichen Grüßen<br>
@@ -203,8 +196,9 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
           </p>
           
           <hr style="border: none; border-top: 1px solid #dee2e6; margin: 30px 0;">
-          <p style="font-size: 12px; color: #6c757d; text-align: center;">
-            Fahrerexpress-Agentur | info@kraftfahrer-mieten.com | 01577 1442285
+          <p style="font-size: 12px; color: #6c757d; line-height: 1.5;">
+            Fahrerexpress-Agentur | info@kraftfahrer-mieten.com | 01577 1442285<br>
+            Walther-von-Cronberg-Platz 12 · 60594 Frankfurt am Main
           </p>
         </div>
       `,
