@@ -328,7 +328,7 @@ const SimpleBookingForm = () => {
                 <div>
                   <Label htmlFor="fahrzeugtyp">Benötigter Fahrertyp / Qualifikation *</Label>
                   <p className="text-sm opacity-80 mb-2" aria-live="polite">
-                    Beispielauswahl: <em>7,5 t</em>, <em>40 t (CE)</em>, <em>Baumaschinenführer</em>, <em>LKW mit Ladekran</em>.
+                    Beispiel: <em>7,5 t</em>, <em>40 t</em>, <em>ADR</em>, <em>Tankwagen</em>, <em>Baumaschinenführer</em>, <em>Ladekran</em>.
                   </p>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>

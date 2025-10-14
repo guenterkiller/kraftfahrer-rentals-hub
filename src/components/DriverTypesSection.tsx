@@ -19,7 +19,7 @@ const DriverTypesSection = () => {
       title: "Tankwagenfahrer (ADR)",
       description: "Spezialisierte ADR-Fahrer für Gefahrguttransporte in Mineralöl, Chemie und Lebensmittelbereich.",
       image: tankwagenFahrer,
-      features: ["ADR-Schein aktuell", "Gefahrgut-Erfahrung", "Mineralöl & Chemie"],
+      features: ["ADR-Schein aktuell", "Gefahrgut-Erfahrung", "Mineralöl & Chemie", "Tankwagen- und ADR-Spezialfahrer gehören zur Kategorie 'Spezialfahrer'."],
       path: "/tankwagenfahrer-buchen"
     },
     {

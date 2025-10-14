@@ -104,7 +104,7 @@ const PreiseUndAblauf = () => {
               <Card className="border-2 border-orange-500/20">
                 <CardHeader className="text-center">
                   <CardTitle className="text-base mb-3">
-                    LKW mit Ladekran
+                    Spezialfahrer (ADR / Tankwagen / Schwerlast / Ladekran)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-center space-y-3">
