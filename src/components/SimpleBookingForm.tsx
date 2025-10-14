@@ -229,7 +229,7 @@ const SimpleBookingForm = () => {
 
                     <p className="text-sm opacity-80 text-green-800">
                       Projektpreise für längere Einsätze finden Sie unter{' '}
-                      <a href="/preise" className="underline hover:no-underline font-medium">
+                      <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
                         Preise & Konditionen →
                       </a>
                     </p>
