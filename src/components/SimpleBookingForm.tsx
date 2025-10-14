@@ -220,27 +220,17 @@ const SimpleBookingForm = () => {
                     </p>
 
                     <div className="bg-white/80 p-4 rounded-lg mb-4">
-                      <p className="text-green-800 mb-3 text-sm">
-                        <strong>Standard-LKW-Fahrer:</strong> 50 €/h | 359 € / Tag | 349 € / Tag (Projekt)
-                      </p>
-                      <p className="text-green-800 mb-3 text-sm">
-                        <strong>CE/40 t:</strong> 55 €/h | 399 € / Tag | 379 € / Tag (Projekt)
-                      </p>
-                      <p className="text-green-800 mb-3 text-sm">
-                        <strong>Baumaschinenführer:</strong> 60 €/h | 489 € / Tag | 469 € / Tag (Projekt)
-                      </p>
                       <p className="text-green-800 text-sm">
-                        <strong>Spezialfahrer (ADR/Kran):</strong> 65 €/h | 539 € / Tag | 519 € / Tag (Projekt)
+                        <strong>Standard-LKW</strong> ab 359 €/Tag | <strong>CE</strong> ab 399 €/Tag | <strong>Baumaschinenführer</strong> ab 489 €/Tag | <strong>Spezial</strong> ab 539 €/Tag
                       </p>
                     </div>
 
                     <p className="text-sm text-green-800 mb-4">
-                      Kurzzeiteinsätze (4–6 h) sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet. 
-                      Regelmäßige Einsätze werden nach Tagessatz oder Projektpreis abgerechnet.
+                      Kurzzeiteinsätze (4–6 h) sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet.
                     </p>
 
                     <p className="text-sm opacity-80 text-green-800">
-                      Vollständige Preisstaffelung unter{' '}
+                      Details:{' '}
                       <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
                         Preise & Konditionen →
                       </a>
@@ -592,7 +582,7 @@ const SimpleBookingForm = () => {
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Fahrer buchen</div>
-                      <div className="text-sm opacity-90">ab 399 € netto</div>
+                      <div className="text-sm opacity-90">ab 359 € netto</div>
                     </div>
                   )}
                 </Button>

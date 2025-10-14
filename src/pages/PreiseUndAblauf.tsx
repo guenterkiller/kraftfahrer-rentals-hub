@@ -87,7 +87,7 @@ const PreiseUndAblauf = () => {
                 <CardContent className="text-center space-y-3">
                   <div>
                     <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
-                    <div className="text-2xl font-bold text-orange-600">60 €/h</div>
+                    <div className="text-2xl font-bold text-orange-600">62 €/h</div>
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Standard</div>
@@ -110,7 +110,7 @@ const PreiseUndAblauf = () => {
                 <CardContent className="text-center space-y-3">
                   <div>
                     <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
-                    <div className="text-2xl font-bold text-orange-600">65 €/h</div>
+                    <div className="text-2xl font-bold text-orange-600">68 €/h</div>
                   </div>
                   <div>
                     <div className="text-sm text-muted-foreground">Standard</div>
