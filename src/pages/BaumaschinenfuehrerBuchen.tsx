@@ -61,19 +61,19 @@ const BaumaschinenfuehrerBuchen = () => {
 
   const relatedServices = [
     {
-      title: "LKW-Fahrer buchen",
+      title: "LKW-Fahrer",
       path: "/lkw-fahrer-buchen",
-      description: "Speziell C+E Sattelzugfahrer"
+      description: "Standard- und CE-Fahrer für alle LKW-Klassen"
     },
     {
-      title: "Kraftfahrer mieten",
-      path: "/kraftfahrer-mieten",
-      description: "Berufskraftfahrer für alle Fahrzeugklassen"
+      title: "ADR-Fahrer",
+      path: "/adr-fahrer-buchen",
+      description: "Gefahrgut-Fahrer mit ADR-Schein"
     },
     {
       title: "Fahrmischerfahrer",
-      path: "/fahrmischerfahrer-gesucht",
-      description: "Erfahrene Betonmischer-Spezialisten"
+      path: "/fahrmischerfahrer-buchen",
+      description: "Betonmischer-Spezialisten & Mischmeister"
     }
   ];
 

@@ -23,7 +23,7 @@ import FahrmischerfahrerGesucht from "./pages/FahrmischerfahrerGesucht";
 import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import TankwagenfahrerBuchen from "./pages/TankwagenfahrerBuchen";
 import ADRFahrerBuchen from "./pages/ADRFahrerBuchen";
-import KranfahrerBuchen from "./pages/KranfahrerBuchen";
+
 import FahrmischerfahrerBuchen from "./pages/FahrmischerfahrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
@@ -50,7 +50,7 @@ const App = () => (
           <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
           <Route path="/tankwagenfahrer-buchen" element={<TankwagenfahrerBuchen />} />
           <Route path="/adr-fahrer-buchen" element={<ADRFahrerBuchen />} />
-          <Route path="/kranfahrer-buchen" element={<KranfahrerBuchen />} />
+          
           <Route path="/fahrmischerfahrer-buchen" element={<FahrmischerfahrerBuchen />} />
           <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
           <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />

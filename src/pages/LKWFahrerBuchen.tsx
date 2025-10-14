@@ -85,24 +85,24 @@ const LKWFahrerBuchen = () => {
 
   const relatedServices = [
     {
-      title: "Tankwagenfahrer buchen",
+      title: "Tankwagenfahrer",
       path: "/tankwagenfahrer-buchen",
-      description: "ADR-Fahrer für Mineralöl, Chemie & Lebensmittel"
-    },
-    {
-      title: "Fahrmischerfahrer",
-      path: "/fahrmischerfahrer-gesucht", 
-      description: "Erfahrene Betonmischer-Spezialisten"
+      description: "ADR-Tankwagenfahrer für Gefahrgut-Transport"
     },
     {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
-      description: "Bagger, Radlader, Kran-Operateure"
+      description: "Bagger, Radlader & Erdbaumaschinen"
     },
     {
-      title: "Kraftfahrer mieten",
-      path: "/kraftfahrer-mieten",
-      description: "Berufskraftfahrer für alle Fahrzeugklassen"
+      title: "Fahrmischerfahrer",
+      path: "/fahrmischerfahrer-buchen",
+      description: "Betonmischer-Spezialisten & Mischmeister"
+    },
+    {
+      title: "ADR-Fahrer",
+      path: "/adr-fahrer-buchen",
+      description: "Gefahrgut-Fahrer mit ADR-Schein"
     }
   ];
 

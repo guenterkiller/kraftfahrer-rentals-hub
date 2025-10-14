@@ -85,19 +85,19 @@ const TankwagenfahrerBuchen = () => {
 
   const relatedServices = [
     {
-      title: "LKW-Fahrer buchen",
-      path: "/lkwfahrer-buchen",
-      description: "Standard C/CE-Fahrer für alle Transportarten"
-    },
-    {
-      title: "Fahrmischerfahrer",
-      path: "/fahrmischerfahrer-gesucht", 
-      description: "Erfahrene Betonmischer-Spezialisten"
+      title: "LKW-Fahrer",
+      path: "/lkw-fahrer-buchen",
+      description: "Standard- und CE-Fahrer für alle LKW-Klassen"
     },
     {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
-      description: "Bagger, Radlader, Kran-Operateure"
+      description: "Bagger, Radlader & Erdbaumaschinen"
+    },
+    {
+      title: "Fahrmischerfahrer",
+      path: "/fahrmischerfahrer-buchen",
+      description: "Betonmischer-Spezialisten & Mischmeister"
     }
   ];
 

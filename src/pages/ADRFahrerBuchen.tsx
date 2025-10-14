@@ -69,17 +69,17 @@ const ADRFahrerBuchen = () => {
     {
       title: "Tankwagenfahrer",
       path: "/tankwagenfahrer-buchen",
-      description: "ADR-Tankwagenfahrer für Mineralöl & Chemie"
-    },
-    {
-      title: "Kranfahrer",
-      path: "/kranfahrer-buchen",
-      description: "Mobilkran-Operateure mit Kranschein"
+      description: "ADR-Tankwagenfahrer für Gefahrgut-Transport"
     },
     {
       title: "Fahrmischerfahrer",
       path: "/fahrmischerfahrer-buchen",
       description: "Betonmischer-Spezialisten & Mischmeister"
+    },
+    {
+      title: "Baumaschinenführer",
+      path: "/baumaschinenfuehrer-buchen",
+      description: "Bagger, Radlader & Erdbaumaschinen"
     }
   ];
 

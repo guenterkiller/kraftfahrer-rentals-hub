@@ -95,9 +95,9 @@ const FahrmischerfahrerBuchen = () => {
       description: "Gefahrgut-Fahrer mit ADR-Schein"
     },
     {
-      title: "Kranfahrer",
-      path: "/kranfahrer-buchen",
-      description: "Mobilkran-Operateure mit Kranschein"
+      title: "Baumaschinenführer",
+      path: "/baumaschinenfuehrer-buchen",
+      description: "Bagger, Radlader & Erdbaumaschinen"
     }
   ];
 
