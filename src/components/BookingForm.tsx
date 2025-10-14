@@ -37,7 +37,6 @@ const BookingForm = () => {
     "Ladekran-Erfahrung",
     "Staplerführerschein",
     "Baumaschinenführerschein",
-    "Personenbeförderung",
     "BF3-Begleitung"
   ];
 

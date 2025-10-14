@@ -74,7 +74,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
-        answer: "Hauptsächlich <strong>C+E (Sattelzug)</strong>, aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Kranführerschein oder Fahrmischer-Qualifikation."
+        answer: "Hauptsächlich <strong>C+E (Sattelzug)</strong>, aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Ladekran-Erfahrung oder Fahrmischer-Qualifikation."
       },
       {
         question: "Wie läuft die Abrechnung?",
