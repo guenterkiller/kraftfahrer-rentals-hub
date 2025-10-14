@@ -26,7 +26,7 @@ const BookingForm = () => {
   const vehicleOptions = [
     "LKW (C/CE)",
     "Fahrmischer",
-    "Schwertransport/Spezial", 
+    "LKW mit Ladekran", 
     "Baumaschinen",
     "Sattelzug",
     "Kleintransporter"
@@ -34,11 +34,11 @@ const BookingForm = () => {
 
   const qualificationOptions = [
     "ADR-Schein",
-    "BF3-Begleitung",
+    "Ladekran-Erfahrung",
     "Staplerführerschein",
     "Baumaschinenführerschein",
     "Personenbeförderung",
-    "Schwertransport"
+    "BF3-Begleitung"
   ];
 
   const handleVehicleTypeChange = (type: string, checked: boolean) => {

@@ -16,8 +16,8 @@ import { useSEO } from "@/hooks/useSEO";
 const Index = () => {
   useSEO({
     title: "LKW-Fahrer buchen & Kraftfahrer mieten – Fahrerexpress Agentur",
-    description: "Kurzfristig bundesweit Fahrer buchen – LKW-Fahrer, Kraftfahrer, Fahrmischerfahrer, ADR- und Spezialfahrer. Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
-    keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, Fahrer gesucht, Berufskraftfahrer kurzfristig buchen, C+E Fahrer buchen, ADR-Fahrer mieten, Spezialfahrer buchen, Fahrmischerfahrer gesucht, Baumaschinenführer buchen, Fahrer mieten deutschlandweit",
+    description: "Kurzfristig bundesweit Fahrer buchen – LKW-Fahrer, Kraftfahrer, Fahrmischerfahrer, ADR-Fahrer. Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
+    keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, Fahrer gesucht, Berufskraftfahrer kurzfristig buchen, C+E Fahrer buchen, ADR-Fahrer mieten, LKW mit Ladekran, Fahrmischerfahrer gesucht, Baumaschinenführer buchen, Fahrer mieten deutschlandweit",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     faqData: [
       {
@@ -30,7 +30,7 @@ const Index = () => {
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
-        answer: "C+E (Sattelzug), C, C1+E, ADR-Schein, BF3-Begleitung, Fahrmischer-Qualifikation und weitere Spezialführerscheine je nach Anfrage."
+        answer: "C+E (Sattelzug), C, C1+E, ADR-Schein, Ladekran-Erfahrung, Fahrmischer-Qualifikation und weitere Spezialführerscheine je nach Anfrage."
       },
       {
         question: "Sind die Fahrer versichert?",

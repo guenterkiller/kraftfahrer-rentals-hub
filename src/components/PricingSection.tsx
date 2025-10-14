@@ -50,17 +50,17 @@ const PricingSection = () => {
       ]
     },
     {
-      title: "Spezialfahrer (ADR/Schwertransport)",
+      title: "LKW mit Ladekran",
       hourly: "68",
       price: "539",
       projectPrice: "519",
       unit: "€ / Tag (8h)", 
       icon: CheckCircle,
       features: [
-        "ADR-Schein",
-        "Schwertransport-Erfahrung",
-        "Gefahrgut",
-        "BF3-Begleitung optional",
+        "Ladekran-Erfahrung",
+        "Baustoffkran",
+        "Entladekran",
+        "Sichere Bedienung",
         "Komplexe Einsätze"
       ]
     }
@@ -196,7 +196,7 @@ const PricingSection = () => {
                   <td className="p-3 text-sm text-muted-foreground">Bagger-, Radlader-Erfahrung</td>
                 </tr>
                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="p-3 font-medium">Spezialfahrer (ADR/Schwertransport)</td>
+                  <td className="p-3 font-medium">LKW mit Ladekran (Baustoff-/Entladekran)</td>
                   <td className="p-3 text-center">
                     <div className="font-bold text-orange-600 dark:text-orange-400">68 € / h</div>
                   </td>
@@ -206,7 +206,7 @@ const PricingSection = () => {
                   <td className="p-3 text-center">
                     <div className="font-bold text-green-600 dark:text-green-400">519 € / Tag</div>
                   </td>
-                  <td className="p-3 text-sm text-muted-foreground">Gefahrgut, Schwertransport oder Spezialfahrten</td>
+                  <td className="p-3 text-sm text-muted-foreground">LKW-Fahrer mit Baustoffkran- oder Entladekran-Erfahrung</td>
                 </tr>
               </tbody>
             </table>

@@ -76,7 +76,7 @@ const SimpleBookingForm = () => {
         billing_model: 'agency',
         anforderungen: [
           adrRequired && 'ADR-Schein',
-          craneRequired && 'Schwertransport-Erfahrung',
+          craneRequired && 'Ladekran-Erfahrung',
           longDistance && 'Langstrecke',
           nightShift && 'Nachtschicht',
           weekendWork && 'Wochenendarbeit',
@@ -221,7 +221,7 @@ const SimpleBookingForm = () => {
 
                     <div className="bg-white/80 p-4 rounded-lg mb-4">
                       <p className="text-green-800 text-sm">
-                        <strong>Standard-LKW</strong> ab 359 €/Tag | <strong>CE</strong> ab 399 €/Tag | <strong>Baumaschinenführer</strong> ab 489 €/Tag | <strong>Spezial</strong> ab 539 €/Tag
+                        <strong>Standard-LKW</strong> ab 359 €/Tag | <strong>CE</strong> ab 399 €/Tag | <strong>Baumaschinenführer</strong> ab 489 €/Tag | <strong>LKW mit Ladekran</strong> ab 539 €/Tag
                       </p>
                       <p className="text-sm text-green-800 mt-2">
                         Kurzeinsätze (4–6 h) auf Anfrage zum erhöhten Stundensatz.{' '}
@@ -328,7 +328,7 @@ const SimpleBookingForm = () => {
                 <div>
                   <Label htmlFor="fahrzeugtyp">Benötigter Fahrertyp / Qualifikation *</Label>
                   <p className="text-sm opacity-80 mb-2" aria-live="polite">
-                    Beispielauswahl: <em>7,5 t</em>, <em>40 t (CE)</em>, <em>Baumaschinenführer</em>, <em>ADR/Schwertransport</em>.
+                    Beispielauswahl: <em>7,5 t</em>, <em>40 t (CE)</em>, <em>Baumaschinenführer</em>, <em>LKW mit Ladekran</em>.
                   </p>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
@@ -337,7 +337,7 @@ const SimpleBookingForm = () => {
                     <SelectContent>
                       <SelectItem value="lkw">LKW (C/CE)</SelectItem>
                       <SelectItem value="fahrmischer">Fahrmischer</SelectItem>
-                      <SelectItem value="schwertransport">Schwertransport/Spezial</SelectItem>
+                      <SelectItem value="lkw-ladekran">LKW mit Ladekran</SelectItem>
                       <SelectItem value="baumaschinen">Baumaschinen</SelectItem>
                       <SelectItem value="sattelzug">Sattelzug</SelectItem>
                       <SelectItem value="kleintransporter">Kleintransporter</SelectItem>
@@ -363,7 +363,7 @@ const SimpleBookingForm = () => {
                         checked={craneRequired}
                         onCheckedChange={(checked) => setCraneRequired(checked as boolean)}
                       />
-                      <Label htmlFor="kran">Schwertransport-Erfahrung erforderlich</Label>
+                      <Label htmlFor="kran">Ladekran-Erfahrung erforderlich</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox 

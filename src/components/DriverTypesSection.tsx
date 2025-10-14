@@ -23,11 +23,11 @@ const DriverTypesSection = () => {
       path: "/tankwagenfahrer-buchen"
     },
     {
-      title: "Spezialfahrer (ADR/Schwertransport)",
-      description: "Qualifizierte Fahrer für ADR-Gefahrgut, Schwertransport und Spezialtransporte mit besonderem Qualifikationsbedarf.",
+      title: "LKW mit Ladekran",
+      description: "LKW-Fahrer mit Erfahrung im Fahren von Fahrzeugen mit Baustoffkran oder Entladekran.",
       image: kranFahrer,
-      features: ["ADR-Schein", "Schwertransport", "BF3-Begleitung optional"],
-      path: "/adr-fahrer-buchen"
+      features: ["Ladekran-Erfahrung", "Baustoffkran", "Entladekran"],
+      path: "/lkw-fahrer-buchen"
     },
     {
       title: "Fahrmischerfahrer",

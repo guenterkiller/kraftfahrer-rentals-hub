@@ -27,7 +27,7 @@ const BookingFAQ = () => {
     {
       id: "angaben",
       question: "Welche Angaben sind wichtig?",
-      answer: "Einsatzort, Zeitraum, Fahrzeugtyp, besondere Anforderungen (z. B. ADR, Schwertransport), Kontaktperson & Telefonnummer."
+      answer: "Einsatzort, Zeitraum, Fahrzeugtyp, besondere Anforderungen (z. B. ADR, Ladekran), Kontaktperson & Telefonnummer."
     }
   ];
 
