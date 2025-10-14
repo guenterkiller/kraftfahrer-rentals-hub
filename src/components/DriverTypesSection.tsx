@@ -23,11 +23,11 @@ const DriverTypesSection = () => {
       path: "/tankwagenfahrer-buchen"
     },
     {
-      title: "Kran- & Spezialfahrer",
-      description: "Qualifizierte Kranfahrer und Fahrer für Schwerlast-, Autokran- und Spezialtransporte.",
+      title: "Spezialfahrer (ADR/Schwertransport)",
+      description: "Qualifizierte Fahrer für ADR-Gefahrgut, Schwertransport und Spezialtransporte mit besonderem Qualifikationsbedarf.",
       image: kranFahrer,
-      features: ["Kranführerschein", "Schwerlast-Transport", "Mobilkran-Erfahrung"],
-      path: "/kranfahrer-buchen"
+      features: ["ADR-Schein", "Schwertransport", "BF3-Begleitung optional"],
+      path: "/adr-fahrer-buchen"
     },
     {
       title: "Fahrmischerfahrer",
@@ -120,10 +120,6 @@ const DriverTypesSection = () => {
             <span className="text-muted-foreground">•</span>
             <Link to="/adr-fahrer-buchen" className="text-primary hover:underline">
               ADR-Fahrer mieten
-            </Link>
-            <span className="text-muted-foreground">•</span>
-            <Link to="/kranfahrer-buchen" className="text-primary hover:underline">
-              Kranfahrer / Mobilkran buchen
             </Link>
             <span className="text-muted-foreground">•</span>
             <Link to="/fahrmischerfahrer-buchen" className="text-primary hover:underline">

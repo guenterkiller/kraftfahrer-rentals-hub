@@ -26,7 +26,7 @@ const BookingForm = () => {
   const vehicleOptions = [
     "LKW (C/CE)",
     "Fahrmischer",
-    "Kran/Mobilkran", 
+    "Schwertransport/Spezial", 
     "Baumaschinen",
     "Sattelzug",
     "Kleintransporter"
@@ -34,7 +34,7 @@ const BookingForm = () => {
 
   const qualificationOptions = [
     "ADR-Schein",
-    "Kranführerschein",
+    "BF3-Begleitung",
     "Staplerführerschein",
     "Baumaschinenführerschein",
     "Personenbeförderung",

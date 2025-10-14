@@ -44,13 +44,13 @@ const PricingSection = () => {
       features: [
         "Bagger-Erfahrung",
         "Radlader-Erfahrung",
-        "Kran-Erfahrung",
+        "Baustellen-Routine",
         "Flexibel auf Baustellen",
         "Vielseitig einsetzbar"
       ]
     },
     {
-      title: "Spezialfahrer (ADR/Kran)",
+      title: "Spezialfahrer (ADR/Schwertransport)",
       hourly: "68",
       price: "539",
       projectPrice: "519",
@@ -58,9 +58,9 @@ const PricingSection = () => {
       icon: CheckCircle,
       features: [
         "ADR-Schein",
-        "Kran-/Staplererfahrung",
+        "Schwertransport-Erfahrung",
         "Gefahrgut",
-        "Schwertransport",
+        "BF3-Begleitung optional",
         "Komplexe Einsätze"
       ]
     }
@@ -193,10 +193,10 @@ const PricingSection = () => {
                   <td className="p-3 text-center">
                     <div className="font-bold text-green-600 dark:text-green-400">469 € / Tag</div>
                   </td>
-                  <td className="p-3 text-sm text-muted-foreground">Bagger-, Radlader- oder Kranerfahrung</td>
+                  <td className="p-3 text-sm text-muted-foreground">Bagger-, Radlader-Erfahrung</td>
                 </tr>
                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                  <td className="p-3 font-medium">Spezialfahrer (ADR, Kran, Schwertransport)</td>
+                  <td className="p-3 font-medium">Spezialfahrer (ADR/Schwertransport)</td>
                   <td className="p-3 text-center">
                     <div className="font-bold text-orange-600 dark:text-orange-400">68 € / h</div>
                   </td>
@@ -206,7 +206,7 @@ const PricingSection = () => {
                   <td className="p-3 text-center">
                     <div className="font-bold text-green-600 dark:text-green-400">519 € / Tag</div>
                   </td>
-                  <td className="p-3 text-sm text-muted-foreground">Gefahrgut, Kran- oder Spezialfahrten</td>
+                  <td className="p-3 text-sm text-muted-foreground">Gefahrgut, Schwertransport oder Spezialfahrten</td>
                 </tr>
               </tbody>
             </table>

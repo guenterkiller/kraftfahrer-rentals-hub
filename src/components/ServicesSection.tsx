@@ -32,7 +32,7 @@ const ServicesSection = () => {
     "Fahrerkarte",
     "Modul 95",
     "ADR (bei Bedarf)",
-    "Kran-/Staplerschein",
+    "Staplerführerschein",
     "Mischmeister für Flüssigboden",
     "Fahrmischerfahrer"
   ];
@@ -97,7 +97,7 @@ const ServicesSection = () => {
               <CardTitle className="text-lg">Baumaschinenführer</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground text-sm mb-4">Bagger, Radlader, Kran</p>
+              <p className="text-muted-foreground text-sm mb-4">Bagger, Radlader</p>
               <Button asChild variant="outline" size="sm">
                 <Link to="/baumaschinenfuehrer-buchen">Baumaschinenführer buchen</Link>
               </Button>

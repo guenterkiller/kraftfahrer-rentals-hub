@@ -4,12 +4,12 @@ const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
     title: "Baumaschinenführer buchen ab 489 € – Baggerfahrer & Radlader deutschlandweit",
     description: "Jetzt deutschlandweit Baumaschinenführer buchen: Baggerfahrer, Radladerfahrer, Mischmeister für Flüssigboden. Kurzeinsatz 62 €/h, Standardtag 489 €, Projekt ab 469 €. Geräte stellt der Auftraggeber. Rechtssicher & kurzfristig verfügbar.",
-    keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer buchen, Baumaschinenführer Subunternehmer, Mischmeister Flüssigboden deutschlandweit, Kranführer buchen, Maschinisten mieten",
+    keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer buchen, Baumaschinenführer Subunternehmer, Mischmeister Flüssigboden deutschlandweit, Maschinisten mieten",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "Baumaschinenführer buchen",
-      "description": "Baumaschinenführer kurzfristig für Bagger, Radlader und Kran - selbstständige Subunternehmer ohne Arbeitnehmerüberlassung",
+      "description": "Baumaschinenführer kurzfristig für Bagger, Radlader - selbstständige Subunternehmer ohne Arbeitnehmerüberlassung",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -50,7 +50,7 @@ const BaumaschinenfuehrerBuchen = () => {
       },
       {
         question: "Welche Baumaschinen können bedient werden?",
-        answer: "Hauptsächlich <strong>Bagger (Mobilbagger, Raupenbagger)</strong>, <strong>Radlader</strong>, <strong>Mobilkrane</strong>, <strong>Mischmeister für Flüssigboden</strong> und weitere Erdbaumaschinen je nach Qualifikation. <em>Immer mit Ihren Geräten/Maschinen – keine Maschinenvermietung.</em>"
+        answer: "Hauptsächlich <strong>Bagger (Mobilbagger, Raupenbagger)</strong>, <strong>Radlader</strong>, <strong>Mischmeister für Flüssigboden</strong> und weitere Erdbaumaschinen je nach Qualifikation. <em>Immer mit Ihren Geräten/Maschinen – keine Maschinenvermietung.</em>"
       },
       {
         question: "Wie lange dauern typische Einsätze?",

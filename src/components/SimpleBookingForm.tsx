@@ -76,7 +76,7 @@ const SimpleBookingForm = () => {
         billing_model: 'agency',
         anforderungen: [
           adrRequired && 'ADR-Schein',
-          craneRequired && 'Kran-Erfahrung',
+          craneRequired && 'Schwertransport-Erfahrung',
           longDistance && 'Langstrecke',
           nightShift && 'Nachtschicht',
           weekendWork && 'Wochenendarbeit',
@@ -328,7 +328,7 @@ const SimpleBookingForm = () => {
                 <div>
                   <Label htmlFor="fahrzeugtyp">Benötigter Fahrertyp / Qualifikation *</Label>
                   <p className="text-sm opacity-80 mb-2" aria-live="polite">
-                    Beispielauswahl: <em>7,5 t</em>, <em>40 t (CE)</em>, <em>Baumaschinenführer</em>, <em>ADR/Kran</em>.
+                    Beispielauswahl: <em>7,5 t</em>, <em>40 t (CE)</em>, <em>Baumaschinenführer</em>, <em>ADR/Schwertransport</em>.
                   </p>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
@@ -337,7 +337,7 @@ const SimpleBookingForm = () => {
                     <SelectContent>
                       <SelectItem value="lkw">LKW (C/CE)</SelectItem>
                       <SelectItem value="fahrmischer">Fahrmischer</SelectItem>
-                      <SelectItem value="kran">Kran/Mobilkran</SelectItem>
+                      <SelectItem value="schwertransport">Schwertransport/Spezial</SelectItem>
                       <SelectItem value="baumaschinen">Baumaschinen</SelectItem>
                       <SelectItem value="sattelzug">Sattelzug</SelectItem>
                       <SelectItem value="kleintransporter">Kleintransporter</SelectItem>
@@ -363,7 +363,7 @@ const SimpleBookingForm = () => {
                         checked={craneRequired}
                         onCheckedChange={(checked) => setCraneRequired(checked as boolean)}
                       />
-                      <Label htmlFor="kran">Kran-Erfahrung erforderlich</Label>
+                      <Label htmlFor="kran">Schwertransport-Erfahrung erforderlich</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox 

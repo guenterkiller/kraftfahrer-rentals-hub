@@ -94,11 +94,6 @@ const BegleitfahrzeugeBF3 = () => {
       description: "Erfahrene Fahrer für Schwer- und Großraumtransporte"
     },
     {
-      title: "Kranfahrer buchen", 
-      path: "/kranfahrer-buchen",
-      description: "Mobilkran-Operateure für Hebevorgänge"
-    },
-    {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen", 
       description: "Bagger, Radlader und Spezialmaschinen"
