@@ -165,14 +165,19 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
             <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
             <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
             <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
-            <li><strong>LKW mit Ladekran:</strong> 539 € netto / Tag (8 Std.)</li>
+            <li><strong>Spezialfahrer (ADR, Schwerlast, Ladekran):</strong> 539 € netto / Tag (8 Std.)</li>
           </ul>
           
           <p style="margin: 15px 0 10px 20px; font-size: 14px; line-height: 1.6;">
-            <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, LKW mit Ladekran 519 €<br>
+            <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, Spezialfahrer 519 €<br>
             <strong>Kurzzeiteinsätze (4–6 h)</strong> auf Anfrage zum erhöhten Stundensatz.<br>
             Abrechnung zum Tagessatz (8 Std.); Mehrstunden, Nacht-, Sonn- und Feiertagszuschläge gemäß Preisliste.<br>
             <em>Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung.</em>
+          </p>
+          
+          <p style="margin: 15px 0 10px 20px; font-size: 14px; line-height: 1.6;">
+            Fahrerexpress vermittelt ausschließlich selbstständige Fahrerleistungen (§ 84 HGB).<br>
+            Keine Fahrzeugvermietung – Fahrzeuge und Maschinen werden vom Auftraggeber gestellt.
           </p>
           
           <div style="background-color: #fff3cd; padding: 15px; margin: 25px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
