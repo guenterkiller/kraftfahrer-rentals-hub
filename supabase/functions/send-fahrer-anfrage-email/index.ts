@@ -164,22 +164,20 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
             </ul>
           </div>
           
-          <div style="background-color: #fff9e6; padding: 15px; margin: 20px 0; border-left: 4px solid #f39c12; border-radius: 4px;">
-            <h3 style="margin-top: 0; color: #2c3e50;">💰 Konditionen</h3>
-            <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
-              <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
-              <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
-              <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
-              <li><strong>Spezialfahrer (ADR, Schwertransport):</strong> 539 € netto / Tag (8 Std.)</li>
+          <div style="background-color: #e8f5e9; padding: 15px; margin: 20px 0; border-left: 4px solid #4caf50; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">💰 Ihr Fahrerpreis</h3>
+            <ul style="margin: 10px 0; padding-left: 0; list-style: none; line-height: 1.8;">
+              <li style="margin-bottom: 8px;">– <strong>Standard LKW-Fahrer:</strong> 399 € netto / Tag (8 Std.)</li>
+              <li style="margin-bottom: 8px;">– <strong>Spezialfahrer (ADR/Kran):</strong> 539 € netto / Tag (8 Std.)</li>
+              <li style="margin-bottom: 8px;">– <strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
             </ul>
             
-            <p style="margin: 15px 0 0 0; font-size: 14px; line-height: 1.6;">
-              <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, Spezialfahrer 519 €<br>
-              <strong>Kurzzeiteinsätze (4–6 h)</strong> auf Anfrage zum erhöhten Stundensatz.
+            <p style="margin: 15px 0 0 0; font-size: 13px; line-height: 1.5;">
+              Alle Preise zzgl. MwSt., Fahrtkosten und evtl. Übernachtung nach Aufwand. Mit Absenden des Formulars buchen Sie verbindlich zum angegebenen Tagespreis.
             </p>
             
-            <p style="margin: 10px 0 0 0; font-size: 13px; font-style: italic; line-height: 1.5;">
-              Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung nach tatsächlichem Einsatzumfang. Zuschläge für Überstunden, Nacht-, Sonn- und Feiertage laut gültiger Preisliste.
+            <p style="margin: 10px 0 0 0; font-size: 13px; line-height: 1.5; color: #1976d2;">
+              <strong>Hinweis:</strong> Die Vermittlungsprovision bezieht sich auf das gesamte Nettohonorar des Einsatzes einschließlich berechtigter Nebenkosten (z. B. Fahrt-/Übernachtung/Mehrstunden).
             </p>
           </div>
           
