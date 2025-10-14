@@ -166,10 +166,17 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
           <div style="background-color: #fff3cd; padding: 15px; margin: 20px 0; border-left: 4px solid #ffc107; border-radius: 4px;">
             <h3 style="margin-top: 0; color: #856404;">💰 Konditionen</h3>
             <ul style="margin: 0; padding-left: 20px;">
-              <li><strong>Standard-LKW-Fahrer:</strong> 399,00 € netto / Tag (8 Std.)</li>
-              <li><strong>Spezialfahrer (ADR/Kran):</strong> 539,00 € netto / Tag (8 Std.)</li>
-              <li><strong>Baumaschinenführer:</strong> 489,00 € netto / Tag (8 Std.)</li>
+              <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
+              <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
+              <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
+              <li><strong>Spezialfahrer (ADR, Schwertransport):</strong> 539 € netto / Tag (8 Std.)</li>
             </ul>
+            <p style="margin: 10px 0 0 0; padding-left: 20px; font-size: 14px;">
+              <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, Spezialfahrer 519 €
+            </p>
+            <p style="font-size: 14px; margin-top: 10px; padding-left: 20px;">
+              Kurzzeiteinsätze (4–6 h) auf Anfrage zum erhöhten Stundensatz.
+            </p>
             <p style="font-size: 14px; margin-top: 15px; color: #6c757d;">
               <em>Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung nach tatsächlichem Einsatzumfang. Zuschläge für Überstunden, Nacht-, Sonn- und Feiertage laut gültiger Preisliste.</em>
             </p>
