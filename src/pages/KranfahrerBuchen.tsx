@@ -52,7 +52,7 @@ const KranfahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Kranfahrer buchen – ab 68 €/h bzw. 539 € netto/Tag",
+    h1: "Kranfahrer buchen – ab 539 € netto/Tag",
     intro: "Sie benötigen kurzfristig einen erfahrenen Kranfahrer für Mobilkran-Einsätze? Über Fahrerexpress buchen Sie bundesweit qualifizierte Kranoperateure mit gültigem Kranschein für Baustellen und Hebevorgänge. Rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer ohne Arbeitnehmerüberlassung. Kurzeinsätze 68 €/h, Standardtag 539 €, Projektpreis ab 4 Wochen 519 €.",
     bullets: [
       "Kranschein & Zertifizierung",

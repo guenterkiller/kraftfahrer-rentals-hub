@@ -132,6 +132,9 @@ const PreiseUndAblauf = () => {
                   <strong>ℹ️ Kurzeinsätze (4–6 h):</strong> Sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet. 
                   Regelmäßige Einsätze werden nach Tagessatz oder Projektpreis abgerechnet.
                 </p>
+                <p className="text-sm text-blue-900 mt-3">
+                  <strong>Langzeiteinsätze (ab 3 Monaten):</strong> Für Einsätze ab 3 Monaten sind individuelle Projektverträge oder Wochenpauschalen auf Anfrage möglich.
+                </p>
               </CardContent>
             </Card>
 

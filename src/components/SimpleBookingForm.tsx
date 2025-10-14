@@ -223,18 +223,13 @@ const SimpleBookingForm = () => {
                       <p className="text-green-800 text-sm">
                         <strong>Standard-LKW</strong> ab 359 €/Tag | <strong>CE</strong> ab 399 €/Tag | <strong>Baumaschinenführer</strong> ab 489 €/Tag | <strong>Spezial</strong> ab 539 €/Tag
                       </p>
+                      <p className="text-sm text-green-800 mt-2">
+                        Kurzeinsätze (4–6 h) auf Anfrage zum erhöhten Stundensatz.{' '}
+                        <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
+                          Details: Preise & Konditionen →
+                        </a>
+                      </p>
                     </div>
-
-                    <p className="text-sm text-green-800 mb-4">
-                      Kurzzeiteinsätze (4–6 h) sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet.
-                    </p>
-
-                    <p className="text-sm opacity-80 text-green-800">
-                      Details:{' '}
-                      <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
-                        Preise & Konditionen →
-                      </a>
-                    </p>
                     <hr className="my-3 border-green-300" />
                   </div>
                 </div>

@@ -2,7 +2,7 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
-    title: "Baumaschinenführer buchen ab 62 €/h bzw. 489 € – Baggerfahrer & Radlader deutschlandweit",
+    title: "Baumaschinenführer buchen ab 489 € – Baggerfahrer & Radlader deutschlandweit",
     description: "Jetzt deutschlandweit Baumaschinenführer buchen: Baggerfahrer, Radladerfahrer, Mischmeister für Flüssigboden. Kurzeinsatz 62 €/h, Standardtag 489 €, Projekt ab 469 €. Geräte stellt der Auftraggeber. Rechtssicher & kurzfristig verfügbar.",
     keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer buchen, Baumaschinenführer Subunternehmer, Mischmeister Flüssigboden deutschlandweit, Kranführer buchen, Maschinisten mieten",
     structuredData: {

@@ -52,7 +52,7 @@ const TankwagenfahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Tankwagenfahrer buchen – ADR-Fahrer ab 539 €",
+    h1: "Tankwagenfahrer buchen – ADR-Fahrer ab 539 € netto/Tag",
     intro: "Sie benötigen kurzfristig einen ADR-Tankwagenfahrer für Gefahrgut-Transporte? Über Fahrerexpress buchen Sie bundesweit qualifizierte Tankwagenfahrer mit gültigem ADR-Schein für Mineralöl, Chemie und Lebensmitteltransporte. Rechtssichere Dienst-/Werkleistung ohne Arbeitnehmerüberlassung. Kurzeinsätze 68 €/h, Standardtag 539 €, Projektpreis ab 4 Wochen 519 €.",
     bullets: [
       "ADR-Schein aktuell & gültig",

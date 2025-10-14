@@ -2,7 +2,7 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const LKWFahrerBuchen = () => {
   const seoData = {
-    title: "LKW-Fahrer buchen ab 55 €/h bzw. 399 € – deutschlandweit & kurzfristig | Fahrerexpress",
+    title: "LKW-Fahrer buchen ab 399 € – deutschlandweit & kurzfristig | Fahrerexpress",
     description: "LKW-Fahrer (C/CE) kurzfristig buchen. Kurzeinsatz 55 €/h, Standardtag 399 €, Projekt ab 379 €. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung. Tankwagenfahrer ADR, Kranfahrer, Fahrmischerfahrer.",
     keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen, Tankwagenfahrer buchen, ADR-Fahrer mieten, Kranfahrer buchen, Fahrmischerfahrer gesucht",
     faqData: [
@@ -52,7 +52,7 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW-Fahrer buchen – ab 55 €/h bzw. 399 € (8 Std.)",
+    h1: "LKW-Fahrer buchen – ab 399 € netto/Tag",
     intro: "Sie benötigen kurzfristig einen LKW-Fahrer (C/CE) für Transport, Baustelle oder Überführung? Über Fahrerexpress buchen Sie bundesweit selbstständige Berufskraftfahrer – flexibel, zuverlässig und mit Rechnung von Fahrerexpress. Die Leistung wird als Dienst-/Werkvertrag erbracht (kein AÜG). Kurzeinsätze 55 €/h, Standardtag 399 €, Projektpreis ab 4 Wochen 379 €. Auf Wunsch Spezialqualifikationen wie ADR, Kran, Fahrmischer.",
     bullets: [
       "C/CE-Fahrer für Nah- & Fernverkehr",

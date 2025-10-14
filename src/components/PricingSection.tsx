@@ -236,31 +236,31 @@ const PricingSection = () => {
             Wie setzen sich unsere Preise zusammen?
           </h3>
           <p className="text-muted-foreground mb-6 text-sm">
-            Transparente Aufschlüsselung am Beispiel eines Standard LKW-Fahrers (399 € Netto-Tagespreis):
+            Transparente Aufschlüsselung am Beispiel eines Standard LKW-Fahrers (359 € Netto-Tagespreis):
           </p>
           
           <div className="grid md:grid-cols-2 gap-6 text-sm">
             <div className="space-y-4">
               <div className="flex justify-between items-center p-3 bg-primary/10 rounded-lg border border-primary/20">
                 <span className="font-semibold">Netto-Honorar (8h)</span>
-                <span className="font-bold text-primary">399,00 €</span>
+                <span className="font-bold text-primary">359,00 €</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-white dark:bg-gray-800 rounded-lg">
                 <span>MwSt. (19%)</span>
-                <span className="font-medium">75,81 €</span>
+                <span className="font-medium">68,21 €</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
                 <span className="font-semibold">Brutto-Rechnungsbetrag</span>
-                <span className="font-bold text-green-700 dark:text-green-400">474,81 €</span>
+                <span className="font-bold text-green-700 dark:text-green-400">427,21 €</span>
               </div>
             </div>
             
             <div className="space-y-3">
-              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Was bleibt vom 399€ Tagespreis?</h4>
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100">Was bleibt vom Tagespreis?</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between items-center p-2 bg-white dark:bg-gray-800 rounded">
                   <span>Tagesumsatz netto</span>
-                  <span className="font-medium">399,00 €</span>
+                  <span className="font-medium">359,00 €</span>
                 </div>
                 <div className="text-xs text-muted-foreground ml-2">Abzüge pro Tag:</div>
                 <div className="space-y-1 text-xs ml-4">
@@ -288,7 +288,7 @@ const PricingSection = () => {
                 <hr className="border-gray-300 dark:border-gray-600" />
                 <div className="flex justify-between font-semibold text-green-700 dark:text-green-400 p-2 bg-green-50 dark:bg-green-900/20 rounded">
                   <span>Verbleibt netto/Tag:</span>
-                  <span>200,00 € (25,00 €/h)</span>
+                  <span>180,00 € (22,50 €/h)</span>
                 </div>
               </div>
               
