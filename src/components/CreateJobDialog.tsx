@@ -298,7 +298,7 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
                     <SelectItem value="LKW">LKW</SelectItem>
                     <SelectItem value="Sattelzug">Sattelzug</SelectItem>
                     <SelectItem value="Kipper">Kipper</SelectItem>
-                    <SelectItem value="Kran">Kran</SelectItem>
+                    <SelectItem value="LKW mit Ladekran">LKW mit Ladekran</SelectItem>
                     <SelectItem value="Bagger">Bagger</SelectItem>
                     <SelectItem value="Radlader">Radlader</SelectItem>
                     <SelectItem value="Sonstige">Sonstige</SelectItem>

@@ -73,7 +73,7 @@ const FahrmischerfahrerGesucht = () => {
     {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
-      description: "Bagger, Radlader, Kran-Operateure"
+      description: "Bagger, Radlader"
     }
   ];
 

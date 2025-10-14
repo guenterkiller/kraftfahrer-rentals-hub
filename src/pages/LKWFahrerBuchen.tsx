@@ -3,8 +3,8 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 const LKWFahrerBuchen = () => {
   const seoData = {
     title: "LKW-Fahrer buchen ab 399 € – deutschlandweit & kurzfristig | Fahrerexpress",
-    description: "LKW-Fahrer (C/CE) kurzfristig buchen. Kurzeinsatz 55 €/h, Standardtag 399 €, Projekt ab 379 €. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung. Tankwagenfahrer ADR, Kranfahrer, Fahrmischerfahrer.",
-    keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen, Tankwagenfahrer buchen, ADR-Fahrer mieten, Kranfahrer buchen, Fahrmischerfahrer gesucht",
+    description: "LKW-Fahrer (C/CE) kurzfristig buchen. Kurzeinsatz 55 €/h, Standardtag 399 €, Projekt ab 379 €. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung. Tankwagenfahrer ADR, LKW mit Ladekran, Fahrmischerfahrer.",
+    keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen, Tankwagenfahrer buchen, ADR-Fahrer mieten, LKW mit Ladekran, Fahrmischerfahrer gesucht",
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
@@ -16,7 +16,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
-        answer: "Hauptsächlich C+E (Sattelzug), aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Kranführerschein oder Fahrmischer-Qualifikation."
+        answer: "Hauptsächlich C+E (Sattelzug), aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Ladekran-Erfahrung oder Fahrmischer-Qualifikation."
       },
       {
         question: "Wie läuft die Abrechnung?",

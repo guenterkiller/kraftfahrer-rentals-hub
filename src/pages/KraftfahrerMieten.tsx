@@ -33,7 +33,7 @@ const KraftfahrerMieten = () => {
     bullets: [
       "Engpässe überbrücken (Tag/Woche/Projekt)",
       "Ein Ansprechpartner, eine Rechnung",
-      "ADR, Kran, Fahrmischer optional"
+      "ADR, Ladekran, Fahrmischer optional"
     ]
   };
 
@@ -50,7 +50,7 @@ const KraftfahrerMieten = () => {
       },
       {
         question: "Welche Qualifikationen haben die Kraftfahrer?",
-        answer: "Alle Kraftfahrer verfügen über gültige <strong>Führerscheine (B, C, C+E)</strong>, Berufskraftfahrer-Qualifikation und optional <strong>ADR, Kran, Fahrmischer</strong>-Zusatzqualifikationen."
+        answer: "Alle Kraftfahrer verfügen über gültige <strong>Führerscheine (B, C, C+E)</strong>, Berufskraftfahrer-Qualifikation und optional <strong>ADR, Ladekran-Erfahrung, Fahrmischer</strong>-Zusatzqualifikationen."
       },
       {
         question: "Wie unterscheidet sich das von Zeitarbeit?",
@@ -73,7 +73,7 @@ const KraftfahrerMieten = () => {
     {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
-      description: "Bagger, Radlader, Kran-Operateure"
+      description: "Bagger, Radlader"
     }
   ];
 

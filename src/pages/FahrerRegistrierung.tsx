@@ -102,7 +102,7 @@ const FahrerRegistrierung = () => {
     "Fernfahrt",
     "Fahrmischer",
     "Kipper",
-    "Kran",
+    "LKW mit Ladekran",
     "Schwertransport",
     "Gefahrgut",
     "Kühlfahrzeuge",
@@ -120,7 +120,7 @@ const FahrerRegistrierung = () => {
     "Mitnahmestapler / Gabelstapler möglich",
     "Auslandseinsätze möglich",
     "Berechtigung für BF3-Schulungen vorhanden",
-    "Kran-Erfahrung vorhanden",
+    "Ladekran-Erfahrung vorhanden",
     "Nachtschicht möglich",
     "Baustellen-Erfahrung vorhanden",
     "Überbreite/Überlänge möglich",
@@ -964,10 +964,10 @@ const FahrerRegistrierung = () => {
                      <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-muted-foreground" />
-                         <h4 className="font-medium">Weitere Zertifikate</h4>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            ADR-Schein, Kranführerschein, etc. (Mehrere Dateien möglich)
-                          </p>
+                          <h4 className="font-medium">Weitere Zertifikate</h4>
+                           <p className="text-sm text-muted-foreground mb-2">
+                             ADR-Schein, Fahrmischer-Qualifikation, etc. (Mehrere Dateien möglich)
+                           </p>
                           <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
                             <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
                             <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>

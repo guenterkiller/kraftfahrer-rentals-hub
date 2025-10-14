@@ -173,7 +173,7 @@ export const useSEO = (seoData: SEOData) => {
             "itemOffered": {
               "@type": "Service",
               "name": "Baumaschinenführer Vermittlung",
-              "description": "Erfahrene Kranführer und Baggerfahrer"
+              "description": "Erfahrene Bagger- und Radladerfahrer"
             }
           },
           {
