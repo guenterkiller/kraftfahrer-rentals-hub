@@ -36,7 +36,7 @@ const PricingSection = () => {
     },
     {
       title: "Baumaschinenführer",
-      hourly: "60",
+      hourly: "62",
       price: "489",
       projectPrice: "469",
       unit: "€ / Tag (8h)",
@@ -51,7 +51,7 @@ const PricingSection = () => {
     },
     {
       title: "Spezialfahrer (ADR/Kran)",
-      hourly: "65",
+      hourly: "68",
       price: "539",
       projectPrice: "519",
       unit: "€ / Tag (8h)", 
@@ -185,7 +185,7 @@ const PricingSection = () => {
                 <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-medium">Baumaschinenführer</td>
                   <td className="p-3 text-center">
-                    <div className="font-bold text-orange-600 dark:text-orange-400">60 € / h</div>
+                    <div className="font-bold text-orange-600 dark:text-orange-400">62 € / h</div>
                   </td>
                   <td className="p-3 text-center">
                     <div className="font-bold text-primary">489 € / Tag</div>
@@ -198,7 +198,7 @@ const PricingSection = () => {
                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-medium">Spezialfahrer (ADR, Kran, Schwertransport)</td>
                   <td className="p-3 text-center">
-                    <div className="font-bold text-orange-600 dark:text-orange-400">65 € / h</div>
+                    <div className="font-bold text-orange-600 dark:text-orange-400">68 € / h</div>
                   </td>
                   <td className="p-3 text-center">
                     <div className="font-bold text-primary">539 € / Tag</div>

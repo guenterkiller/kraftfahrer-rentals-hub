@@ -44,7 +44,7 @@ const TankwagenfahrerBuchen = () => {
       },
       "offers": {
         "@type": "Offer",
-        "price": "449",
+        "price": "539",
         "priceCurrency": "EUR",
         "description": "Tankwagenfahrer (ADR) Tagespreis für 8 Stunden"
       }
@@ -52,8 +52,8 @@ const TankwagenfahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Tankwagenfahrer buchen – ADR-Fahrer ab 449 €",
-    intro: "Sie benötigen kurzfristig einen ADR-Tankwagenfahrer für Gefahrgut-Transporte? Über Fahrerexpress buchen Sie bundesweit qualifizierte Tankwagenfahrer mit gültigem ADR-Schein für Mineralöl, Chemie und Lebensmitteltransporte. Rechtssichere Dienst-/Werkleistung ohne Arbeitnehmerüberlassung.",
+    h1: "Tankwagenfahrer buchen – ADR-Fahrer ab 539 €",
+    intro: "Sie benötigen kurzfristig einen ADR-Tankwagenfahrer für Gefahrgut-Transporte? Über Fahrerexpress buchen Sie bundesweit qualifizierte Tankwagenfahrer mit gültigem ADR-Schein für Mineralöl, Chemie und Lebensmitteltransporte. Rechtssichere Dienst-/Werkleistung ohne Arbeitnehmerüberlassung. Kurzeinsätze 68 €/h, Standardtag 539 €, Projektpreis ab 4 Wochen 519 €.",
     bullets: [
       "ADR-Schein aktuell & gültig",
       "Mineralöl, Chemie & Lebensmittel", 
