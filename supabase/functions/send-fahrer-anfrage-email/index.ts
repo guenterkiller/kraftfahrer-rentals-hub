@@ -146,6 +146,8 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
       subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; line-height: 1.6; color: #333;">
+          <h1 style="color: #2c3e50; font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #3498db; padding-bottom: 10px;">Ihre Fahrerbuchung bei der Fahrerexpress-Agentur</h1>
+          
           <p>Sehr geehrte/r ${requestData.vorname} ${requestData.nachname},</p>
           
           <p>vielen Dank für Ihre Anfrage bei der Fahrerexpress-Agentur – Günter Killer.<br>
