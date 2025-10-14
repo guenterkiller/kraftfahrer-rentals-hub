@@ -151,29 +151,42 @@ ${requestData.message ? `<p><strong>Nachricht:</strong> ${requestData.message}</
           <p>vielen Dank für Ihre Anfrage bei der Fahrerexpress-Agentur – Günter Killer.<br>
           Wir haben Ihre Buchungsanfrage erhalten und werden diese umgehend bearbeiten. Sobald ein Fahrer den Auftrag annimmt, bestätigen wir Ihnen die Buchung separat per E-Mail.</p>
           
-          <h3 style="color: #2c3e50; margin-top: 25px;">📝 Ihre Anfrage im Überblick</h3>
-          <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
-            <li><strong>Fahrertyp / Qualifikation:</strong> ${requestData.fahrzeugtyp || 'nicht angegeben'}</li>
-            <li><strong>Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
-            <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) && requestData.specializations.length > 0 ? requestData.specializations.join(', ') : 'Standard'}</li>
-            <li><strong>Region:</strong> ${Array.isArray(requestData.regions) && requestData.regions.length > 0 ? requestData.regions.join(', ') : 'nach Vereinbarung'}</li>
-            ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
-          </ul>
+          <div style="background-color: #f8f9fa; padding: 15px; margin: 20px 0; border-left: 4px solid #3498db; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">📝 Ihre Anfrage im Überblick</h3>
+            <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+              <li><strong>Fahrzeugtyp:</strong> ${requestData.fahrzeugtyp || 'nicht angegeben'}</li>
+              <li><strong>Führerscheinklassen:</strong> ${Array.isArray(requestData.license_classes) ? requestData.license_classes.join(', ') : 'C+E (Standard)'}</li>
+              <li><strong>Spezialisierungen:</strong> ${Array.isArray(requestData.specializations) && requestData.specializations.length > 0 ? requestData.specializations.join(', ') : 'Standard'}</li>
+              <li><strong>Region:</strong> ${Array.isArray(requestData.regions) && requestData.regions.length > 0 ? requestData.regions.join(', ') : 'nach Vereinbarung'}</li>
+              ${Array.isArray(requestData.spezialanforderungen) && requestData.spezialanforderungen.length > 0 ? `<li><strong>Spezialanforderungen:</strong> ${requestData.spezialanforderungen.join(', ')}</li>` : ''}
+            </ul>
+          </div>
           
-          <h3 style="color: #2c3e50; margin-top: 25px;">💰 Konditionen</h3>
-          <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
-            <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
-            <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
-            <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
-            <li><strong>LKW mit Ladekran:</strong> 539 € netto / Tag (8 Std.)</li>
-          </ul>
+          <div style="background-color: #fff9e6; padding: 15px; margin: 20px 0; border-left: 4px solid #f39c12; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">💰 Konditionen</h3>
+            <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+              <li><strong>Standard-LKW (bis 7,5 t / 12 t):</strong> 359 € netto / Tag (8 Std.)</li>
+              <li><strong>LKW (CE, 40 t / Hängerzug):</strong> 399 € netto / Tag (8 Std.)</li>
+              <li><strong>Baumaschinenführer:</strong> 489 € netto / Tag (8 Std.)</li>
+              <li><strong>Spezialfahrer (ADR, Schwertransport):</strong> 539 € netto / Tag (8 Std.)</li>
+            </ul>
+            
+            <p style="margin: 15px 0 0 0; font-size: 14px; line-height: 1.6;">
+              <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, Spezialfahrer 519 €<br>
+              <strong>Kurzzeiteinsätze (4–6 h)</strong> auf Anfrage zum erhöhten Stundensatz.
+            </p>
+            
+            <p style="margin: 10px 0 0 0; font-size: 13px; font-style: italic; line-height: 1.5;">
+              Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung. Abrechnung nach tatsächlichem Einsatzumfang. Zuschläge für Überstunden, Nacht-, Sonn- und Feiertage laut gültiger Preisliste.
+            </p>
+          </div>
           
-          <p style="margin: 15px 0 10px 20px; font-size: 14px; line-height: 1.6;">
-            <strong>Projektpreise (ab 4 Wochen):</strong> Standard-LKW 349 €, CE 379 €, Baumaschinenführer 469 €, LKW mit Ladekran 519 €<br>
-            <strong>Kurzzeiteinsätze (4–6 h)</strong> auf Anfrage zum erhöhten Stundensatz.<br>
-            Abrechnung zum Tagessatz (8 Std.); Mehrstunden, Nacht-, Sonn- und Feiertagszuschläge gemäß Preisliste.<br>
-            <em>Alle Preise zzgl. MwSt., Fahrtkosten und ggf. Übernachtung.</em>
-          </p>
+          <div style="background-color: #e8f4f8; padding: 15px; margin: 20px 0; border-left: 4px solid #5dade2; border-radius: 4px;">
+            <h3 style="margin-top: 0; color: #2c3e50;">🌸 Wichtiger Hinweis</h3>
+            <p style="margin: 0; line-height: 1.6;">
+              Mit Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage gestellt. Verbindlich wird die Buchung erst, wenn ein Fahrer den Auftrag annimmt und wir dies schriftlich bestätigen.
+            </p>
+          </div>
           
           <h3 style="color: #2c3e50; margin-top: 25px;">📞 Kontakt</h3>
           <p style="margin: 10px 0; line-height: 1.6;">
