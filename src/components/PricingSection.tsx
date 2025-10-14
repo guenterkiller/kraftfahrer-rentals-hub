@@ -6,8 +6,10 @@ const PricingSection = () => {
   const pricingTiers = [
     {
       title: "Standard LKW-Fahrer",
-      price: "399",
-      unit: "€ (8-Stunden-Tag)",
+      hourly: "50",
+      price: "359",
+      projectPrice: "349",
+      unit: "€ / Tag (8h)",
       icon: Truck,
       features: [
         "CE-Führerschein",
@@ -18,22 +20,26 @@ const PricingSection = () => {
       ]
     },
     {
-      title: "Spezialfahrer",
-      price: "539",
-      unit: "€ (8-Stunden-Tag)", 
-      icon: CheckCircle,
+      title: "CE/40 t",
+      hourly: "55",
+      price: "399",
+      projectPrice: "379",
+      unit: "€ / Tag (8h)",
+      icon: Truck,
       features: [
-        "ADR-Schein",
-        "Kran-/Staplererfahrung",
-        "Gefahrgut",
-        "Schwertransport",
-        "Komplexe Einsätze"
+        "CE-Führerschein",
+        "Hängerzug-Erfahrung",
+        "Baustellenverkehr",
+        "Logistik & Fernverkehr",
+        "Überführungen"
       ]
     },
     {
       title: "Baumaschinenführer",
+      hourly: "60",
       price: "489",
-      unit: "€ (8-Stunden-Tag)",
+      projectPrice: "469",
+      unit: "€ / Tag (8h)",
       icon: Clock,
       features: [
         "Bagger-Erfahrung",
@@ -41,6 +47,21 @@ const PricingSection = () => {
         "Kran-Erfahrung",
         "Flexibel auf Baustellen",
         "Vielseitig einsetzbar"
+      ]
+    },
+    {
+      title: "Spezialfahrer (ADR/Kran)",
+      hourly: "65",
+      price: "539",
+      projectPrice: "519",
+      unit: "€ / Tag (8h)", 
+      icon: CheckCircle,
+      features: [
+        "ADR-Schein",
+        "Kran-/Staplererfahrung",
+        "Gefahrgut",
+        "Schwertransport",
+        "Komplexe Einsätze"
       ]
     }
   ];
@@ -55,28 +76,44 @@ const PricingSection = () => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto mb-12">
           {pricingTiers.map((tier, index) => (
             <Card key={index} className="relative hover:shadow-lg transition-shadow">
               <CardHeader className="text-center pb-6">
                 <tier.icon className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle className="text-xl mb-2">{tier.title}</CardTitle>
-                <div className="text-xs text-muted-foreground mb-1">netto</div>
-                <div className="text-3xl font-bold text-primary mb-1">
-                  {tier.price}
+                <CardTitle className="text-lg mb-3">{tier.title}</CardTitle>
+                <div className="space-y-2">
+                  <div>
+                    <div className="text-xs text-muted-foreground">Kurzeinsatz</div>
+                    <div className="text-2xl font-bold text-primary">
+                      {tier.hourly} €/h
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Standard</div>
+                    <div className="text-xl font-bold text-primary">
+                      {tier.price} €
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Projekt (4+ Wo.)</div>
+                    <div className="text-xl font-bold text-green-600">
+                      {tier.projectPrice} €
+                    </div>
+                  </div>
                 </div>
-                <div className="text-muted-foreground">{tier.unit}</div>
+                <div className="text-xs text-muted-foreground mt-2">netto / Tag (8h)</div>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-2 mb-6">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span className="text-sm">{feature}</span>
+                      <CheckCircle className="h-3 w-3 text-primary" />
+                      <span className="text-xs">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant="outline" onClick={() => {
+                <Button className="w-full" size="sm" variant="outline" onClick={() => {
                   document.getElementById('fahreranfrage')?.scrollIntoView({ behavior: 'smooth' });
                 }}>
                   Fahrer buchen
@@ -84,6 +121,14 @@ const PricingSection = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Info paragraph for short-term engagements */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg max-w-4xl mx-auto mb-12 border border-blue-200 dark:border-blue-800">
+          <p className="text-sm text-blue-900 dark:text-blue-100">
+            <strong>ℹ️ Kurzeinsätze (4–6 h):</strong> Sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet. 
+            Regelmäßige Einsätze werden nach Tagessatz oder Projektpreis abgerechnet.
+          </p>
         </div>
 
         {/* Preisstaffelung für längere Einsätze */}
@@ -94,8 +139,8 @@ const PricingSection = () => {
           </div>
           
           <p className="text-muted-foreground mb-6">
-            Unsere Standardpreise gelten für einzelne oder kurzfristige Einsätze (z. B. Tages- oder Wocheneinsätze).
-            Bei garantierten, durchgehenden Projekten über mehrere Wochen bieten wir auf Anfrage projektbezogene Konditionen an.
+            Unsere Preisstruktur ist klar und linear: Je nach Einsatzdauer (Kurzeinsatz, Standard-Tag oder längeres Projekt) gelten unterschiedliche Konditionen. 
+            Projektpreise gelten ab 4 Wochen garantierter Laufzeit mit fester Wochenplanung.
           </p>
 
           {/* Pricing Table */}
@@ -104,7 +149,8 @@ const PricingSection = () => {
               <thead>
                 <tr className="bg-green-100 dark:bg-green-900/30">
                   <th className="p-3 text-left font-semibold border-b border-green-200 dark:border-green-700">Fahrerprofil</th>
-                  <th className="p-3 text-center font-semibold border-b border-green-200 dark:border-green-700">Standard-Tagessatz (netto)</th>
+                  <th className="p-3 text-center font-semibold border-b border-green-200 dark:border-green-700">Kurzeinsatz (4–6 h)</th>
+                  <th className="p-3 text-center font-semibold border-b border-green-200 dark:border-green-700">Standard-Tagessatz (8 h)</th>
                   <th className="p-3 text-center font-semibold border-b border-green-200 dark:border-green-700">Projektpreis ab 4 Wochen</th>
                   <th className="p-3 text-left font-semibold border-b border-green-200 dark:border-green-700">Beschreibung</th>
                 </tr>
@@ -112,6 +158,9 @@ const PricingSection = () => {
               <tbody>
                 <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-medium">Standard-LKW-Fahrer (bis 7,5 t / 12 t)</td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-orange-600 dark:text-orange-400">50 € / h</div>
+                  </td>
                   <td className="p-3 text-center">
                     <div className="font-bold text-primary">359 € / Tag</div>
                   </td>
@@ -123,6 +172,9 @@ const PricingSection = () => {
                 <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-medium">LKW-Fahrer (CE, 40 t / Hängerzug)</td>
                   <td className="p-3 text-center">
+                    <div className="font-bold text-orange-600 dark:text-orange-400">55 € / h</div>
+                  </td>
+                  <td className="p-3 text-center">
                     <div className="font-bold text-primary">399 € / Tag</div>
                   </td>
                   <td className="p-3 text-center">
@@ -133,6 +185,9 @@ const PricingSection = () => {
                 <tr className="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-medium">Baumaschinenführer</td>
                   <td className="p-3 text-center">
+                    <div className="font-bold text-orange-600 dark:text-orange-400">60 € / h</div>
+                  </td>
+                  <td className="p-3 text-center">
                     <div className="font-bold text-primary">489 € / Tag</div>
                   </td>
                   <td className="p-3 text-center">
@@ -142,6 +197,9 @@ const PricingSection = () => {
                 </tr>
                 <tr className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-medium">Spezialfahrer (ADR, Kran, Schwertransport)</td>
+                  <td className="p-3 text-center">
+                    <div className="font-bold text-orange-600 dark:text-orange-400">65 € / h</div>
+                  </td>
                   <td className="p-3 text-center">
                     <div className="font-bold text-primary">539 € / Tag</div>
                   </td>
@@ -156,7 +214,7 @@ const PricingSection = () => {
 
           <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800 mb-6">
             <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
-              💡 Projektpreise gelten nur bei fester Wochenplanung (mind. 4 Wochen, 5 Tage/Woche). Alle Preise zzgl. 19 % MwSt.
+              💡 <strong>Kurzeinsätze (4–6 h)</strong> werden mit erhöhtem Stundensatz berechnet. <strong>Projektpreise</strong> gelten nur bei fester Wochenplanung (mind. 4 Wochen, 5 Tage/Woche). Alle Preise zzgl. 19 % MwSt.
             </p>
           </div>
 
@@ -280,8 +338,8 @@ const PricingSection = () => {
               <p className="text-muted-foreground">+20% (22–6 Uhr)</p>
             </div>
             <div>
-              <h5 className="font-semibold mb-2">Kurzeinsätze:</h5>
-              <p className="text-muted-foreground">Pauschal 299 € (unter 5 Std.)</p>
+              <h5 className="font-semibold mb-2">Kurzeinsätze (4–6 h):</h5>
+              <p className="text-muted-foreground">Nach erhöhtem Stundensatz (siehe Tabelle)</p>
             </div>
           </div>
           

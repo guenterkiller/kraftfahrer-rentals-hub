@@ -52,8 +52,8 @@ const FahrmischerfahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Fahrmischerfahrer buchen – ab 489 € netto/Tag",
-    intro: "Sie benötigen kurzfristig einen erfahrenen Fahrmischerfahrer für Betonlogistik? Über Fahrerexpress buchen Sie bundesweit qualifizierte Mischmeister und Fahrmischerfahrer für Baustellen-Versorgung. Rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer ohne Arbeitnehmerüberlassung.",
+    h1: "Fahrmischerfahrer buchen – ab 60 €/h bzw. 489 € netto/Tag",
+    intro: "Sie benötigen kurzfristig einen erfahrenen Fahrmischerfahrer für Betonlogistik? Über Fahrerexpress buchen Sie bundesweit qualifizierte Mischmeister und Fahrmischerfahrer für Baustellen-Versorgung. Rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer ohne Arbeitnehmerüberlassung. Kurzeinsätze 60 €/h, Standardtag 489 €, Projektpreis ab 4 Wochen 469 €.",
     bullets: [
       "Erfahrene Mischmeister",
       "Betonlogistik-Expertise",

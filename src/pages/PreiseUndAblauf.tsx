@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – LKW-Fahrer mieten ab 25€/h | Fahrerexpress",
-    description: "Transparente Preise für Kraftfahrer-Vermittlung. Stundensätze ab 25€, keine Vermittlungsgebühr für Auftraggeber. Schneller Ablauf in 3 Schritten.",
-    keywords: "LKW-Fahrer Preise, Kraftfahrer Kosten, Vermittlungsgebühr, Stundensatz Fahrer, LKW-Fahrer mieten Kosten, Fahrerexpress Preise"
+    title: "Preise & Ablauf – LKW-Fahrer mieten ab 50€/h bzw. 359€/Tag | Fahrerexpress",
+    description: "Transparente Preisstruktur für Kraftfahrer: Kurzeinsatz (4-6h), Standard-Tagessatz oder Projektpreis ab 4 Wochen. Keine Vermittlungsgebühr für Auftraggeber. Schneller Ablauf in 3 Schritten.",
+    keywords: "LKW-Fahrer Preise, Kraftfahrer Kosten, Stundensatz Fahrer, Tagessatz Fahrer, Projektpreis LKW-Fahrer, Fahrerexpress Preise"
   });
 
   return (
@@ -31,109 +31,130 @@ const PreiseUndAblauf = () => {
             </div>
 
             {/* Preisübersicht */}
-            <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               <Card className="border-2 border-primary/20">
                 <CardHeader className="text-center">
-                  <CardTitle className="flex items-center justify-center gap-2">
-                    <Euro className="h-5 w-5" />
+                  <CardTitle className="text-base mb-3">
                     Standard LKW-Fahrer
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <div className="text-3xl font-bold text-primary">25-35€</div>
-                  <div className="text-muted-foreground">pro Stunde (netto)</div>
-                  <ul className="text-sm space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      C+E Führerschein
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Aktuelle Fahrerkarte
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Berufserfahrung 2+ Jahre
-                    </li>
-                  </ul>
+                <CardContent className="text-center space-y-3">
+                  <div>
+                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
+                    <div className="text-2xl font-bold text-orange-600">50 €/h</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Standard</div>
+                    <div className="text-2xl font-bold text-primary">359 €</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Projekt</div>
+                    <div className="text-2xl font-bold text-green-600">349 €</div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-orange-500/20">
+              <Card className="border-2 border-primary/20">
                 <CardHeader className="text-center">
-                  <CardTitle className="flex items-center justify-center gap-2">
-                    <Users className="h-5 w-5" />
-                    Spezialfahrer
+                  <CardTitle className="text-base mb-3">
+                    CE/40 t
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <div className="text-3xl font-bold text-orange-600">30-45€</div>
-                  <div className="text-muted-foreground">pro Stunde (netto)</div>
-                  <ul className="text-sm space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      ADR-Schein (Tankwagen)
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Kranschein
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      BF3-Berechtigung
-                    </li>
-                  </ul>
+                <CardContent className="text-center space-y-3">
+                  <div>
+                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
+                    <div className="text-2xl font-bold text-orange-600">55 €/h</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Standard</div>
+                    <div className="text-2xl font-bold text-primary">399 €</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Projekt</div>
+                    <div className="text-2xl font-bold text-green-600">379 €</div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
                 </CardContent>
               </Card>
 
               <Card className="border-2 border-green-500/20">
                 <CardHeader className="text-center">
-                  <CardTitle className="flex items-center justify-center gap-2">
-                    <Clock className="h-5 w-5" />
+                  <CardTitle className="text-base mb-3">
                     Baumaschinenführer
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-center space-y-4">
-                  <div className="text-3xl font-bold text-green-600">35-50€</div>
-                  <div className="text-muted-foreground">pro Stunde (netto)</div>
-                  <ul className="text-sm space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Kranführer
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Baggerfahrer
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-500" />
-                      Mischmeister
-                    </li>
-                  </ul>
+                <CardContent className="text-center space-y-3">
+                  <div>
+                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
+                    <div className="text-2xl font-bold text-orange-600">60 €/h</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Standard</div>
+                    <div className="text-2xl font-bold text-primary">489 €</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Projekt</div>
+                    <div className="text-2xl font-bold text-green-600">469 €</div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-2 border-orange-500/20">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-base mb-3">
+                    Spezialfahrer (ADR/Kran)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-center space-y-3">
+                  <div>
+                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
+                    <div className="text-2xl font-bold text-orange-600">65 €/h</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Standard</div>
+                    <div className="text-2xl font-bold text-primary">539 €</div>
+                  </div>
+                  <div>
+                    <div className="text-sm text-muted-foreground">Projekt</div>
+                    <div className="text-2xl font-bold text-green-600">519 €</div>
+                  </div>
+                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Wichtige Hinweise */}
+            {/* Info paragraph */}
             <Card className="mb-12 bg-blue-50 border-blue-200">
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-blue-800">Wichtige Preisinformationen</h3>
+                <p className="text-sm text-blue-900">
+                  <strong>ℹ️ Kurzeinsätze (4–6 h):</strong> Sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet. 
+                  Regelmäßige Einsätze werden nach Tagessatz oder Projektpreis abgerechnet.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Wichtige Hinweise */}
+            <Card className="mb-12 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-4 text-green-800">Wichtige Preisinformationen</h3>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h4 className="font-semibold mb-2">✅ Für Auftraggeber kostenlos</h4>
-                    <p className="text-sm">Keine Vermittlungsgebühr, keine Anmeldekosten. Sie zahlen nur den Stundensatz direkt an den Fahrer.</p>
+                    <h4 className="font-semibold mb-2">💰 Drei Preisstufen</h4>
+                    <p className="text-sm">Kurzeinsatz (4-6h erhöhter Stundensatz), Standard-Tagessatz (8h) oder Projektpreis ab 4 Wochen garantierter Laufzeit.</p>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2">🚛 Fahrzeug & Sprit</h4>
                     <p className="text-sm">Ihr Fahrzeug, Ihr Sprit. Der Fahrer bringt nur seine Expertise mit.</p>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2">⏰ Mindestdauer</h4>
-                    <p className="text-sm">Minimum 4 Stunden pro Einsatz. Fahrtkosten zum Einsatzort werden separat berechnet.</p>
+                    <h4 className="font-semibold mb-2">⏰ Planungssicherheit</h4>
+                    <p className="text-sm">Projektpreise bei fester Wochenplanung (mind. 4 Wochen, 5 Tage/Woche). Alle Preise zzgl. 19% MwSt.</p>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2">📋 Keine AÜG-Kosten</h4>
-                    <p className="text-sm">Selbstständige Fahrer, kein Personalleasing. Günstigere Alternative zur Zeitarbeit.</p>
+                    <p className="text-sm">Selbstständige Fahrer, kein Personalleasing. Dienst-/Werkleistung gemäß § 84 HGB.</p>
                   </div>
                 </div>
                 

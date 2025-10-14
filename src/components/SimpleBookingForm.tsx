@@ -219,16 +219,28 @@ const SimpleBookingForm = () => {
                       Abrechnung über <strong>Fahrerexpress</strong> (Dienst-/Werkleistung, keine Arbeitnehmerüberlassung gemäß § 84 HGB).
                     </p>
 
-                    <p className="text-green-800 mb-3">
-                      <strong>Standard-LKW-Fahrer</strong> ab <strong>359 € / Tag</strong>
-                      {' | '}
-                      <strong>Baumaschinenführer</strong> ab <strong>489 € / Tag</strong>
-                      {' | '}
-                      <strong>Spezialfahrer (ADR/Kran)</strong> ab <strong>539 € / Tag</strong>
+                    <div className="bg-white/80 p-4 rounded-lg mb-4">
+                      <p className="text-green-800 mb-3 text-sm">
+                        <strong>Standard-LKW-Fahrer:</strong> 50 €/h | 359 € / Tag | 349 € / Tag (Projekt)
+                      </p>
+                      <p className="text-green-800 mb-3 text-sm">
+                        <strong>CE/40 t:</strong> 55 €/h | 399 € / Tag | 379 € / Tag (Projekt)
+                      </p>
+                      <p className="text-green-800 mb-3 text-sm">
+                        <strong>Baumaschinenführer:</strong> 60 €/h | 489 € / Tag | 469 € / Tag (Projekt)
+                      </p>
+                      <p className="text-green-800 text-sm">
+                        <strong>Spezialfahrer (ADR/Kran):</strong> 65 €/h | 539 € / Tag | 519 € / Tag (Projekt)
+                      </p>
+                    </div>
+
+                    <p className="text-sm text-green-800 mb-4">
+                      Kurzzeiteinsätze (4–6 h) sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet. 
+                      Regelmäßige Einsätze werden nach Tagessatz oder Projektpreis abgerechnet.
                     </p>
 
                     <p className="text-sm opacity-80 text-green-800">
-                      Projektpreise für längere Einsätze finden Sie unter{' '}
+                      Vollständige Preisstaffelung unter{' '}
                       <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
                         Preise & Konditionen →
                       </a>

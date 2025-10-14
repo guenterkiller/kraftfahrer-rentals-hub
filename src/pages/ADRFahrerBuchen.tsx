@@ -34,8 +34,8 @@ const ADRFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "ADR-Fahrer buchen – ab 539 € netto/Tag",
-    intro: "Sie benötigen kurzfristig einen ADR-Fahrer für Gefahrgut-Transporte? Über Fahrerexpress buchen Sie bundesweit qualifizierte ADR-Fahrer mit gültigem Gefahrgutschein. Rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer ohne Arbeitnehmerüberlassung.",
+    h1: "ADR-Fahrer buchen – ab 65 €/h bzw. 539 € netto/Tag",
+    intro: "Sie benötigen kurzfristig einen ADR-Fahrer für Gefahrgut-Transporte? Über Fahrerexpress buchen Sie bundesweit qualifizierte ADR-Fahrer mit gültigem Gefahrgutschein. Rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer ohne Arbeitnehmerüberlassung. Kurzeinsätze 65 €/h, Standardtag 539 €, Projektpreis ab 4 Wochen 519 €.",
     bullets: [
       "ADR-Schein aktuell & gültig",
       "Gefahrgut-Transport Expertise",
