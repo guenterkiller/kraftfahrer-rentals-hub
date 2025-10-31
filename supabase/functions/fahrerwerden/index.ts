@@ -308,8 +308,8 @@ const handler = async (req: Request): Promise<Response> => {
       stundensatz: parsedRate,
       status: 'pending',
       dokumente: uploadedFiles,
-      bf2_erlaubnis: requestData.bf2_erlaubnis === 'true',
-      bf3_erlaubnis: requestData.bf3_erlaubnis === 'true',
+      bf2_erlaubnis: requestData.bf2_erlaubnis === 'true' || requestData.bf2_erlaubnis === true,
+      bf3_erlaubnis: requestData.bf3_erlaubnis === 'true' || requestData.bf3_erlaubnis === true,
       spezialanforderungen: Array.isArray(requestData.spezialanforderungen) 
         ? requestData.spezialanforderungen 
         : (requestData.spezialanforderungen ? 
