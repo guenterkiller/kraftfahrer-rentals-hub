@@ -6,13 +6,13 @@ verify_jwt = false
 [functions.admin-auth-check]
 verify_jwt = false
 
-[functions.admin-data-fetch]
-verify_jwt = false
-
 [functions.admin-complete-old-jobs]
 verify_jwt = false
 
 [functions.admin-create-job]
+verify_jwt = false
+
+[functions.admin-data-fetch]
 verify_jwt = false
 
 [functions.admin-mark-job-completed]
@@ -30,16 +30,13 @@ verify_jwt = false
 [functions.approve-driver-and-send-jobs]
 verify_jwt = false
 
-[functions.assign-driver-to-job]
-verify_jwt = false
-
 [functions.broadcast-job-to-drivers]
 verify_jwt = false
 
 [functions.check-admin-login]
 verify_jwt = false
 
-[functions.create-or-get-fahrer]
+[functions.driver-accept-job]
 verify_jwt = false
 
 [functions.fahrerwerden]
@@ -48,25 +45,28 @@ verify_jwt = false
 [functions.get-document-preview]
 verify_jwt = false
 
-[functions.handle-driver-response]
+[functions.handle-driver-job-response]
 verify_jwt = false
 
 [functions.reset-driver-status]
 verify_jwt = false
 
-[functions.send-contact-email]
-verify_jwt = false
-
 [functions.send-driver-confirmation]
 verify_jwt = false
 
-[functions.send-fahrer-anfrage-email]
+[functions.send-driver-job-notification]
+verify_jwt = false
+
+[functions.send-driver-newsletter]
 verify_jwt = false
 
 [functions.send-job-alert-emails]
 verify_jwt = false
 
 [functions.send-no-show-notice]
+verify_jwt = false
+
+[functions.send-nurture-email]
 verify_jwt = false
 
 [functions.submit-fahrer-anfrage]
