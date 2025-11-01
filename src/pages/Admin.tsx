@@ -17,6 +17,7 @@ import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
+import { AdminActionsLog } from "@/components/AdminActionsLog";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
@@ -1571,6 +1572,9 @@ const Admin = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Admin Actions Log */}
+      <AdminActionsLog />
 
       {/* Email Log View */}
       <EmailLogView />
