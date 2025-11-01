@@ -32,6 +32,7 @@ export function EmailLogView() {
   }, []);
 
   const loadEmailLogs = async () => {
+    setLoading(true);
     try {
       const adminSession = localStorage.getItem('adminSession');
       if (!adminSession) {
