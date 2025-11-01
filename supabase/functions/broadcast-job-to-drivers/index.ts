@@ -174,8 +174,8 @@ serve(async (req) => {
           });
         }
 
-        // Rate limit protection: Wait 600ms between emails (allows ~1.6 emails/second, safely under Resend's 2/second limit)
-        await new Promise(resolve => setTimeout(resolve, 600));
+        // Rate limit protection: Wait 1000ms between emails (1 email/second, safely under Resend's 2/second limit)
+        await new Promise(resolve => setTimeout(resolve, 1000));
 
       } catch (error) {
         console.error(`Error processing driver ${driver.id}:`, error);
