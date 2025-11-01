@@ -1363,7 +1363,12 @@ const Admin = () => {
                               if (!a) {
                                 return (
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <Button size="sm" onClick={() => handleAssignDriver(req.id)}>
+                                    <Button 
+                                      size="sm" 
+                                      onClick={() => handleAssignDriver(req.id)}
+                                      disabled={req.status === 'completed'}
+                                      title={req.status === 'completed' ? 'Erledigte Aufträge können nicht zugewiesen werden' : 'Fahrer zuweisen'}
+                                    >
                                       Zuweisen
                                     </Button>
                                     {!req.customer_street && (
