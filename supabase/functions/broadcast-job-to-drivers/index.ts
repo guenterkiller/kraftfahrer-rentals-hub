@@ -145,7 +145,9 @@ serve(async (req) => {
           });
           
           if (logError) {
-            console.error(`Failed to log failed email for ${driver.email}:`, logError);
+            console.error(`❌ Failed to log failed email for ${driver.email}:`, logError);
+          } else {
+            console.log(`✅ Failed email log saved for ${driver.email}`);
           }
         } else {
           console.log(`Email sent successfully to ${driver.email}`);
@@ -159,10 +161,13 @@ serve(async (req) => {
             status: "sent",
             sent_at: new Date().toISOString(),
             job_id: jobRequestId,
+            message_id: emailResult?.id || null,
           });
           
           if (logError) {
-            console.error(`Failed to log successful email for ${driver.email}:`, logError);
+            console.error(`❌ Failed to log successful email for ${driver.email}:`, logError);
+          } else {
+            console.log(`✅ Email log saved for ${driver.email}`);
           }
 
           // Log to job_mail_log
