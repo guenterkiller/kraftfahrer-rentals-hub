@@ -1295,7 +1295,12 @@ const Admin = () => {
                         </TableCell>
                       <TableCell className="font-medium">
                         <div className="space-y-2">
-                          <div className="font-semibold">{req.customer_name}</div>
+                          <button 
+                            onClick={() => handleOpenContactDialog(req.id)}
+                            className="font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer transition-colors"
+                          >
+                            {req.customer_name}
+                          </button>
                           <div className="text-sm text-gray-600">
                             <div><strong>Eingang:</strong> {new Date(req.created_at).toLocaleDateString('de-DE')}</div>
                           </div>
