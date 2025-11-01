@@ -32,23 +32,25 @@ serve(async (req) => {
   }
 
   try {
-    // Verify internal function secret
-    const internalSecret = req.headers.get("x-internal-fn");
-    if (internalSecret !== Deno.env.get("INTERNAL_FN_SECRET")) {
-      console.error("Unauthorized access attempt");
-      return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
       { auth: { persistSession: false } }
     );
 
-    const { jobRequestId }: BroadcastRequest = await req.json();
+    const body = await req.json();
+    const { email, jobId } = body;
+    const jobRequestId = jobId;
+
+    // Validate admin email
+    const ADMIN_EMAIL = "guenter.killer@t-online.de";
+    if (email !== ADMIN_EMAIL) {
+      console.error("Unauthorized access attempt by:", email);
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     if (!jobRequestId) {
       return new Response(
@@ -189,6 +191,7 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         message: "Job broadcast completed",
+        sentToCount: successCount,
         total: drivers.length,
         sent: successCount,
         failed: errorCount,
