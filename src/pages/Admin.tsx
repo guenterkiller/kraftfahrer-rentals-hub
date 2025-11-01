@@ -1371,6 +1371,16 @@ const Admin = () => {
                                     >
                                       Zuweisen
                                     </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleSendJobToAllDrivers(req.id)}
+                                      disabled={sendingJobToAll === req.id || req.status === 'completed'}
+                                      title="Job an alle verfügbaren Fahrer senden"
+                                    >
+                                      <Mail className="h-3 w-3 mr-1" />
+                                      {sendingJobToAll === req.id ? 'Sende...' : 'An alle senden'}
+                                    </Button>
                                     {!req.customer_street && (
                                       <Button
                                         size="sm"
