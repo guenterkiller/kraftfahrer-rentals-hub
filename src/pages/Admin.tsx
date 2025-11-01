@@ -1236,25 +1236,23 @@ const Admin = () => {
                       <TableRow key={req.id}>
                         <TableCell className="text-center">
                           {(() => {
-                            // Vereinfachte Logik: Checkbox nur deaktivieren wenn Job aktive Zuweisung hat oder gerade bearbeitet wird
-                            const hasActiveAssignment = req.status === 'assigned' || req.status === 'confirmed';
+                            // Checkbox ist IMMER klickbar - Admin kann jeden Job als erledigt markieren
                             const isBeingProcessed = markingCompleted === req.id;
-                            const disabled = isBeingProcessed || hasActiveAssignment;
+                            const hasActiveAssignment = req.status === 'assigned' || req.status === 'confirmed';
                             
                             console.log('🔍 Validation check:', {
                               jobId: req.id,
                               customerName: req.customer_name,
                               status: req.status,
                               hasActiveAssignment,
-                              isBeingProcessed,
-                              disabled
+                              isBeingProcessed
                             });
                             
                             return (
                               <Checkbox
                                 checked={req.status === 'completed'}
                                 onCheckedChange={async (checked) => {
-                                  console.log('✅ Checkbox clicked:', { jobId: req.id, checked });
+                                  console.log('✅ Checkbox clicked:', { jobId: req.id, checked, currentStatus: req.status });
                                   if (checked) {
                                     await handleMarkJobCompleted(req.id);
                                   } else {
@@ -1263,10 +1261,10 @@ const Admin = () => {
                                   // Optimistische UI + Refetch
                                   await loadJobRequests();
                                 }}
-                                disabled={disabled}
-                                className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
-                                title={disabled && req.status !== 'completed' ? 
-                                  "Nicht verfügbar: Job hat aktive Zuweisung" : 
+                                disabled={isBeingProcessed}
+                                className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground cursor-pointer"
+                                title={hasActiveAssignment && req.status !== 'completed' ? 
+                                  "⚠️ Achtung: Job hat aktive Zuweisung - trotzdem abschließen möglich" : 
                                   "Job als erledigt/offen markieren"}
                               />
                             );
