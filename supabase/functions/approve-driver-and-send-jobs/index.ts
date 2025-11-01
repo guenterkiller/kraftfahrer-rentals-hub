@@ -78,10 +78,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('👤 Driver found:', driver.vorname, driver.nachname);
 
-    // 2. Update driver status to 'active'
+    // 2. Update driver status to 'approved'
     const { error: updateError } = await supabase
       .from('fahrer_profile')
-      .update({ status: 'active' })
+      .update({ status: 'approved' })
       .eq('id', driverId);
 
     if (updateError) {
@@ -92,7 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    console.log('✅ Driver status updated to active');
+    console.log('✅ Driver status updated to approved');
 
     // 3. Get recent open jobs (last 30 days)
     const thirtyDaysAgo = new Date();

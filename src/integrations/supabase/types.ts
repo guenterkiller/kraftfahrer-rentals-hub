@@ -490,7 +490,7 @@ export type Database = {
           billing_model: Database["public"]["Enums"]["billing_model_enum"]
           driver_id: string
           id: string
-          ip: unknown | null
+          ip: unknown
           job_id: string
           terms_version: string | null
           user_agent: string | null
@@ -500,7 +500,7 @@ export type Database = {
           billing_model: Database["public"]["Enums"]["billing_model_enum"]
           driver_id: string
           id?: string
-          ip?: unknown | null
+          ip?: unknown
           job_id: string
           terms_version?: string | null
           user_agent?: string | null
@@ -510,7 +510,7 @@ export type Database = {
           billing_model?: Database["public"]["Enums"]["billing_model_enum"]
           driver_id?: string
           id?: string
-          ip?: unknown | null
+          ip?: unknown
           job_id?: string
           terms_version?: string | null
           user_agent?: string | null
@@ -765,25 +765,31 @@ export type Database = {
           updated_at: string
           zeitraum: string
         }
+        SetofOptions: {
+          from: "*"
+          to: "job_requests"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
-      admin_mark_no_show: {
-        Args:
-          | {
+      admin_mark_no_show:
+        | {
+            Args: {
               _assignment_id: string
               _override_fee_eur?: number
               _reason?: string
             }
-          | { _assignment_id: string; _reason?: string }
-        Returns: boolean
-      }
+            Returns: boolean
+          }
+        | {
+            Args: { _assignment_id: string; _reason?: string }
+            Returns: boolean
+          }
       admin_mark_old_jobs_completed: {
         Args: { _days_old?: number }
         Returns: Json
       }
-      admin_reset_jobs_by_email: {
-        Args: { _email: string }
-        Returns: Json
-      }
+      admin_reset_jobs_by_email: { Args: { _email: string }; Returns: Json }
       admin_update_job_contact: {
         Args: {
           _ansprechpartner: string
@@ -809,14 +815,8 @@ export type Database = {
         Args: { _driver_id: string; _job_id: string }
         Returns: Json
       }
-      is_admin: {
-        Args: { user_uuid: string }
-        Returns: boolean
-      }
-      is_admin_user: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      is_admin: { Args: { user_uuid: string }; Returns: boolean }
+      is_admin_user: { Args: never; Returns: boolean }
       log_job_mail: {
         Args: {
           p_driver_snapshot?: Json
@@ -847,10 +847,7 @@ export type Database = {
         }
         Returns: string
       }
-      subscribe_to_job_alerts: {
-        Args: { _email: string }
-        Returns: string
-      }
+      subscribe_to_job_alerts: { Args: { _email: string }; Returns: string }
     }
     Enums: {
       billing_model_enum: "direct" | "agency"
