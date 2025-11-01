@@ -1236,46 +1236,25 @@ const Admin = () => {
                       <TableRow key={req.id}>
                         <TableCell className="text-center">
                           {(() => {
-                            // Hilfsfunktion zur Erkennung von Zukunftszeiträumen oder laufenden Jobs
-                            const isFutureOrOngoing = (zeitraum: string, status: string) => {
-                              // Bereits abgeschlossene Jobs sind immer erlaubt zu togglen
-                              if (status === 'completed') return false;
-                              
-                              // Jobs mit aktiven Zuweisungen (assigned/confirmed) nicht per Checkbox ändern
-                              if (status === 'assigned' || status === 'confirmed') return true;
-                              
-                              // Zeitraum-basierte Prüfung für Zukunft
-                              const zeitraumLower = zeitraum.toLowerCase();
-                              const now = new Date();
-                              const currentYear = now.getFullYear();
-                              const futureYearPattern = /202[5-9]|20[3-9][0-9]/;
-                              
-                              // Explizite Zukunftsjahre
-                              if (futureYearPattern.test(zeitraum)) return true;
-                              
-                              // "ab" + Zukunftsdatum
-                              if (zeitraumLower.includes('ab ') && futureYearPattern.test(zeitraum)) return true;
-                              
-                              // Aktuelle Monate/Jahre die möglicherweise noch laufen
-                              const currentMonth = now.getMonth() + 1;
-                              const monthNames = ['januar', 'februar', 'märz', 'april', 'mai', 'juni', 
-                                                'juli', 'august', 'september', 'oktober', 'november', 'dezember'];
-                              const currentMonthName = monthNames[currentMonth - 1];
-                              
-                              // Prüfe ob aktueller oder zukünftiger Monat erwähnt wird
-                              if (zeitraumLower.includes(currentMonthName) && zeitraumLower.includes(currentYear.toString())) {
-                                return true;
-                              }
-                              
-                              return false;
-                            };
+                            // Vereinfachte Logik: Checkbox nur deaktivieren wenn Job aktive Zuweisung hat oder gerade bearbeitet wird
+                            const hasActiveAssignment = req.status === 'assigned' || req.status === 'confirmed';
+                            const isBeingProcessed = markingCompleted === req.id;
+                            const disabled = isBeingProcessed || hasActiveAssignment;
                             
-                            const disabled = markingCompleted === req.id || isFutureOrOngoing(req.zeitraum, req.status);
+                            console.log('🔍 Validation check:', {
+                              jobId: req.id,
+                              customerName: req.customer_name,
+                              status: req.status,
+                              hasActiveAssignment,
+                              isBeingProcessed,
+                              disabled
+                            });
                             
                             return (
                               <Checkbox
                                 checked={req.status === 'completed'}
                                 onCheckedChange={async (checked) => {
+                                  console.log('✅ Checkbox clicked:', { jobId: req.id, checked });
                                   if (checked) {
                                     await handleMarkJobCompleted(req.id);
                                   } else {
@@ -1287,7 +1266,7 @@ const Admin = () => {
                                 disabled={disabled}
                                 className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
                                 title={disabled && req.status !== 'completed' ? 
-                                  "Nicht verfügbar: Job läuft noch oder hat aktive Zuweisung" : 
+                                  "Nicht verfügbar: Job hat aktive Zuweisung" : 
                                   "Job als erledigt/offen markieren"}
                               />
                             );
