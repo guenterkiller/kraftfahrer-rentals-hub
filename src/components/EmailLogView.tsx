@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { de } from 'date-fns/locale';
@@ -80,10 +81,14 @@ export function EmailLogView() {
         return 'Fahrer-Bestätigung';
       case 'job_alert':
         return 'Job-Alarm';
+      case 'job-broadcast':
+        return 'Job-Rundschreiben';
       case 'no_show_notice':
         return 'No-Show-Mitteilung';
       case 'fahrer_anfrage':
         return 'Fahrer-Anfrage';
+      case 'newsletter':
+        return 'Newsletter';
       default:
         return template;
     }
@@ -111,8 +116,16 @@ export function EmailLogView() {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>E-Mail-Logs (letzte 50)</CardTitle>
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={loadEmailLogs}
+          disabled={loading}
+        >
+          {loading ? 'Lädt...' : 'Aktualisieren'}
+        </Button>
       </CardHeader>
       <CardContent>
         {emailLogs.length === 0 ? (
