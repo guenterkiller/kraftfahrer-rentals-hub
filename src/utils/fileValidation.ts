@@ -23,9 +23,6 @@ export function validateFiles(files: File[]): string[] {
       errors.push(`„${file.name}": unzulässige Dateiendung.`);
       continue;
     }
-    
-    // File is valid
-    errors.push(`„${file.name}": ✓ OK`);
   }
   
   return errors;
