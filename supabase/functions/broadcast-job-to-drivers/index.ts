@@ -173,6 +173,10 @@ serve(async (req) => {
             p_meta: { resend_id: emailResult?.id },
           });
         }
+
+        // Rate limit protection: Wait 600ms between emails (allows ~1.6 emails/second, safely under Resend's 2/second limit)
+        await new Promise(resolve => setTimeout(resolve, 600));
+
       } catch (error) {
         console.error(`Error processing driver ${driver.id}:`, error);
         errorCount++;
