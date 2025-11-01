@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { Mail, CheckCircle, XCircle } from 'lucide-react';
+import { Mail, CheckCircle, XCircle, ChevronDown, ChevronRight } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface AdminAction {
   id: string;
@@ -19,9 +20,21 @@ interface AdminAction {
   created_at: string;
 }
 
+interface EmailRecipient {
+  email: string;
+  driver_snapshot: {
+    vorname: string;
+    nachname: string;
+    email: string;
+  };
+  status: string;
+}
+
 export function AdminActionsLog() {
   const [actions, setActions] = useState<AdminAction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [emailRecipients, setEmailRecipients] = useState<Record<string, EmailRecipient[]>>({});
   const { toast } = useToast();
 
   useEffect(() => {
@@ -49,6 +62,59 @@ export function AdminActionsLog() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadEmailRecipients = async (jobId: string) => {
+    if (emailRecipients[jobId]) return; // Already loaded
+
+    try {
+      const adminSession = localStorage.getItem('adminSession');
+      if (!adminSession) return;
+      
+      const session = JSON.parse(adminSession);
+      
+      const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: {
+          email: session.email,
+          dataType: 'emails'
+        }
+      });
+
+      if (error) throw error;
+      
+      // Filter emails for this specific job
+      const jobEmails = (data?.data || []).filter((log: any) => 
+        log.job_id === jobId && log.template === 'job-broadcast'
+      );
+      
+      // Transform to EmailRecipient format
+      const recipients: EmailRecipient[] = jobEmails.map((log: any) => ({
+        email: log.recipient,
+        driver_snapshot: { 
+          vorname: log.recipient.split('@')[0], 
+          nachname: '', 
+          email: log.recipient 
+        },
+        status: log.status
+      }));
+      
+      setEmailRecipients(prev => ({ ...prev, [jobId]: recipients }));
+    } catch (error) {
+      console.error('Error loading email recipients:', error);
+    }
+  };
+
+  const toggleRow = async (actionId: string, jobId: string | null) => {
+    const newExpanded = new Set(expandedRows);
+    if (expandedRows.has(actionId)) {
+      newExpanded.delete(actionId);
+    } else {
+      newExpanded.add(actionId);
+      if (jobId) {
+        await loadEmailRecipients(jobId);
+      }
+    }
+    setExpandedRows(newExpanded);
   };
 
   const getActionBadge = (action: string) => {
@@ -135,22 +201,74 @@ export function AdminActionsLog() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {actions.map((action) => (
-                  <TableRow key={action.id}>
-                    <TableCell>
-                      {getActionBadge(action.action)}
-                    </TableCell>
-                    <TableCell className="max-w-md">
-                      {getActionDescription(action)}
-                    </TableCell>
-                    <TableCell className="font-mono text-xs text-muted-foreground">
-                      {action.admin_email}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
-                      {formatDate(action.created_at)}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {actions.map((action) => {
+                  const isBroadcast = action.action === 'job_broadcast_completed';
+                  const isExpanded = expandedRows.has(action.id);
+                  const recipients = action.job_id ? emailRecipients[action.job_id] : [];
+
+                  return (
+                    <React.Fragment key={action.id}>
+                      <TableRow className={isBroadcast ? 'cursor-pointer hover:bg-muted/50' : ''}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            {isBroadcast && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0"
+                                onClick={() => toggleRow(action.id, action.job_id)}
+                              >
+                                {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                              </Button>
+                            )}
+                            {getActionBadge(action.action)}
+                          </div>
+                        </TableCell>
+                        <TableCell className="max-w-md">
+                          {getActionDescription(action)}
+                        </TableCell>
+                        <TableCell className="font-mono text-xs text-muted-foreground">
+                          {action.admin_email}
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground whitespace-nowrap">
+                          {formatDate(action.created_at)}
+                        </TableCell>
+                      </TableRow>
+                      {isBroadcast && isExpanded && (
+                        <TableRow>
+                          <TableCell colSpan={4} className="bg-muted/30 p-4">
+                            <div className="space-y-2">
+                              <h4 className="font-semibold text-sm mb-3">Empfänger ({recipients.length}):</h4>
+                              {recipients.length === 0 ? (
+                                <p className="text-sm text-muted-foreground">Lade E-Mail-Adressen...</p>
+                              ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                  {recipients.map((recipient, idx) => (
+                                    <div key={idx} className="flex items-center gap-2 text-sm p-2 bg-background rounded border">
+                                      {recipient.status === 'sent' ? (
+                                        <CheckCircle className="h-4 w-4 text-green-500" />
+                                      ) : (
+                                        <XCircle className="h-4 w-4 text-red-500" />
+                                      )}
+                                      <div className="flex-1 min-w-0">
+                                        <div className="font-medium truncate">
+                                          {recipient.driver_snapshot?.vorname} {recipient.driver_snapshot?.nachname}
+                                        </div>
+                                        <div className="text-xs text-muted-foreground truncate">
+                                          {recipient.email}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
