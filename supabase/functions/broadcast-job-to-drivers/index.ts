@@ -135,27 +135,35 @@ serve(async (req) => {
           errorCount++;
 
           // Log failed email
-          await supabase.from("email_log").insert({
+          const { error: logError } = await supabase.from("email_log").insert({
             recipient: driver.email,
             subject: `Neuer Auftrag: ${job.fahrzeugtyp} in ${job.einsatzort}`,
             template: "job-broadcast",
             status: "failed",
             error_message: emailError.message || String(emailError),
-            meta: { job_id: jobRequestId, driver_id: driver.id },
+            job_id: jobRequestId,
           });
+          
+          if (logError) {
+            console.error(`Failed to log failed email for ${driver.email}:`, logError);
+          }
         } else {
           console.log(`Email sent successfully to ${driver.email}`);
           successCount++;
 
           // Log successful email
-          await supabase.from("email_log").insert({
+          const { error: logError } = await supabase.from("email_log").insert({
             recipient: driver.email,
             subject: `Neuer Auftrag: ${job.fahrzeugtyp} in ${job.einsatzort}`,
             template: "job-broadcast",
             status: "sent",
             sent_at: new Date().toISOString(),
-            meta: { job_id: jobRequestId, driver_id: driver.id, resend_id: emailResult?.id },
+            job_id: jobRequestId,
           });
+          
+          if (logError) {
+            console.error(`Failed to log successful email for ${driver.email}:`, logError);
+          }
 
           // Log to job_mail_log
           await supabase.rpc("log_job_mail", {
