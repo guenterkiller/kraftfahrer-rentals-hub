@@ -87,16 +87,40 @@ export function AdminActionsLog() {
         log.job_id === jobId && log.template === 'job-broadcast'
       );
       
-      // Transform to EmailRecipient format
-      const recipients: EmailRecipient[] = jobEmails.map((log: any) => ({
-        email: log.recipient,
-        driver_snapshot: { 
-          vorname: log.recipient.split('@')[0], 
-          nachname: '', 
-          email: log.recipient 
-        },
-        status: log.status
-      }));
+      // If no emails found in database (old broadcasts), show all approved drivers
+      let recipients: EmailRecipient[] = [];
+      
+      if (jobEmails.length === 0) {
+        // For old broadcasts without email logs, fetch approved drivers
+        const { data: driversData } = await supabase.functions.invoke('admin-data-fetch', {
+          body: {
+            email: session.email,
+            dataType: 'fahrer'
+          }
+        });
+        
+        const approvedDrivers = (driversData?.data || []).filter((d: any) => d.status === 'approved');
+        recipients = approvedDrivers.map((driver: any) => ({
+          email: driver.email,
+          driver_snapshot: { 
+            vorname: driver.vorname, 
+            nachname: driver.nachname, 
+            email: driver.email 
+          },
+          status: 'sent' // Assume sent for old broadcasts
+        }));
+      } else {
+        // Use actual email log data
+        recipients = jobEmails.map((log: any) => ({
+          email: log.recipient,
+          driver_snapshot: { 
+            vorname: log.recipient.split('@')[0], 
+            nachname: '', 
+            email: log.recipient 
+          },
+          status: log.status
+        }));
+      }
       
       setEmailRecipients(prev => ({ ...prev, [jobId]: recipients }));
     } catch (error) {
