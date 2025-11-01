@@ -108,6 +108,8 @@ serve(async (req) => {
         const html = await renderAsync(
           React.createElement(JobNotificationEmail, {
             driverName: `${driver.vorname} ${driver.nachname}`,
+            driverId: driver.id,
+            jobId: jobRequestId,
             customerName: job.customer_name || "Unbekannt",
             company: job.company,
             einsatzort: job.einsatzort || "Keine Angabe",

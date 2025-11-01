@@ -8,11 +8,14 @@ import {
   Text,
   Section,
   Hr,
+  Button,
 } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 
 interface JobNotificationEmailProps {
   driverName: string;
+  driverId: string;
+  jobId: string;
   customerName: string;
   company?: string;
   einsatzort: string;
@@ -25,6 +28,8 @@ interface JobNotificationEmailProps {
 
 export const JobNotificationEmail = ({
   driverName,
+  driverId,
+  jobId,
   customerName,
   company,
   einsatzort,
@@ -33,159 +38,292 @@ export const JobNotificationEmail = ({
   fuehrerscheinklasse,
   nachricht,
   besonderheiten,
-}: JobNotificationEmailProps) => (
-  <Html>
-    <Head />
-    <Preview>Neuer Auftrag verfügbar: {fahrzeugtyp} in {einsatzort}</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>🚛 Neuer Auftrag verfügbar</Heading>
-        
-        <Text style={text}>
-          Hallo {driverName},
-        </Text>
-        
-        <Text style={text}>
-          ein neuer Auftrag ist verfügbar, der zu Ihrem Profil passen könnte:
-        </Text>
+}: JobNotificationEmailProps) => {
+  const baseUrl = 'https://hxnabnsoffzevqhruvar.supabase.co/functions/v1';
+  const acceptUrl = `${baseUrl}/handle-driver-job-response?job=${jobId}&driver=${driverId}&action=accept`;
+  const declineUrl = `${baseUrl}/handle-driver-job-response?job=${jobId}&driver=${driverId}&action=decline`;
 
-        <Section style={infoBox}>
-          <Text style={infoTitle}>Auftragsdetails</Text>
+  return (
+    <Html>
+      <Head />
+      <Preview>Neuer Auftrag verfügbar: {fahrzeugtyp} in {einsatzort}</Preview>
+      <Body style={main}>
+        <Container style={container}>
           
-          <Text style={infoRow}>
-            <strong>Auftraggeber:</strong> {customerName}
-            {company && ` (${company})`}
-          </Text>
+          {/* Blue Header */}
+          <div style={header}>
+            <Heading style={headerTitle}>NEUER AUFTRAG VERFÜGBAR</Heading>
+            <Text style={headerSubtitle}>Fahrerexpress | kraftfahrer-mieten.com</Text>
+          </div>
           
-          <Text style={infoRow}>
-            <strong>Einsatzort:</strong> {einsatzort}
-          </Text>
-          
-          <Text style={infoRow}>
-            <strong>Zeitraum:</strong> {zeitraum}
-          </Text>
-          
-          <Text style={infoRow}>
-            <strong>Fahrzeugtyp:</strong> {fahrzeugtyp}
-          </Text>
-          
-          <Text style={infoRow}>
-            <strong>Führerscheinklasse:</strong> {fuehrerscheinklasse}
-          </Text>
-          
-          {besonderheiten && (
-            <Text style={infoRow}>
-              <strong>Besonderheiten:</strong> {besonderheiten}
+          {/* Content */}
+          <div style={content}>
+            <Text style={greeting}>Hallo {driverName},</Text>
+            <Text style={introText}>
+              ein neuer Auftrag ist verfügbar, der zu Ihrem Profil passen könnte:
             </Text>
-          )}
+            
+            {/* AUFTRAGGEBER Section */}
+            <div style={sectionBox}>
+              <Heading style={sectionTitle}>AUFTRAGGEBER</Heading>
+              <div style={sectionContent}>
+                <Text style={detailRow}>
+                  <strong>• Unternehmen/Name:</strong> {company || customerName}
+                </Text>
+                {company && customerName && (
+                  <Text style={detailRow}>
+                    <strong>• Ansprechpartner:</strong> {customerName}
+                  </Text>
+                )}
+              </div>
+            </div>
+            
+            {/* EINSATZ Section */}
+            <div style={sectionBox}>
+              <Heading style={sectionTitle}>EINSATZ</Heading>
+              <div style={sectionContent}>
+                <Text style={detailRow}>
+                  <strong>• Datum/Zeitraum:</strong> {zeitraum}
+                </Text>
+                <Text style={detailRow}>
+                  <strong>• Einsatzort:</strong> {einsatzort}
+                </Text>
+                <Text style={detailRow}>
+                  <strong>• Fahrzeug/Typ:</strong> {fahrzeugtyp}
+                </Text>
+                <Text style={detailRow}>
+                  <strong>• Führerscheinklasse:</strong> {fuehrerscheinklasse}
+                </Text>
+                {besonderheiten && (
+                  <Text style={detailRow}>
+                    <strong>• Besonderheiten:</strong> {besonderheiten}
+                  </Text>
+                )}
+              </div>
+            </div>
+            
+            {/* NACHRICHT Section */}
+            {nachricht && (
+              <div style={sectionBox}>
+                <Heading style={sectionTitle}>NACHRICHT</Heading>
+                <div style={sectionContent}>
+                  <Text style={detailRow}>{nachricht}</Text>
+                </div>
+              </div>
+            )}
+            
+            {/* Action Buttons */}
+            <Section style={buttonSection}>
+              <Text style={actionText}>
+                <strong>Möchten Sie diesen Auftrag annehmen?</strong>
+              </Text>
+              <table style={buttonTable}>
+                <tr>
+                  <td style={buttonCell}>
+                    <Button href={acceptUrl} style={acceptButton}>
+                      ✅ Auftrag annehmen
+                    </Button>
+                  </td>
+                  <td style={buttonCell}>
+                    <Button href={declineUrl} style={declineButton}>
+                      ❌ Ablehnen
+                    </Button>
+                  </td>
+                </tr>
+              </table>
+              <Text style={noteText}>
+                Nach dem Annehmen erhalten Sie weitere Details und Kontaktinformationen.
+              </Text>
+            </Section>
+            
+            {/* Contact Info */}
+            <div style={contactSection}>
+              <Text style={contactInfo}>
+                Bei Fragen erreichen Sie uns unter:
+              </Text>
+              <Text style={contactDetails}>
+                📞 <strong>Telefon:</strong> +49-1577-1442285<br />
+                ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
+              </Text>
+            </div>
+          </div>
           
-          <Hr style={hr} />
-          
-          <Text style={infoRow}>
-            <strong>Nachricht:</strong><br />
-            {nachricht}
-          </Text>
-        </Section>
-
-        <Text style={text}>
-          <strong>Interessiert?</strong> Melden Sie sich bei uns telefonisch oder per E-Mail, 
-          damit wir die Details mit Ihnen besprechen können.
-        </Text>
-
-        <Section style={contactBox}>
-          <Text style={contactText}>
-            📞 <strong>Telefon:</strong> +49 (0) 123 456789<br />
-            ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
-          </Text>
-        </Section>
-
-        <Hr style={hr} />
-
-        <Text style={footer}>
-          Diese E-Mail wurde automatisch versendet, weil Sie in unserem Fahrerpool registriert sind.
-          <br />
-          <br />
-          Kraftfahrer-Mieten.com | Ihr Partner für professionelle Fahrergestellung
-        </Text>
-      </Container>
-    </Body>
-  </Html>
-);
+          {/* Footer */}
+          <div style={footer}>
+            <Text style={footerText}>
+              <strong>Fahrerexpress-Agentur – Günter Killer</strong>
+            </Text>
+            <Text style={footerText}>
+              E-Mail: info@kraftfahrer-mieten.com | Web: kraftfahrer-mieten.com
+            </Text>
+            <Text style={footerText}>
+              Diese E-Mail wurde automatisch versendet, weil Sie in unserem Fahrerpool registriert sind.
+            </Text>
+          </div>
+        </Container>
+      </Body>
+    </Html>
+  );
+};
 
 export default JobNotificationEmail;
 
 const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
+  backgroundColor: '#ffffff',
+  fontFamily: 'Arial, sans-serif',
+  margin: 0,
+  padding: '20px',
 };
 
 const container = {
-  backgroundColor: '#ffffff',
+  maxWidth: '700px',
   margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
 };
 
-const h1 = {
-  color: '#333',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '40px 0',
-  padding: '0 40px',
+const header = {
+  backgroundColor: '#4472c4',
+  color: 'white',
+  padding: '30px',
+  textAlign: 'center' as const,
+  marginBottom: '20px',
 };
 
-const text = {
-  color: '#333',
+const headerTitle = {
+  margin: 0,
+  fontSize: '36px',
+  fontWeight: 'bold' as const,
+  letterSpacing: '1px',
+  color: 'white',
+};
+
+const headerSubtitle = {
+  margin: '10px 0 0 0',
   fontSize: '16px',
-  lineHeight: '26px',
-  padding: '0 40px',
+  color: 'white',
 };
 
-const infoBox = {
-  backgroundColor: '#f8f9fa',
-  borderRadius: '8px',
-  margin: '32px 40px',
-  padding: '24px',
+const content = {
+  padding: '0 20px',
 };
 
-const infoTitle = {
-  fontSize: '18px',
-  fontWeight: 'bold',
-  color: '#1a1a1a',
-  margin: '0 0 16px 0',
-};
-
-const infoRow = {
+const greeting = {
+  margin: '0 0 10px 0',
   fontSize: '14px',
-  lineHeight: '24px',
-  color: '#333',
-  margin: '8px 0',
+  color: '#000',
 };
 
-const contactBox = {
-  backgroundColor: '#e8f4f8',
-  borderRadius: '8px',
-  margin: '32px 40px',
-  padding: '20px',
+const introText = {
+  margin: '0 0 20px 0',
+  fontSize: '14px',
+  color: '#000',
+};
+
+const sectionBox = {
+  backgroundColor: '#f2f2f2',
+  borderLeft: '4px solid #4472c4',
+  padding: '15px',
+  marginBottom: '20px',
+};
+
+const sectionTitle = {
+  margin: '0 0 10px 0',
+  color: '#000',
+  fontSize: '16px',
+  fontWeight: 'bold' as const,
+};
+
+const sectionContent = {
+  color: '#000',
+  fontSize: '14px',
+};
+
+const detailRow = {
+  margin: '3px 0',
+  fontSize: '14px',
+  color: '#000',
+};
+
+const buttonSection = {
+  margin: '30px 0',
   textAlign: 'center' as const,
 };
 
-const contactText = {
+const actionText = {
   fontSize: '16px',
-  lineHeight: '24px',
-  color: '#0066cc',
-  margin: '0',
+  color: '#000',
+  marginBottom: '15px',
 };
 
-const hr = {
-  borderColor: '#e6ebf1',
-  margin: '20px 0',
+const buttonTable = {
+  margin: '0 auto',
+  borderSpacing: '10px',
+};
+
+const buttonCell = {
+  padding: '5px',
+};
+
+const acceptButton = {
+  backgroundColor: '#10b981',
+  color: '#ffffff',
+  padding: '15px 40px',
+  borderRadius: '8px',
+  textDecoration: 'none',
+  fontWeight: 'bold' as const,
+  fontSize: '16px',
+  display: 'inline-block',
+  border: 'none',
+};
+
+const declineButton = {
+  backgroundColor: '#ef4444',
+  color: '#ffffff',
+  padding: '15px 40px',
+  borderRadius: '8px',
+  textDecoration: 'none',
+  fontWeight: 'bold' as const,
+  fontSize: '16px',
+  display: 'inline-block',
+  border: 'none',
+};
+
+const noteText = {
+  fontSize: '12px',
+  color: '#666',
+  marginTop: '10px',
+  fontStyle: 'italic' as const,
+};
+
+const contactSection = {
+  marginTop: '30px',
+  padding: '20px',
+  backgroundColor: '#f9f9f9',
+  borderRadius: '8px',
+};
+
+const contactInfo = {
+  fontSize: '14px',
+  color: '#000',
+  marginBottom: '10px',
+};
+
+const contactDetails = {
+  fontSize: '14px',
+  color: '#4472c4',
+  margin: 0,
 };
 
 const footer = {
-  color: '#8898aa',
+  textAlign: 'center' as const,
+  marginTop: '30px',
+  padding: '15px',
   fontSize: '12px',
-  lineHeight: '16px',
-  padding: '0 40px',
-  marginTop: '32px',
+  color: '#666',
+  borderTop: '1px solid #ccc',
+};
+
+const footerText = {
+  margin: '5px 0',
+  fontSize: '12px',
+  color: '#666',
 };
