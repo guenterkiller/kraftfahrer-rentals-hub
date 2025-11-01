@@ -118,6 +118,33 @@ serve(async (req) => {
 
     console.log('✅ Job created successfully:', job.id);
 
+    // Broadcast job to all approved drivers
+    try {
+      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/broadcast-job-to-drivers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-internal-fn": Deno.env.get("INTERNAL_FN_SECRET")!,
+        },
+        body: JSON.stringify({
+          jobRequestId: job.id,
+          job: {
+            fahrzeugtyp: job.fahrzeugtyp,
+            fuehrerscheinklasse: job.fuehrerscheinklasse,
+          },
+          customer: {
+            name: job.customer_name,
+            email: job.customer_email,
+            phone: job.customer_phone,
+          },
+        }),
+      });
+      console.log("📧 Driver broadcast initiated for manually created job");
+    } catch (broadcastError) {
+      console.error("⚠️ Error broadcasting to drivers:", broadcastError);
+      // Don't fail the job creation if broadcast fails
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true, 
