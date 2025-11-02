@@ -87,6 +87,53 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Check if job is still available
     if (job.status !== 'open') {
+      // Return friendly HTML page for GET requests (email links)
+      if (req.method === 'GET') {
+        const statusText = job.status === 'assigned' 
+          ? 'bereits vergeben' 
+          : job.status === 'completed' 
+          ? 'bereits abgeschlossen' 
+          : 'nicht mehr verfügbar';
+        
+        const html = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Auftrag nicht mehr verfügbar</title>
+            <meta charset="utf-8">
+            <style>
+              body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+              .info { background: #fff3cd; border: 1px solid #ffc107; padding: 20px; border-radius: 8px; }
+              h2 { color: #856404; margin: 0 0 15px 0; }
+              p { color: #856404; margin: 10px 0; }
+              .contact { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ffc107; }
+            </style>
+          </head>
+          <body>
+            <div class="info">
+              <h2>ℹ️ Auftrag nicht mehr verfügbar</h2>
+              <p>Dieser Auftrag ist leider ${statusText}.</p>
+              <p>Ein anderer Fahrer hat den Auftrag bereits angenommen oder der Auftrag wurde zwischenzeitlich geschlossen.</p>
+              <div class="contact">
+                <p><strong>Keine Sorge!</strong> Wir haben weitere Aufträge für Sie.</p>
+                <p>Bei Fragen erreichen Sie uns unter:</p>
+                <p>
+                  📞 <strong>Telefon:</strong> +49-1577-1442285<br>
+                  ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
+                </p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+        
+        return new Response(html, {
+          status: 200,
+          headers: { ...corsHeaders, 'Content-Type': 'text/html' }
+        });
+      }
+      
+      // For API calls, return JSON
       return new Response(JSON.stringify({ 
         error: 'Job is no longer available',
         currentStatus: job.status 
