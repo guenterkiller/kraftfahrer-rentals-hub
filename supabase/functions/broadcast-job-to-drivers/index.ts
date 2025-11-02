@@ -25,6 +25,13 @@ interface BroadcastRequest {
   };
 }
 
+// Token-Generierung (48 Zeichen)
+function randomToken(len = 48): string {
+  const arr = new Uint8Array(len);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, b => ("0" + b.toString(16)).slice(-2)).join("").slice(0, len);
+}
+
 serve(async (req) => {
   // Handle CORS
   if (req.method === "OPTIONS") {
@@ -107,6 +114,32 @@ serve(async (req) => {
 
     for (const driver of drivers) {
       try {
+        // Generate unique token and store invitation
+        const token = randomToken(48);
+        const tokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60 * 48); // 48 Stunden
+
+        const { error: inviteError } = await supabase
+          .from('assignment_invites')
+          .insert({
+            job_id: jobRequestId,
+            driver_id: driver.id,
+            token: token,
+            token_expires_at: tokenExpiresAt.toISOString(),
+            status: 'pending'
+          });
+
+        if (inviteError) {
+          console.error(`Failed to create invite for driver ${driver.id}:`, inviteError);
+          errorCount++;
+          continue;
+        }
+
+        // Generate URLs with token
+        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+        const baseUrl = `${supabaseUrl.replace('/rest/v1', '')}/functions/v1/respond-invite`;
+        const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
+        const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
+
         const html = await renderAsync(
           React.createElement(JobNotificationEmail, {
             driverName: `${driver.vorname} ${driver.nachname}`,
@@ -120,6 +153,8 @@ serve(async (req) => {
             fuehrerscheinklasse: job.fuehrerscheinklasse || "C+E",
             nachricht: job.nachricht || "Keine weiteren Informationen",
             besonderheiten: job.besonderheiten,
+            acceptUrl: acceptUrl,
+            declineUrl: declineUrl,
           })
         );
 

@@ -11,13 +11,14 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit } from "lucide-react";
+import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit, ChevronUp } from "lucide-react";
 import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
+import { JobInvitesStatus } from "@/components/JobInvitesStatus";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -79,6 +80,8 @@ const Admin = () => {
   const [completingOldJobs, setCompletingOldJobs] = useState(false);
   const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
   const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
+  const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
+  
   
   
   const handleMarkJobOpen = async (jobId: string) => {
@@ -1233,42 +1236,54 @@ const Admin = () => {
                   </TableHeader>
                 <TableBody>
                   {jobRequests.map((req) => (
-                      <TableRow key={req.id}>
+                    <React.Fragment key={req.id}>
+                      <TableRow>
                         <TableCell className="text-center">
-                          {(() => {
-                            // Checkbox ist IMMER klickbar - Admin kann jeden Job als erledigt markieren
-                            const isBeingProcessed = markingCompleted === req.id;
-                            const hasActiveAssignment = req.status === 'assigned' || req.status === 'confirmed';
-                            
-                            console.log('🔍 Validation check:', {
-                              jobId: req.id,
-                              customerName: req.customer_name,
-                              status: req.status,
-                              hasActiveAssignment,
-                              isBeingProcessed
-                            });
-                            
-                            return (
-                              <Checkbox
-                                checked={req.status === 'completed'}
-                                onCheckedChange={async (checked) => {
-                                  console.log('✅ Checkbox clicked:', { jobId: req.id, checked, currentStatus: req.status });
-                                  if (checked) {
-                                    await handleMarkJobCompleted(req.id);
-                                  } else {
-                                    await handleMarkJobOpen(req.id);
-                                  }
-                                  // Optimistische UI + Refetch
-                                  await loadJobRequests();
-                                }}
-                                disabled={isBeingProcessed}
-                                className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground cursor-pointer"
-                                title={hasActiveAssignment && req.status !== 'completed' ? 
-                                  "⚠️ Achtung: Job hat aktive Zuweisung - trotzdem abschließen möglich" : 
-                                  "Job als erledigt/offen markieren"}
-                              />
-                            );
-                          })()}
+                          <div className="flex items-center justify-center gap-2">
+                            {(() => {
+                              // Checkbox ist IMMER klickbar - Admin kann jeden Job als erledigt markieren
+                              const isBeingProcessed = markingCompleted === req.id;
+                              const hasActiveAssignment = req.status === 'assigned' || req.status === 'confirmed';
+                              
+                              return (
+                                <Checkbox
+                                  checked={req.status === 'completed'}
+                                  onCheckedChange={async (checked) => {
+                                    console.log('✅ Checkbox clicked:', { jobId: req.id, checked, currentStatus: req.status });
+                                    if (checked) {
+                                      await handleMarkJobCompleted(req.id);
+                                    } else {
+                                      await handleMarkJobOpen(req.id);
+                                    }
+                                    // Optimistische UI + Refetch
+                                    await loadJobRequests();
+                                  }}
+                                  disabled={isBeingProcessed}
+                                  className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground cursor-pointer"
+                                  title={hasActiveAssignment && req.status !== 'completed' ? 
+                                    "⚠️ Achtung: Job hat aktive Zuweisung - trotzdem abschließen möglich" : 
+                                    "Job als erledigt/offen markieren"}
+                                />
+                              );
+                            })()}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                const newExpanded = new Set(expandedJobRows);
+                                if (newExpanded.has(req.id)) {
+                                  newExpanded.delete(req.id);
+                                } else {
+                                  newExpanded.add(req.id);
+                                }
+                                setExpandedJobRows(newExpanded);
+                              }}
+                              className="p-0 h-6 w-6"
+                              title="Einladungsstatus anzeigen/verbergen"
+                            >
+                              {expandedJobRows.has(req.id) ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                            </Button>
+                          </div>
                         </TableCell>
                       <TableCell className="font-medium">
                         <div className="space-y-2">
@@ -1425,6 +1440,15 @@ const Admin = () => {
                           })()}
                         </TableCell>
                       </TableRow>
+                      {/* Einladungsstatus Row */}
+                      {expandedJobRows.has(req.id) && (
+                        <TableRow>
+                          <TableCell colSpan={7} className="bg-muted/50 p-4">
+                            <JobInvitesStatus jobId={req.id} />
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
                   ))}
                 </TableBody>
                 </Table>

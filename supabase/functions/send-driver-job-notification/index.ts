@@ -14,6 +14,13 @@ interface JobNotificationRequest {
   billingModel: 'direct' | 'agency';
 }
 
+// Token-Generierung (48 Zeichen)
+function randomToken(len = 48): string {
+  const arr = new Uint8Array(len);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, b => ("0" + b.toString(16)).slice(-2)).join("").slice(0, len);
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -64,10 +71,33 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Generate response URLs with billing model
-    const baseUrl = 'https://kraftfahrer-mieten.com';
-    const acceptUrl = `${baseUrl}/driver/accept?job=${jobId}&driver=${driverId}&action=accept&billing=${billingModel}`;
-    const declineUrl = `${baseUrl}/driver/accept?job=${jobId}&driver=${driverId}&action=decline`;
+
+    // Generate unique token and store invitation
+    const token = randomToken(48);
+    const tokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60 * 48); // 48 Stunden
+
+    const { error: inviteError } = await supabase
+      .from('assignment_invites')
+      .insert({
+        job_id: jobId,
+        driver_id: driverId,
+        token: token,
+        token_expires_at: tokenExpiresAt.toISOString(),
+        status: 'pending'
+      });
+
+    if (inviteError) {
+      console.error('Failed to create invite:', inviteError);
+      return new Response(JSON.stringify({ error: 'Failed to create invitation' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Generate response URLs with token (neue robuste Links)
+    const baseUrl = `${supabaseUrl.replace('/rest/v1', '')}/functions/v1/respond-invite`;
+    const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
+    const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
 
     // Generate rechtssichere email content based on billing model
     const billingInfo = billingModel === 'agency' 
@@ -127,16 +157,30 @@ const handler = async (req: Request): Promise<Response> => {
           <p><strong>Nachricht:</strong> ${job.nachricht}</p>
         </div>
 
-        <div style="margin: 30px 0; text-align: center;">
-          <a href="${acceptUrl}" 
-             style="background: #16a34a; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 10px;">
-            ${billingInfo.acceptText}
-          </a>
-          <br>
-          <a href="${declineUrl}" 
-             style="background: #dc2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 10px;">
-            ❌ Auftrag ablehnen
-          </a>
+        <div style="margin: 30px 0;">
+          <p style="margin: 16px 0;">
+            <a href="${acceptUrl}" 
+               style="background: #16a34a; color: #ffffff; text-decoration: none; display: inline-block; padding: 12px 18px; border-radius: 6px; font-weight: 600;">
+              ${billingInfo.acceptText}
+            </a>
+          </p>
+          
+          <p style="margin: 8px 0;">
+            <a href="${declineUrl}" 
+               style="background: #ef4444; color: #ffffff; text-decoration: none; display: inline-block; padding: 12px 18px; border-radius: 6px; font-weight: 600;">
+              ❌ Auftrag ablehnen
+            </a>
+          </p>
+          
+          <p style="font-size: 12px; color: #555; margin-top: 12px;">
+            <strong>Falls die Buttons nicht funktionieren:</strong><br>
+            Annehmen: <a href="${acceptUrl}" style="color: #2563eb; word-break: break-all;">${acceptUrl}</a><br>
+            Ablehnen: <a href="${declineUrl}" style="color: #2563eb; word-break: break-all;">${declineUrl}</a>
+          </p>
+          
+          <p style="font-size: 11px; color: #999; margin-top: 16px;">
+            ⏱️ Dieser Link ist 48 Stunden gültig und kann nur einmal verwendet werden.
+          </p>
         </div>
 
         <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">

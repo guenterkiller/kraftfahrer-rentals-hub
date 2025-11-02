@@ -24,6 +24,8 @@ interface JobNotificationEmailProps {
   fuehrerscheinklasse: string;
   nachricht: string;
   besonderheiten?: string;
+  acceptUrl: string;
+  declineUrl: string;
 }
 
 export const JobNotificationEmail = ({
@@ -38,10 +40,9 @@ export const JobNotificationEmail = ({
   fuehrerscheinklasse,
   nachricht,
   besonderheiten,
+  acceptUrl,
+  declineUrl,
 }: JobNotificationEmailProps) => {
-  const baseUrl = 'https://hxnabnsoffzevqhruvar.supabase.co/functions/v1';
-  const acceptUrl = `${baseUrl}/handle-driver-job-response?job=${jobId}&driver=${driverId}&action=accept`;
-  const declineUrl = `${baseUrl}/handle-driver-job-response?job=${jobId}&driver=${driverId}&action=decline`;
 
   return (
     <Html>
@@ -132,7 +133,15 @@ export const JobNotificationEmail = ({
                 </tr>
               </table>
               <Text style={noteText}>
-                Nach dem Annehmen erhalten Sie weitere Details und Kontaktinformationen.
+                Nach dem Annehmen werden wir Sie kontaktieren mit weiteren Details.
+              </Text>
+              <Text style={noteText}>
+                ⏱️ Dieser Link ist 48 Stunden gültig und kann nur einmal verwendet werden.
+              </Text>
+              <Text style={{...noteText, fontSize: '11px', marginTop: '10px'}}>
+                <strong>Falls die Buttons nicht funktionieren:</strong><br />
+                Annehmen: {acceptUrl}<br />
+                Ablehnen: {declineUrl}
               </Text>
             </Section>
             

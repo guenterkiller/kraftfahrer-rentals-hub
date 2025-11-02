@@ -170,6 +170,60 @@ export type Database = {
         }
         Relationships: []
       }
+      assignment_invites: {
+        Row: {
+          created_at: string
+          driver_id: string
+          id: string
+          ip: unknown
+          job_id: string
+          responded_at: string | null
+          status: string
+          token: string
+          token_expires_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          driver_id: string
+          id?: string
+          ip?: unknown
+          job_id: string
+          responded_at?: string | null
+          status?: string
+          token: string
+          token_expires_at: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          driver_id?: string
+          id?: string
+          ip?: unknown
+          job_id?: string
+          responded_at?: string | null
+          status?: string
+          token?: string
+          token_expires_at?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assignment_invites_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assignment_invites_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_log: {
         Row: {
           assignment_id: string | null
@@ -814,6 +868,10 @@ export type Database = {
       debug_echo_ids: {
         Args: { _driver_id: string; _job_id: string }
         Returns: Json
+      }
+      ensure_job_assignment: {
+        Args: { p_driver_id: string; p_job_id: string }
+        Returns: undefined
       }
       is_admin: { Args: { user_uuid: string }; Returns: boolean }
       is_admin_user: { Args: never; Returns: boolean }
