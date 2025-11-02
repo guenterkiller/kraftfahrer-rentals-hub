@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -22,6 +23,8 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'guenter.killer@t-online.de';
 
     if (!supabaseUrl || !supabaseKey) {
       return new Response(JSON.stringify({ error: 'Missing environment variables' }), {
@@ -185,8 +188,52 @@ const handler = async (req: Request): Promise<Response> => {
         });
       }
 
-      // Send confirmation email to driver
-      // TODO: Implement confirmation email with billing model details
+      // Send confirmation email to admin
+      if (resendApiKey) {
+        const resend = new Resend(resendApiKey);
+        
+        const adminEmailHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: #d4fdf7; border: 1px solid #10b981; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h2 style="color: #065f46; margin: 0 0 15px 0;">✅ Fahrer hat Auftrag angenommen</h2>
+              <p style="color: #065f46; margin: 0;">
+                <strong>${driver.vorname} ${driver.nachname}</strong> hat den Auftrag über den E-Mail-Link angenommen.
+              </p>
+            </div>
+            
+            <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0;">Fahrerdetails:</h3>
+              <p><strong>Name:</strong> ${driver.vorname} ${driver.nachname}</p>
+              <p><strong>E-Mail:</strong> ${driver.email}</p>
+              <p><strong>Telefon:</strong> ${driver.telefon}</p>
+              
+              <h3>Auftragsdetails:</h3>
+              <p><strong>Job-ID:</strong> ${jobId}</p>
+              <p><strong>Kunde:</strong> ${job.customer_name}</p>
+              <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
+              <p><strong>Zeitraum:</strong> ${job.zeitraum}</p>
+              <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
+              <p><strong>Abrechnungsmodell:</strong> ${finalBillingModel === 'agency' ? 'Agentur' : 'Direktabrechnung'}</p>
+            </div>
+            
+            <p style="color: #666; font-size: 12px; margin-top: 20px;">
+              Diese E-Mail wurde automatisch versendet, als der Fahrer auf den Bestätigungs-Link geklickt hat.
+            </p>
+          </div>
+        `;
+
+        try {
+          await resend.emails.send({
+            from: 'Fahrerexpress System <info@kraftfahrer-mieten.com>',
+            to: [adminEmail],
+            subject: `✅ Auftrag angenommen: ${driver.vorname} ${driver.nachname} - ${job.customer_name}`,
+            html: adminEmailHtml
+          });
+          console.log(`✅ Admin notification sent to ${adminEmail}`);
+        } catch (emailError) {
+          console.error('❌ Failed to send admin notification:', emailError);
+        }
+      }
 
       // Return HTML response for GET requests (email links)
       if (req.method === 'GET') {
@@ -200,12 +247,20 @@ const handler = async (req: Request): Promise<Response> => {
               body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
               .success { background: #d4fdf7; border: 1px solid #10b981; padding: 20px; border-radius: 8px; }
               .info { background: #f0f9ff; border: 1px solid #3b82f6; padding: 15px; border-radius: 8px; margin: 20px 0; }
+              .driver-info { background: #fff; border: 1px solid #e5e5e5; padding: 15px; border-radius: 8px; margin: 20px 0; }
             </style>
           </head>
           <body>
             <div class="success">
               <h2>✅ Auftrag erfolgreich angenommen!</h2>
               <p>Vielen Dank, ${driver.vorname}! Sie haben den Auftrag erfolgreich angenommen.</p>
+            </div>
+            
+            <div class="driver-info">
+              <h3>Ihre Daten:</h3>
+              <p><strong>Name:</strong> ${driver.vorname} ${driver.nachname}</p>
+              <p><strong>E-Mail:</strong> ${driver.email}</p>
+              <p><strong>Telefon:</strong> ${driver.telefon}</p>
             </div>
             
             <div class="info">
@@ -218,7 +273,7 @@ const handler = async (req: Request): Promise<Response> => {
               </p>
             </div>
             
-            <p>Sie erhalten in Kürze weitere Details und Kontaktinformationen per E-Mail.</p>
+            <p><strong>Der Administrator wurde über Ihre Annahme informiert</strong> und wird sich in Kürze mit weiteren Details bei Ihnen melden.</p>
             <p>Bei Fragen erreichen Sie uns unter: <strong>info@kraftfahrer-mieten.com</strong></p>
           </body>
           </html>
