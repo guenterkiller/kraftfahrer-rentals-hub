@@ -136,7 +136,7 @@ serve(async (req) => {
 
         // Generate URLs with token
         const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-        const baseUrl = `${supabaseUrl.replace('/rest/v1', '')}/functions/v1/respond-invite`;
+        const baseUrl = `${supabaseUrl}/functions/v1/handle-driver-job-response`;
         const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
         const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
 
