@@ -279,15 +279,13 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Log in jobalarm_antworten (Statistik/Tracking)
-    const userAgent = req.headers.get("user-agent") || "";
-    const forwardedFor = req.headers.get("x-forwarded-for") || "";
-    const realIp = req.headers.get("x-real-ip") || "";
-    const ip = forwardedFor || realIp || "";
+    // Die Tabelle erwartet 'available' (= accept) oder 'unavailable' (= decline)
+    const antwortValue = action === "accept" ? "available" : "unavailable";
     
     await supabase.from("jobalarm_antworten").insert({
       job_id: invite.job_id,
       fahrer_email: driver?.email || "unknown",
-      antwort: action
+      antwort: antwortValue
     });
     
     console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}, ip=${ip}`);
