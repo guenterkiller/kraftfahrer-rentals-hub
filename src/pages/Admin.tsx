@@ -1121,8 +1121,8 @@ const Admin = () => {
               <p className="text-gray-500 italic text-center py-4">Keine Fahrer registriert.</p>
             ) : (
               <>
-                {/* Desktop Table View */}
-                <div className="hidden lg:block overflow-x-auto">
+                {/* Desktop Table View - only show on very large screens */}
+                <div className="hidden xl:block overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow>
@@ -1181,8 +1181,8 @@ const Admin = () => {
                   </Table>
                 </div>
 
-                {/* Mobile & Tablet Card View */}
-                <div className="lg:hidden space-y-3">
+                {/* Mobile & Tablet Card View - show on all screens except very large */}
+                <div className="xl:hidden space-y-3">
                   {fahrer.map((f) => (
                     <Card key={f.id} className="shadow-sm border-gray-200">
                       <CardContent className="p-4">
