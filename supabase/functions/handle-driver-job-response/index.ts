@@ -98,6 +98,42 @@ const handler = async (req: Request): Promise<Response> => {
           ? 'bereits abgeschlossen' 
           : 'nicht mehr verfügbar';
         
+        // Get assignment details if job is assigned
+        let assignmentInfo = '';
+        if (job.status === 'assigned' || job.status === 'confirmed') {
+          const { data: assignment } = await supabase
+            .from('job_assignments')
+            .select(`
+              *,
+              driver:fahrer_profile!job_assignments_driver_id_fkey(vorname, nachname, email, telefon)
+            `)
+            .eq('job_id', jobId)
+            .in('status', ['assigned', 'confirmed'])
+            .order('assigned_at', { ascending: false })
+            .limit(1)
+            .single();
+          
+          if (assignment && assignment.driver) {
+            const assignedDriver = assignment.driver as any;
+            const assignedDate = new Date(assignment.assigned_at).toLocaleString('de-DE', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            });
+            
+            assignmentInfo = `
+              <div class="assignment-details">
+                <h3>Auftrag vergeben an:</h3>
+                <p><strong>Fahrer:</strong> ${assignedDriver.vorname} ${assignedDriver.nachname}</p>
+                <p><strong>Vergeben am:</strong> ${assignedDate} Uhr</p>
+                <p><strong>Status:</strong> ${assignment.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}</p>
+              </div>
+            `;
+          }
+        }
+        
         const html = `
           <!DOCTYPE html>
           <html>
@@ -109,6 +145,22 @@ const handler = async (req: Request): Promise<Response> => {
               .info { background: #fff3cd; border: 1px solid #ffc107; padding: 20px; border-radius: 8px; }
               h2 { color: #856404; margin: 0 0 15px 0; }
               p { color: #856404; margin: 10px 0; }
+              .assignment-details { 
+                background: #e7f3ff; 
+                border: 1px solid #3b82f6; 
+                padding: 15px; 
+                border-radius: 8px; 
+                margin: 20px 0; 
+              }
+              .assignment-details h3 { 
+                color: #1e40af; 
+                margin: 0 0 10px 0; 
+                font-size: 16px; 
+              }
+              .assignment-details p { 
+                color: #1e40af; 
+                margin: 5px 0; 
+              }
               .contact { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ffc107; }
             </style>
           </head>
@@ -116,6 +168,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="info">
               <h2>ℹ️ Auftrag nicht mehr verfügbar</h2>
               <p>Dieser Auftrag ist leider ${statusText}.</p>
+              ${assignmentInfo}
               <p>Ein anderer Fahrer hat den Auftrag bereits angenommen oder der Auftrag wurde zwischenzeitlich geschlossen.</p>
               <div class="contact">
                 <p><strong>Keine Sorge!</strong> Wir haben weitere Aufträge für Sie.</p>
