@@ -135,7 +135,7 @@ const Vermittlung = () => {
 
               <div className="text-center pt-6">
                 <Button asChild size="lg">
-                  <Link to="/fahrerregistrierung">
+                  <Link to="/fahrer-registrierung">
                     Jetzt als Fahrer registrieren
                   </Link>
                 </Button>
