@@ -369,7 +369,7 @@ const FahrerRegistrierung = () => {
       if (response.status === 409) {
         toast({
           title: "E-Mail bereits registriert",
-          description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail-Adresse.",
+          description: "Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail-Adresse oder kontaktieren Sie uns unter info@kraftfahrer-mieten.com",
           variant: "destructive",
         });
         setIsLoading(false);
