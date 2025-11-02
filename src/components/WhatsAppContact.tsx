@@ -9,7 +9,7 @@ const WhatsAppContact = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 md:hidden">
+    <div className="fixed bottom-4 left-4 z-50 md:hidden">
       <Button
         onClick={handleWhatsApp}
         className="bg-green-500 hover:bg-green-600 rounded-full w-14 h-14 shadow-lg"
