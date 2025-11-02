@@ -126,6 +126,7 @@ const handler = async (req: Request): Promise<Response> => {
         driver_id, 
         token_expires_at, 
         status,
+        responded_at,
         driver:fahrer_profile(id, vorname, nachname, email, telefon, plz, ort),
         job:job_requests(id, customer_name, company, einsatzort, zeitraum, fahrzeugtyp, fuehrerscheinklasse, status)
       `)
@@ -144,6 +145,11 @@ const handler = async (req: Request): Promise<Response> => {
     // Ablaufdatum prüfen
     if (new Date(invite.token_expires_at) < new Date()) {
       return page("Link abgelaufen", "Dieser Link ist leider abgelaufen. Bitte melde dich beim Disponenten für einen neuen Link.", false);
+    }
+
+    // One-Shot-Schutz: Prüfe ob bereits beantwortet
+    if (invite.responded_at) {
+      return page("Bereits beantwortet", "Du hast auf diese Einladung bereits geantwortet.");
     }
 
     const driver = invite.driver as any;
@@ -267,6 +273,12 @@ const handler = async (req: Request): Promise<Response> => {
       fahrer_email: driver?.email || "unknown",
       antwort: action
     });
+    
+    // Mark invite as responded (One-Shot-Schutz)
+    await supabase
+      .from("assignment_invites")
+      .update({ responded_at: new Date().toISOString() })
+      .eq("id", invite.id);
     
     console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}, ip=${ip}`);
 
