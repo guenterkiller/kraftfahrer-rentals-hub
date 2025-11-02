@@ -70,28 +70,31 @@ curl -i "https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response?
 ### 3. Logging verifizieren (SQL)
 
 ```sql
--- Email-Logs prüfen
+-- Admin-Mail angekommen?
 SELECT 
   created_at,
   recipient as to_email,
   subject,
   template,
   status,
-  message_id
+  message_id,
+  meta
 FROM email_log
 WHERE template = 'driver-response'
 ORDER BY created_at DESC
-LIMIT 5;
+LIMIT 10;
 
--- Fahrerantworten prüfen
+-- Fahrerantworten protokolliert?
 SELECT 
   created_at,
   job_id,
   fahrer_email,
-  antwort as action
+  antwort as action,
+  ip,
+  user_agent
 FROM jobalarm_antworten
 ORDER BY created_at DESC
-LIMIT 5;
+LIMIT 20;
 ```
 
 ### 4. Invite-Status prüfen
@@ -230,6 +233,59 @@ WHERE id = '<JOB_ID>';
 
 ---
 
+## 🚀 Production-Ready Schnelltest (alle freigegebenen Fahrer)
+
+Erzeugt für alle approved Fahrer eines offenen Jobs Tokens + sofort klickfertige URLs:
+
+```sql
+-- 1) Einen offenen Job wählen (oder WHERE id = '…' setzen)
+WITH job AS (
+  SELECT id FROM job_requests
+  WHERE status = 'open'
+  ORDER BY created_at DESC
+  LIMIT 1
+),
+drivers AS (
+  SELECT id, vorname, nachname, email
+  FROM fahrer_profile
+  WHERE status = 'approved'
+)
+
+-- 2) Einladungen erzeugen (48h gültig)
+INSERT INTO assignment_invites (job_id, driver_id, token, token_expires_at, status)
+SELECT job.id, d.id, encode(gen_random_bytes(24), 'hex'), now() + interval '48 hours', 'pending'
+FROM job, drivers d
+ON CONFLICT DO NOTHING
+RETURNING job_id, driver_id, token;
+
+-- 3) Klick-URLs ausgeben (Akzeptieren & Ablehnen)
+WITH inv AS (
+  SELECT ai.job_id, ai.driver_id, ai.token, 
+         d.vorname || ' ' || d.nachname as name, 
+         d.email
+  FROM assignment_invites ai
+  JOIN fahrer_profile d ON d.id = ai.driver_id
+  WHERE ai.token_expires_at > now()
+    AND ai.status = 'pending'
+    AND ai.job_id = (SELECT id FROM job_requests WHERE status = 'open' ORDER BY created_at DESC LIMIT 1)
+)
+SELECT
+  name AS fahrer,
+  email AS adresse,
+  'https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response?a=accept&t=' || token AS accept_url,
+  'https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response?a=decline&t=' || token AS decline_url
+FROM inv
+ORDER BY fahrer;
+```
+
+**Erwartung:** 
+- Accept-URL aufrufen → grüne Bestätigungsseite
+- Admin-Mail in `email_log`
+- Eintrag in `jobalarm_antworten`
+- KEINE Änderungen an `job_assignments`/`job_requests`
+
+---
+
 ## 📧 Test mit echter E-Mail
 
 ```sql
@@ -353,5 +409,44 @@ HAVING COUNT(*) > 1;
 
 ---
 
-**Datum:** 2025-01-19
-**Version:** 2.0 (Token-basiert, keine Auto-Zuweisung)
+## 🔒 Optional: One-Shot-Schutz (Doppel-Klick verhindern)
+
+Falls du doppelte Admin-Mails verhindern willst:
+
+```sql
+-- Einmalige Antwort je Invite erzwingen:
+ALTER TABLE assignment_invites 
+ADD COLUMN IF NOT EXISTS responded_at TIMESTAMPTZ;
+```
+
+In der Function vor dem Email-Insert prüfen:
+```typescript
+// Prüfe ob bereits beantwortet
+if (invite.responded_at) {
+  return page("Bereits beantwortet", "Du hast auf diese Einladung bereits geantwortet.");
+}
+
+// ... Email senden & Logs schreiben ...
+
+// Als beantwortet markieren
+await supabase
+  .from("assignment_invites")
+  .update({ responded_at: new Date().toISOString() })
+  .eq("id", invite.id);
+```
+
+---
+
+## 🎯 Go-Live-Checkliste
+
+- [ ] Function deployed: `handle-driver-job-response` mit Service Role Key
+- [ ] Buttons verlinkt: `?a=accept&t=<token>` (oder Fallback `?p=<base64>`)
+- [ ] Mail-Tracking AUS für genau diese beiden Link-URLs
+- [ ] Logging aktiv: `email_log` + `jobalarm_antworten` befüllen sich
+- [ ] Schnelltest durchgeführt (Production-Ready Test oben)
+- [ ] Verifizierung: Admin-Mail erhalten, Logs sichtbar, KEINE DB-Änderungen
+
+---
+
+**Datum:** 2025-01-19  
+**Version:** 2.1 (Production-Ready mit Schnelltests und One-Shot-Option)
