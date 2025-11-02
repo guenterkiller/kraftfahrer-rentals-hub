@@ -1076,15 +1076,15 @@ const Admin = () => {
     <div className="min-h-screen bg-gray-50">
       <div className={`w-full text-xs md:text-sm border-b px-3 py-2 ${envOk ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
         {envOk ? '✅ Supabase ENV: konfiguriert' : '❌ Supabase Config fehlt'}
-        <span className="ml-2">URL: {SUPABASE_URL ? 'gesetzt' : 'leer'} | ANON: {SUPABASE_PUBLISHABLE_KEY ? 'gesetzt' : 'leer'}</span>
+        <span className="ml-2 hidden md:inline">URL: {SUPABASE_URL ? 'gesetzt' : 'leer'} | ANON: {SUPABASE_PUBLISHABLE_KEY ? 'gesetzt' : 'leer'}</span>
       </div>
-      <div className="container mx-auto py-8">
-        <div className="flex justify-between items-center mb-8">
+      <div className="container mx-auto py-4 md:py-8 px-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-gray-600">Fahrerdokumente verwalten</p>
+            <h1 className="text-2xl md:text-3xl font-bold">Admin Dashboard</h1>
+            <p className="text-sm md:text-base text-gray-600">Fahrerdokumente verwalten</p>
           </div>
-          <Button onClick={handleLogout} variant="outline">
+          <Button onClick={handleLogout} variant="outline" size="sm" className="w-full md:w-auto">
             <LogOut className="h-4 w-4 mr-2" />
             Abmelden
           </Button>
@@ -1092,14 +1092,14 @@ const Admin = () => {
 
         <Card>
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Registrierte Fahrer ({fahrer.length})</CardTitle>
-              <div className="flex gap-2">
+            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+              <CardTitle className="text-lg md:text-xl">Registrierte Fahrer ({fahrer.length})</CardTitle>
+              <div className="flex gap-2 flex-wrap">
                 <Button 
                   onClick={() => setNewsletterDialogOpen(true)}
                   variant="default"
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 flex-1 md:flex-none"
                 >
                   <Mail className="h-4 w-4 mr-2" />
                   Rundschreiben
@@ -1109,6 +1109,7 @@ const Admin = () => {
                   variant="outline" 
                   size="sm"
                   disabled={isLoadingData}
+                  className="flex-1 md:flex-none"
                 >
                   {isLoadingData ? "Lädt..." : "Aktualisieren"}
                 </Button>
@@ -1116,7 +1117,8 @@ const Admin = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -1174,29 +1176,82 @@ const Admin = () => {
                 </TableBody>
               </Table>
             </div>
+
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+              {fahrer.map((f) => (
+                <Card key={f.id} className="border-2">
+                  <CardContent className="p-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-semibold text-base">{f.vorname} {f.nachname}</h3>
+                          <p className="text-sm text-gray-600">{f.telefon}</p>
+                        </div>
+                        {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                      </div>
+                      
+                      <div className="text-sm">
+                        <p className="text-gray-600">
+                          <span className="font-medium">Führerschein:</span> {f.fuehrerscheinklassen?.join(", ") || "-"}
+                        </p>
+                        {f.beschreibung && (
+                          <p className="text-gray-600 mt-2">
+                            <span className="font-medium">Nachricht:</span> {f.beschreibung}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex gap-2 pt-2">
+                        {f.status === 'pending' && (
+                          <Button
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 text-white font-medium flex-1"
+                            onClick={() => handleApproveDriver(f.id)}
+                            disabled={approvingDriver === f.id}
+                          >
+                            {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                          </Button>
+                        )}
+                        {f.status === 'active' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
+                            onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
+                          >
+                            ↻ Zurücksetzen
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
         {/* Job Requests Section */}
-        <Card className="mt-8">
+        <Card className="mt-6 md:mt-8">
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Eingegangene Fahreranfragen ({jobRequests.length})</CardTitle>
+            <div className="flex flex-col gap-4">
+              <CardTitle className="text-lg md:text-xl">Eingegangene Fahreranfragen ({jobRequests.length})</CardTitle>
               <div className="flex gap-2 flex-wrap">
                 <Button 
                   onClick={handleCreateJob} 
                   variant="default" 
                   size="sm"
-                  className="bg-green-600 hover:bg-green-700"
+                  className="bg-green-600 hover:bg-green-700 flex-1 md:flex-none"
                 >
-                  + Neuen Auftrag anlegen
+                  + Neuer Auftrag
                 </Button>
                 <Button 
                   onClick={() => handleCompleteOldJobs(30)}
                   size="sm"
                   variant="outline"
                   disabled={completingOldJobs}
-                  className="bg-green-50 hover:bg-green-100 text-green-700 border-green-300"
+                  className="bg-green-50 hover:bg-green-100 text-green-700 border-green-300 hidden md:inline-flex"
                 >
                   {completingOldJobs ? 'Wird abgeschlossen...' : 'Alte Aufträge abschließen (30 Tage)'}
                 </Button>
@@ -1204,6 +1259,7 @@ const Admin = () => {
                   onClick={handleResetJobsByEmail} 
                   variant="destructive" 
                   size="sm"
+                  className="hidden md:inline-flex"
                 >
                   Test zurücksetzen
                 </Button>
@@ -1211,6 +1267,7 @@ const Admin = () => {
                   onClick={loadJobRequests} 
                   variant="outline" 
                   size="sm"
+                  className="flex-1 md:flex-none"
                 >
                   Aktualisieren
                 </Button>
