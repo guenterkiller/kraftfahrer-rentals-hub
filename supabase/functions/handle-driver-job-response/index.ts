@@ -147,9 +147,25 @@ const handler = async (req: Request): Promise<Response> => {
       return page("Link abgelaufen", "Dieser Link ist leider abgelaufen. Bitte melde dich beim Disponenten für einen neuen Link.", false);
     }
 
-    // One-Shot-Schutz: Prüfe ob bereits beantwortet
-    if (invite.responded_at) {
-      return page("Bereits beantwortet", "Du hast auf diese Einladung bereits geantwortet.");
+    // Atomare One-Shot-Sperre: Setze responded_at NUR wenn noch null
+    // Race-Condition-sicher durch UPDATE mit WHERE-Bedingung
+    const nowIso = new Date().toISOString();
+    const { data: lockRow, error: lockErr } = await supabase
+      .from("assignment_invites")
+      .update({ responded_at: nowIso })
+      .eq("id", invite.id)
+      .is("responded_at", null)
+      .select("id");
+
+    if (lockErr) {
+      console.error("Lock error:", lockErr);
+      return page("Technischer Fehler", "Bitte melde dich beim Disponenten.", false);
+    }
+
+    // Wenn keine Zeile betroffen → bereits beantwortet (kein Mail/Log)
+    if (!lockRow || lockRow.length === 0) {
+      console.log(`⚠️ Already responded: invite=${invite.id}, token=${token?.substring(0, 8)}...`);
+      return page("Bereits beantwortet", "Danke, deine Rückmeldung liegt bereits vor.");
     }
 
     const driver = invite.driver as any;
@@ -273,12 +289,6 @@ const handler = async (req: Request): Promise<Response> => {
       fahrer_email: driver?.email || "unknown",
       antwort: action
     });
-    
-    // Mark invite as responded (One-Shot-Schutz)
-    await supabase
-      .from("assignment_invites")
-      .update({ responded_at: new Date().toISOString() })
-      .eq("id", invite.id);
     
     console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}, ip=${ip}`);
 

@@ -1,4 +1,90 @@
-# Handle-Driver-Job-Response - Test & Verification Guide
+# Handle-Driver-Job-Response – Testing & Verifizierung (Production-Ready)
+
+Dieses Dokument zeigt, wie du den „Handle-Driver-Job-Response"-Flow (Fahrer klickt „Annehmen"/„Ablehnen" in der E-Mail) testest, verifizierst und sicher in Produktion betreibst.
+
+## ⚡ Atomare One-Shot-Sperre (Race-Condition-Sicher)
+
+Die Edge Function nutzt **atomares Locking** über `assignment_invites.responded_at`:
+
+```typescript
+// NACH Invite-Lookup, VOR Mail/Log-Schreibung:
+const { data: lockRow } = await supabase
+  .from("assignment_invites")
+  .update({ responded_at: now() })
+  .eq("id", invite.id)
+  .is("responded_at", null)  // ← nur wenn noch nicht beantwortet
+  .select("id");
+
+if (!lockRow || lockRow.length === 0) {
+  // Schon beantwortet → freundliche Seite, KEIN erneutes Mail/Log
+  return page("Bereits beantwortet", "Danke, deine Rückmeldung liegt bereits vor.");
+}
+
+// Ab hier: genau EINMAL je Token → Admin-Mail + Logs schreiben
+```
+
+**Garantie**: Selbst bei Doppelklick oder parallelen Requests wird nur **einmal** eine Admin-Mail versendet und ein Log geschrieben.
+
+---
+
+## 🚀 Finaler Produktionstest (Copy/Paste Ready)
+
+### 1. Invite für einen echten Fahrer erzeugen
+
+```sql
+-- Ersetze <JOB_ID> und <DRIVER_ID> mit echten UUIDs
+INSERT INTO assignment_invites (job_id, driver_id, token, token_expires_at, status)
+VALUES ('<JOB_ID>', '<DRIVER_ID>', encode(gen_random_bytes(24), 'hex'), now() + interval '48 hours', 'pending')
+RETURNING token;
+```
+
+**Erwartung**: Du erhältst einen 48-Zeichen-Hex-Token.
+
+### 2. Zwei klickfertige Links bauen
+
+```
+Accept: https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response?a=accept&t=<TOKEN>
+Decline: https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response?a=decline&t=<TOKEN>
+```
+
+**Wichtig**: Diese Links MÜSSEN im Mail-Provider vom Tracking ausgenommen werden (sonst werden Query-Parameter zerstört).
+
+### 3. Klick ausführen & Erwartungen
+
+| Aktion | Erwartung |
+|--------|-----------|
+| Link klicken | Grüne Bestätigungsseite („Rückmeldung erfasst") |
+| `email_log` | **Genau 1** Eintrag mit `template='driver-response'` |
+| `jobalarm_antworten` | **Genau 1** Eintrag mit `antwort='accept'` oder `'decline'` |
+| `job_assignments` | **Keine Änderung** (nur Info-Mail, keine Auto-Zuweisung) |
+| `job_requests` | **Keine Änderung** (Status bleibt `open`) |
+
+### 4. Verifizieren (SQL)
+
+```sql
+-- Admin-Mail geloggt?
+SELECT created_at, recipient, subject, status
+FROM email_log
+WHERE template = 'driver-response'
+ORDER BY created_at DESC
+LIMIT 5;
+
+-- Fahrerantwort protokolliert?
+SELECT created_at, job_id, fahrer_email, antwort
+FROM jobalarm_antworten
+ORDER BY created_at DESC
+LIMIT 5;
+```
+
+### 5. Doppelklick-Test
+
+- **Erneut auf denselben Link klicken**
+- **Erwartung**: 
+  - Seite: „Bereits beantwortet"
+  - **Keine** neue Mail in `email_log`
+  - **Kein** neuer Eintrag in `jobalarm_antworten`
+
+---
 
 ## ✅ Checkliste: Buttons funktionieren wirklich
 
@@ -409,44 +495,86 @@ HAVING COUNT(*) > 1;
 
 ---
 
-## 🔒 Optional: One-Shot-Schutz (Doppel-Klick verhindern)
+---
 
-Falls du doppelte Admin-Mails verhindern willst:
+## 📊 Monitoring & Alarme (Empfohlen)
+
+### Function Logs
+- **Supabase → Functions → `handle-driver-job-response` → Logs**
+- Prüfen: Jeder Button-Klick erzeugt ein Log-Event
+- Fehler-Alarme: Wenn `lockErr` oder `emailError` auftreten
+
+### Token-Health-Check
 
 ```sql
--- Einmalige Antwort je Invite erzwingen:
-ALTER TABLE assignment_invites 
-ADD COLUMN IF NOT EXISTS responded_at TIMESTAMPTZ;
+-- Abgelaufene, unbeantwortete Einladungen (potenzielle Probleme)
+SELECT COUNT(*) AS expired_unanswered
+FROM assignment_invites
+WHERE status = 'pending'
+  AND responded_at IS NULL
+  AND token_expires_at < now();
 ```
 
-In der Function vor dem Email-Insert prüfen:
+**Erwartung**: Sollte niedrig bleiben (<10%). Hohe Werte → Fahrer erhalten Links nicht oder klicken nicht.
+
+### Mail-Delivery-Check
+
+```sql
+-- Fehlgeschlagene Admin-Mails (kritisch!)
+SELECT created_at, recipient, error_message
+FROM email_log
+WHERE template = 'driver-response'
+  AND status = 'failed'
+ORDER BY created_at DESC
+LIMIT 10;
+```
+
+**Alarm**: Wenn innerhalb 10 Min. nach Klicks keine Mails in `email_log` → Mail-Provider-Problem.
+
+---
+
+## ⚠️ Typische Stolperfallen
+
+| Problem | Ursache | Lösung |
+|---------|---------|--------|
+| "Einladung nicht gefunden" | Mail-Tool hat Query-Parameter umgeschrieben | Tracking für diese Links deaktivieren ODER `?p=<base64>` Fallback nutzen |
+| Mehrfache Admin-Mails | Race Condition | ✅ Gelöst durch atomare `responded_at`-Sperre |
+| "Link abgelaufen" nach 2 Tagen | Token-TTL 48h | Normal – Fahrer muss beim Disponenten anfragen |
+| Keine Mail beim Klick | Resend API Key fehlt/falsch | `.env` prüfen: `RESEND_API_KEY`, `ADMIN_EMAIL` |
+
+---
+
+## 🔧 Notfall-Rollback (Auto-Assign reaktivieren)
+
+Falls du doch zur alten Auto-Zuweisung zurück willst:
+
+**Option A**: In `handle-driver-job-response/index.ts` nach dem Log einfügen:
+
 ```typescript
-// Prüfe ob bereits beantwortet
-if (invite.responded_at) {
-  return page("Bereits beantwortet", "Du hast auf diese Einladung bereits geantwortet.");
+if (action === "accept") {
+  await supabase.rpc("ensure_job_assignment", {
+    p_job_id: invite.job_id,
+    p_driver_id: invite.driver_id
+  });
 }
-
-// ... Email senden & Logs schreiben ...
-
-// Als beantwortet markieren
-await supabase
-  .from("assignment_invites")
-  .update({ responded_at: new Date().toISOString() })
-  .eq("id", invite.id);
 ```
+
+**Option B**: Alte Function-Version aus Git redeployen.
 
 ---
 
 ## 🎯 Go-Live-Checkliste
 
-- [ ] Function deployed: `handle-driver-job-response` mit Service Role Key
-- [ ] Buttons verlinkt: `?a=accept&t=<token>` (oder Fallback `?p=<base64>`)
-- [ ] Mail-Tracking AUS für genau diese beiden Link-URLs
-- [ ] Logging aktiv: `email_log` + `jobalarm_antworten` befüllen sich
-- [ ] Schnelltest durchgeführt (Production-Ready Test oben)
-- [ ] Verifizierung: Admin-Mail erhalten, Logs sichtbar, KEINE DB-Änderungen
+- [ ] Edge Function `handle-driver-job-response` deployed
+- [ ] Atomare One-Shot-Sperre aktiv (`responded_at` Spalte existiert)
+- [ ] Mail-Links konfiguriert (`?a=accept&t=...` oder Fallback `?p=...`)
+- [ ] Mail-Tracking für genau diese beiden Links deaktiviert
+- [ ] Logging verifiziert (`email_log` + `jobalarm_antworten` befüllen sich)
+- [ ] Production-Ready Test erfolgreich (siehe oben)
+- [ ] Doppelklick-Test bestanden (keine doppelten Mails)
+- [ ] Monitoring-Queries eingerichtet (Token-Health, Mail-Delivery)
 
 ---
 
-**Datum:** 2025-01-19  
-**Version:** 2.1 (Production-Ready mit Schnelltests und One-Shot-Option)
+**Datum:** 2025-11-02  
+**Version:** 3.0 (Production-Ready mit atomarer One-Shot-Sperre, Monitoring & Notfall-Rollback)
