@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "npm:resend@2.0.0";
+import React from 'npm:react@18.3.1';
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import { DriverApprovalEmail } from './_templates/driver-approval-email.tsx';
 
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -113,48 +116,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('📋 Found jobs:', jobs?.length || 0);
 
-    // 4. Prepare email content
-    const mailReplyTo = Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com';
-
-    let emailContent = `Hallo ${driver.vorname} ${driver.nachname},
-
-Sie sind jetzt freigeschaltet und können Fahrergesuche erhalten!
-
-`;
-
-    if (jobs && jobs.length > 0) {
-      emailContent += `Hier sind die aktuellen Fahrergesuche der letzten 30 Tage:
-
-`;
-
-      jobs.forEach((job, index) => {
-        const startDate = new Date(job.created_at).toLocaleDateString('de-DE');
-        emailContent += `${index + 1}. ${job.nachricht || 'Fahrergesuch'} — ${job.einsatzort || 'Ort nicht angegeben'} — ${startDate} — ${job.zeitraum || 'Zeitraum nicht angegeben'} — ${job.fahrzeugtyp || 'Fahrzeugtyp nicht angegeben'} — ${job.fuehrerscheinklasse || 'Klasse nicht angegeben'}
-`;
-        if (job.besonderheiten) {
-          emailContent += `   Besonderheiten: ${job.besonderheiten}
-`;
-        }
-        emailContent += `
-`;
-      });
-
-      emailContent += `
-Antworten Sie direkt auf diese E-Mail oder rufen Sie uns an, um Interesse zu bekunden.`;
-    } else {
-      emailContent += `Derzeit sind keine offenen Fahrergesuche verfügbar. Wir melden uns, sobald neue Anfragen eingehen.`;
-    }
-
-    emailContent += `
-
-Mit freundlichen Grüßen
-Ihr Fahrerexpress-Team
-
----
-Fahrerexpress-Agentur
-Günter Killer`;
+    // 4. Render email HTML using React Email
+    const html = await renderAsync(
+      React.createElement(DriverApprovalEmail, {
+        driverName: `${driver.vorname} ${driver.nachname}`,
+        jobs: jobs || [],
+      })
+    );
 
     // 5. Send email
+    const mailReplyTo = Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com';
     let emailSuccess = false;
     let emailError = null;
 
@@ -163,8 +134,8 @@ Günter Killer`;
         from: MAIL_FROM,
         to: [driver.email],
         reply_to: mailReplyTo,
-        subject: 'Aktuelle Fahrergesuche – Fahrerexpress',
-        text: emailContent,
+        subject: '🎉 Sie sind freigeschaltet! – Aktuelle Fahrergesuche',
+        html: html,
       });
 
       console.log('✅ Email sent successfully:', emailResponse.id);
