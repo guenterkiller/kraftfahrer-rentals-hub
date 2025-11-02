@@ -4,13 +4,12 @@ import {
   Head,
   Heading,
   Html,
-  Link,
   Preview,
-  Section,
   Text,
+  Section,
   Hr,
-} from 'npm:@react-email/components@0.0.22'
-import * as React from 'npm:react@18.3.1'
+} from 'npm:@react-email/components@0.0.22';
+import * as React from 'npm:react@18.3.1';
 
 interface Job {
   nachricht: string;
@@ -30,242 +29,260 @@ interface DriverApprovalEmailProps {
 export const DriverApprovalEmail = ({
   driverName,
   jobs = [],
-}: DriverApprovalEmailProps) => (
-  <Html>
-    <Head />
-    <Preview>Sie sind freigeschaltet! Aktuelle Fahrergesuche</Preview>
-    <Body style={main}>
-      <Container style={container}>
-        {/* Header */}
-        <Section style={header}>
-          <Heading style={h1}>🚛 Fahrerexpress</Heading>
-          <Text style={tagline}>Ihre Vermittlungsagentur für LKW-Fahrer</Text>
-        </Section>
-
-        <Hr style={hr} />
-
-        {/* Welcome Message */}
-        <Section style={content}>
-          <Heading style={h2}>Herzlich willkommen, {driverName}! 🎉</Heading>
-          <Text style={paragraph}>
-            Wir freuen uns, Ihnen mitteilen zu können, dass Sie jetzt{' '}
-            <strong>freigeschaltet</strong> sind und Fahrergesuche erhalten können!
-          </Text>
-        </Section>
-
-        {/* Jobs Section */}
-        {jobs.length > 0 ? (
-          <Section style={content}>
-            <Heading style={h3}>
-              📋 Aktuelle Fahrergesuche ({jobs.length})
-            </Heading>
-            <Text style={paragraph}>
-              Hier finden Sie die neuesten offenen Aufträge der letzten 30 Tage:
+}: DriverApprovalEmailProps) => {
+  return (
+    <Html>
+      <Head />
+      <Preview>Sie sind freigeschaltet! Aktuelle Fahrergesuche verfügbar</Preview>
+      <Body style={main}>
+        <Container style={container}>
+          
+          {/* Blue Header */}
+          <div style={header}>
+            <Heading style={headerTitle}>FREISCHALTUNG ERFOLGREICH</Heading>
+            <Text style={headerSubtitle}>Fahrerexpress | kraftfahrer-mieten.com</Text>
+          </div>
+          
+          {/* Content */}
+          <div style={content}>
+            <Text style={greeting}>Hallo {driverName},</Text>
+            <Text style={introText}>
+              wir freuen uns, Ihnen mitteilen zu können, dass Sie jetzt <strong>freigeschaltet</strong> sind 
+              und Fahrergesuche erhalten können!
             </Text>
+            
+            {/* Jobs Section */}
+            {jobs.length > 0 ? (
+              <>
+                <Text style={jobsHeader}>
+                  <strong>Aktuelle Fahrergesuche ({jobs.length})</strong>
+                </Text>
+                <Text style={jobsSubtext}>
+                  Hier finden Sie die neuesten offenen Aufträge der letzten 30 Tage:
+                </Text>
 
-            {jobs.map((job, index) => {
-              const startDate = new Date(job.created_at).toLocaleDateString('de-DE');
-              return (
-                <Section key={index} style={jobCard}>
-                  <Text style={jobNumber}>Auftrag #{index + 1}</Text>
-                  <Text style={jobDescription}>{job.nachricht || 'Fahrergesuch'}</Text>
-                  
-                  <Section style={jobDetails}>
-                    <Text style={jobDetail}>
-                      📍 <strong>Ort:</strong> {job.einsatzort || 'Nicht angegeben'}
-                    </Text>
-                    <Text style={jobDetail}>
-                      📅 <strong>Erstellt:</strong> {startDate}
-                    </Text>
-                    <Text style={jobDetail}>
-                      ⏰ <strong>Zeitraum:</strong> {job.zeitraum || 'Nicht angegeben'}
-                    </Text>
-                    <Text style={jobDetail}>
-                      🚚 <strong>Fahrzeug:</strong> {job.fahrzeugtyp || 'Nicht angegeben'}
-                    </Text>
-                    <Text style={jobDetail}>
-                      🪪 <strong>Führerschein:</strong> {job.fuehrerscheinklasse || 'Nicht angegeben'}
-                    </Text>
-                    {job.besonderheiten && (
-                      <Text style={jobDetail}>
-                        ⚡ <strong>Besonderheiten:</strong> {job.besonderheiten}
-                      </Text>
-                    )}
-                  </Section>
-                </Section>
-              );
-            })}
+                {jobs.map((job, index) => {
+                  const startDate = new Date(job.created_at).toLocaleDateString('de-DE');
+                  return (
+                    <div key={index} style={sectionBox}>
+                      <Heading style={sectionTitle}>AUFTRAG #{index + 1}</Heading>
+                      <div style={sectionContent}>
+                        <Text style={detailRow}>
+                          <strong>• Beschreibung:</strong> {job.nachricht || 'Fahrergesuch'}
+                        </Text>
+                        <Text style={detailRow}>
+                          <strong>• Einsatzort:</strong> {job.einsatzort || 'Nicht angegeben'}
+                        </Text>
+                        <Text style={detailRow}>
+                          <strong>• Erstellt am:</strong> {startDate}
+                        </Text>
+                        <Text style={detailRow}>
+                          <strong>• Zeitraum:</strong> {job.zeitraum || 'Nicht angegeben'}
+                        </Text>
+                        <Text style={detailRow}>
+                          <strong>• Fahrzeugtyp:</strong> {job.fahrzeugtyp || 'Nicht angegeben'}
+                        </Text>
+                        <Text style={detailRow}>
+                          <strong>• Führerschein:</strong> {job.fuehrerscheinklasse || 'Nicht angegeben'}
+                        </Text>
+                        {job.besonderheiten && (
+                          <Text style={detailRow}>
+                            <strong>• Besonderheiten:</strong> {job.besonderheiten}
+                          </Text>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
 
-            <Hr style={hr} />
-
-            <Text style={paragraph}>
-              <strong>Interessiert an einem Auftrag?</strong>
+                <div style={actionSection}>
+                  <Text style={actionText}>
+                    <strong>Interessiert an einem Auftrag?</strong>
+                  </Text>
+                  <Text style={actionSubtext}>
+                    Antworten Sie einfach auf diese E-Mail oder rufen Sie uns direkt an!
+                  </Text>
+                </div>
+              </>
+            ) : (
+              <div style={sectionBox}>
+                <Text style={detailRow}>
+                  Derzeit sind keine offenen Fahrergesuche verfügbar. Wir melden uns bei Ihnen,
+                  sobald neue Anfragen eingehen.
+                </Text>
+              </div>
+            )}
+            
+            {/* Contact Info */}
+            <div style={contactSection}>
+              <Text style={contactInfo}>
+                Bei Fragen erreichen Sie uns unter:
+              </Text>
+              <Text style={contactDetails}>
+                📞 <strong>Telefon:</strong> +49-1577-1442285<br />
+                ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
+              </Text>
+            </div>
+          </div>
+          
+          {/* Footer */}
+          <div style={footer}>
+            <Text style={footerText}>
+              <strong>Fahrerexpress-Agentur – Günter Killer</strong>
             </Text>
-            <Text style={paragraph}>
-              Antworten Sie einfach auf diese E-Mail oder rufen Sie uns direkt an!
+            <Text style={footerText}>
+              E-Mail: info@kraftfahrer-mieten.com | Web: kraftfahrer-mieten.com
             </Text>
-          </Section>
-        ) : (
-          <Section style={content}>
-            <Text style={paragraph}>
-              Derzeit sind keine offenen Fahrergesuche verfügbar. Wir melden uns bei Ihnen,
-              sobald neue Anfragen eingehen.
+            <Text style={footerText}>
+              Diese E-Mail wurde automatisch versendet, weil Sie in unserem Fahrerpool registriert sind.
             </Text>
-          </Section>
-        )}
+          </div>
+        </Container>
+      </Body>
+    </Html>
+  );
+};
 
-        <Hr style={hr} />
+export default DriverApprovalEmail;
 
-        {/* Footer */}
-        <Section style={footer}>
-          <Text style={footerText}>
-            Mit freundlichen Grüßen<br />
-            <strong>Ihr Fahrerexpress-Team</strong>
-          </Text>
-          <Hr style={footerDivider} />
-          <Text style={footerCompany}>
-            <strong>Fahrerexpress-Agentur</strong><br />
-            Günter Killer<br />
-            <Link href="mailto:info@kraftfahrer-mieten.com" style={link}>
-              info@kraftfahrer-mieten.com
-            </Link><br />
-            <Link href="https://kraftfahrer-mieten.com" style={link}>
-              www.kraftfahrer-mieten.com
-            </Link>
-          </Text>
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-)
-
-export default DriverApprovalEmail
-
-// Styles
+// Styles matching the job-notification template
 const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-}
+  backgroundColor: '#ffffff',
+  fontFamily: 'Arial, sans-serif',
+  margin: 0,
+  padding: '20px',
+};
 
 const container = {
-  backgroundColor: '#ffffff',
+  maxWidth: '700px',
   margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
-  maxWidth: '600px',
-}
+};
 
 const header = {
-  padding: '32px 24px',
+  backgroundColor: '#4472c4',
+  color: 'white',
+  padding: '30px',
   textAlign: 'center' as const,
-  backgroundColor: '#1e40af',
-}
+  marginBottom: '20px',
+};
 
-const h1 = {
-  color: '#ffffff',
-  fontSize: '32px',
-  fontWeight: '700',
-  margin: '0',
-  padding: '0',
-}
+const headerTitle = {
+  margin: 0,
+  fontSize: '36px',
+  fontWeight: 'bold' as const,
+  letterSpacing: '1px',
+  color: 'white',
+};
 
-const tagline = {
-  color: '#e0e7ff',
-  fontSize: '14px',
-  margin: '8px 0 0',
-}
-
-const h2 = {
-  color: '#1e40af',
-  fontSize: '24px',
-  fontWeight: '700',
-  margin: '0 0 16px',
-}
-
-const h3 = {
-  color: '#1e293b',
-  fontSize: '20px',
-  fontWeight: '600',
-  margin: '24px 0 16px',
-}
+const headerSubtitle = {
+  margin: '10px 0 0 0',
+  fontSize: '16px',
+  color: 'white',
+};
 
 const content = {
-  padding: '0 24px',
-}
+  padding: '0 20px',
+};
 
-const paragraph = {
-  color: '#525252',
+const greeting = {
+  margin: '0 0 10px 0',
+  fontSize: '14px',
+  color: '#000',
+};
+
+const introText = {
+  margin: '0 0 20px 0',
+  fontSize: '14px',
+  color: '#000',
+};
+
+const jobsHeader = {
+  margin: '20px 0 10px 0',
   fontSize: '16px',
-  lineHeight: '26px',
-  margin: '16px 0',
-}
+  color: '#000',
+};
 
-const jobCard = {
-  backgroundColor: '#f8fafc',
-  border: '1px solid #e2e8f0',
+const jobsSubtext = {
+  margin: '0 0 15px 0',
+  fontSize: '14px',
+  color: '#000',
+};
+
+const sectionBox = {
+  backgroundColor: '#f2f2f2',
+  borderLeft: '4px solid #4472c4',
+  padding: '15px',
+  marginBottom: '20px',
+};
+
+const sectionTitle = {
+  margin: '0 0 10px 0',
+  color: '#000',
+  fontSize: '16px',
+  fontWeight: 'bold' as const,
+};
+
+const sectionContent = {
+  color: '#000',
+  fontSize: '14px',
+};
+
+const detailRow = {
+  margin: '3px 0',
+  fontSize: '14px',
+  color: '#000',
+};
+
+const actionSection = {
+  margin: '30px 0',
+  textAlign: 'center' as const,
+  padding: '20px',
+  backgroundColor: '#f9f9f9',
   borderRadius: '8px',
-  padding: '16px',
-  marginBottom: '16px',
-}
+};
 
-const jobNumber = {
-  color: '#1e40af',
+const actionText = {
+  fontSize: '16px',
+  color: '#000',
+  marginBottom: '10px',
+};
+
+const actionSubtext = {
   fontSize: '14px',
-  fontWeight: '600',
-  margin: '0 0 8px',
-}
+  color: '#666',
+  margin: '5px 0',
+};
 
-const jobDescription = {
-  color: '#1e293b',
-  fontSize: '15px',
-  fontWeight: '500',
-  lineHeight: '22px',
-  margin: '0 0 12px',
-}
+const contactSection = {
+  marginTop: '30px',
+  padding: '20px',
+  backgroundColor: '#f9f9f9',
+  borderRadius: '8px',
+};
 
-const jobDetails = {
-  marginTop: '12px',
-}
-
-const jobDetail = {
-  color: '#475569',
+const contactInfo = {
   fontSize: '14px',
-  lineHeight: '20px',
-  margin: '4px 0',
-}
+  color: '#000',
+  marginBottom: '10px',
+};
 
-const hr = {
-  borderColor: '#e2e8f0',
-  margin: '24px 0',
-}
+const contactDetails = {
+  fontSize: '14px',
+  color: '#4472c4',
+  margin: 0,
+};
 
 const footer = {
-  padding: '24px',
-}
+  textAlign: 'center' as const,
+  marginTop: '30px',
+  padding: '15px',
+  fontSize: '12px',
+  color: '#666',
+  borderTop: '1px solid #ccc',
+};
 
 const footerText = {
-  color: '#525252',
-  fontSize: '14px',
-  lineHeight: '24px',
-  margin: '0 0 16px',
-  textAlign: 'center' as const,
-}
-
-const footerDivider = {
-  borderColor: '#e2e8f0',
-  margin: '16px 0',
-}
-
-const footerCompany = {
-  color: '#71717a',
-  fontSize: '13px',
-  lineHeight: '20px',
-  textAlign: 'center' as const,
-  margin: '0',
-}
-
-const link = {
-  color: '#1e40af',
-  textDecoration: 'underline',
-}
+  margin: '5px 0',
+  fontSize: '12px',
+  color: '#666',
+};
