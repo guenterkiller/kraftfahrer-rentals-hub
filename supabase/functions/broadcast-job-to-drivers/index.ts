@@ -134,9 +134,8 @@ serve(async (req) => {
           continue;
         }
 
-        // Generate URLs with token
-        const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-        const baseUrl = `${supabaseUrl}/functions/v1/handle-driver-job-response`;
+        // Generate URLs with custom domain (user-friendly)
+        const baseUrl = `https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response`;
         const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
         const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
 
