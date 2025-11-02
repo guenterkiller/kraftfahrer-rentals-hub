@@ -199,11 +199,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Log the driver response
-    const responseNote = action === 'accept' 
-      ? `Driver ${driver.vorname} ${driver.nachname} accepted job (${billingModel || job.billing_model} billing)`
-      : `Driver ${driver.vorname} ${driver.nachname} declined job`;
-
+    // Log the driver response in database
     await supabase
       .from('jobalarm_antworten')
       .insert({
@@ -223,34 +219,19 @@ const handler = async (req: Request): Promise<Response> => {
         });
       }
 
-      // Create job assignment using admin function
-      const { data: assignment, error: assignError } = await supabase
-        .rpc('admin_assign_driver', {
-          _job_id: jobId,
-          _driver_id: driverId,
-          _rate_type: 'daily',
-          _rate_value: finalBillingModel === 'agency' ? 399 : 349, // Different rates for different models
-          _note: `Driver accepted via email (${finalBillingModel} billing model)`
-        });
-
-      if (assignError) {
-        console.error('Error creating assignment:', assignError);
-        return new Response(JSON.stringify({ error: 'Failed to create assignment' }), {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-
-      // Send confirmation email to admin
+      // Send notification email to admin (NO automatic assignment)
       if (resendApiKey) {
         const resend = new Resend(resendApiKey);
         
         const adminEmailHtml = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: #d4fdf7; border: 1px solid #10b981; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h2 style="color: #065f46; margin: 0 0 15px 0;">✅ Fahrer hat Auftrag angenommen</h2>
+              <h2 style="color: #065f46; margin: 0 0 15px 0;">✅ Fahrer interessiert an Auftrag</h2>
               <p style="color: #065f46; margin: 0;">
-                <strong>${driver.vorname} ${driver.nachname}</strong> hat den Auftrag über den E-Mail-Link angenommen.
+                <strong>${driver.vorname} ${driver.nachname}</strong> hat Interesse am Auftrag bekundet.
+              </p>
+              <p style="color: #065f46; margin: 10px 0 0 0; font-size: 14px;">
+                ⚠️ <strong>Bitte prüfen und manuell zuweisen!</strong> Der Auftrag wurde noch NICHT automatisch vergeben.
               </p>
             </div>
             
@@ -259,6 +240,9 @@ const handler = async (req: Request): Promise<Response> => {
               <p><strong>Name:</strong> ${driver.vorname} ${driver.nachname}</p>
               <p><strong>E-Mail:</strong> ${driver.email}</p>
               <p><strong>Telefon:</strong> ${driver.telefon}</p>
+              <p><strong>Adresse:</strong> ${driver.plz} ${driver.ort}</p>
+              <p><strong>Führerscheinklassen:</strong> ${driver.fuehrerscheinklassen?.join(', ') || 'Keine Angabe'}</p>
+              <p><strong>Spezialisierungen:</strong> ${driver.spezialisierungen?.join(', ') || 'Keine Angabe'}</p>
               
               <h3>Auftragsdetails:</h3>
               <p><strong>Job-ID:</strong> ${jobId}</p>
@@ -266,11 +250,17 @@ const handler = async (req: Request): Promise<Response> => {
               <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
               <p><strong>Zeitraum:</strong> ${job.zeitraum}</p>
               <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
-              <p><strong>Abrechnungsmodell:</strong> ${finalBillingModel === 'agency' ? 'Agentur' : 'Direktabrechnung'}</p>
+              <p><strong>Gewünschtes Abrechnungsmodell:</strong> ${finalBillingModel === 'agency' ? 'Agentur (399€/Tag)' : 'Direktabrechnung (349€/Tag)'}</p>
+            </div>
+            
+            <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin: 20px 0;">
+              <p style="color: #92400e; margin: 0;">
+                <strong>Nächster Schritt:</strong> Bitte im Admin-Dashboard den Fahrer manuell dem Auftrag zuweisen, wenn gewünscht.
+              </p>
             </div>
             
             <p style="color: #666; font-size: 12px; margin-top: 20px;">
-              Diese E-Mail wurde automatisch versendet, als der Fahrer auf den Bestätigungs-Link geklickt hat.
+              Diese E-Mail wurde automatisch versendet, als der Fahrer auf "Auftrag annehmen" geklickt hat.
             </p>
           </div>
         `;
@@ -279,7 +269,7 @@ const handler = async (req: Request): Promise<Response> => {
           await resend.emails.send({
             from: 'Fahrerexpress System <info@kraftfahrer-mieten.com>',
             to: [adminEmail],
-            subject: `✅ Auftrag angenommen: ${driver.vorname} ${driver.nachname} - ${job.customer_name}`,
+            subject: `✅ Interesse bekundet: ${driver.vorname} ${driver.nachname} - ${job.customer_name}`,
             html: adminEmailHtml
           });
           console.log(`✅ Admin notification sent to ${adminEmail}`);
@@ -305,8 +295,8 @@ const handler = async (req: Request): Promise<Response> => {
           </head>
           <body>
             <div class="success">
-              <h2>✅ Auftrag erfolgreich angenommen!</h2>
-              <p>Vielen Dank, ${driver.vorname}! Sie haben den Auftrag erfolgreich angenommen.</p>
+              <h2>✅ Interesse erfolgreich bekundet!</h2>
+              <p>Vielen Dank, ${driver.vorname}! Wir haben Ihr Interesse an diesem Auftrag registriert.</p>
             </div>
             
             <div class="driver-info">
@@ -317,17 +307,22 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             
             <div class="info">
-              <h3>Abrechnungsmodell: ${finalBillingModel === 'agency' ? 'Agenturabrechnung' : 'Direktabrechnung'}</h3>
+              <h3>Gewähltes Abrechnungsmodell: ${finalBillingModel === 'agency' ? 'Agenturabrechnung (399€/Tag)' : 'Direktabrechnung (349€/Tag)'}</h3>
               <p>
                 ${finalBillingModel === 'agency' 
-                  ? 'Sie arbeiten als Subunternehmer für Fahrerexpress und stellen Ihre Rechnung an uns.'
-                  : 'Sie rechnen direkt mit dem Auftraggeber ab und zahlen eine Vermittlungsprovision an Fahrerexpress.'
+                  ? 'Sie würden als Subunternehmer für Fahrerexpress arbeiten und Ihre Rechnung an uns stellen.'
+                  : 'Sie würden direkt mit dem Auftraggeber abrechnen und eine Vermittlungsprovision an Fahrerexpress zahlen.'
                 }
               </p>
             </div>
             
-            <p><strong>Der Administrator wurde über Ihre Annahme informiert</strong> und wird sich in Kürze mit weiteren Details bei Ihnen melden.</p>
-            <p>Bei Fragen erreichen Sie uns unter: <strong>info@kraftfahrer-mieten.com</strong></p>
+            <div class="info" style="background: #fef3c7; border-color: #f59e0b;">
+              <p style="color: #92400e;"><strong>Nächste Schritte:</strong></p>
+              <p style="color: #92400e;">Der Administrator wurde über Ihr Interesse informiert und wird den Auftrag prüfen. Da mehrere Fahrer auf diesen Auftrag antworten können, entscheidet der Administrator über die finale Vergabe.</p>
+              <p style="color: #92400e;">Sie werden zeitnah kontaktiert, sobald eine Entscheidung getroffen wurde.</p>
+            </div>
+            
+            <p>Bei Fragen erreichen Sie uns unter: <strong>info@kraftfahrer-mieten.com</strong> oder <strong>+49-1577-1442285</strong></p>
           </body>
           </html>
         `;
@@ -340,8 +335,7 @@ const handler = async (req: Request): Promise<Response> => {
 
       return new Response(JSON.stringify({ 
         success: true, 
-        message: 'Job accepted successfully',
-        assignmentId: assignment,
+        message: 'Interest registered successfully. Admin will review and assign.',
         billingModel: finalBillingModel
       }), {
         status: 200,
