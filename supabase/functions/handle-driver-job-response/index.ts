@@ -8,66 +8,56 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
 };
 
-function page(title: string, body?: string, isSuccess: boolean = true) {
-  const bgColor = isSuccess ? '#d4fdf7' : '#fef2f2';
-  const borderColor = isSuccess ? '#10b981' : '#ef4444';
-  const textColor = isSuccess ? '#065f46' : '#991b1b';
+function page(title: string, message?: string, accent: "ok" | "warn" = "ok") {
+  const color = accent === "ok" ? "#16a34a" : "#ef4444";
   
   return new Response(
-    `<!DOCTYPE html>
-    <html>
-    <head>
-      <title>${title}</title>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      <style>
-        body { 
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-          max-width: 600px;
-          margin: 50px auto;
-          padding: 24px;
-          line-height: 1.55;
-        }
-        .message {
-          background: ${bgColor};
-          border: 1px solid ${borderColor};
-          padding: 20px;
-          border-radius: 8px;
-          margin-bottom: 20px;
-        }
-        h1 {
-          color: ${textColor};
-          margin: 0 0 15px 0;
-          font-size: 20px;
-        }
-        p {
-          color: ${textColor};
-          margin: 10px 0;
-        }
-        .contact {
-          margin-top: 30px;
-          padding-top: 20px;
-          border-top: 1px solid #ddd;
-          color: #666;
-          font-size: 14px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="message">
-        <h1>${title}</h1>
-        ${body ? `<p>${body}</p>` : ""}
-        <p>Vielen Dank! Du kannst dieses Fenster schließen.</p>
+    `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Fahrerexpress – Rückmeldung</title>
+  <style>
+    :root { --accent:${color}; --text:#111827; --muted:#6b7280; --bg:#ffffff; }
+    body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
+    .wrap { max-width:560px; margin:48px auto; padding:0 20px; }
+    .card { border:1px solid #e5e7eb; border-radius:16px; padding:24px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+    .logo { display:flex; align-items:center; gap:10px; margin-bottom:12px; color:var(--accent); font-weight:700; letter-spacing:.2px }
+    .logo svg{ width:28px; height:28px; }
+    h1 { font-size:20px; margin:8px 0 6px; }
+    p { margin:6px 0 0; color:var(--muted); line-height:1.5 }
+    .ok { color:var(--accent); font-weight:700 }
+    .btn { margin-top:16px; display:inline-block; padding:10px 14px; border-radius:10px; background:var(--accent); color:#fff; text-decoration:none; font-weight:600; cursor:pointer; border:none; font-size:14px; }
+    .btn:hover { opacity:0.9; }
+    .foot { margin-top:18px; font-size:12px; color:#9ca3af }
+    .contact { margin-top:20px; padding:12px; background:#f9fafb; border-radius:8px; font-size:13px; color:#6b7280; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" d="M3 13h2l2 7h8l2-7h2"/><path stroke-width="2" d="M5 13l4-9h6l4 9"/><circle cx="7.5" cy="20.5" r="1.5"/><circle cx="16.5" cy="20.5" r="1.5"/></svg>
+        <span>Fahrerexpress</span>
       </div>
+      <h1>${title}</h1>
+      ${message ? `<p>${message}</p>` : ""}
+      <button class="btn" onclick="window.close();">Fenster schließen</button>
+      <div class="foot">Wenn sich das Fenster nicht automatisch schließt, bitte einfach schließen.</div>
       <div class="contact">
-        <p><strong>Bei Fragen:</strong></p>
-        <p>
-          📞 +49-1577-1442285<br>
-          ✉️ info@kraftfahrer-mieten.com
-        </p>
+        <strong>Bei Fragen:</strong><br>
+        📞 +49-1577-1442285 | ✉️ info@kraftfahrer-mieten.com
       </div>
-    </body>
-    </html>`,
+    </div>
+  </div>
+  <script>
+    // Versuche, In-App WebView Tabs elegant zu schließen
+    setTimeout(function(){ try { window.close(); } catch(_){} }, 600);
+  </script>
+</body>
+</html>`,
     { 
       status: 200,
       headers: { ...corsHeaders, "content-type": "text/html; charset=utf-8" } 
@@ -102,7 +92,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`📩 Driver response: action=${action}, token=${token?.substring(0, 8)}...`);
 
     if (!token || !action || !["accept", "decline"].includes(action)) {
-      return page("Ungültiger Link", "Bitte verwende den Button aus der E-Mail.", false);
+      return page("Ungültiger Link", "Bitte verwende den Button aus der E-Mail.", "warn");
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -112,7 +102,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
-      return page("Systemfehler", "Fehlende Konfiguration. Bitte melde dich beim Disponenten.", false);
+      return page("Systemfehler", "Fehlende Konfiguration. Bitte melde dich beim Disponenten.", "warn");
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -135,16 +125,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error("Error fetching invite:", error);
-      return page("Fehler", "Einladung konnte nicht geladen werden. Bitte melde dich beim Disponenten.", false);
+      return page("Fehler", "Einladung konnte nicht geladen werden. Bitte melde dich beim Disponenten.", "warn");
     }
 
     if (!invite) {
-      return page("Einladung nicht gefunden", "Bitte melde dich beim Disponenten.", false);
+      return page("Einladung nicht gefunden", "Bitte melde dich beim Disponenten.", "warn");
     }
 
     // Ablaufdatum prüfen
     if (new Date(invite.token_expires_at) < new Date()) {
-      return page("Link abgelaufen", "Dieser Link ist leider abgelaufen. Bitte melde dich beim Disponenten für einen neuen Link.", false);
+      return page("Link abgelaufen oder ungültig", "Bitte melde dich kurz beim Disponenten für einen neuen Link.", "warn");
     }
 
     // Atomare One-Shot-Sperre: Setze responded_at NUR wenn noch null
@@ -159,13 +149,13 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (lockErr) {
       console.error("Lock error:", lockErr);
-      return page("Technischer Fehler", "Bitte melde dich beim Disponenten.", false);
+      return page("Technischer Fehler", "Bitte melde dich beim Disponenten.", "warn");
     }
 
     // Wenn keine Zeile betroffen → bereits beantwortet (kein Mail/Log)
     if (!lockRow || lockRow.length === 0) {
       console.log(`⚠️ Already responded: invite=${invite.id}, token=${token?.substring(0, 8)}...`);
-      return page("Bereits beantwortet", "Danke, deine Rückmeldung liegt bereits vor.");
+      return page("Bereits beantwortet", "Danke! Deine Rückmeldung liegt bereits vor.", "ok");
     }
 
     const driver = invite.driver as any;
@@ -291,17 +281,18 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}`);
 
     // Erfolgsseite zurückgeben
+    const successTitle = action === "accept" ? "Rückmeldung erfasst ✅" : "Rückmeldung erfasst ❌";
     const confirmMsg = action === "accept"
-      ? "Danke! Deine Zusage wurde an die Disposition weitergeleitet. Wir melden uns in Kürze bei dir."
-      : "Danke für deine Rückmeldung. Wir haben die Disposition informiert.";
+      ? "Danke! Deine Zusage wurde an die Disposition weitergeleitet."
+      : "Danke für deine Rückmeldung. Wir informieren die Disposition.";
     
     console.log(`✅ Driver response processed: ${actionVerb} by ${driver?.vorname} ${driver?.nachname}`);
     
-    return page("Rückmeldung erfasst", confirmMsg, true);
+    return page(successTitle, confirmMsg, "ok");
 
   } catch (e) {
     console.error("Unexpected error in handle-driver-job-response:", e);
-    return page("Unerwarteter Fehler", "Bitte melde dich beim Disponenten.", false);
+    return page("Unerwarteter Fehler", "Bitte melde dich beim Disponenten.", "warn");
   }
 };
 
