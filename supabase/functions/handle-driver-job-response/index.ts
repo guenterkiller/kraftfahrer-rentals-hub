@@ -82,8 +82,22 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const url = new URL(req.url);
-    const action = url.searchParams.get("a"); // accept | decline
-    const token = url.searchParams.get("t"); // Einmal-Token
+    
+    // Support both formats: ?a=accept&t=token OR ?p=base64payload (für Mailer mit Tracking-Problemen)
+    let action = url.searchParams.get("a"); // accept | decline
+    let token = url.searchParams.get("t"); // Einmal-Token
+    
+    // Fallback: Kompakt-Payload für kaputte Tracking-Links
+    const p = url.searchParams.get("p");
+    if (p && !action && !token) {
+      try {
+        const obj = JSON.parse(atob(p));
+        action = obj?.a;
+        token = obj?.t;
+      } catch (e) {
+        console.error("Failed to parse p parameter:", e);
+      }
+    }
 
     console.log(`📩 Driver response: action=${action}, token=${token?.substring(0, 8)}...`);
 
@@ -242,12 +256,19 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    // Log in jobalarm_antworten (falls benötigt für Statistik)
+    // Log in jobalarm_antworten (Statistik/Tracking)
+    const userAgent = req.headers.get("user-agent") || "";
+    const forwardedFor = req.headers.get("x-forwarded-for") || "";
+    const realIp = req.headers.get("x-real-ip") || "";
+    const ip = forwardedFor || realIp || "";
+    
     await supabase.from("jobalarm_antworten").insert({
       job_id: invite.job_id,
       fahrer_email: driver?.email || "unknown",
       antwort: action
     });
+    
+    console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}, ip=${ip}`);
 
     // Erfolgsseite zurückgeben
     const confirmMsg = action === "accept"
