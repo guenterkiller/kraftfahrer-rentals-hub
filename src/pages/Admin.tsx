@@ -1116,119 +1116,127 @@ const Admin = () => {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
-            {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-[150px]">Name</TableHead>
-                    <TableHead className="min-w-[130px]">Telefon</TableHead>
-                    <TableHead className="min-w-[120px]">Führerschein</TableHead>
-                    <TableHead className="min-w-[300px]">Nachricht</TableHead>
-                    <TableHead className="min-w-[150px]">Aktionen</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
+          <CardContent className="p-4 md:p-6">
+            {fahrer.length === 0 ? (
+              <p className="text-gray-500 italic text-center py-4">Keine Fahrer registriert.</p>
+            ) : (
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[150px]">Name</TableHead>
+                        <TableHead className="min-w-[130px]">Telefon</TableHead>
+                        <TableHead className="min-w-[120px]">Führerschein</TableHead>
+                        <TableHead className="min-w-[300px]">Nachricht</TableHead>
+                        <TableHead className="min-w-[150px]">Aktionen</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {fahrer.map((f) => (
+                        <TableRow key={f.id}>
+                          <TableCell className="font-medium">
+                            {f.vorname} {f.nachname}
+                          </TableCell>
+                          <TableCell>
+                            {f.telefon}
+                          </TableCell>
+                          <TableCell>
+                            {f.fuehrerscheinklassen?.join(", ") || "-"}
+                          </TableCell>
+                          <TableCell className="max-w-[300px]">
+                            <div className="text-sm">
+                              {f.beschreibung || "Keine Nachricht"}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                               {f.status === 'pending' && (
+                                 <Button
+                                   size="sm"
+                                   className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
+                                   onClick={() => handleApproveDriver(f.id)}
+                                   disabled={approvingDriver === f.id}
+                                 >
+                                   {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                                 </Button>
+                               )}
+                               {f.status === 'active' && (
+                                 <Button
+                                   size="sm"
+                                   variant="outline"
+                                   className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                   onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
+                                 >
+                                   ↻ Zurücksetzen
+                                 </Button>
+                               )}
+                             </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Mobile & Tablet Card View */}
+                <div className="lg:hidden space-y-3">
                   {fahrer.map((f) => (
-                    <TableRow key={f.id}>
-                      <TableCell className="font-medium">
-                        {f.vorname} {f.nachname}
-                      </TableCell>
-                      <TableCell>
-                        {f.telefon}
-                      </TableCell>
-                      <TableCell>
-                        {f.fuehrerscheinklassen?.join(", ") || "-"}
-                      </TableCell>
-                      <TableCell className="max-w-[300px]">
-                        <div className="text-sm">
-                          {f.beschreibung || "Keine Nachricht"}
+                    <Card key={f.id} className="shadow-sm border-gray-200">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-start gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-base truncate">{f.vorname} {f.nachname}</h3>
+                              <a href={`tel:${f.telefon}`} className="text-sm text-blue-600 hover:underline">{f.telefon}</a>
+                            </div>
+                            <div className="flex-shrink-0">
+                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                            </div>
+                          </div>
+                          
+                          <div className="text-sm space-y-1">
+                            <p className="text-gray-700">
+                              <span className="font-medium">Führerschein:</span> {f.fuehrerscheinklassen?.join(", ") || "-"}
+                            </p>
+                            {f.beschreibung && (
+                              <p className="text-gray-600 bg-gray-50 p-2 rounded text-xs">
+                                <span className="font-medium">Nachricht:</span> {f.beschreibung}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex gap-2 pt-1">
+                            {f.status === 'pending' && (
+                              <Button
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700 text-white font-medium flex-1"
+                                onClick={() => handleApproveDriver(f.id)}
+                                disabled={approvingDriver === f.id}
+                              >
+                                {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                              </Button>
+                            )}
+                            {f.status === 'active' && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
+                                onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
+                              >
+                                ↻ Zurücksetzen
+                              </Button>
+                            )}
+                          </div>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                           {f.status === 'pending' && (
-                             <Button
-                               size="sm"
-                               className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
-                               onClick={() => handleApproveDriver(f.id)}
-                               disabled={approvingDriver === f.id}
-                             >
-                               {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
-                             </Button>
-                           )}
-                           {f.status === 'active' && (
-                             <Button
-                               size="sm"
-                               variant="outline"
-                               className="text-orange-600 border-orange-300 hover:bg-orange-50"
-                               onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
-                             >
-                               ↻ Zurücksetzen
-                             </Button>
-                           )}
-                         </div>
-                      </TableCell>
-                    </TableRow>
+                      </CardContent>
+                    </Card>
                   ))}
-                </TableBody>
-              </Table>
-            </div>
-
-            {/* Mobile Card View */}
-            <div className="md:hidden space-y-4">
-              {fahrer.map((f) => (
-                <Card key={f.id} className="border-2">
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold text-base">{f.vorname} {f.nachname}</h3>
-                          <p className="text-sm text-gray-600">{f.telefon}</p>
-                        </div>
-                        {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                      </div>
-                      
-                      <div className="text-sm">
-                        <p className="text-gray-600">
-                          <span className="font-medium">Führerschein:</span> {f.fuehrerscheinklassen?.join(", ") || "-"}
-                        </p>
-                        {f.beschreibung && (
-                          <p className="text-gray-600 mt-2">
-                            <span className="font-medium">Nachricht:</span> {f.beschreibung}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex gap-2 pt-2">
-                        {f.status === 'pending' && (
-                          <Button
-                            size="sm"
-                            className="bg-green-600 hover:bg-green-700 text-white font-medium flex-1"
-                            onClick={() => handleApproveDriver(f.id)}
-                            disabled={approvingDriver === f.id}
-                          >
-                            {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
-                          </Button>
-                        )}
-                        {f.status === 'active' && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
-                            onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
-                          >
-                            ↻ Zurücksetzen
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
 
