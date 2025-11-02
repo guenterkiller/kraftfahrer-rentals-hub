@@ -288,7 +288,7 @@ const handler = async (req: Request): Promise<Response> => {
       antwort: antwortValue
     });
     
-    console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}, ip=${ip}`);
+    console.log(`📊 Logged response: job=${invite.job_id}, driver=${driver?.email}, action=${action}`);
 
     // Erfolgsseite zurückgeben
     const confirmMsg = action === "accept"
