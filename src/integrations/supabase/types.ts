@@ -337,6 +337,8 @@ export type Database = {
           beschreibung: string | null
           bf2_erlaubnis: boolean | null
           bf3_erlaubnis: boolean | null
+          blocked_at: string | null
+          blocked_reason: string | null
           created_at: string
           dokumente: Json | null
           email: string
@@ -344,6 +346,7 @@ export type Database = {
           erfahrung_jahre: number | null
           fuehrerscheinklassen: string[] | null
           id: string
+          is_blocked: boolean
           nachname: string
           no_show_count: number
           ort: string | null
@@ -363,6 +366,8 @@ export type Database = {
           beschreibung?: string | null
           bf2_erlaubnis?: boolean | null
           bf3_erlaubnis?: boolean | null
+          blocked_at?: string | null
+          blocked_reason?: string | null
           created_at?: string
           dokumente?: Json | null
           email: string
@@ -370,6 +375,7 @@ export type Database = {
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string
+          is_blocked?: boolean
           nachname: string
           no_show_count?: number
           ort?: string | null
@@ -389,6 +395,8 @@ export type Database = {
           beschreibung?: string | null
           bf2_erlaubnis?: boolean | null
           bf3_erlaubnis?: boolean | null
+          blocked_at?: string | null
+          blocked_reason?: string | null
           created_at?: string
           dokumente?: Json | null
           email?: string
@@ -396,6 +404,7 @@ export type Database = {
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string
+          is_blocked?: boolean
           nachname?: string
           no_show_count?: number
           ort?: string | null
