@@ -1359,11 +1359,13 @@ const Admin = () => {
               </div>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="p-3 md:p-6">
             {jobRequests.length === 0 ? (
-              <p className="text-gray-500 italic">Keine Anfragen vorhanden.</p>
+              <p className="text-gray-500 italic text-center py-4">Keine Anfragen vorhanden.</p>
             ) : (
-              <div className="overflow-x-auto">
+              <>
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
                   <Table>
                   <TableHeader>
                     <TableRow>
@@ -1391,110 +1393,66 @@ const Admin = () => {
                                 <Checkbox
                                   checked={req.status === 'completed'}
                                   onCheckedChange={async (checked) => {
-                                    console.log('✅ Checkbox clicked:', { jobId: req.id, checked, currentStatus: req.status });
                                     if (checked) {
                                       await handleMarkJobCompleted(req.id);
                                     } else {
                                       await handleMarkJobOpen(req.id);
                                     }
-                                    // Optimistische UI + Refetch
-                                    await loadJobRequests();
                                   }}
                                   disabled={isBeingProcessed}
-                                  className="data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground cursor-pointer"
-                                  title={hasActiveAssignment && req.status !== 'completed' ? 
-                                    "⚠️ Achtung: Job hat aktive Zuweisung - trotzdem abschließen möglich" : 
-                                    "Job als erledigt/offen markieren"}
                                 />
                               );
                             })()}
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                const newExpanded = new Set(expandedJobRows);
-                                if (newExpanded.has(req.id)) {
-                                  newExpanded.delete(req.id);
-                                } else {
-                                  newExpanded.add(req.id);
-                                }
-                                setExpandedJobRows(newExpanded);
-                              }}
-                              className="p-0 h-6 w-6"
-                              title="Einladungsstatus anzeigen/verbergen"
-                            >
-                              {expandedJobRows.has(req.id) ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                            </Button>
                           </div>
                         </TableCell>
-                      <TableCell className="font-medium">
-                        <div className="space-y-2">
-                          <button 
-                            onClick={() => handleOpenContactDialog(req.id)}
-                            className="font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer transition-colors"
+                        <TableCell>
+                          <Collapsible
+                            open={expandedJobRows.has(req.id)}
+                            onOpenChange={() => {
+                              const newExpanded = new Set(expandedJobRows);
+                              if (newExpanded.has(req.id)) {
+                                newExpanded.delete(req.id);
+                              } else {
+                                newExpanded.add(req.id);
+                              }
+                              setExpandedJobRows(newExpanded);
+                            }}
                           >
-                            {req.customer_name}
-                          </button>
-                          <div className="text-sm text-gray-600">
-                            <div><strong>Eingang:</strong> {new Date(req.created_at).toLocaleDateString('de-DE')}</div>
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="font-semibold">{req.customer_name}</div>
+                                <div className="text-xs text-gray-500">{req.customer_company || '–'}</div>
+                              </div>
+                              <CollapsibleTrigger asChild>
+                                <Button variant="ghost" size="sm" className="p-0 h-auto">
+                                  {expandedJobRows.has(req.id) ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                </Button>
+                              </CollapsibleTrigger>
+                            </div>
+                          </Collapsible>
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <div className="font-medium">{req.customer_email}</div>
+                            <div className="text-gray-600">{req.customer_phone}</div>
                           </div>
-                          {req.nachricht && (
-                            <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded max-w-xs">
-                              <strong>Nachricht:</strong> {req.nachricht}
-                            </div>
-                          )}
-                          {req.besonderheiten && (
-                            <div className="text-sm text-amber-700 bg-amber-50 p-2 rounded max-w-xs">
-                              <strong>Besonderheiten:</strong> {req.besonderheiten}
-                            </div>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="text-sm">
-                          <div className="font-medium">{req.customer_email}</div>
-                          <div className="text-gray-600">{req.customer_phone}</div>
-                          {req.company && (
-                            <div className="text-gray-500 text-xs">{req.company}</div>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div 
-                          className="text-sm cursor-help"
-                          title={`Ort: ${req.einsatzort}\nZeit: ${req.zeitraum}`}
-                        >
-                          <div className="font-medium truncate max-w-[100px]">{req.einsatzort}</div>
-                          <div className="text-gray-600 truncate max-w-[100px]">{req.zeitraum}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm font-medium">{req.fahrzeugtyp}</span>
-                          <span className="text-xs text-gray-500">({req.fuehrerscheinklasse})</span>
-                        </div>
-                      </TableCell>
-                       <TableCell>
-                          <div className="space-y-1">
+                        </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            {req.eintrittsdatum ? new Date(req.eintrittsdatum).toLocaleDateString('de-DE') : '-'}
+                            {req.einsatzdauer && <div className="text-gray-600">{req.einsatzdauer} Tage</div>}
+                          </div>
+                        </TableCell>
+                        <TableCell>{req.fahrzeugtyp || 'Nicht angegeben'}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-col gap-1">
                             <Badge 
-                               variant={
-                                 req.status === 'confirmed' ? 'default' : 
-                                 req.status === 'assigned' ? 'secondary' : 
-                                 req.status === 'no_show' ? 'destructive' :
-                                 req.status === 'completed' ? 'secondary' :
-                                 'outline'
-                               }
-                               className={
-                                 req.status === 'confirmed' 
-                                   ? 'bg-green-100 text-green-800 border-green-200' 
-                                   : req.status === 'assigned'
-                                   ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                                   : req.status === 'no_show'
-                                   ? 'bg-red-100 text-red-800 border-red-200'
-                                   : req.status === 'completed'
-                                   ? 'bg-gray-100 text-gray-700 border-gray-300'
-                                   : 'bg-blue-100 text-blue-800 border-blue-200'
-                               }
+                              variant={
+                                req.status === 'completed' ? 'outline' :
+                                req.status === 'confirmed' ? 'default' :
+                                req.status === 'assigned' ? 'secondary' :
+                                req.status === 'no_show' ? 'destructive' : 'outline'
+                              }
                             >
                               {req.status === 'confirmed' ? 'Bestätigt' : 
                                 req.status === 'assigned' ? 'Zugewiesen' : 
@@ -1594,7 +1552,200 @@ const Admin = () => {
                   ))}
                 </TableBody>
                 </Table>
-              </div>
+                </div>
+
+                {/* Mobile Card View */}
+                <div className="lg:hidden space-y-4">
+                  {jobRequests.map((req) => {
+                    const a = activeByJob.get(req.id);
+                    const isBeingProcessed = markingCompleted === req.id;
+                    const isExpanded = expandedJobRows.has(req.id);
+                    
+                    return (
+                      <Card key={req.id} className="shadow-sm border-gray-200">
+                        <CardContent className="p-4 space-y-3">
+                          {/* Header mit Checkbox und Status */}
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-start gap-3 flex-1 min-w-0">
+                              <Checkbox
+                                checked={req.status === 'completed'}
+                                onCheckedChange={async (checked) => {
+                                  if (checked) {
+                                    await handleMarkJobCompleted(req.id);
+                                  } else {
+                                    await handleMarkJobOpen(req.id);
+                                  }
+                                }}
+                                disabled={isBeingProcessed}
+                                className="mt-1"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-semibold text-base truncate">{req.customer_name}</h3>
+                                {req.customer_company && (
+                                  <p className="text-sm text-gray-600 truncate">{req.customer_company}</p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex-shrink-0">
+                              <Badge 
+                                variant={
+                                  req.status === 'completed' ? 'outline' :
+                                  req.status === 'confirmed' ? 'default' :
+                                  req.status === 'assigned' ? 'secondary' :
+                                  req.status === 'no_show' ? 'destructive' : 'outline'
+                                }
+                                className="text-xs"
+                              >
+                                {req.status === 'confirmed' ? 'Bestätigt' : 
+                                  req.status === 'assigned' ? 'Zugewiesen' : 
+                                  req.status === 'no_show' ? 'No-Show' :
+                                  req.status === 'completed' ? 'Erledigt' : 'Offen'}
+                              </Badge>
+                            </div>
+                          </div>
+
+                          {/* Adresswarnung */}
+                          {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
+                            <Badge 
+                              variant="outline" 
+                              className="bg-orange-50 text-orange-700 border-orange-300 text-xs w-full justify-center"
+                            >
+                              ⚠️ Adresse unvollständig
+                            </Badge>
+                          )}
+
+                          {/* Kontaktdaten */}
+                          <div className="text-sm space-y-1 bg-gray-50 p-2 rounded">
+                            <div className="flex items-center gap-2">
+                              <Mail className="h-3 w-3 text-gray-500" />
+                              <a href={`mailto:${req.customer_email}`} className="text-blue-600 hover:underline truncate">
+                                {req.customer_email}
+                              </a>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-gray-700">📞</span>
+                              <a href={`tel:${req.customer_phone}`} className="text-blue-600 hover:underline">
+                                {req.customer_phone}
+                              </a>
+                            </div>
+                          </div>
+
+                          {/* Einsatzdaten */}
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <span className="font-medium text-gray-700">Fahrzeugtyp:</span>
+                              <p className="text-gray-900">{req.fahrzeugtyp || 'Nicht angegeben'}</p>
+                            </div>
+                            <div>
+                              <span className="font-medium text-gray-700">Start:</span>
+                              <p className="text-gray-900">
+                                {req.eintrittsdatum ? new Date(req.eintrittsdatum).toLocaleDateString('de-DE') : '-'}
+                              </p>
+                            </div>
+                            {req.einsatzdauer && (
+                              <div className="col-span-2">
+                                <span className="font-medium text-gray-700">Dauer:</span>
+                                <p className="text-gray-900">{req.einsatzdauer} Tage</p>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Zuweisung */}
+                          {a ? (
+                            <div className="bg-blue-50 p-3 rounded space-y-2">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium text-blue-900">
+                                  {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
+                                </span>
+                                <span className="text-sm text-blue-700">
+                                  {a.rate_value}€/{a.rate_type === 'hourly' ? 'Std' : 'Tag'}
+                                </span>
+                              </div>
+                              <div className="flex gap-2 flex-wrap">
+                                <Button 
+                                  size="sm" 
+                                  onClick={() => resendDriverConfirmationNew(a.id)}
+                                  className="flex-1 min-w-[140px]"
+                                >
+                                  E-Mail erneut senden
+                                </Button>
+                                <Button 
+                                  size="sm" 
+                                  variant="outline" 
+                                  onClick={() => handleAssignDriver(req.id)}
+                                  className="flex-1 min-w-[100px]"
+                                >
+                                  Ändern
+                                </Button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <Button 
+                                size="sm" 
+                                onClick={() => handleAssignDriver(req.id)}
+                                disabled={req.status === 'completed'}
+                                className="w-full h-11"
+                              >
+                                👤 Fahrer zuweisen
+                              </Button>
+                              <div className="flex gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleSendJobToAllDrivers(req.id)}
+                                  disabled={sendingJobToAll === req.id || req.status === 'completed'}
+                                  className="flex-1 h-11"
+                                >
+                                  <Mail className="h-4 w-4 mr-1" />
+                                  {sendingJobToAll === req.id ? 'Sende...' : 'An alle senden'}
+                                </Button>
+                                {!req.customer_street && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => handleOpenContactDialog(req.id)}
+                                    className="flex-1 text-orange-600 border-orange-300 hover:bg-orange-50 h-11"
+                                  >
+                                    <Edit className="h-4 w-4 mr-1" />
+                                    Adresse
+                                  </Button>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Einladungsstatus Toggle */}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const newExpanded = new Set(expandedJobRows);
+                              if (newExpanded.has(req.id)) {
+                                newExpanded.delete(req.id);
+                              } else {
+                                newExpanded.add(req.id);
+                              }
+                              setExpandedJobRows(newExpanded);
+                            }}
+                            className="w-full justify-between"
+                          >
+                            <span>Einladungsstatus anzeigen</span>
+                            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                          </Button>
+
+                          {/* Einladungsstatus */}
+                          {isExpanded && (
+                            <div className="bg-muted/50 p-3 rounded">
+                              <JobInvitesStatus jobId={req.id} />
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -1635,25 +1786,25 @@ const Admin = () => {
       />
 
       {/* Job Assignments Section */}
-      <Card className="mt-6">
+      <Card className="mt-6 md:mt-8">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
             <Users className="h-5 w-5" />
             Zuweisungen ({jobAssignments.length})
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3 md:p-6">
           {jobAssignments.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
               Keine Zuweisungen vorhanden.
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {jobAssignments.map((assignment) => (
-                <div key={assignment.id} className="border rounded-lg p-4 space-y-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h4 className="font-semibold">
+                <div key={assignment.id} className="border rounded-lg p-3 md:p-4 space-y-3">
+                  <div className="flex flex-col md:flex-row justify-between md:items-start gap-2">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-base">
                         {assignment.fahrer_profile.vorname} {assignment.fahrer_profile.nachname}
                       </h4>
                       <p className="text-sm text-muted-foreground">
@@ -1667,6 +1818,7 @@ const Admin = () => {
                             assignment.status === 'assigned' ? 'secondary' : 
                             assignment.status === 'no_show' ? 'destructive' : 'destructive'
                           }
+                          className="text-xs"
                         >
                           {assignment.status === 'assigned' ? 'Zugewiesen' :
                            assignment.status === 'confirmed' ? 'Bestätigt' : 
@@ -1675,7 +1827,7 @@ const Admin = () => {
                       </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 text-sm">
                     <div>
                       <span className="font-medium">Satz:</span> {assignment.rate_value}€ ({assignment.rate_type === 'hourly' ? 'Stunde' : 'Tag'})
                     </div>
@@ -1687,7 +1839,7 @@ const Admin = () => {
                   </div>
 
                   {assignment.admin_note && (
-                    <div className="text-sm">
+                    <div className="text-sm bg-gray-50 p-2 rounded">
                       <span className="font-medium">Notiz:</span> {assignment.admin_note}
                     </div>
                   )}
@@ -1698,7 +1850,7 @@ const Admin = () => {
                          size="sm"
                          onClick={() => confirmAndSend(assignment.id)}
                          disabled={confirmingAssignment === assignment.id}
-                         className="flex items-center gap-1"
+                         className="flex items-center gap-1 h-10 w-full md:w-auto"
                        >
                          <Check className="h-4 w-4" />
                          {confirmingAssignment === assignment.id ? "Bestätige..." : "Bestätigen & E-Mail senden"}
@@ -1712,7 +1864,7 @@ const Admin = () => {
                         size="sm"
                         variant="destructive"
                         onClick={() => handleMarkNoShow(assignment)}
-                        className="flex items-center gap-1"
+                        className="flex items-center gap-1 h-10 w-full md:w-auto"
                       >
                         <X className="h-4 w-4" />
                         No-Show markieren
@@ -1721,13 +1873,13 @@ const Admin = () => {
                   )}
 
                   {assignment.status === 'no_show' && assignment.no_show_fee_cents && (
-                    <div className="text-sm text-red-600 font-medium">
+                    <div className="text-sm text-red-600 font-medium bg-red-50 p-2 rounded">
                       Schadensersatz: {(assignment.no_show_fee_cents / 100).toFixed(2)} € ({assignment.no_show_tier})
                     </div>
                   )}
 
                   {assignment.status === 'confirmed' && (
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-xs md:text-sm text-muted-foreground">
                       Bestätigt am: {new Date(assignment.confirmed_at).toLocaleString('de-DE')}
                     </div>
                   )}
