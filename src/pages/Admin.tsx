@@ -84,7 +84,6 @@ const Admin = () => {
   const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
   const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
-  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({});
   
   
   
@@ -737,17 +736,12 @@ const Admin = () => {
   };
 
   const toggleBlockDriver = async (id: string, currentBlockStatus: boolean, driverName: string) => {
-    // Prevent duplicate calls
-    if (loadingStates[`block-${id}`]) return;
-    
     try {
       const reason = currentBlockStatus 
         ? undefined 
         : prompt('Grund für die Sperre (optional):');
       
       if (!currentBlockStatus && reason === null) return; // User cancelled
-      
-      setLoadingStates(prev => ({ ...prev, [`block-${id}`]: true }));
       
       const { data, error } = await supabase.functions.invoke('toggle-driver-block', {
         body: { 
@@ -1229,15 +1223,14 @@ const Admin = () => {
                                    ↻ Zurücksetzen
                                  </Button>
                                )}
-                                <Button
-                                  size="sm"
-                                  variant={f.is_blocked ? "outline" : "destructive"}
-                                  className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50" : ""}
-                                  onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
-                                  disabled={loadingStates[`block-${f.id}`]}
-                                >
-                                  {loadingStates[`block-${f.id}`] ? 'Wird verarbeitet...' : (f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren')}
-                                </Button>
+                               <Button
+                                 size="sm"
+                                 variant={f.is_blocked ? "outline" : "destructive"}
+                                 className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50" : ""}
+                                 onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
+                               >
+                                 {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
+                               </Button>
                              </div>
                           </TableCell>
                         </TableRow>
@@ -1310,9 +1303,8 @@ const Admin = () => {
                               variant={f.is_blocked ? "outline" : "destructive"}
                               className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50 flex-1" : "flex-1"}
                               onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
-                              disabled={loadingStates[`block-${f.id}`]}
                             >
-                              {loadingStates[`block-${f.id}`] ? 'Lädt...' : (f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren')}
+                              {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                             </Button>
                           </div>
                         </div>
