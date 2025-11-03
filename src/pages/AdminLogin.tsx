@@ -78,11 +78,7 @@ const AdminLogin = () => {
       toast({ title: "Erfolgreich angemeldet" });
       
       console.log('Navigating to /admin...');
-      
-      // Force reload after navigation to ensure components re-check localStorage
-      setTimeout(() => {
-        window.location.href = "/admin";
-      }, 500);
+      navigate("/admin", { replace: true });
       
     } catch (err: any) {
       console.error('Login error:', err);
