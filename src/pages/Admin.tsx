@@ -29,6 +29,9 @@ interface FahrerProfile {
   email: string;
   telefon: string;
   status: string;
+  is_blocked?: boolean;
+  blocked_at?: string;
+  blocked_reason?: string;
   created_at: string;
   dokumente: any;
   fuehrerscheinklassen: string[] | null;
@@ -732,6 +735,48 @@ const Admin = () => {
     }
   };
 
+  const toggleBlockDriver = async (id: string, currentBlockStatus: boolean, driverName: string) => {
+    try {
+      const reason = currentBlockStatus 
+        ? undefined 
+        : prompt('Grund für die Sperre (optional):');
+      
+      if (!currentBlockStatus && reason === null) return; // User cancelled
+      
+      const { data, error } = await supabase.functions.invoke('toggle-driver-block', {
+        body: { 
+          driverId: id, 
+          isBlocked: !currentBlockStatus,
+          reason: reason 
+        }
+      });
+
+      if (error) throw error;
+
+      setFahrer(prev => 
+        prev.map(f => f.id === id ? { 
+          ...f, 
+          is_blocked: !currentBlockStatus,
+          blocked_at: !currentBlockStatus ? new Date().toISOString() : undefined,
+          blocked_reason: !currentBlockStatus ? reason || undefined : undefined
+        } : f)
+      );
+
+      toast({
+        title: !currentBlockStatus ? "Fahrer gesperrt" : "Sperre aufgehoben",
+        description: !currentBlockStatus 
+          ? `${driverName} wurde gesperrt.${reason ? ` Grund: ${reason}` : ''}` 
+          : `${driverName} wurde entsperrt.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Fehler",
+        description: "Status konnte nicht aktualisiert werden.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSendJobToAllDrivers = async (jobId: string) => {
     console.log('📧 Sending job to all drivers:', jobId);
     setSendingJobToAll(jobId);
@@ -1151,7 +1196,12 @@ const Admin = () => {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {f.is_blocked && (
+                                <Badge variant="destructive" className="bg-red-600">
+                                  🚫 GESPERRT
+                                </Badge>
+                              )}
                               {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                                {f.status === 'pending' && (
                                  <Button
@@ -1173,6 +1223,14 @@ const Admin = () => {
                                    ↻ Zurücksetzen
                                  </Button>
                                )}
+                               <Button
+                                 size="sm"
+                                 variant={f.is_blocked ? "outline" : "destructive"}
+                                 className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50" : ""}
+                                 onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
+                               >
+                                 {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
+                               </Button>
                              </div>
                           </TableCell>
                         </TableRow>
@@ -1192,10 +1250,21 @@ const Admin = () => {
                               <h3 className="font-semibold text-base truncate">{f.vorname} {f.nachname}</h3>
                               <a href={`tel:${f.telefon}`} className="text-sm text-blue-600 hover:underline">{f.telefon}</a>
                             </div>
-                            <div className="flex-shrink-0">
+                            <div className="flex-shrink-0 flex gap-1">
+                              {f.is_blocked && (
+                                <Badge variant="destructive" className="bg-red-600 text-xs">
+                                  🚫
+                                </Badge>
+                              )}
                               {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                             </div>
                           </div>
+                          
+                          {f.is_blocked && f.blocked_reason && (
+                            <div className="text-xs text-red-600 bg-red-50 dark:bg-red-950/20 p-2 rounded">
+                              <strong>Sperrgrund:</strong> {f.blocked_reason}
+                            </div>
+                          )}
                           
                           <div className="text-sm space-y-1">
                             <p className="text-gray-700">
@@ -1208,7 +1277,7 @@ const Admin = () => {
                             )}
                           </div>
 
-                          <div className="flex gap-2 pt-1">
+                          <div className="flex gap-2 pt-1 flex-wrap">
                             {f.status === 'pending' && (
                               <Button
                                 size="sm"
@@ -1229,6 +1298,14 @@ const Admin = () => {
                                 ↻ Zurücksetzen
                               </Button>
                             )}
+                            <Button
+                              size="sm"
+                              variant={f.is_blocked ? "outline" : "destructive"}
+                              className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50 flex-1" : "flex-1"}
+                              onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
+                            >
+                              {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
+                            </Button>
                           </div>
                         </div>
                       </CardContent>
