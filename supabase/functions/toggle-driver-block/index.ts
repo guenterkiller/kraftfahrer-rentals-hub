@@ -103,39 +103,133 @@ async function sendBlockNotification(
     const contactPhone = '01577 1442285';
 
     const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #d32f2f;">Vorübergehende Sperrung Ihres Fahrerprofils</h2>
-        
-        <p>Sehr geehrte/r ${driver.vorname} ${driver.nachname},</p>
-        
-        <p>Ihr Fahrerprofil bei fahrerexpress wurde vorübergehend gesperrt.</p>
-        
-        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 20px 0;">
-          <strong>Grund der Sperrung:</strong><br>
-          ${reason}
-        </div>
-        
-        <h3 style="color: #333; margin-top: 30px;">Ihre Rechte</h3>
-        <ul style="line-height: 1.8;">
-          <li><strong>Widerspruchsrecht:</strong> Sie haben das Recht, gegen diese Sperrung Widerspruch einzulegen</li>
-          <li><strong>Stellungnahme:</strong> Sie können zu diesem Vorgang Stellung nehmen</li>
-          <li><strong>Auskunft:</strong> Sie können jederzeit Auskunft über die zu Ihrer Person gespeicherten Daten verlangen (DSGVO Art. 15)</li>
-        </ul>
-        
-        <h3 style="color: #333; margin-top: 30px;">Kontakt</h3>
-        <p>Bitte wenden Sie sich bei Fragen oder zur Klärung an:</p>
-        <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-          <strong>fahrerexpress (Günter Killer)</strong><br>
-          E-Mail: <a href="mailto:${contactEmail}">${contactEmail}</a><br>
-          Telefon: ${contactPhone}<br>
-          Adresse: Walther-von-Cronberg-Platz 12, 60594 Frankfurt
-        </div>
-        
-        <p style="margin-top: 30px; color: #666; font-size: 12px;">
-          Diese E-Mail wurde automatisch generiert. Die Sperrung erfolgte gemäß unserer AGB und 
-          den vertraglichen Vereinbarungen. Sie erhalten diese Information gemäß Art. 14 DSGVO.
-        </p>
-      </div>
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sperrung Fahrerprofil</title>
+      </head>
+      <body style="margin: 0; padding: 0; background-color: #f8f8f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f8f8f8;">
+          <tr>
+            <td align="center" style="padding: 40px 20px;">
+              <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, hsl(0, 73%, 41%) 0%, hsl(0, 73%, 51%) 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                    <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">fahrerexpress</h1>
+                    <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">Fahrervermittlung</p>
+                  </td>
+                </tr>
+                
+                <!-- Warning Banner -->
+                <tr>
+                  <td style="background-color: #fef3cd; border-left: 4px solid #ffc107; padding: 20px 30px;">
+                    <p style="margin: 0; color: #856404; font-size: 16px; font-weight: 600;">
+                      ⚠️ Wichtige Information zu Ihrem Fahrerprofil
+                    </p>
+                  </td>
+                </tr>
+                
+                <!-- Main Content -->
+                <tr>
+                  <td style="padding: 30px;">
+                    <p style="margin: 0 0 20px 0; color: #333; font-size: 16px; line-height: 1.6;">
+                      Sehr geehrte/r ${driver.vorname} ${driver.nachname},
+                    </p>
+                    
+                    <p style="margin: 0 0 24px 0; color: #333; font-size: 16px; line-height: 1.6;">
+                      Ihr Fahrerprofil bei <strong>fahrerexpress</strong> wurde vorübergehend gesperrt.
+                    </p>
+                    
+                    <!-- Reason Box -->
+                    <div style="background-color: #fff5f5; border: 1px solid #fee; border-radius: 6px; padding: 20px; margin: 24px 0;">
+                      <p style="margin: 0 0 8px 0; color: #c53030; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Grund der Sperrung
+                      </p>
+                      <p style="margin: 0; color: #333; font-size: 15px; line-height: 1.6;">
+                        ${reason}
+                      </p>
+                    </div>
+                    
+                    <!-- Rights Section -->
+                    <div style="margin: 32px 0;">
+                      <h2 style="margin: 0 0 16px 0; color: hsl(0, 73%, 41%); font-size: 18px; font-weight: 600;">
+                        Ihre Rechte
+                      </h2>
+                      <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                          <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                            <p style="margin: 0; color: #333; font-size: 15px; line-height: 1.6;">
+                              <strong style="color: hsl(0, 73%, 41%);">Widerspruchsrecht:</strong> Sie haben das Recht, gegen diese Sperrung Widerspruch einzulegen
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
+                            <p style="margin: 0; color: #333; font-size: 15px; line-height: 1.6;">
+                              <strong style="color: hsl(0, 73%, 41%);">Stellungnahme:</strong> Sie können zu diesem Vorgang Stellung nehmen
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 12px 0;">
+                            <p style="margin: 0; color: #333; font-size: 15px; line-height: 1.6;">
+                              <strong style="color: hsl(0, 73%, 41%);">Auskunftsrecht:</strong> Sie können jederzeit Auskunft über die zu Ihrer Person gespeicherten Daten verlangen (DSGVO Art. 15)
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    
+                    <!-- Contact Section -->
+                    <div style="background-color: #f8f9fa; border-radius: 6px; padding: 24px; margin: 32px 0;">
+                      <h3 style="margin: 0 0 16px 0; color: #333; font-size: 16px; font-weight: 600;">
+                        Kontakt für Rückfragen
+                      </h3>
+                      <table role="presentation" style="width: 100%;">
+                        <tr>
+                          <td>
+                            <p style="margin: 0 0 8px 0; color: #333; font-size: 15px; font-weight: 600;">
+                              fahrerexpress (Günter Killer)
+                            </p>
+                            <p style="margin: 0 0 4px 0; color: #666; font-size: 14px;">
+                              📧 <a href="mailto:${contactEmail}" style="color: hsl(0, 73%, 41%); text-decoration: none;">${contactEmail}</a>
+                            </p>
+                            <p style="margin: 0 0 4px 0; color: #666; font-size: 14px;">
+                              📞 ${contactPhone}
+                            </p>
+                            <p style="margin: 0; color: #666; font-size: 14px;">
+                              📍 Walther-von-Cronberg-Platz 12, 60594 Frankfurt
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="background-color: #f8f9fa; padding: 24px 30px; border-radius: 0 0 8px 8px; border-top: 1px solid #e9ecef;">
+                    <p style="margin: 0 0 8px 0; color: #6c757d; font-size: 12px; line-height: 1.5;">
+                      Diese E-Mail wurde automatisch generiert. Die Sperrung erfolgte gemäß unserer AGB und den vertraglichen Vereinbarungen.
+                    </p>
+                    <p style="margin: 0; color: #6c757d; font-size: 12px; line-height: 1.5;">
+                      Sie erhalten diese Information gemäß Art. 14 DSGVO. Weitere Informationen zum Datenschutz finden Sie unter 
+                      <a href="https://fahrerexpress.de/datenschutz" style="color: hsl(0, 73%, 41%);">fahrerexpress.de/datenschutz</a>
+                    </p>
+                  </td>
+                </tr>
+                
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
     `;
 
     await resend.emails.send({
