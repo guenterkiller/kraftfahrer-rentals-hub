@@ -250,48 +250,120 @@ async function sendBlockNotification(
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fahrer gesperrt</title>
       </head>
-      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: hsl(0, 73%, 41%); border-bottom: 2px solid hsl(0, 73%, 41%); padding-bottom: 10px;">
-            Fahrer gesperrt - Admin-Benachrichtigung
-          </h2>
-          
-          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: #333;">Fahrer-Details</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 8px 0; font-weight: 600; width: 120px;">Name:</td>
-                <td style="padding: 8px 0;">${driver.vorname} ${driver.nachname}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: 600;">E-Mail:</td>
-                <td style="padding: 8px 0;">${driver.email}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: 600;">Fahrer-ID:</td>
-                <td style="padding: 8px 0; font-family: monospace; font-size: 12px;">${driverId}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; font-weight: 600;">Zeitpunkt:</td>
-                <td style="padding: 8px 0;">${new Date().toLocaleString('de-DE', { 
-                  dateStyle: 'full', 
-                  timeStyle: 'short' 
-                })}</td>
-              </tr>
-            </table>
-          </div>
-          
-          <div style="background-color: #fff5f5; border-left: 4px solid hsl(0, 73%, 41%); padding: 15px; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: hsl(0, 73%, 41%);">Grund der Sperrung</h3>
-            <p style="margin: 0; white-space: pre-wrap;">${reason}</p>
-          </div>
-          
-          <p style="color: #666; font-size: 13px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-            Diese E-Mail wurde automatisch generiert vom fahrerexpress System.<br>
-            Der Fahrer wurde ebenfalls per E-Mail über die Sperrung informiert.
-          </p>
-        </div>
+      <body style="margin: 0; padding: 0; background-color: #f8f8f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <table role="presentation" style="width: 100%; border-collapse: collapse; background-color: #f8f8f8;">
+          <tr>
+            <td align="center" style="padding: 40px 20px;">
+              <table role="presentation" style="max-width: 600px; width: 100%; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                
+                <!-- Header -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, hsl(0, 73%, 41%) 0%, hsl(0, 73%, 51%) 100%); padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                    <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">🚫 Fahrersperrung durchgeführt</h1>
+                    <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.9); font-size: 14px;">Admin-Benachrichtigung</p>
+                  </td>
+                </tr>
+                
+                <!-- Main Content -->
+                <tr>
+                  <td style="padding: 30px;">
+                    <p style="margin: 0 0 24px 0; color: #333; font-size: 16px; line-height: 1.6;">
+                      Ein Fahrerprofil wurde im System gesperrt. Nachfolgend die Details:
+                    </p>
+                    
+                    <!-- Driver Details -->
+                    <div style="background-color: #f8f9fa; border-radius: 6px; padding: 24px; margin: 24px 0;">
+                      <h2 style="margin: 0 0 16px 0; color: hsl(0, 73%, 41%); font-size: 18px; font-weight: 600;">
+                        Fahrer-Informationen
+                      </h2>
+                      <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef; width: 140px;">
+                            <strong style="color: #495057; font-size: 14px;">Name:</strong>
+                          </td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+                            <span style="color: #212529; font-size: 15px;">${driver.vorname} ${driver.nachname}</span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+                            <strong style="color: #495057; font-size: 14px;">E-Mail:</strong>
+                          </td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+                            <a href="mailto:${driver.email}" style="color: hsl(0, 73%, 41%); text-decoration: none; font-size: 15px;">${driver.email}</a>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+                            <strong style="color: #495057; font-size: 14px;">Fahrer-ID:</strong>
+                          </td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #e9ecef;">
+                            <code style="background-color: #e9ecef; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #495057;">${driverId}</code>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0;">
+                            <strong style="color: #495057; font-size: 14px;">Gesperrt am:</strong>
+                          </td>
+                          <td style="padding: 10px 0;">
+                            <span style="color: #212529; font-size: 15px;">${new Date().toLocaleString('de-DE', { 
+                              weekday: 'long',
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}</span>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    
+                    <!-- Block Reason -->
+                    <div style="background-color: #fff5f5; border: 1px solid #fee; border-left: 4px solid hsl(0, 73%, 41%); border-radius: 6px; padding: 20px; margin: 24px 0;">
+                      <p style="margin: 0 0 8px 0; color: hsl(0, 73%, 41%); font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        Sperrgrund
+                      </p>
+                      <p style="margin: 0; color: #333; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">${reason}</p>
+                    </div>
+                    
+                    <!-- Info Box -->
+                    <div style="background-color: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 6px; padding: 16px; margin: 24px 0;">
+                      <p style="margin: 0; color: #004085; font-size: 14px; line-height: 1.6;">
+                        ℹ️ <strong>Automatische Benachrichtigung:</strong> Der Fahrer wurde parallel per E-Mail über die Sperrung informiert und erhielt Informationen zu seinen Rechten (Widerspruch, Stellungnahme, DSGVO-Auskunft).
+                      </p>
+                    </div>
+                    
+                    <!-- Action Required -->
+                    <div style="margin: 32px 0;">
+                      <h3 style="margin: 0 0 12px 0; color: #333; font-size: 16px; font-weight: 600;">
+                        Nächste Schritte
+                      </h3>
+                      <ul style="margin: 0; padding-left: 20px; color: #666; font-size: 14px; line-height: 1.8;">
+                        <li>Dokumentation der Sperrung im Admin-System ist erfolgt</li>
+                        <li>Bei Rückfragen des Fahrers: Stellungnahme prüfen und dokumentieren</li>
+                        <li>Entsperrung bei Klärung über Admin-Panel möglich</li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                
+                <!-- Footer -->
+                <tr>
+                  <td style="background-color: #f8f9fa; padding: 20px 30px; border-radius: 0 0 8px 8px; border-top: 1px solid #e9ecef; text-align: center;">
+                    <p style="margin: 0; color: #6c757d; font-size: 12px; line-height: 1.5;">
+                      Diese E-Mail wurde automatisch vom <strong>fahrerexpress</strong> Admin-System generiert<br>
+                      Walther-von-Cronberg-Platz 12 · 60594 Frankfurt · info@poolaufbau.com
+                    </p>
+                  </td>
+                </tr>
+                
+              </table>
+            </td>
+          </tr>
+        </table>
       </body>
       </html>
     `;
@@ -299,7 +371,7 @@ async function sendBlockNotification(
     await resend.emails.send({
       from: mailFrom,
       to: [adminEmail],
-      subject: `🚫 Fahrer gesperrt: ${driver.vorname} ${driver.nachname}`,
+      subject: `🚫 Fahrersperrung: ${driver.vorname} ${driver.nachname}`,
       html: adminHtml,
     });
 
