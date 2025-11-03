@@ -8,7 +8,7 @@ import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
 import NotFound from "./pages/NotFound";
 import FahrerRegistrierung from "./pages/FahrerRegistrierung";
-import FahrerAdmin from "./pages/FahrerAdmin";
+
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
@@ -61,7 +61,7 @@ const App = () => (
           <Route path="/frankfurt" element={<Frankfurt />} />
           <Route path="/hessen" element={<Hessen />} />
           <Route path="/rhein-main" element={<RheinMain />} />
-          <Route path="/fahrer-admin" element={<FahrerAdmin />} />
+          
           
           <Route path="/vermittlung" element={<Vermittlung />} />
           <Route path="/wissenswertes" element={<Wissenswertes />} />
