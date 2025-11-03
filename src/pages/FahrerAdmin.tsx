@@ -36,6 +36,9 @@ interface FahrerProfile {
   verfuegbarkeit?: string;
   beschreibung?: string;
   status: string;
+  is_blocked?: boolean;
+  blocked_at?: string;
+  blocked_reason?: string;
   created_at: string;
   dokumente?: FahrerDokument[];
 }
@@ -122,6 +125,42 @@ const FahrerAdmin = () => {
       toast({
         title: "Status aktualisiert",
         description: `Fahrer wurde ${status === 'approved' ? 'freigegeben' : 'abgelehnt'}.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Fehler",
+        description: "Status konnte nicht aktualisiert werden.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const toggleBlockDriver = async (id: string, currentBlockStatus: boolean, reason?: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('toggle-driver-block', {
+        body: { 
+          driverId: id, 
+          isBlocked: !currentBlockStatus,
+          reason: reason 
+        }
+      });
+
+      if (error) throw error;
+
+      setFahrer(prev => 
+        prev.map(f => f.id === id ? { 
+          ...f, 
+          is_blocked: !currentBlockStatus,
+          blocked_at: !currentBlockStatus ? new Date().toISOString() : null,
+          blocked_reason: !currentBlockStatus ? reason : null
+        } : f)
+      );
+
+      toast({
+        title: !currentBlockStatus ? "Fahrer gesperrt" : "Sperre aufgehoben",
+        description: !currentBlockStatus 
+          ? `Fahrer wurde gesperrt.${reason ? ` Grund: ${reason}` : ''}` 
+          : "Fahrer wurde entsperrt.",
       });
     } catch (error) {
       toast({
@@ -266,13 +305,25 @@ const FahrerAdmin = () => {
             {filteredFahrer.map((fahrerProfile) => (
               <Card key={fahrerProfile.id}>
                 <CardHeader>
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between items-start flex-wrap gap-2">
                     <CardTitle className="flex items-center gap-2">
                       <User className="h-5 w-5" />
                       {fahrerProfile.vorname} {fahrerProfile.nachname}
                     </CardTitle>
-                    {getStatusBadge(fahrerProfile.status)}
+                    <div className="flex gap-2">
+                      {getStatusBadge(fahrerProfile.status)}
+                      {fahrerProfile.is_blocked && (
+                        <Badge variant="destructive" className="bg-red-600">
+                          🚫 GESPERRT
+                        </Badge>
+                      )}
+                    </div>
                   </div>
+                  {fahrerProfile.is_blocked && fahrerProfile.blocked_reason && (
+                    <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-950/20 p-2 rounded">
+                      <strong>Sperrgrund:</strong> {fahrerProfile.blocked_reason}
+                    </div>
+                  )}
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-6">
@@ -431,22 +482,40 @@ const FahrerAdmin = () => {
                   )}
 
                   {/* Aktionen */}
-                  {fahrerProfile.status === 'pending' && (
-                    <div className="flex gap-2 mt-4">
-                      <Button
-                        onClick={() => updateStatus(fahrerProfile.id, 'approved')}
-                        className="bg-green-600 hover:bg-green-700"
-                      >
-                        Freigeben
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        onClick={() => updateStatus(fahrerProfile.id, 'rejected')}
-                      >
-                        Ablehnen
-                      </Button>
-                    </div>
-                  )}
+                  <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                    {fahrerProfile.status === 'pending' && (
+                      <>
+                        <Button
+                          onClick={() => updateStatus(fahrerProfile.id, 'approved')}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          Freigeben
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          onClick={() => updateStatus(fahrerProfile.id, 'rejected')}
+                        >
+                          Ablehnen
+                        </Button>
+                      </>
+                    )}
+                    
+                    {/* Sperr-Button für alle Fahrer */}
+                    <Button
+                      variant={fahrerProfile.is_blocked ? "outline" : "destructive"}
+                      onClick={() => {
+                        const reason = fahrerProfile.is_blocked 
+                          ? undefined 
+                          : prompt('Grund für die Sperre (optional):');
+                        if (fahrerProfile.is_blocked || reason !== null) {
+                          toggleBlockDriver(fahrerProfile.id, fahrerProfile.is_blocked || false, reason || undefined);
+                        }
+                      }}
+                      className={fahrerProfile.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50" : ""}
+                    >
+                    {fahrerProfile.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
