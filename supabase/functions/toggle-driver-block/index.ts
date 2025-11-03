@@ -232,6 +232,7 @@ async function sendBlockNotification(
       </html>
     `;
 
+
     await resend.emails.send({
       from: mailFrom,
       to: [driver.email],
@@ -239,7 +240,70 @@ async function sendBlockNotification(
       html: emailHtml,
     });
 
-    console.log(`✉️ Block notification sent to ${driver.email}`);
+    console.log(`✉️ Block notification sent to driver ${driver.email}`);
+
+    // Send notification to admin
+    const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'guenter.killer@t-online.de';
+    const adminHtml = `
+      <!DOCTYPE html>
+      <html lang="de">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      </head>
+      <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: hsl(0, 73%, 41%); border-bottom: 2px solid hsl(0, 73%, 41%); padding-bottom: 10px;">
+            Fahrer gesperrt - Admin-Benachrichtigung
+          </h2>
+          
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 6px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: #333;">Fahrer-Details</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; font-weight: 600; width: 120px;">Name:</td>
+                <td style="padding: 8px 0;">${driver.vorname} ${driver.nachname}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: 600;">E-Mail:</td>
+                <td style="padding: 8px 0;">${driver.email}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: 600;">Fahrer-ID:</td>
+                <td style="padding: 8px 0; font-family: monospace; font-size: 12px;">${driverId}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; font-weight: 600;">Zeitpunkt:</td>
+                <td style="padding: 8px 0;">${new Date().toLocaleString('de-DE', { 
+                  dateStyle: 'full', 
+                  timeStyle: 'short' 
+                })}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div style="background-color: #fff5f5; border-left: 4px solid hsl(0, 73%, 41%); padding: 15px; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: hsl(0, 73%, 41%);">Grund der Sperrung</h3>
+            <p style="margin: 0; white-space: pre-wrap;">${reason}</p>
+          </div>
+          
+          <p style="color: #666; font-size: 13px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+            Diese E-Mail wurde automatisch generiert vom fahrerexpress System.<br>
+            Der Fahrer wurde ebenfalls per E-Mail über die Sperrung informiert.
+          </p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await resend.emails.send({
+      from: mailFrom,
+      to: [adminEmail],
+      subject: `🚫 Fahrer gesperrt: ${driver.vorname} ${driver.nachname}`,
+      html: adminHtml,
+    });
+
+    console.log(`✉️ Admin notification sent to ${adminEmail}`);
 
     // Log email in database
     await supabase.from('email_log').insert({
