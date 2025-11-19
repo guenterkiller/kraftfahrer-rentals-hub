@@ -47,15 +47,15 @@ const ServicesSection = () => {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-4">Unsere Dienstleistungen</h2>
-        <p className="text-center text-lg text-muted-foreground mb-12">Von Personalengpässen bis Projektlösungen – wir vermitteln die passenden Fahrer</p>
+        <h2 className="text-3xl font-bold text-center mb-4">Unsere Leistungen</h2>
+        <p className="text-center text-lg text-muted-foreground mb-12">Personalengpässe, Überführungen & Projektlösungen</p>
         
         {/* Services Overview Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {services.map((service, index) => (
             <Card key={index}>
               <CardHeader>
-                <service.icon className="h-10 w-10 text-primary mb-2" />
+                <service.icon className="h-10 w-10 text-primary mb-2" aria-hidden="true" />
                 <CardTitle className="text-base">{service.title}</CardTitle>
               </CardHeader>
               <CardContent>

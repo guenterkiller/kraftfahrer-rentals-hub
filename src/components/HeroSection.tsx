@@ -25,18 +25,12 @@ const HeroSection = () => {
         
         <div className="bg-primary/90 backdrop-blur-sm text-white p-4 md:p-6 mb-8 max-w-4xl mx-auto rounded-lg shadow-xl animate-slide-up">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 drop-shadow-md">
-            Selbstständige Profi-Fahrer für Transporte, Baustellen und Spezialaufgaben – bundesweit verfügbar.
+            Bundesweit qualifizierte Fahrer – CE, ADR, Fahrmischer & Baumaschinen
           </h2>
           <p className="text-base sm:text-lg md:text-xl drop-shadow-sm">
-            Wir vermitteln qualifizierte selbstständige LKW-Fahrer – flexibel, rechtskonform und ohne Arbeitnehmerüberlassung.
+            Rechtskonform als Dienst-/Werkleistung • Keine Arbeitnehmerüberlassung • 24-72h Verfügbarkeit
           </p>
         </div>
-        
-        <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-6 max-w-4xl mx-auto leading-relaxed px-4 drop-shadow-sm animate-fade-in">
-          Sie möchten einen Fahrer mieten? Fahrerexpress vermittelt bundesweit 
-          selbstständige Fahrer für alle Fahrzeugtypen – flexibel, zuverlässig 
-          und rechtssicher. Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
-        </p>
         
         <div className="bg-white/10 backdrop-blur-sm px-4 py-2 mb-8 max-w-2xl mx-auto rounded-lg border border-white/20 animate-fade-in">
           <p className="text-sm md:text-base text-white/90">

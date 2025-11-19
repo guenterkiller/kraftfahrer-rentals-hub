@@ -64,7 +64,10 @@ const DriverTypesSection = () => {
               <div className="relative h-48 overflow-hidden">
                 <img 
                   src={type.image} 
-                  alt={type.title}
+                  alt={type.isPremium 
+                    ? "Baumaschinenführer bedient Bagger auf Baustelle - Fahrerexpress vermittelt qualifizierte Baumaschinenführer bundesweit"
+                    : "LKW CE-Fahrer am Steuer eines Sattelzugs - Fahrerexpress vermittelt erfahrene Kraftfahrer"
+                  }
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
