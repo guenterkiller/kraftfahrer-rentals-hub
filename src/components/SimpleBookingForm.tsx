@@ -332,7 +332,7 @@ const SimpleBookingForm = () => {
                   </p>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
-                      <SelectValue placeholder="Bitte wählen (z. B. LKW 7,5 t, CE, ADR, Baumaschinenführer …)" />
+                      <SelectValue placeholder="Fahrertyp wählen: Premium oder Standard CE-Fahrer" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="premium">Premium - All-in-One Maschinenbediener</SelectItem>
