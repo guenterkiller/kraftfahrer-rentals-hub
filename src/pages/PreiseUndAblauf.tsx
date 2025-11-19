@@ -31,141 +31,106 @@ const PreiseUndAblauf = () => {
             </div>
 
             {/* Preisübersicht */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-base mb-3">
-                    Standard LKW-Fahrer
+            <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
+              <Card className="border-primary/20 hover:border-primary/40 transition-all bg-primary/5">
+                <CardHeader>
+                  <CardTitle className="text-xl flex items-center gap-2">
+                    Premium-Kategorie
+                    <Badge variant="secondary">Günter Killer persönlich</Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-center space-y-3">
+                <CardContent className="space-y-4">
                   <div>
-                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
-                    <div className="text-2xl font-bold text-orange-600">50 €/h</div>
+                    <h3 className="font-semibold text-lg mb-2">All-in-One Maschinenbediener</h3>
+                    <p className="text-3xl font-bold text-primary">459€</p>
+                    <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
                   </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Standard</div>
-                    <div className="text-2xl font-bold text-primary">359 €</div>
+                  <div className="pt-2 border-t">
+                    <p className="text-sm font-medium">Überstunden</p>
+                    <p className="text-xl font-semibold">60€/Stunde</p>
                   </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Projekt</div>
-                    <div className="text-2xl font-bold text-green-600">349 €</div>
+                  <div className="pt-3">
+                    <p className="text-sm font-medium mb-2">Einsatzbereiche:</p>
+                    <ul className="text-sm space-y-1 text-muted-foreground">
+                      <li>✓ Bagger & Radlader</li>
+                      <li>✓ Fahrmischer & Flüssigboden</li>
+                      <li>✓ Mischanlagen</li>
+                      <li>✓ Technische Störungen & Reparaturen</li>
+                      <li>✓ Prozessüberwachung</li>
+                    </ul>
                   </div>
-                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-primary/20">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-base mb-3">
-                    CE/40 t
-                  </CardTitle>
+              <Card className="border-primary/20 hover:border-primary/40 transition-all">
+                <CardHeader>
+                  <CardTitle className="text-xl">Standard-Kategorie</CardTitle>
+                  <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
                 </CardHeader>
-                <CardContent className="text-center space-y-3">
+                <CardContent className="space-y-4">
                   <div>
-                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
-                    <div className="text-2xl font-bold text-orange-600">55 €/h</div>
+                    <h3 className="font-semibold text-lg mb-2">CE-LKW-Fahrer</h3>
+                    <p className="text-3xl font-bold text-primary">349€</p>
+                    <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
                   </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Standard</div>
-                    <div className="text-2xl font-bold text-primary">399 €</div>
+                  <div className="pt-2 border-t">
+                    <p className="text-sm font-medium">Überstunden</p>
+                    <p className="text-xl font-semibold">30€/Stunde</p>
                   </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Projekt</div>
-                    <div className="text-2xl font-bold text-green-600">379 €</div>
+                  <div className="pt-3">
+                    <p className="text-sm font-medium mb-2">Gilt für alle CE-Einsätze:</p>
+                    <ul className="text-sm space-y-1 text-muted-foreground">
+                      <li>✓ Fahrmischer & Wechselbrücke</li>
+                      <li>✓ Baustellenverkehr & Mitnahmestapler</li>
+                      <li>✓ ADR-Gefahrgut</li>
+                      <li>✓ Fern- & Nahverkehr</li>
+                      <li>✓ Hängerzug & Eventlogistik</li>
+                    </ul>
                   </div>
-                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-green-500/20">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-base mb-3">
-                    Baumaschinenführer
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center space-y-3">
-                  <div>
-                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
-                    <div className="text-2xl font-bold text-orange-600">62 €/h</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Standard</div>
-                    <div className="text-2xl font-bold text-primary">489 €</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Projekt</div>
-                    <div className="text-2xl font-bold text-green-600">469 €</div>
-                  </div>
-                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-orange-500/20">
-                <CardHeader className="text-center">
-                  <CardTitle className="text-base mb-3">
-                    Spezialfahrer (ADR / Tankwagen / Schwerlast / Ladekran)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-center space-y-3">
-                  <div>
-                    <div className="text-sm text-muted-foreground">Kurzeinsatz</div>
-                    <div className="text-2xl font-bold text-orange-600">68 €/h</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Standard</div>
-                    <div className="text-2xl font-bold text-primary">539 €</div>
-                  </div>
-                  <div>
-                    <div className="text-sm text-muted-foreground">Projekt</div>
-                    <div className="text-2xl font-bold text-green-600">519 €</div>
-                  </div>
-                  <div className="text-xs text-muted-foreground">netto / Tag (8h)</div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Info paragraph */}
-            <Card className="mb-12 bg-blue-50 border-blue-200">
-              <CardContent className="p-6">
-                <p className="text-sm text-blue-900">
-                  <strong>ℹ️ Kurzeinsätze (4–6 h):</strong> Sind auf Anfrage möglich und werden mit einem erhöhten Stundensatz berechnet. 
-                  Regelmäßige Einsätze werden nach Tagessatz oder Projektpreis abgerechnet.
-                </p>
-                <p className="text-sm text-blue-900 mt-3">
-                  <strong>Langzeiteinsätze (ab 3 Monaten):</strong> Für Einsätze ab 3 Monaten sind individuelle Projektverträge oder Wochenpauschalen auf Anfrage möglich.
-                </p>
-              </CardContent>
-            </Card>
+            {/* Zusatzinformationen */}
+            <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Fahrtkosten</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="font-semibold">25 Kilometer inklusive</p>
+                  <p className="text-muted-foreground mt-1">Danach 0,40€ pro Kilometer</p>
+                </CardContent>
+              </Card>
 
-            {/* Wichtige Hinweise */}
-            <Card className="mb-12 bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-              <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-4 text-green-800">Wichtige Preisinformationen</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold mb-2">💰 Drei Preisstufen</h4>
-                    <p className="text-sm">Kurzeinsatz (4-6h erhöhter Stundensatz), Standard-Tagessatz (8h) oder Projektpreis ab 4 Wochen garantierter Laufzeit.</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">🚛 Fahrzeug & Sprit</h4>
-                    <p className="text-sm">Ihr Fahrzeug, Ihr Sprit. Der Fahrer bringt nur seine Expertise mit.</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">⏰ Planungssicherheit</h4>
-                    <p className="text-sm">Projektpreise bei fester Wochenplanung (mind. 4 Wochen, 5 Tage/Woche). Alle Preise zzgl. 19% MwSt.</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">📋 Keine AÜG-Kosten</h4>
-                    <p className="text-sm">Selbstständige Fahrer, kein Personalleasing. Dienst-/Werkleistung gemäß § 84 HGB.</p>
-                  </div>
-                </div>
-                
-                {/* Timing Notice */}
-                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-yellow-800">📅 Planung & Timing</h4>
-                  <p className="text-sm">Disposition in der Regel 24–72 h vor Einsatzstart; keine Same-Day-Besetzung.</p>
-                </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Wochenpreise</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="font-semibold">Ab 5 Tagen</p>
+                  <p className="text-primary text-lg font-bold mt-1">1.490€/Woche</p>
+                  <p className="text-muted-foreground text-xs mt-1">(nur CE-Fahrer)</p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-base">Monatspreise</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <p className="font-semibold">Nur auf Anfrage</p>
+                  <p className="text-muted-foreground mt-1">Individuelle Konditionen für längere Projekte</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card className="bg-muted/50 max-w-4xl mx-auto mb-12">
+              <CardHeader>
+                <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                <p>Alle Fahrer arbeiten selbstständig nach §84 HGB. Keine Arbeitnehmerüberlassung.</p>
               </CardContent>
             </Card>
 
