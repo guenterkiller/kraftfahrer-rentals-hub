@@ -54,7 +54,7 @@ const LKWFahrerBuchen = () => {
       },
       "offers": {
         "@type": "Offer",
-        "price": "399",
+        "price": "349",
         "priceCurrency": "EUR",
         "description": "LKW-Fahrer (C+E) Tagespreis für 8 Stunden"
       }

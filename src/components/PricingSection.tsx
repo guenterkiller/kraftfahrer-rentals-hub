@@ -157,68 +157,6 @@ const PricingSection = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-primary/20 hover:border-primary/40 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl">Standard-Kategorie</CardTitle>
-              <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold text-lg mb-2">CE-LKW-Fahrer</h3>
-                <p className="text-sm text-muted-foreground mb-2">Einheitlicher Tagespreis für alle Einsatzarten</p>
-                <p className="text-3xl font-bold text-primary">349€</p>
-                <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
-              </div>
-              <div className="pt-3 border-t">
-                <p className="text-sm font-medium">Überstunden</p>
-                <p className="text-xl font-semibold">30€/Stunde</p>
-              </div>
-              <div className="pt-3 border-t">
-                <p className="text-sm font-medium mb-2">Gilt für folgende Tätigkeiten:</p>
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer, Wechselbrücke, Hängerzug</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Fernverkehr, Nahverkehr</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenverkehr, Mitnahmestapler</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>ADR, Baustofflogistik, Entsorgung</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Container, Express- und Kurierfahrten</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Eventlogistik und alle weiteren CE-Fahrer-Einsatzarten</span>
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full mt-4"
-                onClick={() => {
-                  if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_standard', {
-                      event_category: 'Pricing Section',
-                      event_label: 'Standard CE-LKW-Fahrer',
-                      value: 349
-                    });
-                  }
-                  scrollToBooking();
-                }}
-              >
-                Fahrer buchen
-              </Button>
-            </CardContent>
-          </Card>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
