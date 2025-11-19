@@ -45,7 +45,7 @@ const DriverTypesSection = () => {
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
           Vermittelte CE-Fahrer für alle Einsatzarten oder vermittelte Baumaschinenführer für Bagger, Radlader & mehr –
-          alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
+          alle arbeiten als selbstständige Subunternehmer. Fahrerexpress vermittelt nach § 652 BGB (Maklervertrag).
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-5xl mx-auto">
@@ -119,7 +119,7 @@ const DriverTypesSection = () => {
             <strong>Fahrtkosten:</strong> 25 km inklusive, danach 0,40 € pro km • <strong>Wochenpreise:</strong> CE ab 1.490 €/Woche
           </p>
           <p className="text-xs text-muted-foreground">
-            Alle Fahrer arbeiten selbstständig nach § 84 HGB. Keine Arbeitnehmerüberlassung.
+            Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB. Keine Arbeitnehmerüberlassung.
           </p>
         </div>
       </div>

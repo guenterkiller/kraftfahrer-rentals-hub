@@ -52,11 +52,11 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
   const billingInfo = job.billing_model === 'agency' 
     ? {
         title: "Agenturabrechnung (Subunternehmer-Modell)",
-        description: "Du erbringst die Leistung als selbstständiger Unternehmer/Subunternehmer im Rahmen eines Werk-/Dienstvertrags. Deine Rechnung stellst du an Fahrerexpress; die vereinbarte Provision/Marge wird berücksichtigt. Hinweis: Kein Arbeitsverhältnis, keine Arbeitnehmerüberlassung.",
+        description: "Du erbringst die Leistung als selbstständiger Unternehmer/Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber. Deine Rechnung stellst du an Fahrerexpress; die vereinbarte Vermittlungsgebühr wird berücksichtigt. Hinweis: Vermittlung nach § 652 BGB (Maklervertrag), kein Arbeitsverhältnis, keine Arbeitnehmerüberlassung.",
         alertColor: "bg-yellow-50 border-yellow-200",
         iconColor: "text-yellow-600",
         consentRequired: true,
-        consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags. Ich stelle meine Rechnung an Fahrerexpress, abzüglich der vereinbarten Provision/Marge. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
+        consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber. Ich stelle meine Rechnung an Fahrerexpress, abzüglich der vereinbarten Vermittlungsgebühr. Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
       }
     : {
         title: "Vermittlung (Direktabrechnung)",
@@ -213,7 +213,8 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
             <div className="font-semibold mb-1">Rechtlicher Hinweis:</div>
             <div className="text-sm">
               Mit der Annahme bestätigen Sie, dass Sie die Bedingungen des gewählten Abrechnungsmodells verstehen und akzeptieren.
-              Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um Dienst-/Werkverträge.
+              Es handelt sich um eine Vermittlung nach § 652 BGB (Maklervertrag). Fahrerexpress vermittelt zwischen selbstständigen Fahrern und Auftraggebern.
+              Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um Dienst-/Werkverträge zwischen selbstständigen Subunternehmern und Auftraggebern.
             </div>
           </AlertDescription>
         </Alert>

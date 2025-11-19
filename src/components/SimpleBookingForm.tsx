@@ -226,7 +226,7 @@ const SimpleBookingForm = () => {
                     <h3 className="font-semibold text-green-800 mb-2">Ihr Fahrerpreis</h3>
                     <p className="text-sm text-green-800 mb-3">
                       Unsere Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. 
-                      Abrechnung über <strong>Fahrerexpress</strong> (Dienst-/Werkleistung, keine Arbeitnehmerüberlassung gemäß § 84 HGB).
+                      Abrechnung über <strong>Fahrerexpress</strong> (Vermittlung nach § 652 BGB, Dienst-/Werkleistung durch selbstständige Subunternehmer, keine Arbeitnehmerüberlassung).
                     </p>
 
                     <div className="bg-white/80 p-4 rounded-lg mb-4">
