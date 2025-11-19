@@ -100,12 +100,12 @@ const SimpleBookingForm = () => {
       console.log('Consent states - prices:', agreedToPrices, 'data:', agreedToData);
 
       // Track conversion with category
-      const isPremium = fahrzeugtyp === 'Premium - All-in-One Maschinenbediener';
+      const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer';
       if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', isPremium ? 'category_submit_premium' : 'category_submit_standard', {
+        (window as any).gtag('event', isBaumaschinen ? 'category_submit_baumaschinen' : 'category_submit_lkw', {
           event_category: 'Form Submission',
           event_label: fahrzeugtyp,
-          value: isPremium ? 459 : 349
+          value: isBaumaschinen ? 459 : 349
         });
       }
 

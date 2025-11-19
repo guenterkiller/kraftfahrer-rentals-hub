@@ -4,9 +4,9 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 const LKWFahrerBuchen = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'category_view_standard', {
+      (window as any).gtag('event', 'category_view_lkw', {
         event_category: 'Page View',
-        event_label: 'Standard CE-LKW-Fahrer',
+        event_label: 'LKW CE Fahrer',
         value: 349
       });
     }
@@ -14,7 +14,7 @@ const LKWFahrerBuchen = () => {
   const seoData = {
     title: "LKW CE Fahrer buchen – Vermittelte Fahrer ab 349 €",
     description: "Qualifizierte CE-Fahrer für alle Logistik-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag.",
-    keywords: "CE-LKW-Fahrer, LKW CE Fahrer, Speditionsfahrer, Fahrmischer, ADR-Fahrer",
+    keywords: "CE-LKW-Fahrer, LKW CE Fahrer, Fahrmischer, ADR-Fahrer",
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
@@ -63,8 +63,8 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW CE Fahrer buchen",
-    intro: "Qualifizierte CE-Fahrer für alle Speditions-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
-    bullets: ["Alle Speditions-Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
+    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
+    bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
   };
 
   const faqData = {

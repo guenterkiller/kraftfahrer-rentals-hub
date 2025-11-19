@@ -4,9 +4,9 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 const BaumaschinenfuehrerBuchen = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'category_view_premium', {
+      (window as any).gtag('event', 'category_view_baumaschinen', {
         event_category: 'Page View',
-        event_label: 'Premium All-in-One Maschinenbediener',
+        event_label: 'Baumaschinenführer',
         value: 459
       });
     }
