@@ -14,56 +14,42 @@ const PricingSection = () => {
     <section id="pricing" className="py-20 bg-secondary/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold mb-4">Transparente Preise</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            LKW/Spedition oder Baumaschinen – klare Preise für Ihre Anforderungen. Alle Preise verstehen sich als Netto-Honorar für selbstständige Fahrer.
+          <h1 className="text-4xl font-bold mb-4">LKW-Fahrer oder Baumaschinenführer – Sie haben die Wahl</h1>
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Vermittelte LKW CE Fahrer für alle Einsatzarten im Nah-, Fern- und Baustellenverkehr sowie erfahrene Baumaschinenführer für Bagger, Radlader & mehr – alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-5xl mx-auto">
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader>
+          <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow">
+            <CardHeader className="bg-primary/10 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
                 LKW CE Fahrer
-                <Badge variant="secondary">Vermittelte Fahrer</Badge>
+                <Badge className="bg-primary text-primary-foreground">Vermittelte Fahrer</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Alle Speditions-Einsatzarten</h3>
-                <p className="text-3xl font-bold text-primary">349€</p>
-                <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
+                <h3 className="font-semibold text-lg mb-2">Vermittelte Fahrer für alle Einsatzarten</h3>
+                <p className="text-2xl font-bold text-primary">349 € pro Tag (8 Stunden) • 30 € Überstunde</p>
               </div>
               <div className="pt-3 border-t">
-                <p className="text-sm font-medium">Überstunden</p>
-                <p className="text-xl font-semibold">30€/Stunde</p>
-              </div>
-              <div className="pt-3 border-t">
-                <p className="text-sm font-medium mb-2">Einsatzarten (alle inklusive):</p>
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>CE-Fahrer (Nah-/Fernverkehr)</span>
+                    <span>Nah-, Fern- und Verteilerverkehr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischerfahrer</span>
+                    <span>Fahrmischer, ADR, Wechselbrücke, Hängerzug</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Wechselbrücke, Container, Hängerzug</span>
+                    <span>Baustellenverkehr, Container, Entsorgung</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Mitnahmestapler, Eventlogistik</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Entsorgung, Baustellenverkehr</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>ADR (wenn Fahrer vorhanden)</span>
+                    <span>Event- und Messe-Logistik</span>
                   </li>
                 </ul>
               </div>
@@ -71,13 +57,12 @@ const PricingSection = () => {
                 <p className="text-sm"><strong>Wochenpreis:</strong> ab 1.490 € (5 Tage)</p>
               </div>
               <Button 
-                className="w-full mt-4"
-                variant="outline"
+                className="w-full mt-4 bg-primary hover:bg-primary/90"
                 onClick={() => {
                   if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_standard', {
+                    (window as any).gtag('event', 'category_click_lkw', {
                       event_category: 'Pricing Section',
-                      event_label: 'LKW Speditionsfahrer CE',
+                      event_label: 'LKW CE Fahrer',
                       value: 349
                     });
                   }
@@ -89,49 +74,31 @@ const PricingSection = () => {
             </CardContent>
           </Card>
 
-          <Card className="border-primary/40 bg-primary/5 hover:border-primary/60 transition-all">
-            <CardHeader>
+          <Card className="border-muted bg-muted/10 hover:shadow-lg transition-shadow">
+            <CardHeader className="bg-muted/20 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
-                Baumaschinenbedienung
+                Baumaschinenführer
                 <Badge variant="secondary">Vermittelte Baumaschinenführer</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Baumaschinenführer</h3>
-                <p className="text-3xl font-bold text-primary">459€</p>
-                <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
+                <h3 className="font-semibold text-lg mb-2">Vermittelte Baumaschinenführer</h3>
+                <p className="text-2xl font-bold text-foreground">459 € pro Tag (8 Stunden) • 60 € Überstunde</p>
               </div>
               <div className="pt-3 border-t">
-                <p className="text-sm font-medium">Überstunden</p>
-                <p className="text-xl font-semibold">60€/Stunde</p>
-              </div>
-              <div className="pt-3 border-t">
-                <p className="text-sm font-medium mb-2">Einsatzbereiche:</p>
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Baggerfahren</span>
+                    <span>Bagger, Radlader, Fahrmischer</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Radladerfahren</span>
+                    <span>Flüssigboden, Mischanlagen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer & Betonlogistik</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Flüssigboden (Mischmeister)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Mischanlagen bedienen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Störungsbehebung & Reparaturen</span>
+                    <span>Störungsbehebung & kleinere Reparaturen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -141,11 +108,12 @@ const PricingSection = () => {
               </div>
               <Button 
                 className="w-full mt-4"
+                variant="outline"
                 onClick={() => {
                   if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_premium', {
+                    (window as any).gtag('event', 'category_click_baumaschinen', {
                       event_category: 'Pricing Section',
-                      event_label: 'Baumaschinenbedienung',
+                      event_label: 'Baumaschinenführer',
                       value: 459
                     });
                   }
