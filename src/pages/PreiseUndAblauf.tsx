@@ -52,10 +52,12 @@ const PreiseUndAblauf = () => {
                   <div className="pt-3">
                     <p className="text-sm font-medium mb-2">Einsatzbereiche:</p>
                     <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>✓ Bagger & Radlader</li>
-                      <li>✓ Fahrmischer & Flüssigboden</li>
+                      <li>✓ Bagger, Radlader</li>
+                      <li>✓ Fahrmischer</li>
+                      <li>✓ Flüssigbodenanlagen</li>
                       <li>✓ Mischanlagen</li>
-                      <li>✓ Technische Störungen & Reparaturen</li>
+                      <li>✓ Störungsbehebung, kleinere Reparaturen</li>
+                      <li>✓ Baustellenlogistik, Materialfluss</li>
                       <li>✓ Prozessüberwachung</li>
                     </ul>
                   </div>
@@ -70,6 +72,7 @@ const PreiseUndAblauf = () => {
                 <CardContent className="space-y-4">
                   <div>
                     <h3 className="font-semibold text-lg mb-2">CE-LKW-Fahrer</h3>
+                    <p className="text-sm text-muted-foreground mb-2">Einheitlicher Tagespreis für alle Einsatzarten</p>
                     <p className="text-3xl font-bold text-primary">349€</p>
                     <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
                   </div>
@@ -78,13 +81,14 @@ const PreiseUndAblauf = () => {
                     <p className="text-xl font-semibold">30€/Stunde</p>
                   </div>
                   <div className="pt-3">
-                    <p className="text-sm font-medium mb-2">Gilt für alle CE-Einsätze:</p>
+                    <p className="text-sm font-medium mb-2">Gilt für folgende Tätigkeiten:</p>
                     <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>✓ Fahrmischer & Wechselbrücke</li>
-                      <li>✓ Baustellenverkehr & Mitnahmestapler</li>
-                      <li>✓ ADR-Gefahrgut</li>
-                      <li>✓ Fern- & Nahverkehr</li>
-                      <li>✓ Hängerzug & Eventlogistik</li>
+                      <li>✓ Fahrmischer, Wechselbrücke, Hängerzug</li>
+                      <li>✓ Fernverkehr, Nahverkehr</li>
+                      <li>✓ Baustellenverkehr, Mitnahmestapler</li>
+                      <li>✓ ADR, Baustofflogistik, Entsorgung</li>
+                      <li>✓ Container, Express- und Kurierfahrten</li>
+                      <li>✓ Eventlogistik und alle weiteren CE-Fahrer-Einsatzarten</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -130,7 +134,7 @@ const PreiseUndAblauf = () => {
                 <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                <p>Alle Fahrer arbeiten selbstständig nach §84 HGB. Keine Arbeitnehmerüberlassung.</p>
+                <p>Alle Fahrer arbeiten selbstständig nach Paragraph 84 HGB. Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
               </CardContent>
             </Card>
 

@@ -43,11 +43,15 @@ const PricingSection = () => {
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Bagger & Radlader</span>
+                    <span>Bagger, Radlader</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer & Flüssigboden</span>
+                    <span>Fahrmischer</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Flüssigbodenanlagen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -55,7 +59,11 @@ const PricingSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Technische Störungen & Reparaturen</span>
+                    <span>Störungsbehebung, kleinere Reparaturen</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Baustellenlogistik, Materialfluss</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -80,6 +88,7 @@ const PricingSection = () => {
             <CardContent className="space-y-4">
               <div>
                 <h3 className="font-semibold text-lg mb-2">CE-LKW-Fahrer</h3>
+                <p className="text-sm text-muted-foreground mb-2">Einheitlicher Tagespreis für alle Einsatzarten</p>
                 <p className="text-3xl font-bold text-primary">349€</p>
                 <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
               </div>
@@ -88,27 +97,31 @@ const PricingSection = () => {
                 <p className="text-xl font-semibold">30€/Stunde</p>
               </div>
               <div className="pt-3 border-t">
-                <p className="text-sm font-medium mb-2">Gilt für alle CE-Einsätze:</p>
+                <p className="text-sm font-medium mb-2">Gilt für folgende Tätigkeiten:</p>
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer & Wechselbrücke</span>
+                    <span>Fahrmischer, Wechselbrücke, Hängerzug</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenverkehr & Mitnahmestapler</span>
+                    <span>Fernverkehr, Nahverkehr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>ADR-Gefahrgut</span>
+                    <span>Baustellenverkehr, Mitnahmestapler</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fern- & Nahverkehr</span>
+                    <span>ADR, Baustofflogistik, Entsorgung</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Hängerzug & Eventlogistik</span>
+                    <span>Container, Express- und Kurierfahrten</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Eventlogistik und alle weiteren CE-Fahrer-Einsatzarten</span>
                   </li>
                 </ul>
               </div>
@@ -160,7 +173,7 @@ const PricingSection = () => {
             <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            <p>Alle Fahrer arbeiten selbstständig nach §84 HGB. Keine Arbeitnehmerüberlassung.</p>
+            <p>Alle Fahrer arbeiten selbstständig nach Paragraph 84 HGB. Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
           </CardContent>
         </Card>
 
