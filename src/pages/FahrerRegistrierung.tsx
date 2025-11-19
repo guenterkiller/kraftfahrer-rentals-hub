@@ -475,7 +475,7 @@ const FahrerRegistrierung = () => {
                   <div className="space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
-                      💬 Warum selbstständige fahrer bei uns mehr erreichen
+                      💬 Warum selbstständige Fahrer bei uns mehr erreichen
                     </h2>
                     <p className="text-lg text-muted-foreground">
                       Stell dir vor, du bestimmst selbst, wann, wo und für wen du fährst – ganz ohne Disponenten, 
