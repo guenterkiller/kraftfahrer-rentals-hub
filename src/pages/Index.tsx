@@ -4,7 +4,6 @@ import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
 import DriverTypesSection from "@/components/DriverTypesSection";
-import PricingSection from "@/components/PricingSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
@@ -89,10 +88,6 @@ const Index = () => {
         
         <section id="driver-types" aria-label="Fahrerarten im Detail" className="scroll-mt-16">
           <DriverTypesSection />
-        </section>
-        
-        <section id="pricing" aria-label="Preise und Konditionen" className="scroll-mt-16">
-          <PricingSection />
         </section>
         
         <HowItWorksTimeline />
