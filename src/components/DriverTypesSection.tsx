@@ -90,8 +90,7 @@ const DriverTypesSection = () => {
                 
                 <Button 
                   asChild 
-                  className="w-full" 
-                  variant={type.isPremium ? "default" : "outline"}
+                  className={`w-full ${type.isPopular ? 'bg-red-600 hover:bg-red-700 text-white' : type.isPremium ? 'bg-blue-600 hover:bg-blue-700 text-white' : ''}`}
                   onClick={() => {
                     if (typeof window !== 'undefined' && (window as any).gtag) {
                       (window as any).gtag('event', type.isPremium ? 'category_click_baumaschinen' : 'category_click_lkw', {
