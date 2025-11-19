@@ -1,6 +1,16 @@
+import { useEffect } from "react";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
 const LKWFahrerBuchen = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'category_view_standard', {
+        event_category: 'Page View',
+        event_label: 'Standard CE-LKW-Fahrer',
+        value: 349
+      });
+    }
+  }, []);
   const seoData = {
     title: "CE-LKW-Fahrer buchen ab 349 € – Standard-Kategorie deutschlandweit",
     description: "CE-LKW-Fahrer für alle Einsatzarten buchen: Fahrmischer, ADR, Fernverkehr, Nahverkehr – einheitlich 349 €/Tag, 30 € Überstunde. Rechtssicher & kurzfristig.",

@@ -84,7 +84,20 @@ const DriverTypesSection = () => {
                   ))}
                 </ul>
                 
-                <Button asChild className="w-full" variant={type.isPremium ? "default" : "outline"}>
+                <Button 
+                  asChild 
+                  className="w-full" 
+                  variant={type.isPremium ? "default" : "outline"}
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).gtag) {
+                      (window as any).gtag('event', type.isPremium ? 'category_click_premium' : 'category_click_standard', {
+                        event_category: 'Driver Category',
+                        event_label: type.title,
+                        value: type.isPremium ? 459 : 349
+                      });
+                    }
+                  }}
+                >
                   <Link to={type.path}>
                     {type.isPremium ? "Premiumfahrer buchen" : "CE-Fahrer buchen"}
                   </Link>
