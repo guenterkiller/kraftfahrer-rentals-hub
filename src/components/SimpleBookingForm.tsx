@@ -230,14 +230,13 @@ const SimpleBookingForm = () => {
                     </p>
 
                     <div className="bg-white/80 p-4 rounded-lg mb-4">
-                      <p className="text-green-800 text-sm mb-2">
-                        <strong>Premium – All-in-One Maschinenbediener:</strong> 459 €/Tag (Günter Killer persönlich)
+                      <p className="text-green-800 text-sm mb-3">
+                        <strong>LKW CE Fahrer:</strong> 349 €/Tag – 30 €/h Überstunden
                       </p>
-                      <p className="text-green-800 text-sm">
-                        <strong>Standard – CE-LKW-Fahrer:</strong> 349 €/Tag (einheitlich für alle CE-Einsatzarten)
+                      <p className="text-green-800 text-sm mb-3">
+                        <strong>Baumaschinenführer:</strong> 459 €/Tag – 60 €/h Überstunden
                       </p>
                       <p className="text-sm text-green-800 mt-2">
-                        Überstunden Premium: 60 €/h | Standard: 30 €/h.{' '}
                         <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
                           Details: Preise & Konditionen →
                         </a>
@@ -586,7 +585,7 @@ const SimpleBookingForm = () => {
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Fahrer buchen</div>
-                      <div className="text-sm opacity-90">ab 359 € netto</div>
+                      <div className="text-sm opacity-90">ab 349 € netto</div>
                     </div>
                   )}
                 </Button>

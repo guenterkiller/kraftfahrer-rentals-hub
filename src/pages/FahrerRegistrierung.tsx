@@ -98,7 +98,7 @@ const FahrerRegistrierung = () => {
 
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
   const spezialisierungen = [
-    // Premium Kategorie - All-in-One Maschinenbediener
+    // Baumaschinenführer
     "Bagger",
     "Radlader",
     "Fahrmischer", 
@@ -106,7 +106,7 @@ const FahrerRegistrierung = () => {
     "Baustellenlogistik & Materialfluss",
     "Kleinere Reparaturen & Technik",
     
-    // Standard Kategorie - CE-LKW-Fahrer
+    // LKW CE Fahrer
     "Wechselbrücke",
     "Hängerzug",
     "Fernverkehr",
