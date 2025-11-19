@@ -35,13 +35,13 @@ const PreiseUndAblauf = () => {
               <Card className="border-primary/20 hover:border-primary/40 transition-all bg-primary/5">
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center gap-2">
-                    Premium-Kategorie
-                    <Badge variant="secondary">Günter Killer persönlich</Badge>
+                    Baumaschinenbedienung
+                    <Badge variant="secondary">Vermittelte Baumaschinenführer</Badge>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">All-in-One Maschinenbediener</h3>
+                    <h3 className="font-semibold text-lg mb-2">Baumaschinenführer</h3>
                     <p className="text-3xl font-bold text-primary">459€</p>
                     <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
                   </div>
@@ -52,13 +52,13 @@ const PreiseUndAblauf = () => {
                   <div className="pt-3">
                     <p className="text-sm font-medium mb-2">Einsatzbereiche:</p>
                     <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>✓ Bagger, Radlader</li>
-                      <li>✓ Fahrmischer</li>
-                      <li>✓ Flüssigbodenanlagen</li>
-                      <li>✓ Mischanlagen</li>
-                      <li>✓ Störungsbehebung, kleinere Reparaturen</li>
-                      <li>✓ Baustellenlogistik, Materialfluss</li>
-                      <li>✓ Prozessüberwachung</li>
+                      <li>✓ Baggerfahren</li>
+                      <li>✓ Radladerfahren</li>
+                      <li>✓ Fahrmischer & Betonlogistik</li>
+                      <li>✓ Flüssigboden (Mischmeister)</li>
+                      <li>✓ Mischanlagen bedienen</li>
+                      <li>✓ Störungsbehebung & Reparaturen</li>
+                      <li>✓ Baustellenlogistik & Materialfluss</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -66,7 +66,7 @@ const PreiseUndAblauf = () => {
 
               <Card className="border-primary/20 hover:border-primary/40 transition-all">
                 <CardHeader>
-                  <CardTitle className="text-xl">Standard-Kategorie</CardTitle>
+                  <CardTitle className="text-xl">LKW- / Speditionsfahrer (CE)</CardTitle>
                   <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
                 </CardHeader>
                 <CardContent className="space-y-4">

@@ -12,14 +12,14 @@ const BaumaschinenfuehrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "Baumaschinenbedienung buchen – Günter Killer persönlich ab 459 €",
-    description: "Günter Killer persönlich für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen. 459 € pro Tag.",
-    keywords: "Baumaschinenbedienung, Günter Killer, Baggerfahrer, Radlader",
+    title: "Baumaschinenführer buchen – Vermittelte Fahrer ab 459 €",
+    description: "Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. 459 € pro Tag.",
+    keywords: "Baumaschinenführer buchen, Baggerfahrer, Radladerfahrer, Fahrmischer",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Baumaschinenbedienung – Günter Killer persönlich",
-      "description": "Günter Killer persönlich für Baumaschinenbedienung: Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung, Reparaturen, Baustellenlogistik",
+      "name": "Baumaschinenführer buchen",
+      "description": "Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung, Reparaturen, Baustellenlogistik",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -38,25 +38,25 @@ const BaumaschinenfuehrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Baumaschinenbedienung – Günter Killer persönlich",
-    intro: "Günter Killer persönlich für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. 459 € pro Tag (8h), 60 € Überstunde.",
-    bullets: ["Günter Killer persönlich", "Alle Baumaschinen", "Störungsbehebung & Reparaturen"]
+    h1: "Baumaschinenführer buchen – Vermittelte Fahrer",
+    intro: "Qualifizierte Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. 459 € pro Tag (8h), 60 € Überstunde.",
+    bullets: ["Alle Baumaschinen & Anlagen", "Störungsbehebung & Reparaturen", "459 € pro Tag"]
   };
 
   const faqData = {
-    title: "Baumaschinenbedienung – Häufige Fragen",
+    title: "Baumaschinenführer buchen – Häufige Fragen",
     items: [
       {
-        question: "Was macht Günter Killer bei der Baumaschinenbedienung?",
-        answer: "<strong>Vielseitiger Maschinenbediener:</strong> Baggerfahren, Radladerfahren, Fahrmischer & Betonlogistik, Flüssigboden (Mischmeister), Bedienung von Mischanlagen, Störungsbehebung & Reparaturkenntnisse, Baustellenlogistik, Materialfluss koordinieren, Prozessüberwachung."
+        question: "Welche Baumaschinen werden abgedeckt?",
+        answer: "<strong>Alle gängigen Baumaschinen:</strong> Baggerfahren, Radladerfahren, Fahrmischer & Betonlogistik, Flüssigboden (Mischmeister), Bedienung von Mischanlagen, Störungsbehebung & Reparaturkenntnisse, Baustellenlogistik, Materialfluss, Prozessüberwachung."
       },
       {
-        question: "Welche Qualifikationen hat Günter Killer?",
+        question: "Welche Qualifikationen haben die Baumaschinenführer?",
         answer: "<strong>Umfassende Erfahrung und Zertifizierungen</strong> für alle genannten Baumaschinen und Anlagen. Langjährige Praxis in Baustellenlogistik und technischer Problemlösung."
       },
       {
-        question: "Warum Günter Killer persönlich?",
-        answer: "<strong>Direkter Einsatz von Günter Killer persönlich</strong> statt vermittelter Fahrer. Höhere Expertise im Baumaschinenbereich, umfassendere technische Kenntnisse, eigenständige Prozessverantwortung. Ideal für anspruchsvolle Bauprojekte."
+        question: "Warum ist der Preis höher als bei CE-Fahrern?",
+        answer: "<strong>Höhere technische Anforderungen:</strong> Baumaschinenbedienung erfordert spezialisierte Kenntnisse, umfassendere technische Fähigkeiten und eigenständige Prozessverantwortung. Ideal für anspruchsvolle Bauprojekte."
       },
       {
         question: "Wie sind die Konditionen?",

@@ -19,7 +19,7 @@ const DriverTypesSection = () => {
     },
     {
       title: "Baumaschinenbedienung",
-      subtitle: "Günter Killer persönlich",
+      subtitle: "Vermittelte Baumaschinenführer",
       description: "459 € pro Tag (8 Stunden) • 60 € Überstunde",
       image: "/lovable-uploads/b2cd4743-98d6-4618-81c8-418636570dfc.png",
       features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
@@ -45,7 +45,7 @@ const DriverTypesSection = () => {
           LKW/Spedition oder Baumaschinen – Sie haben die Wahl
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
-          Vermittelte CE-Fahrer für alle Speditions-Einsatzarten oder Günter Killer persönlich für Baumaschinenbedienung – 
+          Vermittelte CE-Fahrer für alle Speditions-Einsatzarten oder vermittelte Baumaschinenführer für Bagger, Radlader & mehr – 
           alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
         </p>
 
@@ -54,7 +54,7 @@ const DriverTypesSection = () => {
             <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-primary' : ''}`}>
               {type.isPremium && (
                 <div className="bg-primary text-primary-foreground text-center py-2 font-semibold">
-                  ⭐ Günter Killer persönlich
+                  🏗️ Baumaschinenführer
                 </div>
               )}
               <div className="relative h-48 overflow-hidden">
