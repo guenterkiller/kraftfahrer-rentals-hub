@@ -220,11 +220,14 @@ const SimpleBookingForm = () => {
                     </p>
 
                     <div className="bg-white/80 p-4 rounded-lg mb-4">
+                      <p className="text-green-800 text-sm mb-2">
+                        <strong>Premium – All-in-One Maschinenbediener:</strong> 459 €/Tag (Günter Killer persönlich)
+                      </p>
                       <p className="text-green-800 text-sm">
-                        <strong>Standard-LKW</strong> ab 359 €/Tag | <strong>CE</strong> ab 399 €/Tag | <strong>Baumaschinenführer</strong> ab 489 €/Tag | <strong>LKW mit Ladekran</strong> ab 539 €/Tag
+                        <strong>Standard – CE-LKW-Fahrer:</strong> 349 €/Tag (einheitlich für alle CE-Einsatzarten)
                       </p>
                       <p className="text-sm text-green-800 mt-2">
-                        Kurzeinsätze (4–6 h) auf Anfrage zum erhöhten Stundensatz.{' '}
+                        Überstunden Premium: 60 €/h | Standard: 30 €/h.{' '}
                         <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
                           Details: Preise & Konditionen →
                         </a>
