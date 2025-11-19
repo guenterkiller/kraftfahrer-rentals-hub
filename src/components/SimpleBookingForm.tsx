@@ -345,11 +345,11 @@ const SimpleBookingForm = () => {
                   </p>
                   <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
                     <SelectTrigger>
-                      <SelectValue placeholder="Fahrertyp wählen: Premium oder Standard CE-Fahrer" />
+                      <SelectValue placeholder="Fahrertyp wählen: CE-Fahrer oder Baumaschinenführer" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="premium">Premium - All-in-One Maschinenbediener</SelectItem>
-                      <SelectItem value="standard">Standard - CE-LKW-Fahrer</SelectItem>
+                      <SelectItem value="ce-fahrer">CE-LKW-Fahrer (349 €)</SelectItem>
+                      <SelectItem value="baumaschinenfuehrer">Baumaschinenführer (459 €)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

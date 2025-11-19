@@ -70,16 +70,16 @@ const ServicesSection = () => {
 
           <Link to="/baumaschinenfuehrer-buchen">
             <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full border-2 border-primary">
-              <div className="bg-primary text-primary-foreground py-2 font-semibold">⭐ Günter Killer persönlich</div>
+              <div className="bg-primary text-primary-foreground py-2 font-semibold">🏗️ Baumaschinenführer</div>
               <CardHeader>
                 <HardHat className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-lg">Baumaschinenbedienung</CardTitle>
-                <p className="text-sm text-muted-foreground">Günter Killer persönlich</p>
+                <p className="text-sm text-muted-foreground">Vermittelte Baumaschinenführer</p>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-primary mb-2">459 €/Tag</p>
                 <p className="text-sm text-muted-foreground mb-4">Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung</p>
-                <Button size="sm" className="w-full">Günter Killer buchen</Button>
+                <Button size="sm" className="w-full">Baumaschinenführer buchen</Button>
               </CardContent>
             </Card>
           </Link>

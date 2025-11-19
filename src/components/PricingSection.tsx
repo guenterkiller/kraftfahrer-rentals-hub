@@ -93,12 +93,12 @@ const PricingSection = () => {
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 Baumaschinenbedienung
-                <Badge variant="secondary">Günter Killer persönlich</Badge>
+                <Badge variant="secondary">Vermittelte Baumaschinenführer</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Günter Killer persönlich</h3>
+                <h3 className="font-semibold text-lg mb-2">Baumaschinenführer</h3>
                 <p className="text-3xl font-bold text-primary">459€</p>
                 <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
               </div>
@@ -145,14 +145,14 @@ const PricingSection = () => {
                   if (typeof window !== 'undefined' && (window as any).gtag) {
                     (window as any).gtag('event', 'category_click_premium', {
                       event_category: 'Pricing Section',
-                      event_label: 'Baumaschinenbedienung Günter Killer',
+                      event_label: 'Baumaschinenbedienung',
                       value: 459
                     });
                   }
                   scrollToBooking();
                 }}
               >
-                Günter Killer buchen
+                Baumaschinenführer buchen
               </Button>
             </CardContent>
           </Card>
