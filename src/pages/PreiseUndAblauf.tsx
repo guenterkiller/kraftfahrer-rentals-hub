@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – Premium 459€ oder Standard CE 349€ pro Tag",
-    description: "Klare Preisstruktur: Premium All-in-One Maschinenbediener 459€/Tag oder Standard CE-LKW-Fahrer 349€/Tag. Wochen- und Monatspreise verfügbar. Einfacher Ablauf in 3 Schritten.",
-    keywords: "LKW-Fahrer Preise, CE-Fahrer Kosten 349€, Premium Maschinenbediener 459€, Tagespreis Kraftfahrer, All-in-One Operator, Fahrmischer Preise, Baustellenlogistik Kosten"
+    title: "Preise & Ablauf – CE-Fahrer 349€ oder Baumaschinenbedienung 459€",
+    description: "Klare Preisstruktur: LKW-/Speditionsfahrer (CE) 349€/Tag oder Baumaschinenbedienung (Günter Killer) 459€/Tag. Wochen- und Monatspreise verfügbar. Einfacher Ablauf in 3 Schritten.",
+    keywords: "LKW-Fahrer Preise, CE-Fahrer Kosten 349€, Baumaschinenbedienung 459€, Günter Killer, Speditionsfahrer, Fahrmischer, Baustellenlogistik"
   });
 
   return (

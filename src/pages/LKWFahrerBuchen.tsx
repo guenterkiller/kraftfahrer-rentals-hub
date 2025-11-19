@@ -12,9 +12,9 @@ const LKWFahrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "CE-LKW-Fahrer buchen ab 349 € – Standard-Kategorie deutschlandweit",
-    description: "CE-LKW-Fahrer für alle Einsatzarten buchen: Fahrmischer, ADR, Fernverkehr, Nahverkehr – einheitlich 349 €/Tag, 30 € Überstunde. Rechtssicher & kurzfristig.",
-    keywords: "CE-LKW-Fahrer buchen, LKW-Fahrer mieten, Kraftfahrer Standard, Fahrmischer, ADR-Fahrer, CE Fahrer deutschlandweit",
+    title: "LKW- / Speditionsfahrer (CE) buchen – Vermittelte Fahrer ab 349 €",
+    description: "Qualifizierte CE-Fahrer für alle Logistik-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag.",
+    keywords: "CE-LKW-Fahrer, Speditionsfahrer, Fahrmischer, ADR-Fahrer",
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
@@ -62,13 +62,9 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW-Fahrer buchen – ab 399 € netto/Tag",
-    intro: "Sie benötigen kurzfristig einen LKW-Fahrer (C/CE) für Transport, Baustelle oder Überführung? Über Fahrerexpress buchen Sie bundesweit selbstständige Berufskraftfahrer – flexibel, zuverlässig und mit Rechnung von Fahrerexpress. Die Leistung wird als Dienst-/Werkvertrag erbracht (kein AÜG). Kurzeinsätze 55 €/h, Standardtag 399 €, Projektpreis ab 4 Wochen 379 €. Auf Wunsch Spezialqualifikationen wie ADR, Kran, Fahrmischer.",
-    bullets: [
-      "C/CE-Fahrer für Nah- & Fernverkehr",
-      "ADR / Kran / Fahrmischer verfügbar", 
-      "Kurzfristig (24-72h) verfügbar"
-    ]
+    h1: "LKW- / Speditionsfahrer (CE) buchen",
+    intro: "Qualifizierte CE-Fahrer für alle Speditions-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
+    bullets: ["Alle Speditions-Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
   };
 
   const faqData = {
