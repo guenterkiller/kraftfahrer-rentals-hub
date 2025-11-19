@@ -48,38 +48,38 @@ const ServicesSection = () => {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">Leistungen im Überblick</h2>
-        <p className="text-center text-lg text-muted-foreground mb-12">Premium oder Standard – transparente Preise für alle Einsatzarten</p>
+        <p className="text-center text-lg text-muted-foreground mb-12">LKW/Spedition oder Baumaschinen – transparente Preise für alle Einsatzarten</p>
         
         {/* Main 2 Categories */}
         <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
-          <Link to="/baumaschinenfuehrer-buchen">
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full border-2 border-primary">
-              <div className="bg-primary text-primary-foreground py-2 font-semibold">⭐ Premium-Kategorie</div>
+          <Link to="/lkw-fahrer-buchen">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <div className="bg-muted text-muted-foreground py-2 font-semibold">LKW- / Speditionsfahrer</div>
               <CardHeader>
-                <HardHat className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle className="text-lg">All-in-One Maschinenbediener</CardTitle>
-                <p className="text-sm text-muted-foreground">Günter Killer persönlich</p>
+                <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
+                <CardTitle className="text-lg">CE-Fahrer (Vermittelt)</CardTitle>
+                <p className="text-sm text-muted-foreground">Alle Speditions-Einsatzarten</p>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-primary mb-2">459 €/Tag</p>
-                <p className="text-sm text-muted-foreground mb-4">Bagger, Radlader, Fahrmischer, Flüssigboden, Störungsbehebung, Baustellenlogistik</p>
-                <Button size="sm" className="w-full">Premium buchen</Button>
+                <p className="text-2xl font-bold text-primary mb-2">349 €/Tag</p>
+                <p className="text-sm text-muted-foreground mb-4">Fahrmischer, ADR, Fernverkehr, Wechselbrücke, Container, Baustelle, Eventlogistik</p>
+                <Button variant="outline" size="sm" className="w-full">CE-Fahrer buchen</Button>
               </CardContent>
             </Card>
           </Link>
 
-          <Link to="/lkw-fahrer-buchen">
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <div className="bg-muted text-muted-foreground py-2 font-semibold">Standard-Kategorie</div>
+          <Link to="/baumaschinenfuehrer-buchen">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full border-2 border-primary">
+              <div className="bg-primary text-primary-foreground py-2 font-semibold">⭐ Günter Killer persönlich</div>
               <CardHeader>
-                <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle className="text-lg">CE-LKW-Fahrer</CardTitle>
-                <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
+                <HardHat className="h-12 w-12 text-primary mx-auto mb-4" />
+                <CardTitle className="text-lg">Baumaschinenbedienung</CardTitle>
+                <p className="text-sm text-muted-foreground">Günter Killer persönlich</p>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-primary mb-2">349 €/Tag</p>
-                <p className="text-sm text-muted-foreground mb-4">Einheitlich für alle CE-Einsatzarten: Fahrmischer, ADR, Fernverkehr, Container</p>
-                <Button variant="outline" size="sm" className="w-full">CE-Fahrer buchen</Button>
+                <p className="text-2xl font-bold text-primary mb-2">459 €/Tag</p>
+                <p className="text-sm text-muted-foreground mb-4">Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung</p>
+                <Button size="sm" className="w-full">Günter Killer buchen</Button>
               </CardContent>
             </Card>
           </Link>

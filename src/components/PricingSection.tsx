@@ -16,21 +16,89 @@ const PricingSection = () => {
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">Transparente Preise</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Zwei klare Kategorien für Ihre Anforderungen. Alle Preise verstehen sich als Netto-Honorar für selbstständige Fahrer.
+            LKW/Spedition oder Baumaschinen – klare Preise für Ihre Anforderungen. Alle Preise verstehen sich als Netto-Honorar für selbstständige Fahrer.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-5xl mx-auto">
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                LKW- / Speditionsfahrer (CE)
+                <Badge variant="secondary">Vermittelte Fahrer</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Alle Speditions-Einsatzarten</h3>
+                <p className="text-3xl font-bold text-primary">349€</p>
+                <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
+              </div>
+              <div className="pt-3 border-t">
+                <p className="text-sm font-medium">Überstunden</p>
+                <p className="text-xl font-semibold">30€/Stunde</p>
+              </div>
+              <div className="pt-3 border-t">
+                <p className="text-sm font-medium mb-2">Einsatzarten (alle inklusive):</p>
+                <ul className="text-sm space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>CE-Fahrer (Nah-/Fernverkehr)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Fahrmischerfahrer</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Wechselbrücke, Container, Hängerzug</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Mitnahmestapler, Eventlogistik</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>Entsorgung, Baustellenverkehr</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary mt-0.5">✓</span>
+                    <span>ADR (wenn Fahrer vorhanden)</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="pt-3 border-t">
+                <p className="text-sm"><strong>Wochenpreis:</strong> ab 1.490 € (5 Tage)</p>
+              </div>
+              <Button 
+                className="w-full mt-4"
+                variant="outline"
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'category_click_standard', {
+                      event_category: 'Pricing Section',
+                      event_label: 'LKW Speditionsfahrer CE',
+                      value: 349
+                    });
+                  }
+                  scrollToBooking();
+                }}
+              >
+                CE-Fahrer buchen
+              </Button>
+            </CardContent>
+          </Card>
+
           <Card className="border-primary/40 bg-primary/5 hover:border-primary/60 transition-all">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
-                Premium-Kategorie
+                Baumaschinenbedienung
                 <Badge variant="secondary">Günter Killer persönlich</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">All-in-One Maschinenbediener</h3>
+                <h3 className="font-semibold text-lg mb-2">Günter Killer persönlich</h3>
                 <p className="text-3xl font-bold text-primary">459€</p>
                 <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
               </div>
@@ -43,31 +111,31 @@ const PricingSection = () => {
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Bagger, Radlader</span>
+                    <span>Baggerfahren</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer</span>
+                    <span>Radladerfahren</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Flüssigbodenanlagen</span>
+                    <span>Fahrmischer & Betonlogistik</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Mischanlagen</span>
+                    <span>Flüssigboden (Mischmeister)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Störungsbehebung, kleinere Reparaturen</span>
+                    <span>Mischanlagen bedienen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenlogistik, Materialfluss</span>
+                    <span>Störungsbehebung & Reparaturen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Prozessüberwachung</span>
+                    <span>Baustellenlogistik & Materialfluss</span>
                   </li>
                 </ul>
               </div>
@@ -77,14 +145,14 @@ const PricingSection = () => {
                   if (typeof window !== 'undefined' && (window as any).gtag) {
                     (window as any).gtag('event', 'category_click_premium', {
                       event_category: 'Pricing Section',
-                      event_label: 'Premium All-in-One Maschinenbediener',
+                      event_label: 'Baumaschinenbedienung Günter Killer',
                       value: 459
                     });
                   }
                   scrollToBooking();
                 }}
               >
-                Fahrer buchen
+                Günter Killer buchen
               </Button>
             </CardContent>
           </Card>

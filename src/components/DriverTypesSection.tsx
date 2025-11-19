@@ -9,22 +9,22 @@ import fahrmischerFahrer from "@/assets/fahrmischer-fahrer.jpg";
 const DriverTypesSection = () => {
   const driverTypes = [
     {
-      title: "Premium – All-in-One Maschinenbediener",
+      title: "LKW- / Speditionsfahrer (CE)",
+      subtitle: "Vermittelte Fahrer",
+      description: "349 € pro Tag (8 Stunden) • 30 € Überstunde",
+      image: lkwFahrerHero,
+      features: ["Alle Speditions- & Logistikeinsätze", "Fahrmischer, ADR, Fernverkehr", "Wechselbrücke, Container, Hängerzug", "Entsorgung, Baustelle, Eventlogistik"],
+      path: "/lkw-fahrer-buchen",
+      isPremium: false
+    },
+    {
+      title: "Baumaschinenbedienung",
       subtitle: "Günter Killer persönlich",
       description: "459 € pro Tag (8 Stunden) • 60 € Überstunde",
       image: "/lovable-uploads/b2cd4743-98d6-4618-81c8-418636570dfc.png",
       features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
       path: "/baumaschinenfuehrer-buchen",
       isPremium: true
-    },
-    {
-      title: "Standard – CE-LKW-Fahrer",
-      subtitle: "Vermittelte Fahrer",
-      description: "349 € pro Tag (8 Stunden) • 30 € Überstunde",
-      image: lkwFahrerHero,
-      features: ["Einheitlich für alle CE-Arten", "Fahrmischer, ADR, Fernverkehr", "Baustellenverkehr, Container", "Express, Kurier, Eventlogistik"],
-      path: "/lkw-fahrer-buchen",
-      isPremium: false
     }
   ];
 
@@ -36,16 +36,16 @@ const DriverTypesSection = () => {
           <div className="inline-flex items-center gap-3 bg-green-50 border border-green-200 px-6 py-3 rounded-full">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-green-800 font-semibold">
-              Klare Preisstruktur – Premium 459€ oder Standard CE 349€ pro Tag
+              Klare Preisstruktur – Spedition 349€ oder Baumaschinenbedienung 459€
             </span>
           </div>
         </div>
 
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-          Premium oder Standard – Sie haben die Wahl
+          LKW/Spedition oder Baumaschinen – Sie haben die Wahl
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
-          Günter Killer persönlich als All-in-One Maschinenbediener (Premium) oder vermittelte CE-LKW-Fahrer für alle Einsatzarten (Standard) – 
+          Vermittelte CE-Fahrer für alle Speditions-Einsatzarten oder Günter Killer persönlich für Baumaschinenbedienung – 
           alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
         </p>
 
@@ -54,7 +54,7 @@ const DriverTypesSection = () => {
             <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-primary' : ''}`}>
               {type.isPremium && (
                 <div className="bg-primary text-primary-foreground text-center py-2 font-semibold">
-                  ⭐ Premium-Kategorie
+                  ⭐ Günter Killer persönlich
                 </div>
               )}
               <div className="relative h-48 overflow-hidden">
