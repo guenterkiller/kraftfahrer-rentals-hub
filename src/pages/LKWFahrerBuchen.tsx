@@ -2,9 +2,9 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const LKWFahrerBuchen = () => {
   const seoData = {
-    title: "LKW-Fahrer buchen ab 399 € – deutschlandweit & kurzfristig | Fahrerexpress",
-    description: "LKW-Fahrer (C/CE) kurzfristig buchen. Kurzeinsatz 55 €/h, Standardtag 399 €, Projekt ab 379 €. Bundesweit verfügbar, transparente Preise, rechtssichere Dienst-/Werkleistung – keine Arbeitnehmerüberlassung. Tankwagenfahrer ADR, LKW mit Ladekran, Fahrmischerfahrer.",
-    keywords: "LKW-Fahrer buchen, C+E Fahrer buchen, LKW-Fahrer kurzfristig, Berufskraftfahrer C/CE, LKW-Fahrer Vermittlung, Sattelzugfahrer buchen, Tankwagenfahrer buchen, ADR-Fahrer mieten, LKW mit Ladekran, Fahrmischerfahrer gesucht",
+    title: "CE-LKW-Fahrer buchen ab 349 € – Standard-Kategorie deutschlandweit",
+    description: "CE-LKW-Fahrer für alle Einsatzarten buchen: Fahrmischer, ADR, Fernverkehr, Nahverkehr – einheitlich 349 €/Tag, 30 € Überstunde. Rechtssicher & kurzfristig.",
+    keywords: "CE-LKW-Fahrer buchen, LKW-Fahrer mieten, Kraftfahrer Standard, Fahrmischer, ADR-Fahrer, CE Fahrer deutschlandweit",
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",

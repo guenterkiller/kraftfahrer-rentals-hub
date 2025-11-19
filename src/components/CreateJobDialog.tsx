@@ -292,16 +292,11 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
                 <Label htmlFor="fahrzeugtyp" className="text-sm">Fahrzeugtyp *</Label>
                 <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Fahrzeugtyp wählen..." />
+                    <SelectValue placeholder="Kategorie wählen" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="LKW">LKW</SelectItem>
-                    <SelectItem value="Sattelzug">Sattelzug</SelectItem>
-                    <SelectItem value="Kipper">Kipper</SelectItem>
-                    <SelectItem value="LKW mit Ladekran">LKW mit Ladekran</SelectItem>
-                    <SelectItem value="Bagger">Bagger</SelectItem>
-                    <SelectItem value="Radlader">Radlader</SelectItem>
-                    <SelectItem value="Sonstige">Sonstige</SelectItem>
+                    <SelectItem value="Premium – All-in-One Maschinenbediener">Premium – All-in-One Maschinenbediener (459 €/Tag)</SelectItem>
+                    <SelectItem value="Standard – CE-LKW-Fahrer">Standard – CE-LKW-Fahrer (349 €/Tag)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

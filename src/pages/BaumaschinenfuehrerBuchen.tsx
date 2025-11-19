@@ -2,14 +2,14 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
-    title: "Baumaschinenführer buchen ab 489 € – Baggerfahrer & Radlader deutschlandweit",
-    description: "Jetzt deutschlandweit Baumaschinenführer buchen: Baggerfahrer, Radladerfahrer, Mischmeister für Flüssigboden. Kurzeinsatz 62 €/h, Standardtag 489 €, Projekt ab 469 €. Geräte stellt der Auftraggeber. Rechtssicher & kurzfristig verfügbar.",
-    keywords: "Baumaschinenführer buchen, Baggerfahrer mieten, Radladerfahrer buchen, Baumaschinenführer Subunternehmer, Mischmeister Flüssigboden deutschlandweit, Maschinisten mieten",
+    title: "Premium All-in-One Maschinenbediener buchen – Günter Killer persönlich ab 459 €",
+    description: "Premium-Kategorie: Günter Killer persönlich als All-in-One Maschinenbediener für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung, Reparaturen, Baustellenlogistik. 459 € pro Tag (8h), 60 € Überstunde. Deutschlandweit verfügbar.",
+    keywords: "All-in-One Maschinenbediener, Premium Baumaschinenführer, Günter Killer, Bagger Radlader Fahrmischer, Flüssigboden Mischmeister, Baustellenlogistik, technische Störungsbehebung",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Baumaschinenführer buchen",
-      "description": "Baumaschinenführer kurzfristig für Bagger, Radlader - selbstständige Subunternehmer ohne Arbeitnehmerüberlassung",
+      "name": "Premium All-in-One Maschinenbediener – Günter Killer",
+      "description": "Premium-Kategorie: Günter Killer persönlich als All-in-One Maschinenbediener für Bagger, Radlader, Fahrmischer, Flüssigboden, Störungsbehebung und mehr",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -28,52 +28,47 @@ const BaumaschinenfuehrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Baumaschinenführer buchen – Baggerfahrer & Radlader deutschlandweit",
-    intro: "Deutschlandweit Baumaschinenführer für Erdarbeiten, Aushub und Verladung buchen. Baggerfahrer, Radladerfahrer und Mischmeister für Flüssigbodenanlagen als selbstständige Subunternehmer – Sie stellen die Geräte, wir den qualifizierten Fahrer.",
+    h1: "Premium All-in-One Maschinenbediener – Günter Killer persönlich",
+    intro: "Premium-Kategorie: Günter Killer persönlich als vielseitiger All-in-One Maschinenbediener. Einsatzbereiche: Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, kleinere Reparaturen, technische Störungsbehebung, Baustellenlogistik, Materialfluss, eigenständige Prozessüberwachung. 459 € pro Tag (8 Stunden), 60 € pro Überstunde. Sie stellen die Geräte, wir den Experten.",
     bullets: [
-      "Erfahrene Maschinisten",
-      "Tages- bis Projekt-Einsätze", 
-      "Deutschlandweit verfügbar"
+      "Günter Killer persönlich",
+      "All-in-One: Bagger, Radlader, Fahrmischer, Mischanlagen",
+      "Störungsbehebung & Baustellenlogistik"
     ]
   };
 
   const faqData = {
-    title: "Baumaschinenführer – Häufige Fragen",
+    title: "Premium All-in-One Maschinenbediener – Häufige Fragen",
     items: [
       {
-        question: "Welche Nachweise/Scheine werden bereitgestellt?",
-        answer: "<strong>Werden bereitgestellt.</strong> Unsere Baumaschinenführer verfügen über gültige Führerscheine, Maschinenscheine und erforderliche Befähigungsnachweise."
+        question: "Was macht Günter Killer als All-in-One Maschinenbediener?",
+        answer: "<strong>Vielseitiger Experte:</strong> Bagger, Radlader, Fahrmischer, Flüssigbodenanlagen, Mischanlagen bedienen. Zusätzlich: kleinere Reparaturen, technische Störungsbehebung, Baustellenlogistik, Materialfluss koordinieren, eigenständige Prozessüberwachung."
       },
       {
-        question: "Wie läuft die Sicherheitsunterweisung?",
-        answer: "<strong>Vor Ort oder Online möglich.</strong> Je nach Baustellen-Anforderungen nehmen die Baumaschinenführer an SiGe-Unterweisungen teil."
+        question: "Welche Qualifikationen hat Günter Killer?",
+        answer: "<strong>Umfassende Erfahrung und Zertifizierungen</strong> für alle genannten Maschinen und Anlagen. Langjährige Praxis in Baustellenlogistik und technischer Problemlösung."
       },
       {
-        question: "Welche Baumaschinen können bedient werden?",
-        answer: "Hauptsächlich <strong>Bagger (Mobilbagger, Raupenbagger)</strong>, <strong>Radlader</strong>, <strong>Mischmeister für Flüssigboden</strong> und weitere Erdbaumaschinen je nach Qualifikation. <em>Immer mit Ihren Geräten/Maschinen – keine Maschinenvermietung.</em>"
+        question: "Warum Premium-Kategorie?",
+        answer: "<strong>Direkter Einsatz von Günter Killer persönlich</strong> statt vermittelter Fahrer. Höhere Expertise, umfassendere Einsatzmöglichkeiten, eigenständige Prozessverantwortung. Ideal für anspruchsvolle Projekte und komplexe Baustellenabläufe."
       },
       {
-        question: "Wie lange dauern typische Einsätze?",
-        answer: "Von <strong>Tageseinsätzen bis zu mehrwöchigen Projekten</strong>. Flexibel nach Ihrem Bauvorhaben und Verfügbarkeit der Baumaschinenführer."
+        question: "Wie sind die Konditionen?",
+        answer: "<strong>459 € pro Tag (8 Stunden), 60 € pro Überstunde.</strong> Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Sie stellen die Geräte/Maschinen."
       }
     ]
   };
 
   const relatedServices = [
     {
-      title: "LKW-Fahrer",
+      title: "Standard – CE-LKW-Fahrer",
       path: "/lkw-fahrer-buchen",
-      description: "Standard- und CE-Fahrer für alle LKW-Klassen"
+      description: "Vermittelte CE-Fahrer – 349 € pro Tag"
     },
     {
-      title: "ADR-Fahrer",
-      path: "/adr-fahrer-buchen",
-      description: "Gefahrgut-Fahrer mit ADR-Schein"
-    },
-    {
-      title: "Fahrmischerfahrer",
-      path: "/fahrmischerfahrer-buchen",
-      description: "Betonmischer-Spezialisten & Mischmeister"
+      title: "Preise & Konditionen",
+      path: "/preise-und-ablauf",
+      description: "Alle Preise und Ablauf im Detail"
     }
   ];
 

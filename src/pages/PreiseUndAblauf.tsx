@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – LKW-Fahrer mieten ab 50€/h bzw. 359€/Tag | Fahrerexpress",
-    description: "Transparente Preisstruktur für Kraftfahrer: Kurzeinsatz (4-6h), Standard-Tagessatz oder Projektpreis ab 4 Wochen. Keine Vermittlungsgebühr für Auftraggeber. Schneller Ablauf in 3 Schritten.",
-    keywords: "LKW-Fahrer Preise, Kraftfahrer Kosten, Stundensatz Fahrer, Tagessatz Fahrer, Projektpreis LKW-Fahrer, Fahrerexpress Preise"
+    title: "Preise & Ablauf – Premium 459€ oder Standard CE 349€ pro Tag",
+    description: "Klare Preisstruktur: Premium All-in-One Maschinenbediener 459€/Tag oder Standard CE-LKW-Fahrer 349€/Tag. Wochen- und Monatspreise verfügbar. Einfacher Ablauf in 3 Schritten.",
+    keywords: "LKW-Fahrer Preise, CE-Fahrer Kosten 349€, Premium Maschinenbediener 459€, Tagespreis Kraftfahrer, All-in-One Operator, Fahrmischer Preise, Baustellenlogistik Kosten"
   });
 
   return (

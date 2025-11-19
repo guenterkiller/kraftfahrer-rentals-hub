@@ -9,32 +9,22 @@ import fahrmischerFahrer from "@/assets/fahrmischer-fahrer.jpg";
 const DriverTypesSection = () => {
   const driverTypes = [
     {
-      title: "Standard LKW-Fahrer (C/CE)",
-      description: "Erfahrene Berufskraftfahrer für Nah- und Fernverkehr. Alle gängigen Führerscheinklassen verfügbar.",
+      title: "Premium – All-in-One Maschinenbediener",
+      subtitle: "Günter Killer persönlich",
+      description: "459 € pro Tag (8 Stunden) • 60 € Überstunde",
+      image: "/lovable-uploads/b2cd4743-98d6-4618-81c8-418636570dfc.png",
+      features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
+      path: "/baumaschinenfuehrer-buchen",
+      isPremium: true
+    },
+    {
+      title: "Standard – CE-LKW-Fahrer",
+      subtitle: "Vermittelte Fahrer",
+      description: "349 € pro Tag (8 Stunden) • 30 € Überstunde",
       image: lkwFahrerHero,
-      features: ["C/CE Führerschein", "Fernverkehr erfahren", "Kurzfristig verfügbar"],
-      path: "/lkwfahrer-buchen"
-    },
-    {
-      title: "Tankwagenfahrer (ADR)",
-      description: "Spezialisierte ADR-Fahrer für Gefahrguttransporte in Mineralöl, Chemie und Lebensmittelbereich.",
-      image: tankwagenFahrer,
-      features: ["ADR-Schein aktuell", "Gefahrgut-Erfahrung", "Mineralöl & Chemie", "Tankwagen- und ADR-Spezialfahrer gehören zur Kategorie 'Spezialfahrer'."],
-      path: "/tankwagenfahrer-buchen"
-    },
-    {
-      title: "LKW mit Ladekran",
-      description: "LKW-Fahrer mit Erfahrung im Fahren von Fahrzeugen mit Baustoffkran oder Entladekran.",
-      image: kranFahrer,
-      features: ["Ladekran-Erfahrung", "Baustoffkran", "Entladekran"],
-      path: "/lkw-fahrer-buchen"
-    },
-    {
-      title: "Fahrmischerfahrer",
-      description: "Erfahrene Betonmischer-Fahrer für Baustelleneinsätze und Betonlieferungen.",
-      image: fahrmischerFahrer,
-      features: ["Fahrmischer-Erfahrung", "Baustellen-Routine", "Präzise Lieferung"],
-      path: "/fahrmischerfahrer-gesucht"
+      features: ["Einheitlich für alle CE-Arten", "Fahrmischer, ADR, Fernverkehr", "Baustellenverkehr, Container", "Express, Kurier, Eventlogistik"],
+      path: "/lkw-fahrer-buchen",
+      isPremium: false
     }
   ];
 
