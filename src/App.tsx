@@ -19,7 +19,7 @@ import DriverJobResponse from "./pages/DriverJobResponse";
 import AdminRoute from "./components/AdminRoute";
 import LKWFahrerBuchen from "./pages/LKWFahrerBuchen";
 import KraftfahrerMieten from "./pages/KraftfahrerMieten";
-import FahrmischerfahrerGesucht from "./pages/FahrmischerfahrerGesucht";
+
 import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
@@ -42,13 +42,13 @@ const App = () => (
           <Route path="/lkw-fahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/lkwfahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/kraftfahrer-mieten" element={<KraftfahrerMieten />} />
-          <Route path="/fahrmischerfahrer-gesucht" element={<FahrmischerfahrerGesucht />} />
           <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
           
-          {/* 301 Redirects for removed pages → Standard CE category */}
+          {/* 301 Redirects for removed pages → LKW CE Fahrer category */}
           <Route path="/tankwagenfahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/adr-fahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/fahrmischerfahrer-buchen" element={<LKWFahrerBuchen />} />
+          <Route path="/fahrmischerfahrer-gesucht" element={<LKWFahrerBuchen />} />
           <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
           <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
           <Route path="/bf3-ablauf-kosten" element={<BF3Ablauf />} />

@@ -2,9 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import lkwFahrerHero from "@/assets/lkw-fahrer-hero.jpg";
-import tankwagenFahrer from "@/assets/tankwagen-fahrer.jpg";
-import kranFahrer from "@/assets/kran-fahrer.jpg";
-import fahrmischerFahrer from "@/assets/fahrmischer-fahrer.jpg";
 
 const DriverTypesSection = () => {
   const driverTypes = [
