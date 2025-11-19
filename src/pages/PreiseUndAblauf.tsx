@@ -261,7 +261,7 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-3 text-sm">
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                  <p><strong>Keine Arbeitnehmerüberlassung:</strong> Alle Fahrer arbeiten selbstständig nach § 84 HGB</p>
+                  <p><strong>Keine Arbeitnehmerüberlassung:</strong> Vermittlung selbstständiger Fahrer nach § 652 BGB (Maklervertrag)</p>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />

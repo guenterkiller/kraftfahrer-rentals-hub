@@ -28,7 +28,7 @@ const AboutSection = () => {
                     Flexibel. Zuverlässig. Deutschlandweit.
                   </p>
                   <p className="text-muted-foreground mb-4">
-                    Seit 2009 vernetze ich als erfahrener Kraftfahrer Unternehmen mit qualifizierten Fahrern – CE, ADR, Fahrmischer und Baumaschinenführer. Rechtssicher nach § 84 HGB.
+                    Seit 2009 vernetze ich als erfahrener Kraftfahrer Unternehmen mit qualifizierten Fahrern – CE, ADR, Fahrmischer und Baumaschinenführer. Vermittlung nach § 652 BGB (Maklervertrag).
                   </p>
                   <div className="text-sm text-muted-foreground">
                     <p>📱 Mobil: 01577 1442285</p>

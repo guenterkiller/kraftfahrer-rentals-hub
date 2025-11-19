@@ -16,7 +16,7 @@ const PricingSection = () => {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">LKW-Fahrer oder Baumaschinenführer – Sie haben die Wahl</h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Vermittelte LKW CE Fahrer für alle Einsatzarten im Nah-, Fern- und Baustellenverkehr sowie erfahrene Baumaschinenführer für Bagger, Radlader & mehr – alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
+            Vermittelte LKW CE Fahrer für alle Einsatzarten im Nah-, Fern- und Baustellenverkehr sowie erfahrene Baumaschinenführer für Bagger, Radlader & mehr – alle arbeiten als selbstständige Subunternehmer. Fahrerexpress vermittelt nach § 652 BGB (Maklervertrag).
           </p>
         </div>
 
@@ -165,7 +165,7 @@ const PricingSection = () => {
             <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            <p>Alle Fahrer arbeiten selbstständig nach Paragraph 84 HGB. Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
+            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
           </CardContent>
         </Card>
 

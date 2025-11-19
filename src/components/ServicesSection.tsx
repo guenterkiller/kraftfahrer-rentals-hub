@@ -145,7 +145,7 @@ const ServicesSection = () => {
             </div>
             <h3 className="text-2xl font-bold mb-3">Rechtssichere Subunternehmer</h3>
             <p className="text-muted-foreground mb-6">
-              Alle Fahrer und Maschinenbediener arbeiten als selbstständige Subunternehmer nach § 84 HGB. 
+              Alle Fahrer und Maschinenbediener arbeiten als selbstständige Subunternehmer. Vermittlung durch Fahrerexpress nach § 652 BGB (Maklervertrag).
               Keine Arbeitnehmerüberlassung. Vollständig versichert und rechtssicher. Abrechnung über Fahrerexpress.
             </p>
             <div className="flex justify-center gap-4">

@@ -91,7 +91,7 @@ const Vermittlung = () => {
                     Die Provision wird direkt einbehalten oder alternativ per separater Provisionsrechnung abgerechnet.
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    <strong>Rechtsgrundlage:</strong> Werk-/Dienstleistungsvertrag nach § 84 HGB
+                    <strong>Rechtsgrundlage:</strong> Vermittlungsvertrag nach § 652 BGB (Maklervertrag) zwischen Fahrerexpress und Fahrer. Der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer gegenüber dem Auftraggeber im Rahmen eines Werk-/Dienstvertrags.
                   </p>
                 </CardContent>
               </Card>

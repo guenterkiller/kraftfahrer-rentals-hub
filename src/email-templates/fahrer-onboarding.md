@@ -26,7 +26,9 @@ Die Vermittlungsgebühr beträgt bei jedem Einsatz:
 
 Die Vermittlungsgebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
 
-**Abrechnung:** Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; die Provision wird intern einbehalten.
+**Abrechnung:** Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; die Vermittlungsgebühr wird intern einbehalten.
+
+**Rechtsgrundlage:** Vermittlungsvertrag nach § 652 BGB (Maklervertrag). Sie erbringen Ihre Leistung als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber.
 
 🔒 **Kundenschutz / Umgehungsverbot**
 
@@ -75,7 +77,7 @@ erste Einsätze in Ihrer Region sind verfügbar:
 **Wichtige Infos zur Zusammenarbeit:**
 ✅ Abrechnung läuft über Fahrerexpress (eine Rechnung für den Auftraggeber)
 ✅ Sie arbeiten als selbstständiger Subunternehmer
-✅ Keine Arbeitnehmerüberlassung – rechtssichere Dienst-/Werkleistung
+✅ Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung
 
 **Ihr Fahrer-Dashboard:**
 [Link zu Einsätzen] | [Link zu Dokumenten] | [Link zu Abrechnungen]
