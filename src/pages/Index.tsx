@@ -16,8 +16,8 @@ import { useSEO } from "@/hooks/useSEO";
 const Index = () => {
   useSEO({
     title: "LKW-Fahrer buchen & Kraftfahrer mieten – Fahrerexpress Agentur",
-    description: "Kurzfristig bundesweit Fahrer buchen: Premium All-in-One Maschinenbediener (459 €) oder Standard CE-LKW-Fahrer (349 €). Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
-    keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, CE-Fahrer buchen, All-in-One Maschinenbediener, Premium Baumaschinenführer, Fahrmischer, ADR-Fahrer, Baustellenlogistik, Fahrer deutschlandweit",
+    description: "Kurzfristig bundesweit Fahrer buchen: Baumaschinenführer (459 €) oder LKW CE Fahrer (349 €). Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
+    keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, LKW CE Fahrer buchen, Baumaschinenführer, Fahrmischer, ADR-Fahrer, Baustellenlogistik, Fahrer deutschlandweit",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     faqData: [
       {
@@ -46,7 +46,7 @@ const Index = () => {
       "mainEntity": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur - Günter Killer",
-        "description": "Premium All-in-One Maschinenbediener (459 €) oder Standard CE-LKW-Fahrer (349 €) bundesweit buchen - selbstständige Subunternehmer ohne Arbeitnehmerüberlassung",
+        "description": "Baumaschinenführer (459 €) oder LKW CE Fahrer (349 €) bundesweit buchen - selbstständige Subunternehmer ohne Arbeitnehmerüberlassung",
         "url": "https://kraftfahrer-mieten.com",
         "telephone": "+49-1577-1442285",
         "priceRange": "Faire Preise",
