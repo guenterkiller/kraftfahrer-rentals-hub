@@ -12,9 +12,9 @@ const LKWFahrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "LKW- / Speditionsfahrer (CE) buchen – Vermittelte Fahrer ab 349 €",
+    title: "LKW CE Fahrer buchen – Vermittelte Fahrer ab 349 €",
     description: "Qualifizierte CE-Fahrer für alle Logistik-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag.",
-    keywords: "CE-LKW-Fahrer, Speditionsfahrer, Fahrmischer, ADR-Fahrer",
+    keywords: "CE-LKW-Fahrer, LKW CE Fahrer, Speditionsfahrer, Fahrmischer, ADR-Fahrer",
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
@@ -62,7 +62,7 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW- / Speditionsfahrer (CE) buchen",
+    h1: "LKW CE Fahrer buchen",
     intro: "Qualifizierte CE-Fahrer für alle Speditions-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
     bullets: ["Alle Speditions-Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
   };
@@ -91,24 +91,14 @@ const LKWFahrerBuchen = () => {
 
   const relatedServices = [
     {
-      title: "Tankwagenfahrer",
-      path: "/tankwagenfahrer-buchen",
-      description: "ADR-Tankwagenfahrer für Gefahrgut-Transport"
-    },
-    {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
-      description: "Bagger, Radlader & Erdbaumaschinen"
+      description: "Vermittelte Baumaschinenführer – 459 € pro Tag"
     },
     {
-      title: "Fahrmischerfahrer",
-      path: "/fahrmischerfahrer-buchen",
-      description: "Betonmischer-Spezialisten & Mischmeister"
-    },
-    {
-      title: "ADR-Fahrer",
-      path: "/adr-fahrer-buchen",
-      description: "Gefahrgut-Fahrer mit ADR-Schein"
+      title: "Preise & Konditionen",
+      path: "/preise-und-ablauf",
+      description: "Alle Preise und Ablauf im Detail"
     }
   ];
 

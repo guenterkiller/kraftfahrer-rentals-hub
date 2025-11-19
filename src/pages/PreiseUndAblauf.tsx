@@ -66,7 +66,7 @@ const PreiseUndAblauf = () => {
 
               <Card className="border-primary/20 hover:border-primary/40 transition-all">
                 <CardHeader>
-                  <CardTitle className="text-xl">LKW- / Speditionsfahrer (CE)</CardTitle>
+                  <CardTitle className="text-xl">LKW CE Fahrer</CardTitle>
                   <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
                 </CardHeader>
                 <CardContent className="space-y-4">

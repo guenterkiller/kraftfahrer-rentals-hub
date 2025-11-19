@@ -9,7 +9,7 @@ import fahrmischerFahrer from "@/assets/fahrmischer-fahrer.jpg";
 const DriverTypesSection = () => {
   const driverTypes = [
     {
-      title: "LKW- / Speditionsfahrer (CE)",
+      title: "LKW CE Fahrer",
       subtitle: "Vermittelte Fahrer",
       description: "349 € pro Tag (8 Stunden) • 30 € Überstunde",
       image: lkwFahrerHero,
