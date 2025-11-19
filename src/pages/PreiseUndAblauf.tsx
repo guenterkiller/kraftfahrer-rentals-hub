@@ -1,17 +1,20 @@
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Clock, Euro, Phone, Users } from "lucide-react";
+import { CheckCircle, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – CE-Fahrer 349€ oder Baumaschinenführer 459€",
-    description: "Klare Preisstruktur: LKW CE Fahrer 349€/Tag oder Baumaschinenführer 459€/Tag. Wochen- und Monatspreise verfügbar. Einfacher Ablauf in 3 Schritten.",
-    keywords: "LKW-Fahrer Preise, CE-Fahrer Kosten 349€, Baumaschinenführer 459€, LKW CE Fahrer, Fahrmischer, Baustellenlogistik"
+    title: "Preise & Ablauf – Transparente Konditionen für Fahrervermittlung",
+    description: "Alle Details zu Preisen, Fahrtkosten, Langzeiteinsätzen und Buchungsablauf. LKW CE Fahrer 349€/Tag, Baumaschinenführer 459€/Tag.",
+    keywords: "Fahrer Preise, Fahrtkosten, Langzeiteinsatz, Wochenpreis, Monatspreise, Buchungsablauf"
   });
+
+  const scrollToBooking = () => {
+    window.location.href = '/#fahreranfrage';
+  };
 
   return (
     <div>
@@ -23,207 +26,301 @@ const PreiseUndAblauf = () => {
             {/* Hero Section */}
             <div className="text-center mb-12">
               <h1 className="text-4xl font-bold mb-4">
-                Transparente Preise & einfacher Ablauf
+                Preise & Ablauf im Detail
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Erfahren Sie, was die Vermittlung qualifizierter Kraftfahrer kostet und wie schnell wir Ihnen helfen können.
+                Transparente Konditionen, klare Prozesse – so funktioniert die professionelle Fahrervermittlung.
               </p>
             </div>
 
-            {/* Preisübersicht */}
-            <div className="grid md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
-              <Card className="border-primary/20 hover:border-primary/40 transition-all bg-primary/5">
+            {/* Preisübersicht Kompakt */}
+            <Card className="mb-12 bg-primary/5 border-primary/20">
+              <CardHeader>
+                <CardTitle className="text-center text-2xl">Aktuelle Tagespreise</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                  <div className="text-center p-4 bg-background rounded-lg">
+                    <div className="text-sm text-muted-foreground mb-1">LKW CE Fahrer</div>
+                    <div className="text-3xl font-bold text-primary">349 €</div>
+                    <div className="text-sm text-muted-foreground mt-1">pro Tag (8 Std.) • 30 € ÜS</div>
+                  </div>
+                  <div className="text-center p-4 bg-background rounded-lg">
+                    <div className="text-sm text-muted-foreground mb-1">Baumaschinenführer</div>
+                    <div className="text-3xl font-bold text-primary">459 €</div>
+                    <div className="text-sm text-muted-foreground mt-1">pro Tag (8 Std.) • 60 € ÜS</div>
+                  </div>
+                </div>
+                <div className="text-center mt-4">
+                  <Button onClick={scrollToBooking} size="lg">
+                    Jetzt Fahrer buchen
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Fahrtkosten & Zusatzkosten */}
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl flex items-center gap-2">
-                    Baumaschinenbedienung
-                    <Badge variant="secondary">Vermittelte Baumaschinenführer</Badge>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    Fahrtkosten-Regelung
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3">
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">Baumaschinenführer</h3>
-                    <p className="text-3xl font-bold text-primary">459€</p>
-                    <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
+                    <p className="font-semibold">Inklusive:</p>
+                    <p className="text-muted-foreground">Erste 25 km (Hin- und Rückweg) ohne Aufpreis</p>
                   </div>
-                  <div className="pt-2 border-t">
-                    <p className="text-sm font-medium">Überstunden</p>
-                    <p className="text-xl font-semibold">60€/Stunde</p>
+                  <div>
+                    <p className="font-semibold">Darüber hinaus:</p>
+                    <p className="text-muted-foreground">0,40 € pro Kilometer (Hin- und Rückweg)</p>
                   </div>
-                  <div className="pt-3">
-                    <p className="text-sm font-medium mb-2">Einsatzbereiche:</p>
-                    <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>✓ Baggerfahren</li>
-                      <li>✓ Radladerfahren</li>
-                      <li>✓ Fahrmischer & Betonlogistik</li>
-                      <li>✓ Flüssigboden (Mischmeister)</li>
-                      <li>✓ Mischanlagen bedienen</li>
-                      <li>✓ Störungsbehebung & Reparaturen</li>
-                      <li>✓ Baustellenlogistik & Materialfluss</li>
-                    </ul>
+                  <div className="pt-3 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Beispiel:</strong> Entfernung 60 km → 35 km berechnet × 2 (Hin/Rück) × 0,40 € = 28 € Fahrtkosten
+                    </p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="border-primary/20 hover:border-primary/40 transition-all">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-xl">LKW CE Fahrer</CardTitle>
-                  <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
+                  <CardTitle className="flex items-center gap-2">
+                    <AlertCircle className="h-5 w-5 text-blue-600" />
+                    Überstunden & Zuschläge
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3">
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">CE-LKW-Fahrer</h3>
-                    <p className="text-sm text-muted-foreground mb-2">Einheitlicher Tagespreis für alle Einsatzarten</p>
-                    <p className="text-3xl font-bold text-primary">349€</p>
-                    <p className="text-sm text-muted-foreground">pro Tag (8 Stunden)</p>
+                    <p className="font-semibold">LKW CE Fahrer:</p>
+                    <p className="text-muted-foreground">30 € pro Überstunde (ab 9. Stunde)</p>
                   </div>
-                  <div className="pt-2 border-t">
-                    <p className="text-sm font-medium">Überstunden</p>
-                    <p className="text-xl font-semibold">30€/Stunde</p>
+                  <div>
+                    <p className="font-semibold">Baumaschinenführer:</p>
+                    <p className="text-muted-foreground">60 € pro Überstunde (ab 9. Stunde)</p>
                   </div>
-                  <div className="pt-3">
-                    <p className="text-sm font-medium mb-2">Gilt für folgende Tätigkeiten:</p>
-                    <ul className="text-sm space-y-1 text-muted-foreground">
-                      <li>✓ Fahrmischer, Wechselbrücke, Hängerzug</li>
-                      <li>✓ Fernverkehr, Nahverkehr</li>
-                      <li>✓ Baustellenverkehr, Mitnahmestapler</li>
-                      <li>✓ ADR, Baustofflogistik, Entsorgung</li>
-                      <li>✓ Container, Express- und Kurierfahrten</li>
-                      <li>✓ Eventlogistik und alle weiteren CE-Fahrer-Einsatzarten</li>
-                    </ul>
+                  <div className="pt-3 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      <strong>Hinweis:</strong> Nacht-, Sonn- und Feiertagszuschläge nach aktueller Preisliste
+                    </p>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
-            {/* Zusatzinformationen */}
-            <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Fahrtkosten</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm">
-                  <p className="font-semibold">25 Kilometer inklusive</p>
-                  <p className="text-muted-foreground mt-1">Danach 0,40€ pro Kilometer</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Wochenpreise</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm">
-                  <p className="font-semibold">Ab 5 Tagen</p>
-                  <p className="text-primary text-lg font-bold mt-1">1.490€/Woche</p>
-                  <p className="text-muted-foreground text-xs mt-1">(nur CE-Fahrer)</p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Monatspreise</CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm">
-                  <p className="font-semibold">Nur auf Anfrage</p>
-                  <p className="text-muted-foreground mt-1">Individuelle Konditionen für längere Projekte</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card className="bg-muted/50 max-w-4xl mx-auto mb-12">
+            {/* Langzeiteinsätze */}
+            <Card className="mb-12 bg-muted/30">
               <CardHeader>
-                <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
+                <CardTitle className="text-2xl text-center">Wochen- und Monatspreise</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
-                <p>Alle Fahrer arbeiten selbstständig nach Paragraph 84 HGB. Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-3">LKW CE Fahrer – Langzeitkonditionen</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-background rounded-lg text-center">
+                        <div className="text-sm text-muted-foreground mb-1">Woche (5 Tage)</div>
+                        <div className="text-2xl font-bold text-primary">ab 1.490 €</div>
+                        <div className="text-xs text-muted-foreground mt-1">statt 1.745 €</div>
+                      </div>
+                      <div className="p-4 bg-background rounded-lg text-center">
+                        <div className="text-sm text-muted-foreground mb-1">2 Wochen</div>
+                        <div className="text-2xl font-bold text-primary">auf Anfrage</div>
+                        <div className="text-xs text-muted-foreground mt-1">Sonderkonditionen</div>
+                      </div>
+                      <div className="p-4 bg-background rounded-lg text-center">
+                        <div className="text-sm text-muted-foreground mb-1">Monat+</div>
+                        <div className="text-2xl font-bold text-primary">individuell</div>
+                        <div className="text-xs text-muted-foreground mt-1">Nach Vereinbarung</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t">
+                    <h3 className="font-semibold text-lg mb-3">Baumaschinenführer – Projektpreise</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Bei Langzeiteinsätzen ab 2 Wochen bieten wir attraktive Projektpreise. 
+                      Je nach Einsatzdauer und Planungssicherheit erstellen wir Ihnen ein individuelles Angebot.
+                    </p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span>Staffelpreise ab 10 Einsatztagen</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm mt-2">
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <span>Garantierte Verfügbarkeit bei Langzeitbuchungen</span>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
             {/* Ablauf in 3 Schritten */}
             <div className="mb-12">
-              <h2 className="text-3xl font-bold text-center mb-8">So einfach funktioniert es</h2>
+              <h2 className="text-3xl font-bold text-center mb-8">So einfach funktioniert die Buchung</h2>
               <div className="grid md:grid-cols-3 gap-8">
-                <Card>
-                  <CardHeader className="text-center">
-                    <div className="mx-auto w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">1</div>
+                <Card className="text-center">
+                  <CardHeader>
+                    <div className="mx-auto w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-2xl font-bold mb-4">1</div>
                     <CardTitle>Anfrage stellen</CardTitle>
                   </CardHeader>
-                  <CardContent className="text-center">
-                    <p>Teilen Sie uns Ihren Bedarf mit: Fahrzeugtyp, Einsatzort, Zeitraum und besondere Anforderungen.</p>
-                    <Badge variant="secondary" className="mt-3">⏱️ 2 Minuten</Badge>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">
+                      Nutzen Sie unser Online-Formular: Fahrzeugtyp, Einsatzort, Zeitraum und Besonderheiten angeben.
+                    </p>
+                    <div className="text-sm text-primary font-semibold">⏱️ Dauer: 2-3 Minuten</div>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="text-center">
-                    <div className="mx-auto w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">2</div>
-                    <CardTitle>Fahrer-Auswahl</CardTitle>
+                <Card className="text-center">
+                  <CardHeader>
+                    <div className="mx-auto w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-2xl font-bold mb-4">2</div>
+                    <CardTitle>Fahrer-Prüfung</CardTitle>
                   </CardHeader>
-                  <CardContent className="text-center">
-                    <p>Wir prüfen verfügbare Fahrer und senden Ihnen den passenden Kandidaten mit allen Qualifikationen.</p>
-                    <Badge variant="secondary" className="mt-3">⏱️ 2-4 Stunden</Badge>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">
+                      Wir prüfen verfügbare Fahrer mit passenden Qualifikationen und schlagen Ihnen geeignete Kandidaten vor.
+                    </p>
+                    <div className="text-sm text-primary font-semibold">⏱️ Reaktionszeit: 2-6 Stunden</div>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="text-center">
-                    <div className="mx-auto w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">3</div>
+                <Card className="text-center">
+                  <CardHeader>
+                    <div className="mx-auto w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-2xl font-bold mb-4">3</div>
                     <CardTitle>Einsatz startet</CardTitle>
                   </CardHeader>
-                  <CardContent className="text-center">
-                    <p>Der Fahrer kontaktiert Sie direkt, um Details zu klären. Pünktlich zum vereinbarten Termin am Einsatzort.</p>
-                    <Badge variant="secondary" className="mt-3">⏱️ Planbar innerhalb 24-72h</Badge>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-4">
+                      Der Fahrer kontaktiert Sie direkt zur Detailabstimmung und erscheint pünktlich zum vereinbarten Termin.
+                    </p>
+                    <div className="text-sm text-primary font-semibold">⏱️ Start: 24-72 Stunden</div>
                   </CardContent>
                 </Card>
               </div>
             </div>
 
-            {/* FAQ Preise */}
+            {/* Beispielrechnungen */}
             <Card className="mb-12">
               <CardHeader>
-                <CardTitle className="text-2xl">Häufige Fragen zu Preisen & Ablauf</CardTitle>
+                <CardTitle className="text-2xl text-center">Beispielrechnungen</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-2">Entstehen für mich als Auftraggeber Kosten?</h4>
-                  <p className="text-muted-foreground">Nein. Für Auftraggeber ist die Vermittlung komplett kostenlos. Sie zahlen nur den vereinbarten Stundensatz direkt an den Fahrer.</p>
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <h4 className="font-semibold mb-3">Beispiel 1: LKW CE Fahrer – Tageseinsatz Hamburg</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>1 Tag (8 Std.) LKW CE Fahrer</span>
+                      <span className="font-semibold">349,00 €</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>2 Überstunden à 30 €</span>
+                      <span className="font-semibold">60,00 €</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Fahrtkosten (45 km → 20 km × 2 × 0,40 €)</span>
+                      <span className="font-semibold">16,00 €</span>
+                    </div>
+                    <div className="flex justify-between pt-2 border-t font-bold text-base">
+                      <span>Gesamt netto</span>
+                      <span className="text-primary">425,00 €</span>
+                    </div>
+                  </div>
                 </div>
-                
-                <div>
-                  <h4 className="font-semibold mb-2">Wie schnell kann ein Fahrer verfügbar sein?</h4>
-                  <p className="text-muted-foreground">In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen.</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold mb-2">Sind die Fahrer versichert?</h4>
-                  <p className="text-muted-foreground">Ja, alle Fahrer haben eine Betriebshaftpflichtversicherung. Ihr Fahrzeug bleibt über Ihre Versicherung abgesichert.</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold mb-2">Was passiert bei Ausfällen?</h4>
-                  <p className="text-muted-foreground">Wir stellen kostenlos einen Ersatzfahrer. Bei kurzfristigen Ausfällen (unter 4 Stunden vor Einsatzbeginn) bemühen wir uns nach besten Kräften.</p>
+
+                <div className="p-4 bg-muted/50 rounded-lg">
+                  <h4 className="font-semibold mb-3">Beispiel 2: Baumaschinenführer – Wochenprojekt</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span>5 Tage à 459 € (Standard 8 Std./Tag)</span>
+                      <span className="font-semibold">2.295,00 €</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Fahrtkosten 5× (30 km → 5 km × 2 × 0,40 €)</span>
+                      <span className="font-semibold">20,00 €</span>
+                    </div>
+                    <div className="flex justify-between pt-2 border-t font-bold text-base">
+                      <span>Gesamt netto</span>
+                      <span className="text-primary">2.315,00 €</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Bei Wochenpreisen (ab 1.490 € für CE-Fahrer) reduzieren sich die Kosten weiter
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* CTA Section */}
+            {/* Wichtige Hinweise */}
+            <Card className="mb-12 border-primary/30 bg-primary/5">
+              <CardHeader>
+                <CardTitle>Wichtige Hinweise</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <p><strong>Keine Arbeitnehmerüberlassung:</strong> Alle Fahrer arbeiten selbstständig nach § 84 HGB</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <p><strong>Nettopreise:</strong> Alle Preise verstehen sich zzgl. gesetzlicher MwSt.</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                  <p><strong>Abrechnung:</strong> Nach tatsächlichem Einsatzumfang – Sie erhalten eine Rechnung von Fahrerexpress</p>
+                </div>
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p><strong>Kurzzeiteinsätze:</strong> Same-Day-Buchungen sind ausgeschlossen – Mindestvorlauf 24h werktags</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* CTA */}
             <div className="text-center">
-              <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-4">Bereit für Ihren Einsatz?</h3>
-                  <p className="text-lg mb-6 text-muted-foreground">
-                    Starten Sie jetzt Ihre kostenlose Anfrage oder rufen Sie uns direkt an.
+              <h2 className="text-2xl font-bold mb-4">Bereit für Ihre Fahreranfrage?</h2>
+              <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                Nutzen Sie unser Online-Formular oder rufen Sie direkt an – wir beraten Sie gerne zu den passenden Konditionen.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" onClick={scrollToBooking}>
+                  Jetzt Fahrer buchen
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <a href="tel:+4915771442285">☎ +49 1577 1442285</a>
+                </Button>
+              </div>
+            </div>
+
+            {/* Weitere Infos Links */}
+            <div className="grid md:grid-cols-2 gap-6 mt-12">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">LKW CE Fahrer im Detail</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Alle Einsatzarten: Fahrmischer, Fernverkehr, ADR, Container, Wechselbrücke und mehr.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button asChild size="lg">
-                      <Link to="/lkw-fahrer-buchen">Jetzt Fahrer buchen</Link>
-                    </Button>
-                    <Button variant="outline" size="lg" asChild>
-                      <a href="tel:+4915771442285" className="flex items-center gap-2">
-                        <Phone className="h-4 w-4" />
-                        01577 144 2285
-                      </a>
-                    </Button>
-                  </div>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link to="/lkw-fahrer-buchen">Mehr erfahren</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Baumaschinenführer im Detail</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung.
+                  </p>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link to="/baumaschinenfuehrer-buchen">Mehr erfahren</Link>
+                  </Button>
                 </CardContent>
               </Card>
             </div>
