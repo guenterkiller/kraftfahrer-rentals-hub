@@ -18,17 +18,17 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
-          <span className="block sm:hidden">LKW-Fahrer buchen &amp; Kraftfahrer mieten</span>
-          <span className="block sm:hidden text-xl mt-2">Fahrerexpress</span>
-          <span className="hidden sm:block">LKW-Fahrer buchen &amp; Kraftfahrer mieten – Fahrerexpress</span>
+          <span className="block sm:hidden">LKW-Fahrer &amp; Kraftfahrer (CE) mieten</span>
+          <span className="block sm:hidden text-xl mt-2">Fahrerexpress-Agentur Günter Killer</span>
+          <span className="hidden sm:block">LKW-Fahrer &amp; Kraftfahrer (CE) mieten – Fahrerexpress-Agentur Günter Killer</span>
         </h1>
         
         <div className="bg-primary/90 backdrop-blur-sm text-white p-4 md:p-6 mb-8 max-w-4xl mx-auto rounded-lg shadow-xl animate-slide-up">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 drop-shadow-md">
-            Flexibel. Zuverlässig. Deutschlandweit.
+            Selbstständige Profi-Fahrer für Transporte, Baustellen &amp; Spezialaufgaben – bundesweit verfügbar
           </h2>
           <p className="text-base sm:text-lg md:text-xl drop-shadow-sm">
-            Wir vermitteln bundesweit selbstständige Fahrer – für Transporte, Bauprojekte und Spezialaufgaben
+            Wir vermitteln deutschlandweit qualifizierte selbstständige LKW-Fahrer und CE-Fahrer – flexibel, zuverlässig und rechtskonform. Keine Arbeitnehmerüberlassung. Reine Dienst-/Werkleistung.
           </p>
         </div>
         
@@ -76,7 +76,7 @@ const HeroSection = () => {
               }}
               aria-label="Fahrer buchen - Zu Buchungsformular scrollen"
             >
-              <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚚</span> Fahrer buchen
+              <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚛</span> Fahrer buchen
             </a>
           </Button>
           <Button 
@@ -85,7 +85,7 @@ const HeroSection = () => {
             asChild
           >
             <Link to="/fahrer-registrierung" aria-label="Als Fahrer registrieren">
-              🚀 Fahrer werden
+              👷 Fahrer werden
             </Link>
           </Button>
         </div>

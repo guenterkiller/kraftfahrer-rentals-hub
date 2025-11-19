@@ -14,9 +14,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
   useSEO({
-    title: "LKW-Fahrer buchen & Kraftfahrer mieten – Fahrerexpress Agentur",
-    description: "Kurzfristig bundesweit Fahrer buchen: Baumaschinenführer (459 €) oder LKW CE Fahrer (349 €). Flexibel, zuverlässig & ohne Arbeitnehmerüberlassung.",
-    keywords: "LKW-Fahrer buchen, Kraftfahrer mieten, LKW CE Fahrer buchen, Baumaschinenführer, Fahrmischer, ADR-Fahrer, Baustellenlogistik, Fahrer deutschlandweit",
+    title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – Fahrerexpress-Agentur",
+    description: "Fahrerexpress-Agentur Günter Killer – Wir vermitteln bundesweit qualifizierte selbstständige LKW-Fahrer (CE) für Transporte, Baustellen und Spezialaufgaben. Schnell verfügbar, zuverlässig, rechtskonform. Jetzt Fahrer mieten oder Fahrer werden.",
+    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, Fahrervermittlung Deutschland, Fahrerexpress Agentur, Baumaschinenfahrer mieten, Spezialfahrer buchen, Transportfahrer bundesweit, Kraftfahrer CE kurzfristig",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     faqData: [
       {
