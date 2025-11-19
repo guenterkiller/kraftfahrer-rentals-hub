@@ -18,9 +18,9 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
-          <span className="block sm:hidden">Fahrerexpress-Agentur</span>
-          <span className="block sm:hidden">Günter Killer</span>
-          <span className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</span>
+          <span className="block sm:hidden">LKW-Fahrer buchen &amp; Kraftfahrer mieten</span>
+          <span className="block sm:hidden text-xl mt-2">Fahrerexpress</span>
+          <span className="hidden sm:block">LKW-Fahrer buchen &amp; Kraftfahrer mieten – Fahrerexpress</span>
         </h1>
         
         <div className="bg-primary/90 backdrop-blur-sm text-white p-4 md:p-6 mb-8 max-w-4xl mx-auto rounded-lg shadow-xl animate-slide-up">
