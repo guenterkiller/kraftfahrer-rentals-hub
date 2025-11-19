@@ -13,7 +13,7 @@ const DriverTypesSection = () => {
       subtitle: "Vermittelte Fahrer",
       description: "349 € pro Tag (8 Stunden) • 30 € Überstunde",
       image: lkwFahrerHero,
-      features: ["Alle Speditions- & Logistikeinsätze", "Fahrmischer, ADR, Fernverkehr", "Wechselbrücke, Container, Hängerzug", "Entsorgung, Baustelle, Eventlogistik"],
+      features: ["Alle Logistikeinsätze", "Fahrmischer, ADR, Fernverkehr", "Wechselbrücke, Container, Hängerzug", "Entsorgung, Baustelle, Eventlogistik"],
       path: "/lkw-fahrer-buchen",
       isPremium: false
     },
@@ -36,16 +36,16 @@ const DriverTypesSection = () => {
           <div className="inline-flex items-center gap-3 bg-green-50 border border-green-200 px-6 py-3 rounded-full">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-green-800 font-semibold">
-              Klare Preisstruktur – Spedition 349€ oder Baumaschinenbedienung 459€
+              Klare Preisstruktur – LKW CE Fahrer 349€ oder Baumaschinenführer 459€
             </span>
           </div>
         </div>
 
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-          LKW/Spedition oder Baumaschinen – Sie haben die Wahl
+          LKW CE Fahrer oder Baumaschinenführer – Sie haben die Wahl
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
-          Vermittelte CE-Fahrer für alle Speditions-Einsatzarten oder vermittelte Baumaschinenführer für Bagger, Radlader & mehr – 
+          Vermittelte CE-Fahrer für alle Einsatzarten oder vermittelte Baumaschinenführer für Bagger, Radlader & mehr –
           alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
         </p>
 
@@ -90,7 +90,7 @@ const DriverTypesSection = () => {
                   variant={type.isPremium ? "default" : "outline"}
                   onClick={() => {
                     if (typeof window !== 'undefined' && (window as any).gtag) {
-                      (window as any).gtag('event', type.isPremium ? 'category_click_premium' : 'category_click_standard', {
+                      (window as any).gtag('event', type.isPremium ? 'category_click_baumaschinen' : 'category_click_lkw', {
                         event_category: 'Driver Category',
                         event_label: type.title,
                         value: type.isPremium ? 459 : 349
@@ -99,7 +99,7 @@ const DriverTypesSection = () => {
                   }}
                 >
                   <Link to={type.path}>
-                    {type.isPremium ? "Premiumfahrer buchen" : "CE-Fahrer buchen"}
+                    {type.isPremium ? "Baumaschinenführer buchen" : "CE-Fahrer buchen"}
                   </Link>
                 </Button>
               </CardContent>

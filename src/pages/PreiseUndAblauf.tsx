@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – CE-Fahrer 349€ oder Baumaschinenbedienung 459€",
-    description: "Klare Preisstruktur: LKW-/Speditionsfahrer (CE) 349€/Tag oder Baumaschinenbedienung (Günter Killer) 459€/Tag. Wochen- und Monatspreise verfügbar. Einfacher Ablauf in 3 Schritten.",
-    keywords: "LKW-Fahrer Preise, CE-Fahrer Kosten 349€, Baumaschinenbedienung 459€, Günter Killer, Speditionsfahrer, Fahrmischer, Baustellenlogistik"
+    title: "Preise & Ablauf – CE-Fahrer 349€ oder Baumaschinenführer 459€",
+    description: "Klare Preisstruktur: LKW CE Fahrer 349€/Tag oder Baumaschinenführer 459€/Tag. Wochen- und Monatspreise verfügbar. Einfacher Ablauf in 3 Schritten.",
+    keywords: "LKW-Fahrer Preise, CE-Fahrer Kosten 349€, Baumaschinenführer 459€, LKW CE Fahrer, Fahrmischer, Baustellenlogistik"
   });
 
   return (

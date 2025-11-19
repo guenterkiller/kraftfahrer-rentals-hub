@@ -101,7 +101,7 @@ const BegleitfahrzeugeBF3 = () => {
     {
       title: "LKW-Fahrer allgemein",
       path: "/lkw-fahrer-buchen",
-      description: "Standard C/CE-Fahrer für alle Transportarten"
+      description: "C/CE-Fahrer für alle Transportarten"
     }
   ];
 

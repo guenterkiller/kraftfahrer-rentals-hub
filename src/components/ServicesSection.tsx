@@ -48,7 +48,7 @@ const ServicesSection = () => {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">Leistungen im Überblick</h2>
-        <p className="text-center text-lg text-muted-foreground mb-12">LKW/Spedition oder Baumaschinen – transparente Preise für alle Einsatzarten</p>
+        <p className="text-center text-lg text-muted-foreground mb-12">LKW CE Fahrer oder Baumaschinenführer – transparente Preise für alle Einsatzarten</p>
         
         {/* Main 2 Categories */}
         <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
@@ -58,7 +58,7 @@ const ServicesSection = () => {
               <CardHeader>
                 <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-lg">CE-Fahrer (Vermittelt)</CardTitle>
-                <p className="text-sm text-muted-foreground">Alle Speditions-Einsatzarten</p>
+                <p className="text-sm text-muted-foreground">Alle Einsatzarten</p>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold text-primary mb-2">349 €/Tag</p>
@@ -187,13 +187,13 @@ const ServicesSection = () => {
               <Link to="/baumaschinenfuehrer-buchen">
                 <Button size="lg" className="gap-2">
                   <HardHat className="h-5 w-5" />
-                  Premium buchen
+                  Baumaschinenführer buchen
                 </Button>
               </Link>
               <Link to="/lkw-fahrer-buchen">
                 <Button size="lg" variant="outline" className="gap-2">
                   <Truck className="h-5 w-5" />
-                  Standard CE buchen
+                  CE-Fahrer buchen
                 </Button>
               </Link>
             </div>
