@@ -24,7 +24,7 @@ const PricingSection = () => {
           <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
-                LKW- / Speditionsfahrer (CE)
+                LKW CE Fahrer
                 <Badge variant="secondary">Vermittelte Fahrer</Badge>
               </CardTitle>
             </CardHeader>

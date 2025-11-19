@@ -54,7 +54,7 @@ const ServicesSection = () => {
         <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
           <Link to="/lkw-fahrer-buchen">
             <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <div className="bg-muted text-muted-foreground py-2 font-semibold">LKW- / Speditionsfahrer</div>
+              <div className="bg-muted text-muted-foreground py-2 font-semibold">LKW CE Fahrer</div>
               <CardHeader>
                 <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
                 <CardTitle className="text-lg">CE-Fahrer (Vermittelt)</CardTitle>

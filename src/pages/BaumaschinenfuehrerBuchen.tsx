@@ -67,9 +67,9 @@ const BaumaschinenfuehrerBuchen = () => {
 
   const relatedServices = [
     {
-      title: "LKW- / Speditionsfahrer (CE)",
+      title: "LKW CE Fahrer",
       path: "/lkw-fahrer-buchen",
-      description: "Vermittelte Fahrer – 349 € pro Tag"
+      description: "Vermittelte CE-Fahrer – 349 € pro Tag"
     },
     {
       title: "Preise & Konditionen",
