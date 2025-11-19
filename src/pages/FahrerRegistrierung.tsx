@@ -98,17 +98,22 @@ const FahrerRegistrierung = () => {
 
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
   const spezialisierungen = [
-    "LKW",
-    "Fernfahrt",
+    "CE-LKW (Standard-Kategorie)",
     "Fahrmischer",
-    "Kipper",
-    "LKW mit Ladekran",
-    "Schwertransport",
-    "Gefahrgut",
-    "Kühlfahrzeuge",
-    "Schwerlasttransporte",
-    "Tankwagen",
-    "Silofahrzeuge"
+    "Fernverkehr",
+    "Nahverkehr",
+    "Baustellenverkehr",
+    "ADR (Gefahrgut)",
+    "Wechselbrücke",
+    "Hängerzug",
+    "Baustofflogistik",
+    "Entsorgung",
+    "Container",
+    "Express/Kurier",
+    "Bagger",
+    "Radlader",
+    "Flüssigboden/Mischanlagen",
+    "Sonstige"
   ];
   
   // Spezialanforderungen - was der Fahrer hat/kann/bereit ist zu machen

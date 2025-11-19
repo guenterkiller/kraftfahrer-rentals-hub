@@ -24,19 +24,16 @@ const BookingForm = () => {
   const { toast } = useToast();
 
   const vehicleOptions = [
-    "LKW (C/CE)",
-    "Fahrmischer",
-    "LKW mit Ladekran", 
-    "Baumaschinen",
-    "Sattelzug",
-    "Kleintransporter"
+    "Premium – All-in-One Maschinenbediener (459 €/Tag)",
+    "Standard – CE-LKW-Fahrer (349 €/Tag)"
   ];
 
   const qualificationOptions = [
-    "ADR-Schein",
+    "ADR-Schein (Gefahrgut)",
+    "Fahrmischer-Erfahrung",
     "Ladekran-Erfahrung",
     "Staplerführerschein",
-    "Baumaschinenführerschein",
+    "Bagger/Radlader-Erfahrung",
     "BF3-Begleitung"
   ];
 
