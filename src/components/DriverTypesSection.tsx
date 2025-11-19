@@ -50,14 +50,14 @@ const DriverTypesSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-5xl mx-auto">
           {driverTypes.map((type, index) => (
-            <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-primary' : ''} ${type.isPopular ? 'border-2 border-blue-500 shadow-xl scale-105' : ''}`}>
+            <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-blue-500' : ''} ${type.isPopular ? 'border-2 border-red-500 shadow-xl' : ''}`}>
               {type.isPopular && (
-                <div className="bg-blue-600 text-white text-center py-2 font-semibold flex items-center justify-center gap-2">
+                <div className="bg-red-600 text-white text-center py-2 font-semibold flex items-center justify-center gap-2">
                   ⭐ Beliebteste Wahl – Meiste Anfragen
                 </div>
               )}
               {type.isPremium && !type.isPopular && (
-                <div className="bg-primary text-primary-foreground text-center py-2 font-semibold">
+                <div className="bg-blue-600 text-white text-center py-2 font-semibold">
                   🏗️ Baumaschinenführer
                 </div>
               )}
