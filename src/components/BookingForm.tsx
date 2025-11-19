@@ -59,11 +59,34 @@ const BookingForm = () => {
 
     // Track conversion event
     try {
+      // Track with category-specific details
+      const isPremium = vehicleTypes.includes('Premium - All-in-One Maschinenbediener');
+      const isStandard = vehicleTypes.includes('Standard - CE-LKW-Fahrer');
+      
       if (typeof (window as any).gtag === 'function') {
         (window as any).gtag('event', 'submit_fahrer_buchen', {
           event_category: 'engagement',
-          event_label: 'booking_form'
+          event_label: 'booking_form',
+          premium_selected: isPremium,
+          standard_selected: isStandard,
+          vehicle_types: vehicleTypes.join(', ')
         });
+        
+        // Track specific category conversions
+        if (isPremium) {
+          (window as any).gtag('event', 'category_submit_premium', {
+            event_category: 'Form Submission',
+            event_label: 'Premium - All-in-One Maschinenbediener',
+            value: 459
+          });
+        }
+        if (isStandard) {
+          (window as any).gtag('event', 'category_submit_standard', {
+            event_category: 'Form Submission',
+            event_label: 'Standard - CE-LKW-Fahrer',
+            value: 349
+          });
+        }
       }
     } catch (error) {
       console.warn('GA tracking error:', error);

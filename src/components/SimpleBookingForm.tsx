@@ -99,6 +99,16 @@ const SimpleBookingForm = () => {
       console.log('Sending payload:', payload);
       console.log('Consent states - prices:', agreedToPrices, 'data:', agreedToData);
 
+      // Track conversion with category
+      const isPremium = fahrzeugtyp === 'Premium - All-in-One Maschinenbediener';
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', isPremium ? 'category_submit_premium' : 'category_submit_standard', {
+          event_category: 'Form Submission',
+          event_label: fahrzeugtyp,
+          value: isPremium ? 459 : 349
+        });
+      }
+
       const { data, error } = await supabase.functions.invoke('submit-fahrer-anfrage', {
         body: payload
       });

@@ -73,7 +73,16 @@ const PricingSection = () => {
               </div>
               <Button 
                 className="w-full mt-4"
-                onClick={scrollToBooking}
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'category_click_premium', {
+                      event_category: 'Pricing Section',
+                      event_label: 'Premium All-in-One Maschinenbediener',
+                      value: 459
+                    });
+                  }
+                  scrollToBooking();
+                }}
               >
                 Fahrer buchen
               </Button>
@@ -127,7 +136,16 @@ const PricingSection = () => {
               </div>
               <Button 
                 className="w-full mt-4"
-                onClick={scrollToBooking}
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'category_click_standard', {
+                      event_category: 'Pricing Section',
+                      event_label: 'Standard CE-LKW-Fahrer',
+                      value: 349
+                    });
+                  }
+                  scrollToBooking();
+                }}
               >
                 Fahrer buchen
               </Button>

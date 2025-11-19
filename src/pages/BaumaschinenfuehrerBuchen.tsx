@@ -1,6 +1,16 @@
+import { useEffect } from "react";
 import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BaumaschinenfuehrerBuchen = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'category_view_premium', {
+        event_category: 'Page View',
+        event_label: 'Premium All-in-One Maschinenbediener',
+        value: 459
+      });
+    }
+  }, []);
   const seoData = {
     title: "Premium All-in-One Maschinenbediener buchen – Günter Killer persönlich ab 459 €",
     description: "Premium-Kategorie: Günter Killer persönlich als All-in-One Maschinenbediener für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung, Reparaturen, Baustellenlogistik. 459 € pro Tag (8h), 60 € Überstunde. Deutschlandweit verfügbar.",
