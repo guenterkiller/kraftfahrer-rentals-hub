@@ -12,7 +12,8 @@ const DriverTypesSection = () => {
       image: lkwFahrerHero,
       features: ["Alle Logistikeinsätze", "Fahrmischer, ADR, Fernverkehr", "Wechselbrücke, Container, Hängerzug", "Entsorgung, Baustelle, Eventlogistik"],
       path: "/lkw-fahrer-buchen",
-      isPremium: false
+      isPremium: false,
+      isPopular: true
     },
     {
       title: "Baumaschinenbedienung",
@@ -21,7 +22,8 @@ const DriverTypesSection = () => {
       image: "/lovable-uploads/b2cd4743-98d6-4618-81c8-418636570dfc.png",
       features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
       path: "/baumaschinenfuehrer-buchen",
-      isPremium: true
+      isPremium: true,
+      isPopular: false
     }
   ];
 
@@ -46,10 +48,15 @@ const DriverTypesSection = () => {
           alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-5xl mx-auto">
           {driverTypes.map((type, index) => (
-            <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-primary' : ''}`}>
-              {type.isPremium && (
+            <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-primary' : ''} ${type.isPopular ? 'border-2 border-blue-500 shadow-xl scale-105' : ''}`}>
+              {type.isPopular && (
+                <div className="bg-blue-600 text-white text-center py-2 font-semibold flex items-center justify-center gap-2">
+                  ⭐ Beliebteste Wahl – Meiste Anfragen
+                </div>
+              )}
+              {type.isPremium && !type.isPopular && (
                 <div className="bg-primary text-primary-foreground text-center py-2 font-semibold">
                   🏗️ Baumaschinenführer
                 </div>

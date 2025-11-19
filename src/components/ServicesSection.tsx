@@ -47,44 +47,9 @@ const ServicesSection = () => {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-4">Leistungen im Überblick</h2>
-        <p className="text-center text-lg text-muted-foreground mb-12">LKW CE Fahrer oder Baumaschinenführer – transparente Preise für alle Einsatzarten</p>
+        <h2 className="text-3xl font-bold text-center mb-4">Unsere Dienstleistungen</h2>
+        <p className="text-center text-lg text-muted-foreground mb-12">Von Personalengpässen bis Projektlösungen – wir vermitteln die passenden Fahrer</p>
         
-        {/* Main 2 Categories */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
-          <Link to="/lkw-fahrer-buchen">
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
-              <div className="bg-muted text-muted-foreground py-2 font-semibold">LKW CE Fahrer</div>
-              <CardHeader>
-                <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle className="text-lg">CE-Fahrer (Vermittelt)</CardTitle>
-                <p className="text-sm text-muted-foreground">Alle Einsatzarten</p>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold text-primary mb-2">349 €/Tag</p>
-                <p className="text-sm text-muted-foreground mb-4">Fahrmischer, ADR, Fernverkehr, Wechselbrücke, Container, Baustelle, Eventlogistik</p>
-                <Button variant="outline" size="sm" className="w-full">CE-Fahrer buchen</Button>
-              </CardContent>
-            </Card>
-          </Link>
-
-          <Link to="/baumaschinenfuehrer-buchen">
-            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full border-2 border-primary">
-              <div className="bg-primary text-primary-foreground py-2 font-semibold">🏗️ Baumaschinenführer</div>
-              <CardHeader>
-                <HardHat className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle className="text-lg">Baumaschinenbedienung</CardTitle>
-                <p className="text-sm text-muted-foreground">Vermittelte Baumaschinenführer</p>
-              </CardHeader>
-              <CardContent>
-                <p className="text-2xl font-bold text-primary mb-2">459 €/Tag</p>
-                <p className="text-sm text-muted-foreground mb-4">Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung</p>
-                <Button size="sm" className="w-full">Baumaschinenführer buchen</Button>
-              </CardContent>
-            </Card>
-          </Link>
-        </div>
-
         {/* Services Overview Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {services.map((service, index) => (
