@@ -31,62 +31,62 @@ const DriverTypesSection = () => {
   return (
     <section className="py-16 px-4 bg-muted/30">
       <div className="max-w-6xl mx-auto">
-        {/* Success Banner */}
+        {/* Success Banner with new 2-category structure */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-3 bg-green-50 border border-green-200 px-6 py-3 rounded-full">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-green-800 font-semibold">
-              Über 500 erfolgreiche Einsätze seit 2009 – geprüft & rechtssicher vermittelt
+              Klare Preisstruktur – Premium 459€ oder Standard CE 349€ pro Tag
             </span>
           </div>
         </div>
 
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-          Fahrer-Sparten – schnell & bundesweit verfügbar
+          Premium oder Standard – Sie haben die Wahl
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
-          Spezialisierte Fahrer für jeden Einsatzbereich. Von Standard-LKW bis Gefahrgut – 
-          alle Fahrer sind geprüft, versichert und als selbstständige Subunternehmer tätig.
+          Günter Killer persönlich als All-in-One Maschinenbediener (Premium) oder vermittelte CE-LKW-Fahrer für alle Einsatzarten (Standard) – 
+          alle arbeiten als selbstständige Subunternehmer nach § 84 HGB.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
           {driverTypes.map((type, index) => (
-            <Card key={index} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
+            <Card key={index} className={`overflow-hidden hover:shadow-lg transition-all duration-300 ${type.isPremium ? 'border-2 border-primary' : ''}`}>
+              {type.isPremium && (
+                <div className="bg-primary text-primary-foreground text-center py-2 font-semibold">
+                  ⭐ Premium-Kategorie
+                </div>
+              )}
               <div className="relative h-48 overflow-hidden">
                 <img 
                   src={type.image} 
-                  alt={`${type.title} - Professionelle Fahrer für ${type.title.toLowerCase()} deutschlandweit verfügbar über Fahrerexpress`}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  alt={type.title}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-bold mb-1">{type.title}</h3>
-                </div>
               </div>
               
               <CardHeader>
-                <CardTitle className="text-lg">{type.title}</CardTitle>
+                <CardTitle className="text-xl">{type.title}</CardTitle>
+                {type.subtitle && (
+                  <p className="text-sm text-muted-foreground">{type.subtitle}</p>
+                )}
               </CardHeader>
               
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {type.description}
-                </p>
+                <p className="text-lg font-semibold text-primary">{type.description}</p>
                 
-                <div className="flex flex-wrap gap-2">
+                <ul className="space-y-2">
                   {type.features.map((feature, featureIndex) => (
-                    <span 
-                      key={featureIndex}
-                      className="inline-flex items-center px-2.5 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full"
-                    >
-                      {feature}
-                    </span>
+                    <li key={featureIndex} className="flex items-start gap-2 text-sm">
+                      <span className="text-green-600 mt-1">✓</span>
+                      <span>{feature}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
                 
-                <Button asChild className="w-full">
+                <Button asChild className="w-full" variant={type.isPremium ? "default" : "outline"}>
                   <Link to={type.path}>
-                    {type.title} buchen
+                    {type.isPremium ? "Premiumfahrer buchen" : "CE-Fahrer buchen"}
                   </Link>
                 </Button>
               </CardContent>
@@ -94,28 +94,14 @@ const DriverTypesSection = () => {
           ))}
         </div>
 
-        {/* Additional Keywords Section */}
-        <div className="mt-16 text-center">
-          <h3 className="text-xl font-semibold mb-4">
-            Weitere Fahrerarten – schnell & bundesweit verfügbar
-          </h3>
-           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <Link to="/begleitfahrzeuge-bf3" className="text-primary hover:underline">
-              BF3-Begleitfahrzeuge buchen
-            </Link>
-            <span className="text-muted-foreground">•</span>
-            <Link to="/tankwagenfahrer-buchen" className="text-primary hover:underline">
-              Tankwagenfahrer buchen
-            </Link>
-            <span className="text-muted-foreground">•</span>
-            <Link to="/adr-fahrer-buchen" className="text-primary hover:underline">
-              ADR-Fahrer mieten
-            </Link>
-            <span className="text-muted-foreground">•</span>
-            <Link to="/fahrmischerfahrer-buchen" className="text-primary hover:underline">
-              Fahrmischerfahrer gesucht
-            </Link>
-          </div>
+        {/* Pricing summary */}
+        <div className="mt-12 p-6 bg-muted rounded-lg max-w-3xl mx-auto text-center">
+          <p className="text-sm text-muted-foreground mb-2">
+            <strong>Fahrtkosten:</strong> 25 km inklusive, danach 0,40 € pro km • <strong>Wochenpreise:</strong> CE ab 1.490 €/Woche
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Alle Fahrer arbeiten selbstständig nach § 84 HGB. Keine Arbeitnehmerüberlassung.
+          </p>
         </div>
       </div>
     </section>

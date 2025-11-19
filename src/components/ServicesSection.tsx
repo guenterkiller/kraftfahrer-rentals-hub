@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Truck, Users, Wrench, MapPin, Clock, CheckCircle } from "lucide-react";
+import { Truck, Users, Wrench, MapPin, Clock, CheckCircle, HardHat, ShieldCheck } from "lucide-react";
 
 const ServicesSection = () => {
   const services = [
@@ -48,146 +48,73 @@ const ServicesSection = () => {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">Leistungen im Überblick</h2>
-        <p className="text-center text-lg text-muted-foreground mb-12">Finden Sie schnell den passenden Fahrer für Ihren Bedarf</p>
+        <p className="text-center text-lg text-muted-foreground mb-12">Premium oder Standard – transparente Preise für alle Einsatzarten</p>
         
-        {/* Spezialized Driver Landing Pages */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
-              <CardTitle className="text-lg">LKW-Fahrer (C+E)</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm mb-4">Sattelzug & Fernverkehr</p>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/lkw-fahrer-buchen">LKW-Fahrer buchen</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <Users className="h-12 w-12 text-primary mx-auto mb-4" />
-              <CardTitle className="text-lg">Kraftfahrer allgemein</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm mb-4">Alle Fahrzeugklassen</p>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/kraftfahrer-mieten">Kraftfahrer mieten</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
-              <CardTitle className="text-lg">Fahrmischerfahrer</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm mb-4">Betonmischer & Baustelle</p>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/fahrmischerfahrer-gesucht">Fahrmischerfahrer finden</Link>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="text-center hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <Wrench className="h-12 w-12 text-primary mx-auto mb-4" />
-              <CardTitle className="text-lg">Baumaschinenführer</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-sm mb-4">Bagger, Radlader</p>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/baumaschinenfuehrer-buchen">Baumaschinenführer buchen</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Baumaschinenführer & Subunternehmer Details */}
-        <div className="mb-16">
-          <Card className="max-w-4xl mx-auto">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl">
-                <Wrench className="h-6 w-6 text-primary" />
-                Baumaschinenführer & Subunternehmer
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
-                Wir vermitteln deutschlandweit selbstständige Baumaschinenführer als Subunternehmer – 
-                immer mit Geräten, die vom Auftraggeber gestellt werden.
-              </p>
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Baggerfahrer für Aushub & Erdarbeiten</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Radladerfahrer für Verladearbeiten</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Mischmeister für Flüssigbodenanlagen</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-primary" />
-                      <span>Weitere Baumaschinenführer nach Bedarf</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="bg-muted/50 p-4 rounded-lg">
-                  <p className="text-sm font-medium mb-2">Wichtiger Hinweis:</p>
-                  <p className="text-sm text-muted-foreground">
-                    Alle Einsätze erfolgen als Dienst-/Werkleistung durch selbstständige Subunternehmer. 
-                    Keine Arbeitnehmerüberlassung, keine Maschinenvermietung – Sie stellen die Geräte, 
-                    wir den passenden Fahrer.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="text-center pt-4">
-                <Button asChild>
-                  <Link to="/baumaschinenfuehrer-buchen">Jetzt Baumaschinenführer buchen</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {services.map((service, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+        {/* Main 2 Categories */}
+        <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
+          <Link to="/baumaschinenfuehrer-buchen">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full border-2 border-primary">
+              <div className="bg-primary text-primary-foreground py-2 font-semibold">⭐ Premium-Kategorie</div>
               <CardHeader>
-                <service.icon className="h-12 w-12 text-primary mx-auto mb-4" />
-                <CardTitle className="text-lg">{service.title}</CardTitle>
+                <HardHat className="h-12 w-12 text-primary mx-auto mb-4" />
+                <CardTitle className="text-lg">All-in-One Maschinenbediener</CardTitle>
+                <p className="text-sm text-muted-foreground">Günter Killer persönlich</p>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground text-sm">{service.description}</p>
+                <p className="text-2xl font-bold text-primary mb-2">459 €/Tag</p>
+                <p className="text-sm text-muted-foreground mb-4">Bagger, Radlader, Fahrmischer, Flüssigboden, Störungsbehebung, Baustellenlogistik</p>
+                <Button size="sm" className="w-full">Premium buchen</Button>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/lkw-fahrer-buchen">
+            <Card className="text-center hover:shadow-lg transition-shadow cursor-pointer h-full">
+              <div className="bg-muted text-muted-foreground py-2 font-semibold">Standard-Kategorie</div>
+              <CardHeader>
+                <Truck className="h-12 w-12 text-primary mx-auto mb-4" />
+                <CardTitle className="text-lg">CE-LKW-Fahrer</CardTitle>
+                <p className="text-sm text-muted-foreground">Vermittelte Fahrer</p>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold text-primary mb-2">349 €/Tag</p>
+                <p className="text-sm text-muted-foreground mb-4">Einheitlich für alle CE-Einsatzarten: Fahrmischer, ADR, Fernverkehr, Container</p>
+                <Button variant="outline" size="sm" className="w-full">CE-Fahrer buchen</Button>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+
+        {/* Services Overview Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {services.map((service, index) => (
+            <Card key={index}>
+              <CardHeader>
+                <service.icon className="h-10 w-10 text-primary mb-2" />
+                <CardTitle className="text-base">{service.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{service.description}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Qualifications & Special Services */}
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2">
                 <CheckCircle className="h-5 w-5 text-primary" />
-                Fahrerprofile & Qualifikationen
+                Qualifikationen
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {qualifications.map((qualification, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>{qualification}</span>
+                {qualifications.map((qual, index) => (
+                  <li key={index} className="flex items-center gap-2 text-sm">
+                    <span className="text-green-600">✓</span>
+                    {qual}
                   </li>
                 ))}
               </ul>
@@ -196,22 +123,81 @@ const ServicesSection = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2">
                 <Clock className="h-5 w-5 text-primary" />
-                Besondere Einsatzbereiche
+                Verfügbarkeit
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm">
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-600">✓</span>
+                  24-72h Vorlauf (werktags)
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-600">✓</span>
+                  Tages- bis Projekteinsätze
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-600">✓</span>
+                  Bundesweit verfügbar
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="text-blue-600">✓</span>
+                  Wochenpreise verfügbar
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-primary" />
+                Spezialleistungen
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
                 {specialServices.map((service, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-primary" />
-                    <span>{service}</span>
+                  <li key={index} className="flex items-center gap-2 text-sm">
+                    <span className="text-primary">→</span>
+                    {service}
                   </li>
                 ))}
               </ul>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Legal Notice */}
+        <div className="bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 rounded-2xl p-8 border border-primary/20">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="flex justify-center mb-4">
+              <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center">
+                <ShieldCheck className="h-8 w-8 text-primary-foreground" />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold mb-3">Rechtssichere Subunternehmer</h3>
+            <p className="text-muted-foreground mb-6">
+              Alle Fahrer und Maschinenbediener arbeiten als selbstständige Subunternehmer nach § 84 HGB. 
+              Keine Arbeitnehmerüberlassung. Vollständig versichert und rechtssicher. Abrechnung über Fahrerexpress.
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link to="/baumaschinenfuehrer-buchen">
+                <Button size="lg" className="gap-2">
+                  <HardHat className="h-5 w-5" />
+                  Premium buchen
+                </Button>
+              </Link>
+              <Link to="/lkw-fahrer-buchen">
+                <Button size="lg" variant="outline" className="gap-2">
+                  <Truck className="h-5 w-5" />
+                  Standard CE buchen
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

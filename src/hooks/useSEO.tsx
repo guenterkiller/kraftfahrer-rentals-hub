@@ -155,7 +155,7 @@ export const useSEO = (seoData: SEOData) => {
         "@type": "Country",
         "name": "Deutschland"
       },
-      "serviceType": ["Fahrerdienstleistungen", "LKW-Fahrer Vermittlung", "Baumaschinenführer", "Personalvermittlung Kraftfahrer"],
+      "serviceType": ["Premium All-in-One Maschinenbediener", "Standard CE-LKW-Fahrer Vermittlung", "Fahrerdienstleistungen Subunternehmer"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
         "name": "Fahrerdienstleistungen",
@@ -164,24 +164,16 @@ export const useSEO = (seoData: SEOData) => {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "LKW-Fahrer Vermittlung",
-              "description": "Selbstständige C+E-Fahrer bundesweit"
+              "name": "Premium All-in-One Maschinenbediener",
+              "description": "Günter Killer persönlich - Bagger, Radlader, Fahrmischer, Störungsbehebung, Baustellenlogistik"
             }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Baumaschinenführer Vermittlung",
-              "description": "Erfahrene Bagger- und Radladerfahrer"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "ADR-Fahrer Vermittlung",
-              "description": "Spezialisierte Gefahrgut-Transporteure"
+              "name": "Standard CE-LKW-Fahrer",
+              "description": "Einheitlicher Preis für alle CE-Einsatzarten - Fahrmischer, ADR, Fernverkehr, Container"
             }
           }
         ]
