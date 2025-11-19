@@ -63,6 +63,9 @@ verify_jwt = false
 [functions.send-job-alert-emails]
 verify_jwt = false
 
+[functions.send-fahrer-anfrage-email]
+verify_jwt = false
+
 [functions.send-no-show-notice]
 verify_jwt = false
 
