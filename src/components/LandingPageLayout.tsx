@@ -5,6 +5,7 @@ import { CheckCircle, Phone, Mail } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
 
 interface LandingPageLayoutProps {
@@ -182,6 +183,8 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
           <ContactSection />
         </section>
       </main>
+
+      <Footer />
 
       {/* Admin Badge */}
       <div className="fixed bottom-4 right-4 z-40">

@@ -10,6 +10,7 @@ import FahreranfrageSection from "@/components/FahreranfrageSection";
 import HowItWorksTimeline from "@/components/HowItWorksTimeline";
 import IndustriesRow from "@/components/IndustriesRow";
 import WhatsAppContact from "@/components/WhatsAppContact";
+import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
@@ -106,6 +107,7 @@ const Index = () => {
         </section>
       </main>
       
+      <Footer />
       <WhatsAppContact />
       
       {/* Fallback Admin-Badge (fixed position, bottom right) */}
