@@ -158,7 +158,16 @@ const handler = async (req: Request): Promise<Response> => {
 
                             <!-- Konditionen -->
                             <div style="background-color: #e8f4f8; border-left: 4px solid #2196f3; padding: 20px; margin-bottom: 25px;">
-                                <h3 style="margin: 0 0 15px 0; color: #2196f3; font-size: 16px; font-weight: bold;">💰 Konditionen</h3>
+                                <h3 style="margin: 0 0 15px 0; color: #2196f3; font-size: 16px; font-weight: bold;">💰 Abrechnung & Preise</h3>
+                                
+                                <div style="background-color: #fff; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
+                                    <p style="margin: 0 0 10px 0; color: #333; font-size: 14px; font-weight: bold;">
+                                        Die Abrechnung erfolgt ausschließlich über die Fahrerexpress-Agentur.
+                                    </p>
+                                    <p style="margin: 0; color: #333; font-size: 13px;">
+                                        Es gelten die öffentlich einsehbaren Tagespreise:
+                                    </p>
+                                </div>
                                 
                                 <div style="margin-bottom: 20px;">
                                     <h4 style="margin: 0 0 10px 0; color: #333; font-size: 15px; font-weight: bold;">LKW CE Fahrer</h4>
