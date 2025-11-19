@@ -9,5 +9,13 @@ Sitemap: https://www.kraftfahrer-mieten.com/sitemap.xml
 Disallow: /admin/
 Disallow: /admin-login/
 
+# Alte URLs (301-Weiterleitungen) - von Indexierung ausschließen
+# Diese leiten zu den Hauptkategorien weiter:
+# /tankwagenfahrer-buchen → /lkw-fahrer-buchen
+# /adr-fahrer-buchen → /lkw-fahrer-buchen
+# /fahrmischerfahrer-buchen → /lkw-fahrer-buchen
+# /fahrmischerfahrer-gesucht → /lkw-fahrer-buchen
+# /kranfahrer-buchen → /lkw-fahrer-buchen
+
 # Host-Directive für eindeutige Domain
 Host: https://www.kraftfahrer-mieten.com
