@@ -24,8 +24,8 @@ const BookingForm = () => {
   const { toast } = useToast();
 
   const vehicleOptions = [
-    "Premium – All-in-One Maschinenbediener (459 €/Tag)",
-    "Standard – CE-LKW-Fahrer (349 €/Tag)"
+    "Baumaschinenführer (459 €/Tag)",
+    "LKW CE Fahrer (349 €/Tag)"
   ];
 
   const qualificationOptions = [
@@ -60,30 +60,30 @@ const BookingForm = () => {
     // Track conversion event
     try {
       // Track with category-specific details
-      const isPremium = vehicleTypes.includes('Premium - All-in-One Maschinenbediener');
-      const isStandard = vehicleTypes.includes('Standard - CE-LKW-Fahrer');
+      const isBaumaschine = vehicleTypes.includes('Baumaschinenführer');
+      const isLKW = vehicleTypes.includes('LKW CE Fahrer');
       
       if (typeof (window as any).gtag === 'function') {
         (window as any).gtag('event', 'submit_fahrer_buchen', {
           event_category: 'engagement',
           event_label: 'booking_form',
-          premium_selected: isPremium,
-          standard_selected: isStandard,
+          baumaschine_selected: isBaumaschine,
+          lkw_selected: isLKW,
           vehicle_types: vehicleTypes.join(', ')
         });
         
         // Track specific category conversions
-        if (isPremium) {
-          (window as any).gtag('event', 'category_submit_premium', {
+        if (isBaumaschine) {
+          (window as any).gtag('event', 'category_submit_baumaschine', {
             event_category: 'Form Submission',
-            event_label: 'Premium - All-in-One Maschinenbediener',
+            event_label: 'Baumaschinenführer',
             value: 459
           });
         }
-        if (isStandard) {
-          (window as any).gtag('event', 'category_submit_standard', {
+        if (isLKW) {
+          (window as any).gtag('event', 'category_submit_lkw', {
             event_category: 'Form Submission',
-            event_label: 'Standard - CE-LKW-Fahrer',
+            event_label: 'LKW CE Fahrer',
             value: 349
           });
         }
