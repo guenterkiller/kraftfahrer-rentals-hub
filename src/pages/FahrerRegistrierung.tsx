@@ -98,21 +98,27 @@ const FahrerRegistrierung = () => {
 
   const fuehrerscheinklassen = ["B", "C1", "C", "CE", "D1", "D", "DE"];
   const spezialisierungen = [
-    "CE-LKW (Standard-Kategorie)",
-    "Fahrmischer",
+    // Premium Kategorie - All-in-One Maschinenbediener
+    "Bagger",
+    "Radlader",
+    "Fahrmischer", 
+    "Flüssigboden/Mischanlagen",
+    "Baustellenlogistik & Materialfluss",
+    "Kleinere Reparaturen & Technik",
+    
+    // Standard Kategorie - CE-LKW-Fahrer
+    "Wechselbrücke",
+    "Hängerzug",
     "Fernverkehr",
     "Nahverkehr",
     "Baustellenverkehr",
+    "Mitnahmestapler",
     "ADR (Gefahrgut)",
-    "Wechselbrücke",
-    "Hängerzug",
     "Baustofflogistik",
     "Entsorgung",
-    "Container",
-    "Express/Kurier",
-    "Bagger",
-    "Radlader",
-    "Flüssigboden/Mischanlagen",
+    "Containertransporte",
+    "Kurier- und Expresslogistik",
+    "Eventlogistik",
     "Sonstige"
   ];
   
