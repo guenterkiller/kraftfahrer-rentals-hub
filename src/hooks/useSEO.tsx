@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
 interface SEOData {
   title: string;
   description: string;
@@ -8,6 +13,7 @@ interface SEOData {
   ogImage?: string;
   noindex?: boolean;
   structuredData?: object;
+  breadcrumbs?: BreadcrumbItem[]; // Optionale manuelle Breadcrumbs
   faqData?: Array<{
     question: string;
     answer: string;
@@ -20,6 +26,44 @@ interface SEOData {
     articleSection?: string;
   };
 }
+
+// Automatische Breadcrumb-Generierung basierend auf Route
+const generateBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
+  const baseUrl = 'https://kraftfahrer-mieten.com';
+  const breadcrumbs: BreadcrumbItem[] = [
+    { name: 'Startseite', url: baseUrl }
+  ];
+
+  // Route-zu-Name Mapping
+  const routeNames: Record<string, string> = {
+    '/lkw-fahrer-buchen': 'LKW CE Fahrer buchen',
+    '/baumaschinenfuehrer-buchen': 'Baumaschinenführer buchen',
+    '/kraftfahrer-mieten': 'Kraftfahrer mieten',
+    '/fahrer-registrierung': 'Fahrer werden',
+    '/begleitfahrzeuge-bf3': 'BF3 Begleitfahrzeuge',
+    '/bf3-ablauf-kosten': 'BF3 Ablauf & Kosten',
+    '/preise-und-ablauf': 'Preise & Ablauf',
+    '/projekte': 'Erfolgreiche Projekte',
+    '/versicherung': 'Versicherungen',
+    '/wissenswertes': 'Wissenswertes',
+    '/vermittlung': 'Vermittlung',
+    '/frankfurt': 'LKW-Fahrer Frankfurt',
+    '/hessen': 'LKW-Fahrer Hessen',
+    '/rhein-main': 'LKW-Fahrer Rhein-Main',
+    '/impressum': 'Impressum',
+    '/datenschutz': 'Datenschutz',
+  };
+
+  if (pathname !== '/') {
+    const pageName = routeNames[pathname] || pathname.slice(1).replace(/-/g, ' ');
+    breadcrumbs.push({
+      name: pageName,
+      url: `${baseUrl}${pathname}`
+    });
+  }
+
+  return breadcrumbs;
+};
 
 export const useSEO = (seoData: SEOData) => {
   const location = useLocation();
@@ -130,6 +174,31 @@ export const useSEO = (seoData: SEOData) => {
       document.head.appendChild(twitterImage);
     }
 
+    // Remove existing structured data scripts
+    const existingStructuredData = document.querySelectorAll('script[type="application/ld+json"][data-seo]');
+    existingStructuredData.forEach(script => script.remove());
+
+    // Breadcrumb structured data (automatisch oder manuell)
+    const breadcrumbs = seoData.breadcrumbs || generateBreadcrumbs(location.pathname);
+    if (breadcrumbs.length > 1) {
+      const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbs.map((crumb, index) => ({
+          "@type": "ListItem",
+          "position": index + 1,
+          "name": crumb.name,
+          "item": crumb.url
+        }))
+      };
+
+      const breadcrumbScript = document.createElement('script');
+      breadcrumbScript.type = 'application/ld+json';
+      breadcrumbScript.setAttribute('data-seo', 'true');
+      breadcrumbScript.text = JSON.stringify(breadcrumbSchema);
+      document.head.appendChild(breadcrumbScript);
+    }
+
     // Enhanced structured data
     let structuredData = seoData.structuredData || {
       "@context": "https://schema.org",
@@ -173,7 +242,7 @@ export const useSEO = (seoData: SEOData) => {
             "itemOffered": {
               "@type": "Service",
               "name": "LKW CE Fahrer",
-              "description": "Alle Speditions-Einsatzarten - Fahrmischer, ADR, Fernverkehr, Wechselbrücke, Container, Baustellenverkehr, Eventlogistik"
+              "description": "Alle Einsatzarten - Fahrmischer, ADR, Fernverkehr, Wechselbrücke, Container, Baustellenverkehr, Eventlogistik"
             }
           }
         ]
@@ -208,67 +277,26 @@ export const useSEO = (seoData: SEOData) => {
             "url": "https://kraftfahrer-mieten.com/lovable-uploads/favicon-truck-512-full.png"
           }
         },
-        "url": canonicalUrl,
-        "description": seoData.description,
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": canonicalUrl
-        }
+        "articleSection": seoData.articleData.articleSection || "Fahrerdienstleistungen"
       };
-
-      if (seoData.articleData.articleSection) {
-        (articleSchema as any).articleSection = seoData.articleData.articleSection;
-      }
 
       // Combine schemas
       structuredData = [structuredData, articleSchema];
     }
 
-    // Remove existing structured data
-    const existingStructuredData = document.querySelectorAll('script[type="application/ld+json"][data-seo]');
-    existingStructuredData.forEach(script => script.remove());
-
-    // Add new structured data
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.setAttribute('data-seo', 'true');
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    // Add breadcrumb structured data for non-homepage
-    if (location.pathname !== '/') {
-      const breadcrumbSchema = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Startseite",
-            "item": "https://kraftfahrer-mieten.com/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": seoData.title.split(' | ')[0] || seoData.title,
-            "item": canonicalUrl
-          }
-        ]
-      };
-
-      const breadcrumbScript = document.createElement('script');
-      breadcrumbScript.type = 'application/ld+json';
-      breadcrumbScript.setAttribute('data-seo', 'true');
-      breadcrumbScript.text = JSON.stringify(breadcrumbSchema);
-      document.head.appendChild(breadcrumbScript);
-    }
+    // Add main structured data
+    const mainScript = document.createElement('script');
+    mainScript.type = 'application/ld+json';
+    mainScript.setAttribute('data-seo', 'true');
+    mainScript.text = JSON.stringify(structuredData);
+    document.head.appendChild(mainScript);
 
     // Add FAQ structured data if provided
     if (seoData.faqData && seoData.faqData.length > 0) {
       const faqSchema = {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "mainEntity": seoData.faqData.map((faq, index) => ({
+        "mainEntity": seoData.faqData.map((faq) => ({
           "@type": "Question",
           "name": faq.question,
           "acceptedAnswer": {
@@ -285,5 +313,5 @@ export const useSEO = (seoData: SEOData) => {
       document.head.appendChild(faqScript);
     }
 
-  }, [seoData, canonicalUrl]);
+  }, [seoData, canonicalUrl, location.pathname]);
 };
