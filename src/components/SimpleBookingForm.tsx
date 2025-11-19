@@ -335,12 +335,8 @@ const SimpleBookingForm = () => {
                       <SelectValue placeholder="Bitte wählen (z. B. LKW 7,5 t, CE, ADR, Baumaschinenführer …)" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="lkw">LKW (C/CE)</SelectItem>
-                      <SelectItem value="fahrmischer">Fahrmischer</SelectItem>
-                      <SelectItem value="lkw-ladekran">LKW mit Ladekran</SelectItem>
-                      <SelectItem value="baumaschinen">Baumaschinen</SelectItem>
-                      <SelectItem value="sattelzug">Sattelzug</SelectItem>
-                      <SelectItem value="kleintransporter">Kleintransporter</SelectItem>
+                      <SelectItem value="premium">Premium - All-in-One Maschinenbediener</SelectItem>
+                      <SelectItem value="standard">Standard - CE-LKW-Fahrer</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
