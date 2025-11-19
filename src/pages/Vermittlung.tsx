@@ -40,16 +40,38 @@ const Vermittlung = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Euro className="h-5 w-5" />
-                    Was kostet das?
+                    Vermittlungsgebühr für Fahrer
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <h3 className="text-lg font-semibold mb-3">Vermittlungskosten für Fahrer</h3>
-                  <p className="mb-3">
-                    Für die erfolgreiche Vermittlung eines Einsatzes berechnen wir <strong>nur dem vermittelten Fahrer</strong> eine Provision in Höhe von <strong>15 % des gesamten Nettohonorars einschließlich berechtigter Nebenkosten (z. B. Fahrt-/Kilometerkosten, Übernachtung, Spesen, Mehrstunden)</strong>. Die Vermittlung ist für Auftraggeber vollständig kostenlos.
-                  </p>
+                <CardContent className="space-y-4">
                   <p>
-                    Die Provision wird ausschließlich bei tatsächlichem Einsatz fällig und kann entweder per Einbehalt oder separater Rechnung abgerechnet werden.
+                    Für jeden erfolgreichen Einsatz berechnet die Fahrerexpress-Agentur eine Vermittlungsgebühr an den Fahrer.
+                  </p>
+                  
+                  <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+                    <h3 className="font-semibold mb-3">Die Vermittlungsgebühr beträgt:</h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary font-semibold">•</span>
+                        <span><strong>15 % des Gesamthonorars</strong> bei LKW CE Fahrern</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-primary font-semibold">•</span>
+                        <span><strong>20 % des Gesamthonorars</strong> bei Baumaschinenführern</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <p className="text-sm">
+                    Das Gesamthonorar umfasst die Tagespauschale laut Website inklusive berechtigter Nebenkosten (Kilometer, Übernachtung, Spesen, Mehrstunden).
+                  </p>
+
+                  <p className="font-semibold">
+                    Die Vermittlung ist für Auftraggeber kostenlos.
+                  </p>
+
+                  <p>
+                    Die Vermittlungsgebühr wird ausschließlich bei tatsächlichem Einsatz fällig.
                   </p>
                 </CardContent>
               </Card>
@@ -58,12 +80,18 @@ const Vermittlung = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Clock className="h-5 w-5" />
-                    Wie läuft die Abrechnung?
+                    Abrechnung der Provision
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-3">
                   <p>
-                    Die Provision wird nach Einsatzabschluss per Rechnung gestellt – entweder pro Auftrag oder gesammelt am Monatsende.
+                    Der Fahrer stellt seine Rechnung an die Fahrerexpress-Agentur <strong>abzüglich der Vermittlungsgebühr</strong>.
+                  </p>
+                  <p>
+                    Die Provision wird direkt einbehalten oder alternativ per separater Provisionsrechnung abgerechnet.
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    <strong>Rechtsgrundlage:</strong> Werk-/Dienstleistungsvertrag nach § 84 HGB
                   </p>
                 </CardContent>
               </Card>

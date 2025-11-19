@@ -18,11 +18,15 @@ Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfü
 - Keine Arbeitnehmerüberlassung (AÜG). Es entsteht kein Arbeitsverhältnis mit Fahrerexpress.
 - Dieses Angebot richtet sich ausschließlich an Unternehmer i.S.d. § 14 BGB.
 
-💰 **Provision & Abrechnung**
+💰 **Vermittlungsgebühr & Abrechnung**
 
-- **Provision:** 15 % des Nettohonorars zzgl. gesetzlicher USt (Bemessungsgrundlage: Leistungsentgelt; Spesen/Übernachtung/Fahrtkosten sind nicht provisionspflichtig, sofern nicht abweichend vereinbart).
-- **Fälligkeit:** nur bei tatsächlich ausgeführtem Einsatz.
-- **Abrechnung:** per Einbehalt oder Rechnung nach Einsatz bzw. als monatliche Sammelrechnung (Zahlungsziel z. B. 14 Tage).
+Die Vermittlungsgebühr beträgt bei jedem Einsatz:
+- **15 % für LKW CE Fahrer**
+- **20 % für Baumaschinenführer**
+
+Die Vermittlungsgebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
+
+**Abrechnung:** Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; die Provision wird intern einbehalten.
 
 🔒 **Kundenschutz / Umgehungsverbot**
 

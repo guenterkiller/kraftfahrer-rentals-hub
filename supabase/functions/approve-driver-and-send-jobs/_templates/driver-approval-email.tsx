@@ -113,6 +113,38 @@ export const DriverApprovalEmail = ({
               </div>
             )}
             
+            {/* Vermittlungsgebühr Info */}
+            <div style={{
+              backgroundColor: '#fff8e1',
+              border: '2px solid #ffc107',
+              borderRadius: '8px',
+              padding: '20px',
+              marginTop: '20px',
+              marginBottom: '20px'
+            }}>
+              <Text style={{
+                color: '#333',
+                fontSize: '16px',
+                fontWeight: 'bold' as const,
+                marginBottom: '10px'
+              }}>
+                📋 Wichtig: Vermittlungsgebühr
+              </Text>
+              <Text style={{
+                color: '#333',
+                fontSize: '14px',
+                lineHeight: '22px',
+                margin: 0
+              }}>
+                Die Vermittlungsgebühr beträgt bei jedem Einsatz:<br />
+                • <strong>15 % für LKW CE Fahrer</strong><br />
+                • <strong>20 % für Baumaschinenführer</strong><br />
+                <br />
+                Die Vermittlungsgebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
+                Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; die Provision wird intern einbehalten.
+              </Text>
+            </div>
+            
             {/* Contact Info */}
             <div style={contactSection}>
               <Text style={contactInfo}>
