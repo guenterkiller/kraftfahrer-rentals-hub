@@ -62,9 +62,17 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Regionen */}
+          {/* Für Fahrer & Standort */}
           <div>
-            <h3 className="font-bold text-lg mb-4">Regionen</h3>
+            <h3 className="font-bold text-lg mb-4">Für Fahrer</h3>
+            <ul className="space-y-2 text-sm mb-4">
+              <li>
+                <Link to="/fahrer-registrierung" className="text-muted-foreground hover:text-primary transition-colors">
+                  Fahrer werden
+                </Link>
+              </li>
+            </ul>
+            <h4 className="font-semibold text-sm mb-2">Beispiel-Regionen:</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link to="/frankfurt" className="text-muted-foreground hover:text-primary transition-colors">
@@ -81,12 +89,11 @@ const Footer = () => {
                   Rhein-Main
                 </Link>
               </li>
-              <li>
-                <Link to="/fahrer-registrierung" className="text-muted-foreground hover:text-primary transition-colors">
-                  Fahrer werden
-                </Link>
-              </li>
             </ul>
+            <p className="text-xs text-muted-foreground mt-3 font-semibold">
+              🇩🇪 Bundesweit verfügbar<br />
+              🇪🇺 EU/EWR-Fahrer
+            </p>
           </div>
 
           {/* Kontakt */}
