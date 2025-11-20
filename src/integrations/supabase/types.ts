@@ -747,6 +747,30 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          created_at: string
+          id: string
+          referrer: string | null
+          route: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          referrer?: string | null
+          route: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          referrer?: string | null
+          route?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
@@ -765,6 +789,33 @@ export type Database = {
           id?: string
           role?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      web_vitals: {
+        Row: {
+          created_at: string
+          id: string
+          metric_name: string
+          metric_value: number
+          rating: string | null
+          route: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metric_name: string
+          metric_value: number
+          rating?: string | null
+          route: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metric_name?: string
+          metric_value?: number
+          rating?: string | null
+          route?: string
         }
         Relationships: []
       }

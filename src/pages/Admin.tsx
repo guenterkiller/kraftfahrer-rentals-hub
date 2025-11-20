@@ -19,6 +19,7 @@ import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
 import { JobInvitesStatus } from "@/components/JobInvitesStatus";
+import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -1133,6 +1134,11 @@ const Admin = () => {
             <LogOut className="h-4 w-4 mr-2" />
             Abmelden
           </Button>
+        </div>
+
+        {/* Analytics Dashboard - NUR für Admin sichtbar */}
+        <div className="mb-8">
+          <AdminAnalyticsDashboard />
         </div>
 
         <Card>
