@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface LazyImageProps {
   src: string;
@@ -25,11 +25,32 @@ const LazyImage = ({
 }: LazyImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(priority);
+  const imgRef = useRef<HTMLDivElement>(null);
 
-  // Generate WebP path by replacing extension
-  const getWebPPath = (imagePath: string) => {
-    return imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-  };
+  // Intersection Observer für progressives Lazy Loading
+  useEffect(() => {
+    if (priority || !imgRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoad(true);
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: '50px',
+        threshold: 0.01
+      }
+    );
+
+    observer.observe(imgRef.current);
+
+    return () => observer.disconnect();
+  }, [priority]);
 
 
   const handleLoad = () => {
@@ -54,7 +75,7 @@ const LazyImage = ({
   }
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
+    <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
       {!isLoaded && (
         <div 
           className="absolute inset-0 bg-muted animate-pulse"
@@ -63,20 +84,22 @@ const LazyImage = ({
         />
       )}
       
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
+      {shouldLoad && (
+        <img
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
         loading={priority ? 'eager' : loading}
         onLoad={handleLoad}
         onError={handleError}
         className={`transition-opacity duration-300 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         } ${className}`}
-        decoding="async"
-        {...(priority && { fetchPriority: 'high' as any })}
-      />
+          decoding="async"
+          {...(priority && { fetchPriority: 'high' as any })}
+        />
+      )}
     </div>
   );
 };

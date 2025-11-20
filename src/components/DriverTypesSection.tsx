@@ -72,6 +72,7 @@ const DriverTypesSection = () => {
                   }
                   width={800}
                   height={400}
+                  priority={false}
                   sizes="(max-width: 768px) 100vw, 50vw"
                   enableWebP={true}
                   className="w-full h-full hover:scale-105 transition-transform duration-300"
