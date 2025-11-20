@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,11 @@ import { useSEO } from "@/hooks/useSEO";
 import { validateFiles, uploadViaEdge } from "@/utils/fileValidation";
 
 const FahrerRegistrierung = () => {
+  // Scroll to top on page load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, []);
+
   useSEO({
     title: "Fahrer werden – LKW-Fahrer & Ersatzfahrer Jobs bundesweit | Fahrerexpress",
     description: "Werden Sie selbstständiger Partner bei Fahrerexpress. Mehr verdienen als Ersatzfahrer, selbst bestimmen, deutschlandweite Aufträge. Jetzt kostenlos registrieren!",
