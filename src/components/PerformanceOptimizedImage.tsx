@@ -86,7 +86,6 @@ const PerformanceOptimizedImage = ({
         width={width}
         height={height}
         loading={priority ? 'eager' : 'lazy'}
-        fetchPriority={priority ? 'high' : 'auto'}
         onLoad={handleLoad}
         onError={handleError}
         className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
