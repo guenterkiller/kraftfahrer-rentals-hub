@@ -32,39 +32,41 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 w-full bg-white/98 backdrop-blur-md border-b z-50 shadow-sm" role="navigation" aria-label="Hauptnavigation">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 sm:h-18">
+        <div className="flex items-center justify-between h-16 sm:h-18 gap-2">
           <Link 
             to="/" 
-            className="font-bold text-base md:text-xl text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight"
+            className="font-bold text-base md:text-xl text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight flex-shrink-0"
             aria-label="Fahrerexpress Startseite"
           >
             <div className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</div>
             <div className="sm:hidden leading-tight">
-              <div className="font-bold text-primary">Fahrerexpress</div>
-              <div className="text-sm font-semibold text-primary/90">Günter Killer</div>
+              <div className="font-bold text-primary text-sm">Fahrerexpress</div>
+              <div className="text-xs font-semibold text-primary/90">Günter Killer</div>
             </div>
           </Link>
           
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+          {/* Desktop und Mobile Navigation nebeneinander */}
+          <div className="flex items-center gap-2">
             <Button
               size="sm" 
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none" 
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-xs sm:text-sm px-3 sm:px-4 py-2" 
               asChild
             >
               <Link to="/fahrer-registrierung" aria-label="Als LKW-Fahrer registrieren">
-                🚀 Fahrer werden
+                <span className="hidden sm:inline">🚀 Fahrer werden</span>
+                <span className="sm:hidden">🚀 Fahrer</span>
               </Link>
             </Button>
+            
+            {/* Desktop: Fahrer buchen Button */}
             <Button 
               size="sm" 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 focus:ring-2 focus:ring-primary/50 focus:outline-none" 
+              className="hidden md:flex bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 focus:ring-2 focus:ring-primary/50 focus:outline-none" 
               asChild
             >
               <Link 
                 to="/#fahreranfrage"
                 onClick={(e) => {
-                  // Wenn wir schon auf der Index-Seite sind, scrolle zum Formular
                   if (window.location.pathname === '/') {
                     e.preventDefault();
                     const element = document.querySelector('#fahreranfrage');
@@ -78,18 +80,18 @@ const Navigation = () => {
                 <span className="inline-block animate-drive">🚚</span> Fahrer buchen
               </Link>
             </Button>
+            
+            {/* Mobile Menu Button */}
+            <button 
+              className="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-gray-100 transition-colors"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={isMenuOpen ? "Menü schließen" : "Menü öffnen"}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+            </button>
           </div>
-          
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-            aria-label={isMenuOpen ? "Menü schließen" : "Menü öffnen"}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
-          </button>
         </div>
         
         {/* Mobile Navigation */}
@@ -101,19 +103,6 @@ const Navigation = () => {
             aria-labelledby="mobile-menu-button"
           >
             <div className="flex flex-col space-y-3">
-              <Button
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none mb-2" 
-                asChild
-              >
-                <Link 
-                  to="/fahrer-registrierung"
-                  onClick={() => setIsMenuOpen(false)}
-                  role="menuitem"
-                  aria-label="Als LKW-Fahrer registrieren"
-                >
-                  🚀 Fahrer werden
-                </Link>
-              </Button>
               <Button 
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 focus:ring-2 focus:ring-primary/50 focus:outline-none" 
                 asChild
@@ -122,7 +111,6 @@ const Navigation = () => {
                   to="/#fahreranfrage"
                   onClick={(e) => {
                     setIsMenuOpen(false);
-                    // Wenn wir schon auf der Index-Seite sind, scrolle zum Formular
                     if (window.location.pathname === '/') {
                       e.preventDefault();
                       const element = document.querySelector('#fahreranfrage');
