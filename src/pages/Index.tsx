@@ -6,6 +6,7 @@ import WhyFahrerexpress from "@/components/WhyFahrerexpress";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import LegalSecuritySection from "@/components/LegalSecuritySection";
+import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import ContactSection from "@/components/ContactSection";
 import WhatsAppContact from "@/components/WhatsAppContact";
 import Footer from "@/components/Footer";
@@ -86,6 +87,7 @@ const Index = () => {
         <TestimonialsSection />
         <FahreranfrageSection />
         <LegalSecuritySection />
+        <BookingPriorityBanner />
         <ContactSection />
       </main>
       
