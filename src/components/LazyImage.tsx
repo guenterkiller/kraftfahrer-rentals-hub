@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 interface LazyImageProps {
   src: string;
   alt: string;
@@ -20,55 +18,16 @@ const LazyImage = ({
   height, 
   loading = 'lazy', 
   priority = false,
-  enableWebP = true,
-  sizes = '100vw'
 }: LazyImageProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
-
-
-  const handleLoad = () => {
-    setIsLoaded(true);
-  };
-
-  const handleError = () => {
-    setHasError(true);
-  };
-
-  if (hasError) {
-    return (
-      <div 
-        className={`bg-muted flex items-center justify-center ${className}`}
-        style={{ width, height }}
-        role="img"
-        aria-label={`Bild konnte nicht geladen werden: ${alt}`}
-      >
-        <span className="text-muted-foreground text-sm">Bild nicht verfügbar</span>
-      </div>
-    );
-  }
-
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      {!isLoaded && (
-        <div 
-          className="absolute inset-0 bg-muted animate-pulse"
-          style={{ width, height }}
-          aria-hidden="true"
-        />
-      )}
-      
       <img
         src={src}
         alt={alt}
         width={width}
         height={height}
         loading={priority ? 'eager' : loading}
-        onLoad={handleLoad}
-        onError={handleError}
-        className={`transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        } ${className}`}
+        className={className}
         decoding="async"
       />
     </div>
