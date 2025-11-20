@@ -19,8 +19,9 @@ const ProductCards = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             Ihre Fahrerpreise
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten
+          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto px-4">
+            Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong><br className="md:hidden" /> 
+            zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten
           </p>
         </div>
 
