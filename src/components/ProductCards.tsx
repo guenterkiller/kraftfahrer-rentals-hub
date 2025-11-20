@@ -108,7 +108,7 @@ const ProductCards = () => {
             <CardContent>
               <div className="mb-6 pb-6 border-b border-border">
                 <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-5xl font-bold bg-gradient-to-r from-secondary to-secondary/70 bg-clip-text text-transparent">459 €</span>
+                  <span className="text-5xl font-bold text-foreground">459 €</span>
                   <span className="text-muted-foreground">/Tag</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">8-Stunden-Tag (netto)</p>
