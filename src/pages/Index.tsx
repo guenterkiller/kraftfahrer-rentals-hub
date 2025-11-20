@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import ProductCards from "@/components/ProductCards";
