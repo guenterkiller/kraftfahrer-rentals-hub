@@ -31,13 +31,6 @@ const LazyImage = ({
     return imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
   };
 
-  // Generate responsive srcset
-  const generateSrcSet = (imagePath: string, format: 'webp' | 'original' = 'original') => {
-    const responsiveSizes = [640, 768, 1024, 1280, 1920];
-    const path = format === 'webp' ? getWebPPath(imagePath) : imagePath;
-    
-    return responsiveSizes.map(size => `${path} ${size}w`).join(', ');
-  };
 
   const handleLoad = () => {
     setIsLoaded(true);
@@ -72,8 +65,6 @@ const LazyImage = ({
       
       <img
         src={src}
-        srcSet={generateSrcSet(src, 'original')}
-        sizes={sizes}
         alt={alt}
         width={width}
         height={height}

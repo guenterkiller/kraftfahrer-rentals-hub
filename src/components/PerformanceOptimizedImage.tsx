@@ -41,15 +41,6 @@ const PerformanceOptimizedImage = ({
     return imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
   };
 
-  // Generate responsive srcset (640w, 768w, 1024w, 1280w, 1920w)
-  const generateSrcSet = (imagePath: string, format: 'webp' | 'original' = 'original') => {
-    const sizes = [640, 768, 1024, 1280, 1920];
-    const path = format === 'webp' ? getWebPPath(imagePath) : imagePath;
-    
-    // For now, return the original image for all sizes
-    // In production, you would have actual different sized images
-    return sizes.map(size => `${path} ${size}w`).join(', ');
-  };
 
   const handleLoad = () => {
     setIsLoaded(true);
@@ -96,8 +87,6 @@ const PerformanceOptimizedImage = ({
       
       <img
         src={src}
-        srcSet={generateSrcSet(src, 'original')}
-        sizes={sizes}
         alt={alt}
         width={width}
         height={height}
