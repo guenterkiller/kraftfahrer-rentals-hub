@@ -10,14 +10,14 @@ const BookingPriorityBanner = () => {
   };
 
   return (
-    <div className="rounded-xl border-2 border-red-300 bg-gradient-to-r from-red-50 to-red-100 p-6 mb-6 shadow-md">
+    <div className="rounded-xl border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-blue-100 p-6 mb-6 shadow-md">
       <div className="flex items-start gap-4">
         <div className="text-4xl">⚡</div>
         <div className="flex-1">
-          <h2 className="text-xl font-bold text-red-900 mb-2">
+          <h2 className="text-xl font-bold text-blue-900 mb-2">
             Professionelle Anfrage in 2 Minuten – direkt & strukturiert
           </h2>
-          <div className="space-y-2 text-sm text-red-800 mb-4">
+          <div className="space-y-2 text-sm text-blue-800 mb-4">
             <p className="flex items-start gap-2">
               <span className="text-green-600 font-bold">✓</span>
               <span><strong>Schnellere Vermittlung:</strong> Alle Infos auf einen Blick, keine zeitraubenden Rückfragen</span>
@@ -39,7 +39,7 @@ const BookingPriorityBanner = () => {
             </p>
           </div>
           <Button 
-            className="bg-red-600 hover:bg-red-700 shadow-lg hover:shadow-xl transition-all"
+            className="bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all"
             onClick={scrollToBooking}
             size="lg"
             aria-label="Zum Buchungsformular scrollen"
