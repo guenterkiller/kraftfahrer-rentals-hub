@@ -3,15 +3,15 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const GermanyMap = () => {
   const cities = [
-    { name: "Hamburg", x: "52%", y: "18%" },
-    { name: "Berlin", x: "70%", y: "28%" },
-    { name: "Frankfurt", x: "45%", y: "50%", highlight: true },
-    { name: "München", x: "58%", y: "80%" },
-    { name: "Köln", x: "35%", y: "42%" },
-    { name: "Stuttgart", x: "48%", y: "68%" },
-    { name: "Dortmund", x: "35%", y: "38%" },
-    { name: "Dresden", x: "72%", y: "45%" },
+    { name: "Hamburg", x: "48%", y: "15%" },
+    { name: "Berlin", x: "72%", y: "22%" },
+    { name: "Frankfurt", x: "42%", y: "48%", highlight: true },
+    { name: "München", x: "55%", y: "82%" },
+    { name: "Köln", x: "30%", y: "42%" },
+    { name: "Stuttgart", x: "48%", y: "72%" },
+    { name: "Dresden", x: "75%", y: "45%" },
     { name: "Hannover", x: "50%", y: "30%" },
+    { name: "Nürnberg", x: "52%", y: "65%" },
   ];
 
   return (
@@ -31,34 +31,43 @@ const GermanyMap = () => {
           <div className="relative">
             <Card className="overflow-hidden border-2 border-primary/20 bg-white/50 backdrop-blur-sm">
               <CardContent className="p-8">
-                {/* Simplified Germany SVG Map */}
-                <div className="relative w-full aspect-[3/4] max-w-md mx-auto">
-                  {/* Germany outline - simplified shape */}
+                {/* Realistic Germany SVG Map */}
+                <div className="relative w-full aspect-[4/5] max-w-md mx-auto">
                   <svg
-                    viewBox="0 0 200 280"
+                    viewBox="0 0 400 500"
                     className="w-full h-full"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    {/* Germany shape - simplified */}
+                    {/* Realistic Germany outline based on actual shape */}
                     <path
-                      d="M 100 10 
-                         L 120 15 L 140 25 L 155 40 L 165 60 L 170 80 
-                         L 168 100 L 165 120 L 160 140 L 155 160 
-                         L 150 180 L 140 200 L 130 220 L 120 240 
-                         L 110 255 L 100 265 L 90 255 L 80 240 
-                         L 70 220 L 60 200 L 50 180 L 45 160 
-                         L 40 140 L 35 120 L 33 100 L 35 80 
-                         L 40 60 L 50 40 L 65 25 L 80 15 Z"
-                      className="fill-primary/10 stroke-primary stroke-2 transition-all duration-300 hover:fill-primary/20"
+                      d="M 200 30
+                         L 230 35 L 260 45 L 280 55 L 295 70 L 310 85 L 325 105 L 335 125
+                         L 340 145 L 345 165 L 350 185 L 355 205 L 358 225 L 360 245
+                         L 358 265 L 355 285 L 350 305 L 345 325 L 338 345 L 330 365
+                         L 320 383 L 308 400 L 295 415 L 280 428 L 265 438 L 248 446
+                         L 230 452 L 210 456 L 190 458 L 170 457 L 150 453 L 132 447
+                         L 115 439 L 100 428 L 87 415 L 76 400 L 68 383 L 62 365
+                         L 58 345 L 55 325 L 53 305 L 52 285 L 53 265 L 55 245
+                         L 58 225 L 62 205 L 67 185 L 73 165 L 80 145 L 88 125
+                         L 98 105 L 110 87 L 125 72 L 142 60 L 160 50 L 180 40 Z"
+                      className="fill-primary/10 stroke-primary stroke-[3] transition-all duration-300 hover:fill-primary/20"
                     />
                     
-                    {/* Grid pattern for visual effect */}
+                    {/* Grid pattern for visual depth */}
                     <defs>
-                      <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                        <circle cx="10" cy="10" r="1" className="fill-primary/5" />
+                      <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+                        <circle cx="15" cy="15" r="1.5" className="fill-primary/8" />
                       </pattern>
+                      
+                      {/* Gradient for map */}
+                      <linearGradient id="mapGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.05" />
+                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.15" />
+                      </linearGradient>
                     </defs>
-                    <rect width="200" height="280" fill="url(#grid)" />
+                    
+                    {/* Background pattern */}
+                    <rect width="400" height="500" fill="url(#grid)" opacity="0.3" />
                   </svg>
 
                   {/* City markers */}
