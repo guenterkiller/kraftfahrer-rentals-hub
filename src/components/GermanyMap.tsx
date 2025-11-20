@@ -1,35 +1,42 @@
 import { MapPin, Truck, CheckCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { Icon, LatLngExpression } from 'leaflet';
+import { divIcon, LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix for default marker icons in React-Leaflet
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
-
-const DefaultIcon = new Icon({
-  iconUrl: icon,
-  iconRetinaUrl: iconRetina,
-  shadowUrl: iconShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
-
-// Custom highlighted marker icon
-const HighlightIcon = new Icon({
-  iconUrl: icon,
-  iconRetinaUrl: iconRetina,
-  shadowUrl: iconShadow,
-  iconSize: [35, 57],
-  iconAnchor: [17, 57],
-  popupAnchor: [1, -48],
-  shadowSize: [57, 57],
-  className: 'highlighted-marker'
-});
+// Create custom marker icons using divIcon (works better in Vite)
+const createCustomIcon = (highlight: boolean = false) => {
+  const size = highlight ? 40 : 30;
+  const color = highlight ? '#FF6B35' : '#4A5568';
+  
+  return divIcon({
+    html: `
+      <div style="
+        width: ${size}px;
+        height: ${size}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: ${color};
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        border: 3px solid white;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        ${highlight ? 'animation: pulse 2s infinite;' : ''}
+      ">
+        <div style="
+          transform: rotate(45deg);
+          color: white;
+          font-size: ${highlight ? '20px' : '16px'};
+        ">📍</div>
+      </div>
+    `,
+    className: 'custom-marker',
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size],
+    popupAnchor: [0, -size]
+  });
+};
 
 interface City {
   name: string;
@@ -86,7 +93,7 @@ const GermanyMap = () => {
                       <Marker
                         key={index}
                         position={[city.lat, city.lng]}
-                        icon={city.highlight ? HighlightIcon : DefaultIcon}
+                        icon={createCustomIcon(city.highlight)}
                       >
                         <Popup>
                           <div className="text-center p-2">
