@@ -1,152 +1,32 @@
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
 
 const ContactSection = () => {
+  const scrollToForm = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const element = document.querySelector('#fahreranfrage');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
   return (
-    <section className="py-16 bg-muted">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Kontakt</h2>
-        
-        <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle>Kontaktinformationen</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="mb-6">
-                <h3 className="font-bold text-lg mb-2">Günter Killer</h3>
-                <p className="text-muted-foreground">Fahrerexpress-Agentur</p>
-                <p className="text-sm text-muted-foreground">
-                  Selbstständiger C+E-Fahrer · Fahrmischerfahrer · Mischmeister für Flüssigboden
-                </p>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <Phone className="h-5 w-5 text-primary mt-1" />
-                <div>
-                  <p className="font-semibold">Mobil</p>
-                  <p className="text-muted-foreground">01577 1442285</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <Mail className="h-5 w-5 text-primary mt-1" />
-                <div>
-                  <p className="font-semibold">E-Mail</p>
-                  <p className="text-xs text-muted-foreground mb-1">
-                    <strong>Hinweis:</strong> Für <strong>zeitkritische Aufträge</strong> nutzen Sie bitte{" "}
-                    <button 
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const element = document.querySelector('#fahreranfrage');
-                        if (element) {
-                          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                      }}
-                      className="text-blue-600 underline hover:text-blue-800"
-                    >
-                      „Fahrer buchen"
-                    </button>.
-                    E-Mails werden manuell erfasst und können Verzögerungen verursachen.
-                  </p>
-                  <p className="text-muted-foreground">info@kraftfahrer-mieten.com</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-primary mt-1" />
-                <div>
-                  <p className="font-semibold">Adresse</p>
-                  <p className="text-muted-foreground">
-                    Walther-von-Cronberg-Platz 12<br />
-                    60594 Frankfurt<br />
-                    Deutschland
-                  </p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <Clock className="h-5 w-5 text-primary mt-1" />
-                <div>
-                  <p className="font-semibold">Erreichbarkeit</p>
-                  <p className="text-muted-foreground">
-                    Mo-Fr: 8:00 - 18:00 Uhr<br />
-                    Sa: 9:00 - 14:00 Uhr<br />
-                    24/7 erreichbar für zeitkritische Abstimmungen – Einsatzstart frühestens am nächsten Werktag nach Bestätigung
-                  </p>
-                </div>
-              </div>
-              
-              <div className="pt-4 border-t">
-                <p className="text-sm text-muted-foreground">
-                  <strong>Website:</strong> www.kraftfahrer-mieten.com<br />
-                  <strong>USt-IdNr.:</strong> DE207642217
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle>Fahrer buchen</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="text-muted-foreground mb-6">
-                Nutzen Sie unser zentrales Buchungsformular, um den passenden Fahrer für Ihren Bedarf zu finden.
-              </p>
-              <Button 
-                size="lg" 
-                asChild
-                className="w-full min-h-[44px]"
-                aria-label="Jetzt Fahrer buchen – schnelles Formular"
-              >
-                <a 
-                  href="#fahreranfrage"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const element = document.querySelector('#fahreranfrage');
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                  }}
-                >
-                  Jetzt Fahrer buchen
-                </a>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="text-center mt-8 pt-8 border-t">
-          <div className="flex flex-wrap justify-center gap-4 mb-4">
-            <Link to="/projekte" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Projekte
-            </Link>
-            <Link to="/wissenswertes" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Wissenswertes
-            </Link>
-            <Link to="/versicherung" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Versicherung
-            </Link>
-            <Link to="/vermittlung" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Vermittlung
-            </Link>
-          </div>
-          <p className="text-sm text-muted-foreground space-x-6">
-            <Link to="/impressum" className="hover:text-primary transition-colors">
-              Impressum
-            </Link>
-            <Link to="/datenschutz" className="hover:text-primary transition-colors">
-              Datenschutz
-            </Link>
-            <a href="/cookies.html" className="hover:text-primary transition-colors">
-              Cookie-Einstellungen
-            </a>
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Bereit, den passenden Fahrer zu buchen?
+          </h2>
+          <p className="text-muted-foreground text-lg mb-8">
+            Nutzen Sie unser Buchungsformular für eine schnelle und unkomplizierte Anfrage.
           </p>
+          <Button 
+            onClick={scrollToForm}
+            size="lg"
+            className="text-lg px-12 py-6 min-h-[56px]"
+            aria-label="Zum Buchungsformular springen"
+          >
+            Jetzt Fahrer buchen
+          </Button>
         </div>
       </div>
     </section>
