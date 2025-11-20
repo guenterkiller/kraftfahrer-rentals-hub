@@ -145,8 +145,6 @@ const Projekte = () => {
                         width={800}
                         height={600}
                         priority={false}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        enableWebP={true}
                         className="w-full h-64 md:h-full"
                         objectFit="cover"
                       />

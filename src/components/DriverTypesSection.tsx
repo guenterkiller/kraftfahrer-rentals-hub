@@ -69,6 +69,8 @@ const DriverTypesSection = () => {
                     ? "Baumaschinenführer bedient Bagger auf Baustelle - Fahrerexpress vermittelt qualifizierte Baumaschinenführer bundesweit"
                     : "LKW CE-Fahrer am Steuer eines Sattelzugs - Fahrerexpress vermittelt erfahrene Kraftfahrer"
                   }
+                  width={800}
+                  height={400}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                   decoding="async"
