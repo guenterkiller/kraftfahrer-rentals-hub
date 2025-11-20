@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import lkwFahrerHero from "@/assets/lkw-fahrer-hero.jpg";
 import kranFahrer from "@/assets/kran-fahrer.jpg";
+import PerformanceOptimizedImage from "@/components/PerformanceOptimizedImage";
 
 const DriverTypesSection = () => {
   const driverTypes = [
@@ -63,13 +64,16 @@ const DriverTypesSection = () => {
                 </div>
               )}
               <div className="relative h-48 overflow-hidden">
-                <img 
+                <PerformanceOptimizedImage
                   src={type.image} 
                   alt={type.isPremium 
                     ? "Baumaschinenführer bedient Bagger auf Baustelle - Fahrerexpress vermittelt qualifizierte Baumaschinenführer bundesweit"
                     : "LKW CE-Fahrer am Steuer eines Sattelzugs - Fahrerexpress vermittelt erfahrene Kraftfahrer"
                   }
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  width={800}
+                  height={400}
+                  className="w-full h-full hover:scale-105 transition-transform duration-300"
+                  objectFit="cover"
                 />
               </div>
               
