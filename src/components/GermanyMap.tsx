@@ -1,18 +1,57 @@
 import { MapPin, Truck, CheckCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Icon, LatLngExpression } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Fix for default marker icons in React-Leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
+
+const DefaultIcon = new Icon({
+  iconUrl: icon,
+  iconRetinaUrl: iconRetina,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+// Custom highlighted marker icon
+const HighlightIcon = new Icon({
+  iconUrl: icon,
+  iconRetinaUrl: iconRetina,
+  shadowUrl: iconShadow,
+  iconSize: [35, 57],
+  iconAnchor: [17, 57],
+  popupAnchor: [1, -48],
+  shadowSize: [57, 57],
+  className: 'highlighted-marker'
+});
+
+interface City {
+  name: string;
+  lat: number;
+  lng: number;
+  highlight?: boolean;
+}
 
 const GermanyMap = () => {
-  const cities = [
-    { name: "Hamburg", x: "48%", y: "15%" },
-    { name: "Berlin", x: "72%", y: "22%" },
-    { name: "Frankfurt", x: "42%", y: "48%", highlight: true },
-    { name: "München", x: "55%", y: "82%" },
-    { name: "Köln", x: "30%", y: "42%" },
-    { name: "Stuttgart", x: "48%", y: "72%" },
-    { name: "Dresden", x: "75%", y: "45%" },
-    { name: "Hannover", x: "50%", y: "30%" },
-    { name: "Nürnberg", x: "52%", y: "65%" },
+  const cities: City[] = [
+    { name: "Hamburg", lat: 53.5511, lng: 9.9937 },
+    { name: "Berlin", lat: 52.5200, lng: 13.4050 },
+    { name: "Frankfurt", lat: 50.1109, lng: 8.6821, highlight: true },
+    { name: "München", lat: 48.1351, lng: 11.5820 },
+    { name: "Köln", lat: 50.9375, lng: 6.9603 },
+    { name: "Stuttgart", lat: 48.7758, lng: 9.1829 },
+    { name: "Dresden", lat: 51.0504, lng: 13.7373 },
+    { name: "Hannover", lat: 52.3759, lng: 9.7320 },
+    { name: "Nürnberg", lat: 49.4521, lng: 11.0767 },
   ];
+
+  const centerPosition: LatLngExpression = [51.1657, 10.4515]; // Center of Germany
 
   return (
     <section className="py-16 bg-gradient-to-br from-primary/5 via-background to-primary/5">
@@ -31,141 +70,89 @@ const GermanyMap = () => {
           <div className="relative">
             <Card className="overflow-hidden border-2 border-primary/20 bg-white/50 backdrop-blur-sm">
               <CardContent className="p-8">
-                {/* Realistic Germany SVG Map */}
-                <div className="relative w-full aspect-[4/5] max-w-md mx-auto">
-                  <svg
-                    viewBox="0 0 400 500"
-                    className="w-full h-full"
-                    xmlns="http://www.w3.org/2000/svg"
+                <div className="relative w-full h-[500px] rounded-lg overflow-hidden">
+                  <MapContainer
+                    center={centerPosition}
+                    zoom={6}
+                    scrollWheelZoom={false}
+                    className="h-full w-full z-0"
+                    style={{ background: 'hsl(var(--muted))' }}
                   >
-                    {/* Realistic Germany outline based on actual shape */}
-                    <path
-                      d="M 200 30
-                         L 230 35 L 260 45 L 280 55 L 295 70 L 310 85 L 325 105 L 335 125
-                         L 340 145 L 345 165 L 350 185 L 355 205 L 358 225 L 360 245
-                         L 358 265 L 355 285 L 350 305 L 345 325 L 338 345 L 330 365
-                         L 320 383 L 308 400 L 295 415 L 280 428 L 265 438 L 248 446
-                         L 230 452 L 210 456 L 190 458 L 170 457 L 150 453 L 132 447
-                         L 115 439 L 100 428 L 87 415 L 76 400 L 68 383 L 62 365
-                         L 58 345 L 55 325 L 53 305 L 52 285 L 53 265 L 55 245
-                         L 58 225 L 62 205 L 67 185 L 73 165 L 80 145 L 88 125
-                         L 98 105 L 110 87 L 125 72 L 142 60 L 160 50 L 180 40 Z"
-                      className="fill-primary/10 stroke-primary stroke-[3] transition-all duration-300 hover:fill-primary/20"
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    
-                    {/* Grid pattern for visual depth */}
-                    <defs>
-                      <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-                        <circle cx="15" cy="15" r="1.5" className="fill-primary/8" />
-                      </pattern>
-                      
-                      {/* Gradient for map */}
-                      <linearGradient id="mapGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.05" />
-                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.15" />
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Background pattern */}
-                    <rect width="400" height="500" fill="url(#grid)" opacity="0.3" />
-                  </svg>
-
-                  {/* City markers */}
-                  {cities.map((city, index) => (
-                    <div
-                      key={city.name}
-                      className="absolute group cursor-pointer animate-fade-in"
-                      style={{
-                        left: city.x,
-                        top: city.y,
-                        animationDelay: `${index * 100}ms`,
-                      }}
-                    >
-                      <div className="relative">
-                        {/* Pin icon */}
-                        <MapPin
-                          className={`h-6 w-6 ${
-                            city.highlight
-                              ? "text-red-600 animate-pulse"
-                              : "text-primary"
-                          } transition-transform duration-200 group-hover:scale-125 drop-shadow-lg`}
-                        />
-                        
-                        {/* City name tooltip */}
-                        <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-                          <div className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg">
-                            {city.name}
-                            {city.highlight && " (Hauptsitz)"}
+                    {cities.map((city, index) => (
+                      <Marker
+                        key={index}
+                        position={[city.lat, city.lng]}
+                        icon={city.highlight ? HighlightIcon : DefaultIcon}
+                      >
+                        <Popup>
+                          <div className="text-center p-2">
+                            <h3 className="font-bold text-lg text-primary">{city.name}</h3>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {city.highlight ? '🎯 Hauptstandort' : 'Verfügbar'}
+                            </p>
                           </div>
-                        </div>
-
-                        {/* Ripple effect for highlight */}
-                        {city.highlight && (
-                          <div className="absolute inset-0 animate-ping">
-                            <MapPin className="h-6 w-6 text-red-600 opacity-50" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                        </Popup>
+                      </Marker>
+                    ))}
+                  </MapContainer>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Info Section */}
+          {/* Info Cards Section */}
           <div className="space-y-6">
-            <Card className="border-2 border-green-500/20 bg-green-50/50">
+            <Card className="border-2 border-primary/20 bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="h-6 w-6 text-white" />
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <MapPin className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-2">Deutschlandweit verfügbar</h3>
                     <p className="text-muted-foreground">
-                      Unsere selbstständigen LKW-Fahrer und Baumaschinenführer sind in allen Bundesländern einsatzbereit
+                      Unser Netzwerk selbstständiger Fahrer deckt alle Bundesländer ab. 
+                      Egal wo Sie einen Fahrer benötigen – wir finden die passende Lösung.
                     </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-blue-500/20 bg-blue-50/50">
+            <Card className="border-2 border-primary/20 bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
-                    <Truck className="h-6 w-6 text-white" />
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <Truck className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg mb-2">Schnelle Verfügbarkeit</h3>
+                    <h3 className="font-bold text-lg mb-2">Schnelle Vermittlung</h3>
                     <p className="text-muted-foreground">
-                      Dank unseres bundesweiten Netzwerks können wir Fahrer auch kurzfristig in Ihrer Region vermitteln
+                      In weniger als 24 Stunden vermitteln wir Ihnen qualifizierte Fahrer 
+                      für Ihre Einsätze – zuverlässig und professionell.
                     </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-primary/20">
+            <Card className="border-2 border-primary/20 bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
-                <h3 className="font-bold text-lg mb-4">Abgedeckte Regionen:</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    "Norddeutschland",
-                    "Süddeutschland", 
-                    "Westdeutschland",
-                    "Ostdeutschland",
-                    "Rhein-Ruhr",
-                    "Bayern",
-                    "Baden-Württemberg",
-                    "Alle Bundesländer"
-                  ].map((region) => (
-                    <div key={region} className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0" />
-                      <span className="text-sm">{region}</span>
-                    </div>
-                  ))}
+                <div className="flex items-start gap-4">
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <CheckCircle className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg mb-2">Alle Regionen abgedeckt</h3>
+                    <p className="text-muted-foreground">
+                      Nord, Süd, Ost und West – unsere Fahrer sind in allen Regionen 
+                      Deutschlands einsatzbereit und kennen sich lokal aus.
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
