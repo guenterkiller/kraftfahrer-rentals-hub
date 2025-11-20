@@ -4,8 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
-import { usePageTracking } from "./hooks/usePageTracking";
-import { useWebVitals } from "./hooks/useWebVitals";
 import Index from "./pages/Index";
 import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
@@ -27,15 +25,10 @@ import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
 import BF3Ablauf from "./pages/BF3Ablauf";
+import { TrackingWrapper } from "./components/TrackingWrapper";
 
 
 const queryClient = new QueryClient();
-
-const AppContent = () => {
-  usePageTracking();
-  useWebVitals();
-  return null;
-};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -43,7 +36,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppContent />
+        <TrackingWrapper />
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
