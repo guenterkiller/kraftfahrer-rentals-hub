@@ -24,17 +24,28 @@ const HeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
           <span className="block sm:hidden">LKW-Fahrer (CE) mieten</span>
-          <span className="block sm:hidden text-xl mt-2">schnell &amp; zuverlässig</span>
-          <span className="hidden sm:block">LKW-Fahrer (CE) mieten – schnell &amp; zuverlässig</span>
+          <span className="block sm:hidden text-xl mt-2">ab 349€/Tag</span>
+          <span className="hidden sm:block">LKW-Fahrer (CE) mieten – bundesweit ab 349€/Tag</span>
         </h1>
         
         <div className="bg-primary/90 backdrop-blur-sm text-white p-4 md:p-6 mb-8 max-w-4xl mx-auto rounded-lg shadow-xl animate-slide-up">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 drop-shadow-md">
-            Bundesweit qualifizierte Fahrer – CE, ADR, Fahrmischer & Baumaschinen
+            Qualifizierte Fahrer – CE, ADR, Fahrmischer & Baumaschinen
           </h2>
           <p className="text-base sm:text-lg md:text-xl drop-shadow-sm">
-            Rechtskonform als Dienst-/Werkleistung • Keine Arbeitnehmerüberlassung
+            Transparent • Rechtssicher • Keine Arbeitnehmerüberlassung
           </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm md:text-base">
+            <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+              ✓ Über 500 Vermittlungen
+            </span>
+            <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+              ✓ Faire Festpreise
+            </span>
+            <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+              ✓ Keine versteckten Kosten
+            </span>
+          </div>
         </div>
         
         <div className="bg-white/10 backdrop-blur-sm px-4 py-2 mb-8 max-w-2xl mx-auto rounded-lg border border-white/20 animate-fade-in">
