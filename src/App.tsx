@@ -25,9 +25,6 @@ import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
 import BF3Ablauf from "./pages/BF3Ablauf";
-import { TrackingWrapper } from "./components/TrackingWrapper";
-
-
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -36,7 +33,6 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <TrackingWrapper />
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
