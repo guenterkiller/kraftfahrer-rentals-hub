@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 interface PerformanceOptimizedImageProps {
   src: string;
@@ -33,34 +33,8 @@ const PerformanceOptimizedImage = ({
 }: PerformanceOptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [shouldLoad, setShouldLoad] = useState(priority);
-  const imgRef = useRef<HTMLDivElement>(null);
 
   const aspectRatio = (height / width) * 100;
-
-  // Intersection Observer für progressives Lazy Loading
-  useEffect(() => {
-    if (priority || !imgRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setShouldLoad(true);
-            observer.disconnect();
-          }
-        });
-      },
-      {
-        rootMargin: '50px', // Lade Bilder 50px bevor sie im Viewport sind
-        threshold: 0.01
-      }
-    );
-
-    observer.observe(imgRef.current);
-
-    return () => observer.disconnect();
-  }, [priority]);
 
 
   const handleLoad = () => {
@@ -92,7 +66,6 @@ const PerformanceOptimizedImage = ({
 
   return (
     <div 
-      ref={imgRef}
       className={`relative overflow-hidden ${className}`}
       style={{
         width: '100%',
@@ -107,12 +80,11 @@ const PerformanceOptimizedImage = ({
         />
       )}
       
-      {shouldLoad && (
-        <img
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
         loading={priority ? 'eager' : 'lazy'}
         fetchPriority={priority ? 'high' : 'auto'}
         onLoad={handleLoad}
@@ -120,10 +92,9 @@ const PerformanceOptimizedImage = ({
         className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
-          style={{ objectFit }}
-          decoding="async"
-        />
-      )}
+        style={{ objectFit }}
+        decoding="async"
+      />
     </div>
   );
 };
