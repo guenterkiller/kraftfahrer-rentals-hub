@@ -94,35 +94,23 @@ const PerformanceOptimizedImage = ({
         />
       )}
       
-      <picture className="absolute inset-0">
-        {/* WebP source for modern browsers */}
-        {enableWebP && (
-          <source
-            type="image/webp"
-            srcSet={generateSrcSet(src, 'webp')}
-            sizes={sizes}
-          />
-        )}
-        
-        {/* Fallback image with srcset */}
-        <img
-          src={src}
-          srcSet={generateSrcSet(src, 'original')}
-          sizes={sizes}
-          alt={alt}
-          width={width}
-          height={height}
-          loading={priority ? 'eager' : 'lazy'}
-          fetchPriority={priority ? 'high' : 'auto'}
-          onLoad={handleLoad}
-          onError={handleError}
-          className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-          style={{ objectFit }}
-          decoding="async"
-        />
-      </picture>
+      <img
+        src={src}
+        srcSet={generateSrcSet(src, 'original')}
+        sizes={sizes}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
+        onLoad={handleLoad}
+        onError={handleError}
+        className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ objectFit }}
+        decoding="async"
+      />
     </div>
   );
 };
