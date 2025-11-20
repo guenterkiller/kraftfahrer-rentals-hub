@@ -23,7 +23,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
       </div>
       
-      <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
+      <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in pb-16 sm:pb-24">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight drop-shadow-lg">
           LKW-Fahrer und Baumaschinenführer mieten – selbstständige Profis bundesweit
         </h1>
