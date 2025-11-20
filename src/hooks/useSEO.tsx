@@ -55,9 +55,6 @@ const generateBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
     '/versicherung': 'Versicherungen',
     '/wissenswertes': 'Wissenswertes',
     '/vermittlung': 'Vermittlung',
-    '/frankfurt': 'LKW-Fahrer Frankfurt',
-    '/hessen': 'LKW-Fahrer Hessen',
-    '/rhein-main': 'LKW-Fahrer Rhein-Main',
     '/impressum': 'Impressum',
     '/datenschutz': 'Datenschutz',
   };

@@ -62,7 +62,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Für Fahrer & Standort */}
+          {/* Für Fahrer */}
           <div>
             <h3 className="font-bold text-lg mb-4">Für Fahrer</h3>
             <ul className="space-y-2 text-sm mb-4">
@@ -72,25 +72,7 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-            <h4 className="font-semibold text-sm mb-2">Beispiel-Regionen:</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link to="/frankfurt" className="text-muted-foreground hover:text-primary transition-colors">
-                  Frankfurt
-                </Link>
-              </li>
-              <li>
-                <Link to="/hessen" className="text-muted-foreground hover:text-primary transition-colors">
-                  Hessen
-                </Link>
-              </li>
-              <li>
-                <Link to="/rhein-main" className="text-muted-foreground hover:text-primary transition-colors">
-                  Rhein-Main
-                </Link>
-              </li>
-            </ul>
-            <p className="text-xs text-muted-foreground mt-3 font-semibold">
+            <p className="text-xs text-muted-foreground font-semibold">
               🇩🇪 Bundesweit verfügbar<br />
               🇪🇺 EU/EWR-Fahrer
             </p>

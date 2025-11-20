@@ -25,9 +25,6 @@ import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
 import BF3Ablauf from "./pages/BF3Ablauf";
-import Frankfurt from "./pages/region/Frankfurt";
-import Hessen from "./pages/region/Hessen";
-import RheinMain from "./pages/region/RheinMain";
 
 
 const queryClient = new QueryClient();
@@ -55,11 +52,6 @@ const App = () => (
           <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
           <Route path="/bf3-ablauf-kosten" element={<BF3Ablauf />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
-          
-          {/* Regional Pages */}
-          <Route path="/frankfurt" element={<Frankfurt />} />
-          <Route path="/hessen" element={<Hessen />} />
-          <Route path="/rhein-main" element={<RheinMain />} />
           
           
           <Route path="/vermittlung" element={<Vermittlung />} />
