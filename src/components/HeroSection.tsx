@@ -7,7 +7,7 @@ import PerformanceOptimizedImage from "@/components/PerformanceOptimizedImage";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Performance-optimized hero image für bessere Core Web Vitals (LCP, CLS) */}
+      {/* Performance-optimized hero image mit WebP und responsive srcset */}
       <div className="absolute inset-0">
         <PerformanceOptimizedImage
           src={heroImage}
@@ -16,6 +16,8 @@ const HeroSection = () => {
           height={1080}
           priority={true}
           objectFit="cover"
+          sizes="100vw"
+          enableWebP={true}
           className="w-full h-full"
         />
         <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
