@@ -232,27 +232,27 @@ const SimpleBookingForm = () => {
               {/* Pricing Cards - 2 separate Karten */}
               <div className="grid md:grid-cols-2 gap-4 mb-6">
                 {/* LKW CE Fahrer Card */}
-                <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-md transition-shadow">
+                <Card className="border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-all">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center gap-2">
+                    <CardTitle className="text-lg flex items-center gap-2 text-red-900">
                       🚛 LKW CE Fahrer
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-primary/20">
-                      <div className="text-3xl font-bold text-primary mb-1">349 €</div>
-                      <div className="text-sm text-muted-foreground">pro 8-Stunden-Tag (netto)</div>
-                      <div className="mt-3 pt-3 border-t border-primary/20">
-                        <div className="text-sm font-medium text-primary">Überstunden: 30 €/h</div>
+                    <div className="bg-white rounded-lg p-4 border-2 border-red-200 shadow-sm">
+                      <div className="text-3xl font-bold text-red-700 mb-1">349 €</div>
+                      <div className="text-sm text-gray-600">pro 8-Stunden-Tag (netto)</div>
+                      <div className="mt-3 pt-3 border-t border-red-200">
+                        <div className="text-sm font-medium text-red-600">Überstunden: 30 €/h</div>
                       </div>
                     </div>
-                    <ul className="text-xs space-y-1.5 text-muted-foreground">
+                    <ul className="text-xs space-y-1.5 text-gray-700">
                       <li className="flex items-start gap-1.5">
-                        <span className="text-primary mt-0.5">✓</span>
+                        <span className="text-red-600 mt-0.5 font-bold">✓</span>
                         <span>Nah-, Fern- und Baustellenverkehr</span>
                       </li>
                       <li className="flex items-start gap-1.5">
-                        <span className="text-primary mt-0.5">✓</span>
+                        <span className="text-red-600 mt-0.5 font-bold">✓</span>
                         <span>ADR, Fahrmischer, Kranführer</span>
                       </li>
                     </ul>
@@ -260,27 +260,27 @@ const SimpleBookingForm = () => {
                 </Card>
 
                 {/* Baumaschinenführer Card */}
-                <Card className="border-secondary/30 bg-gradient-to-br from-secondary/5 to-secondary/10 hover:shadow-md transition-shadow">
+                <Card className="border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-all">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-lg flex items-center gap-2">
+                    <CardTitle className="text-lg flex items-center gap-2 text-orange-900">
                       🏗️ Baumaschinenführer
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-secondary/20">
-                      <div className="text-3xl font-bold text-secondary mb-1">459 €</div>
-                      <div className="text-sm text-muted-foreground">pro 8-Stunden-Tag (netto)</div>
-                      <div className="mt-3 pt-3 border-t border-secondary/20">
-                        <div className="text-sm font-medium text-secondary">Überstunden: 60 €/h</div>
+                    <div className="bg-white rounded-lg p-4 border-2 border-orange-200 shadow-sm">
+                      <div className="text-3xl font-bold text-orange-700 mb-1">459 €</div>
+                      <div className="text-sm text-gray-600">pro 8-Stunden-Tag (netto)</div>
+                      <div className="mt-3 pt-3 border-t border-orange-200">
+                        <div className="text-sm font-medium text-orange-600">Überstunden: 60 €/h</div>
                       </div>
                     </div>
-                    <ul className="text-xs space-y-1.5 text-muted-foreground">
+                    <ul className="text-xs space-y-1.5 text-gray-700">
                       <li className="flex items-start gap-1.5">
-                        <span className="text-secondary mt-0.5">✓</span>
+                        <span className="text-orange-600 mt-0.5 font-bold">✓</span>
                         <span>Bagger, Radlader, Walzen</span>
                       </li>
                       <li className="flex items-start gap-1.5">
-                        <span className="text-secondary mt-0.5">✓</span>
+                        <span className="text-orange-600 mt-0.5 font-bold">✓</span>
                         <span>Kranführer, Spezialmaschinen</span>
                       </li>
                     </ul>
