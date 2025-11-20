@@ -17,8 +17,14 @@ const Index = () => {
   useSEO({
     title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – Fahrerexpress-Agentur",
     description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) für Transporte & Baustellen. Schnell verfügbar, zuverlässig, rechtskonform. Jetzt Fahrer mieten!",
-    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, Fahrervermittlung Deutschland, Fahrerexpress Agentur, Baumaschinenfahrer mieten, Spezialfahrer buchen, Transportfahrer bundesweit, Kraftfahrer CE kurzfristig",
+    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, Fahrervermittlung Deutschland, Fahrerexpress Agentur, Baumaschinenfahrer mieten, Spezialfahrer buchen, Transportfahrer bundesweit, Kraftfahrer CE kurzfristig, LKW Fahrer Österreich, LKW Fahrer Schweiz, Kraftfahrer DACH, Berufskraftfahrer EU, truck driver Germany Austria Switzerland, HGV driver hire Europe",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
+    hreflang: {
+      'de': 'https://kraftfahrer-mieten.com/',
+      'de-AT': 'https://kraftfahrer-mieten.com/',
+      'de-CH': 'https://kraftfahrer-mieten.com/',
+      'x-default': 'https://kraftfahrer-mieten.com/'
+    },
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",

@@ -14,7 +14,13 @@ const LKWFahrerBuchen = () => {
   const seoData = {
     title: "LKW CE Fahrer buchen – Vermittelte Fahrer ab 349 €",
     description: "Qualifizierte CE-Fahrer für alle Logistik-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag.",
-    keywords: "CE-LKW-Fahrer, LKW CE Fahrer, Fahrmischer, ADR-Fahrer",
+    keywords: "CE-LKW-Fahrer, LKW CE Fahrer, Fahrmischer, ADR-Fahrer, LKW Fahrer Deutschland, LKW Fahrer Österreich, LKW Fahrer Schweiz, Berufskraftfahrer DACH, CE Fahrer EU, truck driver hire Germany",
+    hreflang: {
+      'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
+      'de-AT': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
+      'de-CH': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
+      'x-default': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen'
+    },
     faqData: [
       {
         question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
@@ -50,7 +56,7 @@ const LKWFahrerBuchen = () => {
           "addressLocality": "Frankfurt am Main",
           "addressCountry": "DE"
         },
-        "areaServed": "DE"
+        "areaServed": ["DE", "AT", "CH"]
       },
       "offers": {
         "@type": "Offer",
