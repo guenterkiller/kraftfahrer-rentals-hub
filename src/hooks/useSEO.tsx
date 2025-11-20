@@ -13,7 +13,7 @@ interface SEOData {
   ogImage?: string;
   noindex?: boolean;
   structuredData?: object;
-  breadcrumbs?: BreadcrumbItem[]; // Optionale manuelle Breadcrumbs
+  breadcrumbs?: BreadcrumbItem[];
   faqData?: Array<{
     question: string;
     answer: string;
@@ -24,6 +24,14 @@ interface SEOData {
     dateModified?: string;
     author: string;
     articleSection?: string;
+  };
+  // Internationale SEO
+  hreflang?: {
+    de?: string; // Deutschland
+    'de-AT'?: string; // Österreich
+    'de-CH'?: string; // Schweiz
+    en?: string; // International English
+    'x-default'?: string; // Default für alle anderen
   };
 }
 
@@ -115,6 +123,26 @@ export const useSEO = (seoData: SEOData) => {
     document.head.appendChild(metaRobots);
 
     // Open Graph tags
+    // Add language tag for international SEO
+    const ogLocale = document.createElement('meta');
+    ogLocale.setAttribute('property', 'og:locale');
+    ogLocale.content = 'de_DE';
+    ogLocale.setAttribute('data-seo', 'true');
+    document.head.appendChild(ogLocale);
+
+    // Alternative locales for DACH region
+    const ogLocaleAT = document.createElement('meta');
+    ogLocaleAT.setAttribute('property', 'og:locale:alternate');
+    ogLocaleAT.content = 'de_AT';
+    ogLocaleAT.setAttribute('data-seo', 'true');
+    document.head.appendChild(ogLocaleAT);
+
+    const ogLocaleCH = document.createElement('meta');
+    ogLocaleCH.setAttribute('property', 'og:locale:alternate');
+    ogLocaleCH.content = 'de_CH';
+    ogLocaleCH.setAttribute('data-seo', 'true');
+    document.head.appendChild(ogLocaleCH);
+
     const ogTitle = document.createElement('meta');
     ogTitle.setAttribute('property', 'og:title');
     ogTitle.content = seoData.title;
@@ -174,6 +202,27 @@ export const useSEO = (seoData: SEOData) => {
       document.head.appendChild(twitterImage);
     }
 
+    // hreflang tags for international SEO (DACH region + international)
+    // Remove existing hreflang tags
+    const existingHreflangs = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    existingHreflangs.forEach(link => link.remove());
+
+    // Add hreflang tags if provided, otherwise add default DACH tags
+    const hreflangData = seoData.hreflang || {
+      'de': canonicalUrl,
+      'de-AT': canonicalUrl,
+      'de-CH': canonicalUrl,
+      'x-default': canonicalUrl
+    };
+
+    Object.entries(hreflangData).forEach(([lang, url]) => {
+      const hreflang = document.createElement('link');
+      hreflang.rel = 'alternate';
+      hreflang.hreflang = lang;
+      hreflang.href = url;
+      document.head.appendChild(hreflang);
+    });
+
     // Remove existing structured data scripts
     const existingStructuredData = document.querySelectorAll('script[type="application/ld+json"][data-seo]');
     existingStructuredData.forEach(script => script.remove());
@@ -220,10 +269,24 @@ export const useSEO = (seoData: SEOData) => {
         "latitude": 50.110924,
         "longitude": 8.682127
       },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Deutschland"
+        },
+        {
+          "@type": "Country",
+          "name": "Österreich"
+        },
+        {
+          "@type": "Country",
+          "name": "Schweiz"
+        },
+        {
+          "@type": "Place",
+          "name": "Europäische Union"
+        }
+      ],
       "serviceType": ["Baumaschinenführer Vermittlung", "LKW CE Fahrer Vermittlung", "Fahrerdienstleistungen Subunternehmer"],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
