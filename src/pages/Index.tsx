@@ -9,6 +9,7 @@ import ContactSection from "@/components/ContactSection";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import HowItWorksTimeline from "@/components/HowItWorksTimeline";
 import IndustriesRow from "@/components/IndustriesRow";
+import GermanyMap from "@/components/GermanyMap";
 import WhatsAppContact from "@/components/WhatsAppContact";
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
@@ -98,6 +99,7 @@ const Index = () => {
         </section>
         
         <HowItWorksTimeline />
+        <GermanyMap />
         <IndustriesRow />
         
         <section id="fahreranfrage" aria-label="Fahrer anfragen" className="scroll-mt-16">
