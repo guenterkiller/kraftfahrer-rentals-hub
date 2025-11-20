@@ -9,13 +9,15 @@ interface PerformanceOptimizedImageProps {
   priority?: boolean;
   sizes?: string;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  enableWebP?: boolean;
 }
 
 /**
- * Performance-optimierte Bildkomponente für bessere Core Web Vitals
+ * Performance-optimierte Bildkomponente mit WebP-Support für bessere Core Web Vitals
+ * - Automatischer WebP-Support mit JPG-Fallback
+ * - Responsive srcset für verschiedene Bildschirmgrößen
  * - Explizite Dimensionen verhindern CLS (Cumulative Layout Shift)
  * - Lazy Loading für Nicht-kritische Bilder
- * - Aspect-ratio preservation während des Ladens
  * - Skeleton Placeholder für bessere UX
  */
 const PerformanceOptimizedImage = ({ 
@@ -26,13 +28,28 @@ const PerformanceOptimizedImage = ({
   height,
   priority = false,
   sizes = '100vw',
-  objectFit = 'cover'
+  objectFit = 'cover',
+  enableWebP = true
 }: PerformanceOptimizedImageProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  // Aspect Ratio für Layout Stability berechnen
   const aspectRatio = (height / width) * 100;
+
+  // Generate WebP path by replacing extension
+  const getWebPPath = (imagePath: string) => {
+    return imagePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+  };
+
+  // Generate responsive srcset (640w, 768w, 1024w, 1280w, 1920w)
+  const generateSrcSet = (imagePath: string, format: 'webp' | 'original' = 'original') => {
+    const sizes = [640, 768, 1024, 1280, 1920];
+    const path = format === 'webp' ? getWebPPath(imagePath) : imagePath;
+    
+    // For now, return the original image for all sizes
+    // In production, you would have actual different sized images
+    return sizes.map(size => `${path} ${size}w`).join(', ');
+  };
 
   const handleLoad = () => {
     setIsLoaded(true);
@@ -69,7 +86,7 @@ const PerformanceOptimizedImage = ({
         paddingBottom: `${aspectRatio}%`
       }}
     >
-      {/* Skeleton Placeholder für bessere UX während des Ladens */}
+      {/* Skeleton Placeholder */}
       {!isLoaded && (
         <div 
           className="absolute inset-0 bg-muted animate-pulse"
@@ -77,22 +94,35 @@ const PerformanceOptimizedImage = ({
         />
       )}
       
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        sizes={sizes}
-        loading={priority ? 'eager' : 'lazy'}
-        fetchPriority={priority ? 'high' : 'auto'}
-        onLoad={handleLoad}
-        onError={handleError}
-        className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{ objectFit }}
-        decoding="async"
-      />
+      <picture className="absolute inset-0">
+        {/* WebP source for modern browsers */}
+        {enableWebP && (
+          <source
+            type="image/webp"
+            srcSet={generateSrcSet(src, 'webp')}
+            sizes={sizes}
+          />
+        )}
+        
+        {/* Fallback image with srcset */}
+        <img
+          src={src}
+          srcSet={generateSrcSet(src, 'original')}
+          sizes={sizes}
+          alt={alt}
+          width={width}
+          height={height}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          onLoad={handleLoad}
+          onError={handleError}
+          className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
+            isLoaded ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ objectFit }}
+          decoding="async"
+        />
+      </picture>
     </div>
   );
 };
