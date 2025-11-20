@@ -10,7 +10,6 @@ import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import ContactSection from "@/components/ContactSection";
 import WhatsAppContact from "@/components/WhatsAppContact";
 import Footer from "@/components/Footer";
-import PerformanceMonitor from "@/components/PerformanceMonitor";
 import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
@@ -93,7 +92,6 @@ const Index = () => {
       
       <Footer />
       <WhatsAppContact />
-      {process.env.NODE_ENV === 'development' && <PerformanceMonitor />}
     </div>
   );
 };
