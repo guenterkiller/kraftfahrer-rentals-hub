@@ -17,7 +17,7 @@ const HeroSection = () => {
           width={1920}
           height={1080}
         />
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/30" />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
