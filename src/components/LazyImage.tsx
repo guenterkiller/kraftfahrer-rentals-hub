@@ -70,34 +70,22 @@ const LazyImage = ({
         />
       )}
       
-      <picture>
-        {/* WebP source for modern browsers */}
-        {enableWebP && (
-          <source
-            type="image/webp"
-            srcSet={generateSrcSet(src, 'webp')}
-            sizes={sizes}
-          />
-        )}
-        
-        {/* Fallback image */}
-        <img
-          src={src}
-          srcSet={generateSrcSet(src, 'original')}
-          sizes={sizes}
-          alt={alt}
-          width={width}
-          height={height}
-          loading={priority ? 'eager' : loading}
-          onLoad={handleLoad}
-          onError={handleError}
-          className={`transition-opacity duration-300 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          } ${className}`}
-          decoding="async"
-          {...(priority && { fetchPriority: 'high' as any })}
-        />
-      </picture>
+      <img
+        src={src}
+        srcSet={generateSrcSet(src, 'original')}
+        sizes={sizes}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={priority ? 'eager' : loading}
+        onLoad={handleLoad}
+        onError={handleError}
+        className={`transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        } ${className}`}
+        decoding="async"
+        {...(priority && { fetchPriority: 'high' as any })}
+      />
     </div>
   );
 };
