@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin, Lock } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -109,7 +109,8 @@ const Footer = () => {
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {currentYear} Fahrerexpress-Agentur • Günter Killer • USt-IdNr: DE207642217</p>
           <div className="flex gap-4 items-center">
-            <Link to="/admin/login" className="hover:text-primary transition-colors text-xs opacity-50 hover:opacity-100">
+            <Link to="/admin/login" className="hover:text-primary transition-colors flex items-center gap-1 text-xs opacity-60 hover:opacity-100">
+              <Lock className="h-3 w-3" />
               Admin
             </Link>
             <Link to="/impressum" className="hover:text-primary transition-colors">
