@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Hero background image */}
+      {/* Hero background image - optimized for LCP */}
       <div className="absolute inset-0">
         <img
           src={heroImage}
@@ -14,6 +14,9 @@ const HeroSection = () => {
           className="w-full h-full object-cover"
           loading="eager"
           decoding="async"
+          fetchPriority="high"
+          width={1920}
+          height={1080}
         />
         <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
       </div>

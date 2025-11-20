@@ -6,8 +6,7 @@ interface LazyImageProps {
   height?: number;
   loading?: 'lazy' | 'eager';
   priority?: boolean;
-  enableWebP?: boolean;
-  sizes?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none';
 }
 
 const LazyImage = ({ 
@@ -18,19 +17,20 @@ const LazyImage = ({
   height, 
   loading = 'lazy', 
   priority = false,
+  objectFit = 'cover',
 }: LazyImageProps) => {
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={priority ? 'eager' : loading}
-        className={className}
-        decoding="async"
-      />
-    </div>
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={priority ? 'eager' : loading}
+      className={className}
+      style={{ objectFit }}
+      decoding="async"
+      fetchPriority={priority ? 'high' : 'auto'}
+    />
   );
 };
 

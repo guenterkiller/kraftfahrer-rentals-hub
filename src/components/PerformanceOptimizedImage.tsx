@@ -5,13 +5,11 @@ interface PerformanceOptimizedImageProps {
   width: number;
   height: number;
   priority?: boolean;
-  sizes?: string;
-  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
-  enableWebP?: boolean;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none';
 }
 
 /**
- * Performance-optimierte Bildkomponente
+ * Performance-optimierte Bildkomponente mit Aspect Ratio Container
  */
 const PerformanceOptimizedImage = ({ 
   src, 
@@ -20,30 +18,20 @@ const PerformanceOptimizedImage = ({
   width, 
   height,
   priority = false,
-  sizes = '100vw',
   objectFit = 'cover',
 }: PerformanceOptimizedImageProps) => {
-  const aspectRatio = (height / width) * 100;
-
   return (
-    <div 
-      className={`relative overflow-hidden ${className}`}
-      style={{
-        width: '100%',
-        paddingBottom: `${aspectRatio}%`
-      }}
-    >
-      <img
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={priority ? 'eager' : 'lazy'}
-        className="absolute inset-0 w-full h-full"
-        style={{ objectFit }}
-        decoding="async"
-      />
-    </div>
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      loading={priority ? 'eager' : 'lazy'}
+      className={className}
+      style={{ objectFit }}
+      decoding="async"
+      fetchPriority={priority ? 'high' : 'auto'}
+    />
   );
 };
 
