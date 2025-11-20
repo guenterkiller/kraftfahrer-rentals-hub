@@ -50,7 +50,7 @@ const HeroSection = () => {
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center max-w-2xl mx-auto animate-scale-in">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center max-w-2xl mx-auto animate-scale-in mb-8 sm:mb-0">
           <Button 
             size="lg" 
             className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:outline-none w-full sm:w-auto" 
@@ -73,7 +73,7 @@ const HeroSection = () => {
           <Button 
             size="lg" 
             variant="outline"
-            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-white/95 hover:bg-white text-primary border-2 border-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto" 
+            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-background/5 backdrop-blur-sm hover:bg-background/10 text-white border-2 border-white/80 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto" 
             asChild
           >
             <Link to="/preise-und-ablauf" aria-label="Preise und Konditionen ansehen">
