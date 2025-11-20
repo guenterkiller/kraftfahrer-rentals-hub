@@ -108,7 +108,10 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {currentYear} Fahrerexpress-Agentur • Günter Killer • USt-IdNr: DE207642217</p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <Link to="/admin/login" className="hover:text-primary transition-colors text-xs opacity-50 hover:opacity-100">
+              Admin
+            </Link>
             <Link to="/impressum" className="hover:text-primary transition-colors">
               Impressum
             </Link>
