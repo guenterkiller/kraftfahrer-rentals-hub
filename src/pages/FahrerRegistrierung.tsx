@@ -1100,7 +1100,7 @@ const FahrerRegistrierung = () => {
                   <div className="border-b pb-4">
                     <h4 className="font-semibold mb-2">Wie schnell kann ich nach der Registrierung Aufträge erhalten?</h4>
                     <p className="text-sm text-muted-foreground">
-                      Nach erfolgreicher Prüfung Ihrer Unterlagen (24-72 Stunden) können Sie Aufträge erhalten. 
+                      Nach erfolgreicher Prüfung Ihrer Unterlagen können Sie Aufträge erhalten. 
                       Wir garantieren keinen Same-Day-Service, sondern setzen auf planbare Qualität.
                     </p>
                   </div>

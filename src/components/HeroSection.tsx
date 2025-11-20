@@ -28,7 +28,7 @@ const HeroSection = () => {
             Bundesweit qualifizierte Fahrer – CE, ADR, Fahrmischer & Baumaschinen
           </h2>
           <p className="text-base sm:text-lg md:text-xl drop-shadow-sm">
-            Rechtskonform als Dienst-/Werkleistung • Keine Arbeitnehmerüberlassung • 24-72h Verfügbarkeit
+            Rechtskonform als Dienst-/Werkleistung • Keine Arbeitnehmerüberlassung
           </p>
         </div>
         

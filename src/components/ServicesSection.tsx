@@ -97,10 +97,6 @@ const ServicesSection = () => {
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2">
                   <span className="text-blue-600">✓</span>
-                  24-72h Vorlauf (werktags)
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-blue-600">✓</span>
                   Tages- bis Projekteinsätze
                 </li>
                 <li className="flex items-center gap-2">

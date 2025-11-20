@@ -6,7 +6,7 @@ import { CheckCircle, MapPin, Clock, Users, Shield, Star } from 'lucide-react';
 const RheinMain = () => {
   const seoData = {
     title: "LKW-Fahrer & Kraftfahrer mieten im Rhein-Main-Gebiet | Fahrerexpress",
-    description: "Professionelle LKW-Fahrer, Kranführer & Baumaschinenführer im Rhein-Main-Gebiet. 24-72h Vorlauf, keine Same-Day-Buchung. Jetzt Fahrer mieten!",
+    description: "Professionelle LKW-Fahrer, Kranführer & Baumaschinenführer im Rhein-Main-Gebiet. Keine Same-Day-Buchung. Jetzt Fahrer mieten!",
     keywords: "LKW Fahrer Rhein-Main, Kraftfahrer mieten Rhein-Main-Gebiet, Kranführer Frankfurt, Baumaschinenführer Rhein-Main, ADR Fahrer, Main-Taunus",
     structuredData: {
       "@context": "https://schema.org",
@@ -66,7 +66,7 @@ const RheinMain = () => {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Metropolregion-Spezialist für Fahrerdienstleistungen. Von Frankfurt über Wiesbaden bis Mainz – 
-              kurze Wege, dichte Infrastruktur, 24-72h Vorlauf. 🇪🇺 EU/EWR-Fahrer verfügbar.
+              Kurze Wege, dichte Infrastruktur. 🇪🇺 EU/EWR-Fahrer verfügbar.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ const RheinMain = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
-                <span>24-72h Vorlauf</span>
+                <span>Planbare Verfügbarkeit</span>
               </div>
             </div>
             <Button 
@@ -88,7 +88,7 @@ const RheinMain = () => {
               variant="secondary"
               className="mr-4 bg-white text-primary hover:bg-white/90"
             >
-              Fahrer in 24-72 h sichern
+              Fahrer jetzt sichern
             </Button>
             <Button 
               size="lg" 
@@ -151,7 +151,7 @@ const RheinMain = () => {
                   </h3>
                   <p className="text-sm text-muted-foreground">
                     Durch lokale Präsenz und kurze Wege können wir im Rhein-Main-Gebiet 
-                    besonders schnell reagieren – 24-72h Vorlauf.
+                    besonders schnell reagieren – planbar und zuverlässig.
                   </p>
                 </div>
               </div>
@@ -424,7 +424,7 @@ const RheinMain = () => {
             </h2>
             <p className="text-xl mb-6 text-white/90">
               Nutzen Sie unsere Metropolregion-Expertise für Ihre Fahrerdienstleistungen. 
-              Kurze Wege, lokale Kenntnisse – mit 24-72h Vorlauf.
+              Kurze Wege, lokale Kenntnisse – planbar und zuverlässig.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button 

@@ -6,7 +6,7 @@ import { CheckCircle, MapPin, Clock, Users, Shield, Star } from 'lucide-react';
 const Hessen = () => {
   const seoData = {
     title: "LKW-Fahrer & Kraftfahrer mieten in Hessen | Fahrerexpress",
-    description: "Professionelle LKW-Fahrer, Kranführer & Baumaschinenführer in ganz Hessen. 24-72h Vorlauf, keine Same-Day-Buchung. Jetzt Fahrer mieten!",
+    description: "Professionelle LKW-Fahrer, Kranführer & Baumaschinenführer in ganz Hessen. Keine Same-Day-Buchung. Jetzt Fahrer mieten!",
     keywords: "LKW Fahrer Hessen, Kraftfahrer mieten Hessen, Kranführer Hessen, Baumaschinenführer Hessen, ADR Fahrer Hessen, Frankfurt, Kassel, Darmstadt",
     structuredData: {
       "@context": "https://schema.org",
@@ -66,7 +66,7 @@ const Hessen = () => {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Landesweite Fahrerexpress-Vermittlung für Transporte, Bauprojekte und Spezialaufgaben. 
-              Von Frankfurt über Kassel bis Darmstadt – mit 24-72h Vorlauf. 🇪🇺 EU/EWR-Fahrer verfügbar.
+              Von Frankfurt über Kassel bis Darmstadt. 🇪🇺 EU/EWR-Fahrer verfügbar.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ const Hessen = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
-                <span>24-72h Vorlauf</span>
+                <span>Planbare Verfügbarkeit</span>
               </div>
             </div>
             <Button 
@@ -88,7 +88,7 @@ const Hessen = () => {
               variant="secondary"
               className="mr-4 bg-white text-primary hover:bg-white/90"
             >
-              Fahrer in 24-72 h sichern
+              Fahrer jetzt sichern
             </Button>
             <Button 
               size="lg" 
@@ -149,7 +149,7 @@ const Hessen = () => {
                     Planbare Verfügbarkeit
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    24-72 Stunden Vorlauf gewährleisten qualifizierte Fahrer 
+                    Planbare Verfügbarkeit gewährleistet qualifizierte Fahrer 
                     in ganz Hessen. Kein Same-Day – dafür zuverlässig.
                   </p>
                 </div>
@@ -420,7 +420,7 @@ const Hessen = () => {
             </h2>
             <p className="text-xl mb-6 text-white/90">
               Kontaktieren Sie uns für eine landesweite Fahrerxpress-Vermittlung. 
-              Von Frankfurt bis Kassel – mit 24-72h Vorlauf.
+              Von Frankfurt bis Kassel – planbar und zuverlässig.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button 

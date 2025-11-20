@@ -6,7 +6,7 @@ import { CheckCircle, MapPin, Clock, Users, Shield, Star } from 'lucide-react';
 const Frankfurt = () => {
   const seoData = {
     title: "LKW-Fahrer & Kraftfahrer mieten in Frankfurt am Main | Fahrerexpress",
-    description: "Professionelle LKW-Fahrer, Kranführer & Baumaschinenführer in Frankfurt am Main. 24-72h Vorlauf, keine Same-Day-Buchung. Jetzt Fahrer mieten!",
+    description: "Professionelle LKW-Fahrer, Kranführer & Baumaschinenführer in Frankfurt am Main. Keine Same-Day-Buchung. Jetzt Fahrer mieten!",
     keywords: "LKW Fahrer Frankfurt, Kraftfahrer mieten Frankfurt am Main, Kranführer Frankfurt, Baumaschinenführer Frankfurt, ADR Fahrer Frankfurt, Hessen",
     structuredData: {
       "@context": "https://schema.org",
@@ -66,7 +66,7 @@ const Frankfurt = () => {
             </h1>
             <p className="text-xl mb-8 text-white/90">
               Professionelle Fahrer für Transporte, Bauprojekte und Spezialaufgaben im Rhein-Main-Gebiet. 
-              Flexibel, zuverlässig und rechtssicher – mit 24-72h Vorlauf. 🇪🇺 EU/EWR-Fahrer verfügbar.
+              Flexibel, zuverlässig und rechtssicher. 🇪🇺 EU/EWR-Fahrer verfügbar.
             </p>
             <div className="flex flex-wrap justify-center gap-4 mb-6">
               <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ const Frankfurt = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5" />
-                <span>24-72h Vorlauf</span>
+                <span>Planbare Verfügbarkeit</span>
               </div>
             </div>
             <Button 
@@ -88,7 +88,7 @@ const Frankfurt = () => {
               variant="secondary"
               className="mr-4 bg-white text-primary hover:bg-white/90"
             >
-              Fahrer in 24-72 h sichern
+              Fahrer jetzt sichern
             </Button>
             <Button 
               size="lg" 
@@ -133,7 +133,7 @@ const Frankfurt = () => {
                     Planungssicherheit
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    24-72 Stunden Vorlauf garantieren verfügbare Fahrer. 
+                    Planbare Verfügbarkeit garantiert qualifizierte Fahrer. 
                     Kein Same-Day-Service – dafür planbare Qualität.
                   </p>
                 </div>
@@ -363,7 +363,7 @@ const Frankfurt = () => {
             </h2>
             <p className="text-xl mb-6 text-white/90">
               Kontaktieren Sie uns für eine schnelle und professionelle Vermittlung. 
-              24-72h Vorlauf – planbar und zuverlässig.
+              Planbar und zuverlässig.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button 
