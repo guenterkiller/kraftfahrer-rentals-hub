@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import lkwFahrerHero from "@/assets/lkw-fahrer-hero.jpg";
+import kranFahrer from "@/assets/kran-fahrer.jpg";
 
 const DriverTypesSection = () => {
   const driverTypes = [
@@ -19,7 +20,7 @@ const DriverTypesSection = () => {
       title: "Baumaschinenbedienung",
       subtitle: "Vermittelte Baumaschinenführer",
       description: "459 € pro Tag (8 Stunden) • 60 € Überstunde",
-      image: "/lovable-uploads/b2cd4743-98d6-4618-81c8-418636570dfc.png",
+      image: kranFahrer,
       features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
       path: "/baumaschinenfuehrer-buchen",
       isPremium: true,
