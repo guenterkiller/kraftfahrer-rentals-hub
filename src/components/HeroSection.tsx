@@ -1,15 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
-import heroImage from "@/assets/german-truck.jpg";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Optimized hero image für bessere Core Web Vitals (LCP) */}
+      {/* Critical LCP image - using public path for better preload */}
       <div className="absolute inset-0">
         <img
-          src={heroImage}
+          src="/assets/german-truck.jpg"
           alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
           className="w-full h-full object-cover object-center"
           loading="eager"
