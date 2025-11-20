@@ -2,23 +2,18 @@ import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import heroImage from "@/assets/german-truck.jpg";
 import { Link } from "react-router-dom";
-import PerformanceOptimizedImage from "@/components/PerformanceOptimizedImage";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Performance-optimized hero image mit WebP und responsive srcset */}
+      {/* Hero background image */}
       <div className="absolute inset-0">
-        <PerformanceOptimizedImage
+        <img
           src={heroImage}
           alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
-          width={1920}
-          height={1080}
-          priority={true}
-          objectFit="cover"
-          sizes="100vw"
-          enableWebP={true}
-          className="w-full h-full"
+          className="w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
       </div>
