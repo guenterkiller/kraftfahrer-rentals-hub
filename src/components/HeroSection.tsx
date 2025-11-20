@@ -29,13 +29,13 @@ const HeroSection = () => {
           Transparente Tagessätze ab 349 € – Vermittlung geprüfter, selbstständiger Fahrer ohne Arbeitnehmerüberlassung.
         </p>
         
-        <div className="bg-white/10 backdrop-blur-sm px-3 py-2 mb-4 sm:mb-8 max-w-2xl mx-auto rounded-lg border border-white/20 animate-fade-in">
+        <div className="bg-white/10 backdrop-blur-sm px-3 py-2 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-lg border border-white/20 animate-fade-in">
           <p className="text-xs sm:text-sm md:text-base text-white/90">
             🇪🇺 <strong>EU/EWR-Fahrer verfügbar:</strong> Qualifizierte Kraftfahrer aus Deutschland und der gesamten Europäischen Union
           </p>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-center mb-8 sm:mb-12 animate-slide-up">
+        <div className="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-center mb-10 sm:mb-16 animate-slide-up">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-2 sm:px-3 py-1.5 sm:py-2 rounded-full border border-white/20">
             <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
             <span className="text-xs sm:text-sm md:text-base font-medium">Planbare Verfügbarkeit</span>
@@ -50,7 +50,7 @@ const HeroSection = () => {
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 justify-center max-w-2xl mx-auto animate-scale-in mt-8 sm:mt-12 md:mt-16">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 justify-center max-w-2xl mx-auto animate-scale-in">
           <Button 
             size="lg" 
             className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:outline-none w-full sm:w-auto" 
