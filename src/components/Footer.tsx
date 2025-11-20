@@ -109,9 +109,9 @@ const Footer = () => {
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <p>© {currentYear} Fahrerexpress-Agentur • Günter Killer • USt-IdNr: DE207642217</p>
           <div className="flex gap-4 items-center">
-            <Link to="/admin/login" className="hover:text-primary transition-colors flex items-center gap-1 text-xs opacity-60 hover:opacity-100">
-              <Lock className="h-3 w-3" />
-              Admin
+            <Link to="/admin/login" className="hover:text-primary transition-colors flex items-center gap-1.5 opacity-70 hover:opacity-100">
+              <Lock className="h-4 w-4" />
+              <span className="text-sm">Admin</span>
             </Link>
             <Link to="/impressum" className="hover:text-primary transition-colors">
               Impressum
