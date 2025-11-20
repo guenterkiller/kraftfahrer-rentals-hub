@@ -13,100 +13,104 @@ const ProductCards = () => {
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-3">Ihre Fahrerpreise</h2>
+          <p className="text-muted-foreground">
+            Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           
           {/* LKW CE Fahrer */}
-          <Card className="border-2 border-border bg-card hover:shadow-xl transition-all duration-300 hover:border-primary/20">
-            <CardHeader className="pb-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2.5 rounded-lg bg-primary/10">
-                  <Truck className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl font-semibold text-foreground">LKW CE Fahrer mieten</CardTitle>
+          <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Truck className="h-6 w-6 text-primary" />
               </div>
-              <div className="text-3xl font-bold text-foreground">
-                ab 349 € 
-                <span className="text-lg font-normal text-muted-foreground ml-1">/ Tag</span>
-              </div>
-              <p className="text-sm text-muted-foreground">(8 Std., zzgl. MwSt.)</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <ul className="space-y-3.5">
-                <li className="flex items-start gap-3">
-                  <div className="mt-0.5 flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-foreground/90 leading-relaxed">Fernverkehr, Nahverkehr, Container, Baustellenverkehr</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="mt-0.5 flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-foreground/90 leading-relaxed">Selbstständige Fahrer mit eigenem Gewerbe</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="mt-0.5 flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-foreground/90 leading-relaxed">Abrechnung im 15-Minuten-Takt nach 8 Std.</span>
-                </li>
-              </ul>
-              <Button 
-                onClick={scrollToForm}
-                className="w-full"
-                size="lg"
-              >
-                LKW-Fahrer anfragen
-              </Button>
-            </CardContent>
-          </Card>
+              <h3 className="text-xl font-semibold">LKW CE Fahrer</h3>
+            </div>
+            
+            <div className="mb-6 pb-6 border-b border-border">
+              <div className="text-4xl font-bold text-foreground mb-1">349 €</div>
+              <p className="text-muted-foreground text-sm">pro 8-Stunden-Tag (netto)</p>
+              <p className="text-primary font-medium text-sm mt-2">Überstunden: 30 €/h</p>
+            </div>
+
+            <ul className="space-y-2.5 mb-6">
+              <li className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-foreground/90">Nah-, Fern- und Baustellenverkehr</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-foreground/90">ADR, Fahrmischer, Kranführer</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-foreground/90">Abrechnung im 15-Minuten-Takt nach 8 Std.</span>
+              </li>
+            </ul>
+
+            <Button 
+              onClick={scrollToForm}
+              className="w-full"
+              size="default"
+            >
+              LKW-Fahrer anfragen
+            </Button>
+          </div>
 
           {/* Baumaschinenführer */}
-          <Card className="border-2 border-border bg-card hover:shadow-xl transition-all duration-300 hover:border-primary/20">
-            <CardHeader className="pb-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2.5 rounded-lg bg-primary/10">
-                  <Construction className="h-7 w-7 text-primary" />
-                </div>
-                <CardTitle className="text-xl font-semibold text-foreground">Baumaschinenführer mieten</CardTitle>
+          <div className="bg-card border border-border rounded-lg p-6 hover:shadow-md transition-shadow">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-lg bg-primary/10">
+                <Construction className="h-6 w-6 text-primary" />
               </div>
-              <div className="text-3xl font-bold text-foreground">
-                ab 459 € 
-                <span className="text-lg font-normal text-muted-foreground ml-1">/ Tag</span>
-              </div>
-              <p className="text-sm text-muted-foreground">(8 Std., zzgl. MwSt.)</p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <ul className="space-y-3.5">
-                <li className="flex items-start gap-3">
-                  <div className="mt-0.5 flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-foreground/90 leading-relaxed">Bagger, Radlader, Fahrmischer, Flüssigboden</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="mt-0.5 flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-foreground/90 leading-relaxed">Projektpreise ab 10 Einsatztagen</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="mt-0.5 flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <span className="text-sm text-foreground/90 leading-relaxed">Bundesweite Einsätze möglich</span>
-                </li>
-              </ul>
-              <Button 
-                onClick={scrollToForm}
-                className="w-full"
-                size="lg"
-              >
-                Baumaschinenführer anfragen
-              </Button>
-            </CardContent>
-          </Card>
+              <h3 className="text-xl font-semibold">Baumaschinenführer</h3>
+            </div>
+            
+            <div className="mb-6 pb-6 border-b border-border">
+              <div className="text-4xl font-bold text-foreground mb-1">459 €</div>
+              <p className="text-muted-foreground text-sm">pro 8-Stunden-Tag (netto)</p>
+              <p className="text-primary font-medium text-sm mt-2">Überstunden: 60 €/h</p>
+            </div>
 
+            <ul className="space-y-2.5 mb-6">
+              <li className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-foreground/90">Bagger, Radlader, Walzen</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-foreground/90">Kranführer, Spezialmaschinen</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-sm">
+                <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span className="text-foreground/90">Projektpreise ab 10 Einsatztagen</span>
+              </li>
+            </ul>
+
+            <Button 
+              onClick={scrollToForm}
+              className="w-full"
+              size="default"
+            >
+              Baumaschinenführer anfragen
+            </Button>
+          </div>
+
+        </div>
+
+        {/* Abrechnungsmodell-Hinweis */}
+        <div className="max-w-4xl mx-auto mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="font-semibold text-blue-900 mb-2">
+            Abrechnungsmodell: Agenturabrechnung – Vertragspartner ist Fahrerexpress
+          </h4>
+          <p className="text-sm text-blue-800">
+            Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt. 
+            Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
+          </p>
         </div>
       </div>
     </section>
