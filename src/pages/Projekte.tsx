@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Clock, Users, Truck, Calendar } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
-import PerformanceOptimizedImage from "@/components/PerformanceOptimizedImage";
 // Using uploaded project images
 
 const Projekte = () => {
@@ -85,7 +84,7 @@ const Projekte = () => {
         "Spezielle Genehmigungen erforderlich",
         "Komplexe Routenplanung"
       ],
-      losung: "Erfahrene Schwerlastfahrer mit entsprechenden Qualifikationen.",
+      losung: "Erfahrene Schwerlastfahrer mit entsprechenden Qualifikationen und Begleitfahrzeugen.",
       ergebnis: "Alle Anlagenteile sicher und termingerecht am Zielort angeliefert.",
       bewertung: 5,
       bild: "/lovable-uploads/317386e9-d20a-42c9-bf9c-306b44687d48.png"
@@ -139,14 +138,10 @@ const Projekte = () => {
                 <Card key={projekt.id} className="overflow-hidden">
                   <div className="md:flex">
                     <div className="md:w-1/3">
-                      <PerformanceOptimizedImage
+                      <img 
                         src={projekt.bild} 
                         alt={`${projekt.title} - Erfolgreicher ${projekt.fahrzeugtyp}-Fahrereinsatz in ${projekt.ort} für ${projekt.kunde} durch Fahrerexpress vermittelt`}
-                        width={800}
-                        height={600}
-                        priority={false}
-                        className="w-full h-64 md:h-full"
-                        objectFit="cover"
+                        className="w-full h-64 md:h-full object-cover"
                       />
                     </div>
                     

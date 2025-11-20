@@ -28,15 +28,15 @@ const ProductCards = () => {
             <CardContent className="pt-6 space-y-4">
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-2">
-                  <span className="text-success font-bold mt-0.5" aria-hidden="true">✔</span>
+                  <span className="text-green-600 font-bold mt-0.5">✔</span>
                   <span>Fernverkehr, Nahverkehr, Container, Baustellenverkehr</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-success font-bold mt-0.5" aria-hidden="true">✔</span>
+                  <span className="text-green-600 font-bold mt-0.5">✔</span>
                   <span>Selbstständige Fahrer mit eigenem Gewerbe</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-success font-bold mt-0.5" aria-hidden="true">✔</span>
+                  <span className="text-green-600 font-bold mt-0.5">✔</span>
                   <span>Abrechnung im 15-Minuten-Takt nach 8 Std.</span>
                 </li>
               </ul>
@@ -44,7 +44,6 @@ const ProductCards = () => {
                 onClick={scrollToForm}
                 className="w-full mt-4"
                 variant="default"
-                aria-label="LKW CE Fahrer anfragen - zum Anfrageformular springen"
               >
                 LKW-Fahrer anfragen
               </Button>
@@ -64,15 +63,15 @@ const ProductCards = () => {
             <CardContent className="pt-6 space-y-4">
               <ul className="space-y-3 text-sm">
                 <li className="flex items-start gap-2">
-                  <span className="text-success font-bold mt-0.5" aria-hidden="true">✔</span>
+                  <span className="text-green-600 font-bold mt-0.5">✔</span>
                   <span>Bagger, Radlader, Fahrmischer, Flüssigboden</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-success font-bold mt-0.5" aria-hidden="true">✔</span>
+                  <span className="text-green-600 font-bold mt-0.5">✔</span>
                   <span>Projektpreise ab 10 Einsatztagen</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-success font-bold mt-0.5" aria-hidden="true">✔</span>
+                  <span className="text-green-600 font-bold mt-0.5">✔</span>
                   <span>Bundesweite Einsätze möglich</span>
                 </li>
               </ul>
@@ -80,7 +79,6 @@ const ProductCards = () => {
                 onClick={scrollToForm}
                 className="w-full mt-4"
                 variant="default"
-                aria-label="Baumaschinenführer anfragen - zum Anfrageformular springen"
               >
                 Baumaschinenführer anfragen
               </Button>

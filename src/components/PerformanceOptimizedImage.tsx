@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 interface PerformanceOptimizedImageProps {
   src: string;
   alt: string;
@@ -5,11 +7,16 @@ interface PerformanceOptimizedImageProps {
   width: number;
   height: number;
   priority?: boolean;
-  objectFit?: 'cover' | 'contain' | 'fill' | 'none';
+  sizes?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 }
 
 /**
- * Performance-optimierte Bildkomponente mit Aspect Ratio Container
+ * Performance-optimierte Bildkomponente für bessere Core Web Vitals
+ * - Explizite Dimensionen verhindern CLS (Cumulative Layout Shift)
+ * - Lazy Loading für Nicht-kritische Bilder
+ * - Aspect-ratio preservation während des Ladens
+ * - Skeleton Placeholder für bessere UX
  */
 const PerformanceOptimizedImage = ({ 
   src, 
@@ -18,20 +25,75 @@ const PerformanceOptimizedImage = ({
   width, 
   height,
   priority = false,
-  objectFit = 'cover',
+  sizes = '100vw',
+  objectFit = 'cover'
 }: PerformanceOptimizedImageProps) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  // Aspect Ratio für Layout Stability berechnen
+  const aspectRatio = (height / width) * 100;
+
+  const handleLoad = () => {
+    setIsLoaded(true);
+  };
+
+  const handleError = () => {
+    setHasError(true);
+  };
+
+  if (hasError) {
+    return (
+      <div 
+        className={`bg-muted flex items-center justify-center ${className}`}
+        style={{ 
+          width: '100%',
+          paddingBottom: `${aspectRatio}%`,
+          position: 'relative'
+        }}
+        role="img"
+        aria-label={`Bild konnte nicht geladen werden: ${alt}`}
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-muted-foreground text-sm">Bild nicht verfügbar</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <img
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      loading={priority ? 'eager' : 'lazy'}
-      className={className}
-      style={{ objectFit }}
-      decoding="async"
-      fetchPriority={priority ? 'high' : 'auto'}
-    />
+    <div 
+      className={`relative overflow-hidden ${className}`}
+      style={{
+        width: '100%',
+        paddingBottom: `${aspectRatio}%`
+      }}
+    >
+      {/* Skeleton Placeholder für bessere UX während des Ladens */}
+      {!isLoaded && (
+        <div 
+          className="absolute inset-0 bg-muted animate-pulse"
+          aria-hidden="true"
+        />
+      )}
+      
+      <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes={sizes}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchPriority={priority ? 'high' : 'auto'}
+        onLoad={handleLoad}
+        onError={handleError}
+        className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
+          isLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ objectFit }}
+        decoding="async"
+      />
+    </div>
   );
 };
 

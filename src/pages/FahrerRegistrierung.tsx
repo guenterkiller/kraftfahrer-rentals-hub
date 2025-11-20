@@ -801,6 +801,45 @@ const FahrerRegistrierung = () => {
                     </div>
                   </div>
 
+                  {/* BF2/BF3 Erlaubnisse */}
+                  <div className="bg-muted/30 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-lg">🚛</span>
+                      <Label className="text-base font-semibold">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Unsere Fahrer unterstützen Sie bei der Begleitung von Großraum- und Schwertransporten. Ob BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage.
+                    </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="bf2_erlaubnis"
+                          checked={formData.bf2_erlaubnis}
+                          onCheckedChange={(checked) => 
+                            handleInputChange('bf2_erlaubnis', checked as boolean)
+                          }
+                        />
+                        <Label htmlFor="bf2_erlaubnis" className="text-sm flex items-center gap-2">
+                          <span className="text-orange-500">🔶</span>
+                          Ja, BF2 (Rundumkennleuchte)
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox
+                          id="bf3_erlaubnis"
+                          checked={formData.bf3_erlaubnis}
+                          onCheckedChange={(checked) => 
+                            handleInputChange('bf3_erlaubnis', checked as boolean)
+                          }
+                        />
+                        <Label htmlFor="bf3_erlaubnis" className="text-sm flex items-center gap-2">
+                          <span className="text-red-500">🔶</span>
+                          Ja, BF3/BF4 (Wechselverkehrszeichenanlage)
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Verfügbare Regionen */}
                   <div>
                     <Label>Verfügbare Bundesländer</Label>

@@ -3,34 +3,28 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
 import ScrollToTop from "./components/ScrollToTop";
+import Index from "./pages/Index";
+import Impressum from "./pages/Impressum";
+import Datenschutz from "./pages/Datenschutz";
+import NotFound from "./pages/NotFound";
+import FahrerRegistrierung from "./pages/FahrerRegistrierung";
 
-// Lazy load all pages for better code splitting
-const Index = lazy(() => import("./pages/Index"));
-const Impressum = lazy(() => import("./pages/Impressum"));
-const Datenschutz = lazy(() => import("./pages/Datenschutz"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const FahrerRegistrierung = lazy(() => import("./pages/FahrerRegistrierung"));
-const Wissenswertes = lazy(() => import("./pages/Wissenswertes"));
-const Projekte = lazy(() => import("./pages/Projekte"));
-const Vermittlung = lazy(() => import("./pages/Vermittlung"));
-const Versicherung = lazy(() => import("./pages/Versicherung"));
-const Admin = lazy(() => import("./pages/Admin"));
-const AdminLogin = lazy(() => import("./pages/AdminLogin"));
-const DriverJobResponse = lazy(() => import("./pages/DriverJobResponse"));
-const AdminRoute = lazy(() => import("./components/AdminRoute"));
-const LKWFahrerBuchen = lazy(() => import("./pages/LKWFahrerBuchen"));
-const KraftfahrerMieten = lazy(() => import("./pages/KraftfahrerMieten"));
-const BaumaschinenfuehrerBuchen = lazy(() => import("./pages/BaumaschinenfuehrerBuchen"));
-const PreiseUndAblauf = lazy(() => import("./pages/PreiseUndAblauf"));
+import Wissenswertes from "./pages/Wissenswertes";
+import Projekte from "./pages/Projekte";
+import Vermittlung from "./pages/Vermittlung";
+import Versicherung from "./pages/Versicherung";
+import Admin from "./pages/Admin";
+import AdminLogin from "./pages/AdminLogin";
+import DriverJobResponse from "./pages/DriverJobResponse";
+import AdminRoute from "./components/AdminRoute";
+import LKWFahrerBuchen from "./pages/LKWFahrerBuchen";
+import KraftfahrerMieten from "./pages/KraftfahrerMieten";
 
-// Loading fallback component
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-  </div>
-);
+import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
+import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
+import PreiseUndAblauf from "./pages/PreiseUndAblauf";
+import BF3Ablauf from "./pages/BF3Ablauf";
 
 
 const queryClient = new QueryClient();
@@ -42,8 +36,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
+        <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/lkw-fahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/lkwfahrer-buchen" element={<LKWFahrerBuchen />} />
@@ -55,7 +48,9 @@ const App = () => (
           <Route path="/adr-fahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/fahrmischerfahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/fahrmischerfahrer-gesucht" element={<LKWFahrerBuchen />} />
+          <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
           <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
+          <Route path="/bf3-ablauf-kosten" element={<BF3Ablauf />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           
           
@@ -71,8 +66,7 @@ const App = () => (
           <Route path="/datenschutz" element={<Datenschutz />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        </Routes>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

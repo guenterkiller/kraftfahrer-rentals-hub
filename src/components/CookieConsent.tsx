@@ -63,8 +63,7 @@ export function CookieConsent() {
       .link{color:#93c5fd;text-decoration:underline}`}</style>
 
       {visible && (
-        <div className="consent-banner" role="dialog" aria-live="polite" aria-label="Cookie Einstellungen"
- aria-modal="true">
+        <div className="consent-banner" role="dialog" aria-live="polite">
           <div className="consent-box">
             <div className="card" style={{flex:1}}>
               <strong>Cookies & Datenschutz</strong>

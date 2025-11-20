@@ -6,22 +6,22 @@ import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Hero background image - optimized for LCP */}
+      {/* Optimized hero image für bessere Core Web Vitals (LCP) */}
       <div className="absolute inset-0">
         <img
           src={heroImage}
           alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
           loading="eager"
-          decoding="async"
           fetchPriority="high"
+          decoding="async"
           width={1920}
           height={1080}
         />
-        <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
       
-      <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in pb-16 sm:pb-24">
+      <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight drop-shadow-lg">
           LKW-Fahrer und Baumaschinenführer mieten – selbstständige Profis bundesweit
         </h1>
