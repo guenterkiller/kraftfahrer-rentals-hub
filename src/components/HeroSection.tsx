@@ -6,13 +6,18 @@ import { Link } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Optimized background image with proper alt text for accessibility */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed md:bg-scroll"
-        style={{ backgroundImage: `url(${heroImage})` }}
-        role="img"
-        aria-label="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
-      >
+      {/* Optimized hero image für bessere Core Web Vitals (LCP) */}
+      <div className="absolute inset-0">
+        <img
+          src={heroImage}
+          alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          width={1920}
+          height={1080}
+        />
         <div className="absolute inset-0 bg-black/50" />
       </div>
       
