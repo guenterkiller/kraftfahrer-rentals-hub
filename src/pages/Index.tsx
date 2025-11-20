@@ -4,6 +4,7 @@ import ProductCards from "@/components/ProductCards";
 import ProcessSteps from "@/components/ProcessSteps";
 import WhyFahrerexpress from "@/components/WhyFahrerexpress";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import LegalSecuritySection from "@/components/LegalSecuritySection";
 import ContactSection from "@/components/ContactSection";
@@ -84,6 +85,7 @@ const Index = () => {
         <ProcessSteps />
         <WhyFahrerexpress />
         <TestimonialsSection />
+        <BookingPriorityBanner />
         <FahreranfrageSection />
         <LegalSecuritySection />
         <ContactSection />
