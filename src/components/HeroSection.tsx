@@ -2,23 +2,23 @@ import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import heroImage from "@/assets/german-truck.jpg";
 import { Link } from "react-router-dom";
+import PerformanceOptimizedImage from "@/components/PerformanceOptimizedImage";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Optimized hero image für bessere Core Web Vitals (LCP) */}
+      {/* Performance-optimized hero image für bessere Core Web Vitals (LCP, CLS) */}
       <div className="absolute inset-0">
-        <img
+        <PerformanceOptimizedImage
           src={heroImage}
           alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
           width={1920}
           height={1080}
+          priority={true}
+          objectFit="cover"
+          className="w-full h-full"
         />
-        <div className="absolute inset-0 bg-black/25" />
+        <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
