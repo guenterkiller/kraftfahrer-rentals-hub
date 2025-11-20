@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Star, MapPin, Clock, Users, Truck, Calendar } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
+import PerformanceOptimizedImage from "@/components/PerformanceOptimizedImage";
 // Using uploaded project images
 
 const Projekte = () => {
@@ -138,10 +139,13 @@ const Projekte = () => {
                 <Card key={projekt.id} className="overflow-hidden">
                   <div className="md:flex">
                     <div className="md:w-1/3">
-                      <img 
+                      <PerformanceOptimizedImage
                         src={projekt.bild} 
                         alt={`${projekt.title} - Erfolgreicher ${projekt.fahrzeugtyp}-Fahrereinsatz in ${projekt.ort} für ${projekt.kunde} durch Fahrerexpress vermittelt`}
-                        className="w-full h-64 md:h-full object-cover"
+                        width={800}
+                        height={600}
+                        className="w-full h-64 md:h-full"
+                        objectFit="cover"
                       />
                     </div>
                     
