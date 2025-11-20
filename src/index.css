@@ -90,6 +90,31 @@ img {
 
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+  
+  /* Leaflet custom marker animations */
+  @keyframes pulse {
+    0%, 100% {
+      transform: rotate(-45deg) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: rotate(-45deg) scale(1.1);
+      opacity: 0.8;
+    }
+  }
+  
+  .custom-marker {
+    background: transparent;
+    border: none;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    border-radius: 8px;
+  }
+  
+  .leaflet-popup-tip {
+    background: white;
+  }
 
   .dark {
     --background: 222.2 84% 4.9%;
