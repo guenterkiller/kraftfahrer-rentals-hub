@@ -32,29 +32,29 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 w-full bg-white/98 backdrop-blur-md border-b z-50 shadow-sm" role="navigation" aria-label="Hauptnavigation">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 sm:h-18 gap-2">
+        <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
           <Link 
             to="/" 
-            className="font-bold text-base md:text-xl text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight flex-shrink-0"
+            className="font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight flex-shrink min-w-0"
             aria-label="Fahrerexpress Startseite"
           >
-            <div className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</div>
-            <div className="sm:hidden leading-tight">
-              <div className="font-bold text-primary text-sm">Fahrerexpress</div>
-              <div className="text-xs font-semibold text-primary/90">Günter Killer</div>
+            <div className="hidden sm:block text-base md:text-xl">Fahrerexpress-Agentur - Günter Killer</div>
+            <div className="sm:hidden leading-tight text-xs">
+              <div className="font-bold">Fahrerexpress</div>
+              <div className="font-semibold text-primary/90">G. Killer</div>
             </div>
           </Link>
           
           {/* Desktop und Mobile Navigation nebeneinander */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
             <Button
               size="sm" 
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-xs sm:text-sm px-3 sm:px-4 py-2" 
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-xs px-2 sm:px-4 py-2 whitespace-nowrap" 
               asChild
             >
               <Link to="/fahrer-registrierung" aria-label="Als LKW-Fahrer registrieren">
-                <span className="hidden sm:inline">🚀 Fahrer werden</span>
-                <span className="sm:hidden">🚀 Fahrer</span>
+                <span className="hidden xs:inline">🚀 Fahrer werden</span>
+                <span className="xs:hidden">🚀</span>
               </Link>
             </Button>
             
