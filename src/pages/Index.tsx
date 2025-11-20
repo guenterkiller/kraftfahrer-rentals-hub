@@ -12,6 +12,7 @@ import IndustriesRow from "@/components/IndustriesRow";
 import GermanyMap from "@/components/GermanyMap";
 import WhatsAppContact from "@/components/WhatsAppContact";
 import Footer from "@/components/Footer";
+import PerformanceMonitor from "@/components/PerformanceMonitor";
 import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
@@ -117,6 +118,9 @@ const Index = () => {
       
       <Footer />
       <WhatsAppContact />
+      
+      {/* Performance Monitor (nur Development) */}
+      <PerformanceMonitor />
       
       {/* Fallback Admin-Badge (fixed position, bottom right) */}
       <div className="fixed bottom-4 right-4 z-40">
