@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import TrustSignals from "@/components/TrustSignals";
+import PricingBanner from "@/components/PricingBanner";
 import AboutSection from "@/components/AboutSection";
 import ServicesSection from "@/components/ServicesSection";
 import DriverTypesSection from "@/components/DriverTypesSection";
@@ -11,6 +13,7 @@ import HowItWorksTimeline from "@/components/HowItWorksTimeline";
 import IndustriesRow from "@/components/IndustriesRow";
 import GermanyMap from "@/components/GermanyMap";
 import WhatsAppContact from "@/components/WhatsAppContact";
+import StickyBookingButton from "@/components/StickyBookingButton";
 import Footer from "@/components/Footer";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import { useSEO } from "@/hooks/useSEO";

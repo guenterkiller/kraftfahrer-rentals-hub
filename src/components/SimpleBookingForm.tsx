@@ -202,11 +202,29 @@ const SimpleBookingForm = () => {
           <Card id="booking-form">
             <CardHeader>
               <CardTitle className="text-2xl text-center">
-                Fahrer buchen
+                Unverbindliche Fahreranfrage in 2 Minuten
               </CardTitle>
-              <p className="text-center text-muted-foreground">
-                Beschreiben Sie Ihren Fahrbedarf - wir finden den passenden Fahrer für Sie
+              <p className="text-center text-muted-foreground mb-4">
+                Beschreiben Sie Ihren Fahrbedarf - wir melden uns innerhalb von 6 Stunden mit einer Rückmeldung
               </p>
+              
+              {/* Quick Benefits */}
+              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+                <div className="grid sm:grid-cols-3 gap-3 text-sm">
+                  <div className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span className="text-gray-700"><strong>Unverbindlich</strong> – keine versteckten Kosten</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span className="text-gray-700"><strong>Schnell</strong> – Antwort in 2-6h</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span className="text-gray-700"><strong>Transparent</strong> – faire Festpreise</span>
+                  </div>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               {/* Billing Model Info */}
