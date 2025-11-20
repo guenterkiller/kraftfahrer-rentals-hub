@@ -20,6 +20,7 @@ import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
 import { JobInvitesStatus } from "@/components/JobInvitesStatus";
 import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
+import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -1927,6 +1928,9 @@ const Admin = () => {
         open={newsletterDialogOpen}
         onOpenChange={setNewsletterDialogOpen}
       />
+
+      {/* Performance Monitor */}
+      <PerformanceMonitor />
     </div>
   );
 };
