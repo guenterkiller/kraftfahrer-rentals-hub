@@ -4,39 +4,9 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
+
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showAdminLink, setShowAdminLink] = useState(false);
-
-  // Check if current user is admin using localStorage
-  useEffect(() => {
-    const checkAdminAccess = () => {
-      try {
-        // Check localStorage for admin session
-        const adminSession = localStorage.getItem('adminSession');
-        if (adminSession) {
-          const session = JSON.parse(adminSession);
-          const isValidSession = session.isAdmin && 
-                               session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 24 * 60 * 60 * 1000; // 24 hours
-          setShowAdminLink(isValidSession);
-        } else {
-          setShowAdminLink(false);
-        }
-      } catch (error) {
-        console.error('Admin check error:', error);
-        setShowAdminLink(false);
-      }
-    };
-
-    checkAdminAccess();
-    
-    // Listen for storage changes (when user logs in/out in another tab)
-    const handleStorageChange = () => checkAdminAccess();
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
 
   // Close mobile menu on escape key press
   useEffect(() => {
@@ -75,19 +45,17 @@ const Navigation = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-            {showAdminLink && (
-              <Button 
-                size="sm" 
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300" 
-                asChild
-              >
-                <Link to="/admin" aria-label="Admin-Bereich">
-                  <Shield className="h-4 w-4 mr-2" />
-                  Admin
-                </Link>
-              </Button>
-            )}
+            <Button 
+              size="sm" 
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300" 
+              asChild
+            >
+              <Link to="/admin" aria-label="Admin-Bereich">
+                <Shield className="h-4 w-4 mr-2" />
+                Admin
+              </Link>
+            </Button>
             <Button
               size="sm" 
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none" 
@@ -142,23 +110,21 @@ const Navigation = () => {
             aria-labelledby="mobile-menu-button"
           >
             <div className="flex flex-col space-y-3">
-              {showAdminLink && (
-                <Button 
-                  variant="outline"
-                  className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 mb-2" 
-                  asChild
+              <Button 
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-300 mb-2" 
+                asChild
+              >
+                <Link 
+                  to="/admin"
+                  onClick={() => setIsMenuOpen(false)}
+                  role="menuitem"
+                  aria-label="Admin-Bereich"
                 >
-                  <Link 
-                    to="/admin"
-                    onClick={() => setIsMenuOpen(false)}
-                    role="menuitem"
-                    aria-label="Admin-Bereich"
-                  >
-                    <Shield className="h-4 w-4 mr-2" />
-                    Admin
-                  </Link>
-                </Button>
-              )}
+                  <Shield className="h-4 w-4 mr-2" />
+                  Admin
+                </Link>
+              </Button>
               <Button
                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none mb-2" 
                 asChild
