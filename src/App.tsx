@@ -22,9 +22,7 @@ import LKWFahrerBuchen from "./pages/LKWFahrerBuchen";
 import KraftfahrerMieten from "./pages/KraftfahrerMieten";
 
 import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
-import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
-import BF3Ablauf from "./pages/BF3Ablauf";
 
 
 const queryClient = new QueryClient();
@@ -48,9 +46,7 @@ const App = () => (
           <Route path="/adr-fahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/fahrmischerfahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/fahrmischerfahrer-gesucht" element={<LKWFahrerBuchen />} />
-          <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
           <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
-          <Route path="/bf3-ablauf-kosten" element={<BF3Ablauf />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
           
           

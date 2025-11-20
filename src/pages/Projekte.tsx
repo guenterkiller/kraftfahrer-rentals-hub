@@ -84,7 +84,7 @@ const Projekte = () => {
         "Spezielle Genehmigungen erforderlich",
         "Komplexe Routenplanung"
       ],
-      losung: "Erfahrene Schwerlastfahrer mit entsprechenden Qualifikationen und Begleitfahrzeugen.",
+      losung: "Erfahrene Schwerlastfahrer mit entsprechenden Qualifikationen.",
       ergebnis: "Alle Anlagenteile sicher und termingerecht am Zielort angeliefert.",
       bewertung: 5,
       bild: "/lovable-uploads/317386e9-d20a-42c9-bf9c-306b44687d48.png"

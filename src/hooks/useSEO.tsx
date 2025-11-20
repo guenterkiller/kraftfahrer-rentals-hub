@@ -48,8 +48,6 @@ const generateBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
     '/baumaschinenfuehrer-buchen': 'Baumaschinenführer buchen',
     '/kraftfahrer-mieten': 'Kraftfahrer mieten',
     '/fahrer-registrierung': 'Fahrer werden',
-    '/begleitfahrzeuge-bf3': 'BF3 Begleitfahrzeuge',
-    '/bf3-ablauf-kosten': 'BF3 Ablauf & Kosten',
     '/preise-und-ablauf': 'Preise & Ablauf',
     '/projekte': 'Erfolgreiche Projekte',
     '/versicherung': 'Versicherungen',
