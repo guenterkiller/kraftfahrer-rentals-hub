@@ -174,31 +174,9 @@ const SimpleBookingForm = () => {
   };
 
   return (
-    <section className="py-16 bg-white" id="fahreranfrage">
+    <section className="py-16 bg-background" id="fahreranfrage">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          {/* Priority Banner */}
-          <div className="rounded-xl border border-blue-200 bg-blue-50 p-4 mb-6">
-            <div className="flex items-start gap-3">
-              <div className="text-2xl">🚀</div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">
-                  Schneller zum Fahrer: Bitte „Fahrer buchen" nutzen
-                </h2>
-                <p className="text-sm text-gray-700 mt-1">
-                  Ihre Anfrage wird strukturiert erfasst und zügig disponiert. So vermeiden wir Rückfragen und können den passenden Fahrer schnell zuweisen.
-                </p>
-                <Button 
-                  className="mt-3 bg-blue-600 hover:bg-blue-700"
-                  type="button"
-                  onClick={scrollToForm}
-                >
-                  Jetzt Fahrer buchen
-                </Button>
-              </div>
-            </div>
-          </div>
-
           <Card id="booking-form">
             <CardHeader>
               <CardTitle className="text-2xl text-center">
@@ -209,28 +187,28 @@ const SimpleBookingForm = () => {
               </p>
               
               {/* Quick Benefits */}
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4">
+              <div className="bg-muted/50 rounded-lg p-4 border border-border">
                 <div className="grid sm:grid-cols-3 gap-3 text-sm">
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span className="text-gray-700"><strong>Unverbindlich</strong> – keine versteckten Kosten</span>
+                    <span><strong>Unverbindlich</strong> – keine versteckten Kosten</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span className="text-gray-700"><strong>Schnell</strong> – Antwort in 2-6h</span>
+                    <span><strong>Schnell</strong> – Antwort in 2-6h</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span className="text-gray-700"><strong>Transparent</strong> – faire Festpreise</span>
+                    <span><strong>Transparent</strong> – faire Festpreise</span>
                   </div>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
               {/* Billing Model Info */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <h3 className="font-semibold text-blue-800 mb-2">Abrechnungsmodell: Agenturabrechnung – Vertragspartner ist Fahrerexpress</h3>
-                <p className="text-sm text-blue-700">
+              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-6">
+                <h3 className="font-semibold mb-2">Abrechnungsmodell: Agenturabrechnung – Vertragspartner ist Fahrerexpress</h3>
+                <p className="text-sm text-muted-foreground">
                   Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt. 
                   Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
                 </p>

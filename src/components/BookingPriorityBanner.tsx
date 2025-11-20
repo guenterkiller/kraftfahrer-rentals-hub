@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
 
 const BookingPriorityBanner = () => {
   const scrollToBooking = (e: React.MouseEvent) => {
@@ -10,45 +12,40 @@ const BookingPriorityBanner = () => {
   };
 
   return (
-    <div className="rounded-xl border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-blue-100 p-6 mb-6 shadow-md">
-      <div className="flex items-start gap-4">
-        <div className="text-4xl">⚡</div>
-        <div className="flex-1">
-          <h2 className="text-xl font-bold text-blue-900 mb-2">
-            Professionelle Anfrage in 2 Minuten – direkt & strukturiert
-          </h2>
-          <div className="space-y-2 text-sm text-blue-800 mb-4">
-            <p className="flex items-start gap-2">
-              <span className="text-green-600 font-bold">✓</span>
-              <span><strong>Schnellere Vermittlung:</strong> Alle Infos auf einen Blick, keine zeitraubenden Rückfragen</span>
-            </p>
-            <p className="flex items-start gap-2">
-              <span className="text-green-600 font-bold">✓</span>
-              <span><strong>Präzise Fahrerzuweisung:</strong> Wir finden genau den Fahrer, der zu Ihren Anforderungen passt</span>
-            </p>
-            <p className="flex items-start gap-2">
-              <span className="text-green-600 font-bold">✓</span>
-              <span><strong>Transparente Preise:</strong> Sofort sichtbar – LKW CE 349€, Baumaschinen 459€ pro Tag</span>
-            </p>
-          </div>
-          <div className="bg-amber-50 border border-amber-300 rounded-lg p-3 mb-4">
-            <p className="text-sm text-amber-900">
-              <strong>⏰ Wichtiger Hinweis:</strong> Die meisten Fahrer sind Mo–Fr im Einsatz. 
-              Neue Buchungen können in der Regel ab der kommenden Woche eingeplant werden. 
-              <strong> Mindestvorlauf: 24h werktags.</strong>
-            </p>
-          </div>
-          <Button 
-            className="bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all"
-            onClick={scrollToBooking}
-            size="lg"
-            aria-label="Zum Buchungsformular scrollen"
-          >
-            Jetzt Fahrer anfragen – unverbindlich
-          </Button>
-        </div>
+    <section className="py-8 bg-background">
+      <div className="container mx-auto px-4">
+        <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 shadow-lg hover:shadow-xl transition-all">
+          <CardContent className="p-8">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="flex-1 text-center md:text-left">
+                <h2 className="text-2xl md:text-3xl font-bold mb-3">
+                  Schneller zum Fahrer
+                </h2>
+                <p className="text-muted-foreground text-base md:text-lg mb-4">
+                  Ihre Anfrage wird strukturiert erfasst und zügig disponiert. 
+                  So vermeiden wir Rückfragen und können den passenden Fahrer schnell zuweisen.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  ⏰ <strong>Mindestvorlauf:</strong> 24 Stunden werktags – Einsatzstart frühestens am nächsten Werktag
+                </p>
+              </div>
+              
+              <div className="flex-shrink-0">
+                <Button 
+                  onClick={scrollToBooking}
+                  size="lg"
+                  className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all group"
+                  aria-label="Zum Buchungsformular springen"
+                >
+                  Jetzt Fahrer buchen
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </section>
   );
 };
 
