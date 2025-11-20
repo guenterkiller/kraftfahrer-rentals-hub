@@ -1,19 +1,14 @@
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import TrustSignals from "@/components/TrustSignals";
-import PricingBanner from "@/components/PricingBanner";
-import AboutSection from "@/components/AboutSection";
-import ServicesSection from "@/components/ServicesSection";
-import DriverTypesSection from "@/components/DriverTypesSection";
+import ProductCards from "@/components/ProductCards";
+import ProcessSteps from "@/components/ProcessSteps";
+import WhyFahrerexpress from "@/components/WhyFahrerexpress";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import ContactSection from "@/components/ContactSection";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
-import HowItWorksTimeline from "@/components/HowItWorksTimeline";
-import IndustriesRow from "@/components/IndustriesRow";
-import GermanyMap from "@/components/GermanyMap";
+import LegalSecuritySection from "@/components/LegalSecuritySection";
+import ContactSection from "@/components/ContactSection";
 import WhatsAppContact from "@/components/WhatsAppContact";
-import StickyBookingButton from "@/components/StickyBookingButton";
 import Footer from "@/components/Footer";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import { useSEO } from "@/hooks/useSEO";
@@ -84,57 +79,20 @@ const Index = () => {
       
       <Navigation />
       
-      {/* Main content with semantic structure */}
-      <main id="main-content" className="pt-16">
-        <section id="home" aria-label="Hero Bereich">
-          <HeroSection />
-        </section>
-        
-        <section id="about" aria-label="Über uns" className="scroll-mt-16">
-          <AboutSection />
-        </section>
-        
-        <section id="services" aria-label="Unsere Dienstleistungen" className="scroll-mt-16">
-          <ServicesSection />
-        </section>
-        
-        <section id="driver-types" aria-label="Fahrerarten im Detail" className="scroll-mt-16">
-          <DriverTypesSection />
-        </section>
-        
-        <HowItWorksTimeline />
-        <GermanyMap />
-        <IndustriesRow />
-        
-        <section id="fahreranfrage" aria-label="Fahrer anfragen" className="scroll-mt-16">
-          <FahreranfrageSection />
-        </section>
-        
-        <section id="testimonials" aria-label="Kundenbewertungen" className="scroll-mt-16">
-          <TestimonialsSection />
-        </section>
-        
-        <section id="contact" aria-label="Kontakt" className="scroll-mt-16">
-          <ContactSection />
-        </section>
+      <main id="main-content">
+        <HeroSection />
+        <ProductCards />
+        <ProcessSteps />
+        <WhyFahrerexpress />
+        <TestimonialsSection />
+        <FahreranfrageSection />
+        <LegalSecuritySection />
+        <ContactSection />
       </main>
       
       <Footer />
       <WhatsAppContact />
-      
-      {/* Performance Monitor (nur Development) */}
-      <PerformanceMonitor />
-      
-      {/* Fallback Admin-Badge (fixed position, bottom right) */}
-      <div className="fixed bottom-4 right-4 z-40">
-        <Link 
-          to="/admin" 
-          className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-xs rounded-lg shadow-lg hover:bg-red-700 transition-colors"
-          title="Admin-Bereich (nur für Günter Killer)"
-        >
-          🔐 Admin
-        </Link>
-      </div>
+      {process.env.NODE_ENV === 'development' && <PerformanceMonitor />}
     </div>
   );
 };

@@ -22,31 +22,13 @@ const HeroSection = () => {
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg">
-          <span className="block sm:hidden">LKW-Fahrer (CE) mieten</span>
-          <span className="block sm:hidden text-xl mt-2">ab 349€/Tag</span>
-          <span className="hidden sm:block">LKW-Fahrer (CE) mieten – bundesweit ab 349€/Tag</span>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight drop-shadow-lg">
+          LKW-Fahrer und Baumaschinenführer mieten – selbstständige Profis bundesweit
         </h1>
         
-        <div className="bg-primary/90 backdrop-blur-sm text-white p-4 md:p-6 mb-8 max-w-4xl mx-auto rounded-lg shadow-xl animate-slide-up">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4 drop-shadow-md">
-            Qualifizierte Fahrer – CE, ADR, Fahrmischer & Baumaschinen
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl drop-shadow-sm">
-            Transparent • Rechtssicher • Keine Arbeitnehmerüberlassung
-          </p>
-          <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm md:text-base">
-            <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-              ✓ Über 500 Vermittlungen
-            </span>
-            <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-              ✓ Faire Festpreise
-            </span>
-            <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
-              ✓ Keine versteckten Kosten
-            </span>
-          </div>
-        </div>
+        <p className="text-lg sm:text-xl md:text-2xl mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed">
+          Transparente Tagessätze ab 349 € – Vermittlung geprüfter, selbstständiger Fahrer ohne Arbeitnehmerüberlassung.
+        </p>
         
         <div className="bg-white/10 backdrop-blur-sm px-4 py-2 mb-8 max-w-2xl mx-auto rounded-lg border border-white/20 animate-fade-in">
           <p className="text-sm md:text-base text-white/90">
@@ -72,7 +54,7 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center max-w-2xl mx-auto animate-scale-in">
           <Button 
             size="lg" 
-            className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:outline-none backdrop-blur-sm" 
+            className="text-base md:text-lg px-8 md:px-10 py-5 md:py-7 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:outline-none" 
             asChild
           >
             <a 
@@ -84,18 +66,19 @@ const HeroSection = () => {
                   element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
               }}
-              aria-label="Fahrer buchen - Zu Buchungsformular scrollen"
+              aria-label="Direkt zum Fahreranfrage-Formular springen"
             >
-              <span className="inline-block animate-[drive_2s_ease-in-out_infinite]">🚛</span> Fahrer buchen
+              Jetzt Fahrer anfragen
             </a>
           </Button>
           <Button 
             size="lg" 
-            className="text-base md:text-lg px-6 md:px-8 py-4 md:py-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-blue-500/50 focus:outline-none border-0 backdrop-blur-sm" 
+            variant="outline"
+            className="text-base md:text-lg px-8 md:px-10 py-5 md:py-7 bg-white/95 hover:bg-white text-primary border-2 border-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105" 
             asChild
           >
-            <Link to="/fahrer-registrierung" aria-label="Als Fahrer registrieren">
-              👷 Fahrer werden
+            <Link to="/preise-und-ablauf" aria-label="Preise und Konditionen ansehen">
+              Preise & Konditionen ansehen
             </Link>
           </Button>
         </div>
