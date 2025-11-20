@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import { usePageTracking } from "./hooks/usePageTracking";
 import Index from "./pages/Index";
 import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
@@ -29,12 +30,18 @@ import BF3Ablauf from "./pages/BF3Ablauf";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  usePageTracking();
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AppContent />
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
