@@ -5,7 +5,7 @@ import heroImage from "@/assets/german-truck.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-[85vh] sm:min-h-screen flex items-center justify-center overflow-hidden py-20 sm:py-0">
+    <section className="relative min-h-[100vh] sm:min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 sm:py-0">
       {/* Hero image optimiert für Core Web Vitals */}
       <div className="absolute inset-0">
         <img
@@ -17,11 +17,11 @@ const HeroSection = () => {
           width={1920}
           height={1080}
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/40" />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
-        <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight drop-shadow-lg">
+        <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-snug sm:leading-tight drop-shadow-lg">
           LKW-Fahrer und Baumaschinenführer mieten – selbstständige Profis bundesweit
         </h1>
         
