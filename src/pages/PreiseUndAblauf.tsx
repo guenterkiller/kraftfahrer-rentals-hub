@@ -196,7 +196,7 @@ const PreiseUndAblauf = () => {
                     <p className="text-muted-foreground mb-4">
                       Der Fahrer kontaktiert Sie direkt zur Detailabstimmung und erscheint pünktlich zum vereinbarten Termin.
                     </p>
-                    <div className="text-sm text-primary font-semibold">⏱️ Start: 24-72 Stunden</div>
+                    <div className="text-sm text-primary font-semibold">⏱️ Schneller Start</div>
                   </CardContent>
                 </Card>
               </div>
