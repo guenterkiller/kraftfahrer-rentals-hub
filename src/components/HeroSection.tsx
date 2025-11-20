@@ -13,7 +13,6 @@ const HeroSection = () => {
           alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
           className="w-full h-full object-cover object-center"
           loading="eager"
-          fetchPriority="high"
           decoding="async"
           width={1920}
           height={1080}
