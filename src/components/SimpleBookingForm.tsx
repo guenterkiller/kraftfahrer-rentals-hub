@@ -218,33 +218,84 @@ const SimpleBookingForm = () => {
                 </p>
               </div>
 
-              {/* Pricing Info */}
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-                <div className="flex items-start gap-2">
+              {/* Pricing Info - Header */}
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-center mb-2 flex items-center justify-center gap-2">
                   <span className="text-2xl">💰</span>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-green-800 mb-2">Ihr Fahrerpreis</h3>
-                    <p className="text-sm text-green-800 mb-3">
-                      Unsere Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. 
-                      Abrechnung über <strong>Fahrerexpress</strong> (Vermittlung nach § 652 BGB, Dienst-/Werkleistung durch selbstständige Subunternehmer, keine Arbeitnehmerüberlassung).
-                    </p>
+                  Ihre Fahrerpreise
+                </h3>
+                <p className="text-sm text-muted-foreground text-center">
+                  Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten
+                </p>
+              </div>
 
-                    <div className="bg-white/80 p-4 rounded-lg mb-4">
-                      <p className="text-green-800 text-sm mb-3">
-                        <strong>LKW CE Fahrer:</strong> 349 €/Tag – 30 €/h Überstunden
-                      </p>
-                      <p className="text-green-800 text-sm mb-3">
-                        <strong>Baumaschinenführer:</strong> 459 €/Tag – 60 €/h Überstunden
-                      </p>
-                      <p className="text-sm text-green-800 mt-2">
-                        <a href="/preise-und-ablauf" className="underline hover:no-underline font-medium">
-                          Details: Preise & Konditionen →
-                        </a>
-                      </p>
+              {/* Pricing Cards - 2 separate Karten */}
+              <div className="grid md:grid-cols-2 gap-4 mb-6">
+                {/* LKW CE Fahrer Card */}
+                <Card className="border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10 hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      🚛 LKW CE Fahrer
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-primary/20">
+                      <div className="text-3xl font-bold text-primary mb-1">349 €</div>
+                      <div className="text-sm text-muted-foreground">pro 8-Stunden-Tag (netto)</div>
+                      <div className="mt-3 pt-3 border-t border-primary/20">
+                        <div className="text-sm font-medium text-primary">Überstunden: 30 €/h</div>
+                      </div>
                     </div>
-                    <hr className="my-3 border-green-300" />
-                  </div>
-                </div>
+                    <ul className="text-xs space-y-1.5 text-muted-foreground">
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-primary mt-0.5">✓</span>
+                        <span>Nah-, Fern- und Baustellenverkehr</span>
+                      </li>
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-primary mt-0.5">✓</span>
+                        <span>ADR, Fahrmischer, Kranführer</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                {/* Baumaschinenführer Card */}
+                <Card className="border-secondary/30 bg-gradient-to-br from-secondary/5 to-secondary/10 hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      🏗️ Baumaschinenführer
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-secondary/20">
+                      <div className="text-3xl font-bold text-secondary mb-1">459 €</div>
+                      <div className="text-sm text-muted-foreground">pro 8-Stunden-Tag (netto)</div>
+                      <div className="mt-3 pt-3 border-t border-secondary/20">
+                        <div className="text-sm font-medium text-secondary">Überstunden: 60 €/h</div>
+                      </div>
+                    </div>
+                    <ul className="text-xs space-y-1.5 text-muted-foreground">
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-secondary mt-0.5">✓</span>
+                        <span>Bagger, Radlader, Walzen</span>
+                      </li>
+                      <li className="flex items-start gap-1.5">
+                        <span className="text-secondary mt-0.5">✓</span>
+                        <span>Kranführer, Spezialmaschinen</span>
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Details Link */}
+              <div className="text-center mb-6">
+                <a 
+                  href="/preise-und-ablauf" 
+                  className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                >
+                  Details: Preise & Konditionen →
+                </a>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
