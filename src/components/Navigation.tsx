@@ -30,16 +30,19 @@ const Navigation = () => {
   }, [isMenuOpen]);
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b z-50 shadow-sm" role="navigation" aria-label="Hauptnavigation">
+    <nav className="fixed top-0 w-full bg-white/98 backdrop-blur-md border-b z-50 shadow-sm" role="navigation" aria-label="Hauptnavigation">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 sm:h-18">
           <Link 
             to="/" 
-            className="font-bold text-sm md:text-xl text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80"
+            className="font-bold text-base md:text-xl text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight"
             aria-label="Fahrerexpress Startseite"
           >
             <div className="hidden sm:block">Fahrerexpress-Agentur - Günter Killer</div>
-            <div className="sm:hidden">Fahrerexpress<br/>Günter Killer</div>
+            <div className="sm:hidden leading-tight">
+              <div className="font-bold text-primary">Fahrerexpress</div>
+              <div className="text-sm font-semibold text-primary/90">Günter Killer</div>
+            </div>
           </Link>
           
           {/* Desktop Navigation */}
