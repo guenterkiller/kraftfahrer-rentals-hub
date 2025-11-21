@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/german-truck.jpg";
+import heroImage from "@/assets/lkw-fahrer-sonnig.jpg";
 
 const HeroSection = () => {
   return (
@@ -16,7 +16,7 @@ const HeroSection = () => {
           decoding="async"
           width={1920}
           height={1080}
-          style={{ filter: 'brightness(1.15) contrast(1.1) saturate(1.35) sepia(0.25) hue-rotate(-5deg)' }}
+          style={{ filter: 'brightness(1.05) contrast(1.05)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
       </div>
