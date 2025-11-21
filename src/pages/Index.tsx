@@ -4,24 +4,29 @@ import ProductCards from "@/components/ProductCards";
 import ProcessSteps from "@/components/ProcessSteps";
 import WhyFahrerexpress from "@/components/WhyFahrerexpress";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import EUDriverRecruitment from "@/components/EUDriverRecruitment";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import LegalSecuritySection from "@/components/LegalSecuritySection";
 import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import ContactSection from "@/components/ContactSection";
-
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
 
 const Index = () => {
   useSEO({
-    title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – Fahrerexpress-Agentur",
-    description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) für Transporte & Baustellen. Schnell verfügbar, zuverlässig, rechtskonform. Jetzt Fahrer mieten!",
-    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, Fahrervermittlung Deutschland, Fahrerexpress Agentur, Baumaschinenfahrer mieten, Spezialfahrer buchen, Transportfahrer bundesweit, Kraftfahrer CE kurzfristig, LKW Fahrer Österreich, LKW Fahrer Schweiz, Kraftfahrer DACH, Berufskraftfahrer EU, truck driver Germany Austria Switzerland, HGV driver hire Europe",
+    title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – EU-Fahrer willkommen",
+    description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) aus Deutschland und EU für Transporte & Baustellen. Kierowcy z Polski, Rumänii, Bułgarii mile widziani!",
+    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, EU Fahrer Deutschland, LKW Fahrer aus Polen, Kierowcy z Polski do Niemiec, Șoferi profesioniști români Germania, Bulgarian truck drivers Germany, LKW Fahrer Rumänien, Kraftfahrer Bulgarien Ungarn, European truck driver jobs, Berufskraftfahrer EU-Ausland, HGV driver hire Europe, International drivers Germany",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/',
       'de-AT': 'https://kraftfahrer-mieten.com/',
       'de-CH': 'https://kraftfahrer-mieten.com/',
+      'en': 'https://kraftfahrer-mieten.com/',
+      'pl': 'https://kraftfahrer-mieten.com/',
+      'ro': 'https://kraftfahrer-mieten.com/',
+      'bg': 'https://kraftfahrer-mieten.com/',
+      'hu': 'https://kraftfahrer-mieten.com/',
       'x-default': 'https://kraftfahrer-mieten.com/'
     },
     faqData: [
@@ -84,6 +89,7 @@ const Index = () => {
         <ProcessSteps />
         <WhyFahrerexpress />
         <TestimonialsSection />
+        <EUDriverRecruitment />
         <FahreranfrageSection />
         <LegalSecuritySection />
         <BookingPriorityBanner />
