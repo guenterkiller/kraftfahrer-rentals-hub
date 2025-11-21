@@ -33,7 +33,7 @@ verify_jwt = false
 [functions.broadcast-job-to-drivers]
 verify_jwt = false
 
-[functions.check-admin-login]
+[functions.admin-auth-check]
 verify_jwt = false
 
 [functions.driver-accept-job]

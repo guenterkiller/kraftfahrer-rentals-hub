@@ -184,14 +184,13 @@ const Admin = () => {
     setCompletingOldJobs(true);
     
     try {
-      // Get admin email from localStorage
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Admin session not found');
+      // Get admin email from current Supabase session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error('No active session');
       }
       
-      const session = JSON.parse(adminSession);
-      const adminEmail = session.email;
+      const adminEmail = session.user.email;
 
       const { data, error } = await supabase.functions.invoke('admin-complete-old-jobs', {
         body: { email: adminEmail, daysOld }
@@ -238,8 +237,6 @@ const Admin = () => {
   };
 
   const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
-
-  const ADMIN_EMAIL = "guenter.killer@t-online.de";
 
   useEffect(() => {
     checkAuth();
@@ -299,7 +296,17 @@ const Admin = () => {
   const handleAutoLogout = async () => {
     if (user) {
       await logAdminEvent('auto_logout', user.email);
-      localStorage.removeItem('adminSession');
+      
+      // Mark sessions as inactive
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await supabase
+          .from('admin_sessions')
+          .update({ is_active: false })
+          .eq('user_id', session.user.id);
+      }
+      
+      await supabase.auth.signOut();
       setUser(null);
       setFahrer([]);
       setDocuments({});
@@ -314,40 +321,85 @@ const Admin = () => {
     }
   };
 
-  const checkAuth = () => {
-    console.log("🔍 Admin: Prüfe localStorage Authentifizierung...");
+  const checkAuth = async () => {
+    console.log("🔍 Admin: Prüfe Supabase Auth...");
     
-    const adminSession = localStorage.getItem('adminSession');
-    if (!adminSession) {
-      console.log("❌ Admin: Keine Session gefunden");
-      navigate('/admin/login');
-      return;
-    }
-
     try {
-      const session = JSON.parse(adminSession);
-      console.log("🔐 Admin: Session gefunden:", session);
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
-      // Check if session is valid and not expired (24 hours)
-      if (session.isAdmin && session.email === ADMIN_EMAIL) {
-        if (Date.now() - session.loginTime < 24 * 60 * 60 * 1000) {
-      console.log("✅ Admin: Session gültig für:", session.email);
-          setUser({ email: session.email } as User);
-          loadFahrerData();
-          loadJobRequests();
-          loadJobAssignments();
-          return;
-        } else {
-          console.log("⏰ Admin: Session abgelaufen");
-          localStorage.removeItem('adminSession');
-        }
+      if (sessionError || !session) {
+        console.log("❌ Admin: Keine gültige Session");
+        navigate('/admin/login');
+        return;
       }
+
+      console.log("🔐 Admin: Session gefunden für:", session.user.email);
+
+      // Verify admin role
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', session.user.id)
+        .eq('role', 'admin')
+        .single();
+
+      if (roleError || !roleData) {
+        console.error("❌ Admin: Keine Admin-Rolle gefunden");
+        await supabase.auth.signOut();
+        navigate('/admin/login');
+        return;
+      }
+
+      console.log("✅ Admin: Authentifizierung erfolgreich");
+      setUser({ email: session.user.email } as User);
+      loadFahrerData();
+      loadJobRequests();
+      loadJobAssignments();
+      
+      // Update session activity
+      await supabase
+        .from('admin_sessions')
+        .update({ last_activity: new Date().toISOString() })
+        .eq('user_id', session.user.id)
+        .eq('is_active', true);
+        
     } catch (e) {
-      console.error("❌ Admin: Session parsing Fehler:", e);
-      localStorage.removeItem('adminSession');
+      console.error("❌ Admin: Auth-Fehler:", e);
+      navigate('/admin/login');
+    }
+  };
+
+  const handleLogout = async () => {
+    console.log("📤 Admin: Abmeldung...");
+    
+    if (user) {
+      await logAdminEvent('manual_logout', user.email);
     }
     
-    console.log("❌ Admin: Ungültige oder abgelaufene Session");
+    // Mark sessions as inactive
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await supabase
+        .from('admin_sessions')
+        .update({ is_active: false })
+        .eq('user_id', session.user.id);
+    }
+    
+    // Sign out from Supabase
+    await supabase.auth.signOut();
+    setUser(null);
+    setFahrer([]);
+    setDocuments({});
+    
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer);
+    }
+    
+    toast({
+      title: "Abgemeldet",
+      description: "Sie wurden erfolgreich abgemeldet"
+    });
+
     navigate('/admin/login');
   };
 
@@ -835,29 +887,6 @@ const Admin = () => {
     // Refresh data to show updated status
     loadJobRequests();
     loadJobAssignments();
-  };
-
-  const handleLogout = async () => {
-    if (user) {
-      await logAdminEvent('manual_logout', user.email);
-    }
-    
-    // Remove localStorage session instead of Supabase auth
-    localStorage.removeItem('adminSession');
-    setUser(null);
-    setFahrer([]);
-    setDocuments({});
-    
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer);
-    }
-    
-    toast({
-      title: "Abgemeldet",
-      description: "Sie wurden erfolgreich abgemeldet"
-    });
-
-    navigate('/admin/login');
   };
 
   const loadFahrerData = async () => {

@@ -10,26 +10,38 @@ export default function AdminRoute({ children }: AdminRouteProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkAdminAccess = () => {
+    const checkAdminAccess = async () => {
       try {
-        // Check localStorage for admin session
-        const adminSession = localStorage.getItem('adminSession');
-        if (adminSession) {
-          const session = JSON.parse(adminSession);
-          const isValidSession = session.isAdmin && 
-                               session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000; // 7 Tage statt 24 Stunden
-          
-          if (isValidSession) {
-            // Session aktualisieren um automatische Verlängerung zu ermöglichen
-            session.loginTime = Date.now();
-            localStorage.setItem('adminSession', JSON.stringify(session));
-          }
-          
-          setIsAdmin(isValidSession);
-        } else {
+        // Get current session from Supabase
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError || !session) {
           setIsAdmin(false);
+          return;
         }
+
+        // Verify admin role from database
+        const { data: roleData, error: roleError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .eq('role', 'admin')
+          .single();
+
+        if (roleError || !roleData) {
+          // User is authenticated but not an admin
+          setIsAdmin(false);
+          return;
+        }
+
+        // Update session activity
+        await supabase
+          .from('admin_sessions')
+          .update({ last_activity: new Date().toISOString() })
+          .eq('user_id', session.user.id)
+          .eq('is_active', true);
+
+        setIsAdmin(true);
       } catch (error) {
         console.error('Admin check error:', error);
         setIsAdmin(false);
@@ -38,16 +50,25 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
     checkAdminAccess();
     
-    // Regelmäßige Session-Überprüfung alle 5 Minuten
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        setIsAdmin(false);
+      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        checkAdminAccess();
+      }
+    });
+
+    // Periodic session check every 5 minutes
     const sessionCheckInterval = setInterval(checkAdminAccess, 5 * 60 * 1000);
     
     return () => {
+      subscription.unsubscribe();
       clearInterval(sessionCheckInterval);
     };
   }, []);
 
   if (isAdmin === null) {
-    // Loading state - you could add a spinner here
     return <div className="flex items-center justify-center min-h-screen">Laden...</div>;
   }
 
