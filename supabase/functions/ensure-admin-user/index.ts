@@ -45,41 +45,48 @@ Deno.serve(async (req) => {
 
     const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
-    // 1) Prüfen, ob User bereits existiert
-    const { data: existingUserData, error: getUserError } = await supabaseAdmin.auth.admin.getUserByEmail(ADMIN_EMAIL);
+    // Versuche User anzulegen - falls er existiert, ist das OK
+    console.log('ensure-admin-user: attempting to create admin user');
+    const { data: createdUserData, error: createUserError } = await supabaseAdmin.auth.admin.createUser({
+      email: ADMIN_EMAIL,
+      password,
+      email_confirm: true,
+    });
 
-    if (getUserError) {
-      console.error('ensure-admin-user: error getting user by email:', getUserError.message);
-    }
+    let userId: string | undefined;
 
-    let userId = existingUserData?.user?.id as string | undefined;
-
-    // 2) Wenn kein User existiert, neu anlegen
-    if (!userId) {
-      console.log('ensure-admin-user: creating new admin user in auth');
-      const { data: createdUserData, error: createUserError } = await supabaseAdmin.auth.admin.createUser({
-        email: ADMIN_EMAIL,
-        password,
-        email_confirm: true,
-      });
-
-      if (createUserError || !createdUserData?.user) {
-        console.error('ensure-admin-user: error creating admin user:', createUserError?.message);
+    if (createUserError) {
+      // User könnte bereits existieren - versuche ihn via listUsers zu finden
+      console.log('ensure-admin-user: create failed (user may exist), error:', createUserError.message);
+      
+      const { data: listData, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+      
+      if (listError) {
+        console.error('ensure-admin-user: error listing users:', listError.message);
         return new Response(
-          JSON.stringify({ success: false, error: 'Admin-Benutzer konnte nicht erstellt werden' }),
+          JSON.stringify({ success: false, error: 'Benutzersuche fehlgeschlagen' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
 
+      const existingUser = listData?.users?.find(u => u.email?.toLowerCase() === ADMIN_EMAIL);
+      if (existingUser) {
+        userId = existingUser.id;
+        console.log('ensure-admin-user: found existing user with id', userId);
+      } else {
+        console.error('ensure-admin-user: user creation failed and user not found');
+        return new Response(
+          JSON.stringify({ success: false, error: 'Admin-Benutzer konnte nicht erstellt oder gefunden werden' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    } else if (createdUserData?.user) {
       userId = createdUserData.user.id;
       console.log('ensure-admin-user: admin user created with id', userId);
-    } else {
-      console.log('ensure-admin-user: admin user already exists with id', userId);
     }
 
-    // 3) Sicherstellen, dass Rolle "admin" in user_roles gesetzt ist
     if (!userId) {
-      console.error('ensure-admin-user: userId is missing after create/get');
+      console.error('ensure-admin-user: userId is missing after create/find');
       return new Response(
         JSON.stringify({ success: false, error: 'Admin-Benutzer-ID fehlt' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
