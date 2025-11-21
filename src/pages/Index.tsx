@@ -8,7 +8,7 @@ import FahreranfrageSection from "@/components/FahreranfrageSection";
 import LegalSecuritySection from "@/components/LegalSecuritySection";
 import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import ContactSection from "@/components/ContactSection";
-import WhatsAppContact from "@/components/WhatsAppContact";
+
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
 
@@ -91,7 +91,6 @@ const Index = () => {
       </main>
       
       <Footer />
-      <WhatsAppContact />
     </div>
   );
 };
