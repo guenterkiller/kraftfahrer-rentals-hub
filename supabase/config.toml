@@ -1,39 +1,51 @@
 project_id = "hxnabnsoffzevqhruvar"
 
+# ========================================
+# ADMIN FUNCTIONS - JWT REQUIRED
+# ========================================
 [functions.admin-assign-driver]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-auth-check]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-complete-old-jobs]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-create-job]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-data-fetch]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-mark-job-completed]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-mark-job-open]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-reset-jobs]
-verify_jwt = false
+verify_jwt = true
 
 [functions.admin-update-contact]
-verify_jwt = false
+verify_jwt = true
 
 [functions.approve-driver-and-send-jobs]
-verify_jwt = false
+verify_jwt = true
 
 [functions.broadcast-job-to-drivers]
+verify_jwt = true
+
+[functions.toggle-driver-block]
+verify_jwt = true
+
+# ========================================
+# PUBLIC/INTERNAL FUNCTIONS - NO JWT
+# ========================================
+[functions.broadcast-job-invites]
 verify_jwt = false
 
-[functions.admin-auth-check]
+[functions.respond-invite]
 verify_jwt = false
 
 [functions.driver-accept-job]

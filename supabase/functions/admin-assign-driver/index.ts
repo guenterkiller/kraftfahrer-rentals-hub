@@ -6,7 +6,6 @@ const corsHeaders = {
 }
 
 interface AssignDriverRequest {
-  email: string;
   jobId: string;
   driverId: string;
   rateType: string;
@@ -17,7 +16,6 @@ interface AssignDriverRequest {
 }
 
 Deno.serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -25,38 +23,46 @@ Deno.serve(async (req) => {
   try {
     console.log('Admin assign driver request received');
 
-    const { email, jobId, driverId, rateType, rateValue, startDate, endDate, note }: AssignDriverRequest = await req.json();
-    console.log('Assignment request:', { jobId, driverId, rateType, rateValue, by: email });
-
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (email !== ADMIN_EMAIL) {
-      console.log('Unauthorized access attempt by:', email);
+    // Verify JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert' }),
-        { 
-          status: 403, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Create Supabase client with service role key (bypasses RLS)
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Missing Supabase configuration');
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
+    const token = authHeader.replace('Bearer ', '');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Verify user and admin role
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .single();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { jobId, driverId, rateType, rateValue, startDate, endDate, note }: AssignDriverRequest = await req.json();
+    console.log('Assignment request by admin:', user.email);
 
     // Check if job exists
     const { data: job, error: jobError } = await supabase
@@ -156,10 +162,10 @@ Deno.serve(async (req) => {
     await supabase
       .from('admin_actions')
       .insert({
-        action: 'assign_driver_via_function',
+        action: 'assign_driver_via_jwt',
         job_id: jobId,
         assignment_id: assignmentId,
-        admin_email: email,
+        admin_email: user.email,
         note: `Driver ${driverId} assigned with ${rateType} rate ${rateValue}`
       });
 

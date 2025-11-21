@@ -94,10 +94,10 @@ serve(async (req) => {
     await supabaseServiceRole
       .from('admin_actions')
       .insert({
-        action: 'mark_job_completed',
+        action: 'mark_job_completed_jwt',
         job_id: jobId,
-        admin_email: email,
-        note: `Job manually marked as completed by admin`
+        admin_email: user.email,
+        note: `Job marked as completed via secure JWT auth`
       });
 
     return new Response(

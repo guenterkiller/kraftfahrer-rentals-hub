@@ -8,12 +8,10 @@ const corsHeaders = {
 };
 
 interface MarkJobOpenRequest {
-  email: string;
   jobId: string;
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -21,44 +19,53 @@ serve(async (req) => {
   try {
     console.log('Admin mark job open request received');
     
-    // Parse request body
-    const { email, jobId }: MarkJobOpenRequest = await req.json();
-    console.log(`Request from: ${email}, job ID: ${jobId}`);
-    
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (email !== ADMIN_EMAIL) {
-      console.log('Unauthorized access attempt by:', email);
+    // Verify JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert' }),
-        { 
-          status: 403, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    const token = authHeader.replace('Bearer ', '');
+    const supabaseServiceRole = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    // Verify admin role
+    const { data: { user }, error: userError } = await supabaseServiceRole.auth.getUser(token);
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { data: roleData } = await supabaseServiceRole
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .single();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { jobId }: MarkJobOpenRequest = await req.json();
+    console.log(`Admin ${user.email} marking job ${jobId} as open`);
 
     if (!jobId) {
       return new Response(
         JSON.stringify({ error: 'Job ID ist erforderlich' }),
-        { 
-          status: 400, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-
-    // Initialize Supabase client with service role key
-    const supabaseServiceRole = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
-    );
 
     console.log(`Marking job ${jobId} as open...`);
     
@@ -94,10 +101,10 @@ serve(async (req) => {
     await supabaseServiceRole
       .from('admin_actions')
       .insert({
-        action: 'mark_job_open',
+        action: 'mark_job_open_jwt',
         job_id: jobId,
-        admin_email: email,
-        note: `Job manually marked as open by admin`
+        admin_email: user.email,
+        note: `Job marked as open via secure JWT auth`
       });
 
     return new Response(

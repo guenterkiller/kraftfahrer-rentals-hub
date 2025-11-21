@@ -7,7 +7,6 @@ const corsHeaders = {
 };
 
 interface CreateJobRequest {
-  email: string;
   customerName: string;
   customerEmail: string;
   customerPhone: string;
@@ -25,7 +24,6 @@ interface CreateJobRequest {
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -33,31 +31,46 @@ serve(async (req) => {
   try {
     console.log('📝 Admin create job request received');
 
-    const body: CreateJobRequest = await req.json();
-    console.log('📝 Admin create job request:', {
-      email: body.email,
-      customerName: body.customerName,
-      einsatzort: body.einsatzort,
-      fahrzeugtyp: body.fahrzeugtyp
-    });
-
-    // Validate admin email
-    if (body.email !== 'guenter.killer@t-online.de') {
-      console.error('❌ Unauthorized email:', body.email);
+    // Verify JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
       return new Response(
         JSON.stringify({ error: 'Unauthorized' }),
-        { 
-          status: 403, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Create Supabase client with service role
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    const token = authHeader.replace('Bearer ', '');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Verify admin role
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .single();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const body: CreateJobRequest = await req.json();
+    console.log('📝 Job creation by admin:', user.email);
 
     // Validate required fields
     if (!body.customerName || !body.customerEmail || !body.customerPhone || 
@@ -110,10 +123,10 @@ serve(async (req) => {
     await supabase
       .from('admin_actions')
       .insert({
-        action: 'create_job',
+        action: 'create_job_jwt',
         job_id: job.id,
-        admin_email: body.email,
-        note: `Job created via admin interface: ${body.customerName} - ${body.einsatzort}`
+        admin_email: user.email,
+        note: `Job created via secure admin interface: ${body.customerName} - ${body.einsatzort}`
       });
 
     console.log('✅ Job created successfully:', job.id);

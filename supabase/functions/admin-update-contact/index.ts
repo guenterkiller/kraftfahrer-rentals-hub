@@ -7,7 +7,6 @@ const corsHeaders = {
 };
 
 interface UpdateContactRequest {
-  email: string;
   jobId: string;
   cName: string;
   contact: string;
@@ -17,11 +16,10 @@ interface UpdateContactRequest {
   city: string;
   phone: string;
   contactEmail: string;
-  einsatzort?: string; // Optional location field
+  einsatzort?: string;
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -34,26 +32,48 @@ serve(async (req) => {
   }
 
   try {
-    const body: UpdateContactRequest = await req.json();
-    const { email, jobId, cName, contact, street, house, postal, city, phone, contactEmail, einsatzort } = body;
-
-    console.log('📝 Admin update contact request:', {
-      email,
-      jobId,
-      cName,
-      contact
-    });
-
-    // Validate admin access
-    if (email !== 'guenter.killer@t-online.de') {
-      throw new Error('Unauthorized');
+    // Verify JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    // Create Supabase client with service role
+    const token = authHeader.replace('Bearer ', '');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Verify admin role
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .single();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const body: UpdateContactRequest = await req.json();
+    const { jobId, cName, contact, street, house, postal, city, phone, contactEmail, einsatzort } = body;
+
+    console.log('📝 Admin update contact by:', user.email);
 
     // Update job contact data and location
     const updateData: any = {
