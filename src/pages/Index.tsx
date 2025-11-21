@@ -104,7 +104,7 @@ const Index = () => {
       {/* Floating Admin Button */}
       <button
         onClick={() => navigate('/admin/login')}
-        className="fixed bottom-6 right-6 bg-destructive text-destructive-foreground px-6 py-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 font-semibold text-base flex items-center gap-2"
+        className="fixed bottom-4 right-4 bg-destructive text-destructive-foreground px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 z-50 font-medium text-sm flex items-center gap-1.5"
         aria-label="Admin-Bereich öffnen"
       >
         🔐 Admin
