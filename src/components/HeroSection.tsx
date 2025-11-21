@@ -17,7 +17,7 @@ const HeroSection = () => {
           width={1920}
           height={1080}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-blue-800/20 to-orange-900/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
@@ -31,21 +31,21 @@ const HeroSection = () => {
         
         <div className="bg-white/15 backdrop-blur-md px-4 py-3 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-2xl border-2 border-white/30 shadow-xl animate-fade-in">
           <p className="text-xs sm:text-sm md:text-base text-white font-medium">
-            🇪🇺 <strong className="text-yellow-300">EU/EWR-Fahrer verfügbar:</strong> Qualifizierte Kraftfahrer aus Deutschland und der gesamten Europäischen Union
+            🇪🇺 <strong className="text-white">EU/EWR-Fahrer verfügbar:</strong> Qualifizierte Kraftfahrer aus Deutschland und der gesamten Europäischen Union
           </p>
         </div>
         
         <div className="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-center mb-10 sm:mb-16 animate-slide-up">
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
-            <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-300" aria-hidden="true" />
+            <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
             <span className="text-xs sm:text-sm md:text-base font-semibold">Planbare Verfügbarkeit</span>
           </div>
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
-            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-300" aria-hidden="true" />
+            <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
             <span className="text-xs sm:text-sm md:text-base font-semibold">Bundesweite Vermittlung</span>
           </div>
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
-            <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-300" aria-hidden="true" />
+            <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
             <span className="text-xs sm:text-sm md:text-base font-semibold">Professionelle Fahrer</span>
           </div>
         </div>
@@ -53,7 +53,7 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 justify-center max-w-2xl mx-auto animate-scale-in">
           <Button 
             size="lg" 
-            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-orange-400/50 focus:outline-none w-full sm:w-auto rounded-xl font-bold" 
+            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-primary hover:bg-primary/90 text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:outline-none w-full sm:w-auto rounded-xl font-bold" 
             asChild
           >
             <a 
@@ -73,7 +73,7 @@ const HeroSection = () => {
           <Button 
             size="lg" 
             variant="outline"
-            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-white hover:bg-blue-50 text-blue-700 border-3 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto rounded-xl font-bold" 
+            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-white hover:bg-white/90 text-foreground border-3 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto rounded-xl font-bold" 
             asChild
           >
             <Link to="/preise-und-ablauf" aria-label="Preise und Konditionen ansehen">
