@@ -11,8 +11,11 @@ import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   useSEO({
     title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – EU-Fahrer willkommen",
     description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) aus Deutschland und EU für Transporte & Baustellen. Kierowcy z Polski, Rumänii, Bułgarii mile widziani!",
@@ -97,6 +100,15 @@ const Index = () => {
       </main>
       
       <Footer />
+      
+      {/* Floating Admin Button */}
+      <button
+        onClick={() => navigate('/admin/login')}
+        className="fixed bottom-6 right-6 bg-destructive text-destructive-foreground px-6 py-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 z-50 font-semibold text-base flex items-center gap-2"
+        aria-label="Admin-Bereich öffnen"
+      >
+        🔐 Admin
+      </button>
     </div>
   );
 };
