@@ -48,57 +48,30 @@ const AdminLogin = () => {
 
     try {
       console.log('Attempting secure admin login...');
-      const normalizedEmail = email.trim().toLowerCase();
-
-      // 1) Normaler Login-Versuch über Supabase Auth
-      let { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email: normalizedEmail,
-        password: password,
+      
+      // Sign in with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password: password
       });
-
-      // 2) Falls Benutzer (noch) nicht existiert: einmalig Admin-User anlegen
-      if (authError && (authError as any).code === 'invalid_credentials') {
-        console.warn('Auth invalid_credentials – trying to ensure admin user via edge function');
-
-        const { data: ensureData, error: ensureError } = await supabase.functions.invoke('ensure-admin-user', {
-          body: { email: normalizedEmail, password },
-        });
-
-        if (ensureError || !ensureData?.success) {
-          console.error('Error ensuring admin user:', ensureError || ensureData?.error);
-          toast({
-            title: 'Anmeldung fehlgeschlagen',
-            description: 'Ungültige E-Mail oder Passwort',
-            variant: 'destructive',
-          });
-          return;
-        }
-
-        console.log('Admin user ensured, retrying Supabase auth login...');
-        ({ data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email: normalizedEmail,
-          password: password,
-        }));
-      }
 
       if (authError) {
         console.error('Auth error:', authError);
         toast({
-          title: 'Anmeldung fehlgeschlagen',
-          description:
-            (authError as any).message === 'Invalid login credentials'
-              ? 'Ungültige E-Mail oder Passwort'
-              : (authError as any).message,
-          variant: 'destructive',
+          title: "Anmeldung fehlgeschlagen",
+          description: authError.message === "Invalid login credentials" 
+            ? "Ungültige E-Mail oder Passwort" 
+            : authError.message,
+          variant: "destructive",
         });
         return;
       }
 
-      if (!authData?.session || !authData.user) {
+      if (!authData.session) {
         toast({
-          title: 'Anmeldung fehlgeschlagen',
-          description: 'Keine Session erstellt',
-          variant: 'destructive',
+          title: "Anmeldung fehlgeschlagen",
+          description: "Keine Session erstellt",
+          variant: "destructive",
         });
         return;
       }
@@ -115,36 +88,38 @@ const AdminLogin = () => {
 
       if (roleError || !roleData) {
         console.error('Role verification failed:', roleError);
+        // User is authenticated but not an admin
         await supabase.auth.signOut();
         toast({
-          title: 'Zugriff verweigert',
-          description: 'Sie haben keine Admin-Berechtigung',
-          variant: 'destructive',
+          title: "Zugriff verweigert",
+          description: "Sie haben keine Admin-Berechtigung",
+          variant: "destructive",
         });
         return;
       }
 
       console.log('Admin role verified, creating session log...');
 
+      // Log the admin session
       await supabase.from('admin_sessions').insert({
         user_id: authData.user.id,
-        ip_address: null,
-        user_agent: navigator.userAgent,
+        ip_address: null, // Could be captured from a server-side function
+        user_agent: navigator.userAgent
       });
 
       toast({
-        title: 'Erfolgreich angemeldet',
-        description: 'Willkommen im Admin-Bereich',
+        title: "Erfolgreich angemeldet",
+        description: "Willkommen im Admin-Bereich",
       });
-
+      
       console.log('Login successful, navigating to admin...');
-      navigate('/admin');
+      navigate("/admin");
     } catch (error) {
       console.error('Login error:', error);
       toast({
-        title: 'Fehler beim Anmelden',
-        description: 'Ein unerwarteter Fehler ist aufgetreten',
-        variant: 'destructive',
+        title: "Fehler beim Anmelden",
+        description: "Ein unerwarteter Fehler ist aufgetreten",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);

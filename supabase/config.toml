@@ -42,9 +42,6 @@ verify_jwt = true
 # ========================================
 # PUBLIC/INTERNAL FUNCTIONS - NO JWT
 # ========================================
-[functions.ensure-admin-user]
-verify_jwt = false
-
 [functions.broadcast-job-invites]
 verify_jwt = false
 
