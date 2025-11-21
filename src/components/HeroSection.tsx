@@ -10,7 +10,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="Professioneller LKW-Fahrer mit Sattelzug auf deutscher Autobahn - Fahrerexpress vermittelt bundesweit"
+          alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
           className="w-full h-full object-cover object-center"
           loading="eager"
           decoding="async"
@@ -23,7 +23,7 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-snug sm:leading-tight drop-shadow-lg">
-          LKW-Fahrer und Baumaschinenführer mieten – selbstständige Profis bundesweit
+          LKW-Fahrer (CE) buchen & Baumaschinenführer mieten – selbstständige Berufskraftfahrer bundesweit
         </h1>
         
         <p className="text-base sm:text-xl md:text-2xl mb-4 sm:mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed">
