@@ -30,20 +30,8 @@ serve(async (req) => {
     }
 
     // JWT is already validated by Supabase (verify_jwt = true in config.toml)
-    // Just decode it to get the user ID
     const token = authHeader.replace('Bearer ', '');
-    let userId: string;
     
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      userId = payload.sub;
-    } catch (e) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid token format' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     // Initialize Supabase client with service role key
     const supabaseServiceRole = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
@@ -56,11 +44,20 @@ serve(async (req) => {
       }
     );
 
+    // Get user from the JWT
+    const { data: { user }, error: userError } = await supabaseServiceRole.auth.getUser(token);
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     // Verify admin role
     const { data: roleData } = await supabaseServiceRole
       .from('user_roles')
       .select('role')
-      .eq('user_id', userId)
+      .eq('user_id', user.id)
       .eq('role', 'admin')
       .single();
 
@@ -73,7 +70,7 @@ serve(async (req) => {
     
     // Parse request body
     const { jobId }: MarkJobCompletedRequest = await req.json();
-    console.log(`Request from admin: ${userId}, job ID: ${jobId}`);
+    console.log(`Request from admin: ${user.id}, job ID: ${jobId}`);
 
     console.log(`Marking job ${jobId} as completed...`);
     
@@ -111,7 +108,7 @@ serve(async (req) => {
       .insert({
         action: 'mark_job_completed_jwt',
         job_id: jobId,
-        admin_email: userId,
+        admin_email: user.id,
         note: `Job marked as completed via secure JWT auth`
       });
 

@@ -24,33 +24,32 @@ Deno.serve(async (req) => {
     }
 
     // JWT is already validated by Supabase (verify_jwt = true in config.toml)
-    // Just decode it to get the user ID
+    // Create a client with the user's token to get user info
     const token = authHeader.replace('Bearer ', '');
-    let userId: string;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      userId = payload.sub;
-      console.log('User ID from JWT:', userId);
-    } catch (e) {
-      console.log('Failed to decode JWT:', e);
+    // Use service role client to verify the token and get user
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    
+    // Get user from the JWT (no API call, just validates the token we already have)
+    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
+    
+    if (userError || !user) {
+      console.log('Failed to get user from token:', userError?.message);
       return new Response(
-        JSON.stringify({ error: 'Invalid token format' }),
+        JSON.stringify({ error: 'Invalid token' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-
-    // Create client with service role key for privileged operations
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    console.log('User ID from JWT:', user.id);
 
     // Verify admin role
     const { data: roleData, error: roleError } = await supabaseAdmin
       .from('user_roles')
       .select('role')
-      .eq('user_id', userId)
+      .eq('user_id', user.id)
       .eq('role', 'admin')
       .single();
 
@@ -62,7 +61,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log('Admin verified:', userId);
+    console.log('Admin verified:', user.id);
 
     // Parse request body
     const { dataType, fahrerId, fahrerIds } = await req.json();
