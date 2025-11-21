@@ -158,6 +158,36 @@ export type Database = {
           },
         ]
       }
+      admin_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          ip_address: unknown
+          is_active: boolean
+          last_activity: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_address?: unknown
+          is_active?: boolean
+          last_activity?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_address?: unknown
+          is_active?: boolean
+          last_activity?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       admin_settings: {
         Row: {
           admin_email: string
@@ -918,6 +948,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      assign_admin_role: { Args: { _user_id: string }; Returns: undefined }
       calc_no_show_fee_cents: {
         Args: { _rate_type: string; _rate_value: number; _starts_at: string }
         Returns: {
@@ -925,6 +956,7 @@ export type Database = {
           tier: string
         }[]
       }
+      cleanup_old_admin_sessions: { Args: never; Returns: undefined }
       debug_echo_ids: {
         Args: { _driver_id: string; _job_id: string }
         Returns: Json

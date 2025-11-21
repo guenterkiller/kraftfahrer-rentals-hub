@@ -21,71 +21,105 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Check for existing admin session in localStorage
-    const checkExistingSession = () => {
-      try {
-        const adminSession = localStorage.getItem('adminSession');
-        if (adminSession) {
-          const session = JSON.parse(adminSession);
-          const isValidSession = session.isAdmin && 
-                               session.email === "guenter.killer@t-online.de" &&
-                               (Date.now() - session.loginTime) < 7 * 24 * 60 * 60 * 1000;
-          
-          if (isValidSession) {
-            console.log('Valid admin session found, redirecting to /admin');
-            navigate("/admin");
-          } else {
-            console.log('Invalid or expired admin session');
-            localStorage.removeItem('adminSession');
-          }
+    // Check if already authenticated
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        // Verify admin role
+        const { data: roles } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', session.user.id)
+          .eq('role', 'admin')
+          .single();
+        
+        if (roles) {
+          navigate("/admin");
         }
-      } catch (error) {
-        console.error('Error checking existing session:', error);
-        localStorage.removeItem('adminSession');
       }
     };
     
-    checkExistingSession();
+    checkAuth();
   }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      console.log('Attempting admin login for:', email);
+      console.log('Attempting secure admin login...');
       
-      // Use the check-admin-login edge function
-      const { data, error } = await supabase.functions.invoke('check-admin-login', {
-        body: { email, password }
+      // Sign in with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password: password
       });
 
-      if (error || !data?.success) {
-        throw new Error(data?.error || "Ungültige Anmeldedaten");
+      if (authError) {
+        console.error('Auth error:', authError);
+        toast({
+          title: "Anmeldung fehlgeschlagen",
+          description: authError.message === "Invalid login credentials" 
+            ? "Ungültige E-Mail oder Passwort" 
+            : authError.message,
+          variant: "destructive",
+        });
+        return;
       }
 
-      console.log('Login successful, storing session...');
-      
-      // Store admin session info
-      const sessionData = {
-        email: email,
-        isAdmin: true,
-        loginTime: Date.now()
-      };
-      
-      localStorage.setItem('adminSession', JSON.stringify(sessionData));
-      console.log('Session stored:', sessionData);
+      if (!authData.session) {
+        toast({
+          title: "Anmeldung fehlgeschlagen",
+          description: "Keine Session erstellt",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      toast({ title: "Erfolgreich angemeldet" });
+      console.log('Auth successful, verifying admin role...');
+
+      // Verify admin role
+      const { data: roleData, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', authData.user.id)
+        .eq('role', 'admin')
+        .single();
+
+      if (roleError || !roleData) {
+        console.error('Role verification failed:', roleError);
+        // User is authenticated but not an admin
+        await supabase.auth.signOut();
+        toast({
+          title: "Zugriff verweigert",
+          description: "Sie haben keine Admin-Berechtigung",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log('Admin role verified, creating session log...');
+
+      // Log the admin session
+      await supabase.from('admin_sessions').insert({
+        user_id: authData.user.id,
+        ip_address: null, // Could be captured from a server-side function
+        user_agent: navigator.userAgent
+      });
+
+      toast({
+        title: "Erfolgreich angemeldet",
+        description: "Willkommen im Admin-Bereich",
+      });
       
-      console.log('Navigating to /admin...');
-      navigate("/admin", { replace: true });
-      
-    } catch (err: any) {
-      console.error('Login error:', err);
-      toast({ 
-        title: "Login fehlgeschlagen", 
-        description: err.message || "Ungültige Anmeldedaten", 
-        variant: "destructive" 
+      console.log('Login successful, navigating to admin...');
+      navigate("/admin");
+    } catch (error) {
+      console.error('Login error:', error);
+      toast({
+        title: "Fehler beim Anmelden",
+        description: "Ein unerwarteter Fehler ist aufgetreten",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
