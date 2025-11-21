@@ -31,6 +31,10 @@ interface SEOData {
     'de-AT'?: string; // Österreich
     'de-CH'?: string; // Schweiz
     en?: string; // International English
+    pl?: string; // Polen
+    ro?: string; // Rumänien
+    bg?: string; // Bulgarien
+    hu?: string; // Ungarn
     'x-default'?: string; // Default für alle anderen
   };
 }
