@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/lkw-fahrer-sonnig.jpg";
+import heroImage from "@/assets/lkw-autobahn-professionell.jpg";
 
 const HeroSection = () => {
   return (
