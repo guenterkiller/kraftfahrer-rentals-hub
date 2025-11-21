@@ -6,7 +6,6 @@ const corsHeaders = {
 }
 
 Deno.serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -14,40 +13,55 @@ Deno.serve(async (req) => {
   try {
     console.log('Admin data fetch request received');
 
-    // Parse request body once
-    const requestBody = await req.json();
-    const { email, dataType, fahrerId, fahrerIds } = requestBody;
-    console.log('Request for dataType:', dataType, 'by:', email);
-
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (email !== ADMIN_EMAIL) {
-      console.log('Unauthorized access attempt by:', email);
+    // Get JWT token from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.log('Missing authorization header');
       return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert' }),
-        { 
-          status: 403, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        JSON.stringify({ error: 'Unauthorized - missing token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // Create Supabase client with service role key (bypasses RLS)
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const token = authHeader.replace('Bearer ', '');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Missing Supabase configuration');
+    // Create client with service role key for privileged operations
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Verify JWT token and get user
+    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
+    
+    if (userError || !user) {
+      console.log('Invalid token:', userError?.message);
       return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        JSON.stringify({ error: 'Unauthorized - invalid token' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Verify admin role
+    const { data: roleData, error: roleError } = await supabaseAdmin
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .single();
+
+    if (roleError || !roleData) {
+      console.log('User is not an admin:', user.email);
+      return new Response(
+        JSON.stringify({ error: 'Forbidden - admin role required' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Admin verified:', user.email);
+
+    // Parse request body
+    const { dataType, fahrerId, fahrerIds } = await req.json();
+    console.log('Request for dataType:', dataType);
 
     let data = null;
     let error = null;
@@ -55,7 +69,7 @@ Deno.serve(async (req) => {
     switch (dataType) {
       case 'fahrer':
         console.log('Fetching driver data...');
-        const result = await supabase
+        const result = await supabaseAdmin
           .from("fahrer_profile")
           .select("*")
           .order('created_at', { ascending: false });
@@ -65,7 +79,7 @@ Deno.serve(async (req) => {
 
       case 'jobs':
         console.log('Fetching job requests...');
-        const jobResult = await supabase
+        const jobResult = await supabaseAdmin
           .from("job_requests")
           .select("*")
           .order('created_at', { ascending: false });
@@ -78,13 +92,10 @@ Deno.serve(async (req) => {
         if (!fahrerId) {
           return new Response(
             JSON.stringify({ error: 'Fahrer ID erforderlich' }),
-            { 
-              status: 400, 
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-            }
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
-        const docResult = await supabase
+        const docResult = await supabaseAdmin
           .from("fahrer_dokumente")
           .select("*")
           .eq('fahrer_id', fahrerId)
@@ -95,23 +106,16 @@ Deno.serve(async (req) => {
 
       case 'document-counts':
         console.log('Fetching document counts...');
-        console.log('Received fahrerIds:', fahrerIds);
-        console.log('fahrerIds type:', typeof fahrerIds);
-        console.log('fahrerIds is Array:', Array.isArray(fahrerIds));
         if (!fahrerIds || !Array.isArray(fahrerIds)) {
-          console.log('❌ Invalid fahrerIds - not array or empty');
           return new Response(
             JSON.stringify({ error: 'Fahrer IDs erforderlich' }),
-            { 
-              status: 400, 
-              headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-            }
+            { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
           );
         }
         
         const counts = {};
         for (const fahrerId of fahrerIds) {
-          const countResult = await supabase
+          const countResult = await supabaseAdmin
             .from("fahrer_dokumente")
             .select("id", { count: 'exact' })
             .eq('fahrer_id', fahrerId);
@@ -122,7 +126,7 @@ Deno.serve(async (req) => {
 
       case 'emails':
         console.log('Fetching email logs...');
-        const emailResult = await supabase
+        const emailResult = await supabaseAdmin
           .from("email_log")
           .select("*")
           .order('created_at', { ascending: false })
@@ -134,10 +138,7 @@ Deno.serve(async (req) => {
       default:
         return new Response(
           JSON.stringify({ error: 'Ungültiger Datentyp' }),
-          { 
-            status: 400, 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-          }
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
     }
 
@@ -145,30 +146,21 @@ Deno.serve(async (req) => {
       console.error('Database error:', error);
       return new Response(
         JSON.stringify({ error: `Datenbankfehler: ${error.message}` }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
     console.log(`Successfully fetched ${data?.length || 0} records for ${dataType}`);
     return new Response(
       JSON.stringify({ success: true, data }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
+      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
     console.error('Error in admin data fetch:', error);
     return new Response(
       JSON.stringify({ error: 'Interner Serverfehler' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });
