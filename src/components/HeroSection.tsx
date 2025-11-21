@@ -16,7 +16,7 @@ const HeroSection = () => {
           decoding="async"
           width={1920}
           height={1080}
-          style={{ filter: 'brightness(1.1) contrast(1.05) saturate(1.2) sepia(0.15)' }}
+          style={{ filter: 'brightness(1.15) contrast(1.1) saturate(1.35) sepia(0.25) hue-rotate(-5deg)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
       </div>
