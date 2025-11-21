@@ -8,19 +8,25 @@ interface AdminRouteProps {
 
 export default function AdminRoute({ children }: AdminRouteProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAdminAccess = async () => {
+      if (!isMounted) return;
+      
       try {
-        // Get current session from Supabase
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (!isMounted) return;
         
         if (sessionError || !session) {
           setIsAdmin(false);
+          setIsChecking(false);
           return;
         }
 
-        // Verify admin role from database
         const { data: roleData, error: roleError } = await supabase
           .from('user_roles')
           .select('role')
@@ -28,47 +34,41 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           .eq('role', 'admin')
           .single();
 
+        if (!isMounted) return;
+
         if (roleError || !roleData) {
-          // User is authenticated but not an admin
           setIsAdmin(false);
+          setIsChecking(false);
           return;
         }
 
-        // Update session activity
-        await supabase
+        // Update session activity (fire and forget)
+        supabase
           .from('admin_sessions')
           .update({ last_activity: new Date().toISOString() })
           .eq('user_id', session.user.id)
-          .eq('is_active', true);
+          .eq('is_active', true)
+          .then(() => {});
 
         setIsAdmin(true);
+        setIsChecking(false);
       } catch (error) {
         console.error('Admin check error:', error);
-        setIsAdmin(false);
+        if (isMounted) {
+          setIsAdmin(false);
+          setIsChecking(false);
+        }
       }
     };
 
     checkAdminAccess();
     
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || !session) {
-        setIsAdmin(false);
-      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        checkAdminAccess();
-      }
-    });
-
-    // Periodic session check every 5 minutes
-    const sessionCheckInterval = setInterval(checkAdminAccess, 5 * 60 * 1000);
-    
     return () => {
-      subscription.unsubscribe();
-      clearInterval(sessionCheckInterval);
+      isMounted = false;
     };
   }, []);
 
-  if (isAdmin === null) {
+  if (isChecking) {
     return <div className="flex items-center justify-center min-h-screen">Laden...</div>;
   }
 
