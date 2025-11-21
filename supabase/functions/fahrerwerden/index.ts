@@ -1,6 +1,10 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@2.0.0";
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import React from 'npm:react@18.3.1';
+import { DriverRegistrationConfirmation } from '../_shared/email-templates/driver-registration-confirmation.tsx';
+import { AdminDriverNotification } from '../_shared/email-templates/admin-driver-notification.tsx';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -419,31 +423,23 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Send notification email to admin
+    const adminEmailHtml = await renderAsync(
+      React.createElement(AdminDriverNotification, {
+        firstName: insertData.vorname,
+        lastName: insertData.nachname,
+        email: insertData.email,
+        phone: insertData.telefon,
+        regions: insertData.verfuegbare_regionen || [],
+        licenseClasses: insertData.fuehrerscheinklassen || [],
+        specializations: insertData.spezialisierungen || [],
+      })
+    );
+
     const adminEmailResponse = await resend.emails.send({
       from: MAIL_FROM,
       to: ["info@kraftfahrer-mieten.com"],
-      subject: "Neue Fahrer-Registrierung",
-      html: `
-        <h2>📥 Neue Fahrerregistrierung eingegangen</h2>
-        <p>Ein neuer Fahrer hat sich erfolgreich über das Portal registriert:</p>
-        
-        <h3>🧾 Persönliche Daten:</h3>
-        <ul>
-          <li><strong>Vorname:</strong> ${insertData.vorname}</li>
-          <li><strong>Nachname:</strong> ${insertData.nachname}</li>
-          <li><strong>E-Mail:</strong> ${insertData.email}</li>
-          <li><strong>Telefon:</strong> ${insertData.telefon}</li>
-        </ul>
-        
-        <h3>🚛 Fahrerdetails:</h3>
-        <ul>
-          <li><strong>Region:</strong> ${insertData.verfuegbare_regionen?.length ? insertData.verfuegbare_regionen.join(', ') : 'nicht angegeben'}</li>
-          <li><strong>Fahrzeugtyp:</strong> ${insertData.fuehrerscheinklassen?.length ? insertData.fuehrerscheinklassen.join(', ') : 'nicht angegeben'}</li>
-          <li><strong>Besonderheiten:</strong> ${insertData.spezialisierungen?.length ? insertData.spezialisierungen.join(', ') : 'keine'}</li>
-        </ul>
-        
-        <p><strong>📅 Registriert am:</strong> ${new Date().toLocaleString('de-DE')}</p>
-      `
+      subject: `Neue Fahrer-Registrierung: ${insertData.vorname} ${insertData.nachname}`,
+      html: adminEmailHtml,
     });
 
     if (adminEmailResponse.error) {
@@ -454,77 +450,17 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Admin email sent successfully:", adminEmailResponse);
 
     // Send confirmation email to applicant
+    const confirmationEmailHtml = await renderAsync(
+      React.createElement(DriverRegistrationConfirmation, {
+        driverName: `${insertData.vorname} ${insertData.nachname}`,
+      })
+    );
+
     const confirmationEmailResponse = await resend.emails.send({
       from: MAIL_FROM,
       to: [requestData.email],
       subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
-      html: `
-        <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; color: #333;">
-          <div style="background: linear-gradient(135deg, #0891b2, #0e7490); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
-            <h1 style="margin: 0; font-size: 24px; font-weight: bold;">🚛 Willkommen bei der Fahrerexpress-Agentur</h1>
-          </div>
-          <div style="border: 3px solid #0891b2; border-top: none; padding: 0;">
-            <div style="background: #f8fafc; padding: 20px; border-bottom: 3px solid #0891b2;">
-              <p style="margin: 0 0 10px 0; font-size: 16px;">Sehr geehrte/r ${insertData.vorname} ${insertData.nachname},</p>
-              <p style="margin: 10px 0;">vielen Dank, dass Sie sich bei uns als selbstständiger Kraftfahrer mit eigenem Gewerbe registriert haben. <strong>Ihre Registrierung war erfolgreich!</strong></p>
-            </div>
-
-            <div style="background: #dcfce7; border-left: 4px solid #16a34a; padding: 20px; margin: 0;">
-              <h3 style="margin: 0 0 15px 0; color: #16a34a; font-size: 18px;">✅ Nächste Schritte</h3>
-              <p style="margin: 0;">Wir haben Ihre Angaben erhalten und melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfügbar sind. Halten Sie Ihr Telefon bereit!</p>
-            </div>
-
-            <div style="padding: 20px;">
-              <h3 style="margin: 0 0 15px 0; color: #7c2d12; font-size: 18px;">💼 Vermittlung & Provision</h3>
-              <p style="margin: 0 0 15px 0; font-weight: bold;">Wie funktioniert unsere Vermittlung?</p>
-              <p style="margin: 0 0 15px 0;">Wenn Sie sich über unsere Seite als selbstständiger Fahrer eintragen, vermitteln wir Sie an Auftraggeber in ganz Deutschland.</p>
-
-              <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0;">
-                <h4 style="margin: 0 0 10px 0; color: #92400e;">💰 Vermittlungskosten für Fahrer</h4>
-                <p style="margin: 0;">Für die erfolgreiche Vermittlung eines Einsatzes berechnen wir nur dem vermittelten Fahrer eine Provision in Höhe von <strong>15 % des Nettohonorars</strong>. Die Vermittlung ist für Auftraggeber vollständig kostenlos.</p>
-              </div>
-
-              <ul style="margin: 15px 0; padding-left: 20px;">
-                <li style="margin: 5px 0;"><strong>Wann wird die Provision fällig?</strong> Die Provision wird ausschließlich bei tatsächlichem Einsatz fällig und kann entweder per Einbehalt oder separater Rechnung abgerechnet werden.</li>
-                <li style="margin: 5px 0;"><strong>Wie läuft die Abrechnung?</strong> Die Provision wird nach Einsatzabschluss per Rechnung gestellt – entweder pro Auftrag oder gesammelt am Monatsende.</li>
-                <li style="margin: 5px 0;"><strong>Gibt es eine Mindestlaufzeit?</strong> Nein. Sie können Ihre Teilnahme jederzeit beenden. Es entstehen keine Fixkosten oder Verpflichtungen.</li>
-              </ul>
-
-              <h4 style="margin: 20px 0 10px 0; color: #16a34a;">✅ Was ist NICHT provisionspflichtig?</h4>
-              <ul style="margin: 0; padding-left: 20px;">
-                <li>Direktaufträge außerhalb unserer Vermittlung</li>
-                <li>Einsätze ohne vorherige Abstimmung mit Fahrerexpress</li>
-              </ul>
-            </div>
-
-            <div style="background: #f1f5f9; padding: 20px; border-top: 1px solid #e2e8f0;">
-              <h3 style="margin: 0 0 15px 0; color: #334155;">📝 Ihre Daten ändern</h3>
-              <p style="margin: 0;">Falls Sie Ihre Angaben korrigieren oder ergänzen möchten, schreiben Sie uns bitte an:<br>
-              📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: #0891b2;">info@kraftfahrer-mieten.com</a><br>
-              unter Angabe Ihres Namens und Ihrer Telefonnummer.</p>
-            </div>
-
-            <div style="background: #0891b2; color: white; padding: 20px; text-align: center;">
-              <h3 style="margin: 0 0 15px 0;">📞 Kontakt</h3>
-              <p style="margin: 0;">Für Rückfragen zur Abrechnung oder allgemeine Fragen stehen wir Ihnen jederzeit zur Verfügung:</p>
-              <p style="margin: 10px 0 0 0;">
-                📧 <a href="mailto:info@kraftfahrer-mieten.com" style="color: white;">info@kraftfahrer-mieten.com</a><br>
-                📞 01577 1442285
-              </p>
-              <p style="margin: 20px 0 0 0; font-weight: bold;">Mit freundlichen Grüßen<br>Ihr Fahrerexpress-Team</p>
-            </div>
-
-            <div style="background: #f8fafc; padding: 15px; font-size: 12px; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0;">
-              <p style="margin: 0;"><strong>Fahrerexpress-Agentur</strong> | info@kraftfahrer-mieten.com | 01577 1442285</p>
-              <p style="margin: 5px 0 0 0;">
-                <a href="https://kraftfahrer-mieten.com/impressum" style="color: #64748b;">Impressum</a> | 
-                <a href="https://kraftfahrer-mieten.com/datenschutz" style="color: #64748b;">Datenschutz</a> | 
-                <a href="https://kraftfahrer-mieten.com/agb" style="color: #64748b;">AGB</a>
-              </p>
-            </div>
-          </div>
-        </div>
-      `,
+      html: confirmationEmailHtml,
     });
 
     // Log email sending

@@ -1,5 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import React from 'npm:react@18.3.1';
+import { AdminBookingNotification } from '../_shared/email-templates/admin-booking-notification.tsx';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -313,19 +316,29 @@ const handler = async (req: Request): Promise<Response> => {
         .single();
 
       if (adminSettings?.admin_email) {
-        const adminEmailHtml = `
-          <h2>Neue Fahrerbuchung eingegangen</h2>
-          <p><strong>Kunde:</strong> ${vorname} ${nachname}${company ? ` (${company})` : ''}</p>
-          <p><strong>E-Mail:</strong> ${email}</p>
-          <p><strong>Telefon:</strong> ${phone}</p>
-          <p><strong>Einsatzort:</strong> ${customer_street} ${customer_house_number}, ${customer_postal_code} ${customer_city}</p>
-          <p><strong>Zeitraum:</strong> ${zeitraumFormatted}</p>
-          <p><strong>Fahrzeugtyp:</strong> ${fahrzeugtyp}</p>
-          ${anforderungen.length > 0 ? `<p><strong>Anforderungen:</strong> ${anforderungen.join(', ')}</p>` : ''}
-          <p><strong>Nachricht:</strong> ${nachricht}</p>
-          <p><strong>Billing Model:</strong> ${billing_model}</p>
-          <p><strong>Job ID:</strong> ${jobRequest.id}</p>
-        `;
+        // Determine driver type for display
+        let driverTypeDisplay = "LKW CE Fahrer";
+        if (fahrzeugtyp.toLowerCase().includes('baumaschine') || 
+            fahrzeugtyp.toLowerCase().includes('bagger') ||
+            fahrzeugtyp.toLowerCase().includes('radlader')) {
+          driverTypeDisplay = "Baumaschinenführer";
+        }
+
+        const adminEmailHtml = await renderAsync(
+          React.createElement(AdminBookingNotification, {
+            customerName: `${vorname} ${nachname}`,
+            companyName: company || undefined,
+            email: email,
+            phone: phone,
+            address: `${customer_street} ${customer_house_number}, ${customer_postal_code} ${customer_city}`,
+            timeframe: zeitraumFormatted,
+            driverType: driverTypeDisplay,
+            requirements: anforderungen,
+            message: nachricht,
+            billingModel: billing_model,
+            jobId: jobRequest.id,
+          })
+        );
 
         const { Resend } = await import("npm:resend@2.0.0");
         const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -333,7 +346,7 @@ const handler = async (req: Request): Promise<Response> => {
         const adminEmailResponse = await resend.emails.send({
           from: "Fahrerexpress System <info@kraftfahrer-mieten.com>",
           to: [adminSettings.admin_email],
-          subject: `Neue Buchungsanfrage: ${fahrzeugtyp} in ${customer_city}`,
+          subject: `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`,
           html: adminEmailHtml,
         });
 
@@ -343,7 +356,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           await supabase.from('email_log').insert({
             recipient: adminSettings.admin_email,
-            subject: `Neue Buchungsanfrage: ${fahrzeugtyp} in ${customer_city}`,
+            subject: `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`,
             template: 'admin_booking_notification',
             status: 'failed',
             job_id: jobRequest.id,
@@ -354,7 +367,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           await supabase.from('email_log').insert({
             recipient: adminSettings.admin_email,
-            subject: `Neue Buchungsanfrage: ${fahrzeugtyp} in ${customer_city}`,
+            subject: `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`,
             template: 'admin_booking_notification',
             status: 'sent',
             job_id: jobRequest.id,
