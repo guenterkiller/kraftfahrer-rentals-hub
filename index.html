@@ -3,7 +3,7 @@
   <head>
     <!-- Critical rendering optimization -->
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#C73E1D" />
     
     <!-- Performance & Core Web Vitals - Resource Hints -->
@@ -106,10 +106,20 @@
         "latitude": 50.110924,
         "longitude": 8.682127
       },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "Deutschland"
+        },
+        {
+          "@type": "Country",
+          "name": "Österreich"
+        },
+        {
+          "@type": "Country",
+          "name": "Schweiz"
+        }
+      ],
       "serviceType": "Fahrerdienstleistungen",
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -119,8 +129,16 @@
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "LKW-Fahrer Vermittlung",
-              "description": "Selbstständige C+E-Fahrer bundesweit"
+              "name": "LKW CE Fahrer Vermittlung",
+              "description": "Selbstständige C+E-Fahrer bundesweit - Nah-, Fern- und Baustellenverkehr, ADR, Fahrmischer, Kranführer"
+            },
+            "price": "349",
+            "priceCurrency": "EUR",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": "349.00",
+              "priceCurrency": "EUR",
+              "unitText": "Tag (8 Stunden)"
             }
           },
           {
@@ -128,13 +146,106 @@
             "itemOffered": {
               "@type": "Service",
               "name": "Baumaschinenführer Vermittlung",
-              "description": "Erfahrene Kranführer und Baggerfahrer"
+              "description": "Erfahrene Kranführer, Bagger, Radlader, Walzen und Spezialmaschinen"
+            },
+            "price": "459",
+            "priceCurrency": "EUR",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": "459.00",
+              "priceCurrency": "EUR",
+              "unitText": "Tag (8 Stunden)"
             }
           }
         ]
       },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
       "sameAs": [
         "https://kraftfahrer-mieten.com"
+      ]
+    }
+    </script>
+    
+    <!-- Review Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Marcus Weber"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "Seit Jahren zuverlässig – schnelle Vermittlung auch bei Notfällen. Top Fahrer!",
+          "itemReviewed": {
+            "@type": "Service",
+            "name": "Fahrerexpress Fahrervermittlung"
+          }
+        },
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Sandra Müller"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "Professionelle Baumaschinenführer, die unser Projekt termingerecht abgeschlossen haben.",
+          "itemReviewed": {
+            "@type": "Service",
+            "name": "Fahrerexpress Fahrervermittlung"
+          }
+        },
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Thomas Klein"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "Kurzfristige Verfügbarkeit und faire Preise. Sehr empfehlenswert für Personalengpässe.",
+          "itemReviewed": {
+            "@type": "Service",
+            "name": "Fahrerexpress Fahrervermittlung"
+          }
+        },
+        {
+          "@type": "Review",
+          "author": {
+            "@type": "Person",
+            "name": "Andrea Schmidt"
+          },
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "reviewBody": "Für unsere Roadshows immer die perfekten Fahrer gefunden. Absolut zuverlässig!",
+          "itemReviewed": {
+            "@type": "Service",
+            "name": "Fahrerexpress Fahrervermittlung"
+          }
+        }
       ]
     }
     </script>

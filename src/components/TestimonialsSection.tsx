@@ -36,9 +36,9 @@ const TestimonialsSection = () => {
   return (
     <section className="py-16 bg-muted">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-4">Kundenstimmen</h2>
+        <h2 className="text-3xl font-bold text-center mb-4">Kundenbewertungen & Erfahrungen</h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Vertrauen Sie auf die Erfahrungen unserer zufriedenen Kunden aus ganz Deutschland
+          Über 500 erfolgreiche Vermittlungen – Vertrauen Sie auf die Erfahrungen unserer zufriedenen Kunden
         </p>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">

@@ -17,7 +17,7 @@ const ProductCards = () => {
         <div className="text-center mb-16 animate-fade-in">
           <Badge variant="secondary" className="mb-4">Transparent & Fair</Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-            Ihre Fahrerpreise
+            Unsere Dienstleistungen & Preise
           </h2>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto px-4">
             Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong><br className="md:hidden" /> 
@@ -41,7 +41,7 @@ const ProductCards = () => {
                   <Truck className="h-7 w-7 text-primary-foreground" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">LKW CE Fahrer</CardTitle>
+                  <h3 className="text-2xl font-semibold">LKW CE Fahrer</h3>
                   <p className="text-sm text-muted-foreground">Bundesweit verfügbar</p>
                 </div>
               </div>
@@ -100,7 +100,7 @@ const ProductCards = () => {
                   <Construction className="h-7 w-7 text-secondary-foreground" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl">Baumaschinenführer</CardTitle>
+                  <h3 className="text-2xl font-semibold">Baumaschinenführer</h3>
                   <p className="text-sm text-muted-foreground">Für alle Projekte</p>
                 </div>
               </div>
