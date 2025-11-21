@@ -89,10 +89,10 @@ const Index = () => {
         <ProcessSteps />
         <WhyFahrerexpress />
         <TestimonialsSection />
-        <EUDriverRecruitment />
         <FahreranfrageSection />
         <LegalSecuritySection />
         <BookingPriorityBanner />
+        <EUDriverRecruitment />
         <ContactSection />
       </main>
       
