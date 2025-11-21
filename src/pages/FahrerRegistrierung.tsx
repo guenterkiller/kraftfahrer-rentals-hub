@@ -21,9 +21,9 @@ const FahrerRegistrierung = () => {
   }, []);
 
   useSEO({
-    title: "Fahrer werden – LKW-Fahrer & Ersatzfahrer Jobs bundesweit | EU-Fahrer willkommen",
-    description: "Werden Sie selbstständiger Partner bei Fahrerexpress. EU/EWR-Fahrer willkommen! Kierowcy z Polski, Rumänii mile widziani. Fair payment for EU drivers!",
-    keywords: "selbstständiger LKW-Fahrer werden, ersatzfahrer jobs, fahrer registrieren, EU Fahrer Deutschland, kierowcy praca Niemcy, șoferi muncă Germania, Bulgarian drivers Germany jobs, self-employed truck driver, HGV driver jobs Europe",
+    title: "Fahrer werden – LKW-Fahrer & Ersatzfahrer Jobs bundesweit",
+    description: "Werden Sie selbstständiger Partner bei Fahrerexpress. Bundesweite Vermittlung für LKW-Fahrer und Baumaschinenführer mit fairer Bezahlung.",
+    keywords: "selbstständiger LKW-Fahrer werden, ersatzfahrer jobs, fahrer registrieren, LKW Fahrer Jobs Deutschland, Baumaschinenführer Jobs",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "JobPosting",
@@ -618,27 +618,9 @@ const FahrerRegistrierung = () => {
                     <span>EU/EWR-Fahrer willkommen!</span>
                     <span>🇪🇺</span>
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                    <div className="bg-card p-3 rounded">
-                      <p className="font-medium mb-1">🇩🇪 Deutsch</p>
-                      <p className="text-muted-foreground text-xs">Wir vermitteln Fahrer aus allen EU/EWR-Ländern. Rechtssichere Beschäftigung garantiert.</p>
-                    </div>
-                    <div className="bg-card p-3 rounded">
-                      <p className="font-medium mb-1">🇬🇧 English</p>
-                      <p className="text-muted-foreground text-xs">We place drivers from all EU/EEA countries. Legal employment guaranteed.</p>
-                    </div>
-                    <div className="bg-card p-3 rounded">
-                      <p className="font-medium mb-1">🇵🇱 Polski</p>
-                      <p className="text-muted-foreground text-xs">Pośredniczymy w zatrudnieniu kierowców ze wszystkich krajów UE/EOG.</p>
-                    </div>
-                    <div className="bg-card p-3 rounded">
-                      <p className="font-medium mb-1">🇷🇴 Română</p>
-                      <p className="text-muted-foreground text-xs">Plasăm șoferi din toate țările UE/SEE. Angajare legală garantată.</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-primary/20">
-                    <p className="text-center text-sm font-medium">
-                      ✅ Faire Bezahlung • Fair payment • Uczciwe wynagrodzenie • Plată corectă
+                  <div className="bg-card p-4 rounded text-center">
+                    <p className="text-sm text-muted-foreground">
+                      Wir vermitteln Fahrer aus allen EU/EWR-Ländern. Rechtssichere Beschäftigung und faire Bezahlung garantiert.
                     </p>
                   </div>
                 </div>
