@@ -23,11 +23,11 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-snug sm:leading-tight drop-shadow-lg">
-          LKW-Fahrer (CE) buchen & Baumaschinenführer mieten – selbstständige Berufskraftfahrer bundesweit
+          LKW-Fahrer & Kraftfahrer (CE) bundesweit buchen
         </h1>
         
         <p className="text-base sm:text-xl md:text-2xl mb-4 sm:mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed">
-          Transparente Tagessätze ab 349 € – Vermittlung geprüfter, selbstständiger Fahrer ohne Arbeitnehmerüberlassung.
+          Selbstständige Berufskraftfahrer & Baumaschinenführer ab 349 € Tagessatz – Vermittlung ohne Arbeitnehmerüberlassung
         </p>
         
         <div className="bg-white/15 backdrop-blur-md px-4 py-3 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-2xl border-2 border-white/30 shadow-xl animate-fade-in">
