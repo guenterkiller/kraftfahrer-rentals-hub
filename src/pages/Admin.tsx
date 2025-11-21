@@ -352,6 +352,14 @@ const Admin = () => {
 
       console.log("✅ Admin: Authentifizierung erfolgreich");
       setUser({ email: session.user.email } as User);
+      
+      // Persist simple admin session for edge function calls
+      localStorage.setItem('adminSession', JSON.stringify({
+        email: session.user.email,
+        isAdmin: true,
+        lastLogin: new Date().toISOString(),
+      }));
+      
       loadFahrerData();
       loadJobRequests();
       loadJobAssignments();
@@ -897,7 +905,8 @@ const Admin = () => {
       // Get admin email from localStorage
       const adminSession = localStorage.getItem('adminSession');
       if (!adminSession) {
-        navigate('/admin/login');
+        console.warn("⚠️ Admin: Keine lokale Admin-Session gefunden, breche Datenladen ab.");
+        setIsLoadingData(false);
         return;
       }
       
