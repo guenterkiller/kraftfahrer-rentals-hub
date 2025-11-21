@@ -205,7 +205,7 @@ const PreiseUndAblauf = () => {
                 <ul className="space-y-2 text-muted-foreground ml-4">
                   <li>• Hotel/Unterkunft durch Auftraggeber oder</li>
                   <li>• Übernachtungspauschale nach Vereinbarung</li>
-                  <li>• Verpflegungspauschalen: nach gesetzlicher Spesenregelung</li>
+                  <li>• Verpflegung: nach gesetzlicher Spesenregelung</li>
                 </ul>
               </CardContent>
             </Card>
