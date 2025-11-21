@@ -40,25 +40,31 @@ serve(async (req) => {
       );
     }
 
+    // JWT is already validated by Supabase (verify_jwt = true in config.toml)
+    // Just decode it to get the user ID
     const token = authHeader.replace('Bearer ', '');
+    let userId: string;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userId = payload.sub;
+    } catch (e) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token format' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Verify admin role
-    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid token' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     const { data: roleData } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('role', 'admin')
       .single();
 
@@ -70,7 +76,7 @@ serve(async (req) => {
     }
 
     const body: CreateJobRequest = await req.json();
-    console.log('📝 Job creation by admin:', user.email);
+    console.log('📝 Job creation by admin:', userId);
 
     // Validate required fields
     if (!body.customerName || !body.customerEmail || !body.customerPhone || 
@@ -125,7 +131,7 @@ serve(async (req) => {
       .insert({
         action: 'create_job_jwt',
         job_id: job.id,
-        admin_email: user.email,
+        admin_email: userId,
         note: `Job created via secure admin interface: ${body.customerName} - ${body.einsatzort}`
       });
 

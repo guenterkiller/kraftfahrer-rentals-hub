@@ -8,7 +8,6 @@ const corsHeaders = {
 };
 
 interface MarkJobCompletedRequest {
-  email: string;
   jobId: string;
 }
 
@@ -21,30 +20,27 @@ serve(async (req) => {
   try {
     console.log('Admin mark job completed request received');
     
-    // Parse request body
-    const { email, jobId }: MarkJobCompletedRequest = await req.json();
-    console.log(`Request from: ${email}, job ID: ${jobId}`);
-    
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (email !== ADMIN_EMAIL) {
-      console.log('Unauthorized access attempt by:', email);
+    // Verify JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert' }),
-        { 
-          status: 403, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    if (!jobId) {
+    // JWT is already validated by Supabase (verify_jwt = true in config.toml)
+    // Just decode it to get the user ID
+    const token = authHeader.replace('Bearer ', '');
+    let userId: string;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userId = payload.sub;
+    } catch (e) {
       return new Response(
-        JSON.stringify({ error: 'Job ID ist erforderlich' }),
-        { 
-          status: 400, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
+        JSON.stringify({ error: 'Invalid token format' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -59,6 +55,25 @@ serve(async (req) => {
         }
       }
     );
+
+    // Verify admin role
+    const { data: roleData } = await supabaseServiceRole
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', userId)
+      .eq('role', 'admin')
+      .single();
+
+    if (!roleData) {
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+    
+    // Parse request body
+    const { jobId }: MarkJobCompletedRequest = await req.json();
+    console.log(`Request from admin: ${userId}, job ID: ${jobId}`);
 
     console.log(`Marking job ${jobId} as completed...`);
     
@@ -96,7 +111,7 @@ serve(async (req) => {
       .insert({
         action: 'mark_job_completed_jwt',
         job_id: jobId,
-        admin_email: user.email,
+        admin_email: userId,
         note: `Job marked as completed via secure JWT auth`
       });
 

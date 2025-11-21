@@ -28,25 +28,31 @@ serve(async (req) => {
       );
     }
 
+    // JWT is already validated by Supabase (verify_jwt = true in config.toml)
+    // Just decode it to get the user ID
     const token = authHeader.replace('Bearer ', '');
+    let userId: string;
+    
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userId = payload.sub;
+    } catch (e) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid token format' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const supabaseServiceRole = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
     // Verify admin role
-    const { data: { user }, error: userError } = await supabaseServiceRole.auth.getUser(token);
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid token' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     const { data: roleData } = await supabaseServiceRole
       .from('user_roles')
       .select('role')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
       .eq('role', 'admin')
       .single();
 
@@ -58,7 +64,7 @@ serve(async (req) => {
     }
 
     const { jobId }: MarkJobOpenRequest = await req.json();
-    console.log(`Admin ${user.email} marking job ${jobId} as open`);
+    console.log(`Admin ${userId} marking job ${jobId} as open`);
 
     if (!jobId) {
       return new Response(
@@ -103,7 +109,7 @@ serve(async (req) => {
       .insert({
         action: 'mark_job_open_jwt',
         job_id: jobId,
-        admin_email: user.email,
+        admin_email: userId,
         note: `Job marked as open via secure JWT auth`
       });
 
