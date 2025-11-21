@@ -56,7 +56,7 @@ const App = () => (
           <Route path="/wissenswertes" element={<Wissenswertes />} />
           <Route path="/projekte" element={<Projekte />} />
           <Route path="/versicherung" element={<Versicherung />} />
-          <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/driver/accept" element={<DriverJobResponse />} />
           
