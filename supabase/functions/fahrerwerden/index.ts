@@ -527,7 +527,29 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Confirmation email sent successfully:", confirmationEmailResponse);
+    // Log email sending
+    if (confirmationEmailResponse.error) {
+      console.error("Failed to send confirmation email:", confirmationEmailResponse.error);
+      
+      await supabase.from('email_log').insert({
+        recipient: insertData.email,
+        subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
+        template: 'driver_registration_confirmation',
+        status: 'failed',
+        error_message: confirmationEmailResponse.error.message || String(confirmationEmailResponse.error),
+      });
+    } else {
+      console.log("Confirmation email sent successfully:", confirmationEmailResponse);
+      
+      await supabase.from('email_log').insert({
+        recipient: insertData.email,
+        subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
+        template: 'driver_registration_confirmation',
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        message_id: confirmationEmailResponse.data?.id,
+      });
+    }
 
     return new Response(
       JSON.stringify({ success: true }),
