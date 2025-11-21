@@ -62,6 +62,7 @@ const Admin = () => {
   });
 
   const [user, setUser] = useState<User | null>(null);
+  const [authChecking, setAuthChecking] = useState(true);
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [fahrer, setFahrer] = useState<FahrerProfile[]>([]);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
@@ -323,12 +324,14 @@ const Admin = () => {
 
   const checkAuth = async () => {
     console.log("🔍 Admin: Prüfe Supabase Auth...");
+    setAuthChecking(true);
     
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError || !session) {
         console.log("❌ Admin: Keine gültige Session");
+        setAuthChecking(false);
         navigate('/admin/login');
         return;
       }
@@ -346,6 +349,7 @@ const Admin = () => {
       if (roleError || !roleData) {
         console.error("❌ Admin: Keine Admin-Rolle gefunden");
         await supabase.auth.signOut();
+        setAuthChecking(false);
         navigate('/admin/login');
         return;
       }
@@ -370,9 +374,11 @@ const Admin = () => {
         .update({ last_activity: new Date().toISOString() })
         .eq('user_id', session.user.id)
         .eq('is_active', true);
-        
+      
+      setAuthChecking(false);
     } catch (e) {
       console.error("❌ Admin: Auth-Fehler:", e);
+      setAuthChecking(false);
       navigate('/admin/login');
     }
   };
@@ -1151,10 +1157,12 @@ const Admin = () => {
     );
   };
 
-  if (!user) {
-    // This should not happen as authentication is handled by AdminLogin page
-    navigate('/admin/login');
-    return null;
+  if (authChecking || !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-sm text-gray-600">Prüfe Admin-Berechtigung...</div>
+      </div>
+    );
   }
 
   return (
