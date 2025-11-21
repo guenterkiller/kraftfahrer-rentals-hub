@@ -260,13 +260,44 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "Fahrerexpress-Agentur <onboarding@resend.dev>",
+      from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
       to: [email],
       subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
       html: emailHtml,
     });
 
-    console.log("Customer confirmation email sent successfully:", emailResponse);
+    // Create Supabase client for logging
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (supabaseUrl && supabaseKey) {
+      const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.52.0");
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      // Log email sending
+      if (emailResponse.error) {
+        console.error("Failed to send customer confirmation:", emailResponse.error);
+        
+        await supabase.from('email_log').insert({
+          recipient: email,
+          subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+          template: 'customer_booking_confirmation',
+          status: 'failed',
+          error_message: emailResponse.error.message || String(emailResponse.error),
+        });
+      } else {
+        console.log("Customer confirmation email sent successfully:", emailResponse);
+        
+        await supabase.from('email_log').insert({
+          recipient: email,
+          subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+          template: 'customer_booking_confirmation',
+          status: 'sent',
+          sent_at: new Date().toISOString(),
+          message_id: emailResponse.data?.id,
+        });
+      }
+    }
 
     return new Response(JSON.stringify(emailResponse), {
       status: 200,

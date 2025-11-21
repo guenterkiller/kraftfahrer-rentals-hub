@@ -305,6 +305,68 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Error with customer email:", emailError);
     }
 
+    // Send admin notification email
+    try {
+      const { data: adminSettings } = await supabase
+        .from('admin_settings')
+        .select('admin_email')
+        .single();
+
+      if (adminSettings?.admin_email) {
+        const adminEmailHtml = `
+          <h2>Neue Fahrerbuchung eingegangen</h2>
+          <p><strong>Kunde:</strong> ${vorname} ${nachname}${company ? ` (${company})` : ''}</p>
+          <p><strong>E-Mail:</strong> ${email}</p>
+          <p><strong>Telefon:</strong> ${phone}</p>
+          <p><strong>Einsatzort:</strong> ${customer_street} ${customer_house_number}, ${customer_postal_code} ${customer_city}</p>
+          <p><strong>Zeitraum:</strong> ${zeitraumFormatted}</p>
+          <p><strong>Fahrzeugtyp:</strong> ${fahrzeugtyp}</p>
+          ${anforderungen.length > 0 ? `<p><strong>Anforderungen:</strong> ${anforderungen.join(', ')}</p>` : ''}
+          <p><strong>Nachricht:</strong> ${nachricht}</p>
+          <p><strong>Billing Model:</strong> ${billing_model}</p>
+          <p><strong>Job ID:</strong> ${jobRequest.id}</p>
+        `;
+
+        const { Resend } = await import("npm:resend@2.0.0");
+        const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+        const adminEmailResponse = await resend.emails.send({
+          from: "Fahrerexpress System <info@kraftfahrer-mieten.com>",
+          to: [adminSettings.admin_email],
+          subject: `Neue Buchungsanfrage: ${fahrzeugtyp} in ${customer_city}`,
+          html: adminEmailHtml,
+        });
+
+        // Log admin email
+        if (adminEmailResponse.error) {
+          console.error("Failed to send admin notification:", adminEmailResponse.error);
+          
+          await supabase.from('email_log').insert({
+            recipient: adminSettings.admin_email,
+            subject: `Neue Buchungsanfrage: ${fahrzeugtyp} in ${customer_city}`,
+            template: 'admin_booking_notification',
+            status: 'failed',
+            job_id: jobRequest.id,
+            error_message: adminEmailResponse.error.message || String(adminEmailResponse.error),
+          });
+        } else {
+          console.log("Admin notification sent successfully:", adminEmailResponse);
+          
+          await supabase.from('email_log').insert({
+            recipient: adminSettings.admin_email,
+            subject: `Neue Buchungsanfrage: ${fahrzeugtyp} in ${customer_city}`,
+            template: 'admin_booking_notification',
+            status: 'sent',
+            job_id: jobRequest.id,
+            sent_at: new Date().toISOString(),
+            message_id: adminEmailResponse.data?.id,
+          });
+        }
+      }
+    } catch (adminEmailError) {
+      console.error("Error sending admin notification:", adminEmailError);
+    }
+
     return new Response(JSON.stringify({ 
       success: true, 
       message: 'Anfrage erfolgreich gesendet',
