@@ -72,14 +72,36 @@ export const TruckerChat = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Auth-Status überwachen
+  // Debug-Panel State
+  const [showDebug, setShowDebug] = useState(false);
+  const [authState, setAuthState] = useState<string>("INITIALIZING");
+  const [lastLoginResponse, setLastLoginResponse] = useState<string>("");
+  const [hasSession, setHasSession] = useState(false);
+  const [sessionUserId, setSessionUserId] = useState<string>("");
+
+  // Debug-Panel sichtbar bei ?debug=1 oder für Admins
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('debug') === '1' || isAdmin) {
+      setShowDebug(true);
+    }
+  }, [isAdmin]);
+
+  // Auth-Status überwachen + Debug-Logging
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      setHasSession(!!session);
+      setSessionUserId(session?.user?.id || "");
+      console.log('[TruckerChat Debug] Initial session:', session ? 'EXISTS' : 'NULL', session?.user?.id);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[TruckerChat Debug] Auth state changed:', event);
+      setAuthState(event);
       setUser(session?.user ?? null);
+      setHasSession(!!session);
+      setSessionUserId(session?.user?.id || "");
     });
 
     return () => subscription.unsubscribe();
@@ -648,14 +670,25 @@ export const TruckerChat = () => {
     e.preventDefault();
     setIsLoggingIn(true);
 
+    // Debug-Logging
+    console.log('[TruckerChat Debug] Login attempt for:', loginEmail.trim().toLowerCase());
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: loginEmail.trim().toLowerCase(),
         password: loginPassword
       });
 
+      // Debug-Logging
+      console.log('[TruckerChat Debug] Login response:', {
+        email: loginEmail.trim().toLowerCase(),
+        error: error?.message,
+        userId: data?.user?.id
+      });
+
       if (error) {
         console.error("Chat login error", error);
+        setLastLoginResponse(`Login Fehler: ${error.message}`);
         let errorMessage = "E-Mail oder Passwort falsch.";
         
         if (error.message.includes("Email not confirmed")) {
@@ -675,6 +708,7 @@ export const TruckerChat = () => {
       if (data?.user) {
         // Session sofort in den lokalen State übernehmen, damit der Chat ohne Reload schreibbar ist
         setUser(data.user);
+        setLastLoginResponse(`Login OK: User ${data.user.id}`);
         toast({
           title: "Erfolgreich angemeldet",
           description: "Du kannst jetzt im Chat schreiben."
@@ -684,6 +718,7 @@ export const TruckerChat = () => {
       }
     } catch (err) {
       console.error("Unerwarteter Chat-Login-Fehler", err);
+      setLastLoginResponse(`Unerwarteter Fehler: ${err}`);
       toast({
         title: "Fehler",
         description: "Ein unerwarteter Fehler ist aufgetreten.",
@@ -729,6 +764,58 @@ export const TruckerChat = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
+      {/* Debug-Panel */}
+      {showDebug && (
+        <Card className="border-yellow-500 bg-yellow-50/50">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-mono">🔧 Debug (nur Admin)</CardTitle>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setShowDebug(!showDebug)}
+              >
+                {showDebug ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-2 text-xs font-mono">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <span className="font-semibold">Supabase URL:</span>
+                <div className="text-muted-foreground break-all">
+                  {import.meta.env.VITE_SUPABASE_URL?.slice(0, 30) || "https://hxnabnsoffzevqhruvar..."}
+                </div>
+              </div>
+              <div>
+                <span className="font-semibold">Anon-Key geladen:</span>
+                <div className={import.meta.env.VITE_SUPABASE_ANON_KEY ? "text-green-600" : "text-red-600"}>
+                  {import.meta.env.VITE_SUPABASE_ANON_KEY ? "✓ true" : "✗ false"}
+                </div>
+              </div>
+              <div>
+                <span className="font-semibold">Session vorhanden:</span>
+                <div className={hasSession ? "text-green-600" : "text-red-600"}>
+                  {hasSession ? `✓ ja (${sessionUserId.slice(0, 8)}...)` : "✗ nein"}
+                </div>
+              </div>
+              <div>
+                <span className="font-semibold">Auth State:</span>
+                <div className="text-blue-600">{authState}</div>
+              </div>
+            </div>
+            {lastLoginResponse && (
+              <div className="mt-3 p-2 bg-white rounded border">
+                <span className="font-semibold">Letzte Login-Response:</span>
+                <div className={lastLoginResponse.includes("OK") ? "text-green-600" : "text-red-600"}>
+                  {lastLoginResponse}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Login-Formular für nicht angemeldete Benutzer */}
       {!user && (
         <Card>
