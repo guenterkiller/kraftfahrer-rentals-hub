@@ -14,7 +14,8 @@ export const usePageTracking = () => {
       try {
         const userAgent = navigator.userAgent;
         const referrer = document.referrer || null;
-        const route = location.pathname + location.search;
+        // Only track pathname, ignore query parameters (forceHideBadge, tokens, etc.)
+        const route = location.pathname;
 
         await supabase
           .from('page_views')
@@ -30,5 +31,5 @@ export const usePageTracking = () => {
     };
 
     trackPageView();
-  }, [location.pathname, location.search]);
+  }, [location.pathname]);
 };
