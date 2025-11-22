@@ -6,7 +6,7 @@ interface LocationCluster {
   lat: number;
   lng: number;
   count: number;
-  drivers: { user_id: string; user_name: string }[];
+  drivers: { user_id: string; user_name: string; updated_at?: string; }[];
   place_name?: string;
 }
 
@@ -79,8 +79,19 @@ export const TruckerLocationMap = ({ clusters, center }: TruckerLocationMapProps
 
       const marker = L.marker([cluster.lat, cluster.lng], { icon });
 
+      // 4) Marker-Popup mit aktiven Fahrern und Zeitlabels
       const popupContent = document.createElement("div");
       popupContent.className = "text-sm";
+      
+      // Erstelle Fahrer-Liste mit Zeitlabels (max 5)
+      const driversList = cluster.drivers.slice(0, 5).map(driver => {
+        const minutesAgo = driver.updated_at 
+          ? Math.floor((Date.now() - new Date(driver.updated_at).getTime()) / 60000)
+          : 0;
+        const timeLabel = minutesAgo < 5 ? 'online' : `vor ${minutesAgo} Min.`;
+        return `<li class="text-xs text-muted-foreground">${driver.user_name} – ${timeLabel}</li>`;
+      }).join('');
+      
       popupContent.innerHTML = `
         <p class="font-semibold mb-1">
           ${cluster.count} Fahrer in dieser Nähe
@@ -90,6 +101,7 @@ export const TruckerLocationMap = ({ clusters, center }: TruckerLocationMapProps
             ? '<p class="text-xs text-muted-foreground mb-2">Autohof / Rastplatz in der Nähe</p>'
             : ""
         }
+        ${driversList ? `<ul class="space-y-1 mt-2">${driversList}</ul>` : ''}
       `;
 
       marker.bindPopup(popupContent);
