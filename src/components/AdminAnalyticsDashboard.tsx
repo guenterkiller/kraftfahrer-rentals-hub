@@ -69,14 +69,15 @@ export const AdminAnalyticsDashboard = () => {
       // Calculate route statistics
       const routeMap = new Map<string, { count: number; lastVisit: string }>();
       allViews?.forEach((view) => {
-        const existing = routeMap.get(view.route);
+        const cleanRoute = getCleanRoute(view.route);
+        const existing = routeMap.get(cleanRoute);
         if (existing) {
           existing.count++;
           if (new Date(view.created_at) > new Date(existing.lastVisit)) {
             existing.lastVisit = view.created_at;
           }
         } else {
-          routeMap.set(view.route, { count: 1, lastVisit: view.created_at });
+          routeMap.set(cleanRoute, { count: 1, lastVisit: view.created_at });
         }
       });
 
@@ -105,6 +106,13 @@ export const AdminAnalyticsDashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+  
+  const getCleanRoute = (route: string): string => {
+    if (!route) return "/";
+    const [path] = route.split("?");
+    if (!path || path.trim() === "") return "/";
+    return path;
   };
 
   const getBrowserFromUserAgent = (userAgent: string | null): string => {
@@ -271,7 +279,7 @@ export const AdminAnalyticsDashboard = () => {
                           })}
                         </TableCell>
                         <TableCell className="font-mono text-sm">
-                          {view.route}
+                          {getCleanRoute(view.route)}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">
@@ -373,7 +381,7 @@ export const AdminAnalyticsDashboard = () => {
                           })}
                         </TableCell>
                         <TableCell className="font-mono text-sm">
-                          {vital.route}
+                          {getCleanRoute(vital.route)}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{vital.metric_name}</Badge>
