@@ -857,7 +857,7 @@ export const TruckerChat = () => {
                 {isLoggingIn ? "Anmelden..." : "Anmelden"}
               </Button>
               <p className="text-sm text-muted-foreground text-center mt-4">
-                Noch kein Fahrer-Zugang? <a href="/fahrer-werden" className="text-primary hover:underline font-medium">→ jetzt kostenlos registrieren</a>
+                Noch kein Fahrer-Zugang? <a href="/fahrer-registrierung" className="text-primary hover:underline font-medium">→ jetzt kostenlos registrieren</a>
               </p>
             </form>
           </CardContent>
