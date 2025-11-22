@@ -3,13 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Users, Flag, Trash2, AlertCircle, VolumeX, MapPin } from "lucide-react";
+import { Send, Users, Flag, Trash2, AlertCircle, VolumeX, MapPin, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User } from "@supabase/supabase-js";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { divIcon } from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 // B) Schimpfwort-/Sex-Content-Filter
 const blockedWords = [
@@ -37,6 +40,23 @@ interface NearbyDriver {
   user_name: string;
 }
 
+interface LocationCluster {
+  lat: number;
+  lng: number;
+  count: number;
+  drivers: { user_id: string; user_name: string; }[];
+  place_name?: string;
+}
+
+// Helper component to handle map centering
+const MapCenterHandler = ({ center }: { center: [number, number] }) => {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(center, map.getZoom());
+  }, [center, map]);
+  return null;
+};
+
 export const TruckerChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -53,6 +73,9 @@ export const TruckerChat = () => {
   const [nearbyDrivers, setNearbyDrivers] = useState<NearbyDriver[]>([]);
   const [sharingLocation, setSharingLocation] = useState(false);
   const [hasSharedLocation, setHasSharedLocation] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [clusters, setClusters] = useState<LocationCluster[]>([]);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([51.1657, 10.4515]); // Kassel region
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -145,6 +168,106 @@ export const TruckerChat = () => {
     return () => {
       supabase.removeChannel(channel);
     };
+  }, [user, hasSharedLocation]);
+
+  // Lade Cluster-Daten für Karte
+  const loadClusters = async () => {
+    const { data: locations } = await supabase
+      .from('trucker_locations')
+      .select('cluster_lat, cluster_lng, place_name, updated_at, user_id');
+
+    if (!locations) {
+      setClusters([]);
+      return;
+    }
+
+    // Gruppiere nach cluster_lat + cluster_lng
+    const clusterMap = new Map<string, LocationCluster>();
+    
+    for (const loc of locations) {
+      const key = `${loc.cluster_lat},${loc.cluster_lng}`;
+      const existing = clusterMap.get(key);
+      
+      if (existing) {
+        existing.count++;
+        existing.drivers.push({ user_id: loc.user_id, user_name: "Fahrer" });
+      } else {
+        clusterMap.set(key, {
+          lat: loc.cluster_lat,
+          lng: loc.cluster_lng,
+          count: 1,
+          drivers: [{ user_id: loc.user_id, user_name: "Fahrer" }],
+          place_name: loc.place_name
+        });
+      }
+    }
+
+    // Hole Namen aus fahrer_profile
+    const allUserIds = locations.map(l => l.user_id);
+    const { data: profiles } = await supabase
+      .from('fahrer_profile')
+      .select('id, vorname, nachname')
+      .in('id', allUserIds);
+
+    // Namen in Cluster einfügen
+    if (profiles) {
+      clusterMap.forEach(cluster => {
+        cluster.drivers = cluster.drivers.map(driver => {
+          const profile = profiles.find(p => p.id === driver.user_id);
+          return {
+            ...driver,
+            user_name: profile ? `${profile.vorname} ${profile.nachname.charAt(0)}.` : "Fahrer anonym"
+          };
+        });
+      });
+    }
+
+    setClusters(Array.from(clusterMap.values()));
+  };
+
+  // Realtime-Updates für Karte
+  useEffect(() => {
+    if (!showMap) return;
+
+    loadClusters();
+
+    const channel = supabase
+      .channel('trucker_locations_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'trucker_locations'
+        },
+        () => {
+          loadClusters();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [showMap]);
+
+  // Setze Karten-Center wenn User Standort teilt
+  useEffect(() => {
+    if (!user || !hasSharedLocation) return;
+
+    const setMapToUserLocation = async () => {
+      const { data: myLocation } = await supabase
+        .from('trucker_locations')
+        .select('cluster_lat, cluster_lng')
+        .eq('user_id', user.id)
+        .single();
+
+      if (myLocation) {
+        setMapCenter([myLocation.cluster_lat, myLocation.cluster_lng]);
+      }
+    };
+
+    setMapToUserLocation();
   }, [user, hasSharedLocation]);
 
   // Benutzernamen aus fahrer_profile holen
@@ -544,6 +667,112 @@ export const TruckerChat = () => {
             )}
           </div>
         )}
+
+        {/* Karte mit Fahrer-Clustern */}
+        <div className="m-4 border rounded-lg bg-muted/30">
+          <div className="p-3">
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <span className="font-semibold text-sm">Karte mit Fahrer-Clustern</span>
+                </div>
+                <p className="text-xs text-muted-foreground opacity-70">
+                  Es werden nur ungefähre Cluster-Standorte (ca. 300–600 m Radius) angezeigt – keine exakte Ortung.
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowMap(!showMap)}
+                className="shrink-0"
+              >
+                {showMap ? (
+                  <>
+                    <ChevronUp className="h-4 w-4 mr-1" />
+                    Ausblenden
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="h-4 w-4 mr-1" />
+                    Anzeigen
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {showMap && (
+              <div className="h-[400px] rounded-md overflow-hidden mt-3">
+                <MapContainer
+                  center={mapCenter}
+                  zoom={7}
+                  style={{ height: "100%", width: "100%" }}
+                  scrollWheelZoom={true}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <MapCenterHandler center={mapCenter} />
+                  {clusters.map((cluster, idx) => {
+                    const icon = divIcon({
+                      className: 'custom-cluster-icon',
+                      html: `<div style="
+                        background: hsl(var(--primary));
+                        color: hsl(var(--primary-foreground));
+                        border-radius: 50%;
+                        width: ${Math.min(30 + cluster.count * 5, 60)}px;
+                        height: ${Math.min(30 + cluster.count * 5, 60)}px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: bold;
+                        font-size: ${Math.min(12 + cluster.count, 18)}px;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                      ">${cluster.count}</div>`,
+                      iconSize: [Math.min(30 + cluster.count * 5, 60), Math.min(30 + cluster.count * 5, 60)],
+                      iconAnchor: [Math.min(15 + cluster.count * 2.5, 30), Math.min(15 + cluster.count * 2.5, 30)]
+                    });
+
+                    return (
+                      <Marker
+                        key={idx}
+                        position={[cluster.lat, cluster.lng]}
+                        icon={icon}
+                      >
+                        <Popup>
+                          <div className="text-sm">
+                            <p className="font-semibold mb-1">
+                              {cluster.count} {cluster.count === 1 ? 'Fahrer' : 'Fahrer'} in dieser Nähe
+                            </p>
+                            {cluster.place_name && (
+                              <p className="text-xs text-muted-foreground mb-2">
+                                Autohof / Rastplatz in der Nähe
+                              </p>
+                            )}
+                            <ul className="text-xs space-y-1 max-h-24 overflow-y-auto">
+                              {cluster.drivers.slice(0, 5).map((driver, dIdx) => (
+                                <li key={dIdx} className="text-muted-foreground">
+                                  {driver.user_name}
+                                </li>
+                              ))}
+                              {cluster.drivers.length > 5 && (
+                                <li className="text-muted-foreground italic">
+                                  ... und {cluster.drivers.length - 5} weitere
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        </Popup>
+                      </Marker>
+                    );
+                  })}
+                </MapContainer>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Community-Regeln */}
         <Alert className="m-4 border-primary/20 bg-primary/5">
