@@ -36,13 +36,14 @@ interface ChatMessage {
 interface NearbyDriver {
   user_id: string;
   user_name: string;
+  updated_at?: string;
 }
 
 interface LocationCluster {
   lat: number;
   lng: number;
   count: number;
-  drivers: { user_id: string; user_name: string; }[];
+  drivers: { user_id: string; user_name: string; updated_at?: string; }[];
   place_name?: string;
 }
 
@@ -111,7 +112,7 @@ export const TruckerChat = () => {
       // Hole alle mit gleichem Cluster
       const { data: locations } = await supabase
         .from('trucker_locations')
-        .select('user_id')
+        .select('user_id, updated_at')
         .eq('cluster_lat', myLocation.cluster_lat)
         .eq('cluster_lng', myLocation.cluster_lng)
         .neq('user_id', user.id);
@@ -121,19 +122,39 @@ export const TruckerChat = () => {
         return;
       }
 
+      // 1) Aktivitäts-Filter: nur letzten 90 Minuten
+      const activeWindowMs = 90 * 60 * 1000;
+      const now = Date.now();
+      const activeLocations = locations.filter(loc =>
+        now - new Date(loc.updated_at).getTime() <= activeWindowMs
+      );
+
+      if (activeLocations.length === 0) {
+        setNearbyDrivers([]);
+        return;
+      }
+
       // Hole Namen aus fahrer_profile
-      const userIds = locations.map(l => l.user_id);
+      const userIds = activeLocations.map(l => l.user_id);
       const { data: profiles } = await supabase
         .from('fahrer_profile')
         .select('id, vorname, nachname')
         .in('id', userIds);
 
-      const nearby = (profiles || []).slice(0, 5).map(p => ({
-        user_id: p.id,
-        user_name: `${p.vorname} ${p.nachname.charAt(0)}.`
-      }));
+      // Erstelle nearby-Liste mit Zeitstempel
+      const nearby = (profiles || []).map(p => {
+        const loc = activeLocations.find(l => l.user_id === p.id);
+        return {
+          user_id: p.id,
+          user_name: `${p.vorname} ${p.nachname.charAt(0)}.`,
+          updated_at: loc?.updated_at || new Date().toISOString()
+        };
+      });
 
-      setNearbyDrivers(nearby);
+      // Sortiere nach updated_at absteigend (neueste zuerst)
+      nearby.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
+      setNearbyDrivers(nearby.slice(0, 5));
     };
 
     loadNearbyDrivers();
@@ -170,29 +191,49 @@ export const TruckerChat = () => {
       return;
     }
 
+    // 1) Aktivitäts-Filter: nur letzten 90 Minuten
+    const activeWindowMs = 90 * 60 * 1000;
+    const now = Date.now();
+    const activeLocations = locations.filter(loc =>
+      now - new Date(loc.updated_at).getTime() <= activeWindowMs
+    );
+
+    if (activeLocations.length === 0) {
+      setClusters([]);
+      return;
+    }
+
     // Gruppiere nach cluster_lat + cluster_lng
     const clusterMap = new Map<string, LocationCluster>();
     
-    for (const loc of locations) {
+    for (const loc of activeLocations) {
       const key = `${loc.cluster_lat},${loc.cluster_lng}`;
       const existing = clusterMap.get(key);
       
       if (existing) {
         existing.count++;
-        existing.drivers.push({ user_id: loc.user_id, user_name: "Fahrer" });
+        existing.drivers.push({ 
+          user_id: loc.user_id, 
+          user_name: "Fahrer",
+          updated_at: loc.updated_at
+        });
       } else {
         clusterMap.set(key, {
           lat: loc.cluster_lat,
           lng: loc.cluster_lng,
           count: 1,
-          drivers: [{ user_id: loc.user_id, user_name: "Fahrer" }],
+          drivers: [{ 
+            user_id: loc.user_id, 
+            user_name: "Fahrer",
+            updated_at: loc.updated_at
+          }],
           place_name: loc.place_name
         });
       }
     }
 
     // Hole Namen aus fahrer_profile
-    const allUserIds = locations.map(l => l.user_id);
+    const allUserIds = activeLocations.map(l => l.user_id);
     const { data: profiles } = await supabase
       .from('fahrer_profile')
       .select('id, vorname, nachname')
@@ -235,8 +276,15 @@ export const TruckerChat = () => {
       )
       .subscribe();
 
+    // 3) Auto-Refresh alle 60 Sekunden
+    const refreshInterval = setInterval(() => {
+      console.log('[TruckerChat] Auto-refresh: reloading clusters...');
+      loadClusters();
+    }, 60000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(refreshInterval);
     };
   }, [showMap]);
 
@@ -634,24 +682,34 @@ export const TruckerChat = () => {
           </Alert>
         )}
 
-        {/* Fahrer in der Nähe anzeigen */}
+        {/* 2) "Jetzt in deiner Nähe"-Liste */}
         {user && hasSharedLocation && (
           <div className="m-4 p-3 border rounded-lg bg-muted/30">
             <div className="flex items-center gap-2 mb-2">
               <MapPin className="h-4 w-4 text-primary" />
-              <span className="font-semibold text-sm">Fahrer am gleichen Standort:</span>
+              <span className="font-semibold text-sm">
+                Jetzt in deiner Nähe {nearbyDrivers.length > 0 && `(${nearbyDrivers.length})`}
+              </span>
             </div>
             {nearbyDrivers.length === 0 ? (
               <p className="text-sm text-muted-foreground">
-                Noch keine Fahrer in deiner Nähe – vielleicht später!
+                Gerade niemand in deiner Nähe – prüfe später nochmal.
               </p>
             ) : (
               <ul className="text-sm space-y-1">
-                {nearbyDrivers.map((driver) => (
-                  <li key={driver.user_id} className="text-muted-foreground">
-                    {driver.user_name} – in deiner Nähe
-                  </li>
-                ))}
+                {nearbyDrivers.map((driver) => {
+                  const minutesAgo = driver.updated_at 
+                    ? Math.floor((Date.now() - new Date(driver.updated_at).getTime()) / 60000)
+                    : 0;
+                  const timeLabel = minutesAgo < 5 ? 'online' : `vor ${minutesAgo} Min.`;
+                  
+                  return (
+                    <li key={driver.user_id} className="text-muted-foreground flex items-center gap-2">
+                      <span className="font-medium">{driver.user_name}</span>
+                      <span className="text-xs">– {timeLabel}</span>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
