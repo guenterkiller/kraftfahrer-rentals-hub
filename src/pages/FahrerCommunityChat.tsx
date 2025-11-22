@@ -24,7 +24,7 @@ const FahrerCommunityChat = () => {
             {/* Hero Section */}
             <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary">
-                Fahrer-Community-Livechat (ehemals „Trucker-Ladies")
+                Fahrer-Community-Livechat
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
                 Fahrer-Community-Chat – Echtzeit-Austausch für LKW-Fahrer unterwegs
