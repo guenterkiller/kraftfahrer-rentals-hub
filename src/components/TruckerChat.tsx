@@ -87,15 +87,26 @@ export const TruckerChat = () => {
     }
   }, [isAdmin]);
 
-  // Auth-Status überwachen + Debug-Logging
+  // Auth-Status überwachen + Debug-Logging + Robust Session Handling
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setHasSession(!!session);
-      setSessionUserId(session?.user?.id || "");
-      console.log('[TruckerChat Debug] Initial session:', session ? 'EXISTS' : 'NULL', session?.user?.id);
+    // A) Robustes Session-Handling beim Mount
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error || !session) {
+        // Kaputte Session bereinigen
+        console.log('[TruckerChat Debug] No valid session or error, signing out:', error?.message);
+        supabase.auth.signOut();
+        setUser(null);
+        setHasSession(false);
+        setSessionUserId("");
+      } else {
+        setUser(session.user);
+        setHasSession(true);
+        setSessionUserId(session.user.id);
+        console.log('[TruckerChat Debug] Initial session:', 'EXISTS', session.user.id);
+      }
     });
 
+    // B) Auth-State sauber abonnieren
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('[TruckerChat Debug] Auth state changed:', event);
       setAuthState(event);
@@ -706,7 +717,7 @@ export const TruckerChat = () => {
       }
 
       if (data?.user) {
-        // Session sofort in den lokalen State übernehmen, damit der Chat ohne Reload schreibbar ist
+        // C) Kein Router-Redirect, nur State + Toast
         setUser(data.user);
         setLastLoginResponse(`Login OK: User ${data.user.id}`);
         toast({
