@@ -54,6 +54,9 @@ export const TruckerChat = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [canSend, setCanSend] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
@@ -641,25 +644,105 @@ export const TruckerChat = () => {
     });
   };
 
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoggingIn(true);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: loginEmail,
+      password: loginPassword
+    });
+
+    if (error) {
+      toast({
+        title: "Login fehlgeschlagen",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Erfolgreich angemeldet",
+        description: "Du kannst jetzt im Chat schreiben."
+      });
+      setLoginEmail("");
+      setLoginPassword("");
+    }
+
+    setIsLoggingIn(false);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Abgemeldet",
+      description: "Du wurdest erfolgreich abgemeldet."
+    });
+  };
+
   return (
-    <Card className="w-full max-w-4xl mx-auto">
-      <CardHeader className="border-b">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5" />
-            Trucker Ladies Live-Chat
-          </CardTitle>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-            {onlineCount} {onlineCount === 1 ? 'Person' : 'Personen'} online
+    <div className="w-full max-w-4xl mx-auto space-y-6">
+      {/* Login-Formular für nicht angemeldete Benutzer */}
+      {!user && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Login erforderlich</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">E-Mail</label>
+                <Input
+                  type="email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  placeholder="deine@email.de"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Passwort</label>
+                <Input
+                  type="password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <Button type="submit" disabled={isLoggingIn} className="w-full">
+                {isLoggingIn ? "Anmelden..." : "Anmelden"}
+              </Button>
+              <p className="text-sm text-muted-foreground text-center">
+                Noch nicht registriert? Nutze das <a href="/fahrer-registrierung" className="text-primary hover:underline">Fahrer-Registrierungsformular</a>.
+              </p>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
+      <Card className="w-full max-w-4xl mx-auto">
+        <CardHeader className="border-b">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Trucker Ladies Live-Chat
+            </CardTitle>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+              {onlineCount} {onlineCount === 1 ? 'Person' : 'Personen'} online
+            </div>
           </div>
-        </div>
-        {user && (
-          <p className="text-sm text-muted-foreground">
-            Eingeloggt als: <span className="font-medium">{userName}</span>
-          </p>
-        )}
-      </CardHeader>
+          {user && (
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                Eingeloggt als: <span className="font-medium">{userName}</span>
+              </p>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                Abmelden
+              </Button>
+            </div>
+          )}
+        </CardHeader>
       
       <CardContent className="p-0">
         {/* Standort-Freigabe Banner */}
@@ -930,5 +1013,6 @@ export const TruckerChat = () => {
         </DialogContent>
       </Dialog>
     </Card>
+    </div>
   );
 };
