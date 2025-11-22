@@ -648,35 +648,80 @@ export const TruckerChat = () => {
     e.preventDefault();
     setIsLoggingIn(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email: loginEmail,
-      password: loginPassword
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: loginEmail.trim(),
+        password: loginPassword
+      });
 
-    if (error) {
+      if (error) {
+        // Spezifische Fehlermeldungen
+        let errorMessage = "E-Mail oder Passwort falsch.";
+        
+        if (error.message.includes("Email not confirmed")) {
+          errorMessage = "Bitte bestätige zuerst deine E-Mail-Adresse.";
+        } else if (error.message.includes("Invalid login credentials")) {
+          errorMessage = "E-Mail oder Passwort falsch.";
+        } else if (error.message.includes("Email")) {
+          errorMessage = "Ungültige E-Mail-Adresse.";
+        }
+
+        toast({
+          title: "Login fehlgeschlagen",
+          description: errorMessage,
+          variant: "destructive"
+        });
+        setIsLoggingIn(false);
+        return;
+      }
+
+      if (data.user) {
+        toast({
+          title: "Erfolgreich angemeldet",
+          description: "Du kannst jetzt im Chat schreiben."
+        });
+        setLoginEmail("");
+        setLoginPassword("");
+      }
+    } catch (err) {
       toast({
-        title: "Login fehlgeschlagen",
-        description: error.message,
+        title: "Fehler",
+        description: "Ein unerwarteter Fehler ist aufgetreten.",
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "Erfolgreich angemeldet",
-        description: "Du kannst jetzt im Chat schreiben."
-      });
-      setLoginEmail("");
-      setLoginPassword("");
+    } finally {
+      setIsLoggingIn(false);
     }
-
-    setIsLoggingIn(false);
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Abgemeldet",
-      description: "Du wurdest erfolgreich abgemeldet."
-    });
+    try {
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        toast({
+          title: "Fehler beim Abmelden",
+          description: error.message,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Lokalen State zurücksetzen
+      setHasSharedLocation(false);
+      setNearbyDrivers([]);
+      
+      toast({
+        title: "Abgemeldet",
+        description: "Du wurdest erfolgreich abgemeldet."
+      });
+    } catch (err) {
+      toast({
+        title: "Fehler",
+        description: "Ein unerwarteter Fehler ist aufgetreten.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -712,8 +757,8 @@ export const TruckerChat = () => {
               <Button type="submit" disabled={isLoggingIn} className="w-full">
                 {isLoggingIn ? "Anmelden..." : "Anmelden"}
               </Button>
-              <p className="text-sm text-muted-foreground text-center">
-                Noch nicht registriert? Nutze das <a href="/fahrer-registrierung" className="text-primary hover:underline">Fahrer-Registrierungsformular</a>.
+              <p className="text-sm text-muted-foreground text-center mt-4">
+                Noch kein Fahrer-Zugang? <a href="/fahrer-registrierung" className="text-primary hover:underline font-medium">→ jetzt kostenlos registrieren</a>
               </p>
             </form>
           </CardContent>
