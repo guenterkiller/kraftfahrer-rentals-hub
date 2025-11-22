@@ -827,7 +827,7 @@ export const TruckerChat = () => {
 
       {/* Login-Formular für nicht angemeldete Benutzer */}
       {!user && (
-        <Card>
+        <Card id="chat-login">
           <CardHeader>
             <CardTitle>Login erforderlich</CardTitle>
           </CardHeader>
@@ -1085,7 +1085,7 @@ export const TruckerChat = () => {
           {!user ? (
             <Alert>
               <AlertDescription>
-                Du musst <a href="/fahrer-registrierung" className="underline font-medium">angemeldet</a> sein, 
+                Du musst <a href="#chat-login" className="underline font-medium">angemeldet</a> sein,
                 um Nachrichten zu schreiben. Lesen ist weiterhin möglich.
               </AlertDescription>
             </Alert>
