@@ -27,7 +27,7 @@ const HeroSection = () => {
         </h1>
         
         <p className="text-base sm:text-xl md:text-2xl mb-4 sm:mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed">
-          Selbstständige Berufskraftfahrer & Baumaschinenführer ab <span className="text-red-500 font-bold">349 €</span> Tagessatz – Vermittlung ohne Arbeitnehmerüberlassung
+          Selbstständige Berufskraftfahrer & Baumaschinenführer ab <span className="text-white font-bold bg-red-600 px-2 py-1 rounded">349 €</span> Tagessatz – Vermittlung ohne Arbeitnehmerüberlassung
         </p>
         
         <div className="bg-white/15 backdrop-blur-md px-4 py-3 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-2xl border-2 border-white/30 shadow-xl animate-fade-in">
