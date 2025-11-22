@@ -9,8 +9,8 @@ import { TruckerChat } from "@/components/TruckerChat";
 
 const FahrerCommunityChat = () => {
   useSEO({
-    title: "Fahrer-Community-Chat – Austausch unter Berufskraftfahrern | Fahrerexpress",
-    description: "Der kostenlose Live-Chat für alle LKW-Fahrerinnen und LKW-Fahrer: quatschen, helfen, Pause überbrücken, Tipps teilen. Kein Kunden-Support, keine Buchung – nur Fahrer unter sich.",
+    title: "Fahrer-Community-Chat | Austausch für LKW-Fahrer – Trucker-Ladies by Fahrerexpress",
+    description: "Der Fahrer-Community-Chat für LKW-Fahrer: Echtzeit-Chat, Fahrer in der Nähe, Rastplatz-Kontakte, Austausch unter Kollegen. Kostenlos, ohne Dating-Funktion, sicher & anonym.",
     keywords: "trucker community, fahrer chat, lkw fahrer community, fahrer austausch, berufskraftfahrer chat"
   });
 
@@ -23,11 +23,11 @@ const FahrerCommunityChat = () => {
             
             {/* Hero Section */}
             <div className="text-center mb-12">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary">
-                Fahrer-Community-Chat – Austausch unter Berufskraftfahrern
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary">
+                Fahrer-Community-Livechat (ehemals „Trucker-Ladies")
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-                Der kostenlose Live-Chat für alle LKW-Fahrerinnen und LKW-Fahrer: quatschen, helfen, Pause überbrücken, Tipps teilen. Kein Kunden-Support, keine Buchung – nur Fahrer unter sich.
+                Fahrer-Community-Chat – Echtzeit-Austausch für LKW-Fahrer unterwegs
               </p>
             </div>
 
@@ -111,9 +111,8 @@ const FahrerCommunityChat = () => {
             {/* Live Chat */}
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-center mb-6">Live-Chat</h2>
-              <p className="text-xs text-muted-foreground text-center mb-4 max-w-2xl mx-auto">
-                Hinweis: Dies ist ein öffentlicher Community-Chat von Fahrern für Fahrer.
-                Kein Kunden-Support und keine direkte Buchung über den Chat.
+              <p className="text-sm opacity-60 text-center mb-4 max-w-2xl mx-auto">
+                Hinweis: Dies ist kein Dating-Service. Der Community-Chat dient ausschließlich dem Austausch unter Fahrerinnen und Fahrern.
               </p>
               <TruckerChat />
             </div>
