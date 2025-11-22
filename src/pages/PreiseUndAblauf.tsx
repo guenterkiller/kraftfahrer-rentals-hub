@@ -127,8 +127,10 @@ const PreiseUndAblauf = () => {
                 <div className="bg-muted rounded-lg p-4 space-y-2">
                   <p className="font-semibold">Zuschläge:</p>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Nachtarbeit (22:00–06:00 Uhr): gemäß Preisliste</li>
-                    <li>• Sonn- & Feiertage: gemäß Preisliste des jeweiligen Einsatzortes</li>
+                    <li>• Nachtarbeit (22:00–06:00 Uhr): +25 %</li>
+                    <li>• Samstag: +25 %</li>
+                    <li>• Sonntag: +50 %</li>
+                    <li>• Feiertage: +100 %</li>
                     <li>• Wartezeiten & Standzeiten = Arbeitszeit</li>
                   </ul>
                 </div>
