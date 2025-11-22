@@ -115,6 +115,31 @@ export const AdminAnalyticsDashboard = () => {
     return path;
   };
 
+  const getReadableRouteName = (route: string): string => {
+    const cleanRoute = getCleanRoute(route);
+    const routeNames: Record<string, string> = {
+      "/": "Startseite",
+      "/admin": "Admin-Dashboard",
+      "/admin/login": "Admin-Login",
+      "/trucker-ladies": "Fahrer-Community-Chat",
+      "/wissenswertes": "Wissenswertes",
+      "/fahrer-werden": "Fahrer werden",
+      "/kraftfahrer-mieten": "Kraftfahrer mieten",
+      "/lkw-fahrer-buchen": "LKW-Fahrer buchen",
+      "/baumaschinenfuehrer-buchen": "Baumaschinenführer buchen",
+      "/begleitfahrzeuge-bf3": "Begleitfahrzeuge BF3",
+      "/bf3-ablauf": "BF3 Ablauf",
+      "/preise-und-ablauf": "Preise und Ablauf",
+      "/projekte": "Projekte",
+      "/vermittlung": "Vermittlung",
+      "/versicherung": "Versicherung",
+      "/impressum": "Impressum",
+      "/datenschutz": "Datenschutz",
+    };
+    
+    return routeNames[cleanRoute] || cleanRoute;
+  };
+
   const getBrowserFromUserAgent = (userAgent: string | null): string => {
     if (!userAgent) return "Unbekannt";
     if (userAgent.includes("Chrome")) return "Chrome";
@@ -233,8 +258,11 @@ export const AdminAnalyticsDashboard = () => {
                 <TableBody>
                   {routeStats.map((stat) => (
                     <TableRow key={stat.route}>
-                      <TableCell className="font-mono text-sm">
-                        {stat.route}
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="font-medium">{getReadableRouteName(stat.route)}</div>
+                          <div className="font-mono text-xs text-muted-foreground">{stat.route}</div>
+                        </div>
                       </TableCell>
                       <TableCell className="text-right">
                         <Badge variant="secondary">{stat.count}</Badge>
@@ -278,8 +306,11 @@ export const AdminAnalyticsDashboard = () => {
                             locale: de,
                           })}
                         </TableCell>
-                        <TableCell className="font-mono text-sm">
-                          {getCleanRoute(view.route)}
+                        <TableCell>
+                          <div className="space-y-1">
+                            <div className="font-medium text-sm">{getReadableRouteName(view.route)}</div>
+                            <div className="font-mono text-xs text-muted-foreground">{getCleanRoute(view.route)}</div>
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">
@@ -380,8 +411,11 @@ export const AdminAnalyticsDashboard = () => {
                             locale: de,
                           })}
                         </TableCell>
-                        <TableCell className="font-mono text-sm">
-                          {getCleanRoute(vital.route)}
+                        <TableCell>
+                          <div className="space-y-1">
+                            <div className="font-medium text-sm">{getReadableRouteName(vital.route)}</div>
+                            <div className="font-mono text-xs text-muted-foreground">{getCleanRoute(vital.route)}</div>
+                          </div>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{vital.metric_name}</Badge>
