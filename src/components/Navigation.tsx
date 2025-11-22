@@ -39,7 +39,7 @@ const Navigation = () => {
             aria-label="Fahrerexpress Startseite"
           >
             <div className="hidden sm:block text-base md:text-xl">Fahrerexpress-Agentur - Günter Killer</div>
-            <div className="sm:hidden leading-tight text-xs">
+            <div className="sm:hidden leading-tight text-sm">
               <div className="font-bold">Fahrerexpress</div>
               <div className="font-semibold text-primary/90">G. Killer</div>
             </div>
