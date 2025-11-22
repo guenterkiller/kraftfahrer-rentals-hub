@@ -481,15 +481,16 @@ const FahrerRegistrierung = () => {
                   <MessageSquare className="h-10 w-10 text-blue-600 flex-shrink-0 mt-1" />
                   <div className="flex-1">
                     <h2 className="text-xl font-bold text-blue-900 mb-2">
-                      Neu: Trucker Ladies – Community-Chat für alle Fahrer
+                      Neu: Fahrer-Community-Chat – Austausch unter Berufskraftfahrern
                     </h2>
                     <p className="text-blue-800 mb-4">
-                      Hier kannst du dich kostenlos registrieren und gleichzeitig Zugang zum Trucker-Chat bekommen. 
-                      Community und Austausch für Fahrerinnen und Fahrer – unterwegs, in der Pause oder abends.
+                      Mit deiner kostenlosen Registrierung bekommst du Zugang zum Fahrer-Community-Chat.
+                      Dort kannst du dich mit Fahrerinnen und Fahrern austauschen, Tipps teilen und die Pause überbrücken.
+                      Kein Kunden-Support und keine Buchung über den Chat – nur Fahrer unter sich.
                     </p>
                     <Button variant="outline" asChild className="border-blue-600 text-blue-700 hover:bg-blue-50">
                       <Link to="/trucker-ladies">
-                        Zum Trucker-Chat
+                        Zum Fahrer-Community-Chat
                       </Link>
                     </Button>
                   </div>
