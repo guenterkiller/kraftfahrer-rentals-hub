@@ -48,15 +48,6 @@ interface LocationCluster {
   place_name?: string;
 }
 
-// Helper component to handle map centering
-const MapCenterHandler = ({ center }: { center: [number, number] }) => {
-  const map = useMap();
-  useEffect(() => {
-    map.setView(center, map.getZoom());
-  }, [center, map]);
-  return null;
-};
-
 export const TruckerChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -704,6 +695,7 @@ export const TruckerChat = () => {
             {showMap && (
               <div className="h-[400px] rounded-md overflow-hidden mt-3">
                 <MapContainer
+                  key={`${mapCenter[0]}-${mapCenter[1]}`}
                   center={mapCenter}
                   zoom={7}
                   style={{ height: "100%", width: "100%" }}
@@ -713,7 +705,6 @@ export const TruckerChat = () => {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   />
-                  <MapCenterHandler center={mapCenter} />
                   {clusters.map((cluster, idx) => {
                     const icon = divIcon({
                       className: 'custom-cluster-icon',
