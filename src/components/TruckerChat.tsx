@@ -57,6 +57,9 @@ export const TruckerChat = () => {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
   const [canSend, setCanSend] = useState(true);
   const [countdown, setCountdown] = useState(0);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
@@ -738,6 +741,53 @@ export const TruckerChat = () => {
     }
   };
 
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsRegistering(true);
+
+    const email = signUpEmail.trim().toLowerCase();
+    const password = signUpPassword;
+
+    try {
+      const redirectUrl = `${window.location.origin}${window.location.pathname}#chat-login`;
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+        },
+      });
+
+      if (error) {
+        console.error("Chat sign-up error", error);
+        toast({
+          title: "Registrierung fehlgeschlagen",
+          description: error.message || "Bitte prüfe deine Eingaben.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Registrierung gestartet",
+        description: "Bitte bestätige den Link in der E-Mail, dann kannst du dich im Chat einloggen.",
+      });
+
+      setSignUpEmail("");
+      setSignUpPassword("");
+    } catch (err: any) {
+      console.error("Unerwarteter Chat-Sign-Up-Fehler", err);
+      toast({
+        title: "Fehler",
+        description: err?.message || "Ein unerwarteter Fehler ist aufgetreten.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -825,43 +875,101 @@ export const TruckerChat = () => {
         </Card>
       )}
 
-      {/* Login-Formular für nicht angemeldete Benutzer */}
+      {/* Login- und Registrierungsbereich für nicht angemeldete Benutzer */}
       {!user && (
-        <Card id="chat-login">
-          <CardHeader>
-            <CardTitle>Login erforderlich</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label className="text-sm font-medium">E-Mail</label>
-                <Input
-                  type="email"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="deine@email.de"
-                  required
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Passwort</label>
-                <Input
-                  type="password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              <Button type="submit" disabled={isLoggingIn} className="w-full">
-                {isLoggingIn ? "Anmelden..." : "Anmelden"}
-              </Button>
-              <p className="text-sm text-muted-foreground text-center mt-4">
-                Noch kein Fahrer-Zugang? <a href="/fahrer-registrierung" className="text-primary hover:underline font-medium">→ jetzt kostenlos registrieren</a>
+        <>
+          <Card id="chat-login">
+            <CardHeader>
+              <CardTitle>Login erforderlich</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">E-Mail</label>
+                  <Input
+                    type="email"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    placeholder="deine@email.de"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Passwort</label>
+                  <Input
+                    type="password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    placeholder="••••••••"
+                    required
+                  />
+                </div>
+                <Button type="submit" disabled={isLoggingIn} className="w-full">
+                  {isLoggingIn ? "Anmelden..." : "Anmelden"}
+                </Button>
+                <p className="text-sm text-muted-foreground text-center mt-4">
+                  Noch kein Fahrer-Zugang?{" "}
+                  <a
+                    href="#chat-register"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    → jetzt kostenlos registrieren
+                  </a>
+                </p>
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card id="chat-register">
+            <CardHeader>
+              <CardTitle>Neu im Fahrer-Community-Chat?</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Registriere dich mit E-Mail und Passwort. Du erhältst einen Bestätigungslink per E-Mail.
               </p>
-            </form>
-          </CardContent>
-        </Card>
+              <form onSubmit={handleSignUp} className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium">E-Mail</label>
+                  <Input
+                    type="email"
+                    value={signUpEmail}
+                    onChange={(e) => setSignUpEmail(e.target.value)}
+                    placeholder="deine@email.de"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Passwort festlegen</label>
+                  <Input
+                    type="password"
+                    value={signUpPassword}
+                    onChange={(e) => setSignUpPassword(e.target.value)}
+                    placeholder="Mindestens 6 Zeichen"
+                    required
+                  />
+                </div>
+                <Button type="submit" disabled={isRegistering} className="w-full">
+                  {isRegistering ? "Registriere..." : "Jetzt registrieren"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </>
       )}
 
       <Card className="w-full max-w-4xl mx-auto">
