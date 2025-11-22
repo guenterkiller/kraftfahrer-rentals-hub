@@ -12,6 +12,40 @@ serve(async (req) => {
   }
 
   try {
+    // Admin authorization check
+    const authHeader = req.headers.get("Authorization") || "";
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    );
+
+    const { data: { user }, error: userErr } = await supabaseClient.auth.getUser(
+      authHeader.replace("Bearer ", "")
+    );
+
+    if (userErr || !user) {
+      console.error('Unauthorized: No valid user');
+      return new Response(
+        JSON.stringify({ success: false, error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { data: isAdmin } = await supabaseClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin")
+      .maybeSingle();
+
+    if (!isAdmin) {
+      console.error('Forbidden: User is not admin');
+      return new Response(
+        JSON.stringify({ success: false, error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const ADMIN_EMAIL = 'guenter.killer@t-online.de';
     const adminPassword = Deno.env.get('ADMIN_SECRET_PASSWORD');
     

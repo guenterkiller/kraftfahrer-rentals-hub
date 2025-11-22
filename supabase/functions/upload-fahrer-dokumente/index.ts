@@ -31,10 +31,25 @@ serve(async (req) => {
   }
 
   try {
-    const supabase = createClient(
+    // Create client for auth check
+    const authClient = createClient(
       Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")! // Service Role für Server-seitigen Upload
+      Deno.env.get("SUPABASE_ANON_KEY")!
     );
+
+    // Get authenticated user
+    const authHeader = req.headers.get("Authorization") || "";
+    const { data: { user }, error: userErr } = await authClient.auth.getUser(
+      authHeader.replace("Bearer ", "")
+    );
+
+    if (userErr || !user) {
+      console.error('Unauthorized: No valid user');
+      return new Response(
+        JSON.stringify({ success: false, error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders(req), "Content-Type": "application/json" } }
+      );
+    }
 
     const form = await req.formData();
     const fahrer_id = String(form.get("fahrer_id") ?? "");
@@ -46,6 +61,21 @@ serve(async (req) => {
     if (!fahrer_id || !dokument_typ || !file) {
       throw new Error("Pflichtfelder fehlen (fahrer_id, dokument_typ, file).");
     }
+
+    // Ownership check - user can only upload for themselves
+    if (fahrer_id !== user.id) {
+      console.error('Forbidden: User cannot upload for another driver');
+      return new Response(
+        JSON.stringify({ success: false, error: "Forbidden" }),
+        { status: 403, headers: { ...corsHeaders(req), "Content-Type": "application/json" } }
+      );
+    }
+
+    // Create service role client for actual upload
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
 
     if (!ALLOWED.has(file.type)) {
       throw new Error("Nur JPG/PNG/PDF erlaubt.");
