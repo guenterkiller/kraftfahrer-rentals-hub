@@ -13,7 +13,7 @@ import FahrerRegistrierung from "./pages/FahrerRegistrierung";
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
-import TruckerLadies from "./pages/TruckerLadies";
+import FahrerCommunityChat from "./pages/FahrerCommunityChat";
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import DriverJobResponse from "./pages/DriverJobResponse";
@@ -55,7 +55,7 @@ const App = () => (
           <Route path="/vermittlung" element={<Vermittlung />} />
           <Route path="/wissenswertes" element={<Wissenswertes />} />
           <Route path="/projekte" element={<Projekte />} />
-          <Route path="/trucker-ladies" element={<TruckerLadies />} />
+          <Route path="/trucker-ladies" element={<FahrerCommunityChat />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/driver/accept" element={<DriverJobResponse />} />
