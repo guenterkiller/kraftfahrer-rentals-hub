@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Users, Flag, Trash2, AlertCircle, VolumeX } from "lucide-react";
+import { Send, Users, Flag, Trash2, AlertCircle, VolumeX, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -32,6 +32,11 @@ interface ChatMessage {
   created_at: string;
 }
 
+interface NearbyDriver {
+  user_id: string;
+  user_name: string;
+}
+
 export const TruckerChat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -45,6 +50,9 @@ export const TruckerChat = () => {
   const [reportMessageId, setReportMessageId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
   const [blockedUsers, setBlockedUsers] = useState<Set<string>>(new Set());
+  const [nearbyDrivers, setNearbyDrivers] = useState<NearbyDriver[]>([]);
+  const [sharingLocation, setSharingLocation] = useState(false);
+  const [hasSharedLocation, setHasSharedLocation] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -73,6 +81,71 @@ export const TruckerChat = () => {
       }
     }
   }, []);
+
+  // Lade Fahrer in der Nähe
+  useEffect(() => {
+    if (!user || !hasSharedLocation) return;
+
+    const loadNearbyDrivers = async () => {
+      // Hole eigenen Standort
+      const { data: myLocation } = await supabase
+        .from('trucker_locations')
+        .select('cluster_lat, cluster_lng')
+        .eq('user_id', user.id)
+        .single();
+
+      if (!myLocation) return;
+
+      // Hole alle mit gleichem Cluster
+      const { data: locations } = await supabase
+        .from('trucker_locations')
+        .select('user_id')
+        .eq('cluster_lat', myLocation.cluster_lat)
+        .eq('cluster_lng', myLocation.cluster_lng)
+        .neq('user_id', user.id);
+
+      if (!locations || locations.length === 0) {
+        setNearbyDrivers([]);
+        return;
+      }
+
+      // Hole Namen aus fahrer_profile
+      const userIds = locations.map(l => l.user_id);
+      const { data: profiles } = await supabase
+        .from('fahrer_profile')
+        .select('id, vorname, nachname')
+        .in('id', userIds);
+
+      const nearby = (profiles || []).slice(0, 5).map(p => ({
+        user_id: p.id,
+        user_name: `${p.vorname} ${p.nachname.charAt(0)}.`
+      }));
+
+      setNearbyDrivers(nearby);
+    };
+
+    loadNearbyDrivers();
+
+    // Realtime subscription für Standort-Updates
+    const channel = supabase
+      .channel('nearby-drivers')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'trucker_locations'
+        },
+        () => {
+          loadNearbyDrivers();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, hasSharedLocation]);
 
   // Benutzernamen aus fahrer_profile holen
   useEffect(() => {
@@ -349,6 +422,57 @@ export const TruckerChat = () => {
     });
   };
 
+  const handleShareLocation = async () => {
+    if (!user) {
+      toast({
+        title: "Login erforderlich",
+        description: "Bitte melde dich an, um deinen Standort zu teilen.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setSharingLocation(true);
+
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+
+      const { latitude, longitude } = position.coords;
+
+      // Standort runden (ca. 500m Radius)
+      const clusterLat = Math.round(latitude * 200) / 200;
+      const clusterLng = Math.round(longitude * 200) / 200;
+
+      const { error } = await supabase
+        .from('trucker_locations')
+        .upsert({
+          user_id: user.id,
+          cluster_lat: clusterLat,
+          cluster_lng: clusterLng,
+          place_name: null,
+          updated_at: new Date().toISOString()
+        });
+
+      if (error) throw error;
+
+      setHasSharedLocation(true);
+      toast({
+        title: "Standort geteilt",
+        description: "Dein ungefährer Standort wurde geteilt."
+      });
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: error.message || "Standort konnte nicht geteilt werden.",
+        variant: "destructive"
+      });
+    } finally {
+      setSharingLocation(false);
+    }
+  };
+
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('de-DE', { 
@@ -378,6 +502,49 @@ export const TruckerChat = () => {
       </CardHeader>
       
       <CardContent className="p-0">
+        {/* Standort-Freigabe Banner */}
+        {user && !hasSharedLocation && (
+          <Alert className="m-4 border-yellow-500/20 bg-yellow-500/5">
+            <MapPin className="h-4 w-4 text-yellow-600" />
+            <AlertDescription className="text-sm">
+              <strong>Fahrer in deiner Nähe:</strong><br />
+              Du kannst optional deinen ungefähren Standort teilen, um zu sehen, wer am gleichen Rastplatz oder in deiner Nähe ist.
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-2 w-full"
+                onClick={handleShareLocation}
+                disabled={sharingLocation}
+              >
+                {sharingLocation ? "Standort wird geteilt..." : "Standort freigeben"}
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* Fahrer in der Nähe anzeigen */}
+        {user && hasSharedLocation && (
+          <div className="m-4 p-3 border rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2 mb-2">
+              <MapPin className="h-4 w-4 text-primary" />
+              <span className="font-semibold text-sm">Fahrer am gleichen Standort:</span>
+            </div>
+            {nearbyDrivers.length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Noch keine Fahrer in deiner Nähe – vielleicht später!
+              </p>
+            ) : (
+              <ul className="text-sm space-y-1">
+                {nearbyDrivers.map((driver) => (
+                  <li key={driver.user_id} className="text-muted-foreground">
+                    {driver.user_name} – in deiner Nähe
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
         {/* Community-Regeln */}
         <Alert className="m-4 border-primary/20 bg-primary/5">
           <AlertCircle className="h-4 w-4" />

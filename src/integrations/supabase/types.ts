@@ -878,6 +878,30 @@ export type Database = {
           },
         ]
       }
+      trucker_locations: {
+        Row: {
+          cluster_lat: number
+          cluster_lng: number
+          place_name: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cluster_lat: number
+          cluster_lng: number
+          place_name?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cluster_lat?: number
+          cluster_lng?: number
+          place_name?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string | null
