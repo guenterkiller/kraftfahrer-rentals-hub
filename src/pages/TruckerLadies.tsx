@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, MapPin, Users, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
+import { TruckerChat } from "@/components/TruckerChat";
 
 const TruckerLadies = () => {
   useSEO({
@@ -98,13 +99,19 @@ const TruckerLadies = () => {
             </div>
 
             {/* CTA Section */}
-            <div className="bg-primary/5 rounded-lg p-8 text-center mb-8">
+            <div className="bg-primary/5 rounded-lg p-8 text-center mb-12">
               <h2 className="text-2xl font-bold mb-4">Jetzt Teil der Community werden</h2>
               <Button size="lg" asChild className="bg-primary hover:bg-primary/90">
                 <Link to="/fahrer-registrierung">
                   Jetzt kostenlos registrieren
                 </Link>
               </Button>
+            </div>
+
+            {/* Live Chat */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-center mb-6">Live-Chat</h2>
+              <TruckerChat />
             </div>
 
             {/* Hinweis */}
