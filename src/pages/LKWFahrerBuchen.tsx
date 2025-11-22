@@ -69,7 +69,7 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW CE Fahrer buchen",
-    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
+    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. <span class='text-red-600 font-bold'>349 €</span> pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
     bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
   };
 
