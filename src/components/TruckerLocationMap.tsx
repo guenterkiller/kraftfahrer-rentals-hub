@@ -24,7 +24,7 @@ export const TruckerLocationMap = ({ clusters, center }: TruckerLocationMapProps
   useEffect(() => {
     if (mapRef.current || !containerRef.current) return;
 
-    const map = L.map(containerRef.current).setView(center, 7);
+    const map = L.map(containerRef.current).setView(center, 14);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
@@ -46,7 +46,7 @@ export const TruckerLocationMap = ({ clusters, center }: TruckerLocationMapProps
   // Update center when it changes
   useEffect(() => {
     if (!mapRef.current) return;
-    mapRef.current.setView(center, 10); // Näher ran zoomen auf den Fahrer-Standort
+    mapRef.current.setView(center, 14); // Zoom 14 = ca. 1-2 km Radius sichtbar
   }, [center]);
 
   // Update markers when clusters change
