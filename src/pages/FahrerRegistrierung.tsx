@@ -474,7 +474,7 @@ const FahrerRegistrierung = () => {
               </Button>
             </div>
 
-            {/* Trucker Ladies Info Block */}
+            {/* Community Chat Info Block */}
             <Card className="mb-8 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
