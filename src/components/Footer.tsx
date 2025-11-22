@@ -71,6 +71,11 @@ const Footer = () => {
                   Fahrer werden
                 </Link>
               </li>
+              <li>
+                <Link to="/trucker-ladies" className="text-muted-foreground hover:text-primary transition-colors">
+                  Fahrer-Community-Chat
+                </Link>
+              </li>
             </ul>
             <p className="text-xs text-muted-foreground font-semibold">
               🇩🇪 Bundesweit verfügbar<br />
