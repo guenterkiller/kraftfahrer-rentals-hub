@@ -650,20 +650,18 @@ export const TruckerChat = () => {
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: loginEmail.trim(),
+        email: loginEmail.trim().toLowerCase(),
         password: loginPassword
       });
 
       if (error) {
-        // Spezifische Fehlermeldungen
+        console.error("Chat login error", error);
         let errorMessage = "E-Mail oder Passwort falsch.";
         
         if (error.message.includes("Email not confirmed")) {
           errorMessage = "Bitte bestätige zuerst deine E-Mail-Adresse.";
         } else if (error.message.includes("Invalid login credentials")) {
           errorMessage = "E-Mail oder Passwort falsch.";
-        } else if (error.message.includes("Email")) {
-          errorMessage = "Ungültige E-Mail-Adresse.";
         }
 
         toast({
@@ -671,11 +669,12 @@ export const TruckerChat = () => {
           description: errorMessage,
           variant: "destructive"
         });
-        setIsLoggingIn(false);
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
+        // Session sofort in den lokalen State übernehmen, damit der Chat ohne Reload schreibbar ist
+        setUser(data.user);
         toast({
           title: "Erfolgreich angemeldet",
           description: "Du kannst jetzt im Chat schreiben."
@@ -684,6 +683,7 @@ export const TruckerChat = () => {
         setLoginPassword("");
       }
     } catch (err) {
+      console.error("Unerwarteter Chat-Login-Fehler", err);
       toast({
         title: "Fehler",
         description: "Ein unerwarteter Fehler ist aufgetreten.",
@@ -699,6 +699,7 @@ export const TruckerChat = () => {
       const { error } = await supabase.auth.signOut();
       
       if (error) {
+        console.error("Chat logout error", error);
         toast({
           title: "Fehler beim Abmelden",
           description: error.message,
@@ -708,6 +709,7 @@ export const TruckerChat = () => {
       }
 
       // Lokalen State zurücksetzen
+      setUser(null);
       setHasSharedLocation(false);
       setNearbyDrivers([]);
       
@@ -716,6 +718,7 @@ export const TruckerChat = () => {
         description: "Du wurdest erfolgreich abgemeldet."
       });
     } catch (err) {
+      console.error("Unerwarteter Chat-Logout-Fehler", err);
       toast({
         title: "Fehler",
         description: "Ein unerwarteter Fehler ist aufgetreten.",
@@ -758,7 +761,7 @@ export const TruckerChat = () => {
                 {isLoggingIn ? "Anmelden..." : "Anmelden"}
               </Button>
               <p className="text-sm text-muted-foreground text-center mt-4">
-                Noch kein Fahrer-Zugang? <a href="/fahrer-registrierung" className="text-primary hover:underline font-medium">→ jetzt kostenlos registrieren</a>
+                Noch kein Fahrer-Zugang? <a href="/fahrer-werden" className="text-primary hover:underline font-medium">→ jetzt kostenlos registrieren</a>
               </p>
             </form>
           </CardContent>
