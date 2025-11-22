@@ -907,36 +907,38 @@ export const TruckerChat = () => {
       {/* Login- und Registrierungsbereich für nicht angemeldete Benutzer */}
       {!user && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mb-4">
-          <Card id="chat-login">
-            <CardHeader>
-              <CardTitle>Login erforderlich</CardTitle>
+          <Card id="chat-login" className="compact">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Login erforderlich</CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleLogin} className="space-y-4">
+            <CardContent className="pb-4">
+              <form onSubmit={handleLogin} className="space-y-3">
                 <div>
-                  <label className="text-sm font-medium">E-Mail</label>
+                  <label className="text-xs font-medium">E-Mail</label>
                   <Input
                     type="email"
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
                     placeholder="deine@email.de"
+                    className="h-9"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Passwort</label>
+                  <label className="text-xs font-medium">Passwort</label>
                   <Input
                     type="password"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     placeholder="••••••••"
+                    className="h-9"
                     required
                   />
                 </div>
-                <Button type="submit" disabled={isLoggingIn} className="w-full">
+                <Button type="submit" disabled={isLoggingIn} className="w-full h-9">
                   {isLoggingIn ? "Anmelden..." : "Anmelden"}
                 </Button>
-                <p className="text-sm text-muted-foreground text-center mt-4">
+                <p className="text-xs text-muted-foreground text-center mt-2">
                   Noch kein Fahrer-Zugang?{" "}
                   <a
                     href="#chat-register"
@@ -949,36 +951,38 @@ export const TruckerChat = () => {
             </CardContent>
           </Card>
 
-          <Card id="chat-register">
-            <CardHeader>
-              <CardTitle>Neu im Fahrer-Community-Chat?</CardTitle>
+          <Card id="chat-register" className="compact">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg">Neu im Fahrer-Community-Chat?</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground mb-4">
+            <CardContent className="pb-4">
+              <p className="text-xs text-muted-foreground mb-3">
                 Registriere dich mit E-Mail und Passwort. Du erhältst einen Bestätigungslink per E-Mail.
               </p>
-              <form onSubmit={handleSignUp} className="space-y-4">
+              <form onSubmit={handleSignUp} className="space-y-3">
                 <div>
-                  <label className="text-sm font-medium">E-Mail</label>
+                  <label className="text-xs font-medium">E-Mail</label>
                   <Input
                     type="email"
                     value={signUpEmail}
                     onChange={(e) => setSignUpEmail(e.target.value)}
                     placeholder="deine@email.de"
+                    className="h-9"
                     required
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Passwort festlegen</label>
+                  <label className="text-xs font-medium">Passwort festlegen</label>
                   <Input
                     type="password"
                     value={signUpPassword}
                     onChange={(e) => setSignUpPassword(e.target.value)}
                     placeholder="Mindestens 6 Zeichen"
+                    className="h-9"
                     required
                   />
                 </div>
-                <Button type="submit" disabled={isRegistering} className="w-full">
+                <Button type="submit" disabled={isRegistering} className="w-full h-9">
                   {isRegistering ? "Registriere..." : "Jetzt registrieren"}
                 </Button>
               </form>
