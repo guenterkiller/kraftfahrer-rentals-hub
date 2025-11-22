@@ -87,26 +87,24 @@ export const TruckerChat = () => {
     }
   }, [isAdmin]);
 
-  // Auth-Status überwachen + Debug-Logging + Robust Session Handling
+  // Auth-Status überwachen + Session-Handling
   useEffect(() => {
-    // A) Robustes Session-Handling beim Mount
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error || !session) {
-        // Kaputte Session bereinigen
-        console.log('[TruckerChat Debug] No valid session or error, signing out:', error?.message);
-        supabase.auth.signOut();
-        setUser(null);
-        setHasSession(false);
-        setSessionUserId("");
-      } else {
+    // Aktuelle Session prüfen
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
         setUser(session.user);
         setHasSession(true);
         setSessionUserId(session.user.id);
-        console.log('[TruckerChat Debug] Initial session:', 'EXISTS', session.user.id);
+        console.log('[TruckerChat Debug] Initial session found:', session.user.id);
+      } else {
+        setUser(null);
+        setHasSession(false);
+        setSessionUserId("");
+        console.log('[TruckerChat Debug] No initial session');
       }
     });
 
-    // B) Auth-State sauber abonnieren
+    // Auth-State-Changes abonnieren
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('[TruckerChat Debug] Auth state changed:', event);
       setAuthState(event);
