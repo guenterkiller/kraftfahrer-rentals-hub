@@ -801,6 +801,27 @@ export type Database = {
         }
         Relationships: []
       }
+      trucker_chat_blocklist: {
+        Row: {
+          blocked_name: string
+          blocker_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_name: string
+          blocker_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_name?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       trucker_chat_messages: {
         Row: {
           created_at: string
