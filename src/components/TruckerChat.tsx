@@ -1051,7 +1051,7 @@ export const TruckerChat = () => {
         )}
 
         {/* Karte mit Fahrer-Clustern */}
-        <div className="m-4 border rounded-lg bg-muted/30">
+        <div className="mx-4 mb-4 border rounded-lg bg-muted/30">
           <div className="p-3">
             <div className="flex items-center justify-between mb-2">
               <div>
@@ -1090,7 +1090,7 @@ export const TruckerChat = () => {
         </div>
 
         {/* Community-Regeln */}
-        <Alert className="m-4 border-primary/20 bg-primary/5">
+        <Alert className="mx-4 mb-4 border-primary/20 bg-primary/5">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription className="text-sm">
             <strong>Regeln:</strong> Respektvoller Umgang. Keine Beleidigungen, keine sexuellen Inhalte, 
