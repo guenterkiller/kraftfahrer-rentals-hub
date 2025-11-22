@@ -877,7 +877,7 @@ export const TruckerChat = () => {
 
       {/* Login- und Registrierungsbereich für nicht angemeldete Benutzer */}
       {!user && (
-        <>
+        <div className="max-w-md mx-auto space-y-4">
           <Card id="chat-login">
             <CardHeader>
               <CardTitle>Login erforderlich</CardTitle>
@@ -913,20 +913,6 @@ export const TruckerChat = () => {
                     href="#chat-register"
                     className="text-primary hover:underline font-medium"
                   >
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     → jetzt kostenlos registrieren
                   </a>
                 </p>
@@ -969,7 +955,7 @@ export const TruckerChat = () => {
               </form>
             </CardContent>
           </Card>
-        </>
+        </div>
       )}
 
       <Card className="w-full max-w-4xl mx-auto">
