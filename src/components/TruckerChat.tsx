@@ -289,7 +289,16 @@ export const TruckerChat = () => {
       });
     }
 
-    setClusters(Array.from(clusterMap.values()));
+    const clustersArray = Array.from(clusterMap.values());
+    setClusters(clustersArray);
+
+    // Wenn der eingeloggte User einen Standort hat, auf diesen zentrieren
+    if (user) {
+      const userLocation = activeLocations.find(loc => loc.user_id === user.id);
+      if (userLocation) {
+        setMapCenter([userLocation.cluster_lat, userLocation.cluster_lng]);
+      }
+    }
   };
 
   // Realtime-Updates für Karte

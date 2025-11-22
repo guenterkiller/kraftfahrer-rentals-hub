@@ -46,7 +46,7 @@ export const TruckerLocationMap = ({ clusters, center }: TruckerLocationMapProps
   // Update center when it changes
   useEffect(() => {
     if (!mapRef.current) return;
-    mapRef.current.setView(center, mapRef.current.getZoom());
+    mapRef.current.setView(center, 10); // Näher ran zoomen auf den Fahrer-Standort
   }, [center]);
 
   // Update markers when clusters change
