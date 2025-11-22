@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { TruckerChat } from "@/components/TruckerChat";
 
-const TruckerLadies = () => {
+const FahrerCommunityChat = () => {
   useSEO({
     title: "Fahrer-Community-Chat – Austausch unter Berufskraftfahrern | Fahrerexpress",
     description: "Der kostenlose Live-Chat für alle LKW-Fahrerinnen und LKW-Fahrer: quatschen, helfen, Pause überbrücken, Tipps teilen. Kein Kunden-Support, keine Buchung – nur Fahrer unter sich.",
@@ -200,4 +200,4 @@ const TruckerLadies = () => {
   );
 };
 
-export default TruckerLadies;
+export default FahrerCommunityChat;
