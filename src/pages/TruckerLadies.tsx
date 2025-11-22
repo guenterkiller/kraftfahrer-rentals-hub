@@ -9,9 +9,9 @@ import { TruckerChat } from "@/components/TruckerChat";
 
 const TruckerLadies = () => {
   useSEO({
-    title: "Trucker Ladies – Chat & Community für alle Fahrer | Fahrerexpress",
-    description: "Vernetze dich mit Fahrern und Fahrerinnen, tausche dich aus, finde Kontakte auf deiner Route – kostenlos und respektvoll.",
-    keywords: "trucker community, fahrer chat, lkw fahrer community, trucker ladies, fahrer austausch"
+    title: "Fahrer-Community-Chat – Austausch unter Berufskraftfahrern | Fahrerexpress",
+    description: "Der kostenlose Live-Chat für alle LKW-Fahrerinnen und LKW-Fahrer: quatschen, helfen, Pause überbrücken, Tipps teilen. Kein Kunden-Support, keine Buchung – nur Fahrer unter sich.",
+    keywords: "trucker community, fahrer chat, lkw fahrer community, fahrer austausch, berufskraftfahrer chat"
   });
 
   return (
@@ -24,10 +24,10 @@ const TruckerLadies = () => {
             {/* Hero Section */}
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold mb-4 text-primary">
-                Trucker Ladies – Chat & Community für alle Fahrer
+                Fahrer-Community-Chat – Austausch unter Berufskraftfahrern
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-                Vernetze dich mit Fahrern und Fahrerinnen, tausche dich aus, finde Kontakte auf deiner Route – kostenlos und respektvoll.
+                Der kostenlose Live-Chat für alle LKW-Fahrerinnen und LKW-Fahrer: quatschen, helfen, Pause überbrücken, Tipps teilen. Kein Kunden-Support, keine Buchung – nur Fahrer unter sich.
               </p>
             </div>
 
@@ -42,7 +42,7 @@ const TruckerLadies = () => {
                     <div>
                       <h3 className="text-xl font-bold mb-2">Live-Chat für unterwegs</h3>
                       <p className="text-muted-foreground">
-                        Offener Chat für alle Fahrer – hier wird geredet, gelacht und geholfen.
+                        Offener Community-Chat für Fahrer – hier wird geredet, gelacht und geholfen.
                       </p>
                     </div>
                   </div>
@@ -72,9 +72,9 @@ const TruckerLadies = () => {
                       <Users className="h-8 w-8 text-primary" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2">Kontakte & Bekanntschaften</h3>
+                      <h3 className="text-xl font-bold mb-2">Tipps & Hilfe</h3>
                       <p className="text-muted-foreground">
-                        Neue Leute kennenlernen – freundschaftlich, locker, ohne Druck.
+                        Sofortige Antworten von Fahrerkollegen – Fragen stellen, Erfahrungen teilen, Probleme lösen.
                       </p>
                     </div>
                   </div>
@@ -111,14 +111,17 @@ const TruckerLadies = () => {
             {/* Live Chat */}
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-center mb-6">Live-Chat</h2>
+              <p className="text-xs text-muted-foreground text-center mb-4 max-w-2xl mx-auto">
+                Hinweis: Dies ist ein öffentlicher Community-Chat von Fahrern für Fahrer.
+                Kein Kunden-Support und keine direkte Buchung über den Chat.
+              </p>
               <TruckerChat />
             </div>
 
             {/* Hinweis */}
             <div className="text-center text-sm text-muted-foreground max-w-3xl mx-auto">
               <p>
-                Trucker Ladies ist ein Community-Chat der Fahrerexpress-Agentur für Fahrerinnen und Fahrer. 
-                Er ergänzt unsere Fahrerservices und bietet Austausch und Kontakte unterwegs.
+                Der Fahrer-Community-Chat ist ein ergänzendes Community-Angebot der Fahrerexpress-Agentur und dient ausschließlich dem Austausch unter Fahrerinnen und Fahrern.
               </p>
             </div>
 
