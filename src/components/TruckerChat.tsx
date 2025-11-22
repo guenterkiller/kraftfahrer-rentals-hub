@@ -1050,51 +1050,54 @@ export const TruckerChat = () => {
           </div>
         )}
 
-        {/* Karte mit Fahrer-Clustern */}
-        <div className="mx-4 mb-4 p-3 border rounded-lg bg-muted/30">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <MapPin className="h-4 w-4 text-primary" />
-                <span className="font-semibold text-sm">Karte mit Fahrer-Clustern</span>
+        {/* Karte mit Fahrer-Clustern + Community-Regeln */}
+        <div className="mx-4 mb-4 space-y-4">
+          {/* Karte mit Fahrer-Clustern */}
+          <div className="p-3 border rounded-lg bg-muted/30">
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <MapPin className="h-4 w-4 text-primary" />
+                  <span className="font-semibold text-sm">Karte mit Fahrer-Clustern</span>
+                </div>
+                <p className="text-xs text-muted-foreground opacity-70">
+                  Es werden nur ungefähre Cluster-Standorte (ca. 300–600 m Radius) angezeigt – keine exakte Ortung.
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground opacity-70">
-                Es werden nur ungefähre Cluster-Standorte (ca. 300–600 m Radius) angezeigt – keine exakte Ortung.
-              </p>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowMap(!showMap)}
+                className="shrink-0"
+              >
+                {showMap ? (
+                  <>
+                    <ChevronUp className="h-4 w-4 mr-1" />
+                    Ausblenden
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="h-4 w-4 mr-1" />
+                    Anzeigen
+                  </>
+                )}
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowMap(!showMap)}
-              className="shrink-0"
-            >
-              {showMap ? (
-                <>
-                  <ChevronUp className="h-4 w-4 mr-1" />
-                  Ausblenden
-                </>
-              ) : (
-                <>
-                  <ChevronDown className="h-4 w-4 mr-1" />
-                  Anzeigen
-                </>
-              )}
-            </Button>
+
+            {showMap && (
+              <TruckerLocationMap clusters={clusters} center={mapCenter} />
+            )}
           </div>
 
-          {showMap && (
-            <TruckerLocationMap clusters={clusters} center={mapCenter} />
-          )}
+          {/* Community-Regeln */}
+          <Alert className="border-primary/20 bg-primary/5">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription className="text-sm">
+              <strong>Regeln:</strong> Respektvoller Umgang. Keine Beleidigungen, keine sexuellen Inhalte, 
+              keine Hetze, keine Werbung/Spam. Verstöße werden gelöscht und führen zur Sperre.
+            </AlertDescription>
+          </Alert>
         </div>
-
-        {/* Community-Regeln */}
-        <Alert className="mx-4 mb-4 border-primary/20 bg-primary/5">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription className="text-sm">
-            <strong>Regeln:</strong> Respektvoller Umgang. Keine Beleidigungen, keine sexuellen Inhalte, 
-            keine Hetze, keine Werbung/Spam. Verstöße werden gelöscht und führen zur Sperre.
-          </AlertDescription>
-        </Alert>
 
         {/* Nachrichten-Bereich */}
         <ScrollArea className="h-[500px] p-4">
