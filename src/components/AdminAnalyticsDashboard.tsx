@@ -5,8 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, Eye, Calendar, BarChart3, Activity, Gauge } from "lucide-react";
-import { format } from "date-fns";
+import { format, startOfDay, subDays, parseISO } from "date-fns";
 import { de } from "date-fns/locale";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface PageView {
   id: string;
@@ -31,27 +32,48 @@ interface RouteStats {
   lastVisit: string;
 }
 
+interface TimeSeriesData {
+  date: string;
+  total: number;
+  [key: string]: number | string;
+}
+
 export const AdminAnalyticsDashboard = () => {
   const [pageViews, setPageViews] = useState<PageView[]>([]);
   const [webVitals, setWebVitals] = useState<WebVital[]>([]);
   const [routeStats, setRouteStats] = useState<RouteStats[]>([]);
+  const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
   const [totalViews, setTotalViews] = useState(0);
   const [todayViews, setTodayViews] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState<'7days' | '30days' | 'all'>('7days');
 
   useEffect(() => {
     fetchAnalytics();
-  }, []);
+  }, [timeRange]);
 
   const fetchAnalytics = async () => {
     setLoading(true);
     try {
+      // Calculate date range
+      const now = new Date();
+      let startDate: Date;
+      
+      if (timeRange === '7days') {
+        startDate = subDays(now, 7);
+      } else if (timeRange === '30days') {
+        startDate = subDays(now, 30);
+      } else {
+        startDate = new Date(0); // All time
+      }
+
       // Fetch page views
       const { data: allViews, error: viewsError } = await supabase
         .from('page_views')
         .select('*')
+        .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: false })
-        .limit(100);
+        .limit(1000);
 
       if (viewsError) throw viewsError;
 
@@ -91,10 +113,49 @@ export const AdminAnalyticsDashboard = () => {
 
       setRouteStats(stats);
 
+      // Calculate time series data
+      const dailyData = new Map<string, Map<string, number>>();
+      
+      allViews?.forEach((view) => {
+        const dateKey = format(startOfDay(parseISO(view.created_at)), 'dd.MM.yyyy');
+        const cleanRoute = getCleanRoute(view.route);
+        const readableName = getReadableRouteName(cleanRoute);
+        
+        if (!dailyData.has(dateKey)) {
+          dailyData.set(dateKey, new Map());
+        }
+        
+        const dayData = dailyData.get(dateKey)!;
+        dayData.set(readableName, (dayData.get(readableName) || 0) + 1);
+      });
+
+      // Convert to array format for recharts
+      const timeSeriesArray: TimeSeriesData[] = Array.from(dailyData.entries())
+        .map(([date, routes]) => {
+          const dataPoint: TimeSeriesData = { date, total: 0 };
+          let total = 0;
+          
+          routes.forEach((count, route) => {
+            dataPoint[route] = count;
+            total += count;
+          });
+          
+          dataPoint.total = total;
+          return dataPoint;
+        })
+        .sort((a, b) => {
+          const [dayA, monthA, yearA] = a.date.split('.');
+          const [dayB, monthB, yearB] = b.date.split('.');
+          return new Date(+yearA, +monthA - 1, +dayA).getTime() - new Date(+yearB, +monthB - 1, +dayB).getTime();
+        });
+
+      setTimeSeriesData(timeSeriesArray);
+
       // Fetch web vitals
       const { data: vitals, error: vitalsError } = await supabase
         .from('web_vitals')
         .select('*')
+        .gte('created_at', startDate.toISOString())
         .order('created_at', { ascending: false })
         .limit(100);
 
@@ -179,6 +240,31 @@ export const AdminAnalyticsDashboard = () => {
 
   return (
     <div className="space-y-6">
+      {/* Time Range Selector */}
+      <div className="flex gap-2 justify-end">
+        <Badge 
+          variant={timeRange === '7days' ? 'default' : 'outline'} 
+          className="cursor-pointer"
+          onClick={() => setTimeRange('7days')}
+        >
+          7 Tage
+        </Badge>
+        <Badge 
+          variant={timeRange === '30days' ? 'default' : 'outline'} 
+          className="cursor-pointer"
+          onClick={() => setTimeRange('30days')}
+        >
+          30 Tage
+        </Badge>
+        <Badge 
+          variant={timeRange === 'all' ? 'default' : 'outline'} 
+          className="cursor-pointer"
+          onClick={() => setTimeRange('all')}
+        >
+          Alle
+        </Badge>
+      </div>
+
       <Tabs defaultValue="pageviews" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="pageviews">
@@ -237,6 +323,58 @@ export const AdminAnalyticsDashboard = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* Time Series Chart */}
+          {timeSeriesData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Seitenaufrufe über Zeit
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={timeSeriesData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Area 
+                      type="monotone" 
+                      dataKey="total" 
+                      stackId="1"
+                      stroke="hsl(var(--primary))" 
+                      fill="hsl(var(--primary))" 
+                      name="Gesamt"
+                    />
+                    {routeStats.slice(0, 5).map((stat, idx) => {
+                      const routeName = getReadableRouteName(stat.route);
+                      const colors = [
+                        'hsl(var(--chart-1))',
+                        'hsl(var(--chart-2))',
+                        'hsl(var(--chart-3))',
+                        'hsl(var(--chart-4))',
+                        'hsl(var(--chart-5))',
+                      ];
+                      return (
+                        <Area
+                          key={stat.route}
+                          type="monotone"
+                          dataKey={routeName}
+                          stackId="2"
+                          stroke={colors[idx % colors.length]}
+                          fill={colors[idx % colors.length]}
+                          name={routeName}
+                        />
+                      );
+                    })}
+                  </AreaChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Most Visited Pages */}
           <Card>
