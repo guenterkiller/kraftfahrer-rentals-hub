@@ -3,13 +3,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Users, Flag, Trash2, AlertCircle } from "lucide-react";
+import { Send, Users, Flag, Trash2, AlertCircle, VolumeX } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User } from "@supabase/supabase-js";
+
+// B) Schimpfwort-/Sex-Content-Filter
+const blockedWords = [
+  "arsch",
+  "hure",
+  "wichser",
+  "fick",
+  "nazi",
+  "hitler",
+  "sex",
+  "anal",
+  "pimmel",
+  "fotze"
+];
 
 interface ChatMessage {
   id: string;
@@ -30,6 +44,7 @@ export const TruckerChat = () => {
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [reportMessageId, setReportMessageId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState("");
+  const [blockedUsers, setBlockedUsers] = useState<Set<string>>(new Set());
   const scrollRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -44,6 +59,19 @@ export const TruckerChat = () => {
     });
 
     return () => subscription.unsubscribe();
+  }, []);
+
+  // A) Geblockte User aus localStorage laden
+  useEffect(() => {
+    const stored = localStorage.getItem("trucker_chat_blocked");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setBlockedUsers(new Set(parsed));
+      } catch (e) {
+        console.error("Error loading blocklist", e);
+      }
+    }
   }, []);
 
   // Benutzernamen aus fahrer_profile holen
@@ -207,6 +235,19 @@ export const TruckerChat = () => {
       return;
     }
 
+    // B) Schimpfwort-Filter prüfen
+    const lowerMessage = trimmedMessage.toLowerCase();
+    const containsBlockedWord = blockedWords.some(word => lowerMessage.includes(word));
+    
+    if (containsBlockedWord) {
+      toast({
+        title: "Nachricht blockiert",
+        description: "Diese Nachricht verstößt gegen die Chat-Regeln.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     const { error } = await supabase
       .from('trucker_chat_messages')
       .insert({
@@ -259,6 +300,30 @@ export const TruckerChat = () => {
     setReportDialogOpen(false);
     setReportMessageId(null);
     setReportReason("");
+  };
+
+  // A) User blockieren/stummschalten
+  const handleBlockUser = async (blockedName: string) => {
+    if (!user) return;
+
+    // Zu localStorage hinzufügen
+    const newBlocked = new Set(blockedUsers);
+    newBlocked.add(blockedName);
+    setBlockedUsers(newBlocked);
+    localStorage.setItem("trucker_chat_blocked", JSON.stringify([...newBlocked]));
+
+    // In Datenbank speichern
+    await supabase
+      .from('trucker_chat_blocklist')
+      .insert({
+        blocker_id: user.id,
+        blocked_name: blockedName
+      });
+
+    toast({
+      title: "Nutzer stummgeschaltet",
+      description: `${blockedName} wurde stummgeschaltet. Du siehst deren Nachrichten nicht mehr.`
+    });
   };
 
   const handleDelete = async (messageId: string) => {
@@ -330,7 +395,9 @@ export const TruckerChat = () => {
                 Noch keine Nachrichten. Sei der Erste!
               </div>
             ) : (
-              messages.map((msg) => {
+              messages
+                .filter(msg => !blockedUsers.has(msg.user_name)) // A) Geblockte User ausfiltern
+                .map((msg) => {
                 const isOwnMessage = user && msg.user_name === userName;
                 return (
                   <div
@@ -362,21 +429,32 @@ export const TruckerChat = () => {
                         </div>
                       </div>
                       
-                      {/* Melden & Löschen Buttons */}
+                      {/* Melden, Stummschalten & Löschen Buttons */}
                       <div className="flex gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         {user && !isOwnMessage && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 text-xs"
-                            onClick={() => {
-                              setReportMessageId(msg.id);
-                              setReportDialogOpen(true);
-                            }}
-                          >
-                            <Flag className="h-3 w-3 mr-1" />
-                            Melden
-                          </Button>
+                          <>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 text-xs"
+                              onClick={() => handleBlockUser(msg.user_name)}
+                            >
+                              <VolumeX className="h-3 w-3 mr-1" />
+                              Stummschalten
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 text-xs"
+                              onClick={() => {
+                                setReportMessageId(msg.id);
+                                setReportDialogOpen(true);
+                              }}
+                            >
+                              <Flag className="h-3 w-3 mr-1" />
+                              Melden
+                            </Button>
+                          </>
                         )}
                         {isAdmin && (
                           <Button
@@ -434,6 +512,10 @@ export const TruckerChat = () => {
                   </p>
                 )}
               </div>
+              {/* C) UI-Hinweis */}
+              <p className="text-xs text-muted-foreground opacity-70 mt-2">
+                Hinweis: Du kannst andere Nutzer stummschalten. Respektvoller Umgang erforderlich.
+              </p>
             </>
           )}
         </div>
