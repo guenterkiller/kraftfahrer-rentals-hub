@@ -1051,42 +1051,40 @@ export const TruckerChat = () => {
         )}
 
         {/* Karte mit Fahrer-Clustern */}
-        <div className="mx-4 mb-4 border rounded-lg bg-muted/30">
-          <div className="p-3">
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  <span className="font-semibold text-sm">Karte mit Fahrer-Clustern</span>
-                </div>
-                <p className="text-xs text-muted-foreground opacity-70">
-                  Es werden nur ungefähre Cluster-Standorte (ca. 300–600 m Radius) angezeigt – keine exakte Ortung.
-                </p>
+        <div className="mx-4 mb-4 p-3 border rounded-lg bg-muted/30">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <MapPin className="h-4 w-4 text-primary" />
+                <span className="font-semibold text-sm">Karte mit Fahrer-Clustern</span>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowMap(!showMap)}
-                className="shrink-0"
-              >
-                {showMap ? (
-                  <>
-                    <ChevronUp className="h-4 w-4 mr-1" />
-                    Ausblenden
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="h-4 w-4 mr-1" />
-                    Anzeigen
-                  </>
-                )}
-              </Button>
+              <p className="text-xs text-muted-foreground opacity-70">
+                Es werden nur ungefähre Cluster-Standorte (ca. 300–600 m Radius) angezeigt – keine exakte Ortung.
+              </p>
             </div>
-
-            {showMap && (
-              <TruckerLocationMap clusters={clusters} center={mapCenter} />
-            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowMap(!showMap)}
+              className="shrink-0"
+            >
+              {showMap ? (
+                <>
+                  <ChevronUp className="h-4 w-4 mr-1" />
+                  Ausblenden
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4 mr-1" />
+                  Anzeigen
+                </>
+              )}
+            </Button>
           </div>
+
+          {showMap && (
+            <TruckerLocationMap clusters={clusters} center={mapCenter} />
+          )}
         </div>
 
         {/* Community-Regeln */}
