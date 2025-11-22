@@ -877,7 +877,7 @@ export const TruckerChat = () => {
 
       {/* Login- und Registrierungsbereich für nicht angemeldete Benutzer */}
       {!user && (
-        <div className="max-w-md mx-auto space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-4">
           <Card id="chat-login">
             <CardHeader>
               <CardTitle>Login erforderlich</CardTitle>
