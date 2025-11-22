@@ -118,6 +118,73 @@ const TruckerLadies = () => {
               <TruckerChat />
             </div>
 
+            {/* FAQ Section */}
+            <div className="bg-card rounded-lg p-8 mb-8">
+              <h2 className="text-2xl font-bold mb-6 text-center">FAQ – Häufige Fragen zum Fahrer-Community-Chat</h2>
+              
+              <div className="space-y-6 max-w-3xl mx-auto">
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Was ist der Fahrer-Community-Chat?</h3>
+                  <p className="text-muted-foreground">
+                    Ein offener Austauschbereich für LKW-Fahrerinnen und -Fahrer. Hier kann man sich unterwegs, in der Pause oder abends locker unterhalten, Fragen stellen und Tipps teilen.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Wer kann im Chat schreiben?</h3>
+                  <p className="text-muted-foreground">
+                    Schreiben können nur registrierte Fahrer mit Login.<br />
+                    Lesen darf jeder — der Chat bleibt öffentlich einsehbar.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Wird mein Standort genau angezeigt?</h3>
+                  <p className="text-muted-foreground">
+                    Nein.<br />
+                    Es werden nur ungefähre Standort-Cluster angezeigt (Radius ca. 300–600 m).<br />
+                    Keine exakten GPS-Daten, keine Adressen.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Ist das ein Support- oder Buchungschat?</h3>
+                  <p className="text-muted-foreground">
+                    Nein.<br />
+                    Der Chat dient nur dem Austausch unter Fahrern.<br />
+                    Kundenanfragen und Buchungen laufen weiterhin ausschließlich über das Kontaktformular oder Telefon.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Sind private Daten sichtbar?</h3>
+                  <p className="text-muted-foreground">
+                    Nur Vorname + Initial (z. B. „Matthias K.").<br />
+                    Keine privaten Daten, keine komplette Adresse, keine Telefone.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Was passiert bei Beleidigungen oder Spam?</h3>
+                  <p className="text-muted-foreground">
+                    Nutzer können:<br />
+                    • Beiträge melden<br />
+                    • Teilnehmer stummschalten<br />
+                    <br />
+                    Admins können Nachrichten löschen oder Nutzer sperren.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-lg mb-2">Warum gibt es diesen Chat?</h3>
+                  <p className="text-muted-foreground">
+                    Viele Fahrer sind den ganzen Tag allein unterwegs.<br />
+                    Mit dem Community-Chat entsteht ein Ort für Austausch, Vernetzung und ein bisschen Gesellschaft auf der Straße — ganz ohne Druck.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Hinweis */}
             <div className="text-center text-sm text-muted-foreground max-w-3xl mx-auto">
               <p>
