@@ -1189,7 +1189,7 @@ export const TruckerChat = () => {
         </ScrollArea>
 
         {/* Eingabe-Bereich */}
-        <div className="border-t p-4">
+        <div className="border-t p-4 bg-background">
           {!user ? (
             <Alert>
               <AlertDescription>
@@ -1206,14 +1206,14 @@ export const TruckerChat = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Schreibe eine Nachricht..."
                   maxLength={500}
-                  className="flex-1"
+                  className="flex-1 h-12 text-base"
                   disabled={!canSend}
                 />
-                <Button type="submit" size="icon" disabled={!newMessage.trim() || !canSend}>
-                  <Send className="h-4 w-4" />
+                <Button type="submit" size="lg" disabled={!newMessage.trim() || !canSend}>
+                  <Send className="h-5 w-5" />
                 </Button>
               </form>
-              <div className="flex justify-between items-center mt-2">
+              <div className="flex justify-between items-center mt-3">
                 <p className="text-xs text-muted-foreground">
                   {newMessage.length}/500 Zeichen
                 </p>
