@@ -6,6 +6,7 @@ import { MessageSquare, MapPin, Users, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { TruckerChat } from "@/components/TruckerChat";
+import { FEATURE_FLAGS } from "@/utils/featureFlags";
 
 const FahrerCommunityChat = () => {
   useSEO({
@@ -109,13 +110,15 @@ const FahrerCommunityChat = () => {
             </div>
 
             {/* Live Chat */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-center mb-6">Live-Chat</h2>
-              <p className="text-sm opacity-60 text-center mb-4 max-w-2xl mx-auto">
-                Hinweis: Dies ist kein Dating-Service. Der Community-Chat dient ausschließlich dem Austausch unter Fahrerinnen und Fahrern.
-              </p>
-              <TruckerChat />
-            </div>
+            {FEATURE_FLAGS.TRUCKER_CHAT_ENABLED && (
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-center mb-6">Live-Chat</h2>
+                <p className="text-sm opacity-60 text-center mb-4 max-w-2xl mx-auto">
+                  Hinweis: Dies ist kein Dating-Service. Der Community-Chat dient ausschließlich dem Austausch unter Fahrerinnen und Fahrern.
+                </p>
+                <TruckerChat />
+              </div>
+            )}
 
             {/* FAQ Section */}
             <div className="bg-card rounded-lg p-8 mb-8">

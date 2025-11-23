@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { User } from "@supabase/supabase-js";
 import { TruckerLocationMap } from "./TruckerLocationMap";
+import { FEATURE_FLAGS } from "@/utils/featureFlags";
 
 // B) Schimpfwort-/Sex-Content-Filter
 const blockedWords = [
@@ -48,6 +49,10 @@ interface LocationCluster {
 }
 
 export const TruckerChat = () => {
+  // Feature flag check - return null if chat is disabled
+  if (!FEATURE_FLAGS.TRUCKER_CHAT_ENABLED) {
+    return null;
+  }
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [onlineCount, setOnlineCount] = useState(1);
