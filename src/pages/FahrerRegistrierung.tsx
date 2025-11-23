@@ -13,6 +13,7 @@ import { ArrowLeft, Upload, FileText, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 import { validateFiles, uploadViaEdge } from "@/utils/fileValidation";
+import { FEATURE_FLAGS } from "@/utils/featureFlags";
 
 const FahrerRegistrierung = () => {
   // Scroll to top on page load
@@ -475,28 +476,30 @@ const FahrerRegistrierung = () => {
             </div>
 
             {/* Community Chat Info Block */}
-            <Card className="mb-8 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <MessageSquare className="h-10 w-10 text-blue-600 flex-shrink-0 mt-1" />
-                  <div className="flex-1">
-                    <h2 className="text-xl font-bold text-blue-900 mb-2">
-                      Neu: Fahrer-Community-Chat – Austausch unter Berufskraftfahrern
-                    </h2>
-                    <p className="text-blue-800 mb-4">
-                      Mit deiner kostenlosen Registrierung bekommst du Zugang zum Fahrer-Community-Chat.
-                      Dort kannst du dich mit Fahrerinnen und Fahrern austauschen, Tipps teilen und die Pause überbrücken.
-                      Kein Kunden-Support und keine Buchung über den Chat – nur Fahrer unter sich.
-                    </p>
-                    <Button variant="outline" asChild className="border-blue-600 text-blue-700 hover:bg-blue-50">
-                      <Link to="/trucker-ladies">
-                        Zum Fahrer-Community-Chat
-                      </Link>
-                    </Button>
+            {FEATURE_FLAGS.TRUCKER_CHAT_ENABLED && (
+              <Card className="mb-8 bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <MessageSquare className="h-10 w-10 text-blue-600 flex-shrink-0 mt-1" />
+                    <div className="flex-1">
+                      <h2 className="text-xl font-bold text-blue-900 mb-2">
+                        Neu: Fahrer-Community-Chat – Austausch unter Berufskraftfahrern
+                      </h2>
+                      <p className="text-blue-800 mb-4">
+                        Mit deiner kostenlosen Registrierung bekommst du Zugang zum Fahrer-Community-Chat.
+                        Dort kannst du dich mit Fahrerinnen und Fahrern austauschen, Tipps teilen und die Pause überbrücken.
+                        Kein Kunden-Support und keine Buchung über den Chat – nur Fahrer unter sich.
+                      </p>
+                      <Button variant="outline" asChild className="border-blue-600 text-blue-700 hover:bg-blue-50">
+                        <Link to="/trucker-ladies">
+                          Zum Fahrer-Community-Chat
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Werbetext für selbstständige Fahrer */}
             <Card className="mb-8 bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
