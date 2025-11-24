@@ -41,7 +41,7 @@ interface SEOData {
 
 // Automatische Breadcrumb-Generierung basierend auf Route
 const generateBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
-  const baseUrl = 'https://kraftfahrer-mieten.com';
+  const baseUrl = 'https://www.kraftfahrer-mieten.com';
   const breadcrumbs: BreadcrumbItem[] = [
     { name: 'Startseite', url: baseUrl }
   ];
@@ -76,10 +76,10 @@ const generateBreadcrumbs = (pathname: string): BreadcrumbItem[] => {
 
 export const useSEO = (seoData: SEOData) => {
   const location = useLocation();
-  const baseUrl = 'https://kraftfahrer-mieten.com';
+  const baseUrl = 'https://www.kraftfahrer-mieten.com';
   // Für die Startseite explizit mit trailing slash
   const canonicalUrl = location.pathname === '/' 
-    ? 'https://kraftfahrer-mieten.com/' 
+    ? 'https://www.kraftfahrer-mieten.com/' 
     : `${baseUrl}${location.pathname}`;
 
   useEffect(() => {
@@ -316,8 +316,17 @@ export const useSEO = (seoData: SEOData) => {
         "ratingValue": "4.8",
         "reviewCount": "127"
       },
+      "priceRange": "€€",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          "opens": "08:00",
+          "closes": "18:00"
+        }
+      ],
       "sameAs": [
-        "https://kraftfahrer-mieten.com"
+        "https://www.kraftfahrer-mieten.com"
       ]
     };
 
@@ -338,7 +347,7 @@ export const useSEO = (seoData: SEOData) => {
           "name": "Fahrerexpress-Agentur",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://kraftfahrer-mieten.com/lovable-uploads/favicon-truck-512-full.png"
+            "url": "https://www.kraftfahrer-mieten.com/lovable-uploads/favicon-truck-512-full.png"
           }
         },
         "articleSection": seoData.articleData.articleSection || "Fahrerdienstleistungen"
