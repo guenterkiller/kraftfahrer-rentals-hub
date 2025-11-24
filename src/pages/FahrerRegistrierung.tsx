@@ -22,42 +22,29 @@ const FahrerRegistrierung = () => {
   }, []);
 
   useSEO({
-    title: "Fahrer werden – LKW-Fahrer & Ersatzfahrer Jobs bundesweit | EU-Fahrer willkommen",
-    description: "Werden Sie selbstständiger Partner bei Fahrerexpress. EU/EWR-Fahrer willkommen! Kierowcy z Polski, Rumänii mile widziani. Fair payment for EU drivers!",
-    keywords: "selbstständiger LKW-Fahrer werden, ersatzfahrer jobs, fahrer registrieren, EU Fahrer Deutschland, kierowcy praca Niemcy, șoferi muncă Germania, Bulgarian drivers Germany jobs, self-employed truck driver, HGV driver jobs Europe",
+    title: "Partner werden – Selbstständige Fahrer für unser Netzwerk | Fahrerexpress",
+    description: "Werden Sie Partner bei Fahrerexpress. Deutschlandweite Vermittlung für selbstständige LKW-Fahrer & Baumaschinenführer. EU/EWR-Fahrer willkommen! Kierowcy, șoferi, Bulgarian drivers welcome!",
+    keywords: "Fahrer-Netzwerk, selbstständiger Berufskraftfahrer, Fahrer-Partner werden, Kooperation LKW-Fahrer, Subunternehmer Kraftfahrer, EU-Fahrer Deutschland, Fahrerservice Partner, freiberuflicher Kraftfahrer, Werkvertrag Fahrer",
     structuredData: {
       "@context": "https://schema.org",
-      "@type": "JobPosting",
-      "title": "Selbstständige LKW-Fahrer (C+E) deutschlandweit gesucht",
-      "description": "Werden Sie Partner bei Fahrerexpress und übernehmen Sie Fahraufträge als selbstständiger Unternehmer. Flexible Arbeitszeiten, faire Bezahlung, deutschlandweite Einsätze.",
-      "datePosted": "2025-01-01",
-      "employmentType": "CONTRACTOR",
-      "hiringOrganization": {
+      "@type": "Service",
+      "serviceType": "Fahrer-Netzwerk & Vermittlungsservice",
+      "name": "Partner-Netzwerk für selbstständige Kraftfahrer",
+      "description": "Werden Sie Partner in unserem bundesweiten Fahrer-Netzwerk. Wir vermitteln selbstständige Berufskraftfahrer und Baumaschinenführer an Unternehmen deutschlandweit.",
+      "provider": {
         "@type": "Organization",
-        "name": "Fahrerexpress-Agentur",
-        "sameAs": "https://kraftfahrer-mieten.com"
+        "name": "Fahrerexpress-Agentur - Günter Killer",
+        "url": "https://kraftfahrer-mieten.com"
       },
-      "jobLocation": {
-        "@type": "Place",
-        "addressLocality": "Deutschlandweit",
-        "addressCountry": "DE"
-      },
-      "baseSalary": {
-        "@type": "MonetaryAmount",
-        "currency": "EUR",
-        "value": {
-          "@type": "QuantitativeValue",
-          "minValue": 25,
-          "maxValue": 50,
-          "unitText": "HOUR"
-        }
-      },
-      "qualifications": "Führerschein CE, Fahrerkarte, Berufserfahrung mindestens 2 Jahre",
-      "applicantLocationRequirements": {
+      "areaServed": {
         "@type": "Country",
-        "name": "Deutschland, EU-Staaten, EWR-Staaten"
+        "name": "Deutschland"
       },
-      "jobLocationType": "MULTIPLE_LOCATIONS"
+      "offers": {
+        "@type": "Offer",
+        "description": "Flexible Auftragsannahme für selbstständige Kraftfahrer. Faire Konditionen und bundesweite Einsatzmöglichkeiten.",
+        "priceCurrency": "EUR"
+      }
     }
   });
   const { toast } = useToast();
@@ -648,19 +635,19 @@ const FahrerRegistrierung = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇩🇪 Deutsch</p>
-                      <p className="text-muted-foreground text-xs">Wir vermitteln Fahrer aus allen EU/EWR-Ländern. Rechtssichere Beschäftigung garantiert.</p>
+                      <p className="text-muted-foreground text-xs">Wir vermitteln Fahrer aus allen EU/EWR-Ländern. Rechtssichere Zusammenarbeit garantiert.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇬🇧 English</p>
-                      <p className="text-muted-foreground text-xs">We place drivers from all EU/EEA countries. Legal employment guaranteed.</p>
+                      <p className="text-muted-foreground text-xs">We place drivers from all EU/EEA countries. Legal cooperation guaranteed.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇵🇱 Polski</p>
-                      <p className="text-muted-foreground text-xs">Pośredniczymy w zatrudnieniu kierowców ze wszystkich krajów UE/EOG.</p>
+                      <p className="text-muted-foreground text-xs">Pośredniczymy w współpracy z kierowcami ze wszystkich krajów UE/EOG.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇷🇴 Română</p>
-                      <p className="text-muted-foreground text-xs">Plasăm șoferi din toate țările UE/SEE. Angajare legală garantată.</p>
+                      <p className="text-muted-foreground text-xs">Plasăm șoferi din toate țările UE/SEE. Cooperare legală garantată.</p>
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-primary/20">

@@ -52,8 +52,8 @@ const Navigation = () => {
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-xs sm:text-sm px-2.5 sm:px-4 py-2 whitespace-nowrap" 
               asChild
             >
-              <Link to="/fahrer-registrierung" aria-label="Als LKW-Fahrer registrieren">
-                🚀 Fahrer werden
+              <Link to="/fahrer-registrierung" aria-label="Partner werden - Jetzt registrieren">
+                🚀 Partner werden
               </Link>
             </Button>
             

@@ -69,7 +69,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm mb-4">
               <li>
                 <Link to="/fahrer-registrierung" className="text-muted-foreground hover:text-primary transition-colors">
-                  Fahrer werden
+                  Partner werden
                 </Link>
               </li>
               {FEATURE_FLAGS.TRUCKER_CHAT_ENABLED && (

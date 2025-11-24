@@ -252,9 +252,9 @@ export const useSEO = (seoData: SEOData) => {
     // Enhanced structured data
     let structuredData = seoData.structuredData || {
       "@context": "https://schema.org",
-      "@type": ["LocalBusiness", "EmploymentAgency"],
+      "@type": "LocalBusiness",
       "name": "Fahrerexpress-Agentur - Günter Killer",
-      "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer, Kraftfahrer und Baumaschinenführer",
+      "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer, Kraftfahrer und Baumaschinenführer für kurzfristige Einsätze",
       "url": baseUrl,
       "telephone": "+49-1577-1442285",
       "email": "info@kraftfahrer-mieten.com",
