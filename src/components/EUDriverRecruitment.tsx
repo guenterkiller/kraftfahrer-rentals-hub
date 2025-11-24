@@ -34,7 +34,7 @@ const EUDriverRecruitment = () => {
     {
       icon: <Users className="h-8 w-8 text-primary" />,
       title: "Bundesweite Einsätze",
-      titleEn: "Nationwide Jobs",
+      titleEn: "Nationwide Assignments",
       description: "Vielfältige Aufträge in ganz Deutschland und EU",
       descriptionEn: "Diverse assignments throughout Germany and EU"
     },
@@ -55,10 +55,10 @@ const EUDriverRecruitment = () => {
             EU-Fahrer willkommen – Kierowcy z UE mile widziani
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-2">
-            Wir rekrutieren qualifizierte LKW-Fahrer und Baumaschinenführer aus der gesamten Europäischen Union
+            Wir vermitteln qualifizierte LKW-Fahrer und Baumaschinenführer aus der gesamten Europäischen Union
           </p>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto italic">
-            We recruit qualified truck drivers and construction machine operators from across the European Union
+            We place qualified truck drivers and construction machine operators from across the European Union
           </p>
         </div>
 
@@ -176,8 +176,8 @@ const EUDriverRecruitment = () => {
         <div className="text-center text-sm text-muted-foreground max-w-4xl mx-auto">
           <p className="mb-2">
             <strong>Suche nach:</strong> LKW Fahrer aus Polen, Rumänien, Bulgarien, Ungarn • Kierowcy ciężarówek z Polski do Niemiec • 
-            Șoferi profesioniști români în Germania • Bulgarian truck drivers Germany • EU drivers recruitment • 
-            International HGV drivers • Berufskraftfahrer EU-Ausland • European truck driver jobs Germany
+            Șoferi profesioniști români în Germania • Bulgarian truck drivers Germany • EU Fahrer Vermittlung • 
+            Internationale LKW-Fahrer • Berufskraftfahrer EU-Ausland • Europäische Kraftfahrer Deutschland • Fahrer aus EU-Ländern
           </p>
         </div>
       </div>
