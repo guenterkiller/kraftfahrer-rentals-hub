@@ -9,6 +9,12 @@ Sitemap: https://www.kraftfahrer-mieten.com/sitemap.xml
 Disallow: /admin/
 Disallow: /admin-login/
 
+# Optimierung für Pre-Rendering Services (z.B. Prerender.io)
+# Diese User-Agents bekommen fertiges HTML für besseres Crawling
+User-agent: Prerender
+User-agent: rendertron
+Allow: /
+
 # Alte URLs (301-Weiterleitungen) - von Indexierung ausschließen
 # Diese leiten zu den Hauptkategorien weiter:
 # /tankwagenfahrer-buchen → /lkw-fahrer-buchen
