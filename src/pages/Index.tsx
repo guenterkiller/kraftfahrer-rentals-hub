@@ -19,7 +19,7 @@ const Index = () => {
   useSEO({
     title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – EU-Fahrer willkommen",
     description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) aus Deutschland und EU für Transporte & Baustellen. Kierowcy z Polski, Rumänii, Bułgarii mile widziani!",
-    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, EU Fahrer Deutschland, LKW Fahrer aus Polen, Kierowcy z Polski do Niemiec, Șoferi profesioniști români Germania, Bulgarian truck drivers Germany, LKW Fahrer Rumänien, Kraftfahrer Bulgarien Ungarn, European truck driver jobs, Berufskraftfahrer EU-Ausland, HGV driver hire Europe, International drivers Germany",
+    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, EU Fahrer Deutschland, LKW Fahrer aus Polen, Kierowcy z Polski do Niemiec, Șoferi profesioniști români Germania, Bulgarian truck drivers Germany, LKW Fahrer Rumänien, Kraftfahrer Bulgarien Ungarn, Berufskraftfahrer EU-Ausland, Fahrer vermitteln Europa, Internationale Fahrer Deutschland, Fahrerservice Europa, LKW-Fahrer Vermittlung DACH",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/',
