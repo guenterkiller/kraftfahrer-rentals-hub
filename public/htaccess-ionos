@@ -69,15 +69,24 @@ RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
 
 # SPA fallback routing
 RewriteBase /
+
+# Explicitly allow static assets (prevent rewriting)
+RewriteRule ^assets/ - [L]
+RewriteRule ^uploads/ - [L]
+RewriteRule ^lovable-uploads/ - [L]
+RewriteRule ^public/ - [L]
+
+# Allow static files
+RewriteRule ^.*\.(css|js|jpg|jpeg|png|gif|webp|svg|ico|json|woff|woff2|ttf|eot)$ - [L]
+
 RewriteRule ^index\.html$ - [L]
 
 # Admin routes
 RewriteRule ^admin/?$ /index.html [L]
 RewriteRule ^admin/login/?$ /index.html [L]
 
-# Catch-all SPA fallback
+# Catch-all SPA fallback (only for routes, not files)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|manifest\.json)
-RewriteCond %{REQUEST_URI} !^/(assets|uploads|public|lovable-uploads)/
 RewriteRule . /index.html [L]
