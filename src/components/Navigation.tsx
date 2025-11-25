@@ -76,12 +76,6 @@ const Navigation = () => {
                   >
                     Flüssigboden-Service
                   </Link>
-                  <Link 
-                    to="/begleitfahrzeuge-bf3"
-                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
-                  >
-                    Begleitfahrzeuge BF3
-                  </Link>
                   <div className="border-t border-border my-1"></div>
                   <Link 
                     to="/preise-und-ablauf"
@@ -198,14 +192,6 @@ const Navigation = () => {
                   role="menuitem"
                 >
                   Flüssigboden-Service
-                </Link>
-                <Link 
-                  to="/begleitfahrzeuge-bf3"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
-                  role="menuitem"
-                >
-                  Begleitfahrzeuge BF3
                 </Link>
                 <Link 
                   to="/preise-und-ablauf"
