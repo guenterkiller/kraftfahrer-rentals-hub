@@ -1147,6 +1147,15 @@ const Admin = () => {
       );
     }
 
+    // Grüne Badges für genehmigte Fahrer
+    if (status === 'approved' || status === 'active') {
+      return (
+        <Badge className="bg-green-600 hover:bg-green-700 text-white">
+          {labels[status] || status}
+        </Badge>
+      );
+    }
+
     return (
       <Badge variant={variants[status] || "secondary"}>
         {labels[status] || status}
