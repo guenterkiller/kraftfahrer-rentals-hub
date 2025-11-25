@@ -1585,9 +1585,16 @@ const Admin = () => {
                                   </div>
                                   {a.status === "confirmed" ? (
                                     <Badge variant="default">Bestätigt</Badge>
+                                  ) : a.status === "completed" ? (
+                                    <Badge variant="outline">Erledigt</Badge>
+                                  ) : a.status === "no_show" ? (
+                                    <Badge variant="destructive">No-Show</Badge>
+                                  ) : a.status === "cancelled" ? (
+                                    <Badge variant="outline">Storniert</Badge>
                                   ) : (
                                     <Badge variant="secondary">Zugewiesen</Badge>
                                   )}
+
                                 </div>
 
                                 <div className="flex items-center gap-2 flex-wrap">
@@ -1885,7 +1892,8 @@ const Admin = () => {
                         >
                           {assignment.status === 'assigned' ? 'Zugewiesen' :
                            assignment.status === 'confirmed' ? 'Bestätigt' : 
-                           assignment.status === 'no_show' ? `No-Show${assignment.no_show_fee_cents ? ` – ${(assignment.no_show_fee_cents / 100).toFixed(0)} €` : ''}` : 'Storniert'}
+                           assignment.status === 'no_show' ? `No-Show${assignment.no_show_fee_cents ? ` – ${(assignment.no_show_fee_cents / 100).toFixed(0)} €` : ''}` : 
+                           assignment.status === 'completed' ? 'Erledigt' : 'Storniert'}
                         </Badge>
                       </div>
                   </div>
