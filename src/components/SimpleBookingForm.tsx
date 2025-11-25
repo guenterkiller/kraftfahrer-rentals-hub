@@ -396,6 +396,7 @@ const SimpleBookingForm = () => {
                     <SelectContent>
                       <SelectItem value="ce-fahrer">CE-LKW-Fahrer (349 €)</SelectItem>
                       <SelectItem value="baumaschinenfuehrer">Baumaschinenführer (459 €)</SelectItem>
+                      <SelectItem value="mischmeister">Mischmeister für Flüssigboden (489 €)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
