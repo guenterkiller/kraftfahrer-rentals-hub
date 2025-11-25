@@ -442,12 +442,32 @@ const handler = async (req: Request): Promise<Response> => {
       html: adminEmailHtml,
     });
 
+    // Log admin email (WICHTIG: Damit wir Fehler sehen!)
     if (adminEmailResponse.error) {
       console.error("Admin email error (Fahrer werden):", adminEmailResponse.error);
-      throw new Error("Fehler beim Senden der Admin-E-Mail");
+      
+      await supabase.from('email_log').insert({
+        recipient: "info@kraftfahrer-mieten.com",
+        subject: `Neue Fahrer-Registrierung: ${insertData.vorname} ${insertData.nachname}`,
+        template: 'admin_driver_notification',
+        status: 'failed',
+        error_message: adminEmailResponse.error.message || String(adminEmailResponse.error),
+      });
+      
+      // NICHT abbrechen - Fahrer-Bestätigung soll trotzdem gesendet werden
+      console.warn("Admin notification failed, but continuing with driver confirmation");
+    } else {
+      console.log("Admin email sent successfully:", adminEmailResponse);
+      
+      await supabase.from('email_log').insert({
+        recipient: "info@kraftfahrer-mieten.com",
+        subject: `Neue Fahrer-Registrierung: ${insertData.vorname} ${insertData.nachname}`,
+        template: 'admin_driver_notification',
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        message_id: adminEmailResponse.data?.id,
+      });
     }
-
-    console.log("Admin email sent successfully:", adminEmailResponse);
 
     // Send confirmation email to applicant
     const confirmationEmailHtml = await renderAsync(
