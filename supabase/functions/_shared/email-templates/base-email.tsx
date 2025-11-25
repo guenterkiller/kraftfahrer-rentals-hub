@@ -24,6 +24,38 @@ export const colors = {
   info: '#0891b2',
 };
 
+// Mobile-optimized responsive styles
+const mobileStyles = `
+  @media only screen and (max-width: 600px) {
+    .mobile-padding {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+    .mobile-header {
+      padding: 20px !important;
+    }
+    .mobile-text {
+      font-size: 16px !important;
+      line-height: 1.6 !important;
+    }
+    .mobile-heading {
+      font-size: 20px !important;
+    }
+    .mobile-small-heading {
+      font-size: 16px !important;
+    }
+    .mobile-table td {
+      display: block !important;
+      width: 100% !important;
+      padding: 3px 0 !important;
+    }
+    .mobile-box {
+      padding: 15px !important;
+      margin-bottom: 15px !important;
+    }
+  }
+`;
+
 interface BaseEmailProps {
   previewText: string;
   children: React.ReactNode;
@@ -31,29 +63,31 @@ interface BaseEmailProps {
 
 export const BaseEmail = ({ previewText, children }: BaseEmailProps) => (
   <Html lang="de">
-    <Head />
+    <Head>
+      <style>{mobileStyles}</style>
+    </Head>
     <Preview>{previewText}</Preview>
     <Body style={main}>
       <Container style={container}>
         {/* Header */}
-        <Section style={header}>
-          <Heading style={headerTitle}>Fahrerexpress-Agentur</Heading>
-          <Text style={headerSubtitle}>LKW CE Fahrer & Baumaschinenführer</Text>
+        <Section style={header} className="mobile-header">
+          <Heading style={headerTitle} className="mobile-heading">Fahrerexpress-Agentur</Heading>
+          <Text style={headerSubtitle} className="mobile-text">LKW CE Fahrer & Baumaschinenführer</Text>
         </Section>
 
         {/* Content */}
-        <Section style={content}>
+        <Section style={content} className="mobile-padding">
           {children}
         </Section>
 
         {/* Footer */}
-        <Section style={footer}>
-          <Heading style={footerTitle}>Fahrerexpress-Agentur</Heading>
-          <Text style={footerText}>
+        <Section style={footer} className="mobile-padding">
+          <Heading style={footerTitle} className="mobile-small-heading">Fahrerexpress-Agentur</Heading>
+          <Text style={footerText} className="mobile-text">
             📧 info@kraftfahrer-mieten.com<br />
             📱 01577 1442285
           </Text>
-          <Text style={footerSubtext}>
+          <Text style={footerSubtext} className="mobile-text">
             Günter Killer<br />
             Vermittlung gewerblicher Fahrer
           </Text>
@@ -131,7 +165,7 @@ const footerSubtext = {
   lineHeight: '1.5',
 };
 
-// Reusable box styles
+// Reusable box styles with mobile support
 export const boxStyles = {
   infoBox: {
     backgroundColor: '#fef3f2',
@@ -163,6 +197,12 @@ export const boxStyles = {
   },
 };
 
+// Helper to add mobile classes to box sections
+export const getBoxProps = (style: any) => ({
+  style,
+  className: 'mobile-box',
+});
+
 export const textStyles = {
   heading2: {
     color: colors.foreground,
@@ -191,5 +231,11 @@ export const textStyles = {
     fontSize: '13px',
   },
 };
+
+// Helper to add mobile classes to text elements
+export const getTextProps = (style: any, type: 'heading' | 'small-heading' | 'text' = 'text') => ({
+  style,
+  className: type === 'heading' ? 'mobile-heading' : type === 'small-heading' ? 'mobile-small-heading' : 'mobile-text',
+});
 
 export default BaseEmail;
