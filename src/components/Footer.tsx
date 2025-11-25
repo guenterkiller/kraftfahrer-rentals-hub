@@ -24,6 +24,11 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/fluessigboden-service" className="text-muted-foreground hover:text-primary transition-colors">
+                  Flüssigboden-Service (Mischmeister)
+                </Link>
+              </li>
+              <li>
                 <Link to="/begleitfahrzeuge-bf3" className="text-muted-foreground hover:text-primary transition-colors">
                   Begleitfahrzeuge BF3
                 </Link>
