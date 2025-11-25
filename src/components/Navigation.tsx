@@ -47,6 +47,52 @@ const Navigation = () => {
           
           {/* Desktop und Mobile Navigation nebeneinander */}
           <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+            {/* Desktop: Leistungen Dropdown */}
+            <div className="hidden lg:block relative group">
+              <button 
+                className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Leistungen
+              </button>
+              <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="py-2">
+                  <Link 
+                    to="/lkw-fahrer-buchen"
+                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                  >
+                    LKW CE Fahrer
+                  </Link>
+                  <Link 
+                    to="/baumaschinenfuehrer-buchen"
+                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                  >
+                    Baumaschinenführer
+                  </Link>
+                  <Link 
+                    to="/fluessigboden-service"
+                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                  >
+                    Flüssigboden-Service
+                  </Link>
+                  <Link 
+                    to="/begleitfahrzeuge-bf3"
+                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                  >
+                    Begleitfahrzeuge BF3
+                  </Link>
+                  <div className="border-t border-border my-1"></div>
+                  <Link 
+                    to="/preise-und-ablauf"
+                    className="block px-4 py-2.5 text-sm font-medium text-primary hover:bg-muted/50 transition-colors"
+                  >
+                    Preise & Ablauf
+                  </Link>
+                </div>
+              </div>
+            </div>
+            
             <Button
               size="sm" 
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-xs sm:text-sm px-2.5 sm:px-4 py-2 whitespace-nowrap" 
@@ -124,6 +170,52 @@ const Navigation = () => {
                   <span className="inline-block animate-drive">🚚</span> Fahrer buchen
                 </Link>
               </Button>
+              
+              <div className="pt-2 border-t">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 px-2">
+                  Unsere Leistungen
+                </p>
+                <Link 
+                  to="/lkw-fahrer-buchen"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  role="menuitem"
+                >
+                  LKW CE Fahrer
+                </Link>
+                <Link 
+                  to="/baumaschinenfuehrer-buchen"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  role="menuitem"
+                >
+                  Baumaschinenführer
+                </Link>
+                <Link 
+                  to="/fluessigboden-service"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  role="menuitem"
+                >
+                  Flüssigboden-Service
+                </Link>
+                <Link 
+                  to="/begleitfahrzeuge-bf3"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  role="menuitem"
+                >
+                  Begleitfahrzeuge BF3
+                </Link>
+                <Link 
+                  to="/preise-und-ablauf"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  role="menuitem"
+                >
+                  Preise & Ablauf
+                </Link>
+              </div>
             </div>
           </div>
         )}

@@ -21,9 +21,13 @@ const FlüssigbodenService = () => {
   }, []);
 
   const seoData = {
-    title: "Mischmeister für Flüssigboden – Mischanlage, Radlader, Bagger & CE-Fahrmischer",
-    description: "Professioneller Mischmeister für fließfähige Verfüllmaterialien. Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu 2 Personen einsparen. 489 € pro Tag.",
-    keywords: "Flüssigboden, Mischmeister, Verfüllmaterialien, Mischanlagen, fließfähige Baustoffe, Radlader, Bagger, CE-Fahrmischer",
+    title: "Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
+    description: "Mischmeister für Flüssigboden als selbstständiger Subunternehmer: Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu 2 Mitarbeiter einsparen. Bundesweit buchbar – Unterkunft bauseits, klare Tagessätze.",
+    keywords: "Flüssigboden, Mischmeister, Subunternehmer, Verfüllmaterialien, Mischanlagen, fließfähige Baustoffe, Radlader, Bagger, CE-Fahrmischer, Flüssigboden Service, Mischmeister buchen",
+    ogTitle: "Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
+    ogDescription: "Mischmeister für Flüssigboden als selbstständiger Subunternehmer: Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu 2 Mitarbeiter einsparen. Bundesweit buchbar – Unterkunft bauseits, klare Tagessätze.",
+    ogUrl: "https://www.kraftfahrer-mieten.com/fluessigboden-service",
+    ogType: "website",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
