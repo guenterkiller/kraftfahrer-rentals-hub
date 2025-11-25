@@ -101,7 +101,7 @@ const ProductCards = () => {
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-secondary to-secondary/70 shadow-lg">
-                  <img src={excavatorIcon} alt="Bagger" className="h-7 w-7 object-contain brightness-0 invert" />
+                  <img src={excavatorIcon} alt="Bagger Icon" className="h-7 w-7 object-contain" loading="lazy" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold">Baumaschinenführer</h3>
