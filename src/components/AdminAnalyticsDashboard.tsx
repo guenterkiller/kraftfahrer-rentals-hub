@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, Eye, Calendar, BarChart3, Activity, Gauge } from "lucide-react";
 import { format, startOfDay, subDays, parseISO } from "date-fns";
@@ -47,6 +48,9 @@ export const AdminAnalyticsDashboard = () => {
   const [todayViews, setTodayViews] = useState(0);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<'7days' | '30days' | 'all'>('7days');
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [pageViewsPage, setPageViewsPage] = useState(1);
+  const pageViewsPerPage = 10;
 
   useEffect(() => {
     fetchAnalytics();
@@ -239,31 +243,52 @@ export const AdminAnalyticsDashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Time Range Selector */}
-      <div className="flex gap-2 justify-end">
-        <Badge 
-          variant={timeRange === '7days' ? 'default' : 'outline'} 
-          className="cursor-pointer"
-          onClick={() => setTimeRange('7days')}
-        >
-          7 Tage
-        </Badge>
-        <Badge 
-          variant={timeRange === '30days' ? 'default' : 'outline'} 
-          className="cursor-pointer"
-          onClick={() => setTimeRange('30days')}
-        >
-          30 Tage
-        </Badge>
-        <Badge 
-          variant={timeRange === 'all' ? 'default' : 'outline'} 
-          className="cursor-pointer"
-          onClick={() => setTimeRange('all')}
-        >
-          Alle
-        </Badge>
-      </div>
+    <Card className="mb-6">
+      <CardHeader 
+        className="cursor-pointer hover:bg-accent/50 transition-colors py-3"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Activity className="h-5 w-5" />
+            <CardTitle className="text-base">Analytics</CardTitle>
+            <Badge variant="outline" className="text-xs">
+              {totalViews} Aufrufe heute: {todayViews}
+            </Badge>
+          </div>
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+            {isExpanded ? '▲' : '▼'}
+          </Button>
+        </div>
+      </CardHeader>
+      
+      {isExpanded && (
+        <CardContent className="pt-0">
+          <div className="space-y-6">
+            {/* Time Range Selector */}
+            <div className="flex gap-2 justify-end">
+              <Badge 
+                variant={timeRange === '7days' ? 'default' : 'outline'} 
+                className="cursor-pointer text-xs"
+                onClick={() => setTimeRange('7days')}
+              >
+                7 Tage
+              </Badge>
+              <Badge 
+                variant={timeRange === '30days' ? 'default' : 'outline'} 
+                className="cursor-pointer text-xs"
+                onClick={() => setTimeRange('30days')}
+              >
+                30 Tage
+              </Badge>
+              <Badge 
+                variant={timeRange === 'all' ? 'default' : 'outline'} 
+                className="cursor-pointer text-xs"
+                onClick={() => setTimeRange('all')}
+              >
+                Alle
+              </Badge>
+            </div>
 
       <Tabs defaultValue="pageviews" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
@@ -420,49 +445,69 @@ export const AdminAnalyticsDashboard = () => {
           {/* Recent Page Views */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Letzte 100 Seitenaufrufe
+              <CardTitle className="flex items-center gap-2 text-sm">
+                <Activity className="h-4 w-4" />
+                Letzte Seitenaufrufe
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Zeitpunkt</TableHead>
-                      <TableHead>Route</TableHead>
-                      <TableHead>Browser</TableHead>
-                      <TableHead>Referrer</TableHead>
+                    <TableRow className="text-xs">
+                      <TableHead className="py-2">Zeitpunkt</TableHead>
+                      <TableHead className="py-2">Route</TableHead>
+                      <TableHead className="py-2">Browser</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {pageViews.map((view) => (
-                      <TableRow key={view.id}>
-                        <TableCell className="text-sm whitespace-nowrap">
-                          {format(new Date(view.created_at), "dd.MM.yyyy HH:mm:ss", {
+                    {pageViews.slice((pageViewsPage - 1) * pageViewsPerPage, pageViewsPage * pageViewsPerPage).map((view) => (
+                      <TableRow key={view.id} className="text-xs">
+                        <TableCell className="text-xs whitespace-nowrap py-2">
+                          {format(new Date(view.created_at), "dd.MM HH:mm", {
                             locale: de,
                           })}
                         </TableCell>
-                        <TableCell>
-                          <div className="space-y-1">
-                            <div className="font-medium text-sm">{getReadableRouteName(view.route)}</div>
-                            <div className="font-mono text-xs text-muted-foreground">{getCleanRoute(view.route)}</div>
-                          </div>
+                        <TableCell className="py-2">
+                          <div className="text-xs">{getReadableRouteName(view.route)}</div>
                         </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
+                        <TableCell className="py-2">
+                          <Badge variant="outline" className="text-xs py-0">
                             {getBrowserFromUserAgent(view.user_agent)}
                           </Badge>
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground max-w-xs truncate">
-                          {view.referrer || "-"}
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
               </div>
+              {pageViews.length > pageViewsPerPage && (
+                <div className="flex items-center justify-between mt-3 px-2">
+                  <div className="text-xs text-muted-foreground">
+                    Seite {pageViewsPage} von {Math.ceil(pageViews.length / pageViewsPerPage)}
+                  </div>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPageViewsPage(Math.max(1, pageViewsPage - 1))}
+                      disabled={pageViewsPage === 1}
+                      className="h-7 px-2 text-xs"
+                    >
+                      ‹
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPageViewsPage(Math.min(Math.ceil(pageViews.length / pageViewsPerPage), pageViewsPage + 1))}
+                      disabled={pageViewsPage === Math.ceil(pageViews.length / pageViewsPerPage)}
+                      className="h-7 px-2 text-xs"
+                    >
+                      ›
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -574,6 +619,9 @@ export const AdminAnalyticsDashboard = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+          </div>
+        </CardContent>
+      )}
+    </Card>
   );
 };
