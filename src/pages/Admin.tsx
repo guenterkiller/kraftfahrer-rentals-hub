@@ -553,12 +553,21 @@ const Admin = () => {
 
   // Sortierte Job-Liste nach Einsatzdatum (zeitraum)
   const sortedJobRequests = React.useMemo(() => {
-    return [...jobRequests].sort((a, b) => {
+    const sorted = [...jobRequests].sort((a, b) => {
       const dateA = parseStartDate(a.zeitraum);
       const dateB = parseStartDate(b.zeitraum);
       // Neueste Einsätze zuerst (absteigende Sortierung)
       return dateB.getTime() - dateA.getTime();
     });
+    
+    // Debug-Ausgabe
+    console.log('🔍 Sortierte Job-Anfragen nach Einsatzdatum:');
+    sorted.slice(0, 5).forEach((job, idx) => {
+      const parsedDate = parseStartDate(job.zeitraum);
+      console.log(`${idx + 1}. ${job.customer_name}: ${job.zeitraum} → ${parsedDate.toLocaleDateString('de-DE')} (Status: ${job.status})`);
+    });
+    
+    return sorted;
   }, [jobRequests]);
 
   // Sortierte Fahrer-Liste nach Eingangsdatum (created_at)
