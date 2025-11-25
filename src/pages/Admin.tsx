@@ -561,6 +561,16 @@ const Admin = () => {
     });
   }, [jobRequests]);
 
+  // Sortierte Fahrer-Liste nach Eingangsdatum (created_at)
+  const sortedFahrer = React.useMemo(() => {
+    return [...fahrer].sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      // Neueste Anfragen zuerst (absteigende Sortierung)
+      return dateB.getTime() - dateA.getTime();
+    });
+  }, [fahrer]);
+
   async function resendDriverConfirmationNew(assignmentId: string) {
     try {
       const { error } = await supabase.functions.invoke(
@@ -1278,7 +1288,7 @@ const Admin = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {fahrer.map((f) => (
+                      {sortedFahrer.map((f) => (
                         <TableRow key={f.id}>
                           <TableCell className="font-medium">
                             {f.vorname} {f.nachname}
@@ -1342,7 +1352,7 @@ const Admin = () => {
 
                 {/* Mobile & Tablet Card View - show on all screens except very large */}
                 <div className="xl:hidden space-y-3">
-                  {fahrer.map((f) => (
+                  {sortedFahrer.map((f) => (
                     <Card key={f.id} className="shadow-sm border-gray-200">
                       <CardContent className="p-4">
                         <div className="space-y-3">
