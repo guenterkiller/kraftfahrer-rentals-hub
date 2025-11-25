@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const BF3Ablauf = () => {
   useSEO({
-    title: "BF3 Ablauf & Kosten – Begleitfahrzeug Schwertransport | Fahrerexpress",
-    description: "Alles über BF3-Begleitfahrzeuge: Ablauf, Kosten, Berechtigung und Checkliste für Schwertransporte. Professionelle BF3-Fahrer deutschlandweit.",
-    keywords: "BF3 Ablauf, BF3 Kosten, BF3 Berechtigung, Begleitfahrzeug Ablauf, Schwertransport Begleitung, BF3 Checkliste, Wechselverkehrszeichenanlage"
+    title: "BF3-Fahrer Ablauf & Kosten – Begleitfahrer für Schwertransport | Fahrerexpress",
+    description: "Alles über BF3-Fahrer: Ablauf, Kosten, Berechtigung und Checkliste für Schwertransporte. Qualifizierte BF3-Fahrer deutschlandweit. Fahrzeug stellen Sie.",
+    keywords: "BF3 Fahrer, BF3 Kosten, BF3 Berechtigung, Begleitfahrer Ablauf, Schwertransport Begleitung, BF3 Checkliste, WVZA Fahrer"
   });
 
   return (
@@ -23,24 +23,30 @@ const BF3Ablauf = () => {
             {/* Hero Section */}
             <div className="text-center mb-12">
               <h1 className="text-4xl font-bold mb-4">
-                BF3 Ablauf & Kosten im Detail
+                BF3-Fahrer: Ablauf & Kosten
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Professionelle Begleitfahrzeuge für Schwer- und Großraumtransporte. 
-                Alles was Sie über BF3-Begleitung wissen müssen.
+                Qualifizierte BF3-Fahrer für Schwer- und Großraumtransporte. 
+                Alles was Sie über BF3-Begleitfahrer wissen müssen.
               </p>
             </div>
 
             {/* Was ist BF3 */}
             <Card className="mb-12">
               <CardHeader>
-                <CardTitle className="text-2xl">Was bedeutet BF3?</CardTitle>
+                <CardTitle className="text-2xl">Was bedeutet BF3-Berechtigung?</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                  <p className="font-semibold text-blue-900">
+                    ⚠️ Wichtig: Wir vermitteln ausschließlich qualifizierte BF3-Fahrer. 
+                    Das entsprechend ausgerüstete Begleitfahrzeug stellt der Auftraggeber.
+                  </p>
+                </div>
                 <p>
-                  <strong>BF3</strong> steht für "Begleitfahrzeug Kategorie 3" und bezeichnet Fahrzeuge, 
-                  die Schwer- und Großraumtransporte begleiten, um andere Verkehrsteilnehmer zu warnen 
-                  und den Transport abzusichern.
+                  <strong>BF3-Berechtigung</strong> qualifiziert Fahrer zur Führung von Begleitfahrzeugen 
+                  mit Wechselverkehrszeichenanlage (WVZA), die Schwer- und Großraumtransporte begleiten, 
+                  um andere Verkehrsteilnehmer zu warnen und den Transport abzusichern.
                 </p>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -53,12 +59,12 @@ const BF3Ablauf = () => {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-primary">📋 BF3-Ausrüstung</h4>
+                    <h4 className="font-semibold mb-2 text-primary">📋 Ihr Fahrzeug benötigt:</h4>
                     <ul className="space-y-1 text-sm">
                       <li>• Wechselverkehrszeichenanlage (WVZA)</li>
                       <li>• Rundumkennleuchte gelb</li>
                       <li>• Funkgerät für Kommunikation</li>
-                      <li>• Spezielle BF3-Berechtigung</li>
+                      <li>• TÜV-Zulassung und Versicherung</li>
                     </ul>
                   </div>
                 </div>
@@ -89,7 +95,7 @@ const BF3Ablauf = () => {
                     <CardTitle className="text-lg">Buchung</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-sm">BF3-Fahrer mit entsprechender Berechtigung und Ausrüstung buchen. Terminkoordination.</p>
+                    <p className="text-sm">BF3-Fahrer mit entsprechender Berechtigung buchen. Ihr Begleitfahrzeug bereitstellen. Terminkoordination.</p>
                     <Badge variant="secondary" className="mt-3">
                       <Clock className="h-3 w-3 mr-1" />
                       1-3 Tage
@@ -103,7 +109,7 @@ const BF3Ablauf = () => {
                     <CardTitle className="text-lg">Vorbereitung</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-sm">Routenbesprechung, Fahrzeugkontrolle, WVZA-Test und Funkverbindung prüfen.</p>
+                    <p className="text-sm">Routenbesprechung, Fahrzeugkontrolle (Ihr Begleitfahrzeug), WVZA-Test und Funkverbindung prüfen.</p>
                     <Badge variant="secondary" className="mt-3">
                       <Clock className="h-3 w-3 mr-1" />
                       30-60 Min
@@ -117,7 +123,7 @@ const BF3Ablauf = () => {
                     <CardTitle className="text-lg">Transport</CardTitle>
                   </CardHeader>
                   <CardContent className="text-center">
-                    <p className="text-sm">Professionelle Begleitung mit vorausfahrendem BF3-Fahrzeug und Verkehrsregelung.</p>
+                    <p className="text-sm">Professionelle Begleitung durch unseren BF3-Fahrer mit Ihrem vorausfahrenden Begleitfahrzeug und Verkehrsregelung.</p>
                     <Badge variant="secondary" className="mt-3">
                       <Clock className="h-3 w-3 mr-1" />
                       Je nach Route
@@ -130,9 +136,14 @@ const BF3Ablauf = () => {
             {/* Kosten */}
             <Card className="mb-12">
               <CardHeader>
-                <CardTitle className="text-2xl">BF3 Kosten & Preise</CardTitle>
+                <CardTitle className="text-2xl">BF3-Fahrer Kosten & Preise</CardTitle>
               </CardHeader>
               <CardContent>
+                <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6">
+                  <p className="text-sm font-semibold text-amber-900">
+                    💡 Hinweis: Die Preise gelten nur für den Fahrer. Ihr Begleitfahrzeug mit WVZA-Ausrüstung ist nicht enthalten.
+                  </p>
+                </div>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
                     <h3 className="text-xl font-semibold mb-4">Standardpreise</h3>
@@ -148,10 +159,6 @@ const BF3Ablauf = () => {
                       <div className="flex justify-between items-center border-b pb-2">
                         <span>Mindestdauer</span>
                         <span className="font-semibold">4 Stunden</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>WVZA-Gerät (inklusive)</span>
-                        <span className="font-semibold text-green-600">Kostenlos</span>
                       </div>
                     </div>
                   </div>
@@ -181,8 +188,8 @@ const BF3Ablauf = () => {
                 
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <p className="text-sm">
-                    <strong>💡 Kostentipp:</strong> Bei längeren Transporten (über 300 km) oft günstiger als Polizeibegleitung. 
-                    Keine Behördengebühren für das BF3-Fahrzeug selbst.
+                    <strong>💡 Kostentipp:</strong> BF3-Fahrer oft günstiger als Polizeibegleitung bei längeren Transporten (über 300 km). 
+                    Ihr eigenes Begleitfahrzeug spart zusätzliche Mietkosten.
                   </p>
                 </div>
               </CardContent>
@@ -265,8 +272,8 @@ const BF3Ablauf = () => {
                 </div>
                 
                 <div>
-                  <h4 className="font-semibold mb-2">Kann ich mein eigenes BF3-Fahrzeug verwenden?</h4>
-                  <p className="text-muted-foreground">Ja, wenn es über die erforderliche WVZA-Ausrüstung verfügt und regelmäßig geprüft wird. Unsere Fahrer bringen ihre eigene Ausrüstung mit.</p>
+                  <h4 className="font-semibold mb-2">Benötige ich ein eigenes Begleitfahrzeug?</h4>
+                  <p className="text-muted-foreground">Ja, Sie stellen das Begleitfahrzeug mit kompletter WVZA-Ausrüstung. Wir vermitteln ausschließlich den qualifizierten BF3-Fahrer, der Ihr Fahrzeug bedient.</p>
                 </div>
                 
                 <div>
@@ -285,9 +292,9 @@ const BF3Ablauf = () => {
             <div className="text-center">
               <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
                 <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-4">BF3-Begleitung benötigt?</h3>
+                  <h3 className="text-2xl font-bold mb-4">BF3-Fahrer benötigt?</h3>
                   <p className="text-lg mb-6 text-muted-foreground">
-                    Professionelle BF3-Fahrer mit kompletter Ausrüstung deutschlandweit verfügbar.
+                    Qualifizierte BF3-Fahrer mit gültiger Berechtigung deutschlandweit verfügbar. Fahrzeug stellen Sie.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button asChild size="lg">
