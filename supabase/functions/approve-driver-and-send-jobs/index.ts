@@ -4,6 +4,7 @@ import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import { DriverApprovalEmail } from './_templates/driver-approval-email.tsx';
+import { AdminDriverApprovalNotification } from './_templates/admin-driver-approval-notification.tsx';
 
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -116,55 +117,106 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('📋 Found jobs:', jobs?.length || 0);
 
-    // 4. Render email HTML using React Email
-    const html = await renderAsync(
+    // 4. Render driver email HTML using React Email
+    const driverHtml = await renderAsync(
       React.createElement(DriverApprovalEmail, {
         driverName: `${driver.vorname} ${driver.nachname}`,
         jobs: jobs || [],
       })
     );
 
-    // 5. Send email
+    // 5. Send email to driver
     const mailReplyTo = Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com';
-    const emailSubject = '🎉 Sie sind freigeschaltet! – Aktuelle Fahrergesuche';
-    let messageId: string | null = null;
-    let emailError: string | null = null;
-    let emailStatus: 'sent' | 'failed' = 'failed';
+    const driverEmailSubject = '🎉 Sie sind freigeschaltet! – Aktuelle Fahrergesuche';
+    let driverMessageId: string | null = null;
+    let driverEmailError: string | null = null;
+    let driverEmailStatus: 'sent' | 'failed' = 'failed';
 
     try {
       const emailResponse = await resend.emails.send({
         from: MAIL_FROM,
         to: [driver.email],
         reply_to: mailReplyTo,
-        subject: emailSubject,
-        html: html,
+        subject: driverEmailSubject,
+        html: driverHtml,
       });
 
-      messageId = emailResponse.id || null;
-      emailStatus = 'sent';
-      console.log('✅ Email sent successfully:', messageId);
+      driverMessageId = emailResponse.id || null;
+      driverEmailStatus = 'sent';
+      console.log('✅ Driver email sent successfully:', driverMessageId);
     } catch (error) {
-      console.error('❌ Email sending failed:', error);
-      emailError = error instanceof Error ? error.message : 'Unknown email error';
-      emailStatus = 'failed';
+      console.error('❌ Driver email sending failed:', error);
+      driverEmailError = error instanceof Error ? error.message : 'Unknown email error';
+      driverEmailStatus = 'failed';
     }
 
-    // 6. Log email attempt to email_log table
+    // 6. Log driver email attempt to email_log table
     try {
       await supabase.from('email_log').insert({
         recipient: driver.email,
-        subject: emailSubject,
+        subject: driverEmailSubject,
         template: 'driver_approval_with_jobs',
-        status: emailStatus,
-        message_id: messageId,
-        error_message: emailError,
-        sent_at: emailStatus === 'sent' ? new Date().toISOString() : null,
+        status: driverEmailStatus,
+        message_id: driverMessageId,
+        error_message: driverEmailError,
+        sent_at: driverEmailStatus === 'sent' ? new Date().toISOString() : null,
         delivery_mode: 'inline'
       });
-      console.log('✅ Email logged to email_log');
+      console.log('✅ Driver email logged to email_log');
     } catch (logError) {
-      console.error('❌ Failed to log email:', logError);
-      // Don't fail the request if logging fails
+      console.error('❌ Failed to log driver email:', logError);
+    }
+
+    // 7. Render admin notification email
+    const adminHtml = await renderAsync(
+      React.createElement(AdminDriverApprovalNotification, {
+        driverName: `${driver.vorname} ${driver.nachname}`,
+        driverEmail: driver.email,
+        driverId: driver.id,
+        approvedAt: new Date().toLocaleString('de-DE'),
+        jobsSent: jobs?.length || 0,
+      })
+    );
+
+    // 8. Send admin notification email
+    const adminEmail = 'info@kraftfahrer-mieten.com';
+    const adminEmailSubject = `✅ Fahrer freigeschaltet: ${driver.vorname} ${driver.nachname}`;
+    let adminMessageId: string | null = null;
+    let adminEmailError: string | null = null;
+    let adminEmailStatus: 'sent' | 'failed' = 'failed';
+
+    try {
+      const adminEmailResponse = await resend.emails.send({
+        from: MAIL_FROM,
+        to: [adminEmail],
+        subject: adminEmailSubject,
+        html: adminHtml,
+      });
+
+      adminMessageId = adminEmailResponse.id || null;
+      adminEmailStatus = 'sent';
+      console.log('✅ Admin notification sent successfully:', adminMessageId);
+    } catch (error) {
+      console.error('❌ Admin notification sending failed:', error);
+      adminEmailError = error instanceof Error ? error.message : 'Unknown email error';
+      adminEmailStatus = 'failed';
+    }
+
+    // 9. Log admin notification to email_log table
+    try {
+      await supabase.from('email_log').insert({
+        recipient: adminEmail,
+        subject: adminEmailSubject,
+        template: 'admin_driver_approval_notification',
+        status: adminEmailStatus,
+        message_id: adminMessageId,
+        error_message: adminEmailError,
+        sent_at: adminEmailStatus === 'sent' ? new Date().toISOString() : null,
+        delivery_mode: 'inline'
+      });
+      console.log('✅ Admin notification logged to email_log');
+    } catch (logError) {
+      console.error('❌ Failed to log admin notification:', logError);
     }
 
     console.log('✅ Process completed successfully');
@@ -172,8 +224,10 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(JSON.stringify({
       ok: true,
       sentJobs: jobs?.length || 0,
-      emailSent: emailStatus === 'sent',
-      messageId: messageId
+      driverEmailSent: driverEmailStatus === 'sent',
+      adminEmailSent: adminEmailStatus === 'sent',
+      driverMessageId: driverMessageId,
+      adminMessageId: adminMessageId
     }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
