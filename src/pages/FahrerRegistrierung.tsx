@@ -851,10 +851,10 @@ const FahrerRegistrierung = () => {
                   <div className="bg-muted/30 p-4 rounded-lg">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg">🚛</span>
-                      <Label className="text-base font-semibold">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                      <Label className="text-base font-semibold">Haben Sie BF2/BF3-Berechtigung?</Label>
                     </div>
                     <p className="text-sm text-muted-foreground mb-4">
-                      Unsere Fahrer unterstützen Sie bei der Begleitung von Großraum- und Schwertransporten. Ob BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage.
+                      Falls Sie als Fahrer für Großraum- und Schwertransport-Begleitung qualifiziert sind (BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage), geben Sie dies bitte an.
                     </p>
                     <div className="space-y-3">
                       <div className="flex items-center space-x-2">
