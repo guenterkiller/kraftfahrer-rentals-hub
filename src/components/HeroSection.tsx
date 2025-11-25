@@ -74,7 +74,7 @@ const HeroSection = () => {
           <Button 
             size="lg" 
             variant="outline"
-            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-white hover:bg-white/90 text-foreground border-3 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto rounded-xl font-bold" 
+            className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-white hover:bg-white/95 text-gray-900 hover:text-gray-900 border-3 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 w-full sm:w-auto rounded-xl font-bold" 
             asChild
           >
             <Link to="/preise-und-ablauf" aria-label="Preise und Konditionen ansehen">
