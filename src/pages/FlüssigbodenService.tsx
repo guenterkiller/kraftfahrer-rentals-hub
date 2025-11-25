@@ -270,9 +270,9 @@ const FlüssigbodenService = () => {
                       <div className="text-3xl font-bold text-primary">489 €</div>
                       <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
                     </div>
-                    <div className="p-4 bg-background rounded-lg border">
+                    <div className="p-4 bg-background rounded-lg border-2 border-orange-200 shadow-sm">
                       <div className="text-sm text-muted-foreground mb-1">Überstunden</div>
-                      <div className="text-3xl font-bold text-foreground">65 €/Std.</div>
+                      <div className="text-3xl font-bold text-orange-600">65 €/Std.</div>
                       <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
                     </div>
                     <div className="p-4 bg-background rounded-lg border">
