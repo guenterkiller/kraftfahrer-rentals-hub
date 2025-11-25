@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Truck, Check, Star, Droplets } from "lucide-react";
 import baggerIcon from "@/assets/bagger-icon.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const ProductCards = () => {
   const navigate = useNavigate();
@@ -219,8 +219,18 @@ const ProductCards = () => {
 
         </div>
 
+        {/* Neuer Textlink unter den Karten */}
+        <div className="text-center mt-8 mb-8">
+          <Link 
+            to="/fluessigboden-service" 
+            className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-2"
+          >
+            Neu: Mischmeister für Flüssigboden jetzt buchbar →
+          </Link>
+        </div>
+
         {/* Abrechnungsmodell-Hinweis */}
-        <Card className="max-w-7xl mx-auto mt-12 border-l-4 border-l-primary animate-fade-in">
+        <Card className="max-w-7xl mx-auto mt-4 border-l-4 border-l-primary animate-fade-in">
           <CardContent className="pt-6">
             <div className="flex gap-4">
               <div className="flex-shrink-0 p-2 h-fit rounded-lg bg-primary/10">

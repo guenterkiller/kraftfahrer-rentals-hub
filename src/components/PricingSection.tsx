@@ -160,7 +160,7 @@ const PricingSection = () => {
           </Card>
         </div>
 
-        <Card className="bg-muted/50 max-w-5xl mx-auto mb-16">
+        <Card className="bg-muted/50 max-w-5xl mx-auto mb-8">
           <CardHeader>
             <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
           </CardHeader>
@@ -168,6 +168,16 @@ const PricingSection = () => {
             <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
           </CardContent>
         </Card>
+
+        {/* Neuer Textlink unter der Preisübersicht */}
+        <div className="text-center max-w-5xl mx-auto">
+          <a 
+            href="/fluessigboden-service" 
+            className="text-primary hover:text-primary/80 transition-colors inline-block"
+          >
+            Auch verfügbar: Mischmeister für Flüssigboden (ab 489 €/Tag)
+          </a>
+        </div>
 
       </div>
     </section>
