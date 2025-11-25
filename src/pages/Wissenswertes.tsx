@@ -27,20 +27,46 @@ const Wissenswertes = () => {
             </p>
           </div>
 
+          {/* Einleitender Infoblock */}
+          <section className="mb-16">
+            <Card className="border-l-4 border-l-primary">
+              <CardHeader>
+                <CardTitle className="text-2xl">⭐ Was Sie beim Einsatz selbstständiger Fahrer wissen müssen</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 text-muted-foreground">
+                <p className="font-semibold text-foreground">Wir vermitteln Fahrer – keine Fahrzeuge.</p>
+                <p>
+                  Die von uns vermittelten selbstständigen Fahrer führen ausschließlich das vom Auftraggeber bereitgestellte Fahrzeug.
+                  Sie fahren im Auftrag des Auftraggebers dessen Transporte und Aufträge.
+                </p>
+                <p>
+                  Da der Fahrer kein eigenes Fahrzeug einsetzt, handelt es sich nicht um eine Transportleistung im rechtlichen Sinne.
+                </p>
+                <ul className="space-y-2 pl-6">
+                  <li>➡ Keine Transportversicherung erforderlich.</li>
+                  <li>➡ Keine Vollkaskopflicht für den Fahrer.</li>
+                  <li>➡ Empfehlenswert für den Fahrer: eine Betriebshaftpflicht.</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </section>
+
+          <Separator className="my-16" />
+
           {/* Vorteile selbstständiger Fahrer */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Vorteile selbstständiger Fahrer</h2>
+            <h2 className="text-3xl font-bold mb-8">🚛 Vorteile selbstständiger Fahrer</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    Flexibilität
+                    Flexibel
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Kurzfristig (24–72 h) planbar, ohne lange Vertragsbindung.
+                    24–72 h Vorlauf
                   </p>
                 </CardContent>
               </Card>
@@ -49,12 +75,12 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Calculator className="h-5 w-5 text-blue-600" />
-                    Kosteneffizienz
+                    Keine Sozialabgaben
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Keine Sozialversicherungsbeiträge, Urlaubsgeld oder Lohnfortzahlung bei Krankheit.
+                    Kein Urlaub, keine Lohnfortzahlung
                   </p>
                 </CardContent>
               </Card>
@@ -63,26 +89,12 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Users className="h-5 w-5 text-purple-600" />
-                    Erfahrung
+                    Hohe Erfahrung
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Selbstständige Fahrer bringen oft jahrelange Berufserfahrung und Fachkompetenz mit.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-orange-600" />
-                    Rechtssicherheit
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Kein Risiko der Scheinselbstständigkeit bei korrekter Ausgestaltung der Zusammenarbeit.
+                    Fachkenntnis
                   </p>
                 </CardContent>
               </Card>
@@ -91,12 +103,26 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FileText className="h-5 w-5 text-red-600" />
-                    Weniger Bürokratie
+                    Kein Arbeitsrecht
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Einfache Vertragsgestaltung ohne komplexe arbeitsrechtliche Bestimmungen.
+                    Keine Lohnabrechnung
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-orange-600" />
+                    Rechtssichere Zusammenarbeit
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Ohne ANÜ
                   </p>
                 </CardContent>
               </Card>
@@ -105,12 +131,12 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600" />
-                    Qualität
+                    Qualitätsorientiert
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Eigenverantwortliche Arbeitsweise führt oft zu höherer Motivation und Qualität.
+                    Eigenverantwortung
                   </p>
                 </CardContent>
               </Card>
@@ -121,45 +147,47 @@ const Wissenswertes = () => {
 
           {/* Rechtliche Hinweise */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Rechtliche Hinweise</h2>
+            <h2 className="text-3xl font-bold mb-8">⚖ Rechtliche Hinweise</h2>
             
             <div className="space-y-8">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    Abgrenzung zur Arbeitnehmerüberlassung
+                    Abgrenzung zur Arbeitnehmerüberlassung (wichtig!)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-muted-foreground">
-                    Die Beauftragung selbstständiger Fahrer ist <strong>keine Arbeitnehmerüberlassung</strong>, 
-                    wenn folgende Kriterien erfüllt sind:
+                    Die Beauftragung selbstständiger Fahrer ist <strong>keine Arbeitnehmerüberlassung</strong>, wenn:
                   </p>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>✓ Der Fahrer arbeitet eigenverantwortlich und weisungsunabhängig</li>
-                    <li>✓ Sie stellen das Fahrzeug/die Geräte, er bringt die Fachkompetenz</li>
-                    <li>✓ Er trägt ein unternehmerisches Risiko</li>
-                    <li>✓ Er kann eigene Arbeitskräfte einsetzen</li>
-                    <li>✓ Er ist nicht in die Betriebsorganisation eingegliedert</li>
+                    <li>✓ Fahrer bleibt selbstständiger Unternehmer</li>
+                    <li>✓ Auftraggeber stellt das Fahrzeug</li>
+                    <li>✓ Fahrer führt die Arbeit eigenverantwortlich aus</li>
+                    <li>✓ Unternehmerisches Risiko liegt beim Fahrer</li>
+                    <li>✓ Keine Eingliederung in den Betrieb</li>
+                    <li>✓ Abrechnung per Rechnung, nicht per Lohn</li>
+                    <li>✓ Fahrer kann weitere Auftraggeber annehmen</li>
                   </ul>
+                  <p className="text-muted-foreground mt-4">
+                    Diese Konstellation ist rechtlich üblich und zulässig.
+                  </p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Scheinselbstständigkeit vermeiden</CardTitle>
+                  <CardTitle>🚫 Scheinselbstständigkeit vermeiden</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Um eine Scheinselbstständigkeit zu vermeiden, sollten Sie beachten:
-                  </p>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>✓ Keine festen Arbeitszeiten vorgeben</li>
-                    <li>✓ Ergebnis vereinbaren, nicht die Art der Durchführung</li>
-                    <li>✓ Fahrer sollte für mehrere Auftraggeber tätig sein</li>
-                    <li>✓ Eigene Geschäftsausstattung des Fahrers</li>
-                    <li>✓ Rechnungsstellung durch den Fahrer</li>
+                    <li>✓ Keine detaillierten Arbeitszeiten vorschreiben</li>
+                    <li>✓ Ergebnis definieren, nicht den Weg</li>
+                    <li>✓ Fahrer nicht in Dienstpläne integrieren</li>
+                    <li>✓ Fahrer sollte mehrere Auftraggeber haben</li>
+                    <li>✓ Fahrer nutzt eigene Schutzausrüstung (soweit sinnvoll)</li>
+                    <li>✓ Selbstständige Rechnungsstellung</li>
                   </ul>
                 </CardContent>
               </Card>
@@ -170,41 +198,59 @@ const Wissenswertes = () => {
 
           {/* Versicherung und Haftung */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Versicherung und Haftung</h2>
+            <h2 className="text-3xl font-bold mb-8">🛡 Versicherung & Haftung</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Versicherungsschutz</CardTitle>
+                  <CardTitle>Gesetzlich erforderlich:</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent>
                   <p className="text-muted-foreground">
-                    Wichtige Versicherungen für selbstständige Fahrer:
+                    <strong>Kfz-Haftpflichtversicherung</strong> → vom Fahrzeughalter (Auftraggeber)
                   </p>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Berufshaftpflichtversicherung</li>
-                    <li>• Betriebshaftpflichtversicherung</li>
-                    <li>• Kfz-Haftpflichtversicherung</li>
-                    <li>• Vollkasko für das Fahrzeug</li>
-                    <li>• Transportversicherung (falls relevant)</li>
-                  </ul>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Haftungsregelung</CardTitle>
+                  <CardTitle>Für Fahrer empfehlenswert:</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Betriebshaftpflicht / Berufshaftpflicht
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Nicht erforderlich:</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <p className="text-muted-foreground">
-                    Klare Haftungsregelungen im Vertrag:
-                  </p>
-                  <ul className="space-y-1 text-sm text-muted-foreground">
-                    <li>• Haftung bei Schäden durch den Fahrer</li>
-                    <li>• Haftungsausschlüsse definieren</li>
-                    <li>• Nachweis ausreichender Versicherung</li>
-                    <li>• Schadensregulierung festlegen</li>
-                  </ul>
+                  <div>
+                    <p className="font-semibold text-foreground">Transportversicherung</p>
+                    <p className="text-sm text-muted-foreground">
+                      (Fahrer ist kein Frachtführer – er nutzt kein eigenes Fahrzeug)
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">Vollkasko für Fahrer</p>
+                    <p className="text-sm text-muted-foreground">
+                      (optional Sache des Fahrzeughalters)
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-l-4 border-l-primary">
+                <CardHeader>
+                  <CardTitle>Haftung am Fahrzeug</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 text-muted-foreground">
+                  <p>• Auftraggeber bleibt Fahrzeughalter</p>
+                  <p>• Schäden am Fahrzeug laufen über dessen Versicherung</p>
+                  <p>• Grobe Fahrlässigkeit kann vertraglich geregelt werden</p>
                 </CardContent>
               </Card>
             </div>
@@ -212,55 +258,58 @@ const Wissenswertes = () => {
 
           <Separator className="my-16" />
 
-          {/* Mustervertrag */}
+          {/* Vertragsgestaltung */}
           <section className="mb-16">
-            <h2 className="text-3xl font-bold mb-8">Vertragsgestaltung</h2>
+            <h2 className="text-3xl font-bold mb-8">📄 Vertragsgestaltung – das sollte geregelt sein</h2>
             
             <Card>
-              <CardHeader>
-                <CardTitle>Wichtige Vertragsbestandteile</CardTitle>
-                <CardDescription>
-                  Diese Punkte sollten in jedem Vertrag mit selbstständigen Fahrern enthalten sein
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <h4 className="font-semibold mb-3">Leistungsbeschreibung</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• Art der Transportleistung</li>
-                      <li>• Fahrzeugtyp und -ausstattung</li>
-                      <li>• Einsatzgebiet und -zeiten</li>
-                      <li>• Besondere Anforderungen</li>
+                    <h4 className="font-semibold text-lg mb-4">Leistungsbeschreibung:</h4>
+                    <ul className="space-y-2 text-muted-foreground">
+                      <li>• Art der Transporte</li>
+                      <li>• Fahrzeugtyp</li>
+                      <li>• Einsatzort</li>
+                      <li>• Besonderheiten (ADR, Kran usw.)</li>
                     </ul>
                   </div>
                   
                   <div>
-                    <h4 className="font-semibold mb-3">Vergütung</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• Stundensatz oder Pauschale</li>
-                      <li>• Abrechnungsmodalitäten</li>
-                      <li>• Zahlungsziele</li>
-                      <li>• Spesen und Nebenkosten</li>
+                    <h4 className="font-semibold text-lg mb-4">Vergütung:</h4>
+                    <ul className="space-y-2 text-muted-foreground">
+                      <li>• Tages-/Stundensatz</li>
+                      <li>• Abrechnungsweise</li>
+                      <li>• Zahlungsziel</li>
+                      <li>• Spesenregelung</li>
                     </ul>
                   </div>
                   
                   <div>
-                    <h4 className="font-semibold mb-3">Pflichten des Fahrers</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• Führerscheinnachweis</li>
-                      <li>• Versicherungsnachweis</li>
-                      <li>• Fahrzeugwartung</li>
-                      <li>• Einhaltung von Vorschriften</li>
+                    <h4 className="font-semibold text-lg mb-4">Pflichten des Fahrers:</h4>
+                    <ul className="space-y-2 text-muted-foreground">
+                      <li>• Führerschein</li>
+                      <li>• Selbstständiger Status</li>
+                      <li>• Kenntnisse gesetzlicher Vorschriften</li>
                     </ul>
                   </div>
                   
                   <div>
-                    <h4 className="font-semibold mb-3">Kündigung</h4>
-                    <ul className="space-y-1 text-sm text-muted-foreground">
-                      <li>• Kündigungsfristen</li>
-                      <li>• Außerordentliche Kündigung</li>
-                      <li>• Abwicklung nach Vertragsende</li>
+                    <h4 className="font-semibold text-lg mb-4">Pflichten des Auftraggebers:</h4>
+                    <ul className="space-y-2 text-muted-foreground">
+                      <li>• Fahrzeug stellen</li>
+                      <li>• Betriebsmittel & Kraftstoff</li>
+                      <li>• Versicherungen</li>
+                      <li>• Ladungssicherung sicherstellen</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="md:col-span-2">
+                    <h4 className="font-semibold text-lg mb-4">Kündigung:</h4>
+                    <ul className="space-y-2 text-muted-foreground">
+                      <li>• Fristen</li>
+                      <li>• außerordentliche Gründe</li>
+                      <li>• Abwicklung</li>
                     </ul>
                   </div>
                 </div>
@@ -309,10 +358,15 @@ const Wissenswertes = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
+                  <p className="text-muted-foreground mb-3">
+                    <strong>Ja.</strong>
+                  </p>
+                  <p className="text-muted-foreground mb-2">
+                    Die von uns vermittelten Fahrer haben kein eigenes Fahrzeug.
+                  </p>
                   <p className="text-muted-foreground">
-                    Ja, in der Regel stellen Sie als Auftraggeber das Fahrzeug zur Verfügung. 
-                    Die selbstständigen Fahrer bringen ihre Erfahrung und Qualifikation mit, 
-                    fahren aber Ihr Firmenfahrzeug. Dies ist rechtlich zulässig und üblich in der Branche.
+                    Sie fahren ausschließlich Ihr Firmenfahrzeug und führen Ihre Aufträge aus.
+                    Das ist rechtlich zulässig, da keine eigene Transportleistung durch den Fahrer erfolgt.
                   </p>
                 </CardContent>
               </Card>
