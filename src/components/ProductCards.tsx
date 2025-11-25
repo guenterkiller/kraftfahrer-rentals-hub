@@ -2,8 +2,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Truck, Check, Star, Droplets } from "lucide-react";
-import baggerIcon from "@/assets/bagger-icon-new.png";
 import { useNavigate, Link } from "react-router-dom";
+import type { SVGProps } from "react";
+
+const ExcavatorIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className="h-7 w-7"
+    {...props}
+  >
+    <rect x="3" y="14" width="10" height="3" rx="1" className="fill-current opacity-10" />
+    <circle cx="6" cy="17" r="1" className="fill-current" />
+    <circle cx="9" cy="17" r="1" className="fill-current" />
+    <circle cx="12" cy="17" r="1" className="fill-current" />
+    <rect x="5" y="10" width="6" height="3" rx="0.5" className="fill-none stroke-current" strokeWidth="1.5" />
+    <path d="M11 11 L16 7 L20 9" className="fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M19.5 9.5 L21 12 L19 13" className="fill-none stroke-current" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
 
 const ProductCards = () => {
   const navigate = useNavigate();
@@ -101,7 +118,7 @@ const ProductCards = () => {
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-secondary to-secondary/70 shadow-lg">
-                  <img src={baggerIcon} alt="Bagger" className="h-7 w-7 object-contain brightness-0 invert" />
+                  <ExcavatorIcon className="h-7 w-7 text-secondary-foreground" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold">Baumaschinenführer</h3>
