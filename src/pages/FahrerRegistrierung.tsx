@@ -123,7 +123,7 @@ const FahrerRegistrierung = () => {
     "Sonderführerschein vorhanden",
     "Mitnahmestapler / Gabelstapler möglich",
     "Auslandseinsätze möglich",
-    "Berechtigung für BF3-Schulungen vorhanden",
+    "BF2/BF3-Berechtigung vorhanden",
     "Ladekran-Erfahrung vorhanden",
     "Nachtschicht möglich",
     "Baustellen-Erfahrung vorhanden",
