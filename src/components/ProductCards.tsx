@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Truck, Check, Star, Droplets } from "lucide-react";
-import baggerIcon from "@/assets/bagger-icon.png";
+import baggerIcon from "@/assets/bagger-icon-new.png";
 import { useNavigate, Link } from "react-router-dom";
 
 const ProductCards = () => {
@@ -101,7 +101,7 @@ const ProductCards = () => {
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-secondary to-secondary/70 shadow-lg">
-                  <img src={baggerIcon} alt="Bagger" className="h-10 w-10 object-contain brightness-0 invert" />
+                  <img src={baggerIcon} alt="Bagger" className="h-7 w-7 object-contain brightness-0 invert" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold">Baumaschinenführer</h3>
