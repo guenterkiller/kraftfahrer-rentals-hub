@@ -2,17 +2,17 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BegleitfahrzeugeBF3 = () => {
   const seoData = {
-    title: "BF3-Begleitfahrzeuge buchen – Schwertransport Begleitung | Fahrerexpress",
-    description: "BF3-Begleitfahrzeuge für Schwertransporte kurzfristig buchen. Qualifizierte Fahrer mit BF3-Berechtigung für Großraum- und Schwertransport-Begleitung bundesweit.",
-    keywords: "BF3 Begleitfahrzeuge, Schwertransport Begleitung, BF3 Berechtigung, Begleitfahrer buchen, Wechselverkehrszeichenanlage, Großraum Transport, Schwerlast Begleitung",
+    title: "BF3-Fahrer buchen – Qualifizierte Begleitfahrer für Schwertransport | Fahrerexpress",
+    description: "BF3-Fahrer mit gültiger Berechtigung für Schwertransporte kurzfristig buchen. Qualifizierte Begleitfahrer für Großraum- und Schwertransport-Begleitung bundesweit. Fahrzeug stellen Sie.",
+    keywords: "BF3 Fahrer, Schwertransport Begleitung, BF3 Berechtigung, Begleitfahrer buchen, WVZA Fahrer, Großraum Transport, Schwerlast Begleitung, BF3 qualifiziert",
     faqData: [
       {
-        question: "Brauchen die Fahrer ein eigenes Begleitfahrzeug?",
-        answer: "Nein, die Fahrzeuge werden in der Regel durch den Auftraggeber gestellt. Unsere BF3-Fahrer bringen die Qualifikation und Erfahrung mit, das entsprechend ausgerüstete Begleitfahrzeug stellen Sie."
+        question: "Stellen Sie auch das Begleitfahrzeug?",
+        answer: "Nein, wir vermitteln ausschließlich qualifizierte BF3-Fahrer. Das entsprechend ausgerüstete Begleitfahrzeug mit WVZA-Anlage stellt der Auftraggeber. Unsere Fahrer bringen nur ihre BF3-Berechtigung und Erfahrung mit."
       },
       {
-        question: "Was ist ein BF3-Begleitfahrzeug?",
-        answer: "BF3-Begleitfahrzeuge sind speziell ausgerüstete Fahrzeuge mit Wechselverkehrszeichenanlage (WVZA) für die Begleitung von Schwer- und Großraumtransporten. Gemäß StVO § 46 für Transporte über 3,50m Breite."
+        question: "Was ist die BF3-Berechtigung?",
+        answer: "Die BF3-Berechtigung qualifiziert Fahrer zur Führung von Begleitfahrzeugen mit Wechselverkehrszeichenanlage (WVZA) für Schwer- und Großraumtransporte. Gemäß StVO § 46 für Transporte über 3,50m Breite erforderlich."
       },
       {
         question: "Welche Qualifikationen haben die BF3-Fahrer?",
@@ -26,8 +26,8 @@ const BegleitfahrzeugeBF3 = () => {
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "BF3-Begleitfahrzeuge buchen",
-      "description": "BF3-Begleitfahrzeuge und qualifizierte Begleitfahrer für Schwertransporte und Großraumtransporte",
+      "name": "BF3-Fahrer buchen",
+      "description": "Qualifizierte BF3-Fahrer für Schwertransporte und Großraumtransporte. Begleitfahrzeug stellt Auftraggeber.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -46,39 +46,39 @@ const BegleitfahrzeugeBF3 = () => {
         "@type": "Offer",
         "price": "649",
         "priceCurrency": "EUR",
-        "description": "BF3-Begleitfahrzeug mit qualifiziertem Fahrer Tagespreis für 8 Stunden"
+        "description": "BF3-qualifizierter Fahrer Tagespreis für 8 Stunden (Fahrzeug nicht enthalten)"
       }
     }
   };
 
   const heroData = {
-    h1: "BF3-Begleitfahrzeuge buchen – ab 649 € netto/Tag",
-    intro: "Sie benötigen kurzfristig ein BF3-Begleitfahrzeug für Schwertransporte? Über Fahrerexpress buchen Sie bundesweit qualifizierte Begleitfahrer mit gültiger BF3-Berechtigung und Wechselverkehrszeichenanlage. Für Großraum- und Schwertransporte gemäß StVO. Rechtssichere Dienst-/Werkleistung ohne Arbeitnehmerüberlassung.",
+    h1: "BF3-Fahrer buchen – ab 649 € netto/Tag",
+    intro: "Sie benötigen kurzfristig einen qualifizierten BF3-Fahrer für Schwertransporte? Über Fahrerexpress buchen Sie bundesweit erfahrene Begleitfahrer mit gültiger BF3-Berechtigung. Das entsprechend ausgerüstete Begleitfahrzeug stellen Sie. Rechtssichere Dienst-/Werkleistung ohne Arbeitnehmerüberlassung.",
     bullets: [
-      "BF3-Berechtigung & WVZA-Ausrüstung",
-      "Schwertransport-Erfahrung",
+      "Gültige BF3-Berechtigung",
+      "Mehrjährige Schwertransport-Erfahrung",
       "Bundesweite Verfügbarkeit 24/7"
     ]
   };
 
   const faqData = {
-    title: "BF3-Begleitfahrzeuge – Häufige Fragen",
+    title: "BF3-Fahrer – Häufige Fragen",
     items: [
       {
-        question: "Was ist ein BF3-Begleitfahrzeug?",
-        answer: "<strong>BF3-Begleitfahrzeuge</strong> sind speziell ausgerüstete Fahrzeuge mit <strong>Wechselverkehrszeichenanlage (WVZA)</strong> für die Begleitung von Schwer- und Großraumtransporten. Gemäß StVO § 46 für Transporte über 3,50m Breite oder besondere Gefahrensituationen."
+        question: "Stellen Sie auch das Begleitfahrzeug?",
+        answer: "<strong>Nein, wir vermitteln ausschließlich Fahrer.</strong> Das entsprechend ausgerüstete Begleitfahrzeug mit <strong>Wechselverkehrszeichenanlage (WVZA)</strong> stellt der Auftraggeber. Unsere Fahrer bringen die BF3-Berechtigung und langjährige Erfahrung mit."
       },
       {
         question: "Welche Qualifikationen haben die BF3-Fahrer?",
         answer: "<strong>Gültige BF3-Berechtigung</strong> nach Richtlinie für die Ausbildung und Prüfung von Begleitfahrzeugführern. Regelmäßige Fortbildungen und mehrjährige Erfahrung im <strong>Schwertransport-Begleitwesen</strong>."
       },
       {
-        question: "Wie schnell ist ein BF3-Begleitfahrzeug verfügbar?",
+        question: "Wie schnell ist ein BF3-Fahrer verfügbar?",
         answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
       },
       {
-        question: "Welche Ausrüstung ist im BF3-Fahrzeug enthalten?",
-        answer: "<strong>Komplette WVZA-Ausrüstung:</strong> Wechselverkehrszeichenanlage, Rundumkennleuchten, Funkgerät, Warneinrichtungen gemäß StVO. Alle Fahrzeuge TÜV-geprüft und vollständig versichert."
+        question: "Was muss das Begleitfahrzeug haben?",
+        answer: "<strong>Ihr Fahrzeug benötigt:</strong> Wechselverkehrszeichenanlage (WVZA), Rundumkennleuchte gelb, Funkgerät, TÜV-Zulassung. Unser Fahrer übernimmt die Bedienung Ihrer Ausrüstung."
       },
       {
         question: "Für welche Transporte wird BF3 benötigt?",
