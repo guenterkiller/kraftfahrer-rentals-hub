@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "npm:resend@2.0.0";
+import React from 'npm:react@18.3.1';
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import { AdminJobAcceptanceNotification } from '../_shared/email-templates/admin-job-acceptance-notification.tsx';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -170,6 +173,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Send confirmation email based on billing model
       if (resendApiKey) {
         const resend = new Resend(resendApiKey);
+        const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
         
         const billingText = job.billing_model === 'agency' 
           ? {
@@ -215,13 +219,68 @@ const handler = async (req: Request): Promise<Response> => {
 
         try {
           await resend.emails.send({
-            from: 'Fahrerexpress <info@kraftfahrer-mieten.com>',
+            from: MAIL_FROM,
             to: [driver.email],
             subject: billingText.subject,
             html: emailHtml
           });
+          console.log('✅ Driver confirmation email sent');
         } catch (emailError) {
-          console.error('Email sending failed:', emailError);
+          console.error('❌ Driver email sending failed:', emailError);
+        }
+
+        // Send admin notification
+        try {
+          const adminHtml = await renderAsync(
+            React.createElement(AdminJobAcceptanceNotification, {
+              driverName: `${driver.vorname} ${driver.nachname}`,
+              driverEmail: driver.email,
+              jobDetails: {
+                customerName: job.customer_name,
+                einsatzort: job.einsatzort,
+                zeitraum: job.zeitraum,
+                fahrzeugtyp: job.fahrzeugtyp,
+                nachricht: job.nachricht,
+              },
+              billingModel: job.billing_model,
+              acceptedAt: new Date().toLocaleString('de-DE'),
+            })
+          );
+
+          const adminEmail = 'info@kraftfahrer-mieten.com';
+          const adminSubject = `✅ Auftragsannahme: ${driver.vorname} ${driver.nachname} → ${job.customer_name}`;
+
+          await resend.emails.send({
+            from: MAIL_FROM,
+            to: [adminEmail],
+            subject: adminSubject,
+            html: adminHtml
+          });
+
+          console.log('✅ Admin notification email sent');
+
+          // Log admin notification
+          await supabase.from('email_log').insert({
+            recipient: adminEmail,
+            subject: adminSubject,
+            template: 'admin_job_acceptance_notification',
+            status: 'sent',
+            job_id: jobId,
+            sent_at: new Date().toISOString(),
+            delivery_mode: 'inline'
+          });
+        } catch (adminEmailError) {
+          console.error('❌ Admin notification failed:', adminEmailError);
+          // Log failed admin notification
+          await supabase.from('email_log').insert({
+            recipient: 'info@kraftfahrer-mieten.com',
+            subject: `✅ Auftragsannahme: ${driver.vorname} ${driver.nachname}`,
+            template: 'admin_job_acceptance_notification',
+            status: 'failed',
+            job_id: jobId,
+            error_message: adminEmailError instanceof Error ? adminEmailError.message : String(adminEmailError),
+            delivery_mode: 'inline'
+          });
         }
       }
 

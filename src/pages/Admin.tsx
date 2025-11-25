@@ -1275,8 +1275,10 @@ const Admin = () => {
                                )}
                                <Button
                                  size="sm"
-                                 variant={f.is_blocked ? "outline" : "destructive"}
-                                 className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50" : ""}
+                                 variant={f.is_blocked ? "ghost" : "ghost"}
+                                 className={f.is_blocked 
+                                   ? "text-xs text-orange-600 hover:bg-orange-50 hover:text-orange-700" 
+                                   : "text-xs text-muted-foreground hover:bg-muted hover:text-foreground"}
                                  onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
@@ -1350,8 +1352,10 @@ const Admin = () => {
                             )}
                             <Button
                               size="sm"
-                              variant={f.is_blocked ? "outline" : "destructive"}
-                              className={f.is_blocked ? "border-orange-500 text-orange-600 hover:bg-orange-50 flex-1" : "flex-1"}
+                              variant={f.is_blocked ? "ghost" : "ghost"}
+                              className={f.is_blocked 
+                                ? "text-xs text-orange-600 hover:bg-orange-50 hover:text-orange-700 flex-1" 
+                                : "text-xs text-muted-foreground hover:bg-muted hover:text-foreground flex-1"}
                               onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
