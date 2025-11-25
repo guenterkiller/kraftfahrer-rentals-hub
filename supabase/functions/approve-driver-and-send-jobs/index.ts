@@ -126,33 +126,42 @@ const handler = async (req: Request): Promise<Response> => {
 
     // 5. Send email
     const mailReplyTo = Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com';
-    let emailSuccess = false;
-    let emailError = null;
+    const emailSubject = '🎉 Sie sind freigeschaltet! – Aktuelle Fahrergesuche';
+    let messageId: string | null = null;
+    let emailError: string | null = null;
+    let emailStatus: 'sent' | 'failed' = 'failed';
 
     try {
       const emailResponse = await resend.emails.send({
         from: MAIL_FROM,
         to: [driver.email],
         reply_to: mailReplyTo,
-        subject: '🎉 Sie sind freigeschaltet! – Aktuelle Fahrergesuche',
+        subject: emailSubject,
         html: html,
       });
 
-      console.log('✅ Email sent successfully:', emailResponse.id);
-      emailSuccess = true;
+      messageId = emailResponse.id || null;
+      emailStatus = 'sent';
+      console.log('✅ Email sent successfully:', messageId);
     } catch (error) {
       console.error('❌ Email sending failed:', error);
       emailError = error instanceof Error ? error.message : 'Unknown email error';
+      emailStatus = 'failed';
     }
 
-    // 6. Log email attempt
+    // 6. Log email attempt to email_log table
     try {
-      await supabase.from('mail_log').insert({
+      await supabase.from('email_log').insert({
         recipient: driver.email,
+        subject: emailSubject,
         template: 'driver_approval_with_jobs',
-        success: emailSuccess,
-        error_message: emailError
+        status: emailStatus,
+        message_id: messageId,
+        error_message: emailError,
+        sent_at: emailStatus === 'sent' ? new Date().toISOString() : null,
+        delivery_mode: 'inline'
       });
+      console.log('✅ Email logged to email_log');
     } catch (logError) {
       console.error('❌ Failed to log email:', logError);
       // Don't fail the request if logging fails
@@ -163,7 +172,8 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(JSON.stringify({
       ok: true,
       sentJobs: jobs?.length || 0,
-      emailSent: emailSuccess
+      emailSent: emailStatus === 'sent',
+      messageId: messageId
     }), {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
