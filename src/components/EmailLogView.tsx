@@ -25,6 +25,8 @@ interface EmailLog {
 export function EmailLogView() {
   const [emailLogs, setEmailLogs] = useState<EmailLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const { toast } = useToast();
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export function EmailLogView() {
       // Nur die ersten 100 E-Mails anzeigen
       const allEmails = data?.data || [];
       setEmailLogs(allEmails.slice(0, 100));
+      setCurrentPage(1); // Reset to first page on reload
     } catch (error) {
       console.error('Error loading email logs:', error);
       toast({
@@ -106,6 +109,16 @@ export function EmailLogView() {
     });
   };
 
+  // Calculate pagination
+  const totalPages = Math.ceil(emailLogs.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentLogs = emailLogs.slice(startIndex, endIndex);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
   if (loading) {
     return (
       <Card>
@@ -122,7 +135,7 @@ export function EmailLogView() {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between py-3">
-        <CardTitle className="text-base">E-Mail-Logs (letzte 100)</CardTitle>
+        <CardTitle className="text-base">E-Mail-Logs ({emailLogs.length})</CardTitle>
         <Button 
           variant="outline" 
           size="sm"
@@ -138,36 +151,85 @@ export function EmailLogView() {
             Keine E-Mail-Logs gefunden.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="text-xs">
-                  <TableHead className="py-2">Empfänger</TableHead>
-                  <TableHead className="py-2">Template</TableHead>
-                  <TableHead className="py-2">Status</TableHead>
-                  <TableHead className="py-2">Gesendet</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {emailLogs.map((log) => (
-                  <TableRow key={log.id} className="text-xs">
-                    <TableCell className="font-mono text-xs py-2">
-                      {log.recipient}
-                    </TableCell>
-                    <TableCell className="py-2">
-                      <span className="text-xs">{getTemplateName(log.template)}</span>
-                    </TableCell>
-                    <TableCell className="py-2">
-                      {getStatusBadge(log.status)}
-                    </TableCell>
-                    <TableCell className="text-xs text-muted-foreground py-2">
-                      {log.sent_at ? formatDate(log.sent_at) : formatDate(log.created_at)}
-                    </TableCell>
+          <>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="text-xs">
+                    <TableHead className="py-2">Empfänger</TableHead>
+                    <TableHead className="py-2">Template</TableHead>
+                    <TableHead className="py-2">Status</TableHead>
+                    <TableHead className="py-2">Gesendet</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {currentLogs.map((log) => (
+                    <TableRow key={log.id} className="text-xs">
+                      <TableCell className="font-mono text-xs py-2">
+                        {log.recipient}
+                      </TableCell>
+                      <TableCell className="py-2">
+                        <span className="text-xs">{getTemplateName(log.template)}</span>
+                      </TableCell>
+                      <TableCell className="py-2">
+                        {getStatusBadge(log.status)}
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground py-2">
+                        {log.sent_at ? formatDate(log.sent_at) : formatDate(log.created_at)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between mt-4 px-2">
+                <div className="text-xs text-muted-foreground">
+                  Seite {currentPage} von {totalPages} ({startIndex + 1}-{Math.min(endIndex, emailLogs.length)} von {emailLogs.length})
+                </div>
+                <div className="flex gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => goToPage(1)}
+                    disabled={currentPage === 1}
+                    className="h-8 px-2"
+                  >
+                    ««
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="h-8 px-3"
+                  >
+                    ‹
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="h-8 px-3"
+                  >
+                    ›
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => goToPage(totalPages)}
+                    disabled={currentPage === totalPages}
+                    className="h-8 px-2"
+                  >
+                    »»
+                  </Button>
+                </div>
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>
