@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, Phone, Mail, Settings, Droplets, FileText, Shield, UserCheck, AlertCircle } from "lucide-react";
+import { CheckCircle, Phone, Mail, Settings, Droplets, FileText, Shield, UserCheck, AlertCircle, Truck, Construction } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import ContactSection from "@/components/ContactSection";
@@ -21,9 +21,9 @@ const FlüssigbodenService = () => {
   }, []);
 
   const seoData = {
-    title: "Flüssigboden-Service – Mischmeister für fließfähige Verfüllmaterialien",
-    description: "Mischmeister für fließfähige Verfüllmaterialien mit bauseits gestellter Technik. Ohne Gewährleistungsübernahme. 459 € pro Tag.",
-    keywords: "Flüssigboden, Mischmeister, Verfüllmaterialien, Mischanlagen, fließfähige Baustoffe",
+    title: "Mischmeister für Flüssigboden – Mischanlage, Radlader, Bagger & CE-Fahrmischer",
+    description: "Professioneller Mischmeister für fließfähige Verfüllmaterialien. Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu 2 Personen einsparen. 489 € pro Tag.",
+    keywords: "Flüssigboden, Mischmeister, Verfüllmaterialien, Mischanlagen, fließfähige Baustoffe, Radlader, Bagger, CE-Fahrmischer",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -71,25 +71,29 @@ const FlüssigbodenService = () => {
         <section className="py-16 px-4 bg-gradient-to-br from-background to-muted/30">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-              Flüssigboden-Service – Mischmeister
+              Mischmeister für Flüssigboden – Bedienung von Mischanlage, Radlader, Bagger & CE-Fahrmischer
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Qualifizierte Mischmeister für fließfähige Verfüllmaterialien mit bauseits gestellter Misch- und Pumptechnik. 459 € pro Tag (8h), 60 € Überstunde.
+              Professioneller Mischmeister für fließfähige Verfüllmaterialien mit bauseits gestellter Technik. Bedienung von Mischanlage, Radlader, Bagger und Fahrmischer (CE). Durch die Kombination mehrerer Tätigkeiten können bis zu zwei zusätzliche Mitarbeiter eingespart werden.
             </p>
             
             {/* Key Benefits */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 max-w-2xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium">Erfahrene Mischmeister</span>
+                <span className="text-sm font-medium">Mischanlage + Radlader + Bagger</span>
               </div>
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium">Bauseits gestellte Technik</span>
+                <span className="text-sm font-medium">CE-Führerschein</span>
               </div>
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium">459 € pro Tag</span>
+                <span className="text-sm font-medium">Bis zu 2 Personen einsparen</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
+                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                <span className="text-sm font-medium">489 € pro Tag</span>
               </div>
             </div>
 
@@ -145,17 +149,16 @@ const FlüssigbodenService = () => {
                   <AlertCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div>
                     <CardTitle className="text-2xl md:text-3xl font-bold mb-3">
-                      Mischmeister für fließfähige Verfüllmaterialien – unter bauseitiger Verantwortung
+                      Leistungsprofil – Mischmeister für Flüssigboden
                     </CardTitle>
                     <div className="text-base text-muted-foreground leading-relaxed space-y-3">
                       <p>
-                        Der Mischmeister arbeitet ausschließlich mit bauseits gestellter Misch- und Pumptechnik sowie auf Basis der vom Auftraggeber bereitgestellten Rezepturen.
+                        Der Einsatz erfolgt als erfahrener Mischmeister für fließfähige Verfüllmaterialien.
+                        Die Herstellung erfolgt ausschließlich nach den bauseitig vorgegebenen Rezepturen und Anweisungen.
+                        Die Misch- und Pumptechnik wird vollständig vom Auftraggeber gestellt.
                       </p>
                       <p>
-                        Die technische Verantwortung, Gewährleistung und Funktionsfähigkeit der Anlage verbleibt vollständig beim Betreiber.
-                      </p>
-                      <p>
-                        Die Arbeiten erfolgen weisungsgebunden und ohne Übernahme einer Haftung für Materialqualität, Mischparameter oder bauphysikalische Ergebnisse.
+                        Ich bediene nicht nur die Mischanlage, sondern übernehme zusätzlich die Materialversorgung per Radlader/Bagger sowie – bei Bedarf – das Fahren des Fahrmischers mit Führerschein CE. Dadurch kann der Personalbedarf auf der Baustelle erheblich reduziert werden.
                       </p>
                     </div>
                   </div>
@@ -167,52 +170,142 @@ const FlüssigbodenService = () => {
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <CheckCircle className="h-5 w-5 text-green-600" />
-                      Tätigkeiten im Rahmen des Einsatzes
+                      Vorteile & Besonderheiten
                     </h3>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Settings className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Bedienung der vor Ort vorhandenen Technik</span>
+                        <span className="text-sm">Mischmeister für fließfähige Verfüllmaterialien</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Droplets className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Umsetzung der vom Auftraggeber bereitgestellten Rezeptur</span>
+                        <span className="text-sm">Bedienung bauseits gestellter Misch- & Pumpanlagen</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Überwachung des Mischvorgangs nach Anweisung</span>
+                        <Construction className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Bedienung von Radlader und Bagger zur Materialversorgung</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <Truck className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Führerschein CE – Fahrmischer selbst fahren möglich</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Einsparung von bis zu 2 Personen (Maschinist + Fahrer)</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <FileText className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Dokumentation auf Wunsch</span>
+                        <span className="text-sm">Arbeiten ausschließlich nach Rezeptur und Anweisung des Auftraggebers</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Einsatz bundesweit möglich</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Keine Marken, Logos oder Systembezeichnungen</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Keine Gewährleistung / keine technische Betreiberverantwortung</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Haftungsausschluss */}
+                  {/* Einsatzbedingungen */}
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-amber-600" />
-                      Abgrenzung & Verantwortung
+                      <AlertCircle className="h-5 w-5 text-primary" />
+                      Einsatzbedingungen
                     </h3>
                     <div className="space-y-3">
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Technik, Materialien und Rezeptur werden vollständig vom Auftraggeber gestellt</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Der Mischmeister arbeitet ausschließlich weisungsgebunden</span>
+                      </div>
                       <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm font-medium">Keine Haftung / keine Gewährleistung</span>
+                        <span className="text-sm font-medium">Keine Gewährleistung, keine Systemfreigabe, keine Verantwortung für Materialqualität</span>
                       </div>
-                      <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                        <UserCheck className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm font-medium">Verantwortung liegt beim Betreiber der Anlage</span>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Entladestelle muss sich in unmittelbarer Nähe der Mischanlage befinden</span>
                       </div>
-                      <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                        <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm font-medium">Keine Marken, keine Logos, keine Systembezeichnungen</span>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Tagesmenge muss überschaubar sein (typisch für Flüssigbodenbaustellen)</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Unterkunft wird bauseits gestellt (Pflicht, keine Pauschale, keine Eigenbuchung)</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Fahrtkosten werden nach Kilometer berechnet</span>
                       </div>
                     </div>
-                    <div className="mt-4 p-4 bg-muted/50 border-l-4 border-amber-500 rounded">
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        <strong className="text-foreground">Wichtig:</strong> Es findet keine Prüfung von Rezepturen, keine technische Beratung, keine Produktionsfreigabe und keine Übernahme von Gewährleistungen statt. Der Mischmeister arbeitet weisungsgebunden nach Ihren Vorgaben.
-                      </p>
+                  </div>
+                </div>
+
+                {/* Preisübersicht */}
+                <div className="mt-8 p-6 bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/20 rounded-lg">
+                  <h4 className="text-xl font-semibold mb-6 flex items-center gap-2 text-foreground">
+                    <CheckCircle className="h-6 w-6 text-green-600" />
+                    Preisübersicht – Mischmeister für Flüssigboden
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div className="p-4 bg-background rounded-lg border-2 border-primary/30">
+                      <div className="text-sm text-muted-foreground mb-1">Tagessatz (8 Std.)</div>
+                      <div className="text-3xl font-bold text-primary">489 €</div>
+                      <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
+                    </div>
+                    <div className="p-4 bg-background rounded-lg border">
+                      <div className="text-sm text-muted-foreground mb-1">Überstunden</div>
+                      <div className="text-3xl font-bold text-foreground">65 €/Std.</div>
+                      <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
+                    </div>
+                    <div className="p-4 bg-background rounded-lg border">
+                      <div className="text-sm text-muted-foreground mb-1">Fahrtkosten</div>
+                      <div className="text-2xl font-bold text-foreground">0,75 €/km</div>
+                      <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
+                    </div>
+                    <div className="p-4 bg-background rounded-lg border">
+                      <div className="text-sm text-muted-foreground mb-1">Unterkunft</div>
+                      <div className="text-lg font-bold text-foreground">Bauseits zu stellen</div>
+                      <div className="text-xs text-muted-foreground mt-1">Pflicht, keine Pauschale</div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary mb-6">
+                    <h5 className="font-semibold mb-3 text-foreground">Zuschläge</h5>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Samstag:</span>
+                        <span className="font-semibold">+50%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Sonntag:</span>
+                        <span className="font-semibold">+100%</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Feiertag:</span>
+                        <span className="font-semibold">+100%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-5 bg-green-50 dark:bg-green-950/20 border-2 border-green-500/30 rounded-lg">
+                    <div className="flex items-start gap-3 mb-2">
+                      <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-1" />
+                      <div>
+                        <div className="font-semibold text-lg text-foreground mb-1">Komplettpreis bis 10 Stunden</div>
+                        <div className="text-3xl font-bold text-green-600 mb-2">599 € / Tag</div>
+                        <div className="text-sm text-muted-foreground">Inkl. 2 Überstunden • zzgl. MwSt. • Optional verfügbar</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -265,7 +358,7 @@ const FlüssigbodenService = () => {
         <section className="py-16 px-4 bg-muted/50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-              Häufige Fragen zum Flüssigboden-Service
+              Häufige Fragen zum Mischmeister für Flüssigboden
             </h2>
             <div className="space-y-4">
               <details className="group rounded-lg border border-muted p-4 hover:border-primary/50 transition-colors bg-background">
@@ -294,7 +387,7 @@ const FlüssigbodenService = () => {
                   <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div className="mt-3 text-muted-foreground">
-                  <strong>459 € pro Tag (8 Stunden), 60 € pro Überstunde.</strong> Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Alle Anlagen und Materialien werden bauseits gestellt.
+                  <strong>489 € pro Tag (8 Stunden), 65 € pro Überstunde.</strong> Optional: Komplettpreis bis 10 Stunden für 599 €/Tag. Fahrtkosten: 0,75 € pro Kilometer. Unterkunft wird bauseits gestellt (Pflicht). Alle Anlagen und Materialien werden bauseits gestellt. Zuschläge: Samstag +50%, Sonn- und Feiertag +100%.
                 </div>
               </details>
               
