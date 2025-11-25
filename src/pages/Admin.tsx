@@ -521,12 +521,42 @@ const Admin = () => {
     return map;
   }, [jobAssignments]);
 
-  // Sortierte Job-Liste nach Eingangsdatum (created_at)
+  // Hilfsfunktion: Extrahiere Startdatum aus zeitraum-Feld
+  const parseStartDate = (zeitraum: string): Date => {
+    if (!zeitraum) return new Date(0); // Sehr altes Datum für leere Felder
+    
+    // Versuche verschiedene Formate zu parsen
+    // Format: "Ab 29.9.2025 für X Tag(e)"
+    let match = zeitraum.match(/Ab\s+(\d{1,2})\.(\d{1,2})\.(\d{4})/i);
+    if (match) {
+      const [_, day, month, year] = match;
+      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    }
+    
+    // Format: "15.09.2025 für ca. 10 Wochen"
+    match = zeitraum.match(/(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+    if (match) {
+      const [_, day, month, year] = match;
+      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    }
+    
+    // Format: "Ab 2025-07-28 für 2 Wochen"
+    match = zeitraum.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      const [_, year, month, day] = match;
+      return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    }
+    
+    // Fallback: Sehr altes Datum für nicht parsbare Einträge
+    return new Date(0);
+  };
+
+  // Sortierte Job-Liste nach Einsatzdatum (zeitraum)
   const sortedJobRequests = React.useMemo(() => {
     const sorted = [...jobRequests].sort((a, b) => {
-      const dateA = new Date(a.created_at);
-      const dateB = new Date(b.created_at);
-      // Neueste Anfragen zuerst (absteigende Sortierung nach Eingangsdatum)
+      const dateA = parseStartDate(a.zeitraum);
+      const dateB = parseStartDate(b.zeitraum);
+      // Neueste Einsätze zuerst (absteigende Sortierung)
       return dateB.getTime() - dateA.getTime();
     });
     
