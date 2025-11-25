@@ -1492,7 +1492,7 @@ const Admin = () => {
                     </TableRow>
                   </TableHeader>
                 <TableBody>
-                  {jobRequests.map((req) => (
+                  {sortedJobRequests.map((req) => (
                     <React.Fragment key={req.id}>
                       <TableRow>
                         <TableCell className="text-center">
