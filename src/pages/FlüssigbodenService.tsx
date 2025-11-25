@@ -71,10 +71,10 @@ const FlüssigbodenService = () => {
         <section className="py-16 px-4 bg-gradient-to-br from-background to-muted/30">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-6">
-              Mischmeister für Flüssigboden – Bedienung von Mischanlage, Radlader, Bagger & CE-Fahrmischer
+              Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Professioneller Mischmeister für fließfähige Verfüllmaterialien mit bauseits gestellter Technik. Bedienung von Mischanlage, Radlader, Bagger und Fahrmischer (CE). Durch die Kombination mehrerer Tätigkeiten können bis zu zwei zusätzliche Mitarbeiter eingespart werden.
+              Einsatz als selbstständiger Subunternehmer für fließfähige Verfüllmaterialien. Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu zwei Arbeitskräfte können eingespart werden.
             </p>
             
             {/* Key Benefits */}
@@ -153,12 +153,11 @@ const FlüssigbodenService = () => {
                     </CardTitle>
                     <div className="text-base text-muted-foreground leading-relaxed space-y-3">
                       <p>
-                        Der Einsatz erfolgt als erfahrener Mischmeister für fließfähige Verfüllmaterialien.
-                        Die Herstellung erfolgt ausschließlich nach den bauseitig vorgegebenen Rezepturen und Anweisungen.
-                        Die Misch- und Pumptechnik wird vollständig vom Auftraggeber gestellt.
+                        Der Einsatz erfolgt ausschließlich als selbstständiger Subunternehmer.
+                        Die Herstellung und Verarbeitung fließfähiger Verfüllmaterialien erfolgt auf Grundlage der vom Auftraggeber bereitgestellten Technik, Rezeptur und Anweisung.
                       </p>
                       <p>
-                        Ich bediene nicht nur die Mischanlage, sondern übernehme zusätzlich die Materialversorgung per Radlader/Bagger sowie – bei Bedarf – das Fahren des Fahrmischers mit Führerschein CE. Dadurch kann der Personalbedarf auf der Baustelle erheblich reduziert werden.
+                        Ich betreibe die Mischanlage, versorge diese per Radlader/Bagger und kann bei Bedarf den Fahrmischer selbst fahren (CE). Die Verantwortung für Technik, Material, Mischparameter und Gewährleistung liegt vollständig beim Auftraggeber.
                       </p>
                     </div>
                   </div>
@@ -174,16 +173,20 @@ const FlüssigbodenService = () => {
                     </h3>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <UserCheck className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Subunternehmerleistung (keine Arbeitnehmerüberlassung)</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Settings className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Mischmeister für fließfähige Verfüllmaterialien</span>
+                        <span className="text-sm">Mischmeister für Flüssigboden</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Droplets className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Bedienung bauseits gestellter Misch- & Pumpanlagen</span>
+                        <span className="text-sm">Bedienung bauseitiger Mischanlagen</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Construction className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Bedienung von Radlader und Bagger zur Materialversorgung</span>
+                        <span className="text-sm">Radlader- & Baggerbedienung</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Truck className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -191,23 +194,27 @@ const FlüssigbodenService = () => {
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Einsparung von bis zu 2 Personen (Maschinist + Fahrer)</span>
+                        <span className="text-sm">Einsparung von bis zu 2 Arbeitskräften</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <FileText className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Arbeiten ausschließlich nach Rezeptur und Anweisung des Auftraggebers</span>
+                        <span className="text-sm">Arbeit erfolgt ausschließlich nach Anweisung & Rezeptur des Auftraggebers</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span className="text-sm">Einsatz bundesweit möglich</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                        <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Keine Marken, Logos oder Systembezeichnungen</span>
+                        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Unterkunft bauseits (Pflicht)</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Keine Gewährleistung / keine technische Betreiberverantwortung</span>
+                        <span className="text-sm">Keine Gewährleistung / keine Systemfreigaben</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                        <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">Keine Marken oder Logos verwenden</span>
                       </div>
                     </div>
                   </div>
@@ -221,31 +228,27 @@ const FlüssigbodenService = () => {
                     <div className="space-y-3">
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Technik, Materialien und Rezeptur werden vollständig vom Auftraggeber gestellt</span>
+                        <span className="text-sm">Technik & Material bauseits</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Der Mischmeister arbeitet ausschließlich weisungsgebunden</span>
-                      </div>
-                      <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
-                        <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm font-medium">Keine Gewährleistung, keine Systemfreigabe, keine Verantwortung für Materialqualität</span>
+                        <span className="text-sm">Subunternehmer-Einsatz (eigene Rechnung)</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Entladestelle muss sich in unmittelbarer Nähe der Mischanlage befinden</span>
+                        <span className="text-sm">Entladestelle nahe der Mischanlage</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Tagesmenge muss überschaubar sein (typisch für Flüssigbodenbaustellen)</span>
+                        <span className="text-sm">Überschaubare Tagesmengen</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Unterkunft wird bauseits gestellt (Pflicht, keine Pauschale, keine Eigenbuchung)</span>
+                        <span className="text-sm">Unterkunft bauseits zu stellen</span>
                       </div>
-                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                        <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Fahrtkosten werden nach Kilometer berechnet</span>
+                      <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+                        <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm font-medium">Keine Haftung für Material, Anlage oder Ergebnisse</span>
                       </div>
                     </div>
                   </div>
