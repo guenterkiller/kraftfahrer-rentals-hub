@@ -11,15 +11,16 @@ import BookingPriorityBanner from "@/components/BookingPriorityBanner";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
   
   useSEO({
     title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – EU-Fahrer willkommen",
-    description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) aus Deutschland und EU für Transporte & Baustellen. Kierowcy z Polski, Rumänii, Bułgarii mile widziani!",
-    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, EU Fahrer Deutschland, LKW Fahrer aus Polen, Kierowcy z Polski do Niemiec, Șoferi profesioniști români Germania, Bulgarian truck drivers Germany, LKW Fahrer Rumänien, Kraftfahrer Bulgarien Ungarn, Berufskraftfahrer EU-Ausland, Fahrer vermitteln Europa, Internationale Fahrer Deutschland, Fahrerservice Europa, LKW-Fahrer Vermittlung DACH",
+    description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) aus Deutschland und EU für Transporte & Baustellen. Kierowcy z Polski, Rumänii, Bułgarii mile widziani! – zusätzlich Mischmeister für Flüssigboden als Subunternehmer buchbar.",
+    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, EU Fahrer Deutschland, LKW Fahrer aus Polen, Kierowcy z Polski do Niemiec, Șoferi profesioniști români Germania, Bulgarian truck drivers Germany, LKW Fahrer Rumänien, Kraftfahrer Bulgarien Ungarn, Berufskraftfahrer EU-Ausland, Fahrer vermitteln Europa, Internationale Fahrer Deutschland, Fahrerservice Europa, LKW-Fahrer Vermittlung DACH, Mischmeister Flüssigboden, Flüssigboden Service, Subunternehmer Flüssigboden, Mischanlage Bediener, Radlader Bagger Mischmeister, CE-Fahrmischer",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/',
@@ -97,6 +98,29 @@ const Index = () => {
         <BookingPriorityBanner />
         <EUDriverRecruitment />
         <ContactSection />
+        
+        {/* Neuer SEO-Block für Flüssigboden-Service */}
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl font-bold mb-6 text-center">
+              Zusätzlicher Service: Mischmeister für Flüssigboden
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+              Ergänzend zu unseren Fahrerdiensten bieten wir auch den Einsatz eines Mischmeisters für fließfähige Verfüllmaterialien an. Der Einsatz erfolgt als selbstständiger Subunternehmer inklusive Bedienung der bauseits gestellten Mischanlage, Radlader/Bagger sowie CE-Fahrmischer. Durch diese Kombination können auf der Baustelle bis zu zwei zusätzliche Mitarbeiter eingespart werden. Alle Arbeiten erfolgen ausschließlich nach Rezeptur und Anweisung des Auftraggebers, ohne Gewährleistungs- oder Betreiberverantwortung.
+            </p>
+            <div className="flex justify-center">
+              <Button 
+                asChild 
+                size="lg"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <Link to="/fluessigboden-service">
+                  Mischmeister buchen
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
       
       <Footer />
