@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – Transparente Konditionen für Fahrervermittlung",
-    description: "Alle Details zu Preisen, Fahrtkosten, Langzeiteinsätzen und Buchungsablauf. LKW CE Fahrer 349€/Tag, Baumaschinenführer 459€/Tag.",
-    keywords: "Fahrer Preise, Fahrtkosten, Langzeiteinsatz, Wochenpreis, Monatspreise, Buchungsablauf, Stornierung, Spesen"
+    title: "Preise & Ablauf – LKW Fahrer mieten und Baumaschinenführer buchen",
+    description: "Transparente Konditionen für Fahrervermittlung: LKW Fahrer mieten ab 349€/Tag netto, Baumaschinenführer buchen ab 459€/Tag. Ersatzfahrer LKW, Subunternehmer Fahrer, Fahrerservice für B2B.",
+    keywords: "lkw fahrer mieten, fahrer buchen, ersatzfahrer lkw, subunternehmer fahrer, baumaschinenführer mieten, fahrerservice, fahrervermittlung, lkw fahrer tagespreis, baumaschinenführer kosten"
   });
 
   const scrollToBooking = () => {
@@ -35,30 +35,38 @@ const PreiseUndAblauf = () => {
 
             {/* Aktuelle Tagespreise */}
             <div className="mb-16">
-              <h2 className="text-3xl font-bold text-center mb-8">Aktuelle Tagespreise</h2>
+              <h2 className="text-3xl font-bold text-center mb-8">Aktuelle Tagespreise (netto)</h2>
               <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-red-900">LKW CE Fahrer</CardTitle>
+                    <CardTitle className="text-2xl text-red-900">LKW CE Fahrer mieten</CardTitle>
+                    <CardDescription className="text-red-700">Professionelle Ersatzfahrer für alle LKW-Einsätze</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center mb-4">
                       <div className="text-5xl font-bold text-red-700 mb-2">349 €</div>
-                      <p className="text-red-800 font-medium">pro Tag (8 Std.)</p>
-                      <p className="text-red-700 text-sm mt-2">30 € je Überstunde</p>
+                      <p className="text-red-800 font-medium">pro Tag (8 Std.) netto</p>
+                      <p className="text-red-700 text-sm mt-2">30 € je Überstunde netto</p>
+                    </div>
+                    <div className="bg-red-50 rounded-lg p-3 mt-4">
+                      <p className="text-xs text-red-900"><strong>Ideal für:</strong> Nah-, Fern- und Baustellenverkehr, Fahrmischer, ADR, Container, Entsorgung</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-orange-900">Baumaschinenführer</CardTitle>
+                    <CardTitle className="text-2xl text-orange-900">Baumaschinenführer buchen</CardTitle>
+                    <CardDescription className="text-orange-700">Spezialisierte Fachkräfte für Baumaschinen</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center mb-4">
                       <div className="text-5xl font-bold text-orange-700 mb-2">459 €</div>
-                      <p className="text-orange-800 font-medium">pro Tag (8 Std.)</p>
-                      <p className="text-orange-700 text-sm mt-2">60 € je Überstunde</p>
+                      <p className="text-orange-800 font-medium">pro Tag (8 Std.) netto</p>
+                      <p className="text-orange-700 text-sm mt-2">60 € je Überstunde netto</p>
+                    </div>
+                    <div className="bg-orange-50 rounded-lg p-3 mt-4">
+                      <p className="text-xs text-orange-900"><strong>Warum teurer?</strong> Höhere Qualifikation, größere Verantwortung für teure Maschinen, geringere Verfügbarkeit am Markt</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -70,10 +78,43 @@ const PreiseUndAblauf = () => {
                   <div className="space-y-2 text-sm text-blue-900">
                     <p><strong>👉 Mindestbuchung:</strong> 1 Einsatztag = 8 Stunden</p>
                     <p><strong>👉 Abrechnungstaktung:</strong> im 15-Minuten-Takt nach der 8. Stunde</p>
+                    <p><strong>👉 Alle Preise:</strong> Netto-Preise zzgl. gesetzlicher MwSt.</p>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Vergleich zu Zeitarbeit */}
+            <Card className="mb-12 border-green-200 bg-gradient-to-br from-green-50 to-white">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <CheckCircle className="h-6 w-6 text-green-600" />
+                  Vorteile gegenüber klassischer Zeitarbeit
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
+                    <div className="text-3xl mb-2">✅</div>
+                    <p className="font-semibold text-green-900 mb-1">Kein AÜG</p>
+                    <p className="text-sm text-muted-foreground">Keine Arbeitnehmerüberlassungs-regelungen</p>
+                  </div>
+                  <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
+                    <div className="text-3xl mb-2">💰</div>
+                    <p className="font-semibold text-green-900 mb-1">Keine Lohnnebenkosten</p>
+                    <p className="text-sm text-muted-foreground">Kein Sozialversicherungsaufwand, keine Verwaltung</p>
+                  </div>
+                  <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
+                    <div className="text-3xl mb-2">⚡</div>
+                    <p className="font-semibold text-green-900 mb-1">Keine Bindungsfristen</p>
+                    <p className="text-sm text-muted-foreground">Flexibel ab 1 Tag buchbar, keine Kündigungsfristen</p>
+                  </div>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Vermittlung selbstständiger Subunternehmer nach § 652 BGB (Maklervertrag). Keine Arbeitnehmerüberlassung, sondern professionelle Fahrervermittlung für B2B-Kunden.</p>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Fahrtkosten-Regelung */}
             <Card className="mb-12">
@@ -87,20 +128,20 @@ const PreiseUndAblauf = () => {
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <p className="font-semibold text-green-900 mb-2">Inklusive:</p>
-                    <p className="text-green-800">Erste 25 km (Hin- & Rückweg)</p>
+                    <p className="text-green-800">Erste 25 km frei (Hin- & Rückweg)</p>
                   </div>
                   <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                    <p className="font-semibold text-amber-900 mb-2">Darüber hinaus:</p>
-                    <p className="text-amber-800">0,40 € pro Kilometer (Hin- & Rückweg)</p>
+                    <p className="font-semibold text-amber-900 mb-2">Ab dem 26. km:</p>
+                    <p className="text-amber-800">0,40 € je gefahrenen Kilometer</p>
                   </div>
                 </div>
                 <div className="space-y-2 text-muted-foreground">
-                  <p>➡ Berechnungsgrundlage: Wohnort des Fahrers</p>
+                  <p>➡ Berechnungsgrundlage: Wohnort des Fahrers zum Einsatzort</p>
                   <p>➡ Parkgebühren, Maut, Tunnel, Fähren → 1:1 an Auftraggeber weiterberechnet</p>
                 </div>
                 <div className="bg-muted rounded-lg p-4">
                   <p className="font-semibold mb-2">Beispiel:</p>
-                  <p className="text-muted-foreground">Entfernung 60 km → 35 km zu berechnen × 2 × 0,40 € = <strong className="text-foreground">28 € Fahrtkosten</strong></p>
+                  <p className="text-muted-foreground">Entfernung 60 km → 35 km zu berechnen × 2 (Hin & Rück) × 0,40 € = <strong className="text-foreground">28,00 € Fahrtkosten netto</strong></p>
                 </div>
               </CardContent>
             </Card>
@@ -125,14 +166,16 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-muted rounded-lg p-4 space-y-2">
-                  <p className="font-semibold">Zuschläge:</p>
+                  <p className="font-semibold">Zuschläge auf den Stundensatz:</p>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Nachtarbeit (22:00–06:00 Uhr): +25 %</li>
-                    <li>• Samstag: +25 %</li>
-                    <li>• Sonntag: +50 %</li>
-                    <li>• Feiertage: +100 %</li>
-                    <li>• Wartezeiten & Standzeiten = Arbeitszeit</li>
+                    <li>• <strong>Nachtarbeit</strong> (22:00–06:00 Uhr): +25 %</li>
+                    <li>• <strong>Samstag</strong>: +25 %</li>
+                    <li>• <strong>Sonntag</strong>: +50 %</li>
+                    <li>• <strong>Feiertage</strong>: +100 %</li>
                   </ul>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                  <p className="text-sm text-blue-900"><strong>⏱️ Wichtig:</strong> Wartezeiten und Standzeiten gelten als Arbeitszeit und werden entsprechend abgerechnet.</p>
                 </div>
               </CardContent>
             </Card>
@@ -199,15 +242,25 @@ const PreiseUndAblauf = () => {
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <FileText className="h-6 w-6 text-primary" />
-                  Spesen & Übernachtungen
+                  Übernachtungen & Unterbringung
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="mb-4 font-semibold">Bei Einsätzen über 50 km einfacher Strecke:</p>
-                <ul className="space-y-2 text-muted-foreground ml-4">
-                  <li>• Hotel/Unterkunft durch Auftraggeber oder</li>
-                  <li>• Übernachtungspauschale nach Vereinbarung</li>
-                </ul>
+              <CardContent className="space-y-4">
+                <p className="font-semibold">Bei Einsätzen über 50 km einfacher Strecke oder mehrtägigen Projekten:</p>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="font-semibold text-blue-900 mb-2">Option 1: Übernachtungspauschale</p>
+                    <div className="text-2xl font-bold text-blue-700 mb-1">50 € pro Nacht</div>
+                    <p className="text-sm text-blue-800">Falls keine Schlafkabine im LKW vorhanden ist</p>
+                  </div>
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <p className="font-semibold text-green-900 mb-2">Option 2: Unterkunft durch AG</p>
+                    <p className="text-sm text-green-800">Hotel oder Unterkunft wird direkt vom Auftraggeber gestellt bzw. gebucht</p>
+                  </div>
+                </div>
+                <div className="bg-muted rounded-lg p-3">
+                  <p className="text-sm text-muted-foreground">➡ Bei Fernverkehr mit Schlafkabine entfällt die Übernachtungspauschale.</p>
+                </div>
               </CardContent>
             </Card>
 
@@ -306,6 +359,9 @@ const PreiseUndAblauf = () => {
                         <span className="font-bold text-red-900">Gesamt netto:</span>
                         <span className="font-bold text-red-900 text-xl">425,00 €</span>
                       </div>
+                      <div className="text-xs text-muted-foreground text-center mt-2">
+                        zzgl. gesetzl. MwSt.
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -327,6 +383,9 @@ const PreiseUndAblauf = () => {
                       <div className="flex justify-between py-3 bg-orange-50 rounded-lg px-3 mt-3">
                         <span className="font-bold text-orange-900">Gesamt netto:</span>
                         <span className="font-bold text-orange-900 text-xl">2.315,00 €</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground text-center mt-2">
+                        zzgl. gesetzl. MwSt.
                       </div>
                       <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-3">
                         <p className="text-sm text-green-800">➡ Bei Wochenpreisen (ab 1.490 €) reduzieren sich die Kosten weiter.</p>
