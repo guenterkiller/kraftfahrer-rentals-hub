@@ -353,7 +353,7 @@ const FlüssigbodenService = () => {
                     onClick={scrollToBooking}
                     className="text-lg px-8 py-3"
                   >
-                    Spezialkraft anfragen
+                    Mischmeister anfragen
                   </Button>
                 </div>
               </CardContent>
