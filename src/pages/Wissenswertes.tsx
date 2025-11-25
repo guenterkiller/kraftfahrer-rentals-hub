@@ -200,57 +200,55 @@ const Wissenswertes = () => {
           <section className="mb-16">
             <h2 className="text-3xl font-bold mb-8">🛡 Versicherung & Haftung</h2>
             
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Gesetzlich erforderlich:</CardTitle>
+                  <CardTitle>Versicherungsschutz</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    <strong>Kfz-Haftpflichtversicherung</strong> → vom Fahrzeughalter (Auftraggeber)
-                  </p>
+                <CardContent className="space-y-4">
+                  <div>
+                    <p className="font-semibold text-foreground mb-2">Empfehlenswerte Versicherungen für selbstständige Fahrer:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• Betriebshaftpflichtversicherung</li>
+                      <li>• Berufshaftpflichtversicherung (optional)</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <p className="font-semibold text-foreground mb-2">Vom Auftraggeber zu stellen:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• Kfz-Haftpflichtversicherung (gesetzlich verpflichtend für den Fahrzeughalter)</li>
+                      <li>• Vollkaskoversicherung (optional, Entscheidung des Fahrzeughalters)</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <p className="font-semibold text-foreground mb-2">Nicht erforderlich für den Fahrer:</p>
+                    <ul className="space-y-1 text-sm text-muted-foreground">
+                      <li>• Transportversicherung</li>
+                    </ul>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      → Selbstständige Fahrer erbringen keine eigene Transportleistung und nutzen kein eigenes Fahrzeug, daher besteht keine Transportversicherungspflicht.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Für Fahrer empfehlenswert:</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">
-                    Betriebshaftpflicht / Berufshaftpflicht
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Nicht erforderlich:</CardTitle>
+                  <CardTitle>Haftungsregelung</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-foreground">Transportversicherung</p>
-                    <p className="text-sm text-muted-foreground">
-                      (Fahrer ist kein Frachtführer – er nutzt kein eigenes Fahrzeug)
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Vollkasko für Fahrer</p>
-                    <p className="text-sm text-muted-foreground">
-                      (optional Sache des Fahrzeughalters)
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-l-4 border-l-primary">
-                <CardHeader>
-                  <CardTitle>Haftung am Fahrzeug</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2 text-muted-foreground">
-                  <p>• Auftraggeber bleibt Fahrzeughalter</p>
-                  <p>• Schäden am Fahrzeug laufen über dessen Versicherung</p>
-                  <p>• Grobe Fahrlässigkeit kann vertraglich geregelt werden</p>
+                  <p className="text-muted-foreground mb-3">
+                    Klare Haftungsregelungen im Vertrag:
+                  </p>
+                  <ul className="space-y-1 text-sm text-muted-foreground">
+                    <li>• Der Auftraggeber bleibt Fahrzeughalter nach StVG</li>
+                    <li>• Schäden am Fahrzeug werden über die Fahrzeugversicherung des Auftraggebers reguliert</li>
+                    <li>• Der Fahrer haftet nur bei Vorsatz oder grober Fahrlässigkeit</li>
+                    <li>• Eine Betriebshaftpflicht des Fahrers deckt Schäden außerhalb des Fahrzeugs</li>
+                    <li>• Haftungsausschlüsse und Verantwortlichkeiten sollen vertraglich eindeutig festgelegt werden</li>
+                  </ul>
                 </CardContent>
               </Card>
             </div>
