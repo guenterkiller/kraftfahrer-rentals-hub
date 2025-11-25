@@ -27,6 +27,7 @@ import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
 import PreiseUndAblauf from "./pages/PreiseUndAblauf";
 import BF3Ablauf from "./pages/BF3Ablauf";
+import FlüssigbodenService from "./pages/FlüssigbodenService";
 const queryClient = new QueryClient();
 
 // Analytics Tracker Component (DSGVO-konform)
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/lkwfahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/kraftfahrer-mieten" element={<KraftfahrerMieten />} />
           <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
+          <Route path="/fluessigboden-service" element={<FlüssigbodenService />} />
           
           {/* 301 Redirects for removed pages → LKW CE Fahrer category */}
           <Route path="/tankwagenfahrer-buchen" element={<LKWFahrerBuchen />} />
