@@ -1524,8 +1524,7 @@ const Admin = () => {
                         </TableCell>
                         <TableCell>
                           <div className="text-sm">
-                            {req.eintrittsdatum ? new Date(req.eintrittsdatum).toLocaleDateString('de-DE') : '-'}
-                            {req.einsatzdauer && <div className="text-gray-600">{req.einsatzdauer} Tage</div>}
+                            {req.zeitraum || '-'}
                           </div>
                         </TableCell>
                         <TableCell>{req.fahrzeugtyp || 'Nicht angegeben'}</TableCell>
@@ -1729,17 +1728,9 @@ const Admin = () => {
                               <p className="text-gray-900">{req.fahrzeugtyp || 'Nicht angegeben'}</p>
                             </div>
                             <div>
-                              <span className="font-medium text-gray-700">Start:</span>
-                              <p className="text-gray-900">
-                                {req.eintrittsdatum ? new Date(req.eintrittsdatum).toLocaleDateString('de-DE') : '-'}
-                              </p>
+                              <span className="font-medium text-gray-700">Einsatz:</span>
+                              <p className="text-gray-900">{req.zeitraum || '-'}</p>
                             </div>
-                            {req.einsatzdauer && (
-                              <div className="col-span-2">
-                                <span className="font-medium text-gray-700">Dauer:</span>
-                                <p className="text-gray-900">{req.einsatzdauer} Tage</p>
-                              </div>
-                            )}
                           </div>
 
                           {/* Zuweisung */}
