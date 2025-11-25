@@ -65,9 +65,6 @@ const PreiseUndAblauf = () => {
                       <p className="text-orange-800 font-medium">pro Tag (8 Std.) netto</p>
                       <p className="text-orange-700 text-sm mt-2">60 € je Überstunde netto</p>
                     </div>
-                    <div className="bg-orange-50 rounded-lg p-3 mt-4">
-                      <p className="text-xs text-orange-900"><strong>Warum teurer?</strong> Höhere Qualifikation, größere Verantwortung für teure Maschinen, geringere Verfügbarkeit am Markt</p>
-                    </div>
                   </CardContent>
                 </Card>
               </div>
