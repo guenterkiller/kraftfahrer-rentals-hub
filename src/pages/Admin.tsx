@@ -1286,8 +1286,8 @@ const Admin = () => {
                                  size="sm"
                                  variant={f.is_blocked ? "outline" : "outline"}
                                  className={f.is_blocked 
-                                   ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50" 
-                                   : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50"}
+                                   ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700" 
+                                   : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700"}
                                  onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
@@ -1363,8 +1363,8 @@ const Admin = () => {
                               size="sm"
                               variant={f.is_blocked ? "outline" : "outline"}
                               className={f.is_blocked 
-                                ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 flex-1" 
-                                : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 flex-1"}
+                                ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700 flex-1" 
+                                : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 flex-1"}
                               onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
