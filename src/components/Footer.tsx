@@ -29,11 +29,6 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/begleitfahrzeuge-bf3" className="text-muted-foreground hover:text-primary transition-colors">
-                  Begleitfahrzeuge BF3
-                </Link>
-              </li>
-              <li>
                 <Link to="/preise-und-ablauf" className="text-muted-foreground hover:text-primary transition-colors">
                   Preise & Ablauf
                 </Link>
