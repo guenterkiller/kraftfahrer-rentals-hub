@@ -180,8 +180,8 @@ const ProductCards = () => {
                   <span className="text-muted-foreground">/Tag</span>
                 </div>
                 <p className="text-sm text-muted-foreground mb-3">8-Stunden-Tag (netto)</p>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10">
-                  <span className="text-sm font-semibold text-accent-foreground">Überstunden: 65 €/h</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-100 border border-orange-300">
+                  <span className="text-sm font-semibold text-orange-700">Überstunden: 65 €/h</span>
                 </div>
               </div>
 
