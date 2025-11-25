@@ -523,7 +523,7 @@ const SimpleBookingForm = () => {
                         checked={bf3Certified}
                         onCheckedChange={(checked) => setBf3Certified(checked as boolean)}
                       />
-                      <Label htmlFor="bf3certified">Berechtigung für BF3-Schulungen vorhanden</Label>
+                      <Label htmlFor="bf3certified">BF2/BF3-Berechtigung vorhanden</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Checkbox 
