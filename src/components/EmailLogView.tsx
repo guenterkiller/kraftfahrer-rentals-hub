@@ -80,6 +80,8 @@ export function EmailLogView() {
     switch (template) {
       case 'driver_confirmation':
         return 'Fahrer-Bestätigung';
+      case 'driver_approval_with_jobs':
+        return 'Fahrer-Freischaltung';
       case 'job_alert':
         return 'Job-Alarm';
       case 'job-broadcast':
