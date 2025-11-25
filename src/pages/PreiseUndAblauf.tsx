@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Euro, FileText, Shield, Truck, AlertCircle } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
+import baggerIcon from "@/assets/bagger-icon.png";
 
 const PreiseUndAblauf = () => {
   useSEO({
@@ -56,7 +57,10 @@ const PreiseUndAblauf = () => {
 
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-orange-900">Baumaschinenführer buchen</CardTitle>
+                    <CardTitle className="text-2xl text-orange-900 flex items-center gap-2">
+                      <img src={baggerIcon} alt="Bagger" className="h-6 w-6" />
+                      Baumaschinenführer buchen
+                    </CardTitle>
                     <CardDescription className="text-orange-700">Spezialisierte Fachkräfte für Baumaschinen</CardDescription>
                   </CardHeader>
                   <CardContent>
