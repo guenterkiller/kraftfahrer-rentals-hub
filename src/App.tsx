@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import { usePageTracking } from "@/hooks/usePageTracking";
+import { useWebVitals } from "@/hooks/useWebVitals";
 import Index from "./pages/Index";
 import Impressum from "./pages/Impressum";
 import Datenschutz from "./pages/Datenschutz";
@@ -27,10 +29,18 @@ import PreiseUndAblauf from "./pages/PreiseUndAblauf";
 import BF3Ablauf from "./pages/BF3Ablauf";
 const queryClient = new QueryClient();
 
+// Analytics Tracker Component (DSGVO-konform)
+function AnalyticsTracker() {
+  usePageTracking();
+  useWebVitals();
+  return null;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <BrowserRouter>
+        <AnalyticsTracker />
         <Toaster />
         <Sonner />
         <ScrollToTop />

@@ -1,22 +1,31 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { loadConsent } from '@/lib/consent';
 
 /**
- * Hook to track Core Web Vitals (for admin analytics only)
+ * Hook to track Core Web Vitals (DSGVO-konform)
+ * Trackt nur wenn Analytics-Zustimmung vorliegt
  * Tracks LCP, FID, CLS, FCP, TTFB
  */
 export const useWebVitals = () => {
   const location = useLocation();
 
   useEffect(() => {
+    // DSGVO: Nur tracken wenn Analytics-Zustimmung vorliegt
+    const consent = loadConsent();
+    if (!consent?.given || !consent?.categories?.analytics) {
+      console.debug('⏸️ Web vitals tracking skipped - no analytics consent');
+      return;
+    }
+
     const route = location.pathname;
 
     const reportWebVital = async (metric: any) => {
       try {
         const rating = metric.rating || 'unknown';
         
-        await supabase
+        const { error } = await supabase
           .from('web_vitals')
           .insert({
             route,
@@ -24,6 +33,12 @@ export const useWebVitals = () => {
             metric_value: metric.value,
             rating: rating,
           });
+
+        if (error) {
+          console.debug('Web vitals tracking error:', error);
+        } else {
+          console.debug(`✅ Web vital tracked: ${metric.name} = ${metric.value}`);
+        }
       } catch (error) {
         console.debug('Web vitals tracking failed:', error);
       }
