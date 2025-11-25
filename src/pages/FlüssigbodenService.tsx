@@ -145,20 +145,17 @@ const FlüssigbodenService = () => {
                   <AlertCircle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                   <div>
                     <CardTitle className="text-2xl md:text-3xl font-bold mb-3">
-                      Mischmeister für fließfähige Verfüllmaterialien – ohne Gewährleistungsübernahme
+                      Mischmeister für fließfähige Verfüllmaterialien – unter bauseitiger Verantwortung
                     </CardTitle>
                     <div className="text-base text-muted-foreground leading-relaxed space-y-3">
                       <p>
-                        Ich arbeite als Mischmeister für fließfähige Verfüllmaterialien mit bauseits gestellter Misch- und Pumptechnik.
+                        Der Mischmeister arbeitet ausschließlich mit bauseits gestellter Misch- und Pumptechnik sowie auf Basis der vom Auftraggeber bereitgestellten Rezepturen.
                       </p>
                       <p>
-                        Sämtliche Verantwortung für die Anlage, Wartung, Bedienbarkeit, Materialqualität und Gewährleistung liegt ausschließlich beim Betreiber der Anlage.
+                        Die technische Verantwortung, Gewährleistung und Funktionsfähigkeit der Anlage verbleibt vollständig beim Betreiber.
                       </p>
                       <p>
-                        Der Mischprozess erfolgt ausschließlich auf Grundlage der vom Auftraggeber bereitgestellten Rezeptur, Arbeitsanweisungen und Baustellenvorgaben.
-                      </p>
-                      <p className="font-semibold">
-                        Es erfolgt keine Beratung, Systemfreigabe oder Gewährleistungsübernahme.
+                        Die Arbeiten erfolgen weisungsgebunden und ohne Übernahme einer Haftung für Materialqualität, Mischparameter oder bauphysikalische Ergebnisse.
                       </p>
                     </div>
                   </div>
@@ -170,16 +167,16 @@ const FlüssigbodenService = () => {
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <CheckCircle className="h-5 w-5 text-green-600" />
-                      Leistungen
+                      Tätigkeiten im Rahmen des Einsatzes
                     </h3>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Settings className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Bedienung der vorhandenen Technik</span>
+                        <span className="text-sm">Bedienung der vor Ort vorhandenen Technik</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Droplets className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Umsetzung vorgegebener Rezepturen</span>
+                        <span className="text-sm">Umsetzung der vom Auftraggeber bereitgestellten Rezeptur</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -196,24 +193,68 @@ const FlüssigbodenService = () => {
                   <div className="space-y-4">
                     <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                       <Shield className="h-5 w-5 text-amber-600" />
-                      Haftungsausschluss
+                      Abgrenzung & Verantwortung
                     </h3>
                     <div className="space-y-3">
                       <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm font-medium">Keine Haftung/keine Gewährleistung</span>
+                        <span className="text-sm font-medium">Keine Haftung / keine Gewährleistung</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
                         <UserCheck className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm font-medium">Verantwortung verbleibt vollständig beim Auftraggeber</span>
+                        <span className="text-sm font-medium">Verantwortung liegt beim Betreiber der Anlage</span>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
+                        <AlertCircle className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm font-medium">Keine Marken, keine Logos, keine Systembezeichnungen</span>
                       </div>
                     </div>
                     <div className="mt-4 p-4 bg-muted/50 border-l-4 border-amber-500 rounded">
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        <strong className="text-foreground">Wichtig:</strong> Der Mischmeister arbeitet ausschließlich nach Ihren Vorgaben. Die technische und rechtliche Verantwortung für Anlagen, Material, Rezepturen und Ergebnis liegt bei Ihnen als Auftraggeber.
+                        <strong className="text-foreground">Wichtig:</strong> Es findet keine Prüfung von Rezepturen, keine technische Beratung, keine Produktionsfreigabe und keine Übernahme von Gewährleistungen statt. Der Mischmeister arbeitet weisungsgebunden nach Ihren Vorgaben.
                       </p>
                     </div>
                   </div>
+                </div>
+
+                {/* Haftungsausschluss - ausführlich */}
+                <div className="mt-8 p-6 bg-muted/50 border-2 border-muted rounded-lg">
+                  <h4 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-amber-600" />
+                    Haftungsausschluss – Mischmeister für fließfähige Verfüllmaterialien
+                  </h4>
+                  <div className="text-sm text-muted-foreground space-y-3 leading-relaxed">
+                    <p>
+                      Der Mischmeister arbeitet ausschließlich mit bauseits gestellter Technik, Rezeptur und den vom Auftraggeber bereitgestellten Materialien.
+                      Der Auftraggeber bleibt Betreiber der Anlage im Sinne der technischen und rechtlichen Verantwortung.
+                    </p>
+                    <p>
+                      Der Mischmeister führt die Arbeiten weisungsgebunden und ausschließlich nach Vorgaben aus.
+                      Er übernimmt keine Haftung, Gewährleistung oder Funktionsverantwortung für:
+                    </p>
+                    <ul className="list-disc list-inside space-y-2 ml-4">
+                      <li>Misch- oder Pumpanlage</li>
+                      <li>Mischqualität oder Materialeigenschaften</li>
+                      <li>Rezepturen, Zusammensetzungen oder Parameter</li>
+                      <li>Technische Ausführung des Einbaus</li>
+                      <li>Baustellenabläufe oder Ergebnisse</li>
+                      <li>Bauphysikalische Eigenschaften oder spätere Belastbarkeit</li>
+                    </ul>
+                    <p className="font-semibold text-foreground">
+                      Jegliche Verantwortung liegt ausschließlich beim Auftraggeber bzw. Betreiber der Anlage.
+                    </p>
+                  </div>
+                </div>
+
+                {/* CTA Button */}
+                <div className="mt-8 text-center">
+                  <Button 
+                    size="lg" 
+                    onClick={scrollToBooking}
+                    className="text-lg px-8 py-3"
+                  >
+                    Spezialkraft anfragen
+                  </Button>
                 </div>
               </CardContent>
             </Card>
