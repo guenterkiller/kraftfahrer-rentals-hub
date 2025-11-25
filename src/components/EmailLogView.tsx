@@ -50,7 +50,9 @@ export function EmailLogView() {
 
       if (error) throw error;
 
-      setEmailLogs(data?.data || []);
+      // Nur die ersten 100 E-Mails anzeigen
+      const allEmails = data?.data || [];
+      setEmailLogs(allEmails.slice(0, 100));
     } catch (error) {
       console.error('Error loading email logs:', error);
       toast({
@@ -66,13 +68,13 @@ export function EmailLogView() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'sent':
-        return <Badge variant="default" className="bg-green-500">Gesendet</Badge>;
+        return <Badge variant="default" className="bg-green-500 text-xs py-0">✓</Badge>;
       case 'failed':
-        return <Badge variant="destructive">Fehlgeschlagen</Badge>;
+        return <Badge variant="destructive" className="text-xs py-0">✗</Badge>;
       case 'pending':
-        return <Badge variant="outline">Ausstehend</Badge>;
+        return <Badge variant="outline" className="text-xs py-0">...</Badge>;
       default:
-        return <Badge variant="secondary">{status}</Badge>;
+        return <Badge variant="secondary" className="text-xs py-0">{status}</Badge>;
     }
   };
 
@@ -119,8 +121,8 @@ export function EmailLogView() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>E-Mail-Logs (letzte 50)</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between py-3">
+        <CardTitle className="text-base">E-Mail-Logs (letzte 100)</CardTitle>
         <Button 
           variant="outline" 
           size="sm"
@@ -139,39 +141,27 @@ export function EmailLogView() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Empfänger</TableHead>
-                  <TableHead>Betreff</TableHead>
-                  <TableHead>Template</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Erstellt</TableHead>
-                  <TableHead>Gesendet</TableHead>
-                  <TableHead>Fehler</TableHead>
+                <TableRow className="text-xs">
+                  <TableHead className="py-2">Empfänger</TableHead>
+                  <TableHead className="py-2">Template</TableHead>
+                  <TableHead className="py-2">Status</TableHead>
+                  <TableHead className="py-2">Gesendet</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {emailLogs.map((log) => (
-                  <TableRow key={log.id}>
-                    <TableCell className="font-mono text-sm">
+                  <TableRow key={log.id} className="text-xs">
+                    <TableCell className="font-mono text-xs py-2">
                       {log.recipient}
                     </TableCell>
-                    <TableCell className="max-w-xs truncate">
-                      {log.subject}
+                    <TableCell className="py-2">
+                      <span className="text-xs">{getTemplateName(log.template)}</span>
                     </TableCell>
-                    <TableCell>
-                      {getTemplateName(log.template)}
-                    </TableCell>
-                    <TableCell>
+                    <TableCell className="py-2">
                       {getStatusBadge(log.status)}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {formatDate(log.created_at)}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {log.sent_at ? formatDate(log.sent_at) : '-'}
-                    </TableCell>
-                    <TableCell className="max-w-xs truncate text-sm text-red-600">
-                      {log.error_message || '-'}
+                    <TableCell className="text-xs text-muted-foreground py-2">
+                      {log.sent_at ? formatDate(log.sent_at) : formatDate(log.created_at)}
                     </TableCell>
                   </TableRow>
                 ))}
