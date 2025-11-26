@@ -56,30 +56,30 @@ const Navigation = () => {
               >
                 Leistungen
               </button>
-              <div className="absolute left-0 top-full mt-1 w-56 bg-white border border-border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="absolute left-0 top-full mt-1 w-56 bg-white/100 backdrop-blur-sm border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 <div className="py-2">
                   <Link 
                     to="/lkw-fahrer-buchen"
-                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                    className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
                   >
                     LKW CE Fahrer
                   </Link>
                   <Link 
                     to="/baumaschinenfuehrer-buchen"
-                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                    className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
                   >
                     Baumaschinenführer
                   </Link>
                   <Link 
                     to="/fluessigboden-service"
-                    className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 transition-colors"
+                    className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:text-primary hover:bg-gray-50 transition-colors"
                   >
                     Flüssigboden-Service
                   </Link>
-                  <div className="border-t border-border my-1"></div>
+                  <div className="border-t border-gray-200 my-1"></div>
                   <Link 
                     to="/preise-und-ablauf"
-                    className="block px-4 py-2.5 text-sm font-medium text-primary hover:bg-muted/50 transition-colors"
+                    className="block px-4 py-2.5 text-sm font-semibold text-primary hover:bg-gray-50 transition-colors"
                   >
                     Preise & Ablauf
                   </Link>
