@@ -16,7 +16,7 @@ interface JobOffer {
   fuehrerscheinklasse: string;
   besonderheiten?: string;
   nachricht: string;
-  billing_model: 'direct' | 'agency';
+  billing_model: 'agency'; // Nur noch Agenturmodell
   created_at: string;
 }
 
@@ -37,7 +37,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleAccept = async () => {
-    if (job.billing_model === 'agency' && !termsAccepted) {
+    if (!termsAccepted) {
       return; // Prevent submission without terms acceptance
     }
     
@@ -49,23 +49,14 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
     }
   };
 
-  const billingInfo = job.billing_model === 'agency' 
-    ? {
-        title: "Agenturabrechnung (Subunternehmer-Modell)",
-        description: "Du erbringst die Leistung als selbstständiger Unternehmer/Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber. Deine Rechnung stellst du an Fahrerexpress; die vereinbarte Vermittlungsgebühr wird berücksichtigt. Hinweis: Vermittlung nach § 652 BGB (Maklervertrag), kein Arbeitsverhältnis, keine Arbeitnehmerüberlassung.",
-        alertColor: "bg-yellow-50 border-yellow-200",
-        iconColor: "text-yellow-600",
-        consentRequired: true,
-        consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber. Ich stelle meine Rechnung an Fahrerexpress, abzüglich der vereinbarten Vermittlungsgebühr. Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
-      }
-    : {
-        title: "Vermittlung (Direktabrechnung)",
-        description: "Du rechnest direkt mit dem Auftraggeber ab. Fahrerexpress erhält eine Vermittlungsprovision.",
-        alertColor: "bg-green-50 border-green-200",
-        iconColor: "text-green-600",
-        consentRequired: false,
-        consentText: "Du rechnest direkt mit dem Auftraggeber ab. Fahrerexpress stellt dir die vereinbarte Vermittlungsprovision in Rechnung."
-      };
+  const billingInfo = {
+    title: "Agenturabrechnung (Subunternehmer-Modell)",
+    description: "Du stellst deine Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt.",
+    alertColor: "bg-yellow-50 border-yellow-200",
+    iconColor: "text-yellow-600",
+    consentRequired: true,
+    consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber. Ich stelle meine Rechnung an Fahrerexpress. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
+  };
 
   return (
     <Card className="max-w-4xl mx-auto">
@@ -138,46 +129,34 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
           </div>
         </div>
 
-        {/* Terms Acceptance for Agency */}
-        {billingInfo.consentRequired && (
-          <div className="border-2 border-yellow-300 bg-yellow-50 p-4 rounded-lg">
-            <div className="flex items-start space-x-3">
-              <Checkbox
-                id="terms-consent"
-                checked={termsAccepted}
-                onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
-                className="mt-1"
-                required
-              />
-              <div className="flex-1">
-                <label htmlFor="terms-consent" className="text-sm cursor-pointer">
-                  <div className="font-semibold text-yellow-800 mb-2">
-                    ⚠️ Rechtliche Zustimmung erforderlich:
-                  </div>
-                  <div className="text-yellow-700 leading-relaxed">
-                    {billingInfo.consentText}
-                  </div>
-                </label>
-              </div>
+        {/* Terms Acceptance */}
+        <div className="border-2 border-yellow-300 bg-yellow-50 p-4 rounded-lg">
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="terms-consent"
+              checked={termsAccepted}
+              onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
+              className="mt-1"
+              required
+            />
+            <div className="flex-1">
+              <label htmlFor="terms-consent" className="text-sm cursor-pointer">
+                <div className="font-semibold text-yellow-800 mb-2">
+                  ⚠️ Rechtliche Zustimmung erforderlich:
+                </div>
+                <div className="text-yellow-700 leading-relaxed">
+                  {billingInfo.consentText}
+                </div>
+              </label>
             </div>
           </div>
-        )}
-
-        {/* Direct Billing Info */}
-        {!billingInfo.consentRequired && (
-          <div className="border-2 border-green-300 bg-green-50 p-4 rounded-lg">
-            <div className="text-green-800">
-              <div className="font-semibold mb-2">ℹ️ Direktabrechnung:</div>
-              <div className="text-green-700">{billingInfo.consentText}</div>
-            </div>
-          </div>
-        )}
+        </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
             onClick={handleAccept}
-            disabled={isSubmitting || (billingInfo.consentRequired && !termsAccepted)}
+            disabled={isSubmitting || !termsAccepted}
             className="flex-1 bg-green-600 hover:bg-green-700 text-white"
             size="lg"
           >
@@ -186,10 +165,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
             ) : (
               <>
                 <CheckCircle className="w-4 h-4 mr-2" />
-                {job.billing_model === 'agency' 
-                  ? 'Dienst-/Werkvertrag als Subunternehmer annehmen'
-                  : 'Vermittlungsauftrag annehmen'
-                }
+                Dienst-/Werkvertrag als Subunternehmer annehmen
               </>
             )}
           </Button>

@@ -24,9 +24,7 @@ Die Vermittlungsgebühr beträgt bei jedem Einsatz:
 - **15 % für LKW CE Fahrer**
 - **20 % für Baumaschinenführer**
 
-Die Vermittlungsgebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
-
-**Abrechnung:** Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; die Vermittlungsgebühr wird intern einbehalten.
+**Abrechnung:** Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Ihre Auszahlung erfolgt nach Zahlungseingang.
 
 **Rechtsgrundlage:** Vermittlungsvertrag nach § 652 BGB (Maklervertrag). Sie erbringen Ihre Leistung als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber.
 
