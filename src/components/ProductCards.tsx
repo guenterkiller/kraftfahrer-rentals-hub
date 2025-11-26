@@ -228,7 +228,7 @@ const ProductCards = () => {
           </Link>
         </div>
 
-        {/* Abrechnungsmodell-Hinweis */}
+        {/* Abrechnungsmodell-Hinweis mit Kundenvorteil */}
         <Card className="max-w-7xl mx-auto mt-4 border-l-4 border-l-primary animate-fade-in">
           <CardContent className="pt-6">
             <div className="flex gap-4">
@@ -237,11 +237,11 @@ const ProductCards = () => {
               </div>
               <div>
                 <h4 className="font-semibold text-lg mb-2">
-                  Abrechnungsmodell: Agenturabrechnung – Vertragspartner ist Fahrerexpress
+                  ✅ Eine Rechnung – Kein Mehraufwand für Sie
                 </h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt. 
-                  Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
+                  <strong>Sie erhalten immer nur eine Rechnung direkt von Fahrerexpress – ohne zusätzliche Fahrerabrechnungen.</strong> 
+                  Der Fahrer stellt seine Rechnung an uns. Abrechnungsmodell: Agenturabrechnung (Dienst-/Werkleistung durch selbstständige Subunternehmer, keine Arbeitnehmerüberlassung).
                 </p>
               </div>
             </div>

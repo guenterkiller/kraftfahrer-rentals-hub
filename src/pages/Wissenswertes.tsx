@@ -367,7 +367,24 @@ const Wissenswertes = () => {
                     Das ist rechtlich zulässig, da keine eigene Transportleistung durch den Fahrer erfolgt.
                   </p>
                 </CardContent>
-              </Card>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      Wie erfolgt die Abrechnung?
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground mb-3">
+                      <strong>Sie erhalten eine Rechnung direkt von Fahrerexpress.</strong>
+                    </p>
+                    <p className="text-muted-foreground">
+                      Die Fahrer stellen ihre Rechnung an uns – Sie haben keinen Aufwand mit mehreren Rechnungen. 
+                      Das Abrechnungsmodell ist immer die Agenturabrechnung, bei der Fahrerexpress als Vertragspartner auftritt.
+                    </p>
+                  </CardContent>
+                </Card>
 
               <Card>
                 <CardHeader>
