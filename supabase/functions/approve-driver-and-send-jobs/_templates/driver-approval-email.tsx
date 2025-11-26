@@ -102,22 +102,17 @@ export const DriverApprovalEmail = ({
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
       
-      {/* Vermittlungsgebühr Info */}
+      {/* Vermittlungsinformation */}
       <Section style={boxStyles.warning}>
         <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          📋 Wichtig: Vermittlungsgebühr
+          📋 Wichtig: Vermittlungsbedingungen
         </Heading>
         <Text style={textStyles.paragraph}>
-          Die Vermittlungsgebühr beträgt bei jedem Einsatz:
+          Für Fahrer gelten transparente Vermittlungsbedingungen, die bei tatsächlichem Einsatz fällig werden.
+          Details hierzu erhalten Sie in Ihrer persönlichen Vereinbarung mit Fahrerexpress.
         </Text>
         <Text style={textStyles.paragraph}>
-          • <strong>15 % für LKW CE Fahrer</strong><br />
-          • <strong>20 % für Baumaschinenführer</strong>
-        </Text>
-        <Text style={textStyles.paragraph}>
-          Die Vermittlungsgebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
-          Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; 
-          die Provision wird intern einbehalten.
+          Sie stellen Ihre Rechnung nach Einsatzabschluss direkt an Fahrerexpress.
         </Text>
       </Section>
 

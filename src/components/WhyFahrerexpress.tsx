@@ -4,8 +4,8 @@ const WhyFahrerexpress = () => {
   const benefits = [
     {
       icon: Shield,
-      title: "Selbstständige Profis statt Zeitarbeit",
-      description: "Keine AÜG-Risiken – rechtssichere Zusammenarbeit"
+      title: "Selbstständige Profis",
+      description: "Rechtssichere Zusammenarbeit mit selbstständigen Fahrern"
     },
     {
       icon: Euro,

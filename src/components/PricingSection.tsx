@@ -165,7 +165,7 @@ const PricingSection = () => {
             <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Keine Arbeitnehmerüberlassung. Abrechnung erfolgt über Fahrerexpress.</p>
+            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Abrechnung erfolgt über Fahrerexpress.</p>
           </CardContent>
         </Card>
 

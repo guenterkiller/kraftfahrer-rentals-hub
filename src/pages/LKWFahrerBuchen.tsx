@@ -23,8 +23,8 @@ const LKWFahrerBuchen = () => {
     },
     faqData: [
       {
-        question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
-        answer: "Nein. Es handelt sich um eine Dienst-/Werkleistung ohne AÜG-Überlassung. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
+        question: "Ist das Zeitarbeit?",
+        answer: "Nein. Es handelt sich um eine Dienst-/Werkleistung. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
@@ -77,8 +77,8 @@ const LKWFahrerBuchen = () => {
     title: "LKW-Fahrer buchen – Häufige Fragen",
     items: [
       {
-        question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
-        answer: "<strong>Nein.</strong> Es handelt sich um eine <strong>Dienst-/Werkleistung</strong> ohne AÜG-Überlassung. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
+        question: "Ist das Zeitarbeit?",
+        answer: "<strong>Nein.</strong> Es handelt sich um eine <strong>Dienst-/Werkleistung</strong>. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
