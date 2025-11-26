@@ -66,9 +66,9 @@ export const CustomerBookingConfirmation = ({
     </Section>
 
     <Section {...getBoxProps(boxStyles.highlightBox)}>
-      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Abrechnung & Preise</Heading>
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Preise & Konditionen</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold' })}>
-        Die Abrechnung erfolgt ausschließlich über die Fahrerexpress-Agentur.
+        Unsere Fahrer arbeiten als selbstständige Unternehmer. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung.
       </Text>
 
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />
@@ -119,8 +119,8 @@ export const CustomerBookingConfirmation = ({
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>✅ Warum Fahrerexpress?</Heading>
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li>Keine Kosten, falls kein Fahrer verfügbar ist</li>
-        <li>Eine Rechnung, transparente Abwicklung</li>
-        <li>Dienst-/Werkleistung – selbstständige Fahrer</li>
+        <li>Transparente Preise, keine versteckten Kosten</li>
+        <li>Selbstständige Fahrer auf Basis eines Dienst-/Werkvertrags</li>
         <li>Qualifizierte und erfahrene Fahrer</li>
       </ul>
     </Section>

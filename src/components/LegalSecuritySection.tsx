@@ -30,28 +30,28 @@ const LegalSecuritySection = () => {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-gray-700 leading-relaxed">
-                    <strong>Wir vermitteln ausschließlich selbstständige Fahrer</strong> mit eigenem Gewerbe.
+                    <strong>Unsere Fahrer arbeiten als selbstständige Unternehmer</strong> auf Basis eines Dienst-/Werkvertrags.
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-gray-700 leading-relaxed">
-                    Die Zusammenarbeit erfolgt auf Basis eines <strong>Vermittlungsvertrags nach § 652 BGB</strong>.
+                    Es handelt sich <strong>nicht um Arbeitnehmerüberlassung</strong> (kein AÜG).
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-gray-700 leading-relaxed">
-                    Wir sind <strong>kein Zeitarbeitsunternehmen</strong> und betreiben <strong>keine Arbeitnehmerüberlassung</strong>.
+                    Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – <strong>wir übernehmen die professionelle Vermittlung</strong>.
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-gray-700 leading-relaxed">
-                    <strong>Vertrag und Abrechnung</strong> erfolgen direkt zwischen Auftraggeber und Fahrer.
+                    <strong>Keine zusätzliche Provision für Sie</strong> – transparente Tagessätze ohne versteckte Kosten.
                   </p>
                 </div>
                 
@@ -65,8 +65,8 @@ const LegalSecuritySection = () => {
 
               <div className="mt-6 pt-6 border-t bg-blue-50 -mx-6 px-6 py-4 rounded-b-lg">
                 <p className="text-sm text-blue-900 leading-relaxed">
-                  <strong>💡 Ihr Vorteil:</strong> Keine Sozialversicherungspflicht, keine Equal-Pay-Problematik, 
-                  keine AÜG-Meldepflichten – Sie arbeiten mit echten Selbstständigen zusammen.
+                  <strong>💡 Ihr Vorteil:</strong> Rechtssichere Zusammenarbeit mit selbstständigen Fahrern – 
+                  keine Sozialversicherungspflicht, keine Equal-Pay-Problematik, keine AÜG-Meldepflichten.
                 </p>
               </div>
             </CardContent>

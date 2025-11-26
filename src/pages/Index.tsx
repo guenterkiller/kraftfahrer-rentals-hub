@@ -35,8 +35,8 @@ const Index = () => {
     },
     faqData: [
       {
-        question: "Ist das Zeitarbeit oder Arbeitnehmerüberlassung?",
-        answer: "Nein, ausschließlich selbstständige Fahrer ohne AÜG. Es handelt sich um eine rechtssichere Dienst-/Werkleistung durch selbstständige Subunternehmer."
+        question: "Wie funktioniert die Zusammenarbeit?",
+        answer: "Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung."
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",

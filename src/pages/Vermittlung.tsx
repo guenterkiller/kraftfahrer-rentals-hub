@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlung = () => {
   useSEO({
-    title: "Vermittlungsmodell – Ersatzfahrer kurzfristig mieten | Fahrerexpress",
-    description: "Transparentes Vermittlungsmodell für selbstständige Fahrer. Auftraggeber zahlen Fahrer direkt, wir vermitteln kompetente Partner.",
-    keywords: "Fahrervermittlung, selbstständige Fahrer, Fahrerservice, ersatzfahrer vermittlung"
+    title: "Vermittlung selbstständiger Fahrer – Rechtssicher & transparent | Fahrerexpress",
+    description: "Selbstständige Berufskraftfahrer vermitteln – direkte Zusammenarbeit zwischen Auftraggeber und Fahrer, keine zusätzliche Provision für Sie.",
+    keywords: "Fahrervermittlung, selbstständige Fahrer, Fahrerservice, Subunternehmer Fahrer"
   });
   return (
     <div className="min-h-screen bg-muted">
@@ -33,8 +33,30 @@ const Vermittlung = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                Fahrerexpress vermittelt selbstständige Fahrer an Auftraggeber in ganz Deutschland. Wir bringen kompetente Partner zusammen.
+                Fahrerexpress vermittelt selbstständige Fahrer an Auftraggeber in ganz Deutschland. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung.
               </p>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Für Auftraggeber
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p>
+                    <strong>Unsere Fahrer sind selbstständig</strong> und arbeiten auf eigene Rechnung. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die Vermittlung, <strong>keine zusätzliche Provision für Sie</strong>.
+                  </p>
+                  <p>
+                    Sie erhalten transparente Tagessätze (LKW CE-Fahrer 349 €, Baumaschinenführer 459 €) und eine klare Abrechnung.
+                  </p>
+                  <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+                    <p className="font-semibold">
+                      Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
 
               <Card>
                 <CardHeader>
@@ -52,26 +74,6 @@ const Vermittlung = () => {
                   
                   <p>
                     Als selbstständiger Fahrer erhalten Sie Zugang zu qualifizierten Aufträgen in Ihrer Region.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
-                    Abrechnungsmodell
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p>
-                    <strong>Für den Auftraggeber:</strong> Sie erhalten eine einzige Rechnung direkt von Fahrerexpress. Wir kümmern uns um die Abwicklung – Sie haben keinen Mehraufwand.
-                  </p>
-                  <p>
-                    <strong>Für den Fahrer:</strong> Sie erhalten nach erfolgreichem Einsatz Ihre Vergütung transparent und zuverlässig.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    <strong>Rechtsgrundlage:</strong> Vermittlungsvertrag nach § 652 BGB zwischen Fahrerexpress und Fahrer. Der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer gegenüber dem Auftraggeber.
                   </p>
                 </CardContent>
               </Card>
