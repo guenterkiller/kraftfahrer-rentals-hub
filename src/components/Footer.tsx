@@ -46,11 +46,6 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/versicherung" className="text-muted-foreground hover:text-primary transition-colors">
-                  Versicherung
-                </Link>
-              </li>
-              <li>
                 <Link to="/wissenswertes" className="text-muted-foreground hover:text-primary transition-colors">
                   Wissenswertes
                 </Link>
