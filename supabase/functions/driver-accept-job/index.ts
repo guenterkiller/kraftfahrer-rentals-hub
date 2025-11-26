@@ -105,12 +105,12 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     if (action === 'accept') {
-      // Bei agency billing model muss Terms-Zustimmung vorhanden sein
-      if (job.billing_model === 'agency' && !termsAccepted && req.method === 'POST') {
+      // Terms-Zustimmung immer erforderlich (nur noch Agency-Modell)
+      if (!termsAccepted && req.method === 'POST') {
         return new Response(JSON.stringify({ 
-          error: 'Terms acceptance required for agency billing model',
+          error: 'Terms acceptance required',
           requiresTerms: true,
-          billingModel: job.billing_model
+          billingModel: 'agency'
         }), {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -123,7 +123,7 @@ const handler = async (req: Request): Promise<Response> => {
         .insert({
           job_id: jobId,
           driver_id: driverId,
-          billing_model: job.billing_model,
+          billing_model: 'agency', // Immer agency
           ip: ip,
           user_agent: userAgent,
           terms_version: 'v1'
@@ -137,14 +137,14 @@ const handler = async (req: Request): Promise<Response> => {
         });
       }
 
-      // Create job assignment
+      // Create job assignment mit Standard-Rate für Agency-Modell
       const { data: assignment, error: assignError } = await supabase
         .rpc('admin_assign_driver', {
           _job_id: jobId,
           _driver_id: driverId,
           _rate_type: 'daily',
-          _rate_value: job.billing_model === 'agency' ? 399 : 349,
-          _note: `Driver accepted via ${req.method} (${job.billing_model} billing model, terms accepted: ${termsAccepted || 'via link'})`
+          _rate_value: 399, // Standard-Rate für Agency-Modell
+          _note: `Driver accepted via ${req.method} (agency billing model, terms accepted: ${termsAccepted || 'via link'})`
         });
 
       if (assignError) {
@@ -155,53 +155,37 @@ const handler = async (req: Request): Promise<Response> => {
         });
       }
 
-      // Bei agency: Customer invoice draft erstellen
-      if (job.billing_model === 'agency') {
-        const { error: invoiceError } = await supabase
-          .from('job_requests')
-          .update({
-            customer_invoice_status: 'draft',
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', jobId);
+      // Customer invoice draft erstellen (immer bei Agency-Modell)
+      const { error: invoiceError } = await supabase
+        .from('job_requests')
+        .update({
+          customer_invoice_status: 'draft',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', jobId);
 
-        if (invoiceError) {
-          console.error('Error creating customer invoice draft:', invoiceError);
-        }
+      if (invoiceError) {
+        console.error('Error creating customer invoice draft:', invoiceError);
       }
 
-      // Send confirmation email based on billing model
+      // Send confirmation email (Agency-Modell)
       if (resendApiKey) {
         const resend = new Resend(resendApiKey);
         const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
         
-        const billingText = job.billing_model === 'agency' 
-          ? {
-              subject: "Dienst-/Werkvertrag angenommen - Subunternehmer-Einsatz",
-              content: `
-                <h2>✅ Dienst-/Werkvertrag erfolgreich angenommen!</h2>
-                <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                  <h3 style="color: #1e40af;">Agenturabrechnung - Subunternehmer-Modell</h3>
-                  <p><strong>Sie haben den Einsatz als selbstständiger Subunternehmer angenommen.</strong></p>
-                  <p>Sie stellen Ihre Rechnung an Fahrerexpress, abzüglich der vereinbarten Provision/Marge. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis.</p>
-                </div>
-              `
-            }
-          : {
-              subject: "Vermittlungsauftrag angenommen - Direktabrechnung",
-              content: `
-                <h2>✅ Vermittlungsauftrag erfolgreich angenommen!</h2>
-                <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                  <h3 style="color: #15803d;">Vermittlung (Direktabrechnung)</h3>
-                  <p><strong>Sie rechnen direkt mit dem Auftraggeber ab.</strong></p>
-                  <p>Fahrerexpress stellt Ihnen die vereinbarte Vermittlungsprovision in Rechnung.</p>
-                </div>
-              `
-            };
+        const emailSubject = "Dienst-/Werkvertrag angenommen - Subunternehmer-Einsatz";
+        const emailContent = `
+          <h2>✅ Dienst-/Werkvertrag erfolgreich angenommen!</h2>
+          <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #1e40af;">Agenturabrechnung - Subunternehmer-Modell</h3>
+            <p><strong>Sie haben den Einsatz als selbstständiger Subunternehmer angenommen.</strong></p>
+            <p>Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis.</p>
+          </div>
+        `;
 
         const emailHtml = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            ${billingText.content}
+            ${emailContent}
             
             <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <h3>Auftragsdetails:</h3>
@@ -221,7 +205,7 @@ const handler = async (req: Request): Promise<Response> => {
           await resend.emails.send({
             from: MAIL_FROM,
             to: [driver.email],
-            subject: billingText.subject,
+            subject: emailSubject,
             html: emailHtml
           });
           console.log('✅ Driver confirmation email sent');
@@ -242,7 +226,7 @@ const handler = async (req: Request): Promise<Response> => {
                 fahrzeugtyp: job.fahrzeugtyp,
                 nachricht: job.nachricht,
               },
-              billingModel: job.billing_model,
+              billingModel: 'agency', // Immer agency
               acceptedAt: new Date().toLocaleString('de-DE'),
             })
           );
@@ -286,13 +270,8 @@ const handler = async (req: Request): Promise<Response> => {
 
       // Return HTML response for GET requests (email links)
       if (req.method === 'GET') {
-        const billingDisplay = job.billing_model === 'agency' 
-          ? 'Agenturabrechnung - Subunternehmer-Modell'
-          : 'Vermittlung - Direktabrechnung';
-          
-        const billingDescription = job.billing_model === 'agency'
-          ? 'Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.'
-          : 'Sie rechnen direkt mit dem Auftraggeber ab. Fahrerexpress stellt Ihnen die vereinbarte Vermittlungsprovision in Rechnung.';
+        const billingDisplay = 'Agenturabrechnung - Subunternehmer-Modell';
+        const billingDescription = 'Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.';
         
         const html = `
           <!DOCTYPE html>

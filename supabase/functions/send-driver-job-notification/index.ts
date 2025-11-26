@@ -11,7 +11,7 @@ const corsHeaders = {
 interface JobNotificationRequest {
   jobId: string;
   driverId: string;
-  billingModel: 'direct' | 'agency';
+  billingModel: 'agency'; // Nur noch Agenturmodell
 }
 
 // Token-Generierung (48 Zeichen)
@@ -99,40 +99,26 @@ const handler = async (req: Request): Promise<Response> => {
     const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
     const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
 
-    // Generate rechtssichere email content based on billing model
-    const billingInfo = billingModel === 'agency' 
-      ? {
-          title: "Agenturabrechnung – Vertrag mit Fahrerexpress",
-          description: "Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringe die Leistung als selbstständiger Subunternehmer von Fahrerexpress.",
-          consentText: `
-            <div style="background: #fff3cd; border: 2px solid #856404; padding: 20px; margin: 20px 0; border-radius: 8px;">
-              <h4 style="color: #856404; margin-top: 0;">⚠️ Wichtiger Hinweis - Rechtliche Zustimmung erforderlich:</h4>
-              <p style="font-weight: bold; color: #856404;">
-                <strong>Subunternehmer-Einsatz:</strong> Dieser Auftrag wird über Fahrerexpress abgerechnet. 
-                Ich erbringe die Leistung als selbstständiger Subunternehmer von Fahrerexpress und stelle meine Rechnung an Fahrerexpress. 
-                Die vereinbarte Provision/Marge wird von Fahrerexpress einbehalten. 
-                Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um eine Dienst-/Werkleistung.
-              </p>
-              <p style="color: #856404; font-size: 14px;">
-                Mit Klick auf "Annehmen" bestätigen Sie diese Bedingungen.
-              </p>
-            </div>
-          `,
-          acceptText: "✅ Auftrag als Subunternehmer annehmen"
-        }
-      : {
-          title: "Direktabrechnung – Vertrag mit Auftraggeber", 
-          description: "Sie rechnen direkt mit dem Auftraggeber ab. Fahrerexpress berechnet Ihnen eine Vermittlungsprovision.",
-          consentText: `
-            <div style="background: #d1f7d1; border: 2px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 8px;">
-              <h4 style="color: #155724; margin-top: 0;">ℹ️ Direktabrechnung:</h4>
-              <p style="font-weight: bold; color: #155724;">
-                Ich rechne direkt mit dem Auftraggeber ab. Fahrerexpress stellt mir eine Vermittlungsprovision gemäß Vereinbarung in Rechnung.
-              </p>
-            </div>
-          `,
-          acceptText: "✅ Auftrag mit Direktabrechnung annehmen"
-        };
+    // Generate rechtssichere email content - nur Agenturmodell
+    const billingInfo = {
+      title: "Agenturabrechnung – Vertrag mit Fahrerexpress",
+      description: "Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress.",
+      consentText: `
+        <div style="background: #fff3cd; border: 2px solid #856404; padding: 20px; margin: 20px 0; border-radius: 8px;">
+          <h4 style="color: #856404; margin-top: 0;">⚠️ Wichtiger Hinweis - Rechtliche Zustimmung erforderlich:</h4>
+          <p style="font-weight: bold; color: #856404;">
+            <strong>Subunternehmer-Einsatz:</strong> Dieser Auftrag wird über Fahrerexpress abgerechnet. 
+            Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung.
+            Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. 
+            Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um eine Dienst-/Werkleistung.
+          </p>
+          <p style="color: #856404; font-size: 14px;">
+            Mit Klick auf "Annehmen" bestätigen Sie diese Bedingungen.
+          </p>
+        </div>
+      `,
+      acceptText: "✅ Auftrag als Subunternehmer annehmen"
+    };
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
