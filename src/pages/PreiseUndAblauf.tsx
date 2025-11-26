@@ -324,11 +324,11 @@ const PreiseUndAblauf = () => {
                     <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                       <span className="text-2xl font-bold text-primary">3</span>
                     </div>
-                    <CardTitle>Einsatz startet</CardTitle>
+                    <CardTitle>Einsatz startet & Abrechnung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin.</p>
-                    <p className="text-sm text-primary font-semibold">⏱️ Schnell & zuverlässig</p>
+                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Nach dem Einsatz erhalten Sie eine übersichtliche Rechnung von Fahrerexpress.</p>
+                    <p className="text-sm text-primary font-semibold">💼 Nur 1 Rechnung für Sie</p>
                   </CardContent>
                 </Card>
               </div>
