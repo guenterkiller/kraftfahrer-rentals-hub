@@ -68,7 +68,7 @@ export const CustomerBookingConfirmation = ({
     <Section {...getBoxProps(boxStyles.highlightBox)}>
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Preise & Konditionen</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold' })}>
-        Unsere Fahrer arbeiten als selbstständige Unternehmer. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung.
+        Die Einsätze werden über die Fahrerexpress-Agentur koordiniert. Die Fahrleistung wird von selbstständigen Unternehmern erbracht, Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.
       </Text>
 
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />

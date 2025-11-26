@@ -413,7 +413,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Zusammenarbeit</h3>
-                  <p className="text-muted-foreground">Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung. Keine zusätzliche Provision für Sie.</p>
+                  <p className="text-muted-foreground">Die Einsätze werden über die Fahrerexpress-Agentur koordiniert. Die Fahrleistung wird von selbstständigen Unternehmern erbracht, Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Haftung & Versicherung</h3>
