@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlung = () => {
   useSEO({
-    title: "Vermittlung & Provision – Ersatzfahrer kurzfristig mieten | Fahrerexpress",
-    description: "Transparente Vermittlungskosten: 15% Provision nur bei erfolgreichem Einsatz. Keine Fixkosten, keine Mindestlaufzeit für Kraftfahrer und Ersatzfahrer.",
-    keywords: "Vermittlungsprovision, Fahrer Provision, Vermittlungskosten selbstständige Fahrer, 15 Prozent Provision, ersatzfahrer kosten"
+    title: "Vermittlungsmodell – Ersatzfahrer kurzfristig mieten | Fahrerexpress",
+    description: "Transparentes Vermittlungsmodell für selbstständige Fahrer. Auftraggeber zahlen Fahrer direkt, wir vermitteln kompetente Partner.",
+    keywords: "Fahrervermittlung, selbstständige Fahrer, Fahrerservice, ersatzfahrer vermittlung"
   });
   return (
     <div className="min-h-screen bg-muted">
@@ -28,50 +28,30 @@ const Vermittlung = () => {
             <CardHeader>
               <CardTitle className="text-3xl text-center flex items-center justify-center gap-2">
                 <Users className="h-8 w-8" />
-                Vermittlung & Provision
+                Vermittlungsmodell
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                Wenn Sie sich über unsere Seite als selbstständiger Fahrer eintragen, vermitteln wir Sie an Auftraggeber in ganz Deutschland.
+                Fahrerexpress vermittelt selbstständige Fahrer an Auftraggeber in ganz Deutschland. Wir bringen kompetente Partner zusammen.
               </p>
 
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Euro className="h-5 w-5" />
-                    Vermittlungsgebühr für Fahrer
+                    <Users className="h-5 w-5" />
+                    Für Fahrer
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p>
-                    Für jeden erfolgreichen Einsatz berechnet die Fahrerexpress-Agentur eine Vermittlungsgebühr an den Fahrer.
-                  </p>
-                  
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
-                    <h3 className="font-semibold mb-3">Die Vermittlungsgebühr beträgt:</h3>
-                    <ul className="space-y-2">
-                      <li className="flex items-start gap-2">
-                        <span className="text-primary font-semibold">•</span>
-                        <span><strong>15 % des Gesamthonorars</strong> bei LKW CE Fahrern</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-primary font-semibold">•</span>
-                        <span><strong>20 % des Gesamthonorars</strong> bei Baumaschinenführern</span>
-                      </li>
-                    </ul>
+                    <p className="font-semibold">
+                      Für Fahrer gelten transparente Vermittlungsbedingungen, die nach Registrierung bereitgestellt werden.
+                    </p>
                   </div>
-
-                  <p className="text-sm">
-                    Das Gesamthonorar umfasst die Tagespauschale laut Website inklusive berechtigter Nebenkosten (Kilometer, Übernachtung, Spesen, Mehrstunden).
-                  </p>
-
-                  <p className="font-semibold">
-                    Die Vermittlung ist für Auftraggeber kostenlos.
-                  </p>
-
+                  
                   <p>
-                    Die Vermittlungsgebühr wird ausschließlich bei tatsächlichem Einsatz fällig.
+                    Als selbstständiger Fahrer erhalten Sie Zugang zu qualifizierten Aufträgen in Ihrer Region.
                   </p>
                 </CardContent>
               </Card>
@@ -80,18 +60,18 @@ const Vermittlung = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Clock className="h-5 w-5" />
-                    Abrechnung der Provision
+                    Abrechnungsmodell
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <p>
-                    Der Fahrer stellt seine Rechnung in voller Höhe an Fahrerexpress. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt.
+                    <strong>Für den Auftraggeber:</strong> Sie erhalten eine einzige Rechnung direkt von Fahrerexpress. Wir kümmern uns um die Abwicklung – Sie haben keinen Mehraufwand.
                   </p>
                   <p>
-                    <strong>Für den Auftraggeber:</strong> Sie erhalten eine einzige Rechnung direkt von Fahrerexpress. Der Fahrer stellt seine Rechnung an die Agentur – Sie haben keinen Mehraufwand.
+                    <strong>Für den Fahrer:</strong> Sie erhalten nach erfolgreichem Einsatz Ihre Vergütung transparent und zuverlässig.
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    <strong>Rechtsgrundlage:</strong> Vermittlungsvertrag nach § 652 BGB (Maklervertrag) zwischen Fahrerexpress und Fahrer. Der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer gegenüber dem Auftraggeber im Rahmen eines Werk-/Dienstvertrags.
+                    <strong>Rechtsgrundlage:</strong> Vermittlungsvertrag nach § 652 BGB zwischen Fahrerexpress und Fahrer. Der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer gegenüber dem Auftraggeber.
                   </p>
                 </CardContent>
               </Card>
@@ -104,51 +84,6 @@ const Vermittlung = () => {
                   <p>
                     Nein. Sie können Ihre Teilnahme jederzeit beenden. Es entstehen keine Fixkosten oder Verpflichtungen.
                   </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Was ist nicht provisionspflichtig?</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="list-disc pl-6 space-y-2">
-                    <li>Direktaufträge außerhalb unserer Vermittlung</li>
-                    <li>Einsätze ohne vorherige Abstimmung mit Fahrerexpress</li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Abgrenzung zur Arbeitnehmerüberlassung</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4">
-                    Die Beauftragung selbstständiger Fahrer ist keine Arbeitnehmerüberlassung, wenn folgende Kriterien erfüllt sind:
-                  </p>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="text-green-600 font-semibold">✓</span>
-                      <span>Der Fahrer erbringt die Leistung als selbstständiger Unternehmer auf Basis eines Dienst-/Werkvertrags</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-green-600 font-semibold">✓</span>
-                      <span>Das Fahrzeug wird vom Auftraggeber gestellt, die Fahrleistung erfolgt jedoch eigenverantwortlich</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-green-600 font-semibold">✓</span>
-                      <span>Der Fahrer bleibt weisungsunabhängig in der Ausführung und trägt ein eigenes Unternehmerrisiko</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-green-600 font-semibold">✓</span>
-                      <span>Der Fahrer kann eigene Arbeitskräfte/Subunternehmer einsetzen</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-green-600 font-semibold">✓</span>
-                      <span>Keine Eingliederung in die Betriebsorganisation des Auftraggebers</span>
-                    </li>
-                  </ul>
                 </CardContent>
               </Card>
 

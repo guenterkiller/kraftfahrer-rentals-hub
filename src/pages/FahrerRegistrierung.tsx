@@ -209,7 +209,7 @@ const FahrerRegistrierung = () => {
         break;
       case 'vermittlungszustimmung':
         if (!value) {
-          errors.vermittlungszustimmung = 'Sie müssen der Vermittlungsprovision zustimmen';
+          errors.vermittlungszustimmung = 'Sie müssen den Vermittlungsbedingungen zustimmen';
         }
         break;
     }
@@ -1109,7 +1109,7 @@ const FahrerRegistrierung = () => {
                           required 
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
-                          Ich bin selbstständig tätig und stimme der Vermittlungsprovision von 15 % des gesamten Nettohonorars (einschließlich Nebenkosten wie Fahrt-/Übernachtung/Mehrstunden) pro vermitteltem Einsatz zu. *{" "}
+                          Ich bin selbstständig tätig und akzeptiere die Vermittlungsbedingungen, die mir nach Registrierung bereitgestellt werden. *{" "}
                           <Link to="/vermittlung" className="text-primary hover:underline">
                             Mehr Informationen
                           </Link>

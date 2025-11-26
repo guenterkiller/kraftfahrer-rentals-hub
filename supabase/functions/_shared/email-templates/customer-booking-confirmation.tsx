@@ -120,7 +120,7 @@ export const CustomerBookingConfirmation = ({
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li>Keine Kosten, falls kein Fahrer verfügbar ist</li>
         <li>Eine Rechnung, transparente Abwicklung</li>
-        <li>Dienst-/Werkleistung – keine Arbeitnehmerüberlassung</li>
+        <li>Dienst-/Werkleistung – selbstständige Fahrer</li>
         <li>Qualifizierte und erfahrene Fahrer</li>
       </ul>
     </Section>

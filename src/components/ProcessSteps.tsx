@@ -55,7 +55,7 @@ const ProcessSteps = () => {
 
         <div className="text-center bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
           <p className="text-sm text-blue-900">
-            <strong>Keine Arbeitnehmerüberlassung</strong> – Sie arbeiten direkt mit selbstständigen Unternehmern zusammen.
+            <strong>Selbstständige Zusammenarbeit</strong> – Sie arbeiten direkt mit selbstständigen Unternehmern zusammen.
           </p>
         </div>
       </div>

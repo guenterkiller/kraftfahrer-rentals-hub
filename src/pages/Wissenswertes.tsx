@@ -152,32 +152,6 @@ const Wissenswertes = () => {
             <div className="space-y-8">
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    Abgrenzung zur Arbeitnehmerüberlassung (wichtig!)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">
-                    Die Beauftragung selbstständiger Fahrer ist <strong>keine Arbeitnehmerüberlassung</strong>, wenn:
-                  </p>
-                  <ul className="space-y-2 text-muted-foreground">
-                    <li>✓ Fahrer bleibt selbstständiger Unternehmer</li>
-                    <li>✓ Auftraggeber stellt das Fahrzeug</li>
-                    <li>✓ Fahrer führt die Arbeit eigenverantwortlich aus</li>
-                    <li>✓ Unternehmerisches Risiko liegt beim Fahrer</li>
-                    <li>✓ Keine Eingliederung in den Betrieb</li>
-                    <li>✓ Abrechnung per Rechnung, nicht per Lohn</li>
-                    <li>✓ Fahrer kann weitere Auftraggeber annehmen</li>
-                  </ul>
-                  <p className="text-muted-foreground mt-4">
-                    Diese Konstellation ist rechtlich üblich und zulässig.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
                   <CardTitle>🚫 Scheinselbstständigkeit vermeiden</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">

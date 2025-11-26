@@ -30,33 +30,27 @@ export const DriverRegistrationConfirmation = ({
     </Section>
 
     <Section {...getBoxProps(boxStyles.infoBox)}>
-      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💼 Vermittlung & Provision</Heading>
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💼 Vermittlungsmodell</Heading>
       
       <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold' })}>
         Wie funktioniert unsere Vermittlung?
       </Text>
       <Text {...getTextProps(textStyles.paragraph)}>
-        Wenn Sie sich über unsere Seite als selbstständiger Fahrer eintragen, vermitteln wir Sie an
-        Auftraggeber in ganz Deutschland.
+        Fahrerexpress vermittelt selbstständige Fahrer an Auftraggeber in ganz Deutschland. 
+        Wir bringen kompetente Partner zusammen.
       </Text>
 
       <Section {...getBoxProps(boxStyles.highlightBox)}>
-        <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px' }, 'small-heading')}>💰 Vermittlungskosten für Fahrer</Heading>
+        <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px' }, 'small-heading')}>📋 Vermittlungsbedingungen</Heading>
         <Text {...getTextProps(textStyles.paragraph)}>
-          Für die erfolgreiche Vermittlung eines Einsatzes berechnen wir nur dem vermittelten Fahrer eine
-          Provision in Höhe von <strong>15 % des Nettohonorars</strong>. Die Vermittlung ist für Auftraggeber
-          vollständig kostenlos.
+          Für Fahrer gelten transparente Vermittlungsbedingungen, die Ihnen nach Ihrer Freischaltung 
+          detailliert bereitgestellt werden. Die Vermittlung ist für Auftraggeber vollständig kostenlos.
         </Text>
 
         <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
           <li>
-            <strong>Wann wird die Provision fällig?</strong> Die Provision wird ausschließlich bei
-            tatsächlichem Einsatz fällig und kann entweder per Einbehalt oder separater Rechnung
-            abgerechnet werden.
-          </li>
-          <li>
-            <strong>Wie läuft die Abrechnung?</strong> Die Provision wird nach Einsatzabschluss per
-            Rechnung gestellt – entweder pro Auftrag oder gesammelt am Monatsende.
+            <strong>Wann entstehen Kosten?</strong> Vermittlungsgebühren fallen ausschließlich bei 
+            tatsächlichem Einsatz an.
           </li>
           <li>
             <strong>Gibt es eine Mindestlaufzeit?</strong> Nein. Sie können Ihre Teilnahme jederzeit
@@ -64,14 +58,6 @@ export const DriverRegistrationConfirmation = ({
           </li>
         </ul>
       </Section>
-
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '14px', marginTop: '20px' }, 'small-heading')}>
-        ✅ Was ist NICHT provisionspflichtig?
-      </Heading>
-      <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li>Direktaufträge außerhalb unserer Vermittlung</li>
-        <li>Einsätze ohne vorherige Abstimmung mit Fahrerexpress</li>
-      </ul>
     </Section>
 
     <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3f2' })}>

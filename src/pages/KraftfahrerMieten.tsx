@@ -3,13 +3,13 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 const KraftfahrerMieten = () => {
   const seoData = {
     title: "Kraftfahrer mieten – Berufskraftfahrer kurzfristig & bundesweit | Fahrerexpress",
-    description: "Kraftfahrer mieten für Nah-/Fernverkehr, Baustelle, Überführungen. Selbstständige Fahrer, transparente Tagespreise, rechtssicher ohne Arbeitnehmerüberlassung.",
+    description: "Kraftfahrer mieten für Nah-/Fernverkehr, Baustelle, Überführungen. Selbstständige Fahrer, transparente Tagespreise, rechtssichere Vermittlung.",
     keywords: "Kraftfahrer mieten, Berufskraftfahrer mieten, Fahrer mieten kurzfristig, Kraftfahrer Vermittlung, selbstständige Kraftfahrer, Fahrer gesucht",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "Kraftfahrer mieten",
-      "description": "Kraftfahrer mieten für Nah-/Fernverkehr, Baustelle und Überführungen - selbstständige Berufskraftfahrer ohne Arbeitnehmerüberlassung",
+      "description": "Kraftfahrer mieten für Nah-/Fernverkehr, Baustelle und Überführungen - selbstständige Berufskraftfahrer",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -29,7 +29,7 @@ const KraftfahrerMieten = () => {
 
   const heroData = {
     h1: "Kraftfahrer mieten – schnell & rechtssicher",
-    intro: "Bei Spitzen, Krankheit oder Urlaub: Mieten Sie selbstständige Kraftfahrer bundesweit. Abrechnung zentral über Fahrerexpress; der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer und stellt seine Rechnung an Fahrerexpress. Kein Arbeitsverhältnis, kein AÜG.",
+    intro: "Bei Spitzen, Krankheit oder Urlaub: Mieten Sie selbstständige Kraftfahrer bundesweit. Abrechnung zentral über Fahrerexpress; der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer und stellt seine Rechnung an Fahrerexpress.",
     bullets: [
       "Engpässe überbrücken (Tag/Woche/Projekt)",
       "Ein Ansprechpartner, eine Rechnung",
@@ -54,7 +54,7 @@ const KraftfahrerMieten = () => {
       },
       {
         question: "Wie unterscheidet sich das von Zeitarbeit?",
-        answer: "Unsere Kraftfahrer sind <strong>selbstständige Subunternehmer</strong> im Rahmen von Dienst-/Werkverträgen. <strong>Keine Arbeitnehmerüberlassung</strong>, sondern rechtssichere Vermittlung."
+        answer: "Unsere Kraftfahrer sind <strong>selbstständige Subunternehmer</strong> im Rahmen von Dienst-/Werkverträgen. Rechtssichere Vermittlung selbstständiger Fahrer."
       }
     ]
   };
