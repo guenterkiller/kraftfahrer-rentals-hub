@@ -112,7 +112,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Vermittlung selbstständiger Subunternehmer nach § 652 BGB (Maklervertrag). Keine Arbeitnehmerüberlassung, sondern professionelle Fahrervermittlung für B2B-Kunden.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung – professionelle Vermittlung für B2B-Kunden.</p>
                 </div>
               </CardContent>
             </Card>
@@ -327,8 +327,8 @@ const PreiseUndAblauf = () => {
                     <CardTitle>Einsatz startet & Abrechnung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Nach dem Einsatz erhalten Sie eine übersichtliche Rechnung von Fahrerexpress.</p>
-                    <p className="text-sm text-primary font-semibold">💼 Nur 1 Rechnung für Sie</p>
+                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Sie erhalten eine transparente Abrechnung für die erbrachte Leistung.</p>
+                    <p className="text-sm text-primary font-semibold">💼 Professionelle Abwicklung</p>
                   </CardContent>
                 </Card>
               </div>
@@ -407,23 +407,19 @@ const PreiseUndAblauf = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Keine Arbeitnehmerüberlassung</h3>
-                  <p className="text-muted-foreground">Vermittlung selbstständiger Fahrer gemäß § 652 BGB (Maklervertrag).</p>
+                  <h3 className="font-semibold text-lg mb-2">Selbstständige Fahrer</h3>
+                  <p className="text-muted-foreground">Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Vertragssystem</h3>
-                  <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Der Einsatzvertrag entsteht zwischen Auftraggeber und Fahrer.</li>
-                    <li>• Fahrer arbeiten auf eigene Rechnung, eigenes Risiko, eigenes Gewerbe.</li>
-                    <li>• Fahrerexpress übernimmt die reine Vermittlung & Vorauswahl.</li>
-                  </ul>
+                  <h3 className="font-semibold text-lg mb-2">Zusammenarbeit</h3>
+                  <p className="text-muted-foreground">Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung. Keine zusätzliche Provision für Sie.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Haftung</h3>
+                  <h3 className="font-semibold text-lg mb-2">Haftung & Versicherung</h3>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Der Fahrer haftet selbst für seine Tätigkeit.</li>
-                    <li>• Wir sind nicht Arbeitgeber, kein AÜG, keine Sozialversicherungspflicht.</li>
-                    <li>• Versicherung des Fahrers: Haftpflicht & Gewerbeversicherung laut Eigenauskunft des Fahrers.</li>
+                    <li>• Der Fahrer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
+                    <li>• Keine Sozialversicherungspflicht für Sie als Auftraggeber.</li>
+                    <li>• Keine AÜG-Meldepflichten erforderlich.</li>
                   </ul>
                 </div>
               </CardContent>

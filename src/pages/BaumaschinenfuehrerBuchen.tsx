@@ -38,8 +38,8 @@ const BaumaschinenfuehrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "Baumaschinenführer buchen – Vermittelte Fahrer",
-    intro: "Qualifizierte Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. 459 € pro Tag (8h), 60 € Überstunde.",
+    h1: "Baumaschinenführer buchen – Selbstständige Experten",
+    intro: "Qualifizierte Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. Selbstständige Experten, transparente Preise: 459 € pro Tag (8h), 60 € Überstunde.",
     bullets: ["Alle Baumaschinen & Anlagen", "Störungsbehebung & Reparaturen", "459 € pro Tag"]
   };
 

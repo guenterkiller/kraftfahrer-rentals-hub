@@ -29,10 +29,10 @@ const KraftfahrerMieten = () => {
 
   const heroData = {
     h1: "Kraftfahrer mieten – schnell & rechtssicher",
-    intro: "Bei Spitzen, Krankheit oder Urlaub: Mieten Sie selbstständige Kraftfahrer bundesweit. Abrechnung zentral über Fahrerexpress; der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer und stellt seine Rechnung an Fahrerexpress.",
+    intro: "Bei Spitzen, Krankheit oder Urlaub: Selbstständige Kraftfahrer bundesweit verfügbar. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die Vermittlung, keine zusätzliche Provision für Sie.",
     bullets: [
       "Engpässe überbrücken (Tag/Woche/Projekt)",
-      "Ein Ansprechpartner, eine Rechnung",
+      "Direkte Zusammenarbeit mit dem Fahrer",
       "ADR, Ladekran, Fahrmischer optional"
     ]
   };
@@ -53,8 +53,8 @@ const KraftfahrerMieten = () => {
         answer: "Alle Kraftfahrer verfügen über gültige <strong>Führerscheine (B, C, C+E)</strong>, Berufskraftfahrer-Qualifikation und optional <strong>ADR, Ladekran-Erfahrung, Fahrmischer</strong>-Zusatzqualifikationen."
       },
       {
-        question: "Wie unterscheidet sich das von Zeitarbeit?",
-        answer: "Unsere Kraftfahrer sind <strong>selbstständige Subunternehmer</strong> im Rahmen von Dienst-/Werkverträgen. Rechtssichere Vermittlung selbstständiger Fahrer."
+        question: "Wie funktioniert die Zusammenarbeit?",
+        answer: "Unsere Kraftfahrer arbeiten als <strong>selbstständige Unternehmer</strong> auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung."
       }
     ]
   };

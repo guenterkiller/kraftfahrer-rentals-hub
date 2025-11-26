@@ -69,7 +69,7 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW CE Fahrer buchen",
-    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
+    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. Selbstständige Fahrer, transparente Preise: 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
     bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
   };
 
@@ -77,8 +77,8 @@ const LKWFahrerBuchen = () => {
     title: "LKW-Fahrer buchen – Häufige Fragen",
     items: [
       {
-        question: "Ist das Zeitarbeit?",
-        answer: "<strong>Nein.</strong> Es handelt sich um eine <strong>Dienst-/Werkleistung</strong>. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
+        question: "Wie funktioniert die Zusammenarbeit?",
+        answer: "<strong>Unsere Fahrer arbeiten als selbstständige Unternehmer</strong> auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung."
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
@@ -89,8 +89,8 @@ const LKWFahrerBuchen = () => {
         answer: "Hauptsächlich <strong>C+E (Sattelzug)</strong>, aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Ladekran-Erfahrung oder Fahrmischer-Qualifikation."
       },
       {
-        question: "Wie läuft die Abrechnung?",
-        answer: "Sie erhalten <strong>ausschließlich eine Rechnung von Fahrerexpress</strong>. Die Fahrer stellen ihre Rechnung an uns – Sie haben keine zweite Rechnung. Transparente Tagespreise ohne versteckte Kosten."
+        question: "Wie sehen die Konditionen aus?",
+        answer: "<strong>Transparente Tagespreise:</strong> 349 € pro Tag (8h), 30 € Überstunde, Wochenpreis ab 1.490 €. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Keine versteckten Kosten."
       }
     ]
   };
