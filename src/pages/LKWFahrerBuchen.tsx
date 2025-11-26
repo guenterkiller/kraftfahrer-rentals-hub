@@ -69,7 +69,7 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW CE Fahrer buchen",
-    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. Selbstständige Fahrer, transparente Preise: 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
+    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Transparente Preise: 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
     bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
   };
 
@@ -78,7 +78,7 @@ const LKWFahrerBuchen = () => {
     items: [
       {
         question: "Wie funktioniert die Zusammenarbeit?",
-        answer: "<strong>Unsere Fahrer arbeiten als selbstständige Unternehmer</strong> auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung."
+        answer: "Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. <strong>Hinweis:</strong> Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung."
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
