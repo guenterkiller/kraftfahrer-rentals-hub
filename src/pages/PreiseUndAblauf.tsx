@@ -327,8 +327,9 @@ const PreiseUndAblauf = () => {
                     <CardTitle>Einsatz startet & Abrechnung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Sie erhalten eine transparente Abrechnung für die erbrachte Leistung.</p>
+                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur mit transparenter Abrechnung der erbrachten Leistung.</p>
                     <p className="text-sm text-primary font-semibold">💼 Professionelle Abwicklung</p>
+                    <p className="text-xs text-muted-foreground mt-2">Hinweis: Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.</p>
                   </CardContent>
                 </Card>
               </div>

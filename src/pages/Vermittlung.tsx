@@ -33,7 +33,7 @@ const Vermittlung = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                Fahrerexpress vermittelt selbstständige Fahrer an Auftraggeber in ganz Deutschland. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die professionelle Vermittlung.
+                Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer, es handelt sich nicht um Arbeitnehmerüberlassung. Für Sie entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.
               </p>
 
               <Card>
@@ -45,14 +45,14 @@ const Vermittlung = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p>
-                    <strong>Unsere Fahrer sind selbstständig</strong> und arbeiten auf eigene Rechnung. Der Abschluss eines Einsatzes erfolgt direkt zwischen Ihnen und dem Fahrer – wir übernehmen die Vermittlung, <strong>keine zusätzliche Provision für Sie</strong>.
+                    Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. Für Sie entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.
                   </p>
                   <p>
                     Sie erhalten transparente Tagessätze (LKW CE-Fahrer 349 €, Baumaschinenführer 459 €) und eine klare Abrechnung.
                   </p>
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                     <p className="font-semibold">
-                      Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.
+                      Hinweis: Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.
                     </p>
                   </div>
                 </CardContent>
@@ -66,15 +66,15 @@ const Vermittlung = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
-                    <p className="font-semibold">
-                      Für Fahrer gelten transparente Vermittlungsbedingungen, die nach Registrierung bereitgestellt werden.
-                    </p>
-                  </div>
-                  
                   <p>
                     Als selbstständiger Fahrer erhalten Sie Zugang zu qualifizierten Aufträgen in Ihrer Region.
                   </p>
+                  
+                  <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
+                    <p className="text-sm">
+                      Details zur Zusammenarbeit für Fahrer (Vergütung, Vermittlungsbedingungen, Abrechnung) werden nach Registrierung im Partnerbereich bzw. per E-Mail bereitgestellt.
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
 

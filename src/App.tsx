@@ -15,7 +15,9 @@ import FahrerRegistrierung from "./pages/FahrerRegistrierung";
 import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
-// import FahrerCommunityChat from "./pages/FahrerCommunityChat"; // Chat deactivated
+import FahrerCommunityChat from "./pages/FahrerCommunityChat";
+import FahrerInfos from "./pages/FahrerInfos";
+// import TruckerChat from './components/TruckerChat';
 import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import DriverJobResponse from "./pages/DriverJobResponse";
@@ -62,6 +64,7 @@ const App = () => (
           <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
           <Route path="/bf3-ablauf-kosten" element={<BF3Ablauf />} />
           <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
+          <Route path="/fahrer-infos" element={<FahrerInfos />} />
           
           
           <Route path="/vermittlung" element={<Vermittlung />} />
