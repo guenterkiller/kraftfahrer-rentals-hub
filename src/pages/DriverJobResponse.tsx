@@ -106,7 +106,7 @@ const DriverJobResponse = () => {
         setResult({
           type: 'success',
           message: action === 'accept' 
-            ? `Auftrag erfolgreich angenommen! (${data.billingModel === 'agency' ? 'Agenturabrechnung' : 'Direktabrechnung'})`
+            ? 'Auftrag erfolgreich angenommen! (Agenturabrechnung)'
             : 'Auftrag erfolgreich abgelehnt!'
         });
       } else {
@@ -150,7 +150,7 @@ const DriverJobResponse = () => {
       if (response.ok && data.success) {
         setResult({
           type: 'success',
-          message: `Auftrag erfolgreich angenommen! (${data.billingModel === 'agency' ? 'Agenturabrechnung' : 'Direktabrechnung'})`
+          message: 'Auftrag erfolgreich angenommen! (Agenturabrechnung)'
         });
       } else {
         setResult({

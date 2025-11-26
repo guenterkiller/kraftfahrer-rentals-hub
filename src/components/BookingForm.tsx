@@ -363,19 +363,8 @@ const BookingForm = () => {
                   />
                 </div>
 
-                {/* Billing Model */}
-                <div>
-                  <Label htmlFor="billing_model">Abrechnungsmodell *</Label>
-                  <Select name="billing_model" required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Bitte wählen" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="direkt">Direkt (Sie zahlen direkt an den Fahrer)</SelectItem>
-                      <SelectItem value="agentur">Über Agentur (Rechnung von Fahrerexpress)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {/* Billing Model - hidden field, always 'agency' */}
+                <input type="hidden" name="billing_model" value="agency" />
 
                 {/* Description */}
                 <div>

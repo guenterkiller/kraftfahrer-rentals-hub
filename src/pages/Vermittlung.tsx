@@ -85,10 +85,10 @@ const Vermittlung = () => {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <p>
-                    Der Fahrer stellt seine Rechnung an die Fahrerexpress-Agentur <strong>abzüglich der Vermittlungsgebühr</strong>.
+                    Der Fahrer stellt seine Rechnung in voller Höhe an Fahrerexpress. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt.
                   </p>
                   <p>
-                    Die Provision wird direkt einbehalten oder alternativ per separater Provisionsrechnung abgerechnet.
+                    <strong>Für den Auftraggeber:</strong> Sie erhalten eine einzige Rechnung direkt von Fahrerexpress. Der Fahrer stellt seine Rechnung an die Agentur – Sie haben keinen Mehraufwand.
                   </p>
                   <p className="text-sm text-muted-foreground">
                     <strong>Rechtsgrundlage:</strong> Vermittlungsvertrag nach § 652 BGB (Maklervertrag) zwischen Fahrerexpress und Fahrer. Der Fahrer erbringt seine Leistung als selbstständiger Subunternehmer gegenüber dem Auftraggeber im Rahmen eines Werk-/Dienstvertrags.

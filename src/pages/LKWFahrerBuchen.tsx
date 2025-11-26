@@ -36,7 +36,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie läuft die Abrechnung?",
-        answer: "Sie erhalten eine Rechnung von Fahrerexpress. Der LKW-Fahrer stellt seine Leistung als Subunternehmer über uns in Rechnung. Transparente Tagespreise ohne versteckte Kosten."
+        answer: "Sie erhalten ausschließlich eine Rechnung von Fahrerexpress. Die Fahrer stellen ihre Rechnung an uns – Sie haben keine zweite Rechnung. Transparente Tagespreise ohne versteckte Kosten."
       }
     ],
     structuredData: {
@@ -90,7 +90,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie läuft die Abrechnung?",
-        answer: "Sie erhalten <strong>eine Rechnung von Fahrerexpress</strong>. Der LKW-Fahrer stellt seine Leistung als Subunternehmer über uns in Rechnung. Transparente Tagespreise ohne versteckte Kosten."
+        answer: "Sie erhalten <strong>ausschließlich eine Rechnung von Fahrerexpress</strong>. Die Fahrer stellen ihre Rechnung an uns – Sie haben keine zweite Rechnung. Transparente Tagespreise ohne versteckte Kosten."
       }
     ]
   };

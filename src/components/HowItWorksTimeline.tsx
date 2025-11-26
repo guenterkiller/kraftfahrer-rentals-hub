@@ -21,7 +21,7 @@ const HowItWorksTimeline = () => {
     {
       icon: Receipt,
       title: "4. Abrechnung",
-      description: "Eine transparente Rechnung von Fahrerexpress. Dienst-/Werkleistung durch selbstständige Subunternehmer, keine Arbeitnehmerüberlassung."
+      description: "Sie erhalten eine einzige übersichtliche Rechnung von Fahrerexpress – ohne zusätzliche Fahrerabrechnungen. Dienst-/Werkleistung durch selbstständige Subunternehmer, keine Arbeitnehmerüberlassung."
     }
   ];
 
