@@ -50,7 +50,7 @@ const Navigation = () => {
             {/* Desktop: Leistungen Dropdown */}
             <div className="hidden lg:block relative group">
               <button 
-                className="px-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md"
+                className="px-3 py-2 text-sm font-semibold text-gray-900 hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md"
                 aria-haspopup="true"
                 aria-expanded="false"
               >
