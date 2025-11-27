@@ -45,35 +45,40 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    // Internal function authentication
+    const body = await req.json();
+    const { jobRequestId, jobId } = body;
+    const actualJobId = jobRequestId || jobId; // Support both parameter names
+
+    // Authentication: Allow either internal secret OR admin JWT
     const internalSecret = req.headers.get("x-internal-fn");
     const expectedSecret = Deno.env.get("INTERNAL_FN_SECRET");
+    const authHeader = req.headers.get("Authorization");
     
-    if (!internalSecret || internalSecret !== expectedSecret) {
-      console.error("Unauthorized internal function call");
+    const isInternalAuth = internalSecret && internalSecret === expectedSecret;
+    const hasJWT = authHeader && authHeader.startsWith("Bearer ");
+    
+    if (!isInternalAuth && !hasJWT) {
+      console.error("Unauthorized: No valid authentication provided");
       return new Response(
         JSON.stringify({ error: "Unauthorized" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const body = await req.json();
-    const { jobRequestId } = body;
-
-    if (!jobRequestId) {
+    if (!actualJobId) {
       return new Response(
-        JSON.stringify({ error: "jobRequestId is required" }),
+        JSON.stringify({ error: "jobRequestId or jobId is required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    console.log("Broadcasting job to drivers:", jobRequestId);
+    console.log("Broadcasting job to drivers:", actualJobId);
 
     // Fetch full job details
     const { data: job, error: jobError } = await supabase
       .from("job_requests")
       .select("*")
-      .eq("id", jobRequestId)
+      .eq("id", actualJobId)
       .single();
 
     if (jobError || !job) {
@@ -122,7 +127,7 @@ serve(async (req) => {
         const { error: inviteError } = await supabase
           .from('assignment_invites')
           .insert({
-            job_id: jobRequestId,
+            job_id: actualJobId,
             driver_id: driver.id,
             token: token,
             token_expires_at: tokenExpiresAt.toISOString(),
@@ -144,7 +149,7 @@ serve(async (req) => {
           React.createElement(JobNotificationEmail, {
             driverName: `${driver.vorname} ${driver.nachname}`,
             driverId: driver.id,
-            jobId: jobRequestId,
+            jobId: actualJobId,
             customerName: job.customer_name || "Unbekannt",
             company: job.company,
             einsatzort: job.einsatzort || "Keine Angabe",
@@ -176,7 +181,7 @@ serve(async (req) => {
             template: "job-broadcast",
             status: "failed",
             error_message: emailError.message || String(emailError),
-            job_id: jobRequestId,
+            job_id: actualJobId,
           });
           
           if (logError) {
@@ -195,7 +200,7 @@ serve(async (req) => {
             template: "job-broadcast",
             status: "sent",
             sent_at: new Date().toISOString(),
-            job_id: jobRequestId,
+            job_id: actualJobId,
             message_id: emailResult?.id || null,
           });
           
@@ -207,7 +212,7 @@ serve(async (req) => {
 
           // Log to job_mail_log
           await supabase.rpc("log_job_mail", {
-            p_job_request_id: jobRequestId,
+            p_job_request_id: actualJobId,
             p_fahrer_id: driver.id,
             p_email: driver.email,
             p_status: "sent",
@@ -234,7 +239,7 @@ serve(async (req) => {
     // Log admin action
     await supabase.from("admin_actions").insert({
       action: "job_broadcast_completed",
-      job_id: jobRequestId,
+      job_id: actualJobId,
       admin_email: Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com",
       note: `Broadcast sent to ${successCount} drivers, ${errorCount} failed`,
     });
