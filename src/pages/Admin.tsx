@@ -919,17 +919,8 @@ const Admin = () => {
     setSendingJobToAll(jobId);
     
     try {
-      // Get admin email from localStorage
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Admin session not found');
-      }
-      
-      const session = JSON.parse(adminSession);
-      const adminEmail = session.email;
-      
       const { data, error } = await supabase.functions.invoke('broadcast-job-to-drivers', {
-        body: { email: adminEmail, jobId }
+        body: { jobRequestId: jobId }
       });
 
       if (error) {
