@@ -26,6 +26,7 @@ interface FahrerAnfrageEmailRequest {
   customer_house_number?: string;
   customer_postal_code?: string;
   customer_city?: string;
+  einsatzort?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -50,7 +51,8 @@ const handler = async (req: Request): Promise<Response> => {
       customer_street,
       customer_house_number,
       customer_postal_code,
-      customer_city
+      customer_city,
+      einsatzort
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();

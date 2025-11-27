@@ -292,12 +292,12 @@ const handler = async (req: Request): Promise<Response> => {
           einsatzbeginn: einsatzbeginn || '',
           einsatzdauer: einsatzdauer || '',
           fahrzeugtyp: fahrzeugtyp,
-          spezialanforderungen: anforderungen,
-          datenschutz: datenschutz,
-          newsletter: newsletter,
-          price_acknowledged: false,
-          price_ack_time: new Date().toISOString(),
-          price_plan: 'Standard LKW-Fahrer'
+          anforderungen: anforderungen,
+          customer_street: customer_street,
+          customer_house_number: customer_house_number,
+          customer_postal_code: customer_postal_code,
+          customer_city: customer_city,
+          einsatzort: einsatzort
         }
       });
 

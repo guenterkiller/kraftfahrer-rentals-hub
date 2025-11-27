@@ -45,19 +45,20 @@ serve(async (req) => {
       { auth: { persistSession: false } }
     );
 
-    const body = await req.json();
-    const { email, jobId } = body;
-    const jobRequestId = jobId;
-
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (email !== ADMIN_EMAIL) {
-      console.error("Unauthorized access attempt by:", email);
+    // Internal function authentication
+    const internalSecret = req.headers.get("x-internal-fn");
+    const expectedSecret = Deno.env.get("INTERNAL_FN_SECRET");
+    
+    if (!internalSecret || internalSecret !== expectedSecret) {
+      console.error("Unauthorized internal function call");
       return new Response(
         JSON.stringify({ error: "Unauthorized" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    const body = await req.json();
+    const { jobRequestId } = body;
 
     if (!jobRequestId) {
       return new Response(

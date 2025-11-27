@@ -34,7 +34,7 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.broadcast-job-to-drivers]
-verify_jwt = true
+verify_jwt = false
 
 [functions.toggle-driver-block]
 verify_jwt = true
