@@ -2,8 +2,8 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const KraftfahrerMieten = () => {
   const seoData = {
-    title: "Kraftfahrer mieten deutschlandweit – Berufskraftfahrer bundesweit kurzfristig | Fahrerexpress",
-    description: "Kraftfahrer deutschlandweit mieten – selbstständige Berufskraftfahrer für Nah-/Fernverkehr, Baustellen in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung.",
+    title: "Kraftfahrer mieten deutschlandweit – bundesweit kurzfristig",
+    description: "Kraftfahrer deutschlandweit mieten – Berufskraftfahrer für Nah-/Fernverkehr, Baustellen. Kurzfristig, ohne AÜG.",
     keywords: "Kraftfahrer mieten deutschlandweit, Berufskraftfahrer bundesweit, Fahrer mieten kurzfristig, Kraftfahrer Vermittlung bundesweit, selbstständige Kraftfahrer deutschlandweit, Ersatzfahrer bundesweit, Notfallfahrer Deutschland, Urlaubsvertretung Fahrer deutschlandweit",
     structuredData: {
       "@context": "https://schema.org",

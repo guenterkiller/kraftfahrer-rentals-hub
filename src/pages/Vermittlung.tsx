@@ -7,8 +7,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlung = () => {
   useSEO({
-    title: "Fahrervermittlung deutschlandweit – Selbstständige LKW Fahrer bundesweit | Fahrerexpress",
-    description: "Fahrervermittlung deutschlandweit – selbstständige Berufskraftfahrer in ganz Deutschland. Rechtssichere Vermittlung ohne Arbeitnehmerüberlassung, transparente Abrechnung.",
+    title: "Fahrervermittlung deutschlandweit – LKW Fahrer bundesweit",
+    description: "Fahrervermittlung deutschlandweit – selbstständige Berufskraftfahrer bundesweit. Rechtssicher, ohne Arbeitnehmerüberlassung.",
     keywords: "Fahrervermittlung deutschlandweit, selbstständige Fahrer bundesweit, LKW Fahrer Vermittlung deutschlandweit, Fahrerservice bundesweit, Subunternehmer Fahrer deutschlandweit, Fahrer buchen ohne Arbeitnehmerüberlassung"
   });
   return (
@@ -24,9 +24,10 @@ const Vermittlung = () => {
             </Link>
           </Button>
 
+          <h1 className="text-3xl font-bold text-center mb-6">Fahrervermittlung deutschlandweit</h1>
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl text-center flex items-center justify-center gap-2">
+              <CardTitle className="text-2xl text-center flex items-center justify-center gap-2">
                 <Users className="h-8 w-8" />
                 Vermittlungsmodell
               </CardTitle>

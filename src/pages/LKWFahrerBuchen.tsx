@@ -12,8 +12,8 @@ const LKWFahrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "LKW CE Fahrer buchen deutschlandweit – Ersatzfahrer ab 349 €/Tag | Fahrerexpress",
-    description: "LKW Fahrer deutschlandweit buchen – CE-Fahrer für Speditionen, Baustellen, Fernverkehr in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung. 349 € pro Tag.",
+    title: "LKW CE Fahrer buchen deutschlandweit – ab 349 €/Tag",
+    description: "LKW Fahrer deutschlandweit buchen – CE-Fahrer für Speditionen, Baustellen, Fernverkehr. Kurzfristig, ohne AÜG. 349 €/Tag.",
     keywords: "LKW Fahrer buchen deutschlandweit, CE Fahrer deutschlandweit verfügbar, Ersatzfahrer LKW bundesweit, LKW Fahrer für Speditionen deutschlandweit, CE Fahrer für Sattelzug buchen, LKW Fahrer kurzfristig verfügbar, Fahrer für Baustellen deutschlandweit, Notfallfahrer bundesweit, Urlaubsvertretung LKW Fahrer, ADR-Fahrer deutschlandweit, Fahrmischer Fahrer bundesweit, LKW Fahrer mieten",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',

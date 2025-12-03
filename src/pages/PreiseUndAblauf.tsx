@@ -8,8 +8,8 @@ import baggerIcon from "@/assets/bagger-icon.png";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – LKW Fahrer buchen deutschlandweit | Baumaschinenführer bundesweit",
-    description: "Transparente Preise: LKW Fahrer deutschlandweit ab 349€/Tag, Baumaschinenführer bundesweit ab 459€/Tag. Ersatzfahrer kurzfristig verfügbar in ganz Deutschland, ohne Arbeitnehmerüberlassung.",
+    title: "Preise & Ablauf – LKW Fahrer ab 349 € deutschlandweit",
+    description: "Transparente Preise: LKW Fahrer ab 349 €/Tag, Baumaschinenführer ab 459 €/Tag. Deutschlandweit, ohne AÜG.",
     keywords: "LKW Fahrer buchen deutschlandweit, Ersatzfahrer LKW bundesweit, Baumaschinenführer deutschlandweit buchen, Fahrer Vermittlung bundesweit, LKW Fahrer kurzfristig verfügbar, Fahrer buchen ohne Arbeitnehmerüberlassung, LKW Fahrer Tagespreis, Fahrerservice deutschlandweit, selbstständige LKW Fahrer bundesweit"
   });
 

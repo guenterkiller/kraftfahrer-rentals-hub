@@ -7,8 +7,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Wissenswertes = () => {
   useSEO({
-    title: "Wissenswertes – Ersatzfahrer LKW deutschlandweit rechtssicher beauftragen | Fahrerexpress",
-    description: "Selbstständige LKW Fahrer deutschlandweit beauftragen: Rechtliche Grundlagen, keine Arbeitnehmerüberlassung, Scheinselbstständigkeit vermeiden. Fahrer buchen in ganz Deutschland.",
+    title: "Wissenswertes – LKW Fahrer deutschlandweit rechtssicher",
+    description: "Selbstständige Fahrer deutschlandweit beauftragen: Rechtlich sicher, keine Arbeitnehmerüberlassung.",
     keywords: "selbstständige Fahrer deutschlandweit beauftragen, Ersatzfahrer LKW bundesweit rechtlich, LKW Fahrer buchen ohne Arbeitnehmerüberlassung, Fahrer Vermittlung deutschlandweit, Scheinselbstständigkeit vermeiden, Kraftfahrer deutschlandweit rechtssicher"
   });
   return (
