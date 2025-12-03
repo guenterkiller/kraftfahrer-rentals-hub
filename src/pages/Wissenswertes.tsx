@@ -397,16 +397,68 @@ const Wissenswertes = () => {
                 </Card>
 
               <Card>
+400:                 <CardHeader>
+401:                   <CardTitle className="text-lg">
+402:                     Wie ist die Qualifikation der Fahrer sichergestellt?
+403:                   </CardTitle>
+404:                 </CardHeader>
+405:                 <CardContent>
+406:                   <p className="text-muted-foreground">
+407:                     Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
+408:                     entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
+409:                     oder Kranführerschein, je nach Anforderung.
+410:                   </p>
+411:                 </CardContent>
+412:               </Card>
+
+              <Card>
                 <CardHeader>
                   <CardTitle className="text-lg">
-                    Wie ist die Qualifikation der Fahrer sichergestellt?
+                    Bieten Sie Ihre Fahrer wirklich deutschlandweit an?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
-                    entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
-                    oder Kranführerschein, je nach Anforderung.
+                    Ja. Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer bundesweit in ganz Deutschland. Sie können LKW-Fahrer buchen deutschlandweit – unsere Fahrer-Vermittlung ist bundesweit aktiv.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Stellen Sie auch LKW oder Baumaschinen zur Verfügung?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Nein. Wir vermitteln ausschließlich Fahrer und Bediener – keine Fahrzeuge, keine Baumaschinen, keine Anlagen. Geräte und Fahrzeuge stellt immer der Auftraggeber. Unsere Baumaschinenführer sind nur Bediener, keine Maschine wird mitgeliefert. Mischmeister/Anlagenbediener bedienen nur bauseits gestellte Anlagen.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Brauchen wir eine Arbeitnehmerüberlassung, wenn wir über die Fahrerexpress-Agentur buchen?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Nein. Unsere Fahrer sind selbstständige LKW-Fahrer, Baumaschinenführer oder Mischmeister und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer oder Notfallfahrer deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich.
                   </p>
                 </CardContent>
               </Card>

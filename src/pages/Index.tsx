@@ -125,6 +125,39 @@ const Index = () => {
             </div>
           </div>
         </section>
+
+        {/* FAQ-Block für SEO */}
+        <section className="py-16 bg-muted">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <h2 className="text-3xl font-bold mb-8 text-center">Häufige Fragen zur Fahrer-Vermittlung</h2>
+            <div className="space-y-6">
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Bieten Sie LKW-Fahrer wirklich deutschlandweit an?</h3>
+                <p className="text-muted-foreground">
+                  Ja, die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer bundesweit in ganz Deutschland. Sie können LKW-Fahrer buchen deutschlandweit – unsere Fahrer-Vermittlung ist bundesweit aktiv.
+                </p>
+              </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Stellen Sie auch LKW oder Baumaschinen zur Verfügung?</h3>
+                <p className="text-muted-foreground">
+                  Nein. Wir vermitteln ausschließlich Fahrer und Bediener – keine Fahrzeuge, keine Baumaschinen, keine Anlagen. Geräte und Fahrzeuge stellt immer der Auftraggeber. Unsere Baumaschinenführer sind nur Bediener, keine Maschine wird mitgeliefert.
+                </p>
+              </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Brauchen wir eine Arbeitnehmerüberlassung?</h3>
+                <p className="text-muted-foreground">
+                  Nein. Unsere Fahrer sind selbstständige LKW-Fahrer, Baumaschinenführer oder Mischmeister/Anlagenbediener. Die Vermittlung erfolgt rechtssicher per Dienstleistungs- oder Werkvertrag – ohne klassische Arbeitnehmerüberlassung.
+                </p>
+              </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?</h3>
+                <p className="text-muted-foreground">
+                  Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer oder Notfallfahrer deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       
       <Footer />
