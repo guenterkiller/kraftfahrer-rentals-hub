@@ -12,14 +12,14 @@ const BaumaschinenfuehrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "Baumaschinenführer buchen – Vermittelte Fahrer ab 459 €",
-    description: "Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. 459 € pro Tag.",
-    keywords: "Baumaschinenführer buchen, Baggerfahrer, Radladerfahrer, Fahrmischer",
+    title: "Baumaschinenführer buchen deutschlandweit – Baggerfahrer bundesweit ab 459 €",
+    description: "Baumaschinenführer deutschlandweit buchen – Bagger, Radlader, Fahrmischer in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung. 459 € pro Tag.",
+    keywords: "Baumaschinenführer deutschlandweit buchen, Baggerfahrer bundesweit, Radladerfahrer deutschlandweit, Baumaschinenführer kurzfristig verfügbar, Fahrer für Baustellen deutschlandweit, Baumaschinenführer mieten bundesweit, selbstständige Baumaschinenführer",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Baumaschinenführer buchen",
-      "description": "Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung, Reparaturen, Baustellenlogistik",
+      "name": "Baumaschinenführer buchen deutschlandweit",
+      "description": "Baumaschinenführer deutschlandweit buchen – Bagger, Radlader, Fahrmischer, Mischanlagen in ganz Deutschland. Kurzfristig verfügbar, selbstständige Subunternehmer.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -32,15 +32,18 @@ const BaumaschinenfuehrerBuchen = () => {
           "addressLocality": "Frankfurt am Main",
           "addressCountry": "DE"
         },
-        "areaServed": "DE"
+        "areaServed": {
+          "@type": "Country",
+          "name": "Deutschland"
+        }
       }
     }
   };
 
   const heroData = {
-    h1: "Baumaschinenführer buchen – Selbstständige Experten",
-    intro: "Qualifizierte Baumaschinenführer für Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. Selbstständige Experten, transparente Preise: 459 € pro Tag (8h), 60 € Überstunde.",
-    bullets: ["Alle Baumaschinen & Anlagen", "Störungsbehebung & Reparaturen", "459 € pro Tag"]
+    h1: "Baumaschinenführer deutschlandweit buchen",
+    intro: "Qualifizierte Baumaschinenführer in ganz Deutschland: Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. Selbstständige Experten bundesweit verfügbar, transparente Preise: 459 € pro Tag (8h), 60 € Überstunde.",
+    bullets: ["Alle Baumaschinen & Anlagen", "Deutschlandweit kurzfristig verfügbar", "459 € pro Tag"]
   };
 
   const faqData = {

@@ -104,7 +104,7 @@ const ProductCards = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold">Baumaschinenführer</h3>
-                  <p className="text-sm text-muted-foreground">Für alle Projekte</p>
+                  <p className="text-sm text-muted-foreground">Deutschlandweit verfügbar</p>
                 </div>
               </div>
             </CardHeader>
@@ -167,7 +167,7 @@ const ProductCards = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-semibold">Mischmeister Flüssigboden</h3>
-                  <p className="text-sm text-muted-foreground">Multifunktional</p>
+                  <p className="text-sm text-muted-foreground">Bundesweit buchbar</p>
                 </div>
               </div>
             </CardHeader>

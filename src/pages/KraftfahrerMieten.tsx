@@ -2,14 +2,14 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const KraftfahrerMieten = () => {
   const seoData = {
-    title: "Kraftfahrer mieten – Berufskraftfahrer kurzfristig & bundesweit | Fahrerexpress",
-    description: "Kraftfahrer mieten für Nah-/Fernverkehr, Baustelle, Überführungen. Selbstständige Fahrer, transparente Tagespreise, rechtssichere Vermittlung.",
-    keywords: "Kraftfahrer mieten, Berufskraftfahrer mieten, Fahrer mieten kurzfristig, Kraftfahrer Vermittlung, selbstständige Kraftfahrer, Fahrer gesucht",
+    title: "Kraftfahrer mieten deutschlandweit – Berufskraftfahrer bundesweit kurzfristig | Fahrerexpress",
+    description: "Kraftfahrer deutschlandweit mieten – selbstständige Berufskraftfahrer für Nah-/Fernverkehr, Baustellen in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung.",
+    keywords: "Kraftfahrer mieten deutschlandweit, Berufskraftfahrer bundesweit, Fahrer mieten kurzfristig, Kraftfahrer Vermittlung bundesweit, selbstständige Kraftfahrer deutschlandweit, Ersatzfahrer bundesweit, Notfallfahrer Deutschland, Urlaubsvertretung Fahrer deutschlandweit",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Kraftfahrer mieten",
-      "description": "Kraftfahrer mieten für Nah-/Fernverkehr, Baustelle und Überführungen - selbstständige Berufskraftfahrer",
+      "name": "Kraftfahrer mieten deutschlandweit",
+      "description": "Kraftfahrer deutschlandweit mieten – selbstständige Berufskraftfahrer in ganz Deutschland für Nah-/Fernverkehr, Baustellen und Überführungen",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -22,7 +22,10 @@ const KraftfahrerMieten = () => {
           "addressLocality": "Frankfurt am Main",
           "addressCountry": "DE"
         },
-        "areaServed": "DE"
+        "areaServed": {
+          "@type": "Country",
+          "name": "Deutschland"
+        }
       }
     }
   };

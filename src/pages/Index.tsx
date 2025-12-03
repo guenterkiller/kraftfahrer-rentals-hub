@@ -18,9 +18,9 @@ const Index = () => {
   const navigate = useNavigate();
   
   useSEO({
-    title: "LKW Fahrer mieten & Kraftfahrer (CE) bundesweit buchen – EU-Fahrer willkommen",
-    description: "Fahrerexpress vermittelt bundesweit selbstständige LKW-Fahrer (CE) aus Deutschland und EU für Transporte & Baustellen. Kierowcy z Polski, Rumänii, Bułgarii mile widziani! – zusätzlich Mischmeister für Flüssigboden als Subunternehmer buchbar.",
-    keywords: "LKW Fahrer mieten, Kraftfahrer buchen, Fahrer CE bundesweit, selbstständige LKW Fahrer, EU Fahrer Deutschland, LKW Fahrer aus Polen, Kierowcy z Polski do Niemiec, Șoferi profesioniști români Germania, Bulgarian truck drivers Germany, LKW Fahrer Rumänien, Kraftfahrer Bulgarien Ungarn, Berufskraftfahrer EU-Ausland, Fahrer vermitteln Europa, Internationale Fahrer Deutschland, Fahrerservice Europa, LKW-Fahrer Vermittlung DACH, Mischmeister Flüssigboden, Flüssigboden Service, Subunternehmer Flüssigboden, Mischanlage Bediener, Radlader Bagger Mischmeister, CE-Fahrmischer",
+    title: "LKW Fahrer buchen deutschlandweit | Kraftfahrer (CE) bundesweit mieten – Fahrerexpress",
+    description: "LKW Fahrer deutschlandweit buchen – selbstständige CE-Fahrer & Baumaschinenführer in ganz Deutschland verfügbar. Kurzfristig, ohne Arbeitnehmerüberlassung. Ersatzfahrer LKW bundesweit, Notfallfahrer, Urlaubsvertretung.",
+    keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit verfügbar, selbstständige LKW Fahrer bundesweit, LKW Fahrer kurzfristig verfügbar, Fahrer buchen ohne Arbeitnehmerüberlassung, Notfallfahrer bundesweit, Ersatzfahrer LKW deutschlandweit, Urlaubsvertretung Fahrer deutschlandweit, LKW Fahrer für Speditionen deutschlandweit, CE Fahrer für Sattelzug buchen, Baumaschinenführer deutschlandweit buchen, Fahrer Vermittlung bundesweit, Fahrer für einen Tag buchen, LKW Fahrer mieten, Fahrerservice Deutschland",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/',
@@ -54,16 +54,20 @@ const Index = () => {
     structuredData: {
       "@context": "https://schema.org",
       "@type": "WebPage",
-        "name": "LKW-Fahrer buchen & Kraftfahrer mieten - Fahrerexpress",
-        "description": "Kurzfristig LKW-Fahrer buchen und Kraftfahrer mieten - deutschlandweit verfügbare Berufskraftfahrer ohne Arbeitnehmerüberlassung",
+        "name": "LKW-Fahrer buchen deutschlandweit & Kraftfahrer mieten bundesweit - Fahrerexpress",
+        "description": "LKW-Fahrer deutschlandweit buchen und Kraftfahrer bundesweit mieten - selbstständige Berufskraftfahrer in ganz Deutschland ohne Arbeitnehmerüberlassung",
       "url": "https://kraftfahrer-mieten.com/",
       "mainEntity": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur - Günter Killer",
-        "description": "Baumaschinenführer (459 €) oder LKW CE Fahrer (349 €) bundesweit buchen - selbstständige Subunternehmer ohne Arbeitnehmerüberlassung",
+        "description": "LKW CE Fahrer (349 €) und Baumaschinenführer (459 €) deutschlandweit buchen – selbstständige Subunternehmer bundesweit verfügbar, keine Arbeitnehmerüberlassung",
         "url": "https://kraftfahrer-mieten.com",
         "telephone": "+49-1577-1442285",
         "priceRange": "Faire Preise",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Deutschland"
+        },
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Walther-von-Cronberg-Platz 12",

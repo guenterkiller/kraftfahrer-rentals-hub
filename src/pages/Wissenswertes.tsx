@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Wissenswertes = () => {
   useSEO({
-    title: "Wissenswertes – Rechtliche Grundlagen für Ersatzfahrer & LKW-Fahrer | Fahrerexpress",
-    description: "Alles über die Beauftragung selbstständiger Fahrer und Ersatzfahrer: Rechtliche Hinweise, Scheinselbstständigkeit vermeiden, Versicherungsschutz & Vertragsgestaltung.",
-    keywords: "selbstständige Fahrer beauftragen, ersatzfahrer rechtlich, scheinselbstständigkeit vermeiden, arbeitnehmerüberlassung, kraftfahrer rechtlich, vertragsgestaltung fahrer"
+    title: "Wissenswertes – Ersatzfahrer LKW deutschlandweit rechtssicher beauftragen | Fahrerexpress",
+    description: "Selbstständige LKW Fahrer deutschlandweit beauftragen: Rechtliche Grundlagen, keine Arbeitnehmerüberlassung, Scheinselbstständigkeit vermeiden. Fahrer buchen in ganz Deutschland.",
+    keywords: "selbstständige Fahrer deutschlandweit beauftragen, Ersatzfahrer LKW bundesweit rechtlich, LKW Fahrer buchen ohne Arbeitnehmerüberlassung, Fahrer Vermittlung deutschlandweit, Scheinselbstständigkeit vermeiden, Kraftfahrer deutschlandweit rechtssicher"
   });
   return (
     <div className="min-h-screen bg-background">
