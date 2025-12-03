@@ -64,6 +64,15 @@ export const DriverRegistrationConfirmation = ({
       </Section>
 
       <Section {...getBoxProps(boxStyles.infoBox)}>
+        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>👉 Eigenverantwortung als Selbstständiger</Heading>
+        <Text {...getTextProps(textStyles.paragraph)}>
+          Als selbstständiger Fahrer sind Sie selbst verantwortlich für Ihre gewerbliche Anmeldung, 
+          Steuern, Sozialabgaben, Versicherungen (z. B. Kranken-, Renten-, Unfall- oder 
+          Betriebshaftpflichtversicherung) sowie Ihre persönliche Absicherung.
+        </Text>
+      </Section>
+
+      <Section {...getBoxProps(boxStyles.infoBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📝 Pflichten als Subunternehmer</Heading>
         <Text {...getTextProps(textStyles.paragraph)}>
           Mit Annahme eines Einsatzes übernehmen Sie folgende verbindliche Pflichten:
@@ -105,7 +114,7 @@ export const DriverRegistrationConfirmation = ({
           <li>alle weiteren dadurch entstehenden Schäden</li>
         </ul>
         <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', marginTop: '10px' })}>
-          Die Fahrerexpress-Agentur kann diese Schäden vollständig regressieren.
+          Die Fahrerexpress-Agentur kann diese Schäden dem Fahrer intern vollständig weiterbelasten.
         </Text>
       </Section>
 
