@@ -5,7 +5,7 @@ const WhyFahrerexpress = () => {
     {
       icon: Shield,
       title: "Selbstständige Profis",
-      description: "Rechtssichere Zusammenarbeit mit selbstständigen Fahrern"
+      description: "Rechtssichere Zusammenarbeit mit selbstständigen Fahrern deutschlandweit"
     },
     {
       icon: Euro,
@@ -15,12 +15,12 @@ const WhyFahrerexpress = () => {
     {
       icon: Wrench,
       title: "Spezialisierung auf LKW & Baumaschinen",
-      description: "Fokus auf Baustellenlogistik und Transportwesen"
+      description: "Fokus auf Baustellenlogistik und Transportwesen in ganz Deutschland"
     },
     {
       icon: Phone,
       title: "Persönlicher Ansprechpartner",
-      description: "Kurze Wege statt anonymes Callcenter"
+      description: "Kurze Wege statt anonymes Callcenter – bundesweite Betreuung"
     },
     {
       icon: Briefcase,
@@ -29,8 +29,8 @@ const WhyFahrerexpress = () => {
     },
     {
       icon: TrendingUp,
-      title: "Langzeit- und Projektkonditionen",
-      description: "Attraktive Staffelpreise für mehrwöchige Einsätze"
+      title: "Deutschlandweite Vermittlung",
+      description: "Fahrer kurzfristig verfügbar – bundesweit einsetzbar"
     }
   ];
 

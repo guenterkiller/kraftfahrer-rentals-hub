@@ -21,18 +21,18 @@ const FlüssigbodenService = () => {
   }, []);
 
   const seoData = {
-    title: "Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
-    description: "Mischmeister für Flüssigboden als selbstständiger Subunternehmer: Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu 2 Mitarbeiter einsparen. Bundesweit buchbar – Unterkunft bauseits, klare Tagessätze.",
-    keywords: "Flüssigboden, Mischmeister, Subunternehmer, Verfüllmaterialien, Mischanlagen, fließfähige Baustoffe, Radlader, Bagger, CE-Fahrmischer, Flüssigboden Service, Mischmeister buchen",
-    ogTitle: "Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
-    ogDescription: "Mischmeister für Flüssigboden als selbstständiger Subunternehmer: Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu 2 Mitarbeiter einsparen. Bundesweit buchbar – Unterkunft bauseits, klare Tagessätze.",
+    title: "Mischmeister Flüssigboden deutschlandweit – Subunternehmer CE, Radlader & Bagger | Fahrerexpress",
+    description: "Mischmeister für Flüssigboden deutschlandweit buchen – selbstständiger Subunternehmer mit CE, Radlader, Bagger. Bis zu 2 Mitarbeiter einsparen. In ganz Deutschland kurzfristig verfügbar.",
+    keywords: "Flüssigboden deutschlandweit, Mischmeister bundesweit buchen, Subunternehmer Flüssigboden deutschlandweit, Verfüllmaterialien Deutschland, Mischanlagen Fahrer bundesweit, CE-Fahrmischer deutschlandweit, Mischmeister kurzfristig verfügbar, Radlader Bagger Flüssigboden",
+    ogTitle: "Mischmeister für Flüssigboden deutschlandweit – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
+    ogDescription: "Mischmeister für Flüssigboden deutschlandweit buchen – selbstständiger Subunternehmer mit CE, Radlader, Bagger. In ganz Deutschland kurzfristig verfügbar. Klare Tagessätze.",
     ogUrl: "https://www.kraftfahrer-mieten.com/fluessigboden-service",
     ogType: "website",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "Flüssigboden-Service – Mischmeister",
-      "description": "Mischmeister für fließfähige Verfüllmaterialien mit bauseits gestellter Misch- und Pumptechnik",
+      "name": "Mischmeister Flüssigboden deutschlandweit",
+      "description": "Mischmeister für fließfähige Verfüllmaterialien deutschlandweit – mit bauseits gestellter Misch- und Pumptechnik. In ganz Deutschland kurzfristig verfügbar.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -45,7 +45,10 @@ const FlüssigbodenService = () => {
           "addressLocality": "Frankfurt am Main",
           "addressCountry": "DE"
         },
-        "areaServed": "DE"
+        "areaServed": {
+          "@type": "Country",
+          "name": "Deutschland"
+        }
       }
     }
   };

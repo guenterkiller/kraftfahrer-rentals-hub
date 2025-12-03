@@ -12,9 +12,9 @@ const LKWFahrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "LKW CE Fahrer buchen – Vermittelte Fahrer ab 349 €",
-    description: "Qualifizierte CE-Fahrer für alle Logistik-Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. 349 € pro Tag.",
-    keywords: "CE-LKW-Fahrer, LKW CE Fahrer, Fahrmischer, ADR-Fahrer, LKW Fahrer Deutschland, LKW Fahrer Österreich, LKW Fahrer Schweiz, Berufskraftfahrer DACH, CE Fahrer EU, truck driver hire Germany",
+    title: "LKW CE Fahrer buchen deutschlandweit – Ersatzfahrer ab 349 €/Tag | Fahrerexpress",
+    description: "LKW Fahrer deutschlandweit buchen – CE-Fahrer für Speditionen, Baustellen, Fernverkehr in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung. 349 € pro Tag.",
+    keywords: "LKW Fahrer buchen deutschlandweit, CE Fahrer deutschlandweit verfügbar, Ersatzfahrer LKW bundesweit, LKW Fahrer für Speditionen deutschlandweit, CE Fahrer für Sattelzug buchen, LKW Fahrer kurzfristig verfügbar, Fahrer für Baustellen deutschlandweit, Notfallfahrer bundesweit, Urlaubsvertretung LKW Fahrer, ADR-Fahrer deutschlandweit, Fahrmischer Fahrer bundesweit, LKW Fahrer mieten",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
       'de-AT': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
@@ -42,8 +42,8 @@ const LKWFahrerBuchen = () => {
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "name": "LKW-Fahrer buchen",
-      "description": "LKW-Fahrer (C/CE) kurzfristig buchen - bundesweit verfügbare Berufskraftfahrer als selbstständige Subunternehmer",
+      "name": "LKW-Fahrer buchen deutschlandweit",
+      "description": "LKW-Fahrer (C/CE) deutschlandweit buchen – kurzfristig verfügbare Berufskraftfahrer in ganz Deutschland als selbstständige Subunternehmer",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -56,7 +56,10 @@ const LKWFahrerBuchen = () => {
           "addressLocality": "Frankfurt am Main",
           "addressCountry": "DE"
         },
-        "areaServed": ["DE", "AT", "CH"]
+        "areaServed": {
+          "@type": "Country",
+          "name": "Deutschland"
+        }
       },
       "offers": {
         "@type": "Offer",
@@ -68,9 +71,9 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW CE Fahrer buchen",
-    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten: Fahrmischer, Wechselbrücke, Container, ADR. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Transparente Preise: 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
-    bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit verfügbar"]
+    h1: "LKW CE Fahrer deutschlandweit buchen",
+    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten in ganz Deutschland: Fahrmischer, Wechselbrücke, Container, ADR. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Transparente Preise: 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
+    bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit kurzfristig verfügbar"]
   };
 
   const faqData = {

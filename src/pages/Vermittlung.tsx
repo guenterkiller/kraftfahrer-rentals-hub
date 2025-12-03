@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlung = () => {
   useSEO({
-    title: "Vermittlung selbstständiger Fahrer – Rechtssicher & transparent | Fahrerexpress",
-    description: "Selbstständige Berufskraftfahrer vermitteln – direkte Zusammenarbeit zwischen Auftraggeber und Fahrer, keine zusätzliche Provision für Sie.",
-    keywords: "Fahrervermittlung, selbstständige Fahrer, Fahrerservice, Subunternehmer Fahrer"
+    title: "Fahrervermittlung deutschlandweit – Selbstständige LKW Fahrer bundesweit | Fahrerexpress",
+    description: "Fahrervermittlung deutschlandweit – selbstständige Berufskraftfahrer in ganz Deutschland. Rechtssichere Vermittlung ohne Arbeitnehmerüberlassung, transparente Abrechnung.",
+    keywords: "Fahrervermittlung deutschlandweit, selbstständige Fahrer bundesweit, LKW Fahrer Vermittlung deutschlandweit, Fahrerservice bundesweit, Subunternehmer Fahrer deutschlandweit, Fahrer buchen ohne Arbeitnehmerüberlassung"
   });
   return (
     <div className="min-h-screen bg-muted">
