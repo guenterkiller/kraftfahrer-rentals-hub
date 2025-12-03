@@ -58,6 +58,22 @@ const KraftfahrerMieten = () => {
       {
         question: "Wie funktioniert die Zusammenarbeit?",
         answer: "Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. <strong>Hinweis:</strong> Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung."
+      },
+      {
+        question: "Bieten Sie Kraftfahrer wirklich deutschlandweit an?",
+        answer: "Ja. Wir vermitteln <strong>selbstständige LKW-Fahrer und Kraftfahrer bundesweit</strong> in ganz Deutschland. Kraftfahrer mieten ist deutschlandweit möglich – unsere Fahrer-Vermittlung ist bundesweit aktiv."
+      },
+      {
+        question: "Stellen Sie auch LKW oder Baumaschinen zur Verfügung?",
+        answer: "Nein. Wir vermitteln ausschließlich <strong>Fahrer und Bediener</strong> – keine Fahrzeuge, keine Baumaschinen, keine Anlagen. Geräte und Fahrzeuge stellt immer der Auftraggeber. Baumaschinenführer sind nur Bediener, Mischmeister/Anlagenbediener bedienen nur bauseits gestellte Anlagen."
+      },
+      {
+        question: "Brauchen wir eine Arbeitnehmerüberlassung?",
+        answer: "Nein. Unsere Fahrer sind <strong>selbstständige Kraftfahrer, Baumaschinenführer oder Mischmeister</strong>. Die Vermittlung erfolgt rechtssicher per Dienstleistungs- oder Werkvertrag – ohne klassische Arbeitnehmerüberlassung."
+      },
+      {
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
+        answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden."
       }
     ]
   };

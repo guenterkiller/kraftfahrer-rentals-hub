@@ -94,6 +94,22 @@ const LKWFahrerBuchen = () => {
       {
         question: "Wie sehen die Konditionen aus?",
         answer: "<strong>Transparente Tagespreise:</strong> 349 € pro Tag (8h), 30 € Überstunde, Wochenpreis ab 1.490 €. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Keine versteckten Kosten."
+      },
+      {
+        question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
+        answer: "Ja. Wir vermitteln <strong>selbstständige LKW-Fahrer bundesweit</strong> in ganz Deutschland. Unsere Fahrer-Vermittlung ist deutschlandweit aktiv – Sie können LKW-Fahrer buchen deutschlandweit, egal ob für Speditionen, Baustellen oder Fernverkehr."
+      },
+      {
+        question: "Stellen Sie auch LKW oder Baumaschinen zur Verfügung?",
+        answer: "Nein. Wir vermitteln ausschließlich <strong>Fahrer und Bediener</strong> – keine Fahrzeuge, keine Baumaschinen. Geräte und Fahrzeuge stellt immer der Auftraggeber. Baumaschinenführer sind bei uns nur Bediener, keine Maschine wird mitgeliefert."
+      },
+      {
+        question: "Brauchen wir eine Arbeitnehmerüberlassung?",
+        answer: "Nein. Unsere Fahrer sind <strong>selbstständige LKW-Fahrer</strong> und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung."
+      },
+      {
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
+        answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich."
       }
     ]
   };
