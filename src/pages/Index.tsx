@@ -18,8 +18,8 @@ const Index = () => {
   const navigate = useNavigate();
   
   useSEO({
-    title: "LKW Fahrer buchen deutschlandweit | Kraftfahrer (CE) bundesweit mieten – Fahrerexpress",
-    description: "LKW Fahrer deutschlandweit buchen – selbstständige CE-Fahrer & Baumaschinenführer in ganz Deutschland verfügbar. Kurzfristig, ohne Arbeitnehmerüberlassung. Ersatzfahrer LKW bundesweit, Notfallfahrer, Urlaubsvertretung.",
+    title: "LKW Fahrer buchen deutschlandweit – CE-Fahrer bundesweit",
+    description: "LKW Fahrer deutschlandweit buchen – CE-Fahrer & Baumaschinenführer bundesweit. Kurzfristig, ohne Arbeitnehmerüberlassung.",
     keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit verfügbar, selbstständige LKW Fahrer bundesweit, LKW Fahrer kurzfristig verfügbar, Fahrer buchen ohne Arbeitnehmerüberlassung, Notfallfahrer bundesweit, Ersatzfahrer LKW deutschlandweit, Urlaubsvertretung Fahrer deutschlandweit, LKW Fahrer für Speditionen deutschlandweit, CE Fahrer für Sattelzug buchen, Baumaschinenführer deutschlandweit buchen, Fahrer Vermittlung bundesweit, Fahrer für einen Tag buchen, LKW Fahrer mieten, Fahrerservice Deutschland",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {

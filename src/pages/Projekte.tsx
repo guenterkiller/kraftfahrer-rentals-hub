@@ -8,9 +8,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Projekte = () => {
   useSEO({
-    title: "Erfolgreiche Projekte – Ersatzfahrer & LKW-Fahrer Einsätze | Fahrerexpress",
-    description: "Referenzen unserer erfolgreichen Fahrereinsätze: München, Hamburg, Speyer. Zufriedene Kunden bei Bau, Logistik und Schwertransport mit Ersatzfahrern.",
-    keywords: "Fahrerexpress Referenzen, erfolgreiche projekte, kundenbewertungen, fahrereinsätze deutschland, fahrmischer münchen, logistik hamburg, ersatzfahrer referenzen"
+    title: "Projekte & Referenzen – Fahrer-Vermittlung deutschlandweit",
+    description: "Erfolgreiche Fahrereinsätze deutschlandweit: Referenzen aus München, Hamburg, Speyer. Bundesweite Fahrer-Vermittlung.",
+    keywords: "Fahrerexpress Referenzen, erfolgreiche projekte, kundenbewertungen, fahrereinsätze deutschlandweit, fahrmischer münchen, logistik hamburg, ersatzfahrer bundesweit, Fahrer-Vermittlung deutschlandweit"
   });
   const projekte = [
     {
@@ -110,7 +110,7 @@ const Projekte = () => {
               Projekte & Einsatzbeispiele
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Einblicke in unsere erfolgreichen Projekte und Kundeneinsätze
+              Einblicke in unsere erfolgreichen Projekte und Kundeneinsätze. Unsere bundesweite Fahrer-Vermittlung ermöglicht deutschlandweit flexible Einsätze für Bau, Logistik und Transport.
             </p>
           </div>
 

@@ -22,8 +22,8 @@ const FahrerRegistrierung = () => {
   }, []);
 
   useSEO({
-    title: "Partner werden – Selbstständige Fahrer für unser Netzwerk | Fahrerexpress",
-    description: "Werden Sie Partner bei Fahrerexpress. Deutschlandweite Vermittlung für selbstständige LKW-Fahrer & Baumaschinenführer. EU/EWR-Fahrer willkommen! Kierowcy, șoferi, Bulgarian drivers welcome!",
+    title: "Partner werden – Fahrer-Netzwerk deutschlandweit | Fahrerexpress",
+    description: "Partner werden bei Fahrerexpress – deutschlandweite Vermittlung für selbstständige LKW-Fahrer & Baumaschinenführer.",
     keywords: "Fahrer-Netzwerk, selbstständiger Berufskraftfahrer, Fahrer-Partner werden, Kooperation LKW-Fahrer, Subunternehmer Kraftfahrer, EU-Fahrer Deutschland, Fahrerservice Partner, freiberuflicher Kraftfahrer, Werkvertrag Fahrer",
     structuredData: {
       "@context": "https://schema.org",

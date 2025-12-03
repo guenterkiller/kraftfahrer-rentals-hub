@@ -2,8 +2,8 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const BegleitfahrzeugeBF3 = () => {
   const seoData = {
-    title: "BF3-Fahrer buchen deutschlandweit – Begleitfahrer Schwertransport bundesweit | Fahrerexpress",
-    description: "BF3-Fahrer deutschlandweit buchen – qualifizierte Begleitfahrer für Schwertransporte in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung. Fahrzeug stellen Sie.",
+    title: "BF3-Fahrer buchen deutschlandweit – ab 649 €/Tag",
+    description: "BF3-Fahrer deutschlandweit – nur Fahrer, kein Fahrzeug. Kurzfristig für Schwertransporte, ohne AÜG. 649 €/Tag.",
     keywords: "BF3 Fahrer deutschlandweit, Schwertransport Begleitung bundesweit, BF3 Berechtigung, Begleitfahrer buchen deutschlandweit, WVZA Fahrer bundesweit, BF3 Fahrer kurzfristig verfügbar, Schwertransport Begleiter in ganz Deutschland",
     faqData: [
       {

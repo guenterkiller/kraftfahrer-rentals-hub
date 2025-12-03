@@ -5,8 +5,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Datenschutz = () => {
   useSEO({
-    title: "Datenschutzerklärung | Fahrerexpress-Agentur Frankfurt",
-    description: "Datenschutzerklärung der Fahrerexpress-Agentur. Transparente Informationen über Datenverarbeitung, DSGVO-konform.",
+    title: "Datenschutzerklärung | Fahrerexpress-Agentur",
+    description: "Datenschutzerklärung der Fahrerexpress-Agentur – transparente Informationen zur Datenverarbeitung, DSGVO-konform.",
     keywords: "Datenschutz Fahrerexpress, DSGVO, Datenschutzerklärung"
   });
   return (

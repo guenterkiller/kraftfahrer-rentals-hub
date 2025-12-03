@@ -6,8 +6,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Impressum = () => {
   useSEO({
-    title: "Impressum | Fahrerexpress-Agentur Frankfurt",
-    description: "Impressum der Fahrerexpress-Agentur Frankfurt. Kontaktdaten, Geschäftsführung und rechtliche Angaben gemäß TMG.",
+    title: "Impressum | Fahrerexpress-Agentur",
+    description: "Impressum der Fahrerexpress-Agentur – Kontaktdaten, Geschäftsführung und rechtliche Angaben gemäß TMG.",
     keywords: "Impressum Fahrerexpress, Kontakt Frankfurt, Günter Killer, Fahrerexpress-Agentur"
   });
   return (
@@ -23,9 +23,10 @@ const Impressum = () => {
             </Button>
           </div>
           
+          <h1 className="text-3xl font-bold mb-6">Impressum</h1>
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">Impressum</CardTitle>
+              <CardTitle className="text-2xl">Angaben zum Betreiber</CardTitle>
               <p className="text-muted-foreground">gemäß § 5 TMG</p>
             </CardHeader>
             <CardContent className="space-y-6">

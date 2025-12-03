@@ -12,8 +12,8 @@ const BaumaschinenfuehrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "Baumaschinenführer buchen deutschlandweit – Baggerfahrer bundesweit ab 459 €",
-    description: "Baumaschinenführer deutschlandweit buchen – Bagger, Radlader, Fahrmischer in ganz Deutschland. Kurzfristig verfügbar, ohne Arbeitnehmerüberlassung. 459 € pro Tag.",
+    title: "Baumaschinenführer buchen deutschlandweit – ab 459 €/Tag",
+    description: "Baumaschinenführer deutschlandweit buchen – nur Bediener, keine Maschinen. Kurzfristig, ohne AÜG. 459 €/Tag.",
     keywords: "Baumaschinenführer deutschlandweit buchen, Baggerfahrer bundesweit, Radladerfahrer deutschlandweit, Baumaschinenführer kurzfristig verfügbar, Fahrer für Baustellen deutschlandweit, Baumaschinenführer mieten bundesweit, selbstständige Baumaschinenführer",
     structuredData: {
       "@context": "https://schema.org",

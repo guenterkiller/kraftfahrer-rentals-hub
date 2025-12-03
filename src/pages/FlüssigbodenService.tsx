@@ -21,8 +21,8 @@ const FlüssigbodenService = () => {
   }, []);
 
   const seoData = {
-    title: "Mischmeister Flüssigboden deutschlandweit – Subunternehmer CE, Radlader & Bagger | Fahrerexpress",
-    description: "Mischmeister für Flüssigboden deutschlandweit buchen – selbstständiger Subunternehmer mit CE, Radlader, Bagger. Bis zu 2 Mitarbeiter einsparen. In ganz Deutschland kurzfristig verfügbar.",
+    title: "Mischmeister Flüssigboden deutschlandweit – ab 489 €/Tag",
+    description: "Mischmeister für Flüssigboden deutschlandweit – Subunternehmer mit CE, Radlader, Bagger. Bis zu 2 Mitarbeiter einsparen.",
     keywords: "Flüssigboden deutschlandweit, Mischmeister bundesweit buchen, Subunternehmer Flüssigboden deutschlandweit, Verfüllmaterialien Deutschland, Mischanlagen Fahrer bundesweit, CE-Fahrmischer deutschlandweit, Mischmeister kurzfristig verfügbar, Radlader Bagger Flüssigboden",
     ogTitle: "Mischmeister für Flüssigboden deutschlandweit – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
     ogDescription: "Mischmeister für Flüssigboden deutschlandweit buchen – selbstständiger Subunternehmer mit CE, Radlader, Bagger. In ganz Deutschland kurzfristig verfügbar. Klare Tagessätze.",
