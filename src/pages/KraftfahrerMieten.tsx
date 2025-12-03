@@ -74,6 +74,14 @@ const KraftfahrerMieten = () => {
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
         answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden."
+      },
+      {
+        question: "Vermitteln Sie auch Baggerfahrer und Radladerfahrer?",
+        answer: "Ja. Neben LKW-Fahrern und Kraftfahrern vermitteln wir auch <strong>Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit</strong>. Alle arbeiten als Subunternehmer für einzelne Bauabschnitte oder Tagesbaustellen – keine Maschinenvermietung, nur Bediener."
+      },
+      {
+        question: "Bieten Sie Mischmeister für Flüssigboden an?",
+        answer: "Ja. Wir vermitteln erfahrene <strong>Mischmeister und Anlagenbediener für Flüssigboden</strong> deutschlandweit als Subunternehmer. Der Mischmeister bedient Ihre bauseits gestellte Anlage – keine eigene Maschinenvermietung."
       }
     ]
   };

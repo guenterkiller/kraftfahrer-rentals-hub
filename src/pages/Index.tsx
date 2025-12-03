@@ -155,6 +155,18 @@ const Index = () => {
                   Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer oder Notfallfahrer deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich.
                 </p>
               </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Vermitteln Sie auch Baggerfahrer und Radladerfahrer?</h3>
+                <p className="text-muted-foreground">
+                  Ja. Wir vermitteln selbstständige Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit als Subunternehmer für einzelne Bauabschnitte oder Tagesbaustellen. Die Maschinen stellt immer der Auftraggeber – wir liefern nur qualifizierte Bediener.
+                </p>
+              </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Bieten Sie auch Mischmeister für Flüssigboden an?</h3>
+                <p className="text-muted-foreground">
+                  Ja. Wir vermitteln erfahrene Mischmeister und Anlagenbediener für Flüssigboden deutschlandweit. Der Mischmeister bedient Ihre bauseits gestellte Anlage, Radlader/Bagger und Fahrmischer – keine eigene Maschinenvermietung.
+                </p>
+              </div>
             </div>
           </div>
         </section>

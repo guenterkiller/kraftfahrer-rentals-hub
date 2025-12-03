@@ -110,6 +110,14 @@ const LKWFahrerBuchen = () => {
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
         answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich."
+      },
+      {
+        question: "Vermitteln Sie auch Baggerfahrer und Baumaschinenführer?",
+        answer: "Ja. Neben LKW-Fahrern vermitteln wir auch <strong>Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit</strong> als Subunternehmer für Tagesbaustellen oder komplette Projekte. Die Maschinen stellt der Auftraggeber – wir liefern nur qualifizierte Bediener."
+      },
+      {
+        question: "Arbeiten Ihre Fahrer als Subunternehmer?",
+        answer: "Ja. Alle vermittelten Fahrer sind <strong>selbstständige Subunternehmer</strong> und arbeiten für einzelne Bauabschnitte, Tagesbaustellen oder komplette Einsätze. Die Vermittlung erfolgt per Dienst- oder Werkvertrag – keine Arbeitnehmerüberlassung."
       }
     ]
   };

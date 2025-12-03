@@ -462,6 +462,32 @@ const Wissenswertes = () => {
                   </p>
                 </CardContent>
               </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Vermitteln Sie auch Baggerfahrer und Radladerfahrer?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Ja. Wir vermitteln selbstständige Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit als Subunternehmer für einzelne Bauabschnitte, Tagesbaustellen oder komplette Projekte. Die Maschinen stellt immer der Auftraggeber – wir liefern nur qualifizierte Bediener.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Bieten Sie Mischmeister für Flüssigboden an?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Ja. Wir vermitteln erfahrene Mischmeister und Anlagenbediener für Flüssigboden deutschlandweit als Subunternehmer. Der Mischmeister bedient Ihre bauseits gestellte Anlage, Radlader/Bagger und Fahrmischer – keine eigene Maschinenvermietung.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </section>
 

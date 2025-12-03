@@ -68,6 +68,22 @@ const BaumaschinenfuehrerBuchen = () => {
       {
         question: "Wie sind die Konditionen?",
         answer: "<strong>459 € pro Tag (8 Stunden), 60 € pro Überstunde.</strong> Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Sie stellen die Geräte/Maschinen/Anlagen."
+      },
+      {
+        question: "Vermitteln Sie Baggerfahrer und Radladerfahrer deutschlandweit?",
+        answer: "Ja. Wir vermitteln selbstständige <strong>Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit</strong> als Subunternehmer für einzelne Bauabschnitte, Tagesbaustellen oder komplette Projekte. Bundesweite Fahrer-Vermittlung ohne Maschinenvermietung."
+      },
+      {
+        question: "Arbeiten Ihre Baumaschinenführer als Subunternehmer?",
+        answer: "Ja. Alle vermittelten Baumaschinenführer sind <strong>selbstständige Subunternehmer</strong> und arbeiten für einzelne Bauabschnitte oder Tagesbaustellen. Die Vermittlung erfolgt per Dienst- oder Werkvertrag – keine Arbeitnehmerüberlassung erforderlich."
+      },
+      {
+        question: "Bieten Sie auch Mischmeister für Flüssigboden an?",
+        answer: "Ja. Wir vermitteln erfahrene <strong>Mischmeister und Anlagenbediener für Flüssigboden</strong> deutschlandweit als Subunternehmer. Der Mischmeister bedient Ihre bauseits gestellte Anlage – keine eigene Maschinenvermietung."
+      },
+      {
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
+        answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden."
       }
     ]
   };
