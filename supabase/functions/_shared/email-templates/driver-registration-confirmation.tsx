@@ -40,28 +40,87 @@ export const DriverRegistrationConfirmation = ({
         Wir bringen kompetente Partner zusammen.
       </Text>
 
-      <Section {...getBoxProps(boxStyles.highlightBox)}>
-        <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px' }, 'small-heading')}>📋 Vermittlungsbedingungen & Provision</Heading>
+    <Section {...getBoxProps(boxStyles.highlightBox)}>
+        <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px' }, 'small-heading')}>📋 Vermittlungsmodell & Vergütung</Heading>
         <Text {...getTextProps(textStyles.paragraph)}>
-          Für jeden erfolgreichen Einsatz berechnen wir eine Vermittlungsgebühr (Provision), 
-          die vom Fahrer getragen wird:
+          Sie arbeiten als selbstständiger Subunternehmer für die Fahrerexpress-Agentur.
+          Der Auftraggeber erhält die Rechnung von der Fahrerexpress-Agentur.
+          Sie stellen uns nach Durchführung eine Rechnung abzüglich Vermittlungsgebühr.
         </Text>
 
         <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
           <li>
-            <strong>LKW-Fahrer (Klasse CE):</strong> 15 % der Einsatzvergütung
+            <strong>LKW-Fahrer (Klasse CE):</strong> 15 % Vermittlungsgebühr
           </li>
           <li>
-            <strong>Baumaschinenführer:</strong> 20 % der Einsatzvergütung
+            <strong>Baumaschinenführer / Geräteführer:</strong> 20 % Vermittlungsgebühr
           </li>
         </ul>
 
         <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '15px' })}>
-          Die Provision wird nach Abschluss des Einsatzes automatisch bei Ihrer Abrechnung 
-          an die Agentur berücksichtigt. Bei Nichteinsatz entstehen keine Kosten.
+          Die Gebühr fällt ausschließlich bei tatsächlich ausgeführten Einsätzen an.
+          Sie entscheiden vor jedem Einsatz frei, ob Sie annehmen oder ablehnen.
         </Text>
+      </Section>
 
-        <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+      <Section {...getBoxProps(boxStyles.infoBox)}>
+        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📝 Pflichten als Subunternehmer</Heading>
+        <Text {...getTextProps(textStyles.paragraph)}>
+          Mit Annahme eines Einsatzes übernehmen Sie folgende verbindliche Pflichten:
+        </Text>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+          <li>pünktliches Erscheinen am Einsatzort</li>
+          <li>ordnungsgemäße Durchführung des Einsatzes</li>
+          <li>sofortige Meldung bei Problemen</li>
+          <li>richtige und vollständige Angaben zu Qualifikationen</li>
+          <li>pfleglicher Umgang mit Fahrzeugen, Maschinen und Kundenmaterial</li>
+        </ul>
+      </Section>
+
+      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3f2' })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: '#dc2626' }, 'small-heading')}>🚫 Verbote</Heading>
+        <Text {...getTextProps(textStyles.paragraph)}>
+          Folgende Handlungen sind nicht zulässig:
+        </Text>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+          <li>Weitergabe des Einsatzes an andere Fahrer</li>
+          <li>Einsatz durch eine andere Person ohne Zustimmung</li>
+          <li>Direktabsprachen oder Preisvereinbarungen mit Auftraggebern</li>
+          <li>Folgeaufträge am Auftraggeber vorbei</li>
+          <li>Weitergabe interner Einsatzdaten an Dritte</li>
+          <li>eigenständige Änderungen zu Zeiten, Aufgaben oder Einsatzort</li>
+        </ul>
+      </Section>
+
+      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef9c3' })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: '#854d0e' }, 'small-heading')}>⚠️ Nichterscheinen & Leistungsstörungen</Heading>
+        <Text {...getTextProps(textStyles.paragraph)}>
+          Wenn ein Fahrer einen angenommenen Einsatz nicht antritt oder abbricht, entstehen der Fahrerexpress-Agentur Schäden gegenüber dem Auftraggeber.
+          In diesem Fall haftet der Fahrer im Innenverhältnis für:
+        </Text>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+          <li>Ersatzfahrer-Kosten</li>
+          <li>Vertragsstrafen des Auftraggebers</li>
+          <li>Standgelder, Ausfallkosten oder Fehlzeiten</li>
+          <li>alle weiteren dadurch entstehenden Schäden</li>
+        </ul>
+        <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', marginTop: '10px' })}>
+          Die Fahrerexpress-Agentur kann diese Schäden vollständig regressieren.
+        </Text>
+      </Section>
+
+      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fee2e2' })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: '#991b1b' }, 'small-heading')}>⛔ Konsequenzen bei Regelverstößen</Heading>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+          <li>sofortige Sperrung des Fahrerzugangs</li>
+          <li>keine weiteren Einsatzangebote</li>
+          <li>interne Schadensregulierung</li>
+          <li>dauerhafte Beendigung der Zusammenarbeit</li>
+        </ul>
+      </Section>
+
+      <Section {...getBoxProps(boxStyles.highlightBox)}>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
           <li>
             <strong>Wann entstehen Kosten?</strong> Ausschließlich bei tatsächlichem Einsatz.
           </li>
