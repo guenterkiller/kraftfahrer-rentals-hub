@@ -42,16 +42,20 @@ const BaumaschinenfuehrerBuchen = () => {
 
   const heroData = {
     h1: "Baumaschinenführer deutschlandweit buchen",
-    intro: "Qualifizierte Baumaschinenführer in ganz Deutschland: Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen, Störungsbehebung. Selbstständige Experten bundesweit verfügbar, transparente Preise: 459 € pro Tag (8h), 60 € Überstunde.",
-    bullets: ["Alle Baumaschinen & Anlagen", "Deutschlandweit kurzfristig verfügbar", "459 € pro Tag"]
+    intro: "Qualifizierte Bediener für Bagger, Radlader, Fahrmischer, Flüssigboden-Mischanlagen deutschlandweit. Wir vermitteln ausschließlich selbstständige Maschinenführer – keine Maschinen. Gerät/Anlage stellt der Auftraggeber. 459 € pro Tag (8h), 60 € Überstunde.",
+    bullets: ["Nur Bediener – keine Maschinen", "Deutschlandweit kurzfristig verfügbar", "459 € pro Tag"]
   };
 
   const faqData = {
     title: "Baumaschinenführer buchen – Häufige Fragen",
     items: [
       {
-        question: "Welche Baumaschinen werden abgedeckt?",
-        answer: "<strong>Alle gängigen Baumaschinen:</strong> Baggerfahren, Radladerfahren, Fahrmischer & Betonlogistik, Flüssigboden (Mischmeister), Bedienung von Mischanlagen, Störungsbehebung & Reparaturkenntnisse, Baustellenlogistik, Materialfluss, Prozessüberwachung."
+        question: "Werden Maschinen mitgeliefert?",
+        answer: "<strong>Nein.</strong> Wir vermitteln ausschließlich qualifizierte Bediener/Maschinenführer. Die Maschinen, Geräte und Anlagen stellt der Auftraggeber. Unsere Fahrer bringen nur ihre Qualifikation und Erfahrung mit."
+      },
+      {
+        question: "Welche Baumaschinen können bedient werden?",
+        answer: "<strong>Alle gängigen Baumaschinen:</strong> Bagger, Radlader, Fahrmischer, Flüssigboden-Mischanlagen, Betonlogistik, Störungsbehebung, Baustellenlogistik, Materialfluss, Prozessüberwachung."
       },
       {
         question: "Welche Qualifikationen haben die Baumaschinenführer?",
