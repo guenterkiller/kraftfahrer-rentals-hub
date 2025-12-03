@@ -452,6 +452,42 @@ const PreiseUndAblauf = () => {
               </CardContent>
             </Card>
 
+            {/* Mini-AGB für Auftraggeber */}
+            <Card className="mb-12 border-gray-300 bg-gray-50/50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <FileText className="h-6 w-6 text-gray-700" />
+                  Allgemeine Vertragsbedingungen
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">1. Vertragsverhältnis</h3>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">2. Einsatzdurchführung</h3>
+                  <p className="text-muted-foreground">Die Leistung wird durch geeignete Subunternehmer ausgeführt. Ein Wechsel der Einsatzperson ist zulässig, sofern die Leistung gleichwertig erbracht wird.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">3. Haftung</h3>
+                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, sofern nicht grobe Fahrlässigkeit vorliegt.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">4. Abrechnung</h3>
+                  <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktabwerbung</h3>
+                  <p className="text-muted-foreground">Der Auftraggeber verpflichtet sich, Fahrer nicht direkt oder am System vorbei zu beauftragen.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
+                  <p className="text-muted-foreground">Gerichtsstand ist Frankfurt am Main.</p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* CTA */}
             <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
               <CardHeader className="text-center">

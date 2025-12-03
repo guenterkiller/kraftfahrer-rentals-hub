@@ -70,6 +70,36 @@ const LegalSecuritySection = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Mini-AGB Kurzfassung */}
+          <Card className="mt-8 border-gray-200">
+            <CardHeader className="bg-gray-50">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <FileText className="h-5 w-5 text-gray-600" />
+                Vertragsbedingungen im Überblick
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-semibold mb-1">Vertragspartner</p>
+                  <p className="text-muted-foreground">Ausschließlich Fahrerexpress-Agentur</p>
+                </div>
+                <div>
+                  <p className="font-semibold mb-1">Abrechnung</p>
+                  <p className="text-muted-foreground">Eine Rechnung von Fahrerexpress</p>
+                </div>
+                <div>
+                  <p className="font-semibold mb-1">Haftung</p>
+                  <p className="text-muted-foreground">Max. Auftragswert, keine Folgeschäden</p>
+                </div>
+                <div>
+                  <p className="font-semibold mb-1">Gerichtsstand</p>
+                  <p className="text-muted-foreground">Frankfurt am Main</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>

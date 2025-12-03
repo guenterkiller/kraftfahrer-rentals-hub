@@ -289,6 +289,42 @@ const Wissenswertes = () => {
             </Card>
           </section>
 
+          {/* Mini-AGB */}
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold mb-8">📋 Allgemeine Vertragsbedingungen</h2>
+            
+            <Card>
+              <CardContent className="pt-6 space-y-6">
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">1. Vertragsverhältnis</h4>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">2. Einsatzdurchführung</h4>
+                  <p className="text-muted-foreground">Die Leistung wird durch geeignete Subunternehmer ausgeführt. Ein Wechsel der Einsatzperson ist zulässig, sofern die Leistung gleichwertig erbracht wird.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">3. Haftung</h4>
+                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, sofern nicht grobe Fahrlässigkeit vorliegt.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">4. Abrechnung</h4>
+                  <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">5. Verbot der Direktabwerbung</h4>
+                  <p className="text-muted-foreground">Der Auftraggeber verpflichtet sich, Fahrer nicht direkt oder am System vorbei zu beauftragen.</p>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-lg mb-2">6. Gerichtsstand</h4>
+                  <p className="text-muted-foreground">Gerichtsstand ist Frankfurt am Main.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+
+          <Separator className="my-16" />
+
           {/* FAQ */}
           <section className="mb-16">
             <h2 className="text-3xl font-bold mb-8">Häufig gestellte Fragen</h2>
