@@ -41,16 +41,29 @@ export const DriverRegistrationConfirmation = ({
       </Text>
 
       <Section {...getBoxProps(boxStyles.highlightBox)}>
-        <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px' }, 'small-heading')}>📋 Vermittlungsbedingungen</Heading>
+        <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px' }, 'small-heading')}>📋 Vermittlungsbedingungen & Provision</Heading>
         <Text {...getTextProps(textStyles.paragraph)}>
-          Für Fahrer gelten transparente Vermittlungsbedingungen, die Ihnen nach Ihrer Freischaltung 
-          detailliert bereitgestellt werden. Die Vermittlung ist für Auftraggeber vollständig kostenlos.
+          Für jeden erfolgreichen Einsatz berechnen wir eine Vermittlungsgebühr (Provision), 
+          die vom Fahrer getragen wird:
         </Text>
 
         <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
           <li>
-            <strong>Wann entstehen Kosten?</strong> Vermittlungsgebühren fallen ausschließlich bei 
-            tatsächlichem Einsatz an.
+            <strong>LKW-Fahrer (Klasse CE):</strong> 15 % der Einsatzvergütung
+          </li>
+          <li>
+            <strong>Baumaschinenführer:</strong> 20 % der Einsatzvergütung
+          </li>
+        </ul>
+
+        <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '15px' })}>
+          Die Provision wird nach Abschluss des Einsatzes automatisch bei Ihrer Abrechnung 
+          an die Agentur berücksichtigt. Bei Nichteinsatz entstehen keine Kosten.
+        </Text>
+
+        <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+          <li>
+            <strong>Wann entstehen Kosten?</strong> Ausschließlich bei tatsächlichem Einsatz.
           </li>
           <li>
             <strong>Gibt es eine Mindestlaufzeit?</strong> Nein. Sie können Ihre Teilnahme jederzeit
