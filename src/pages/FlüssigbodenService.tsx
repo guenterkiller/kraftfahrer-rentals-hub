@@ -81,14 +81,14 @@ const FlüssigbodenService = () => {
               Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Einsatz als selbstständiger Subunternehmer für fließfähige Verfüllmaterialien. Bedienung von Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu zwei Arbeitskräfte können eingespart werden.
+              Wir vermitteln ausschließlich Mischmeister/Anlagenbediener – keine Maschinen oder Anlagen. Einsatz als selbstständiger Subunternehmer für fließfähige Verfüllmaterialien. Bedienung von bauseitig gestellter Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu zwei Arbeitskräfte können eingespart werden.
             </p>
             
             {/* Key Benefits */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium">Mischanlage + Radlader + Bagger</span>
+                <span className="text-sm font-medium">Nur Bediener – keine Maschinen</span>
               </div>
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
