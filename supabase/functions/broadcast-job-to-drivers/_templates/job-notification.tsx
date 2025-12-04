@@ -1,4 +1,4 @@
-import { Text, Heading, Section, Hr, Button } from 'npm:@react-email/components@0.0.22';
+import { Text, Heading, Section, Hr } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, boxStyles, textStyles, colors } from '../../_shared/email-templates/base-email.tsx';
 
@@ -14,8 +14,6 @@ interface JobNotificationEmailProps {
   fuehrerscheinklasse: string;
   nachricht: string;
   besonderheiten?: string;
-  acceptUrl: string;
-  declineUrl: string;
 }
 
 export const JobNotificationEmail = ({
@@ -30,8 +28,6 @@ export const JobNotificationEmail = ({
   fuehrerscheinklasse,
   nachricht,
   besonderheiten,
-  acceptUrl,
-  declineUrl,
 }: JobNotificationEmailProps) => {
   return (
     <BaseEmail previewText={`Neuer Auftrag verfügbar: ${fahrzeugtyp} in ${einsatzort}`}>
@@ -98,62 +94,31 @@ export const JobNotificationEmail = ({
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
       
-      {/* Action Buttons */}
-      <Section style={{ textAlign: 'center' as const, margin: '30px 0' }}>
-        <Text style={{ ...textStyles.paragraph, fontWeight: 'bold', fontSize: '16px' }}>
-          Möchten Sie diesen Auftrag annehmen?
+      {/* Antwort-Hinweis */}
+      <Section style={{ 
+        textAlign: 'center' as const, 
+        margin: '30px 0',
+        padding: '24px',
+        backgroundColor: '#f0fdf4',
+        border: '2px solid #16a34a',
+        borderRadius: '12px'
+      }}>
+        <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>
+          📱 Interesse? Bitte melden Sie sich!
+        </Heading>
+        <Text style={{ ...textStyles.paragraph, fontSize: '16px', fontWeight: 'bold', color: '#166534' }}>
+          Rufen Sie uns an oder schreiben Sie per SMS/WhatsApp:
         </Text>
-        
-        <table style={{ margin: '20px auto', borderSpacing: '10px' }}>
-          <tr>
-            <td>
-              <Button 
-                href={acceptUrl} 
-                style={{
-                  backgroundColor: colors.success,
-                  color: '#ffffff',
-                  padding: '15px 40px',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  fontWeight: 'bold' as const,
-                  fontSize: '16px',
-                  display: 'inline-block',
-                }}
-              >
-                ✅ Auftrag annehmen
-              </Button>
-            </td>
-            <td>
-              <Button 
-                href={declineUrl} 
-                style={{
-                  backgroundColor: colors.danger,
-                  color: '#ffffff',
-                  padding: '15px 40px',
-                  borderRadius: '8px',
-                  textDecoration: 'none',
-                  fontWeight: 'bold' as const,
-                  fontSize: '16px',
-                  display: 'inline-block',
-                }}
-              >
-                ❌ Ablehnen
-              </Button>
-            </td>
-          </tr>
-        </table>
-        
-        <Text style={{ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic' }}>
-          Nach dem Annehmen werden wir Sie kontaktieren mit weiteren Details.
+        <Text style={{ 
+          fontSize: '24px', 
+          fontWeight: 'bold', 
+          color: '#16a34a',
+          margin: '16px 0'
+        }}>
+          📞 +49-1577-1442285
         </Text>
-        <Text style={{ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic' }}>
-          ⏱️ Dieser Link ist 48 Stunden gültig und kann nur einmal verwendet werden.
-        </Text>
-        
-        <Text style={{ ...textStyles.muted, fontSize: '11px', marginTop: '15px' }}>
-          <strong>Falls die Buttons nicht funktionieren:</strong><br />
-          Annehmen: {acceptUrl}<br />
-          Ablehnen: {declineUrl}
+        <Text style={{ ...textStyles.muted, fontSize: '14px' }}>
+          Nennen Sie kurz Ihren Namen und dass Sie den Auftrag in <strong>{einsatzort}</strong> annehmen oder ablehnen möchten.
         </Text>
       </Section>
 
