@@ -94,42 +94,14 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Generate response URLs with token (neue robuste Links)
-    const baseUrl = `${supabaseUrl.replace('/rest/v1', '')}/functions/v1/respond-invite`;
-    const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
-    const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
-
-    // Generate rechtssichere email content - nur Agenturmodell
-    const billingInfo = {
-      title: "Agenturabrechnung – Vertrag mit Fahrerexpress",
-      description: "Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress.",
-      consentText: `
-        <div style="background: #fff3cd; border: 2px solid #856404; padding: 20px; margin: 20px 0; border-radius: 8px;">
-          <h4 style="color: #856404; margin-top: 0;">⚠️ Wichtiger Hinweis - Rechtliche Zustimmung erforderlich:</h4>
-          <p style="font-weight: bold; color: #856404;">
-            <strong>Subunternehmer-Einsatz:</strong> Dieser Auftrag wird über Fahrerexpress abgerechnet. 
-            Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung.
-            Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. 
-            Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um eine Dienst-/Werkleistung.
-          </p>
-          <p style="color: #856404; font-size: 14px;">
-            Mit Klick auf "Annehmen" bestätigen Sie diese Bedingungen.
-          </p>
-        </div>
-      `,
-      acceptText: "✅ Auftrag als Subunternehmer annehmen"
-    };
-
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>🚛 Neuer Fahrerauftrag verfügbar</h2>
         
         <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #2563eb; margin-top: 0;">${billingInfo.title}</h3>
-          <p style="margin: 10px 0; font-weight: bold;">${billingInfo.description}</p>
+          <h3 style="color: #2563eb; margin-top: 0;">Agenturabrechnung – Vertrag mit Fahrerexpress</h3>
+          <p style="margin: 10px 0;">Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress.</p>
         </div>
-
-        ${billingInfo.consentText}
 
         <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px;">
           <h3>Auftragsdetails:</h3>
@@ -143,42 +115,30 @@ const handler = async (req: Request): Promise<Response> => {
           <p><strong>Nachricht:</strong> ${job.nachricht}</p>
         </div>
 
-        <div style="margin: 30px 0;">
-          <p style="margin: 16px 0;">
-            <a href="${acceptUrl}" 
-               style="background: #16a34a; color: #ffffff; text-decoration: none; display: inline-block; padding: 12px 18px; border-radius: 6px; font-weight: 600;">
-              ${billingInfo.acceptText}
-            </a>
+        <div style="text-align: center; margin: 30px 0; padding: 24px; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px;">
+          <h3 style="color: #166534; margin-top: 0;">📱 Interesse? Bitte melden Sie sich!</h3>
+          <p style="font-size: 16px; font-weight: bold; color: #166534;">
+            Rufen Sie uns an oder schreiben Sie per SMS/WhatsApp:
           </p>
-          
-          <p style="margin: 8px 0;">
-            <a href="${declineUrl}" 
-               style="background: #ef4444; color: #ffffff; text-decoration: none; display: inline-block; padding: 12px 18px; border-radius: 6px; font-weight: 600;">
-              ❌ Auftrag ablehnen
-            </a>
+          <p style="font-size: 24px; font-weight: bold; color: #16a34a; margin: 16px 0;">
+            📞 +49-1577-1442285
           </p>
-          
-          <p style="font-size: 12px; color: #555; margin-top: 12px;">
-            <strong>Falls die Buttons nicht funktionieren:</strong><br>
-            Annehmen: <a href="${acceptUrl}" style="color: #2563eb; word-break: break-all;">${acceptUrl}</a><br>
-            Ablehnen: <a href="${declineUrl}" style="color: #2563eb; word-break: break-all;">${declineUrl}</a>
-          </p>
-          
-          <p style="font-size: 11px; color: #999; margin-top: 16px;">
-            ⏱️ Dieser Link ist 48 Stunden gültig und kann nur einmal verwendet werden.
+          <p style="font-size: 14px; color: #666;">
+            Nennen Sie kurz Ihren Namen und dass Sie den Auftrag in <strong>${job.einsatzort}</strong> annehmen oder ablehnen möchten.
           </p>
         </div>
 
         <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px;"><strong>Rechtlicher Hinweis:</strong></p>
+          <p style="margin: 0; font-size: 14px;"><strong>📋 Vermittlungsgebühr:</strong></p>
           <p style="margin: 5px 0 0 0; font-size: 14px;">
-            Mit dem Klick auf "Annehmen" bestätigen Sie, dass Sie die Bedingungen des gewählten Abrechnungsmodells verstehen und akzeptieren.
-            Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung, sondern um Dienst-/Werkverträge.
+            • 15 % für LKW CE Fahrer<br>
+            • 20 % für Baumaschinenführer<br><br>
+            Die Gebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
           </p>
         </div>
 
         <p style="font-size: 12px; color: #666;">
-          Diese E-Mail wurde automatisch generiert. Bei Fragen wenden Sie sich an info@kraftfahrer-mieten.com
+          Diese E-Mail wurde automatisch generiert. Bei Fragen: info@kraftfahrer-mieten.com
         </p>
       </div>
     `;

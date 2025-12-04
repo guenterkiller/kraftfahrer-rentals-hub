@@ -140,11 +140,6 @@ serve(async (req) => {
           continue;
         }
 
-        // Generate URLs with custom domain (user-friendly)
-        const baseUrl = `https://kraftfahrer-mieten.com/functions/v1/handle-driver-job-response`;
-        const acceptUrl = `${baseUrl}?a=accept&t=${encodeURIComponent(token)}`;
-        const declineUrl = `${baseUrl}?a=decline&t=${encodeURIComponent(token)}`;
-
         const html = await renderAsync(
           React.createElement(JobNotificationEmail, {
             driverName: `${driver.vorname} ${driver.nachname}`,
@@ -158,8 +153,6 @@ serve(async (req) => {
             fuehrerscheinklasse: job.fuehrerscheinklasse || "C+E",
             nachricht: job.nachricht || "Keine weiteren Informationen",
             besonderheiten: job.besonderheiten,
-            acceptUrl: acceptUrl,
-            declineUrl: declineUrl,
           })
         );
 
