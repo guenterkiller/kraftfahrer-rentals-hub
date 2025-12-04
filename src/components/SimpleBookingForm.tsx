@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
@@ -386,20 +386,96 @@ const SimpleBookingForm = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="fahrzeugtyp">Benötigter Fahrertyp / Qualifikation *</Label>
-                  <p className="text-sm opacity-80 mb-2" aria-live="polite">
+                  <Label>Benötigter Fahrertyp / Qualifikation *</Label>
+                  <p className="text-sm opacity-80 mb-3" aria-live="polite">
                     Beispiel: <em>7,5 t</em>, <em>40 t</em>, <em>ADR</em>, <em>Tankwagen</em>, <em>Baumaschinenführer</em>, <em>Ladekran</em>.
                   </p>
-                  <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp} required>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Fahrertyp wählen: CE-Fahrer oder Baumaschinenführer" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ce-fahrer">CE-LKW-Fahrer (349 €)</SelectItem>
-                      <SelectItem value="baumaschinenfuehrer">Baumaschinenführer (459 €)</SelectItem>
-                      <SelectItem value="mischmeister">Mischmeister für Flüssigboden (489 €)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label 
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'LKW CE' 
+                          ? 'border-red-500 bg-red-50' 
+                          : 'border-border hover:border-red-300 hover:bg-red-50/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="fahrzeugtyp"
+                        value="LKW CE"
+                        checked={fahrzeugtyp === 'LKW CE'}
+                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        className="w-5 h-5 text-red-600"
+                        required
+                      />
+                      <div className="flex items-center gap-2">
+                        <Car className="h-5 w-5 text-red-600" />
+                        <span className="font-medium">LKW CE Fahrer</span>
+                      </div>
+                    </label>
+                    
+                    <label 
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'Baumaschinenführer' 
+                          ? 'border-orange-500 bg-orange-50' 
+                          : 'border-border hover:border-orange-300 hover:bg-orange-50/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="fahrzeugtyp"
+                        value="Baumaschinenführer"
+                        checked={fahrzeugtyp === 'Baumaschinenführer'}
+                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        className="w-5 h-5 text-orange-600"
+                      />
+                      <div className="flex items-center gap-2">
+                        <Construction className="h-5 w-5 text-orange-600" />
+                        <span className="font-medium">Baumaschinenführer</span>
+                      </div>
+                    </label>
+                    
+                    <label 
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'Mischmeister' 
+                          ? 'border-blue-500 bg-blue-50' 
+                          : 'border-border hover:border-blue-300 hover:bg-blue-50/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="fahrzeugtyp"
+                        value="Mischmeister"
+                        checked={fahrzeugtyp === 'Mischmeister'}
+                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        className="w-5 h-5 text-blue-600"
+                      />
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="h-5 w-5 text-blue-600" />
+                        <span className="font-medium">Mischmeister</span>
+                      </div>
+                    </label>
+                    
+                    <label 
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'Begleitfahrzeugführer BF3' 
+                          ? 'border-purple-500 bg-purple-50' 
+                          : 'border-border hover:border-purple-300 hover:bg-purple-50/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="fahrzeugtyp"
+                        value="Begleitfahrzeugführer BF3"
+                        checked={fahrzeugtyp === 'Begleitfahrzeugführer BF3'}
+                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        className="w-5 h-5 text-purple-600"
+                      />
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="h-5 w-5 text-purple-600" />
+                        <span className="font-medium">BF3 Begleitfahrer</span>
+                      </div>
+                    </label>
+                  </div>
                 </div>
 
                 {/* Special Requirements */}
