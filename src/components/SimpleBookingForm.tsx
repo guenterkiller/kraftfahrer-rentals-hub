@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -286,12 +287,12 @@ const SimpleBookingForm = () => {
 
               {/* Details Link */}
               <div className="text-center mb-6">
-                <a 
-                  href="/preise-und-ablauf" 
+                <Link 
+                  to="/preise-und-ablauf" 
                   className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                 >
                   Details: Preise & Konditionen →
-                </a>
+                </Link>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
