@@ -116,7 +116,7 @@ const Footer = () => {
               to="/admin/login" 
               className="hover:text-primary-foreground transition-all flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-muted hover:bg-primary border border-border hover:border-primary"
             >
-              <Lock className="h-4 w-4" />
+              <Lock className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Admin</span>
             </Link>
             <Link to="/impressum" className="hover:text-primary transition-colors">
