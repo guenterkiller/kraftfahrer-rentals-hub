@@ -6,8 +6,6 @@ interface JobNotificationEmailProps {
   driverName: string;
   driverId: string;
   jobId: string;
-  customerName: string;
-  company?: string;
   einsatzort: string;
   zeitraum: string;
   fahrzeugtyp: string;
@@ -20,8 +18,6 @@ export const JobNotificationEmail = ({
   driverName,
   driverId,
   jobId,
-  customerName,
-  company,
   einsatzort,
   zeitraum,
   fahrzeugtyp,
@@ -42,21 +38,6 @@ export const JobNotificationEmail = ({
       </Text>
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
-      
-      {/* AUFTRAGGEBER Section */}
-      <Section style={boxStyles.highlight}>
-        <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          👤 Auftraggeber
-        </Heading>
-        <Text style={textStyles.paragraph}>
-          <strong>Unternehmen/Name:</strong> {company || customerName}
-        </Text>
-        {company && customerName && (
-          <Text style={textStyles.paragraph}>
-            <strong>Ansprechpartner:</strong> {customerName}
-          </Text>
-        )}
-      </Section>
       
       {/* EINSATZ Section */}
       <Section style={boxStyles.info}>
@@ -86,7 +67,7 @@ export const JobNotificationEmail = ({
       {nachricht && (
         <Section style={boxStyles.info}>
           <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-            💬 Nachricht vom Auftraggeber
+            💬 Zusätzliche Informationen
           </Heading>
           <Text style={textStyles.paragraph}>{nachricht}</Text>
         </Section>
@@ -104,30 +85,48 @@ export const JobNotificationEmail = ({
         borderRadius: '12px'
       }}>
         <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>
-          📱 Interesse? Bitte melden Sie sich!
+          📱 Interesse? Bitte melden Sie sich bei uns!
         </Heading>
-        <Text style={{ ...textStyles.paragraph, fontSize: '16px', fontWeight: 'bold', color: '#166534' }}>
-          Rufen Sie uns an oder schreiben Sie per SMS/WhatsApp:
+        <Text style={{ ...textStyles.paragraph, fontSize: '16px', color: '#166534' }}>
+          Bei Interesse an diesem Auftrag kontaktieren Sie uns bitte <strong>ausschließlich direkt</strong>:
         </Text>
         <Text style={{ 
-          fontSize: '24px', 
+          fontSize: '22px', 
           fontWeight: 'bold', 
           color: '#16a34a',
           margin: '16px 0'
         }}>
-          📞 +49-1577-1442285
+          📞 +49 1577 1442285
         </Text>
-        <Text style={{ ...textStyles.muted, fontSize: '14px' }}>
-          Nennen Sie kurz Ihren Namen und dass Sie den Auftrag in <strong>{einsatzort}</strong> annehmen oder ablehnen möchten.
+        <Text style={{ 
+          fontSize: '16px', 
+          color: '#16a34a',
+          margin: '8px 0'
+        }}>
+          ✉️ info@kraftfahrer-mieten.com
+        </Text>
+        <Text style={{ ...textStyles.paragraph, fontSize: '14px', marginTop: '16px', color: '#166534' }}>
+          Nennen Sie kurz Ihren Namen und dass Sie den Auftrag in <strong>{einsatzort}</strong> übernehmen möchten.
+        </Text>
+      </Section>
+
+      {/* Wichtiger Hinweis */}
+      <Section style={boxStyles.warning}>
+        <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
+          ⚠️ Wichtiger Hinweis
+        </Heading>
+        <Text style={textStyles.paragraph}>
+          <strong>Bitte kontaktieren Sie den Auftraggeber nicht direkt.</strong> Die Vermittlung und Einsatzkoordination erfolgt ausschließlich über Fahrerexpress. 
+          Direkte Absprachen mit dem Auftraggeber sind nicht gestattet.
         </Text>
       </Section>
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
       
       {/* Vermittlungsgebühr Info */}
-      <Section style={boxStyles.warning}>
+      <Section style={boxStyles.highlight}>
         <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          📋 Wichtig: Vermittlungsgebühr
+          📋 Vermittlungsgebühr
         </Heading>
         <Text style={textStyles.paragraph}>
           Die Vermittlungsgebühr beträgt bei jedem Einsatz:
@@ -151,7 +150,7 @@ export const JobNotificationEmail = ({
           <strong>Bei Fragen erreichen Sie uns unter:</strong>
         </Text>
         <Text style={textStyles.paragraph}>
-          📞 <strong>Telefon:</strong> +49-1577-1442285<br />
+          📞 <strong>Telefon/WhatsApp:</strong> +49 1577 1442285<br />
           ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
         </Text>
       </Section>
