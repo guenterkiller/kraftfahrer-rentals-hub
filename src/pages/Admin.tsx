@@ -425,7 +425,10 @@ const Admin = () => {
   };
 
 
+  const [isLoadingJobs, setIsLoadingJobs] = useState(false);
+
   const loadJobRequests = async () => {
+    setIsLoadingJobs(true);
     try {
       console.log("📋 Admin: Lade Jobanfragen...");
       
@@ -446,11 +449,20 @@ const Admin = () => {
 
       if (!response?.success) {
         console.error("❌ Admin: API-Fehler:", response?.error);
+        toast({
+          title: "Fehler beim Laden",
+          description: response?.error || "Unbekannter API-Fehler",
+          variant: "destructive"
+        });
         return;
       }
 
       console.log("✅ Admin: Fahreranfragen erfolgreich geladen:", response.data?.length || 0);
       setJobRequests(response.data || []);
+      toast({
+        title: "Aktualisiert",
+        description: `${response.data?.length || 0} Fahreranfragen geladen`,
+      });
     } catch (error) {
       console.error("❌ Admin: Unerwarteter Fehler beim Laden der Fahreranfragen:", error);
       toast({
@@ -458,6 +470,8 @@ const Admin = () => {
         description: "Unerwarteter Fehler beim Laden der Daten",
         variant: "destructive"
       });
+    } finally {
+      setIsLoadingJobs(false);
     }
   };
 
@@ -1458,9 +1472,10 @@ const Admin = () => {
                   onClick={loadJobRequests} 
                   variant="outline" 
                   size="sm"
+                  disabled={isLoadingJobs}
                   className="flex-1 md:flex-none"
                 >
-                  Aktualisieren
+                  {isLoadingJobs ? "Lädt..." : "Aktualisieren"}
                 </Button>
               </div>
             </div>
