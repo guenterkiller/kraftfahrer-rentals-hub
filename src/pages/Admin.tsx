@@ -551,12 +551,12 @@ const Admin = () => {
     return new Date(0);
   };
 
-  // Sortierte Job-Liste nach Einsatzdatum (zeitraum)
+  // Sortierte Job-Liste nach Eingangsdatum (created_at) - neueste zuerst
   const sortedJobRequests = React.useMemo(() => {
     const sorted = [...jobRequests].sort((a, b) => {
-      const dateA = parseStartDate(a.zeitraum);
-      const dateB = parseStartDate(b.zeitraum);
-      // Neueste Einsätze zuerst (absteigende Sortierung)
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      // Neueste Anfragen zuerst (absteigende Sortierung)
       return dateB.getTime() - dateA.getTime();
     });
     
