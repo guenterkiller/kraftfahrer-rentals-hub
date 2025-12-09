@@ -1019,15 +1019,15 @@ export type Database = {
       }
       admin_mark_no_show:
         | {
+            Args: { _assignment_id: string; _reason?: string }
+            Returns: boolean
+          }
+        | {
             Args: {
               _assignment_id: string
               _override_fee_eur?: number
               _reason?: string
             }
-            Returns: boolean
-          }
-        | {
-            Args: { _assignment_id: string; _reason?: string }
             Returns: boolean
           }
       admin_mark_old_jobs_completed: {
