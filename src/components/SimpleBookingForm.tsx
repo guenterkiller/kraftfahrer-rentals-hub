@@ -357,11 +357,12 @@ const SimpleBookingForm = () => {
                 {/* Job Details */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="einsatzbeginn">Gewünschter Einsatzbeginn</Label>
+                    <Label htmlFor="einsatzbeginn">Gewünschter Einsatzbeginn *</Label>
                     <Input 
                       id="einsatzbeginn" 
                       name="einsatzbeginn" 
                       type="date" 
+                      required
                       min={(() => {
                         const today = new Date();
                         let nextWorkday = new Date(today);
@@ -380,8 +381,8 @@ const SimpleBookingForm = () => {
                     </p>
                   </div>
                   <div>
-                    <Label htmlFor="einsatzdauer">Einsatzdauer</Label>
-                    <Input id="einsatzdauer" name="einsatzdauer" placeholder="z.B. 3 Tage, 2 Wochen" />
+                    <Label htmlFor="einsatzdauer">Einsatzdauer *</Label>
+                    <Input id="einsatzdauer" name="einsatzdauer" placeholder="z.B. 3 Tage, 2 Wochen" required />
                   </div>
                 </div>
 
