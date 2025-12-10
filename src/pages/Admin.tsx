@@ -1667,11 +1667,39 @@ const Admin = () => {
                           })()}
                         </TableCell>
                       </TableRow>
-                      {/* Einladungsstatus Row */}
+                      {/* Erweiterte Details Row */}
                       {expandedJobRows.has(req.id) && (
                         <TableRow>
-                          <TableCell colSpan={7} className="bg-muted/50 p-4">
-                            <JobInvitesStatus jobId={req.id} />
+                          <TableCell colSpan={7} className="bg-muted/50 p-4 space-y-4">
+                            {/* Nachricht und Besonderheiten */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {req.nachricht && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">📝 Nachricht des Auftraggebers:</span>
+                                  <p className="text-sm text-gray-900 whitespace-pre-wrap">{req.nachricht}</p>
+                                </div>
+                              )}
+                              {req.besonderheiten && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">⚠️ Besonderheiten:</span>
+                                  <p className="text-sm text-gray-900 whitespace-pre-wrap">{req.besonderheiten}</p>
+                                </div>
+                              )}
+                              {req.einsatzort && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">📍 Einsatzort:</span>
+                                  <p className="text-sm text-gray-900">{req.einsatzort}</p>
+                                </div>
+                              )}
+                            </div>
+                            {!req.nachricht && !req.besonderheiten && !req.einsatzort && (
+                              <p className="text-sm text-gray-500 italic">Keine weiteren Details vorhanden.</p>
+                            )}
+                            {/* Einladungsstatus */}
+                            <div className="mt-4">
+                              <span className="text-sm font-semibold text-gray-700 block mb-2">📧 Einladungsstatus:</span>
+                              <JobInvitesStatus jobId={req.id} />
+                            </div>
                           </TableCell>
                         </TableRow>
                       )}
@@ -1849,14 +1877,37 @@ const Admin = () => {
                             }}
                             className="w-full justify-between"
                           >
-                            <span>Einladungsstatus anzeigen</span>
+                            <span>Details anzeigen</span>
                             {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                           </Button>
 
-                          {/* Einladungsstatus */}
+                          {/* Erweiterte Details */}
                           {isExpanded && (
-                            <div className="bg-muted/50 p-3 rounded">
-                              <JobInvitesStatus jobId={req.id} />
+                            <div className="space-y-3">
+                              {/* Nachricht und Besonderheiten */}
+                              {req.nachricht && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">📝 Nachricht:</span>
+                                  <p className="text-sm text-gray-900 whitespace-pre-wrap">{req.nachricht}</p>
+                                </div>
+                              )}
+                              {req.besonderheiten && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">⚠️ Besonderheiten:</span>
+                                  <p className="text-sm text-gray-900 whitespace-pre-wrap">{req.besonderheiten}</p>
+                                </div>
+                              )}
+                              {req.einsatzort && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">📍 Einsatzort:</span>
+                                  <p className="text-sm text-gray-900">{req.einsatzort}</p>
+                                </div>
+                              )}
+                              {/* Einladungsstatus */}
+                              <div className="bg-muted/50 p-3 rounded">
+                                <span className="text-sm font-semibold text-gray-700 block mb-2">📧 Einladungsstatus:</span>
+                                <JobInvitesStatus jobId={req.id} />
+                              </div>
                             </div>
                           )}
                         </CardContent>
