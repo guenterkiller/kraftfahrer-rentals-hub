@@ -18,7 +18,7 @@ import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
-import { JobInvitesStatus } from "@/components/JobInvitesStatus";
+// JobInvitesStatus ausgeblendet - Fahrer antworten jetzt per Telefon
 import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
@@ -1695,11 +1695,6 @@ const Admin = () => {
                             {!req.nachricht && !req.besonderheiten && !req.einsatzort && (
                               <p className="text-sm text-gray-500 italic">Keine weiteren Details vorhanden.</p>
                             )}
-                            {/* Einladungsstatus */}
-                            <div className="mt-4">
-                              <span className="text-sm font-semibold text-gray-700 block mb-2">📧 Einladungsstatus:</span>
-                              <JobInvitesStatus jobId={req.id} />
-                            </div>
                           </TableCell>
                         </TableRow>
                       )}
@@ -1903,11 +1898,6 @@ const Admin = () => {
                                   <p className="text-sm text-gray-900">{req.einsatzort}</p>
                                 </div>
                               )}
-                              {/* Einladungsstatus */}
-                              <div className="bg-muted/50 p-3 rounded">
-                                <span className="text-sm font-semibold text-gray-700 block mb-2">📧 Einladungsstatus:</span>
-                                <JobInvitesStatus jobId={req.id} />
-                              </div>
                             </div>
                           )}
                         </CardContent>
