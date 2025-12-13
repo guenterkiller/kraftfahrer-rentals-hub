@@ -156,8 +156,8 @@ const ProductCards = () => {
           {/* Mischmeister für Flüssigboden */}
           <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fade-in">
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -mr-16 -mt-16" />
-            <Badge className="absolute top-4 right-4 bg-green-600">
-              Neu
+            <Badge className="absolute top-4 right-4 bg-primary">
+              10 Jahre Erfahrung
             </Badge>
             
             <CardHeader className="pb-4">
@@ -224,7 +224,7 @@ const ProductCards = () => {
             to="/fluessigboden-service" 
             className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-2"
           >
-            Neu: Mischmeister für Flüssigboden jetzt buchbar →
+            Mischmeister für Flüssigboden – bundesweit buchbar →
           </Link>
         </div>
 
