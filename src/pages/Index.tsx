@@ -96,22 +96,6 @@ const Index = () => {
         <ProductCards />
         <ProcessSteps />
         <WhyFahrerexpress />
-        
-        {/* Hinweis zur Fahrerausstattung */}
-        <div className="container mx-auto px-4 max-w-4xl py-6">
-          <p className="text-base text-muted-foreground leading-relaxed">
-            <strong>Hinweis zur Fahrerausstattung:</strong> Im täglichen gewerblichen Einsatz spielt auch die Ausstattung der Fahrerkabine eine Rolle. Robuste und{' '}
-            <a 
-              href="https://www.awin1.com/cread.php?awinmid=22158&awinaffid=2362437&clickref=startseite_fahrerbedarf&ued=https%3A%2F%2Fwww.mattenwelt.de%2Flkw-fussmatten"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground underline hover:text-foreground"
-            >
-              passgenaue Fußmatten
-            </a>{' '}
-            tragen zur Sauberkeit und zum Werterhalt des Fahrzeugs bei.
-          </p>
-        </div>
 
         <TestimonialsSection />
         <FahreranfrageSection />
