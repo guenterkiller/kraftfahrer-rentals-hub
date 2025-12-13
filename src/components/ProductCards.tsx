@@ -157,7 +157,7 @@ const ProductCards = () => {
           <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fade-in">
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -mr-16 -mt-16" />
             <Badge className="absolute top-4 right-4 bg-primary">
-              10 Jahre Erfahrung
+              Seit 2015
             </Badge>
             
             <CardHeader className="pb-4">
