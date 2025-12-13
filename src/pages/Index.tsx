@@ -120,11 +120,11 @@ const Index = () => {
         <EUDriverRecruitment />
         <ContactSection />
         
-        {/* Neuer SEO-Block für Flüssigboden-Service */}
+        {/* SEO-Block für Flüssigboden-Service */}
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4 max-w-4xl">
             <h2 className="text-3xl font-bold mb-6 text-center">
-              Zusätzlicher Service: Mischmeister für Flüssigboden
+              Mischmeister für Flüssigboden
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
               Ergänzend zu unseren Fahrerdiensten bieten wir auch den Einsatz eines Mischmeisters für fließfähige Verfüllmaterialien an. Der Einsatz erfolgt als selbstständiger Subunternehmer inklusive Bedienung der bauseits gestellten Mischanlage, Radlader/Bagger sowie CE-Fahrmischer. Durch diese Kombination können auf der Baustelle bis zu zwei zusätzliche Mitarbeiter eingespart werden. Alle Arbeiten erfolgen ausschließlich nach Rezeptur und Anweisung des Auftraggebers, ohne Gewährleistungs- oder Betreiberverantwortung.
