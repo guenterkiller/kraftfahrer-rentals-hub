@@ -54,7 +54,7 @@ const PricingSection = () => {
                 </ul>
               </div>
               <div className="pt-3 border-t">
-                <p className="text-sm"><strong>Wochenpreis:</strong> ab 1.490 € (5 Tage)</p>
+                <p className="text-sm"><strong>Langzeiteinsätze:</strong> ab 3 Monaten individuell</p>
               </div>
               <Button 
                 className="w-full mt-4 bg-primary hover:bg-primary/90"
@@ -140,22 +140,11 @@ const PricingSection = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Wochenpreise</CardTitle>
+              <CardTitle className="text-base">Langzeiteinsätze</CardTitle>
             </CardHeader>
             <CardContent className="text-sm">
-              <p className="font-semibold">Ab 5 Tagen</p>
-              <p className="text-primary text-lg font-bold mt-1">1.490€/Woche</p>
-              <p className="text-muted-foreground text-xs mt-1">(nur CE-Fahrer)</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Monatspreise</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm">
-              <p className="font-semibold">Nur auf Anfrage</p>
-              <p className="text-muted-foreground mt-1">Individuelle Konditionen</p>
+              <p className="font-semibold">Ab 3 Monaten</p>
+              <p className="text-muted-foreground mt-1">Individuelle Konditionen auf Anfrage</p>
             </CardContent>
           </Card>
         </div>

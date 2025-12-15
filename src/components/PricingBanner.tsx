@@ -109,7 +109,7 @@ const PricingBanner = () => {
           </div>
           
           <p className="text-sm text-muted-foreground">
-            💡 <strong>Langzeitprojekte?</strong> Ab 5 Tagen bieten wir attraktive Staffelpreise – sprechen Sie uns an!
+            💡 <strong>Langzeitprojekte?</strong> Ab 3 Monaten bieten wir individuelle Konditionen – sprechen Sie uns an!
           </p>
         </div>
       </div>

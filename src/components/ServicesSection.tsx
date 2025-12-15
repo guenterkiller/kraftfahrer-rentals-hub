@@ -105,7 +105,7 @@ const ServicesSection = () => {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-blue-600">✓</span>
-                  Wochenpreise verfügbar
+                  Langzeitkonditionen ab 3 Monaten
                 </li>
               </ul>
             </CardContent>

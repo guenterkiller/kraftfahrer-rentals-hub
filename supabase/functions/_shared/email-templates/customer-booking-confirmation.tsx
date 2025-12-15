@@ -94,8 +94,7 @@ export const CustomerBookingConfirmation = ({
       <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Fahrtkosten & Langzeiteinsätze</Heading>
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li><strong>Fahrtkosten:</strong> 25 km inklusive, danach 0,40 €/km (Hin- und Rückweg)</li>
-        <li><strong>Wochenpreise:</strong> LKW CE Fahrer ab 1.490 €/Woche (5 Tage)</li>
-        <li><strong>Monatspreise:</strong> auf Anfrage je nach Einsatzdauer und Planungssicherheit</li>
+        <li><strong>Langzeiteinsätze:</strong> Ab 3 Monaten individuelle Konditionen auf Anfrage</li>
       </ul>
 
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
