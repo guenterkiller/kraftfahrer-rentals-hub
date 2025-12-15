@@ -727,6 +727,10 @@ const SimpleBookingForm = () => {
                   </div>
                 </div>
 
+                <p className="text-sm text-muted-foreground text-center">
+                  Mit Absenden der Anfrage gelten unsere Stornierungsregelungen.
+                </p>
+
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
