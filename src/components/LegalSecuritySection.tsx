@@ -74,6 +74,9 @@ const LegalSecuritySection = () => {
                 <p className="text-xs md:text-sm text-blue-900 leading-relaxed">
                   <strong>💡 Hinweis:</strong> Die von uns vermittelten Fahrer sind selbstständige Unternehmer mit eigenem Gewerbe. Die Fahrerexpress-Agentur beschäftigt selbst keine Fahrer. Begriffe wie „Mietfahrer", „Leihfahrer" oder „Ersatzfahrer" sind umgangssprachlich und bezeichnen keine arbeitsrechtliche Einordnung.
                 </p>
+                <p className="text-xs text-blue-800 mt-2 leading-relaxed">
+                  Alle Preis-, Abrechnungs- und Beispielangaben dienen der Orientierung und stellen keine Zusicherung, Garantie oder steuerliche Beratung dar.
+                </p>
               </div>
             </CardContent>
           </Card>
