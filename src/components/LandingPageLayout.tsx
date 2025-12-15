@@ -187,7 +187,7 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
       <Footer />
 
       {/* Admin Badge */}
-      <div className="fixed bottom-4 right-4 md:right-4 right-2 z-40">
+      <div className="fixed bottom-4 right-4 z-40">
         <Link 
           to="/admin" 
           className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-xs rounded-lg shadow-lg hover:bg-red-700 transition-colors"
