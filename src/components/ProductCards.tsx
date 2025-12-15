@@ -33,7 +33,7 @@ const ProductCards = () => {
           {/* LKW CE Fahrer - Featured Card */}
           <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fade-in">
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16" />
-            <Badge className="absolute top-4 right-4" variant="default">
+            <Badge className="absolute top-2 right-2 md:top-3 md:right-3 z-10" variant="default">
               <Star className="h-3 w-3 mr-1" />
               Beliebt
             </Badge>
@@ -156,7 +156,7 @@ const ProductCards = () => {
           {/* Mischmeister für Flüssigboden */}
           <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fade-in">
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full -mr-16 -mt-16" />
-            <Badge className="absolute top-4 right-4 bg-primary">
+            <Badge className="absolute top-2 right-2 md:top-3 md:right-3 z-10 bg-primary">
               Seit 2015
             </Badge>
             
