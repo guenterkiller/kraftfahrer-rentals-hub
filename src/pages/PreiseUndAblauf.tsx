@@ -4,13 +4,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Euro, FileText, Shield, Truck, AlertCircle } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
+import { Link } from "react-router-dom";
 import baggerIcon from "@/assets/bagger-icon.png";
 
 const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
     description: "LKW CE Fahrer, Baumaschinenführer und Mischmeister für Flüssigboden – transparente Tagessätze & Ablauf. Ab 349 €/Tag.",
-    keywords: "LKW Fahrer mieten Preis, Fahrer leihen Kosten, Fahrer bestellen Tagessatz, Mietfahrer Preis, Leihfahrer Kosten, Aushilfsfahrer Tagessatz, Ersatzfahrer LKW Preis, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Abruf, Kipper Fahrer Preis, Baustellen Fahrer Kosten, Fahrmischer Fahrer, Sattelzug Fahrer, Fahrer Dienstleister, Fahrer Personal Kosten, externe LKW Fahrer, LKW Fahrer Personalvermittlung"
+    keywords: "LKW Fahrer mieten Preis, Fahrer leihen Kosten, Fahrer bestellen Tagessatz, Mietfahrer Preis, Leihfahrer Kosten, Aushilfsfahrer Tagessatz, Ersatzfahrer LKW Preis, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Abruf, Kipper Fahrer Preis, Baustellen Fahrer Kosten, Fahrmischer Fahrer, Sattelzug Fahrer, Fahrer Dienstleister, Fahrer Personal Kosten, externe LKW Fahrer, LKW Fahrer Personalvermittlung",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Fahrervermittlung für selbstständige Unternehmer",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Fahrerexpress-Agentur - Günter Killer",
+        "telephone": "+49-1577-1442285"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": "B2B"
+      },
+      "description": "Vermittlung von LKW CE Fahrern, Baumaschinenführern und Mischmeistern als selbstständige Subunternehmer für Speditionen, Bauunternehmen und Logistikdienstleister deutschlandweit."
+    }
   });
 
   const scrollToBooking = () => {
@@ -394,9 +414,13 @@ const PreiseUndAblauf = () => {
             </div>
 
             {/* Was bleibt beim Fahrer übrig - Infobox */}
+            <div className="mb-4 text-center">
+              <h2 className="text-2xl font-bold text-emerald-900 mb-2">Transparenz für Auftraggeber</h2>
+              <p className="text-muted-foreground">Warum der Tagessatz fair kalkuliert ist – ein Blick hinter die Zahlen</p>
+            </div>
             <Card className="mb-12 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50">
               <CardHeader>
-                <CardTitle className="text-2xl flex items-center gap-2 text-emerald-900">
+                <CardTitle className="text-xl flex items-center gap-2 text-emerald-900">
                   <Euro className="h-6 w-6 text-emerald-600" />
                   Was bleibt beim Fahrer realistisch übrig?
                 </CardTitle>
@@ -459,7 +483,7 @@ const PreiseUndAblauf = () => {
                     <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
                     <div className="text-xs md:text-sm text-amber-900">
                       <p className="font-semibold mb-1">⚠️ Wichtiger Hinweis</p>
-                      <p>Die tatsächlichen Abgaben hängen von individuellen Faktoren ab (Familienstand, gewählte Versicherungen, absetzbare Betriebsausgaben). Diese Berechnung dient ausschließlich der Orientierung und stellt <strong>keine Steuer- oder Rechtsberatung</strong> dar. Bitte konsultieren Sie für eine verbindliche Berechnung Ihren Steuerberater.</p>
+                      <p>Die dargestellten Werte sind Durchschnittswerte und begründen keinen Anspruch auf tatsächliche oder zukünftige Einnahmen. Die tatsächlichen Abgaben hängen von individuellen Faktoren ab (Familienstand, gewählte Versicherungen, absetzbare Betriebsausgaben). Diese Berechnung dient ausschließlich der Orientierung und stellt <strong>keine Steuer- oder Rechtsberatung</strong> dar.</p>
                     </div>
                   </div>
                 </div>
@@ -477,7 +501,7 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-4">
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Selbstständige Fahrer</h3>
-                  <p className="text-muted-foreground">Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.</p>
+                  <p className="text-muted-foreground">Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Subunternehmer ist in der Ausführung seiner Tätigkeit fachlich eigenverantwortlich und nicht in die Arbeitsorganisation des Auftraggebers eingegliedert.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Zusammenarbeit</h3>
@@ -552,6 +576,33 @@ const PreiseUndAblauf = () => {
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
                   <p className="text-muted-foreground">Gerichtsstand ist Frankfurt am Main.</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Interne Verlinkung zu Landingpages */}
+            <Card className="mb-12 border-gray-200">
+              <CardHeader>
+                <CardTitle className="text-xl">Passende Fahrer für Ihren Bedarf</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <Link to="/ersatzfahrer-lkw" className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
+                    <Truck className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium">Ersatzfahrer bei Fahrerausfall buchen</span>
+                  </Link>
+                  <Link to="/mietfahrer" className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
+                    <Truck className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium">Mietfahrer für flexible Einsätze</span>
+                  </Link>
+                  <Link to="/lkw-fahrer-kurzfristig" className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
+                    <Clock className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium">LKW-Fahrer kurzfristig verfügbar</span>
+                  </Link>
+                  <Link to="/fahrer-fuer-speditionen" className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
+                    <FileText className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium">Fahrer für Speditionen bundesweit</span>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
