@@ -14,9 +14,9 @@ const PricingSection = () => {
     <section id="pricing" className="py-20 bg-secondary/5">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">LKW-Fahrer oder Baumaschinenführer – Sie haben die Wahl</h1>
+          <h1 className="text-4xl font-bold mb-4">LKW-Fahrer, Baumaschinenführer & Mischmeister – Sie haben die Wahl</h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Vermittelte LKW CE Fahrer für alle Einsatzarten im Nah-, Fern- und Baustellenverkehr sowie erfahrene Baumaschinenführer für Bagger, Radlader & mehr – alle arbeiten als selbstständige Subunternehmer. Fahrerexpress vermittelt nach § 652 BGB (Maklervertrag).
+            Vermittelte LKW CE Fahrer, Baumaschinenführer für Bagger, Radlader & mehr sowie Mischmeister für Flüssigboden – alle arbeiten als selbstständige Subunternehmer. Fahrerexpress vermittelt nach § 652 BGB (Maklervertrag).
           </p>
         </div>
 
