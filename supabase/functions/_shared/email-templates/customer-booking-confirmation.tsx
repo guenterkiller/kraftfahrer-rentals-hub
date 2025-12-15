@@ -104,6 +104,18 @@ export const CustomerBookingConfirmation = ({
       </Text>
     </Section>
 
+    <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
+      <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>⚠️ Stornierungsregelung</Heading>
+      <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+        <li><strong>Storno bis 24 Std. vorher</strong> → kostenlos</li>
+        <li><strong>Storno unter 24 Std.</strong> → 80 % des Tagessatzes</li>
+        <li><strong>Same-Day-Buchungen ausgeschlossen</strong> (Mindestvorlauf 24h werktags)</li>
+      </ul>
+      <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', marginTop: '10px' })}>
+        Mit Ihrer Buchungsanfrage bestätigen Sie die Kenntnisnahme dieser Stornierungsregelung.
+      </Text>
+    </Section>
+
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>🔄 Wie es jetzt weitergeht</Heading>
       <ol style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
