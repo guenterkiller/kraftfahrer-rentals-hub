@@ -124,6 +124,10 @@ const LKWFahrerBuchen = () => {
         answer: "Ja. Neben LKW-Fahrern vermitteln wir auch <strong>Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit</strong> als Subunternehmer für Tagesbaustellen oder komplette Projekte. Die Maschinen stellt der Auftraggeber – wir liefern nur qualifizierte Bediener."
       },
       {
+        question: "Bieten Sie auch Mischmeister für Flüssigboden an?",
+        answer: "Ja. Wir vermitteln erfahrene <strong>Mischmeister und Anlagenbediener für Flüssigboden</strong> deutschlandweit als Subunternehmer. Der Mischmeister bedient Ihre bauseits gestellte Anlage – keine Maschinenvermietung."
+      },
+      {
         question: "Arbeiten Ihre Fahrer als Subunternehmer?",
         answer: "Ja. Alle vermittelten Fahrer sind <strong>selbstständige Subunternehmer</strong> und arbeiten für einzelne Bauabschnitte, Tagesbaustellen oder komplette Einsätze. Die Vermittlung erfolgt per Dienst- oder Werkvertrag – keine Arbeitnehmerüberlassung."
       }

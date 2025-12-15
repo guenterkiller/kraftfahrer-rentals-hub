@@ -36,16 +36,16 @@ const DriverTypesSection = () => {
           <div className="inline-flex items-center gap-3 bg-green-50 border border-green-200 px-6 py-3 rounded-full">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-green-800 font-semibold">
-              Klare Preisstruktur – LKW CE Fahrer 349€ oder Baumaschinenführer 459€
+              Klare Preisstruktur – LKW CE Fahrer 349€, Baumaschinenführer 459€, Mischmeister 489€
             </span>
           </div>
         </div>
 
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-          LKW CE Fahrer oder Baumaschinenführer – Sie haben die Wahl
+          LKW CE Fahrer, Baumaschinenführer & Mischmeister – Sie haben die Wahl
         </h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
-          Vermittelte CE-Fahrer für alle Einsatzarten oder vermittelte Baumaschinenführer für Bagger, Radlader & mehr –
+          Vermittelte CE-Fahrer, Baumaschinenführer für Bagger, Radlader & mehr sowie Mischmeister für Flüssigboden –
           alle arbeiten als selbstständige Subunternehmer. Fahrerexpress vermittelt nach § 652 BGB (Maklervertrag).
         </p>
 
