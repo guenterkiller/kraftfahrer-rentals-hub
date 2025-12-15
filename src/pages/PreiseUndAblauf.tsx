@@ -181,62 +181,42 @@ const PreiseUndAblauf = () => {
               </CardContent>
             </Card>
 
-            {/* Wochen- & Monatspreise */}
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <Card className="border-red-200">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-red-900">LKW CE Fahrer – Langzeitkonditionen</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="bg-red-50 rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">Woche (5 Tage)</span>
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-red-700">ab 1.490 €</div>
-                        <div className="text-sm text-red-600 line-through">statt 1.745 €</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">2 Wochen</span>
-                      <span className="font-semibold">auf Anfrage</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Monat+</span>
-                      <span className="font-semibold">individuell nach Projekt</span>
-                    </div>
-                  </div>
-                  <div className="text-sm text-muted-foreground pt-3 border-t space-y-1">
-                    <p>➡ Woche = 5 Einsatztage (Mo–Fr)</p>
-                    <p>➡ Überstunden & Fahrtkosten werden zusätzlich berechnet.</p>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-orange-200">
-                <CardHeader>
-                  <CardTitle className="text-2xl text-orange-900">Baumaschinenführer – Projektpreise</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="mb-4 text-muted-foreground">Bei Einsätzen ab 2 Wochen bieten wir attraktive Projekt- und Staffelpreise:</p>
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Staffelpreise ab 10 Einsatztagen</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Garantierte Verfügbarkeit für Langzeitprojekte</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Individuelle Paketpreise möglich</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+            {/* Einsatzdauer & Langzeitkonditionen */}
+            <Card className="mb-12 border-blue-200 bg-blue-50/30">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Clock className="h-6 w-6 text-blue-600" />
+                  Einsatzdauer & Langzeitkonditionen
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-white rounded-lg p-4 border border-blue-200">
+                  <p className="font-semibold text-lg mb-2">Kurz- und Mitteleinsätze (unter 3 Monaten)</p>
+                  <p className="text-muted-foreground">
+                    Für Einsätze bis unter 3 Monaten gelten unsere transparenten Tagessätze ohne Wochenrabatte.
+                  </p>
+                  <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>LKW CE Fahrer: 349 € pro Tag (8 Std.)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>Baumaschinenführer: 459 € pro Tag (8 Std.)</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-blue-200">
+                  <p className="font-semibold text-lg mb-2">Langzeiteinsätze (ab 3 Monaten)</p>
+                  <p className="text-muted-foreground">
+                    Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert – fair für selbstständige Fahrer und Auftraggeber.
+                  </p>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    ➡ Sprechen Sie uns an für ein individuelles Angebot.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Spesen & Übernachtungen */}
             <Card className="mb-12">
@@ -389,8 +369,8 @@ const PreiseUndAblauf = () => {
                       <div className="text-xs text-muted-foreground text-center mt-2">
                         zzgl. gesetzl. MwSt.
                       </div>
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mt-3">
-                        <p className="text-sm text-green-800">➡ Bei Wochenpreisen (ab 1.490 €) reduzieren sich die Kosten weiter.</p>
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                        <p className="text-sm text-blue-800">➡ Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert.</p>
                       </div>
                     </div>
                   </CardContent>

@@ -72,8 +72,8 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW Fahrer buchen, mieten oder leihen – deutschlandweit",
-    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise oder wochenweise buchbar. Externe LKW Fahrer als Fahrer-Dienstleister. 349 € pro Tag (8h).",
-    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer sofort auf Abruf", "Tageweise oder wochenweise"]
+    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. Externe LKW Fahrer als Fahrer-Dienstleister. 349 € pro Tag (8h).",
+    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer sofort auf Abruf", "Transparente Tagessätze"]
   };
 
   const faqData = {
@@ -93,7 +93,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "<strong>Transparente Tagespreise:</strong> 349 € pro Tag (8h), 30 € Überstunde, Wochenpreis ab 1.490 €. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Keine versteckten Kosten."
+        answer: "<strong>Transparente Tagespreise:</strong> 349 € pro Tag (8h), 30 € Überstunde. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert. Keine versteckten Kosten."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
