@@ -20,18 +20,19 @@ const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 mb-16 max-w-6xl mx-auto">
           <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow">
             <CardHeader className="bg-primary/10 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
                 LKW CE Fahrer
-                <Badge className="bg-primary text-primary-foreground">Vermittelte Fahrer</Badge>
+                <Badge className="bg-primary text-primary-foreground">Vermittelt</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Vermittelte Fahrer für alle Einsatzarten</h3>
-                <p className="text-2xl font-bold text-primary">349 € pro Tag (8 Stunden) • 30 € Überstunde</p>
+                <h3 className="font-semibold text-lg mb-2">Für alle Einsatzarten</h3>
+                <p className="text-2xl font-bold text-primary">349 € / Tag</p>
+                <p className="text-sm text-muted-foreground">8 Std. • 30 € Überstunde</p>
               </div>
               <div className="pt-3 border-t">
                 <ul className="text-sm space-y-2">
@@ -41,20 +42,13 @@ const PricingSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer, ADR, Wechselbrücke, Hängerzug</span>
+                    <span>Fahrmischer, ADR, Wechselbrücke</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenverkehr, Container, Entsorgung</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Event- und Messe-Logistik</span>
+                    <span>Baustellenverkehr, Container</span>
                   </li>
                 </ul>
-              </div>
-              <div className="pt-3 border-t">
-                <p className="text-sm"><strong>Langzeiteinsätze:</strong> ab 3 Monaten individuell</p>
               </div>
               <Button 
                 className="w-full mt-4 bg-primary hover:bg-primary/90"
@@ -78,13 +72,14 @@ const PricingSection = () => {
             <CardHeader className="bg-muted/20 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
                 Baumaschinenführer
-                <Badge variant="secondary">Vermittelte Baumaschinenführer</Badge>
+                <Badge variant="secondary">Vermittelt</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Vermittelte Baumaschinenführer</h3>
-                <p className="text-2xl font-bold text-foreground">459 € pro Tag (8 Stunden) • 60 € Überstunde</p>
+                <h3 className="font-semibold text-lg mb-2">Bagger, Radlader & mehr</h3>
+                <p className="text-2xl font-bold text-foreground">459 € / Tag</p>
+                <p className="text-sm text-muted-foreground">8 Std. • 60 € Überstunde</p>
               </div>
               <div className="pt-3 border-t">
                 <ul className="text-sm space-y-2">
@@ -94,15 +89,11 @@ const PricingSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Flüssigboden, Mischanlagen</span>
+                    <span>Störungsbehebung & Reparaturen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Störungsbehebung & kleinere Reparaturen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenlogistik & Materialfluss</span>
+                    <span>Baustellenlogistik</span>
                   </li>
                 </ul>
               </div>
@@ -125,6 +116,52 @@ const PricingSection = () => {
             </CardContent>
           </Card>
 
+          <Card className="border-blue-500 bg-blue-50 hover:shadow-lg transition-shadow">
+            <CardHeader className="bg-blue-100 rounded-t-lg">
+              <CardTitle className="text-xl flex items-center gap-2">
+                Mischmeister
+                <Badge className="bg-blue-600 text-white">Flüssigboden</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Anlagenbediener Flüssigboden</h3>
+                <p className="text-2xl font-bold text-blue-700">489 € / Tag</p>
+                <p className="text-sm text-muted-foreground">8 Std. • 65 € Überstunde</p>
+              </div>
+              <div className="pt-3 border-t">
+                <ul className="text-sm space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-0.5">✓</span>
+                    <span>Mischanlage bedienen</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-0.5">✓</span>
+                    <span>Radlader, Bagger, Fahrmischer</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 mt-0.5">✓</span>
+                    <span>Anlage bauseits gestellt</span>
+                  </li>
+                </ul>
+              </div>
+              <Button 
+                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'category_click_mischmeister', {
+                      event_category: 'Pricing Section',
+                      event_label: 'Mischmeister',
+                      value: 489
+                    });
+                  }
+                  scrollToBooking();
+                }}
+              >
+                Mischmeister buchen
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
@@ -157,16 +194,6 @@ const PricingSection = () => {
             <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Abrechnung erfolgt über Fahrerexpress.</p>
           </CardContent>
         </Card>
-
-        {/* Neuer Textlink unter der Preisübersicht */}
-        <div className="text-center max-w-5xl mx-auto">
-          <a 
-            href="/fluessigboden-service" 
-            className="text-primary hover:text-primary/80 transition-colors inline-block"
-          >
-            Auch verfügbar: Mischmeister für Flüssigboden (ab 489 €/Tag)
-          </a>
-        </div>
 
       </div>
     </section>
