@@ -27,6 +27,36 @@
     <mobile:mobile/>
   </url>
   
+  <!-- Keyword-Landingpages - Ersatzfahrer, Mietfahrer, kurzfristig, Speditionen -->
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/ersatzfahrer-lkw</loc>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <mobile:mobile/>
+  </url>
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/mietfahrer</loc>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <mobile:mobile/>
+  </url>
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/lkw-fahrer-kurzfristig</loc>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <mobile:mobile/>
+  </url>
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/fahrer-fuer-speditionen</loc>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.90</priority>
+    <mobile:mobile/>
+  </url>
+  
   <!-- Alternative Einstiegsseite - Kraftfahrer mieten, leihen -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/kraftfahrer-mieten</loc>
