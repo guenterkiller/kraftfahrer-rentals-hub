@@ -707,11 +707,11 @@ const SimpleBookingForm = () => {
                       onCheckedChange={(checked) => setAgreedToData(checked as boolean)}
                       required
                     />
-                    <Label htmlFor="data">
-                      Ich stimme der Verarbeitung meiner Daten zu. *
-                      <a href="/datenschutz" className="text-blue-600 hover:underline ml-1">
+                    <Label htmlFor="data" className="inline">
+                      Ich stimme der Verarbeitung meiner Daten zu. *{' '}
+                      <Link to="/datenschutz" className="text-primary hover:underline">
                         Datenschutzerklärung
-                      </a>
+                      </Link>
                     </Label>
                   </div>
                   
