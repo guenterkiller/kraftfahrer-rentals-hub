@@ -24,6 +24,10 @@ import DriverJobResponse from "./pages/DriverJobResponse";
 import AdminRoute from "./components/AdminRoute";
 import LKWFahrerBuchen from "./pages/LKWFahrerBuchen";
 import KraftfahrerMieten from "./pages/KraftfahrerMieten";
+import ErsatzfahrerLkw from "./pages/ErsatzfahrerLkw";
+import Mietfahrer from "./pages/Mietfahrer";
+import LkwFahrerKurzfristig from "./pages/LkwFahrerKurzfristig";
+import FahrerFuerSpeditionen from "./pages/FahrerFuerSpeditionen";
 
 import BaumaschinenfuehrerBuchen from "./pages/BaumaschinenfuehrerBuchen";
 import BegleitfahrzeugeBF3 from "./pages/BegleitfahrzeugeBF3";
@@ -52,6 +56,10 @@ const App = () => (
           <Route path="/lkw-fahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/lkwfahrer-buchen" element={<LKWFahrerBuchen />} />
           <Route path="/kraftfahrer-mieten" element={<KraftfahrerMieten />} />
+          <Route path="/ersatzfahrer-lkw" element={<ErsatzfahrerLkw />} />
+          <Route path="/mietfahrer" element={<Mietfahrer />} />
+          <Route path="/lkw-fahrer-kurzfristig" element={<LkwFahrerKurzfristig />} />
+          <Route path="/fahrer-fuer-speditionen" element={<FahrerFuerSpeditionen />} />
           <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
           <Route path="/fluessigboden-service" element={<FlüssigbodenService />} />
           
