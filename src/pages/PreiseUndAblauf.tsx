@@ -398,6 +398,76 @@ const PreiseUndAblauf = () => {
               </div>
             </div>
 
+            {/* Was bleibt beim Fahrer übrig - Infobox */}
+            <Card className="mb-12 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2 text-emerald-900">
+                  <Euro className="h-6 w-6 text-emerald-600" />
+                  Was bleibt beim Fahrer realistisch übrig?
+                </CardTitle>
+                <CardDescription className="text-emerald-700">
+                  Orientierungsrechnung für selbstständige LKW-Fahrer (CE)
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-white rounded-lg p-4 border border-emerald-200">
+                  <p className="font-semibold text-emerald-900 mb-3">Beispiel: 20 Einsatztage im Monat</p>
+                  <div className="space-y-2 text-sm md:text-base">
+                    <div className="flex justify-between py-2 border-b border-emerald-100">
+                      <span className="text-muted-foreground">Tagessatz LKW CE Fahrer</span>
+                      <span className="font-semibold">349 € netto</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-emerald-100">
+                      <span className="text-muted-foreground">× 20 Einsatztage</span>
+                      <span className="font-semibold">6.980 € brutto</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-emerald-100">
+                      <span className="text-muted-foreground">– 15 % Agenturprovision</span>
+                      <span className="font-semibold text-red-600">– 1.047 €</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-emerald-100">
+                      <span className="text-muted-foreground">= Fahrer-Brutto vor Steuern</span>
+                      <span className="font-semibold">5.933 €</span>
+                    </div>
+                    <div className="flex justify-between py-2 border-b border-emerald-100">
+                      <span className="text-muted-foreground">– Geschätzte Steuern & Abgaben*</span>
+                      <span className="font-semibold text-red-600">– ca. 1.600–2.100 €</span>
+                    </div>
+                  </div>
+                  
+                  {/* Ergebnis hervorgehoben */}
+                  <div className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg p-4 text-white">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                      <span className="font-bold text-lg">≈ Netto beim Fahrer:</span>
+                      <span className="font-bold text-2xl sm:text-3xl">ca. 3.800 – 4.000 €</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Zusätzliche Einnahmen */}
+                <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                  <p className="font-semibold text-emerald-900 mb-2">💡 Zusätzliche Einnahmen möglich:</p>
+                  <ul className="space-y-1 text-sm text-emerald-800">
+                    <li>• Überstunden (30 € je Stunde ab der 9. Std.)</li>
+                    <li>• Zuschläge für Nacht-, Wochenend- & Feiertagsarbeit</li>
+                    <li>• Fahrtkosten-Erstattung ab dem 26. km</li>
+                    <li>• Übernachtungspauschale bei Fernverkehr</li>
+                  </ul>
+                </div>
+
+                {/* Disclaimer */}
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-xs md:text-sm text-amber-900">
+                      <p className="font-semibold mb-1">⚠️ Wichtiger Hinweis</p>
+                      <p>*Die tatsächliche Steuerlast hängt von individuellen Faktoren ab (Familienstand, Betriebsausgaben, Krankenversicherung, Altersvorsorge). Diese Berechnung dient ausschließlich der Orientierung und stellt <strong>keine Steuer- oder Rechtsberatung</strong> dar. Bitte konsultieren Sie für eine verbindliche Berechnung Ihren Steuerberater.</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Rechtliche Hinweise */}
             <Card className="mb-12 border-blue-200 bg-blue-50/50">
               <CardHeader>
