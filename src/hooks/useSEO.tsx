@@ -311,11 +311,7 @@ export const useSEO = (seoData: SEOData) => {
           }
         ]
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "127"
-      },
+      // AggregateRating entfernt - Google bestraft self-serving Reviews ohne verifizierte Drittanbieter-Quelle
       "priceRange": "€€",
       "openingHoursSpecification": [
         {
