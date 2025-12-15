@@ -1093,7 +1093,7 @@ const FahrerRegistrierung = () => {
                        <Checkbox id="datenschutz" required />
                        <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
                          Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
-                         <Link to="/impressum" className="text-primary hover:underline">
+                         <Link to="/datenschutz" className="text-primary hover:underline">
                            Datenschutzerklärung
                          </Link>{" "}
                          zu. *
