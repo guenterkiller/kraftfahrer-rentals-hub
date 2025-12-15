@@ -72,7 +72,7 @@ export const BaseEmail = ({ previewText, children }: BaseEmailProps) => (
         {/* Header */}
         <Section style={header} className="mobile-header">
           <Heading style={headerTitle} className="mobile-heading">Fahrerexpress-Agentur</Heading>
-          <Text style={headerSubtitle} className="mobile-text">LKW CE Fahrer & Baumaschinenführer</Text>
+          <Text style={headerSubtitle} className="mobile-text">LKW CE Fahrer, Baumaschinenführer & Mischmeister</Text>
         </Section>
 
         {/* Content */}

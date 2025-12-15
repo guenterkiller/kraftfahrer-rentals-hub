@@ -75,7 +75,7 @@ const FahrerInfos = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Vergütung</h4>
-                    <p className="text-muted-foreground text-sm">Der Fahrer erhält die vereinbarte Vergütung abzüglich der Vermittlungsgebühr (15 % LKW / 20 % Baumaschinen).</p>
+                    <p className="text-muted-foreground text-sm">Der Fahrer erhält die vereinbarte Vergütung abzüglich der Vermittlungsgebühr (15 % LKW / 20 % Baumaschinen & Mischmeister).</p>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Pflichten</h4>
