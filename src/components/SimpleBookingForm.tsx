@@ -15,6 +15,7 @@ const SimpleBookingForm = () => {
   const [loading, setLoading] = useState(false);
   const [agreedToPrices, setAgreedToPrices] = useState(false);
   const [agreedToData, setAgreedToData] = useState(false);
+  const [agreedToStorno, setAgreedToStorno] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
@@ -134,6 +135,7 @@ const SimpleBookingForm = () => {
       }
       setAgreedToPrices(false);
       setAgreedToData(false);
+      setAgreedToStorno(false);
       setNewsletter(false);
       setAdrRequired(false);
       setCraneRequired(false);
@@ -664,6 +666,18 @@ const SimpleBookingForm = () => {
                   />
                 </div>
 
+                {/* Stornierungsregelung */}
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <h4 className="font-semibold text-amber-800 mb-2 flex items-center gap-2">
+                    ⚠️ Stornierungsregelung
+                  </h4>
+                  <ul className="text-sm text-amber-900 space-y-1">
+                    <li>• <strong>Storno bis 24 Std. vorher</strong> → kostenlos</li>
+                    <li>• <strong>Storno unter 24 Std.</strong> → 80 % des Tagessatzes</li>
+                    <li>• <strong>Same-Day-Buchungen ausgeschlossen</strong> (Mindestvorlauf 24h werktags)</li>
+                  </ul>
+                </div>
+
                 {/* Consents */}
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2">
@@ -674,6 +688,16 @@ const SimpleBookingForm = () => {
                       required
                     />
                     <Label htmlFor="prices">Ich habe die Preise gelesen und verstanden. *</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="storno" 
+                      checked={agreedToStorno}
+                      onCheckedChange={(checked) => setAgreedToStorno(checked as boolean)}
+                      required
+                    />
+                    <Label htmlFor="storno">Ich habe die Stornierungsregelung gelesen und akzeptiere diese. *</Label>
                   </div>
                   
                   <div className="flex items-center space-x-2">
@@ -706,7 +730,7 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || !agreedToPrices || !agreedToData || !fahrzeugtyp}
+                  disabled={loading || !agreedToPrices || !agreedToData || !agreedToStorno || !fahrzeugtyp}
                 >
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
