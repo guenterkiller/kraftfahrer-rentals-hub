@@ -23,8 +23,8 @@ const LKWFahrerBuchen = () => {
     },
     faqData: [
       {
-        question: "Ist das Zeitarbeit?",
-        answer: "Nein. Es handelt sich um eine Dienst-/Werkleistung. Der LKW-Fahrer erbringt seine Leistung als selbstständiger Subunternehmer."
+        question: "Wie funktioniert die Zusammenarbeit?",
+        answer: "Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. Hinweis: Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung."
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
@@ -35,8 +35,44 @@ const LKWFahrerBuchen = () => {
         answer: "Hauptsächlich C+E (Sattelzug), aber auch C, C1+E je nach Anfrage. Zusätzlich ADR-Schein, Ladekran-Erfahrung oder Fahrmischer-Qualifikation."
       },
       {
-        question: "Wie läuft die Abrechnung?",
-        answer: "Sie erhalten ausschließlich eine Rechnung von Fahrerexpress. Die Fahrer stellen ihre Rechnung an uns – Sie haben keine zweite Rechnung. Transparente Tagespreise ohne versteckte Kosten."
+        question: "Wie sehen die Konditionen aus?",
+        answer: "Transparente Tagespreise: 349 € pro Tag (8h), 30 € Überstunde. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert. Keine versteckten Kosten."
+      },
+      {
+        question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
+        answer: "Ja. Wir vermitteln selbstständige LKW-Fahrer bundesweit in ganz Deutschland. Unsere Fahrer-Vermittlung ist deutschlandweit aktiv – Sie können LKW-Fahrer buchen deutschlandweit, egal ob für Speditionen, Baustellen oder Fernverkehr."
+      },
+      {
+        question: "Stellen Sie auch LKW oder Baumaschinen zur Verfügung?",
+        answer: "Nein. Wir vermitteln ausschließlich Fahrer und Bediener – keine Fahrzeuge, keine Baumaschinen. Geräte und Fahrzeuge stellt immer der Auftraggeber. Baumaschinenführer sind bei uns nur Bediener, keine Maschine wird mitgeliefert."
+      },
+      {
+        question: "Brauchen wir eine Arbeitnehmerüberlassung?",
+        answer: "Nein. Unsere Fahrer sind selbstständige LKW-Fahrer und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung."
+      },
+      {
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
+        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer sofort buchbar."
+      },
+      {
+        question: "Kann ich einen Fahrer sofort oder für heute bestellen?",
+        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
+      },
+      {
+        question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
+        answer: "Ja. Wir vermitteln Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer deutschlandweit. Alle arbeiten als selbstständige Fahrer – Sie können Fahrer leihen ohne Arbeitnehmerüberlassung. Fahrer Personal für Speditionen und Bauunternehmen."
+      },
+      {
+        question: "Vermitteln Sie auch Baggerfahrer und Baumaschinenführer?",
+        answer: "Ja. Neben LKW-Fahrern vermitteln wir auch Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit als Subunternehmer für Tagesbaustellen oder komplette Projekte. Die Maschinen stellt der Auftraggeber – wir liefern nur qualifizierte Bediener."
+      },
+      {
+        question: "Bieten Sie auch Mischmeister für Flüssigboden an?",
+        answer: "Ja. Wir vermitteln erfahrene Mischmeister und Anlagenbediener für Flüssigboden deutschlandweit als Subunternehmer. Der Mischmeister bedient Ihre bauseits gestellte Anlage – keine Maschinenvermietung."
+      },
+      {
+        question: "Arbeiten Ihre Fahrer als Subunternehmer?",
+        answer: "Ja. Alle vermittelten Fahrer sind selbstständige Subunternehmer und arbeiten für einzelne Bauabschnitte, Tagesbaustellen oder komplette Einsätze. Die Vermittlung erfolgt per Dienst- oder Werkvertrag – keine Arbeitnehmerüberlassung."
       }
     ],
     structuredData: {
