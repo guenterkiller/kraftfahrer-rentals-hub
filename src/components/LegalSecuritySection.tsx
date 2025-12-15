@@ -27,10 +27,17 @@ const LegalSecuritySection = () => {
             </CardHeader>
             <CardContent className="pt-6">
               <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                  <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-gray-700 leading-relaxed">
+                    <strong>Alle vermittelten Fahrer sind selbstständige Unternehmer mit eigenem Gewerbe</strong> und arbeiten auf Basis eines Dienst-/Werkvertrags.
+                  </p>
+                </div>
+                
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-gray-700 leading-relaxed">
-                    <strong>Unsere Fahrer arbeiten als selbstständige Unternehmer</strong> auf Basis eines Dienst-/Werkvertrags.
+                    <strong>Die Fahrerexpress-Agentur beschäftigt keine Fahrer</strong> – wir vermitteln und organisieren selbstständige Subunternehmer.
                   </p>
                 </div>
                 
@@ -65,7 +72,7 @@ const LegalSecuritySection = () => {
 
               <div className="mt-6 pt-6 border-t bg-blue-50 -mx-6 px-6 py-4 rounded-b-lg">
                 <p className="text-sm text-blue-900 leading-relaxed">
-                  <strong>💡 Hinweis:</strong> Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.
+                  <strong>💡 Hinweis:</strong> Die von uns vermittelten Fahrer sind selbstständige Unternehmer mit eigenem Gewerbe. Die Fahrerexpress-Agentur beschäftigt selbst keine Fahrer. Begriffe wie „Mietfahrer", „Leihfahrer" oder „Ersatzfahrer" sind umgangssprachlich und bezeichnen keine arbeitsrechtliche Einordnung.
                 </p>
               </div>
             </CardContent>
