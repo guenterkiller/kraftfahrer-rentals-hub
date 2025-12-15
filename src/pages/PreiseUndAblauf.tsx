@@ -37,37 +37,48 @@ const PreiseUndAblauf = () => {
             {/* Aktuelle Tagespreise */}
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-center mb-8">Mietfahrer & Leihfahrer – Tagespreise (netto)</h2>
-              <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-6">
+              <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-red-900">LKW Fahrer buchen / leihen</CardTitle>
-                    <CardDescription className="text-red-700">Ersatzfahrer, Aushilfsfahrer, Mietfahrer für Kipper, Sattelzug, Baustelle</CardDescription>
+                    <CardTitle className="text-xl text-red-900">LKW Fahrer buchen</CardTitle>
+                    <CardDescription className="text-red-700">Ersatzfahrer, Mietfahrer für Kipper, Sattelzug, Baustelle</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center mb-4">
-                      <div className="text-5xl font-bold text-red-700 mb-2">349 €</div>
-                      <p className="text-red-800 font-medium">pro Tag (8 Std.) netto</p>
-                      <p className="text-red-700 text-sm mt-2">30 € je Überstunde netto</p>
-                    </div>
-                    <div className="bg-red-50 rounded-lg p-3 mt-4">
-                      <p className="text-xs text-red-900"><strong>Ideal für:</strong> Kipper-Fahrer, Baustellen-Fahrer, Sattelzug-Fahrer, Fahrmischer-Fahrer, ADR-Fahrer – tageweise auf Abruf</p>
+                      <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
+                      <p className="text-red-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
+                      <p className="text-red-700 text-xs mt-2">30 € je Überstunde</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-orange-900 flex items-center gap-2">
-                      <img src={baggerIcon} alt="Bagger" className="h-6 w-6" />
-                      Baumaschinenführer buchen
+                    <CardTitle className="text-xl text-orange-900 flex items-center gap-2">
+                      <img src={baggerIcon} alt="Bagger" className="h-5 w-5" />
+                      Baumaschinenführer
                     </CardTitle>
-                    <CardDescription className="text-orange-700">Spezialisierte Fachkräfte für Baumaschinen</CardDescription>
+                    <CardDescription className="text-orange-700">Bagger, Radlader & mehr</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center mb-4">
-                      <div className="text-5xl font-bold text-orange-700 mb-2">459 €</div>
-                      <p className="text-orange-800 font-medium">pro Tag (8 Std.) netto</p>
-                      <p className="text-orange-700 text-sm mt-2">60 € je Überstunde netto</p>
+                      <div className="text-4xl font-bold text-orange-700 mb-2">459 €</div>
+                      <p className="text-orange-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
+                      <p className="text-orange-700 text-xs mt-2">60 € je Überstunde</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-blue-900">Mischmeister</CardTitle>
+                    <CardDescription className="text-blue-700">Anlagenbediener Flüssigboden</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center mb-4">
+                      <div className="text-4xl font-bold text-blue-700 mb-2">489 €</div>
+                      <p className="text-blue-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
+                      <p className="text-blue-700 text-xs mt-2">65 € je Überstunde</p>
                     </div>
                   </CardContent>
                 </Card>
