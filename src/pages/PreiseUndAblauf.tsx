@@ -204,6 +204,10 @@ const PreiseUndAblauf = () => {
                       <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                       <span>Baumaschinenführer: 459 € pro Tag (8 Std.)</span>
                     </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>Mischmeister Flüssigboden: 489 € pro Tag (8 Std.)</span>
+                    </li>
                   </ul>
                 </div>
                 <div className="bg-white rounded-lg p-4 border border-blue-200">
