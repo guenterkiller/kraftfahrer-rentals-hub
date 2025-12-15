@@ -60,7 +60,7 @@ const Index = () => {
       "mainEntity": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur - Günter Killer",
-        "description": "LKW CE Fahrer (349 €) und Baumaschinenführer (459 €) deutschlandweit buchen – selbstständige Subunternehmer bundesweit verfügbar, keine Arbeitnehmerüberlassung",
+        "description": "LKW CE Fahrer (349 €), Baumaschinenführer (459 €) und Mischmeister (489 €) deutschlandweit buchen – selbstständige Subunternehmer bundesweit verfügbar, keine Arbeitnehmerüberlassung",
         "url": "https://kraftfahrer-mieten.com",
         "telephone": "+49-1577-1442285",
         "priceRange": "Faire Preise",
