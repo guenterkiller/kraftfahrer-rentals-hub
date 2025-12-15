@@ -14,6 +14,7 @@ const HeroSection = () => {
           className="w-full h-full object-cover object-center"
           loading="eager"
           decoding="async"
+          fetchPriority="high"
           width={1920}
           height={1080}
           style={{ filter: 'brightness(1.05) contrast(1.05)' }}
