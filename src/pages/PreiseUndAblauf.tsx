@@ -8,9 +8,9 @@ import baggerIcon from "@/assets/bagger-icon.png";
 
 const PreiseUndAblauf = () => {
   useSEO({
-    title: "Preise & Ablauf – LKW Fahrer ab 349 € deutschlandweit",
-    description: "Transparente Preise: LKW Fahrer ab 349 €/Tag, Baumaschinenführer ab 459 €/Tag. Deutschlandweit, ohne AÜG.",
-    keywords: "LKW Fahrer buchen deutschlandweit, Ersatzfahrer LKW bundesweit, Baumaschinenführer deutschlandweit buchen, Fahrer Vermittlung bundesweit, LKW Fahrer kurzfristig verfügbar, Fahrer buchen ohne Arbeitnehmerüberlassung, LKW Fahrer Tagespreis, Fahrerservice deutschlandweit, selbstständige LKW Fahrer bundesweit"
+    title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
+    description: "Fahrer mieten, leihen oder bestellen: LKW Fahrer ab 349 €/Tag, Baumaschinenführer ab 459 €/Tag. Auf Abruf, tageweise, wochenweise.",
+    keywords: "LKW Fahrer mieten Preis, Fahrer leihen Kosten, Fahrer bestellen Tagessatz, Mietfahrer Preis, Leihfahrer Kosten, Aushilfsfahrer Tagessatz, Ersatzfahrer LKW Preis, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Abruf, Kipper Fahrer Preis, Baustellen Fahrer Kosten, Fahrmischer Fahrer, Sattelzug Fahrer, Fahrer Dienstleister, Fahrer Personal Kosten, externe LKW Fahrer, LKW Fahrer Personalvermittlung"
   });
 
   const scrollToBooking = () => {

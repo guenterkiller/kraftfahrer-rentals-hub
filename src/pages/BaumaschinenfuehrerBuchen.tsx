@@ -13,8 +13,8 @@ const BaumaschinenfuehrerBuchen = () => {
   }, []);
   const seoData = {
     title: "Baumaschinenführer buchen deutschlandweit – ab 459 €/Tag",
-    description: "Baumaschinenführer deutschlandweit buchen – nur Bediener, keine Maschinen. Kurzfristig, ohne AÜG. 459 €/Tag.",
-    keywords: "Baumaschinenführer deutschlandweit buchen, Baggerfahrer bundesweit, Radladerfahrer deutschlandweit, Baumaschinenführer kurzfristig verfügbar, Fahrer für Baustellen deutschlandweit, Baumaschinenführer mieten bundesweit, selbstständige Baumaschinenführer",
+    description: "Baumaschinenführer mieten, leihen oder bestellen – Baggerfahrer, Radladerfahrer auf Abruf. Tageweise, ohne AÜG. 459 €/Tag.",
+    keywords: "Baumaschinenführer buchen, Baumaschinenführer mieten, Baumaschinenführer leihen, Baggerfahrer bestellen, Radladerfahrer mieten, Baustellen Fahrer, Fahrer auf Abruf, Fahrer tageweise, Aushilfsfahrer Baustelle, Ersatzfahrer Baumaschine, Mietfahrer Bagger, externes Fahrer Personal, Fahrer Dienstleister Bau",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -82,8 +82,12 @@ const BaumaschinenfuehrerBuchen = () => {
         answer: "Ja. Wir vermitteln erfahrene <strong>Mischmeister und Anlagenbediener für Flüssigboden</strong> deutschlandweit als Subunternehmer. Der Mischmeister bedient Ihre bauseits gestellte Anlage – keine eigene Maschinenvermietung."
       },
       {
-        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
-        answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden."
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
+        answer: "Bei Fahrerausfall können Sie kurzfristig einen <strong>Aushilfsfahrer oder Mietfahrer</strong> bestellen. Unsere Ersatzfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Fahrer Personal für Baustellen sofort buchbar."
+      },
+      {
+        question: "Kann ich einen Baumaschinenführer tageweise oder wochenweise bestellen?",
+        answer: "Ja. Sie können <strong>Fahrer tageweise, wochenweise oder projektbezogen</strong> bestellen. Fahrer auf Abruf – flexibel nach Ihrem Bedarf. Als Fahrer-Dienstleister bieten wir externes Fahrer Personal für Baustellen."
       }
     ]
   };
