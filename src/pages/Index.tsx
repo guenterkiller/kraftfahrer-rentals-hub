@@ -19,8 +19,8 @@ const Index = () => {
   
   useSEO({
     title: "LKW Fahrer buchen deutschlandweit – CE-Fahrer bundesweit",
-    description: "LKW Fahrer deutschlandweit buchen – CE-Fahrer & Baumaschinenführer bundesweit. Kurzfristig, ohne Arbeitnehmerüberlassung.",
-    keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit verfügbar, selbstständige LKW Fahrer bundesweit, LKW Fahrer kurzfristig verfügbar, Fahrer buchen ohne Arbeitnehmerüberlassung, Notfallfahrer bundesweit, Ersatzfahrer LKW deutschlandweit, Urlaubsvertretung Fahrer deutschlandweit, LKW Fahrer für Speditionen deutschlandweit, CE Fahrer für Sattelzug buchen, Baumaschinenführer deutschlandweit buchen, Fahrer Vermittlung bundesweit, Fahrer für einen Tag buchen, LKW Fahrer mieten, Fahrerservice Deutschland",
+    description: "LKW Fahrer deutschlandweit buchen – Ersatzfahrer, Aushilfsfahrer & Mietfahrer bundesweit. Kurzfristig, auf Abruf, ohne Arbeitnehmerüberlassung.",
+    keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit, Ersatzfahrer LKW, Aushilfsfahrer LKW, Mietfahrer LKW, Leihfahrer LKW, Fahrer leihen, Fahrer bestellen, Fahrer Personal, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer, Urlaubsvertretung Fahrer, Krankheitsvertretung Fahrer, Vertretungsfahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, Baumaschinenführer buchen, LKW Fahrer Personalvermittlung, Fahrer kurzfristig verfügbar",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/',
@@ -151,9 +151,21 @@ const Index = () => {
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?</h3>
+                <h3 className="font-semibold text-lg mb-2">Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?</h3>
                 <p className="text-muted-foreground">
-                  Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer oder Notfallfahrer deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich.
+                  Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer für Speditionen sofort buchbar.
+                </p>
+              </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Kann ich einen Fahrer sofort oder für heute bestellen?</h3>
+                <p className="text-muted-foreground">
+                  Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Für kurzfristigen Bedarf empfehlen wir, Ihren Fahrer-Dienstleister frühzeitig zu kontaktieren.
+                </p>
+              </div>
+              <div className="bg-background rounded-lg p-6 shadow-sm">
+                <h3 className="font-semibold text-lg mb-2">Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?</h3>
+                <p className="text-muted-foreground">
+                  Ja. Wir vermitteln Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer deutschlandweit. Alle arbeiten als selbstständige Fahrer – Sie können Fahrer leihen ohne Arbeitnehmerüberlassung.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">

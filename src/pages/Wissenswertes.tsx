@@ -7,9 +7,9 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Wissenswertes = () => {
   useSEO({
-    title: "Wissenswertes – LKW Fahrer deutschlandweit rechtssicher",
-    description: "Selbstständige Fahrer deutschlandweit beauftragen: Rechtlich sicher, keine Arbeitnehmerüberlassung.",
-    keywords: "selbstständige Fahrer deutschlandweit beauftragen, Ersatzfahrer LKW bundesweit rechtlich, LKW Fahrer buchen ohne Arbeitnehmerüberlassung, Fahrer Vermittlung deutschlandweit, Scheinselbstständigkeit vermeiden, Kraftfahrer deutschlandweit rechtssicher"
+    title: "Wissenswertes – Fahrer mieten, leihen oder bestellen rechtssicher",
+    description: "Mietfahrer, Leihfahrer, Aushilfsfahrer rechtssicher beauftragen: Fahrer Personal ohne Arbeitnehmerüberlassung.",
+    keywords: "Fahrer mieten rechtssicher, Fahrer leihen legal, Mietfahrer beauftragen, Leihfahrer LKW, Aushilfsfahrer rechtlich, Fahrer Personal, Fahrer Dienstleister, externe Fahrer, Fahrer Personalvermittlung, Scheinselbstständigkeit vermeiden, Fahrer auf Abruf, Fahrer tageweise, Ersatzfahrer, Vertretungsfahrer"
   });
   return (
     <div className="min-h-screen bg-background">

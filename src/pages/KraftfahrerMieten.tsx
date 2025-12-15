@@ -2,9 +2,9 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const KraftfahrerMieten = () => {
   const seoData = {
-    title: "Kraftfahrer mieten deutschlandweit – bundesweit kurzfristig",
-    description: "Kraftfahrer deutschlandweit mieten – Berufskraftfahrer für Nah-/Fernverkehr, Baustellen. Kurzfristig, ohne AÜG.",
-    keywords: "Kraftfahrer mieten deutschlandweit, Berufskraftfahrer bundesweit, Fahrer mieten kurzfristig, Kraftfahrer Vermittlung bundesweit, selbstständige Kraftfahrer deutschlandweit, Ersatzfahrer bundesweit, Notfallfahrer Deutschland, Urlaubsvertretung Fahrer deutschlandweit",
+    title: "Kraftfahrer mieten deutschlandweit – Fahrer leihen & bestellen",
+    description: "Kraftfahrer mieten, leihen oder bestellen – Aushilfsfahrer, Mietfahrer, Leihfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
+    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer Personal, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Personalvermittlung, Kipper Fahrer, Baustellen Fahrer",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -31,12 +31,12 @@ const KraftfahrerMieten = () => {
   };
 
   const heroData = {
-    h1: "Kraftfahrer mieten – schnell & rechtssicher",
-    intro: "Bei Spitzen, Krankheit oder Urlaub: Selbstständige Kraftfahrer bundesweit verfügbar. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.",
+    h1: "Kraftfahrer mieten, leihen oder bestellen – deutschlandweit",
+    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit auf Abruf. Fahrer tageweise oder wochenweise bestellen. Ihr Fahrer-Dienstleister für externes Fahrer-Personal.",
     bullets: [
-      "Engpässe überbrücken (Tag/Woche/Projekt)",
-      "Transparente Abrechnung über die Agentur",
-      "ADR, Ladekran, Fahrmischer optional"
+      "Aushilfsfahrer bei Fahrerausfall",
+      "Fahrer auf Abruf – tageweise/wochenweise",
+      "Kipper, Baustelle, Sattelzug, Fahrmischer"
     ]
   };
 
@@ -72,8 +72,16 @@ const KraftfahrerMieten = () => {
         answer: "Nein. Unsere Fahrer sind <strong>selbstständige Kraftfahrer, Baumaschinenführer oder Mischmeister</strong>. Die Vermittlung erfolgt rechtssicher per Dienstleistungs- oder Werkvertrag – ohne klassische Arbeitnehmerüberlassung."
       },
       {
-        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
-        answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden."
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
+        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise."
+      },
+      {
+        question: "Kann ich einen Fahrer sofort oder für heute bestellen?",
+        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren Kraftfahrer frühzeitig zu bestellen."
+      },
+      {
+        question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
+        answer: "Ja. Wir vermitteln <strong>Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer</strong> deutschlandweit. Fahrer Personal für Speditionen und Bauunternehmen – Fahrer leihen ohne Arbeitnehmerüberlassung."
       },
       {
         question: "Vermitteln Sie auch Baggerfahrer und Radladerfahrer?",

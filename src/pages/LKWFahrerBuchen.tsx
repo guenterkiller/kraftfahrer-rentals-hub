@@ -13,8 +13,8 @@ const LKWFahrerBuchen = () => {
   }, []);
   const seoData = {
     title: "LKW CE Fahrer buchen deutschlandweit – ab 349 €/Tag",
-    description: "LKW Fahrer deutschlandweit buchen – CE-Fahrer für Speditionen, Baustellen, Fernverkehr. Kurzfristig, ohne AÜG. 349 €/Tag.",
-    keywords: "LKW Fahrer buchen deutschlandweit, CE Fahrer deutschlandweit verfügbar, Ersatzfahrer LKW bundesweit, LKW Fahrer für Speditionen deutschlandweit, CE Fahrer für Sattelzug buchen, LKW Fahrer kurzfristig verfügbar, Fahrer für Baustellen deutschlandweit, Notfallfahrer bundesweit, Urlaubsvertretung LKW Fahrer, ADR-Fahrer deutschlandweit, Fahrmischer Fahrer bundesweit, LKW Fahrer mieten",
+    description: "LKW Fahrer buchen, mieten oder leihen – Ersatzfahrer, Aushilfsfahrer, Mietfahrer deutschlandweit. Kurzfristig auf Abruf, tageweise. 349 €/Tag.",
+    keywords: "LKW Fahrer buchen, LKW Fahrer mieten, LKW Fahrer leihen, Ersatzfahrer LKW, Aushilfsfahrer LKW, LKW Mietfahrer, LKW Leihfahrer, Fahrer bestellen, Fahrer Personal, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer LKW, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW Fahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, CE Fahrer, ADR-Fahrer, LKW Fahrer Personalvermittlung",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
       'de-AT': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
@@ -71,9 +71,9 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW CE Fahrer deutschlandweit buchen",
-    intro: "Qualifizierte CE-Fahrer für alle Einsatzarten in ganz Deutschland: Fahrmischer, Wechselbrücke, Container, ADR. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Transparente Preise: 349 € pro Tag (8h), 30 € Überstunde. Wochenpreis ab 1.490 €.",
-    bullets: ["Alle Einsatzarten", "349 € pro Tag", "Deutschlandweit kurzfristig verfügbar"]
+    h1: "LKW Fahrer buchen, mieten oder leihen – deutschlandweit",
+    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise oder wochenweise buchbar. Externe LKW Fahrer als Fahrer-Dienstleister. 349 € pro Tag (8h).",
+    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer sofort auf Abruf", "Tageweise oder wochenweise"]
   };
 
   const faqData = {
@@ -108,8 +108,16 @@ const LKWFahrerBuchen = () => {
         answer: "Nein. Unsere Fahrer sind <strong>selbstständige LKW-Fahrer</strong> und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung."
       },
       {
-        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Ausfall?",
-        answer: "Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen <strong>Ersatzfahrer oder Notfallfahrer</strong> deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich."
+        question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
+        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer sofort buchbar."
+      },
+      {
+        question: "Kann ich einen Fahrer sofort oder für heute bestellen?",
+        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
+      },
+      {
+        question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
+        answer: "Ja. Wir vermitteln <strong>Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer</strong> deutschlandweit. Alle arbeiten als selbstständige Fahrer – Sie können Fahrer leihen ohne Arbeitnehmerüberlassung. Fahrer Personal für Speditionen und Bauunternehmen."
       },
       {
         question: "Vermitteln Sie auch Baggerfahrer und Baumaschinenführer?",
