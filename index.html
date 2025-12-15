@@ -64,8 +64,7 @@
     <meta name="DC.coverage" content="Deutschland, Österreich, Schweiz, EU" />
     <meta name="target-country" content="DE, AT, CH" />
     
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.kraftfahrer-mieten.com/" />
+    <!-- Canonical URL wird dynamisch per Route über useSEO gesetzt -->
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -151,13 +150,6 @@
           }
         ]
       },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "127",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
       "priceRange": "€€",
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
@@ -169,125 +161,7 @@
     }
     </script>
     
-    <!-- FAQ Schema für Startseite -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Kann ich einen LKW Fahrer sofort oder für heute bestellen?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Same-Day-Buchungen sind ausgeschlossen. Wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Was kostet ein Mietfahrer oder Leihfahrer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "LKW CE Fahrer ab 349€ pro Tag (8 Stunden), Baumaschinenführer ab 459€ pro Tag. Ersatzfahrer, Aushilfsfahrer und Vertretungsfahrer zu gleichen Konditionen."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen - meist innerhalb von 24-72 Stunden."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Vermitteln Sie Kipper-Fahrer und Baustellen-Fahrer?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Ja. Wir vermitteln Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer deutschlandweit. Fahrer Personal für Speditionen und Bauunternehmen."
-          }
-        }
-      ]
-    }
-    </script>
-    
-    <!-- Review Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "itemListElement": [
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Marcus Weber"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "Seit Jahren zuverlässig – schnelle Vermittlung auch bei Notfällen. Top Fahrer!",
-          "itemReviewed": {
-            "@type": "Service",
-            "name": "Fahrerexpress Fahrervermittlung"
-          }
-        },
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Sandra Müller"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "Professionelle Baumaschinenführer, die unser Projekt termingerecht abgeschlossen haben.",
-          "itemReviewed": {
-            "@type": "Service",
-            "name": "Fahrerexpress Fahrervermittlung"
-          }
-        },
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Thomas Klein"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "Kurzfristige Verfügbarkeit und faire Preise. Sehr empfehlenswert für Personalengpässe.",
-          "itemReviewed": {
-            "@type": "Service",
-            "name": "Fahrerexpress Fahrervermittlung"
-          }
-        },
-        {
-          "@type": "Review",
-          "author": {
-            "@type": "Person",
-            "name": "Andrea Schmidt"
-          },
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "reviewBody": "Für unsere Roadshows immer die perfekten Fahrer gefunden. Absolut zuverlässig!",
-          "itemReviewed": {
-            "@type": "Service",
-            "name": "Fahrerexpress Fahrervermittlung"
-          }
-        }
-      ]
-    }
-    </script>
+    <!-- FAQ und Review Schemata werden dynamisch per Route über useSEO generiert -->
     
     <meta name="x-build" content="fe9b7a1" />
   </head>
