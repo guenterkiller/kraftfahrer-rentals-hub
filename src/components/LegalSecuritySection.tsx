@@ -87,7 +87,7 @@ const LegalSecuritySection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-3 md:pt-4">
-              <div className="grid grid-cols-2 gap-3 md:gap-4 text-xs md:text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-xs md:text-sm">
                 <div>
                   <p className="font-semibold mb-1">Vertragspartner</p>
                   <p className="text-muted-foreground">Ausschließlich Fahrerexpress-Agentur</p>
