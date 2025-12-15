@@ -23,11 +23,11 @@ const HeroSection = () => {
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
         <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-snug sm:leading-tight drop-shadow-lg">
-          LKW-Fahrer & Kraftfahrer (CE) bundesweit buchen
+          LKW Fahrer buchen, mieten oder leihen – deutschlandweit
         </h1>
         
         <p className="text-base sm:text-xl md:text-2xl mb-4 sm:mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed">
-          Selbstständige Berufskraftfahrer & Baumaschinenführer ab <span className="text-white font-bold bg-red-600 px-2 py-1 rounded">349 €</span> Tagessatz – Vermittlung ohne Arbeitnehmerüberlassung
+          Ersatzfahrer, Aushilfsfahrer & Mietfahrer ab <span className="text-white font-bold bg-red-600 px-2 py-1 rounded">349 €</span> pro Tag – Fahrer auf Abruf, tageweise oder wochenweise bestellen
         </p>
         
         <div className="bg-white/15 backdrop-blur-md px-4 py-3 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-2xl border-2 border-white/30 shadow-xl animate-fade-in">
@@ -39,15 +39,15 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-center mb-10 sm:mb-16 animate-slide-up">
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
             <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
-            <span className="text-xs sm:text-sm md:text-base font-semibold">Planbare Verfügbarkeit</span>
+            <span className="text-xs sm:text-sm md:text-base font-semibold">Fahrer auf Abruf</span>
           </div>
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
             <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
-            <span className="text-xs sm:text-sm md:text-base font-semibold">Bundesweite Vermittlung</span>
+            <span className="text-xs sm:text-sm md:text-base font-semibold">Ersatz- & Mietfahrer</span>
           </div>
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
             <Truck className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
-            <span className="text-xs sm:text-sm md:text-base font-semibold">Professionelle Fahrer</span>
+            <span className="text-xs sm:text-sm md:text-base font-semibold">Tageweise buchbar</span>
           </div>
         </div>
         
