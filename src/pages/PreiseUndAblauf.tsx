@@ -414,24 +414,27 @@ const PreiseUndAblauf = () => {
                   <p className="font-semibold text-emerald-900 mb-3">Beispiel: 20 Einsatztage im Monat</p>
                   <div className="space-y-2 text-sm md:text-base">
                     <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">Tagessatz LKW CE Fahrer</span>
-                      <span className="font-semibold">349 € netto</span>
+                      <span className="text-muted-foreground">Monatliche Einnahmen (20 Tage)</span>
+                      <span className="font-semibold">ca. 5.900 €</span>
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground pt-2 pb-1 font-medium">Typische Abgaben als Selbstständiger:</p>
+                    
+                    <div className="flex justify-between py-2 border-b border-emerald-100">
+                      <span className="text-muted-foreground">– Krankenversicherung (gesetzl./privat)</span>
+                      <span className="font-semibold text-red-600">– ca. 450–650 €</span>
                     </div>
                     <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">× 20 Einsatztage</span>
-                      <span className="font-semibold">6.980 € brutto</span>
+                      <span className="text-muted-foreground">– Altersvorsorge / Rentenversicherung</span>
+                      <span className="font-semibold text-red-600">– ca. 300–500 €</span>
                     </div>
                     <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">– 15 % Agenturprovision</span>
-                      <span className="font-semibold text-red-600">– 1.047 €</span>
+                      <span className="text-muted-foreground">– Einkommensteuer (geschätzt)</span>
+                      <span className="font-semibold text-red-600">– ca. 700–1.000 €</span>
                     </div>
                     <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">= Fahrer-Brutto vor Steuern</span>
-                      <span className="font-semibold">5.933 €</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">– Geschätzte Steuern & Abgaben*</span>
-                      <span className="font-semibold text-red-600">– ca. 1.600–2.100 €</span>
+                      <span className="text-muted-foreground">– Betriebsausgaben (Telefon, Buchhaltung etc.)</span>
+                      <span className="font-semibold text-red-600">– ca. 100–200 €</span>
                     </div>
                   </div>
                   
@@ -461,7 +464,7 @@ const PreiseUndAblauf = () => {
                     <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
                     <div className="text-xs md:text-sm text-amber-900">
                       <p className="font-semibold mb-1">⚠️ Wichtiger Hinweis</p>
-                      <p>*Die tatsächliche Steuerlast hängt von individuellen Faktoren ab (Familienstand, Betriebsausgaben, Krankenversicherung, Altersvorsorge). Diese Berechnung dient ausschließlich der Orientierung und stellt <strong>keine Steuer- oder Rechtsberatung</strong> dar. Bitte konsultieren Sie für eine verbindliche Berechnung Ihren Steuerberater.</p>
+                      <p>Die tatsächlichen Abgaben hängen von individuellen Faktoren ab (Familienstand, gewählte Versicherungen, absetzbare Betriebsausgaben). Diese Berechnung dient ausschließlich der Orientierung und stellt <strong>keine Steuer- oder Rechtsberatung</strong> dar. Bitte konsultieren Sie für eine verbindliche Berechnung Ihren Steuerberater.</p>
                     </div>
                   </div>
                 </div>
