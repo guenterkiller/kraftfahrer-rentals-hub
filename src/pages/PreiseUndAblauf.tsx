@@ -27,21 +27,21 @@ const PreiseUndAblauf = () => {
             {/* Hero Section */}
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                Preise & Ablauf im Detail
+                Fahrer mieten, leihen oder bestellen – Preise & Ablauf
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Transparente Konditionen, klare Abläufe – so funktioniert die professionelle Vermittlung selbstständiger LKW-Fahrer & Baumaschinenführer.
+                Ersatzfahrer, Aushilfsfahrer, Mietfahrer & Leihfahrer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externes Fahrer-Personal.
               </p>
             </div>
 
             {/* Aktuelle Tagespreise */}
             <div className="mb-16">
-              <h2 className="text-3xl font-bold text-center mb-8">Aktuelle Tagespreise (netto)</h2>
+              <h2 className="text-3xl font-bold text-center mb-8">Mietfahrer & Leihfahrer – Tagespreise (netto)</h2>
               <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-2xl text-red-900">LKW CE Fahrer mieten</CardTitle>
-                    <CardDescription className="text-red-700">Professionelle Ersatzfahrer für alle LKW-Einsätze</CardDescription>
+                    <CardTitle className="text-2xl text-red-900">LKW Fahrer buchen / leihen</CardTitle>
+                    <CardDescription className="text-red-700">Ersatzfahrer, Aushilfsfahrer, Mietfahrer für Kipper, Sattelzug, Baustelle</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center mb-4">
@@ -50,7 +50,7 @@ const PreiseUndAblauf = () => {
                       <p className="text-red-700 text-sm mt-2">30 € je Überstunde netto</p>
                     </div>
                     <div className="bg-red-50 rounded-lg p-3 mt-4">
-                      <p className="text-xs text-red-900"><strong>Ideal für:</strong> Nah-, Fern- und Baustellenverkehr, Fahrmischer, ADR, Container, Entsorgung</p>
+                      <p className="text-xs text-red-900"><strong>Ideal für:</strong> Kipper-Fahrer, Baustellen-Fahrer, Sattelzug-Fahrer, Fahrmischer-Fahrer, ADR-Fahrer – tageweise auf Abruf</p>
                     </div>
                   </CardContent>
                 </Card>

@@ -2,144 +2,134 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
         xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0">
   
-  <!-- Hauptseite -->
+  <!-- Hauptseite - LKW Fahrer buchen, mieten, leihen -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <mobile:mobile/>
   </url>
   
-  <!-- Hauptkategorien (Kernprodukte) -->
+  <!-- Hauptkategorien (Kernprodukte) - Ersatzfahrer, Mietfahrer, Aushilfsfahrer -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <mobile:mobile/>
   </url>
   <url>
     <loc>https://www.kraftfahrer-mieten.com/baumaschinenfuehrer-buchen</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
     <mobile:mobile/>
   </url>
   
-  <!-- Alternative Einstiegsseite -->
+  <!-- Alternative Einstiegsseite - Kraftfahrer mieten, leihen -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/kraftfahrer-mieten</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+    <mobile:mobile/>
+  </url>
+  
+  <!-- Flüssigboden-Service - Mischmeister -->
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/fluessigboden-service</loc>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <mobile:mobile/>
   </url>
   
-  <!-- Fahrerregistrierung (wichtige Conversion-Seite) -->
+  <!-- Fahrerregistrierung -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/fahrer-registrierung</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+    <mobile:mobile/>
+  </url>
+  
+  <!-- Preise - Tagessätze, Kosten für Mietfahrer -->
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/preise-und-ablauf</loc>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
     <mobile:mobile/>
   </url>
   
-  <!-- Spezialleistungen -->
+  <!-- Spezialleistungen - BF3 -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/begleitfahrzeuge-bf3</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.75</priority>
     <mobile:mobile/>
   </url>
   <url>
     <loc>https://www.kraftfahrer-mieten.com/bf3-ablauf-kosten</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
-    <loc>https://www.kraftfahrer-mieten.com/preise-und-ablauf</loc>
-    <lastmod>2025-11-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <!-- Regionale Landingpages -->
-  <url>
-    <loc>https://www.kraftfahrer-mieten.com/frankfurt</loc>
-    <lastmod>2025-11-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <mobile:mobile/>
-  </url>
-  <url>
-    <loc>https://www.kraftfahrer-mieten.com/hessen</loc>
-    <lastmod>2025-11-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
-    <mobile:mobile/>
-  </url>
-  <url>
-    <loc>https://www.kraftfahrer-mieten.com/rhein-main</loc>
-    <lastmod>2025-11-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.70</priority>
     <mobile:mobile/>
   </url>
   
   <!-- Informationsseiten -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/projekte</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
+    <priority>0.70</priority>
+    <mobile:mobile/>
   </url>
   <url>
     <loc>https://www.kraftfahrer-mieten.com/versicherung</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.65</priority>
+    <mobile:mobile/>
   </url>
   <url>
     <loc>https://www.kraftfahrer-mieten.com/wissenswertes</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
+    <priority>0.70</priority>
+    <mobile:mobile/>
   </url>
   <url>
     <loc>https://www.kraftfahrer-mieten.com/vermittlung</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
+    <mobile:mobile/>
+  </url>
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/fahrer-infos</loc>
+    <lastmod>2025-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.50</priority>
+    <mobile:mobile/>
   </url>
   
-  <!-- Rechtliches (niedrige Priorität) -->
+  <!-- Rechtliches -->
   <url>
     <loc>https://www.kraftfahrer-mieten.com/impressum</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
+    <mobile:mobile/>
   </url>
   <url>
     <loc>https://www.kraftfahrer-mieten.com/datenschutz</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2025-06-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
+    <mobile:mobile/>
   </url>
-  
-  <!-- 
-  ENTFERNTE URLs (301-Weiterleitungen zu Hauptkategorien):
-  - /fahrmischerfahrer-gesucht → /lkw-fahrer-buchen
-  - /tankwagenfahrer-buchen → /lkw-fahrer-buchen
-  - /kranfahrer-buchen → /lkw-fahrer-buchen
-  - /fahrmischerfahrer-buchen → /lkw-fahrer-buchen
-  - /adr-fahrer-buchen → /lkw-fahrer-buchen
-  
-  Diese URLs sind nicht mehr in der Sitemap, da Google nur kanonische URLs crawlen soll.
-  Die Weiterleitungen funktionieren weiterhin auf App-Ebene (React Router).
-  -->
   
 </urlset>

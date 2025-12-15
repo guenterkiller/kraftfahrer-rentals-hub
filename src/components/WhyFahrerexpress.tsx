@@ -4,33 +4,33 @@ const WhyFahrerexpress = () => {
   const benefits = [
     {
       icon: Shield,
-      title: "Selbstständige Profis",
-      description: "Rechtssichere Zusammenarbeit mit selbstständigen Fahrern deutschlandweit"
+      title: "Ersatzfahrer bei Fahrerausfall",
+      description: "Aushilfsfahrer und Vertretungsfahrer bei Krankheit oder Urlaub – kurzfristig verfügbar"
     },
     {
       icon: Euro,
-      title: "Transparente Tagessätze",
-      description: "Ohne versteckte Kosten – Sie wissen genau, was Sie zahlen"
+      title: "Mietfahrer ab 349 €/Tag",
+      description: "Transparente Tagessätze – Leihfahrer und Mietfahrer ohne versteckte Kosten"
     },
     {
       icon: Wrench,
-      title: "Spezialisierung auf LKW & Baumaschinen",
-      description: "Fokus auf Baustellenlogistik und Transportwesen in ganz Deutschland"
+      title: "Kipper, Baustelle, Sattelzug",
+      description: "Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und CE-Fahrer deutschlandweit"
     },
     {
       icon: Phone,
-      title: "Persönlicher Ansprechpartner",
-      description: "Kurze Wege statt anonymes Callcenter – bundesweite Betreuung"
+      title: "Fahrer Dienstleister",
+      description: "Ihr Fahrer-Personal Ansprechpartner – externe LKW Fahrer auf Abruf bestellen"
     },
     {
       icon: Briefcase,
-      title: "Erfahrene Fahrer",
-      description: "Mit eigener Berufserfahrung im Bau- und Logistikbereich"
+      title: "Fahrer tageweise buchen",
+      description: "Fahrer tageweise oder wochenweise leihen – flexibel nach Ihrem Bedarf"
     },
     {
       icon: TrendingUp,
-      title: "Deutschlandweite Vermittlung",
-      description: "Fahrer kurzfristig verfügbar – bundesweit einsetzbar"
+      title: "Fahrer sofort deutschlandweit",
+      description: "Fahrer Personalvermittlung bundesweit – Notfallfahrer in 24-72 Stunden"
     }
   ];
 
