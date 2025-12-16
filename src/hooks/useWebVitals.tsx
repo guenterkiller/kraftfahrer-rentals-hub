@@ -1,17 +1,46 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { loadConsent } from '@/lib/consent';
 
 /**
+ * Prüft ob der Zugriff aus der Lovable-Preview stammt
+ */
+const isLovablePreview = (): boolean => {
+  const referrer = document.referrer || '';
+  const hostname = window.location.hostname;
+  
+  const lovablePatterns = [
+    'lovable.dev',
+    'lovableproject.com',
+    '__lovable_token'
+  ];
+  
+  return lovablePatterns.some(pattern => 
+    referrer.includes(pattern) || hostname.includes(pattern)
+  );
+};
+
+/**
  * Hook to track Core Web Vitals (DSGVO-konform)
- * Trackt nur wenn Analytics-Zustimmung vorliegt
+ * - Trackt nur wenn Analytics-Zustimmung vorliegt
+ * - Schließt Lovable-Preview Zugriffe aus
  * Tracks LCP, FID, CLS, FCP, TTFB
  */
 export const useWebVitals = () => {
   const location = useLocation();
+  const hasTracked = useRef(false);
 
   useEffect(() => {
+    // Prevent double-tracking during React StrictMode
+    if (hasTracked.current) return;
+    
+    // Lovable-Preview ausschließen
+    if (isLovablePreview()) {
+      console.debug('⏸️ Web vitals tracking skipped - Lovable Preview detected');
+      return;
+    }
+    
     // DSGVO: Nur tracken wenn Analytics-Zustimmung vorliegt
     const consent = loadConsent();
     if (!consent?.given || !consent?.categories?.analytics) {
@@ -19,6 +48,7 @@ export const useWebVitals = () => {
       return;
     }
 
+    hasTracked.current = true;
     const route = location.pathname;
 
     const reportWebVital = async (metric: any) => {
