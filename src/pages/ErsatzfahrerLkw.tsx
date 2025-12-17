@@ -15,7 +15,7 @@ const ErsatzfahrerLkw = () => {
   const seoData = {
     title: "Ersatzfahrer LKW – Sofort-Vertretung bei Fahrerausfall",
     description: "Ersatzfahrer LKW bei Krankheit, Urlaub oder Fahrerausfall. Vertretungsfahrer deutschlandweit in 24-72h verfügbar. Keine Arbeitnehmerüberlassung.",
-    keywords: "Ersatzfahrer LKW, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW, Fahrerausfall, Notfallfahrer LKW, kurzfristiger Ersatz, LKW Fahrer Vertretung, Aushilfsfahrer Krankheit, Ersatz LKW Fahrer, spontaner Ersatzfahrer, Fahrerengpass, Personalengpass LKW",
+    keywords: "Ersatzfahrer LKW, Ersatzfahrer LKW sofort, LKW Fahrer Krankheitsvertretung, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW, Fahrerausfall, Notfallfahrer LKW, kurzfristiger Ersatz, LKW Fahrer Vertretung, Aushilfsfahrer Krankheit, Ersatz LKW Fahrer, spontaner Ersatzfahrer, Fahrerengpass, Personalengpass LKW",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/ersatzfahrer-lkw',
       'x-default': 'https://www.kraftfahrer-mieten.com/ersatzfahrer-lkw'
