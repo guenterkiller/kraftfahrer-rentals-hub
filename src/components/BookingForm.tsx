@@ -171,7 +171,7 @@ const BookingForm = () => {
               </p>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" aria-label="Vollständige Fahreranfrage">
                 {/* Company & Contact */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -247,8 +247,10 @@ const BookingForm = () => {
                           "w-full justify-start text-left font-normal mt-1",
                           !startDate && "text-muted-foreground"
                         )}
+                        aria-label="Startdatum auswählen"
+                        aria-describedby="start-date-hint"
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        <CalendarIcon className="mr-2 h-4 w-4" aria-hidden="true" />
                         {startDate ? (
                           <>
                             {format(startDate, "PPP", { locale: de })}
@@ -286,9 +288,9 @@ const BookingForm = () => {
                 </div>
 
                 {/* Vehicle Types */}
-                <div>
-                  <Label className="text-base font-medium">Fahrzeugtyp (Mehrfachauswahl möglich) *</Label>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
+                <fieldset>
+                  <legend className="text-base font-medium">Fahrzeugtyp (Mehrfachauswahl möglich) *</legend>
+                  <div className="grid grid-cols-2 gap-2 mt-2" role="group" aria-label="Fahrzeugtyp auswählen">
                     {vehicleOptions.map((type) => (
                       <div key={type} className="flex items-center space-x-2">
                         <Checkbox
@@ -304,12 +306,12 @@ const BookingForm = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 {/* Qualifications */}
-                <div>
-                  <Label className="text-base font-medium">Erforderliche Qualifikationen</Label>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
+                <fieldset>
+                  <legend className="text-base font-medium">Erforderliche Qualifikationen</legend>
+                  <div className="grid grid-cols-2 gap-2 mt-2" role="group" aria-label="Qualifikationen auswählen">
                     {qualificationOptions.map((qual) => (
                       <div key={qual} className="flex items-center space-x-2">
                         <Checkbox
@@ -325,7 +327,7 @@ const BookingForm = () => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </fieldset>
 
                 {/* Duration & Location */}
                 <div className="grid md:grid-cols-2 gap-4">
@@ -400,6 +402,7 @@ const BookingForm = () => {
                   type="submit" 
                   className="w-full bg-primary hover:bg-primary/90"
                   disabled={loading || vehicleTypes.length === 0 || !startDate}
+                  aria-label="Jetzt Fahrer anfragen"
                 >
                   {loading ? "Wird gesendet..." : "Jetzt Fahrer anfragen"}
                 </Button>

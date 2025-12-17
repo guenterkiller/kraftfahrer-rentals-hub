@@ -297,10 +297,10 @@ const SimpleBookingForm = () => {
                 </Link>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahreranfrage-Formular">
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Ihre Anfrage</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p id="form-description" className="text-sm text-muted-foreground mb-4">
                     Bitte geben Sie Ihre Kontaktdaten und Details zu Ihrem Fahrbedarf an
                   </p>
                 </div>
@@ -388,12 +388,12 @@ const SimpleBookingForm = () => {
                   </div>
                 </div>
 
-                <div>
-                  <Label>Benötigter Fahrertyp / Qualifikation *</Label>
-                  <p className="text-sm opacity-80 mb-3" aria-live="polite">
+                <fieldset>
+                  <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Benötigter Fahrertyp / Qualifikation *</legend>
+                  <p id="fahrertyp-hint" className="text-sm opacity-80 mb-3" aria-live="polite">
                     Beispiel: <em>7,5 t</em>, <em>40 t</em>, <em>ADR</em>, <em>Tankwagen</em>, <em>Baumaschinenführer</em>, <em>Ladekran</em>.
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
                     <label 
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         fahrzeugtyp === 'LKW CE' 
@@ -479,12 +479,12 @@ const SimpleBookingForm = () => {
                       </div>
                     </label>
                   </div>
-                </div>
+                </fieldset>
 
                 {/* Special Requirements */}
-                <div>
-                  <Label className="text-base font-medium">Spezialanforderungen</Label>
-                  <div className="grid md:grid-cols-2 gap-x-8 gap-y-2 mt-2">
+                <fieldset>
+                  <legend className="text-base font-medium">Spezialanforderungen</legend>
+                  <div className="grid md:grid-cols-2 gap-x-8 gap-y-2 mt-2" role="group" aria-label="Spezialanforderungen auswählen">
                     <div className="flex items-center space-x-2">
                       <Checkbox 
                         id="adr" 
@@ -614,22 +614,22 @@ const SimpleBookingForm = () => {
                       <Label htmlFor="escortexperience">Erfahrung im Schwertransport-Begleitwesen</Label>
                     </div>
                   </div>
-                </div>
+                </fieldset>
 
                 {/* Begleitfahrzeuge Requirements */}
-                <div>
+                <fieldset>
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1" aria-hidden="true">
                       <Car className="w-4 h-4 text-warning" />
                       <ShieldAlert className="w-4 h-4 text-warning" />
                     </div>
-                    <Label className="text-base font-medium">Benötigen Sie Fahrer für Begleitfahrzeuge?</Label>
+                    <legend className="text-base font-medium">Benötigen Sie Fahrer für Begleitfahrzeuge?</legend>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p id="bf-hint" className="text-sm text-muted-foreground mb-3">
                     Unsere Fahrer unterstützen Sie bei der Begleitung von Großraum- und Schwertransporten. 
                     Ob BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage.
                   </p>
-                  <div className="space-y-2">
+                  <div className="space-y-2" role="group" aria-describedby="bf-hint">
                     <div className="flex items-center space-x-2">
                       <Checkbox 
                         id="requiresbf2" 
@@ -653,7 +653,7 @@ const SimpleBookingForm = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </fieldset>
 
                 <div>
                   <Label htmlFor="beschreibung">Beschreiben Sie Ihren Fahrbedarf *</Label>
@@ -735,6 +735,7 @@ const SimpleBookingForm = () => {
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
                   disabled={loading || !agreedToPrices || !agreedToData || !agreedToStorno || !fahrzeugtyp}
+                  aria-describedby="form-description"
                 >
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">

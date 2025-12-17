@@ -658,7 +658,7 @@ const FahrerRegistrierung = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahrer-Registrierungsformular">
                   {/* Persönliche Daten */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -671,7 +671,7 @@ const FahrerRegistrierung = () => {
                         required
                       />
                       {validationErrors.vorname && (
-                        <p className="text-sm text-destructive mt-1">{validationErrors.vorname}</p>
+                        <p id="vorname-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.vorname}</p>
                       )}
                     </div>
                     <div>
@@ -684,7 +684,7 @@ const FahrerRegistrierung = () => {
                         required
                       />
                       {validationErrors.nachname && (
-                        <p className="text-sm text-destructive mt-1">{validationErrors.nachname}</p>
+                        <p id="nachname-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.nachname}</p>
                       )}
                     </div>
                   </div>
@@ -701,7 +701,7 @@ const FahrerRegistrierung = () => {
                         required
                       />
                       {validationErrors.email && (
-                        <p className="text-sm text-destructive mt-1">{validationErrors.email}</p>
+                        <p id="email-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.email}</p>
                       )}
                     </div>
                     <div>
@@ -714,7 +714,7 @@ const FahrerRegistrierung = () => {
                         required
                       />
                       {validationErrors.telefon && (
-                        <p className="text-sm text-destructive mt-1">{validationErrors.telefon}</p>
+                        <p id="telefon-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.telefon}</p>
                       )}
                     </div>
                   </div>
@@ -766,9 +766,9 @@ const FahrerRegistrierung = () => {
                   </div>
 
                   {/* Qualifikationen */}
-                  <div>
-                    <Label>Führerscheinklassen *</Label>
-                    <div className="grid grid-cols-3 md:grid-cols-7 gap-2 mt-2">
+                  <fieldset>
+                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Führerscheinklassen *</legend>
+                    <div className="grid grid-cols-3 md:grid-cols-7 gap-2 mt-2" role="group" aria-label="Führerscheinklassen auswählen">
                       {fuehrerscheinklassen.map((klasse) => (
                         <div key={klasse} className="flex items-center space-x-2">
                           <Checkbox
@@ -783,9 +783,9 @@ const FahrerRegistrierung = () => {
                       ))}
                     </div>
                     {validationErrors.fuehrerscheinklassen && (
-                      <p className="text-sm text-destructive mt-1">{validationErrors.fuehrerscheinklassen}</p>
+                      <p id="fuehrerschein-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.fuehrerscheinklassen}</p>
                     )}
-                  </div>
+                  </fieldset>
 
                   <div>
                     <Label htmlFor="erfahrung">Berufserfahrung (Jahre) *</Label>
@@ -805,14 +805,14 @@ const FahrerRegistrierung = () => {
                       </SelectContent>
                     </Select>
                     {validationErrors.erfahrung_jahre && (
-                      <p className="text-sm text-destructive mt-1">{validationErrors.erfahrung_jahre}</p>
+                      <p id="erfahrung-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.erfahrung_jahre}</p>
                     )}
                   </div>
 
                   {/* Spezialisierungen */}
-                  <div>
-                    <Label>Spezialisierungen</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                  <fieldset>
+                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Spezialisierungen</legend>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2" role="group" aria-label="Spezialisierungen auswählen">
                       {spezialisierungen.map((spez) => (
                         <div key={spez} className="flex items-center space-x-2">
                           <Checkbox
@@ -826,12 +826,12 @@ const FahrerRegistrierung = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Spezialanforderungen */}
-                  <div>
-                    <Label>Spezialanforderungen</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                  <fieldset>
+                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Spezialanforderungen</legend>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2" role="group" aria-label="Spezialanforderungen auswählen">
                       {spezialanforderungen.map((anforderung) => (
                         <div key={anforderung} className="flex items-center space-x-2">
                           <Checkbox
@@ -845,18 +845,18 @@ const FahrerRegistrierung = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* BF2/BF3 Erlaubnisse */}
-                  <div className="bg-muted/30 p-4 rounded-lg">
+                  <fieldset className="bg-muted/30 p-4 rounded-lg">
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-lg">🚛</span>
-                      <Label className="text-base font-semibold">Haben Sie BF2/BF3-Berechtigung?</Label>
+                      <span className="text-lg" aria-hidden="true">🚛</span>
+                      <legend className="text-base font-semibold">Haben Sie BF2/BF3-Berechtigung?</legend>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p id="bf-berechtigung-hint" className="text-sm text-muted-foreground mb-4">
                       Falls Sie als Fahrer für Großraum- und Schwertransport-Begleitung qualifiziert sind (BF2 mit Rundumkennleuchte oder BF3/BF4 mit Wechselverkehrszeichenanlage), geben Sie dies bitte an.
                     </p>
-                    <div className="space-y-3">
+                    <div className="space-y-3" role="group" aria-describedby="bf-berechtigung-hint">
                       <div className="flex items-center space-x-2">
                         <Checkbox
                           id="bf2_erlaubnis"
@@ -884,12 +884,12 @@ const FahrerRegistrierung = () => {
                         </Label>
                       </div>
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Verfügbare Regionen */}
-                  <div>
-                    <Label>Verfügbare Bundesländer</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 max-h-40 overflow-y-auto">
+                  <fieldset>
+                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Verfügbare Bundesländer</legend>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2 max-h-40 overflow-y-auto" role="group" aria-label="Bundesländer für Einsätze auswählen">
                       {bundeslaender.map((land) => (
                         <div key={land} className="flex items-center space-x-2">
                           <Checkbox
@@ -903,7 +903,7 @@ const FahrerRegistrierung = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </fieldset>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -919,7 +919,7 @@ const FahrerRegistrierung = () => {
                         required
                       />
                       {validationErrors.stundensatz && (
-                        <p className="text-sm text-destructive mt-1">{validationErrors.stundensatz}</p>
+                        <p id="stundensatz-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.stundensatz}</p>
                       )}
                     </div>
                     <div>
@@ -948,7 +948,7 @@ const FahrerRegistrierung = () => {
                      <div className="grid md:grid-cols-2 gap-4">
                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                          <div className="flex flex-col items-center space-y-2">
-                           <FileText className="h-8 w-8 text-muted-foreground" />
+                           <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
                             <h4 className="font-medium">Führerschein</h4>
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihres Führerscheins hoch (mehrere Dateien möglich)
@@ -977,8 +977,9 @@ const FahrerRegistrierung = () => {
                              variant="outline"
                              size="sm"
                              onClick={() => document.getElementById('fuehrerschein')?.click()}
+                             aria-label="Führerschein hochladen"
                            >
-                             <Upload className="h-4 w-4 mr-2" />
+                             <Upload className="h-4 w-4 mr-2" aria-hidden="true" />
                              Datei wählen
                            </Button>
                          </div>
@@ -986,7 +987,7 @@ const FahrerRegistrierung = () => {
 
                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                          <div className="flex flex-col items-center space-y-2">
-                           <FileText className="h-8 w-8 text-muted-foreground" />
+                           <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
                             <h4 className="font-medium">Fahrerkarte</h4>
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihrer Fahrerkarte hoch (mehrere Dateien möglich)
@@ -1015,8 +1016,9 @@ const FahrerRegistrierung = () => {
                              variant="outline"
                              size="sm"
                              onClick={() => document.getElementById('fahrerkarte')?.click()}
+                             aria-label="Fahrerkarte hochladen"
                            >
-                             <Upload className="h-4 w-4 mr-2" />
+                             <Upload className="h-4 w-4 mr-2" aria-hidden="true" />
                              Datei wählen
                            </Button>
                          </div>
@@ -1025,7 +1027,7 @@ const FahrerRegistrierung = () => {
 
                      <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                        <div className="flex flex-col items-center space-y-2">
-                         <FileText className="h-8 w-8 text-muted-foreground" />
+                         <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
                           <h4 className="font-medium">Weitere Zertifikate</h4>
                            <p className="text-sm text-muted-foreground mb-2">
                              ADR-Schein, Fahrmischer-Qualifikation, etc. (Mehrere Dateien möglich)
@@ -1054,8 +1056,9 @@ const FahrerRegistrierung = () => {
                            variant="outline"
                            size="sm"
                            onClick={() => document.getElementById('zertifikate')?.click()}
+                           aria-label="Zertifikate hochladen"
                          >
-                           <Upload className="h-4 w-4 mr-2" />
+                           <Upload className="h-4 w-4 mr-2" aria-hidden="true" />
                            Dateien wählen
                          </Button>
                        </div>
@@ -1116,7 +1119,7 @@ const FahrerRegistrierung = () => {
                         </Label>
                       </div>
                       {validationErrors.vermittlungszustimmung && (
-                        <p className="text-sm text-destructive mt-1">{validationErrors.vermittlungszustimmung}</p>
+                        <p id="vermittlung-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.vermittlungszustimmung}</p>
                       )}
                     </div>
 
@@ -1125,6 +1128,7 @@ const FahrerRegistrierung = () => {
                     className="w-full" 
                     size="lg"
                     disabled={isLoading}
+                    aria-label="Registrierung abschließen"
                   >
                     {isLoading ? "Registrierung läuft..." : "Jetzt registrieren"}
                   </Button>
