@@ -120,9 +120,10 @@ export function ContactDataDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" aria-describedby="contact-dialog-description">
         <DialogHeader>
           <DialogTitle>Auftraggeber-Daten ergänzen</DialogTitle>
+          <p id="contact-dialog-description" className="sr-only">Formular zur Eingabe und Bearbeitung von Auftraggeber-Kontaktdaten</p>
         </DialogHeader>
         
         <div className="space-y-4">
@@ -233,26 +234,27 @@ export function ContactDataDialog({
             </div>
             
             {!hasContactWay && (
-              <p className="text-sm text-orange-600 mt-2">
+              <p id="contact-warning" className="text-sm text-orange-600 mt-2" role="alert">
                 Mindestens Telefon oder E-Mail muss angegeben werden.
               </p>
             )}
             
             {!allDataComplete && (
-              <p className="text-sm text-blue-600 mt-2">
+              <p id="incomplete-warning" className="text-sm text-blue-600 mt-2" role="status">
                 Alle markierten Felder (*) müssen ausgefüllt werden. PLZ muss 5-stellig sein.
               </p>
             )}
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button onClick={onClose} variant="outline" className="flex-1">
+            <Button onClick={onClose} variant="outline" className="flex-1" aria-label="Abbrechen und Dialog schließen">
               Abbrechen
             </Button>
             <Button 
               onClick={handleSave} 
               disabled={isSaving || !allDataComplete}
               className="flex-1"
+              aria-label="Kontaktdaten speichern"
             >
               {isSaving ? "Speichern..." : "Daten speichern"}
             </Button>

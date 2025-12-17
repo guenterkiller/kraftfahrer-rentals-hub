@@ -154,9 +154,10 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto" aria-describedby="create-job-description">
         <DialogHeader>
           <DialogTitle>Neuen Auftrag anlegen</DialogTitle>
+          <p id="create-job-description" className="sr-only">Formular zur Erstellung eines neuen Fahrerauftrags mit Kunden- und Auftragsdaten</p>
         </DialogHeader>
         
         <div className="space-y-6">
@@ -343,13 +344,14 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button onClick={handleClose} variant="outline" className="flex-1">
+            <Button onClick={handleClose} variant="outline" className="flex-1" aria-label="Abbrechen und Dialog schließen">
               Abbrechen
             </Button>
             <Button 
               onClick={handleCreateJob} 
               disabled={isCreating}
               className="flex-1"
+              aria-label="Auftrag erstellen"
             >
               {isCreating ? "Erstelle..." : "Auftrag erstellen"}
             </Button>
