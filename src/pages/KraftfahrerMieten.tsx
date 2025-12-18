@@ -4,7 +4,7 @@ const KraftfahrerMieten = () => {
   const seoData = {
     title: "Kraftfahrer mieten deutschlandweit – Fahrer leihen & bestellen",
     description: "Kraftfahrer mieten, leihen oder bestellen – Aushilfsfahrer, Mietfahrer, Leihfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
-    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer Personal, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Personalvermittlung, Kipper Fahrer, Baustellen Fahrer",
+    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -32,7 +32,7 @@ const KraftfahrerMieten = () => {
 
   const heroData = {
     h1: "Kraftfahrer mieten, leihen oder bestellen – deutschlandweit",
-    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit auf Abruf. Fahrer tageweise oder wochenweise bestellen. Ihr Fahrer-Dienstleister für externes Fahrer-Personal.",
+    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit auf Abruf. Fahrer tageweise oder wochenweise bestellen. Ihr Ansprechpartner für externe Fahrer-Dienstleistungen – selbstständige LKW-Fahrer auf Abruf.",
     bullets: [
       "Aushilfsfahrer bei Fahrerausfall",
       "Fahrer auf Abruf – tageweise/wochenweise",
@@ -81,7 +81,7 @@ const KraftfahrerMieten = () => {
       },
       {
         question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
-        answer: "Ja. Wir vermitteln <strong>Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer</strong> deutschlandweit. Fahrer Personal für Speditionen und Bauunternehmen – Fahrer leihen ohne Arbeitnehmerüberlassung."
+        answer: "Ja. Wir vermitteln <strong>Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer</strong> deutschlandweit. Externe Fahrer für Speditionen und Bauunternehmen – Fahrer vermitteln ohne Arbeitnehmerüberlassung."
       },
       {
         question: "Vermitteln Sie auch Baggerfahrer und Radladerfahrer?",

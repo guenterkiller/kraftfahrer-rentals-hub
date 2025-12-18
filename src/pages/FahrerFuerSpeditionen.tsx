@@ -14,8 +14,8 @@ const FahrerFuerSpeditionen = () => {
 
   const seoData = {
     title: "Fahrer für Speditionen – Externe LKW Fahrer buchen",
-    description: "Externe Fahrer für Speditionen und Logistikunternehmen. Subunternehmer-Fahrer bei Personalengpass, Auftragsspitzen oder Krankheit. Ab 349 €/Tag.",
-    keywords: "Fahrer für Speditionen, Speditionsfahrer, externe Fahrer Spedition, LKW Fahrer Logistik, Subunternehmer Spedition, Fahrer Transportunternehmen, Berufskraftfahrer Spedition, Fernfahrer buchen, Nahverkehr Fahrer, Verteilerverkehr Fahrer, Spedition Personalengpass, Logistik Fahrer mieten",
+    description: "Externe Fahrer für Speditionen und Logistikunternehmen. Subunternehmer-Fahrer bei Fahrermangel, Auftragsspitzen oder Krankheit. Ab 349 €/Tag.",
+    keywords: "Fahrer für Speditionen, Speditionsfahrer, externe Fahrer Spedition, LKW Fahrer Logistik, Subunternehmer Spedition, Fahrer Transportunternehmen, Berufskraftfahrer Spedition, Fernfahrer buchen, Nahverkehr Fahrer, Verteilerverkehr Fahrer, Spedition Fahrermangel, Logistik Fahrer mieten",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/fahrer-fuer-speditionen',
       'x-default': 'https://www.kraftfahrer-mieten.com/fahrer-fuer-speditionen'
@@ -60,7 +60,7 @@ const FahrerFuerSpeditionen = () => {
 
   const heroData = {
     h1: "Fahrer für Speditionen – Externe Kapazitäten buchen",
-    intro: "Personalengpass in der Spedition? Auftragsspitze, Urlaubszeit oder Krankheitswelle? Wir vermitteln erfahrene LKW-Fahrer für Speditionen und Logistikunternehmen – deutschlandweit, als selbstständige Subunternehmer. Ab 349 € pro Tag.",
+    intro: "Fahrermangel in der Spedition? Auftragsspitze, Urlaubszeit oder Krankheitswelle? Wir vermitteln erfahrene LKW-Fahrer für Speditionen und Logistikunternehmen – deutschlandweit, als selbstständige Subunternehmer. Ab 349 € pro Tag.",
     bullets: ["Erfahrung mit Speditionsabläufen", "Nah- und Fernverkehr", "Keine Arbeitnehmerüberlassung"]
   };
 
