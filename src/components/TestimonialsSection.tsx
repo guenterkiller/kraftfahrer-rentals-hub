@@ -21,7 +21,7 @@ const TestimonialsSection = () => {
       name: "Thomas Klein",
       company: "Klein Transport AG",
       rating: 5,
-      text: "Kurzfristige Verfügbarkeit und faire Preise. Sehr empfehlenswert für Personalengpässe.",
+      text: "Kurzfristige Verfügbarkeit und faire Preise. Sehr empfehlenswert bei Fahrermangel.",
       location: "Hamburg"
     },
     {
