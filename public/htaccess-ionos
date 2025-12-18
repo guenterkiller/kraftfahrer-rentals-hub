@@ -43,9 +43,14 @@ AddType image/svg+xml .svg
   ExpiresByType image/webp "access plus 1 year"
 </IfModule>
 
-# Force HTTPS (IONOS-spezifisch)
+# Force HTTPS + WWW (IONOS-spezifisch)
+# Canonical: https://www.kraftfahrer-mieten.com/
 RewriteCond %{HTTPS} off
-RewriteRule ^ https://kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
+RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
+
+# Force WWW auch bei HTTPS
+RewriteCond %{HTTP_HOST} ^kraftfahrer-mieten\.com$ [NC]
+RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 
 # Remove legacy Fahrerbörse URLs
 Redirect 410 /fahrerboerse
@@ -53,19 +58,19 @@ Redirect 410 /fahrerbörse
 
 # Canonical 301 redirects for legacy .html URLs
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^index\.html$ https://kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^impressum\.html$ https://kraftfahrer-mieten.com/impressum [R=301,L]
-RewriteRule ^datenschutzerklaerung\.html$ https://kraftfahrer-mieten.com/datenschutz [R=301,L]
-RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://kraftfahrer-mieten.com/agb [R=301,L]
+RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/agb [R=301,L]
 
 # Referenzen variants
-RewriteRule ^referenzen/default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
-RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://kraftfahrer-mieten.com/referenzen [R=301,L]
+RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
 
 # Generic .html removal
 RewriteCond %{REQUEST_URI} \.html$ [NC]
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^(.+)\.html$ https://kraftfahrer-mieten.com/$1 [R=301,L]
+RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 
 # SPA fallback routing
 RewriteBase /
