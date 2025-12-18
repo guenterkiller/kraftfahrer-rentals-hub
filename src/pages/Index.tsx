@@ -35,6 +35,22 @@ const Index = () => {
     },
     faqData: [
       {
+        question: "Ist Fahrerexpress eine Zeitarbeitsfirma?",
+        answer: "Nein."
+      },
+      {
+        question: "Stellen Sie Fahrzeuge oder Maschinen?",
+        answer: "Nein."
+      },
+      {
+        question: "Arbeiten die Fahrer selbstständig?",
+        answer: "Ja."
+      },
+      {
+        question: "Gibt es Arbeitnehmerüberlassung?",
+        answer: "Nein."
+      },
+      {
         question: "Wie funktioniert die Zusammenarbeit?",
         answer: "Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. Hinweis: Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung."
       },
@@ -93,6 +109,31 @@ const Index = () => {
       
       <main id="main-content">
         <HeroSection />
+        
+        {/* AUFGABE 1: Zentraler Definitions-Block für Google & KI */}
+        <section aria-label="Leistungsdefinition Fahrerexpress" className="py-8 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <p className="text-muted-foreground leading-relaxed">
+              Fahrerexpress ist eine Vermittlungsagentur für selbstständige LKW-Fahrer (CE),
+              Baumaschinenführer und Mischmeister in Deutschland und der EU.
+              Wir stellen keine Fahrzeuge und betreiben keine Zeitarbeit.
+              Die Fahrer arbeiten selbstständig und werden rechtssicher über eine
+              Agenturabrechnung vermittelt.
+            </p>
+          </div>
+        </section>
+
+        {/* AUFGABE 2: Klarstellung Mieten/Leihen */}
+        <section aria-label="Begriffsklarstellung" className="pb-8 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <p className="text-sm text-muted-foreground">
+              Hinweis: Begriffe wie „Mietfahrer", „Leihfahrer" oder „Ersatzfahrer"
+              werden umgangssprachlich verwendet und bezeichnen ausschließlich
+              selbstständige Unternehmer – keine Arbeitnehmerüberlassung.
+            </p>
+          </div>
+        </section>
+
         <ProductCards />
         <ProcessSteps />
         <WhyFahrerexpress />
@@ -131,6 +172,18 @@ const Index = () => {
         <section className="py-16 bg-muted">
           <div className="container mx-auto px-4 max-w-4xl">
             <h2 className="text-3xl font-bold mb-8 text-center">Häufige Fragen zur Fahrer-Vermittlung</h2>
+            
+            {/* AUFGABE 3: Mini-FAQ für maschinenlesbare Ja/Nein-Signale */}
+            <section aria-label="Kurz-FAQ Fahrerexpress" className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Kurze Antworten zur Fahrervermittlung</h3>
+              <div className="space-y-2 text-muted-foreground">
+                <p><strong>Ist Fahrerexpress eine Zeitarbeitsfirma?</strong><br />Nein.</p>
+                <p><strong>Stellen Sie Fahrzeuge oder Maschinen?</strong><br />Nein.</p>
+                <p><strong>Arbeiten die Fahrer selbstständig?</strong><br />Ja.</p>
+                <p><strong>Gibt es Arbeitnehmerüberlassung?</strong><br />Nein.</p>
+              </div>
+            </section>
+
             <div className="space-y-6">
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Bieten Sie LKW-Fahrer wirklich deutschlandweit an?</h3>
