@@ -20,7 +20,7 @@ const WhyFahrerexpress = () => {
     {
       icon: Phone,
       title: "Fahrer Dienstleister",
-      description: "Ihr Fahrer-Personal Ansprechpartner – externe LKW Fahrer auf Abruf bestellen"
+      description: "Ihr Ansprechpartner für externe Fahrer-Dienstleistungen – selbstständige LKW-Fahrer auf Abruf"
     },
     {
       icon: Briefcase,
@@ -30,7 +30,7 @@ const WhyFahrerexpress = () => {
     {
       icon: TrendingUp,
       title: "Fahrer sofort deutschlandweit",
-      description: "Fahrer Personalvermittlung bundesweit – Notfallfahrer in 24-72 Stunden"
+      description: "Fahrer-Vermittlung bundesweit – Notfallfahrer in 24-72 Stunden"
     }
   ];
 
