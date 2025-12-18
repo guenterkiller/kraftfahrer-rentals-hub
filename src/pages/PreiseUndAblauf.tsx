@@ -11,7 +11,7 @@ const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
     description: "LKW CE Fahrer, Baumaschinenführer und Mischmeister für Flüssigboden – transparente Tagessätze & Ablauf. Ab 349 €/Tag.",
-    keywords: "LKW Fahrer mieten Preis, Fahrer leihen Kosten, Fahrer bestellen Tagessatz, Mietfahrer Preis, Leihfahrer Kosten, Aushilfsfahrer Tagessatz, Ersatzfahrer LKW Preis, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Abruf, Kipper Fahrer Preis, Baustellen Fahrer Kosten, Fahrmischer Fahrer, Sattelzug Fahrer, Fahrer Dienstleister, Fahrer Personal Kosten, externe LKW Fahrer, LKW Fahrer Personalvermittlung",
+    keywords: "LKW Fahrer mieten Preis, Fahrer leihen Kosten, Fahrer bestellen Tagessatz, Mietfahrer Preis, Leihfahrer Kosten, Aushilfsfahrer Tagessatz, Ersatzfahrer LKW Preis, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Abruf, Kipper Fahrer Preis, Baustellen Fahrer Kosten, Fahrmischer Fahrer, Sattelzug Fahrer, Fahrer Dienstleister, Fahrer-Dienstleistungen Kosten, externe LKW Fahrer, LKW Fahrer Vermittlung",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -50,7 +50,7 @@ const PreiseUndAblauf = () => {
                 Fahrer mieten, leihen oder bestellen – Preise & Ablauf
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Ersatzfahrer, Aushilfsfahrer, Mietfahrer & Leihfahrer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externes Fahrer-Personal.
+                Ersatzfahrer, Aushilfsfahrer, Mietfahrer & Leihfahrer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
               </p>
             </div>
 
