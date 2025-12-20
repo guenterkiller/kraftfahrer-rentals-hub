@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -379,12 +380,18 @@ const BookingForm = () => {
                   />
                 </div>
 
-                {/* Legal Notice */}
+                {/* Legal Notice with Terms Reference */}
                 <div className="bg-blue-50 p-4 rounded-lg text-sm">
                   <p className="font-medium mb-2">Rechtlicher Hinweis:</p>
-                  <p>
+                  <p className="mb-2">
                     Die Leistung wird als <strong>Dienst-/Werkleistung</strong> durch 
                     selbstständige Subunternehmer erbracht. <strong>Keine Arbeitnehmerüberlassung.</strong>
+                  </p>
+                  <p className="text-muted-foreground">
+                    Mit der Bestellung gelten die{" "}
+                    <Link to="/vermittlungsbedingungen" className="text-primary hover:underline font-medium">
+                      Vermittlungsbedingungen für Auftraggeber
+                    </Link>.
                   </p>
                 </div>
 
