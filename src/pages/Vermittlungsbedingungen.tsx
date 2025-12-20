@@ -1,198 +1,151 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, FileText, Scale, Clock, Building2 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Mail, Phone } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
 
 const Vermittlungsbedingungen = () => {
   useSEO({
     title: "Vermittlungsbedingungen für Auftraggeber – Fahrerexpress",
-    description: "Vermittlungsbedingungen für Auftraggeber bei Fahrerexpress. Selbstständige Fahrer, zentrale Abwicklung, klare Zahlungsbedingungen.",
-    keywords: "Vermittlungsbedingungen, Auftraggeber, Fahrerexpress, LKW Fahrer Vermittlung, Zahlungsbedingungen"
+    description: "Vermittlungsbedingungen für Auftraggeber der Fahrerexpress-Agentur. Rechtssichere Vermittlung selbstständiger LKW-Fahrer.",
+    keywords: "Vermittlungsbedingungen, Auftraggeber, Fahrerexpress, LKW Fahrer Vermittlung"
   });
 
   return (
-    <div className="min-h-screen bg-muted flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navigation />
       
-      <main className="flex-1 pt-24 pb-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <Button variant="ghost" asChild className="mb-6">
-            <Link to="/" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Zurück zur Startseite
-            </Link>
-          </Button>
-
-          <h1 className="text-3xl font-bold text-center mb-8">
+      <main className="flex-1 pt-24 pb-16">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8">
             Vermittlungsbedingungen für Auftraggeber
           </h1>
 
           <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-6 w-6 text-primary" />
-                Geltungsbereich
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                Diese Vermittlungsbedingungen gelten für alle Aufträge und Bestellungen von 
-                Fahrer-Dienstleistungen über die Fahrerexpress-Agentur (Günter Killer, 
-                Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main).
-              </p>
-              <p>
-                Mit der Bestellung eines Fahrers akzeptiert der Auftraggeber diese 
-                Vermittlungsbedingungen.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Scale className="h-6 w-6 text-primary" />
-                Vertragsmodell
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
-                <p className="font-semibold">
-                  Wichtiger Hinweis: Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung.
+            <CardContent className="p-6 md:p-8 space-y-8">
+              
+              {/* 1. Geltungsbereich */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">1. Geltungsbereich</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Diese Vermittlungsbedingungen gelten für alle Anfragen, Buchungen und Aufträge von Fahrerdienstleistungen über die Fahrerexpress-Agentur (Günter Killer, Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main).
                 </p>
-              </div>
-              <p>
-                Die von Fahrerexpress vermittelten Fahrer sind <strong>selbstständige Unternehmer</strong>, 
-                die ihre Leistung auf Basis eines Dienst- oder Werkvertrags erbringen.
-              </p>
-              <p>
-                Fahrerexpress fungiert als Vermittlungsagentur und übernimmt die 
-                Einsatzkoordination und Abrechnung aus Gründen der Qualitätssicherung.
-              </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Mit der Bestellung eines Fahrers erkennt der Auftraggeber diese Vermittlungsbedingungen als verbindlich an.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 2. Vertragsmodell */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">2. Vertragsmodell</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige, gewerblich tätige Fahrer.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Es handelt sich ausdrücklich <strong className="text-foreground">nicht</strong> um Arbeitnehmerüberlassung, Personalgestellung oder ein arbeitsrechtliches Vertragsverhältnis.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Der Einsatz erfolgt auf Grundlage eines projektbezogenen Dienst- oder Werkvertrags.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 3. Rolle der Fahrerexpress-Agentur */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">3. Rolle der Fahrerexpress-Agentur</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Fahrerexpress fungiert als Vermittlungs- und Koordinationsagentur.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Die Einsatzkoordination sowie die Abrechnung erfolgen ausschließlich über Fahrerexpress, insbesondere aus Gründen der Qualitätssicherung und der ordnungsgemäßen Dokumentation.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 4. Abwicklung & Abrechnung */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">4. Abwicklung & Abrechnung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Die Abrechnung der beauftragten Einsätze erfolgt über die Fahrerexpress-Agentur.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Der Auftraggeber erhält eine Rechnung über die vereinbarten Leistungen.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Direkte Beauftragungen von durch Fahrerexpress vermittelten Fahrern im sachlichen Zusammenhang mit dem jeweiligen Projekt sind unzulässig.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 5. Zahlungsbedingungen */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">5. Zahlungsbedingungen</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Rechnungen sind innerhalb von 7 Kalendertagen ab Rechnungsdatum ohne Abzug zu begleichen.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Es gelten die gesetzlichen Regelungen zum Zahlungsverzug gemäß § 288 BGB.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 6. Vertragsschluss */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">6. Vertragsschluss</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Der Vertrag kommt zustande durch:
+                </p>
+                <ul className="list-disc list-inside text-muted-foreground mt-3 space-y-2 ml-4">
+                  <li>die Bestellung eines Fahrers durch den Auftraggeber (z. B. per Formular, E-Mail oder Telefon) und</li>
+                  <li>die Bestätigung durch die Fahrerexpress-Agentur.</li>
+                </ul>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Eine gesonderte Unterschrift ist nicht erforderlich.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 7. Gerichtsstand */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">7. Gerichtsstand</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Gerichtsstand für alle Streitigkeiten aus Vertragsverhältnissen, die diesen Vermittlungsbedingungen unterliegen, ist – soweit gesetzlich zulässig – Frankfurt am Main.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* Kontakt */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">Kontakt</h2>
+                <div className="flex flex-col sm:flex-row gap-4 text-muted-foreground">
+                  <a 
+                    href="mailto:info@kraftfahrer-mieten.com" 
+                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                  >
+                    <Mail className="h-5 w-5" />
+                    info@kraftfahrer-mieten.com
+                  </a>
+                  <a 
+                    href="tel:+4915771442285" 
+                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                  >
+                    <Phone className="h-5 w-5" />
+                    01577 1442285
+                  </a>
+                </div>
+              </section>
+
             </CardContent>
           </Card>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Building2 className="h-6 w-6 text-primary" />
-                Abwicklung und Abrechnung
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="list-disc list-inside space-y-2">
-                <li>
-                  Die Abrechnung erfolgt <strong>ausschließlich über Fahrerexpress</strong>.
-                </li>
-                <li>
-                  Der Auftraggeber erhält eine übersichtliche Rechnung für alle 
-                  beauftragten Einsätze.
-                </li>
-                <li>
-                  Direktvereinbarungen zwischen Auftraggeber und vermittelten Fahrern 
-                  außerhalb der Fahrerexpress-Plattform sind während der Projektlaufzeit 
-                  und für einen angemessenen Zeitraum danach nicht gestattet.
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-6 w-6 text-primary" />
-                Zahlungsbedingungen
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <ul className="list-disc list-inside space-y-2">
-                <li>
-                  <strong>Zahlungsziel:</strong> 7 Kalendertage nach Rechnungsstellung
-                </li>
-                <li>
-                  Die Rechnung gilt nach Ablauf der Zahlungsfrist als anerkannt, 
-                  sofern keine schriftlichen Einwände erfolgen.
-                </li>
-                <li>
-                  Bei Zahlungsverzug werden Verzugszinsen gemäß § 288 BGB berechnet.
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Transparente Preise</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                Sie erhalten transparente Tagessätze ohne versteckte Kosten:
-              </p>
-              <ul className="list-disc list-inside space-y-2">
-                <li>LKW CE-Fahrer: 349 €/Tag (netto)</li>
-                <li>Baumaschinenführer: 459 €/Tag (netto)</li>
-              </ul>
-              <p className="text-sm text-muted-foreground">
-                Weitere Konditionen (z.B. für längere Einsätze) auf Anfrage.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Gerichtsstand</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>
-                Gerichtsstand für alle Streitigkeiten aus Verträgen, die diesen 
-                Vermittlungsbedingungen unterliegen, ist <strong>Frankfurt am Main</strong>.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle>Vertragsschluss</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                Der Vertrag kommt zustande durch:
-              </p>
-              <ol className="list-decimal list-inside space-y-2">
-                <li>Bestellung durch den Auftraggeber (Formular, E-Mail, Telefon)</li>
-                <li>Schriftliche Bestätigung durch Fahrerexpress</li>
-              </ol>
-              <p className="text-sm text-muted-foreground">
-                Mit der Bestellung akzeptiert der Auftraggeber diese Vermittlungsbedingungen. 
-                Eine gesonderte Unterschrift ist nicht erforderlich.
-              </p>
-            </CardContent>
-          </Card>
-
-          <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">
-            <p className="mb-4">
-              Bei Fragen zu den Vermittlungsbedingungen stehen wir Ihnen gerne zur Verfügung:
-            </p>
-            <p>
-              <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary hover:underline font-medium">
-                info@kraftfahrer-mieten.com
-              </a>
-              {" | "}
-              <a href="tel:+4915771442285" className="text-primary hover:underline font-medium">
-                01577 1442285
-              </a>
-            </p>
-          </div>
-
-          <div className="text-center pt-8">
-            <Button asChild size="lg">
-              <Link to="/#fahreranfrage">
-                Jetzt Fahrer anfragen
-              </Link>
-            </Button>
-          </div>
         </div>
       </main>
 
