@@ -16,6 +16,7 @@ import Wissenswertes from "./pages/Wissenswertes";
 import Projekte from "./pages/Projekte";
 import Vermittlung from "./pages/Vermittlung";
 import Vermittlungsbedingungen from "./pages/Vermittlungsbedingungen";
+import FahrerVermittlungsbedingungen from "./pages/FahrerVermittlungsbedingungen";
 import FahrerCommunityChat from "./pages/FahrerCommunityChat";
 import FahrerInfos from "./pages/FahrerInfos";
 // import TruckerChat from './components/TruckerChat';
@@ -78,6 +79,7 @@ const App = () => (
           
           <Route path="/vermittlung" element={<Vermittlung />} />
           <Route path="/vermittlungsbedingungen" element={<Vermittlungsbedingungen />} />
+          <Route path="/fahrer-vermittlungsbedingungen" element={<FahrerVermittlungsbedingungen />} />
           <Route path="/wissenswertes" element={<Wissenswertes />} />
           <Route path="/projekte" element={<Projekte />} />
           {/* <Route path="/trucker-ladies" element={<FahrerCommunityChat />} /> */} {/* Chat deactivated */}

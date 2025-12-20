@@ -155,6 +155,18 @@ export const DriverRegistrationConfirmation = ({
       </Text>
     </Section>
 
+    <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderColor: '#16a34a' })}>
+      <Heading {...getTextProps({ ...textStyles.heading3, color: '#16a34a' }, 'small-heading')}>💰 Wichtiger Hinweis zur Abrechnung</Heading>
+      <Text {...getTextProps(textStyles.paragraph)}>
+        Die Auszahlung erfolgt gemäß unseren Vermittlungsbedingungen für Fahrer nach Zahlungseingang des Auftraggebers, spätestens 5 Werktage danach.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        👉 <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen" style={{ color: colors.primary, textDecoration: 'underline' }}>
+          Vermittlungsbedingungen für Fahrer ansehen
+        </a>
+      </Text>
+    </Section>
+
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>📞 Kontakt</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
