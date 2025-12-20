@@ -72,6 +72,11 @@ const Footer = () => {
                   Partner werden
                 </Link>
               </li>
+              <li>
+                <Link to="/fahrer-vermittlungsbedingungen" className="text-muted-foreground hover:text-primary transition-colors">
+                  Vermittlungsbedingungen
+                </Link>
+              </li>
               {FEATURE_FLAGS.TRUCKER_CHAT_ENABLED && (
                 <li>
                   <Link to="/trucker-ladies" className="text-muted-foreground hover:text-primary transition-colors">
