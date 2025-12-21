@@ -1738,13 +1738,14 @@ const Admin = () => {
                                     {req.status !== 'pending' && (
                                       <Button
                                         size="sm"
-                                        variant="outline"
+                                        variant={req.sent_at ? "outline" : "default"}
                                         onClick={() => handleSendJobToAllDrivers(req.id)}
                                         disabled={sendingJobToAll === req.id || req.status === 'completed'}
-                                        title="Job erneut an alle verfügbaren Fahrer senden"
+                                        title={req.sent_at ? "Job erneut an alle verfügbaren Fahrer senden" : "Job prüfen und an alle Fahrer freigeben"}
+                                        className={!req.sent_at ? "bg-green-600 hover:bg-green-700" : ""}
                                       >
                                         <Mail className="h-3 w-3 mr-1" />
-                                        {sendingJobToAll === req.id ? 'Sende...' : 'Erneut senden'}
+                                        {sendingJobToAll === req.id ? 'Sende...' : (req.sent_at ? 'Erneut senden' : 'Freigeben & Senden')}
                                       </Button>
                                     )}
                                     {!req.customer_street && (
@@ -2002,13 +2003,13 @@ const Admin = () => {
                                 <div className="flex gap-2">
                                   <Button
                                     size="sm"
-                                    variant="outline"
+                                    variant={req.sent_at ? "outline" : "default"}
                                     onClick={() => handleSendJobToAllDrivers(req.id)}
                                     disabled={sendingJobToAll === req.id || req.status === 'completed'}
-                                    className="flex-1 h-11"
+                                    className={`flex-1 h-11 ${!req.sent_at ? "bg-green-600 hover:bg-green-700" : ""}`}
                                   >
                                     <Mail className="h-4 w-4 mr-1" />
-                                    {sendingJobToAll === req.id ? 'Sende...' : 'Erneut senden'}
+                                    {sendingJobToAll === req.id ? 'Sende...' : (req.sent_at ? 'Erneut senden' : 'Freigeben & Senden')}
                                   </Button>
                                   {!req.customer_street && (
                                     <Button
