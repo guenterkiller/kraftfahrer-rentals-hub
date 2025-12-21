@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
       .single();
 
     if (roleError || !roleData) {
-      console.log('User is not an admin:', userId, roleError);
+      console.log('User is not an admin:', user.id);
       return new Response(
         JSON.stringify({ error: 'Forbidden - admin role required' }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -147,9 +147,9 @@ Deno.serve(async (req) => {
     }
 
     if (error) {
-      console.error('Database error:', error);
+      console.error('Database error:', error.message, error.code);
       return new Response(
-        JSON.stringify({ error: `Datenbankfehler: ${error.message}` }),
+        JSON.stringify({ error: 'Fehler beim Laden der Daten' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
