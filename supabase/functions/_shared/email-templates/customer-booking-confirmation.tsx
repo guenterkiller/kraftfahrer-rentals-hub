@@ -21,7 +21,7 @@ export const CustomerBookingConfirmation = ({
   location,
   message,
 }: CustomerBookingConfirmationProps) => (
-  <BaseEmail previewText="Ihre Fahrerbuchung bei der Fahrerexpress-Agentur">
+  <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
     <Heading {...getTextProps(textStyles.heading2, 'heading')}>
       Sehr geehrte/r {companyName ? `${companyName} (${customerName})` : customerName},
     </Heading>
@@ -32,8 +32,8 @@ export const CustomerBookingConfirmation = ({
 
     <Section {...getBoxProps(boxStyles.warningBox)}>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        <strong>Wichtiger Hinweis:</strong> Diese Bestätigung ist eine Eingangsbestätigung Ihrer Buchungsanfrage.
-        Die Buchung wird erst verbindlich, wenn ein Fahrer den Auftrag annimmt und wir Ihnen dies separat per E-Mail bestätigen.
+        <strong>Wichtiger Hinweis:</strong> Dies ist eine Eingangsbestätigung Ihrer unverbindlichen Anfrage – noch kein Auftrag.
+        Ein verbindlicher Auftrag kommt erst zustande, wenn ein selbstständiger Fahrer den Einsatz annimmt und Sie von uns eine separate Auftragsbestätigung erhalten.
       </Text>
     </Section>
 
@@ -66,25 +66,28 @@ export const CustomerBookingConfirmation = ({
     </Section>
 
     <Section {...getBoxProps(boxStyles.highlightBox)}>
-      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Preise & Konditionen</Heading>
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Unverbindliche Preisübersicht</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold' })}>
-        Die Einsätze werden über die Fahrerexpress-Agentur koordiniert. Die Fahrleistung wird von selbstständigen Unternehmern erbracht, Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.
+        Die nachfolgenden Preise sind unverbindliche Richtwerte. Die verbindlichen Konditionen werden Ihnen mit der Auftragsbestätigung nach Annahme durch einen Fahrer mitgeteilt.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph })}>
+        Die Fahrleistung wird von selbstständigen Unternehmern erbracht. Die Fahrerexpress-Agentur koordiniert den Einsatz und erstellt nach Durchführung eine Rechnung gemäß Auftragsbestätigung. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die in der Auftragsbestätigung vereinbarten Konditionen hinaus.
       </Text>
 
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />
 
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer</Heading>
+      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer (Richtwert)</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
-        <strong>349 € pro Tag</strong> (8 Stunden) | <strong>30 € pro Überstunde</strong>
+        <strong>ab 349 € pro Tag</strong> (8 Stunden) | <strong>ab 30 € pro Überstunde</strong>
       </Text>
       <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
         Gilt für: Fahrmischer, Fernverkehr, Nahverkehr, ADR, Container, Wechselbrücke,
         Kühltransport, Baustellenverkehr, Event- und Messe-Logistik u. v. m.
       </Text>
 
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Baumaschinenführer</Heading>
+      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Baumaschinenführer (Richtwert)</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
-        <strong>459 € pro Tag</strong> (8 Stunden) | <strong>60 € pro Überstunde</strong>
+        <strong>ab 459 € pro Tag</strong> (8 Stunden) | <strong>ab 60 € pro Überstunde</strong>
       </Text>
       <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
         Gilt für: Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen,
@@ -98,16 +101,18 @@ export const CustomerBookingConfirmation = ({
       </ul>
 
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
-        Alle Preise verstehen sich netto zzgl. gesetzlicher MwSt., Fahrt- und ggf. Übernachtungskosten.
-        Abrechnung nach tatsächlichem Einsatzumfang. Zuschläge für Überstunden, Nacht-, Sonn- und Feiertage
-        gemäß aktueller Preisliste.
+        Alle Preise verstehen sich als unverbindliche Richtwerte netto zzgl. gesetzlicher MwSt., Fahrt- und ggf. Übernachtungskosten.
+        Die verbindliche Abrechnung erfolgt nach tatsächlichem Einsatzumfang gemäß Auftragsbestätigung.
       </Text>
     </Section>
 
     <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
-      <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung</Heading>
+      <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung (gilt erst nach Auftragsbestätigung)</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-        Eine kostenfreie Stornierung ist bis 24 Stunden vor Einsatzbeginn möglich.
+        Die nachfolgenden Stornierungsbedingungen gelten erst, wenn ein verbindlicher Auftrag zustande gekommen ist (nach Annahme durch einen Fahrer und Versand der Auftragsbestätigung).
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
+        Eine kostenfreie Stornierung bestätigter Aufträge ist bis 24 Stunden vor Einsatzbeginn möglich.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
         Bei einer Stornierung unter 24 Stunden vor Einsatzbeginn werden 80 % des vereinbarten Tagessatzes berechnet.
@@ -116,17 +121,17 @@ export const CustomerBookingConfirmation = ({
         Same-Day-Buchungen sind ausgeschlossen (Mindestvorlauf: 24 Stunden an Werktagen).
       </Text>
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', marginTop: '10px' })}>
-        Es gelten die auf unserer Webseite veröffentlichten Stornierungsregelungen.
+        Es gelten die auf unserer Webseite veröffentlichten Vermittlungsbedingungen.
       </Text>
     </Section>
 
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>🔄 Wie es jetzt weitergeht</Heading>
       <ol style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li>Wir prüfen verfügbare Fahrer in Ihrer Region</li>
+        <li>Wir prüfen verfügbare selbstständige Fahrer in Ihrer Region</li>
         <li>Sie erhalten spätestens am nächsten Werktag unsere Rückmeldung</li>
-        <li>Bei Verfügbarkeit stellen wir den direkten Kontakt zum Fahrer her</li>
-        <li>Nach Annahme durch den Fahrer erhalten Sie eine separate Auftragsbestätigung</li>
+        <li>Bei Verfügbarkeit vermitteln wir einen passenden Fahrer</li>
+        <li>Erst nach Annahme durch den Fahrer erhalten Sie eine verbindliche Auftragsbestätigung mit den finalen Konditionen</li>
       </ol>
     </Section>
 
@@ -134,9 +139,10 @@ export const CustomerBookingConfirmation = ({
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>✅ Warum Fahrerexpress?</Heading>
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li>Keine Kosten, falls kein Fahrer verfügbar ist</li>
-        <li>Transparente Preise, keine versteckten Kosten</li>
+        <li>Transparente Preise ohne versteckte Vermittlungsgebühren</li>
         <li>Selbstständige Fahrer auf Basis eines Dienst-/Werkvertrags</li>
         <li>Qualifizierte und erfahrene Fahrer</li>
+        <li>Eine Rechnung über die Fahrerexpress-Agentur</li>
       </ul>
     </Section>
   </BaseEmail>
