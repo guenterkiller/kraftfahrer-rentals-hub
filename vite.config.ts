@@ -49,12 +49,26 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
-        // Nur statische Assets cachen, große Uploads ausschließen
-        globPatterns: ['**/*.{js,css,html,ico,woff,woff2}'],
+        // Nur JS/CSS/Fonts precachen - NICHT HTML (NetworkFirst für aktuelle Inhalte)
+        globPatterns: ['**/*.{js,css,ico,woff,woff2}'],
         // lovable-uploads enthält große Bilder - nicht precachen
         globIgnores: ['**/lovable-uploads/**', '**/assets/*.png'],
-        // Keine Runtime-Caching für API-Requests (DSGVO-konform)
+        // Navigation (HTML) immer NetworkFirst für aktuelle Inhalte
+        navigateFallback: null, // Kein Fallback - immer Netzwerk für Navigation
         runtimeCaching: [
+          {
+            // HTML/Navigation: NetworkFirst - immer aktuelle Inhalte
+            urlPattern: ({ request }) => request.mode === 'navigate',
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
+              networkTimeoutSeconds: 3,
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 // 1 Tag
+              }
+            }
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
