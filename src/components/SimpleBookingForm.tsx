@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 
 const SimpleBookingForm = () => {
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,7 @@ const SimpleBookingForm = () => {
   const [requiresBf2, setRequiresBf2] = useState(false);
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
+  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -128,6 +130,9 @@ const SimpleBookingForm = () => {
         title: "Anfrage erfolgreich gesendet!",
         description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
       });
+
+      // PWA Install-Hinweis nach erfolgreicher Absendung aktivieren
+      setShowPWAPrompt(true);
 
       // Reset form
       if (e.currentTarget) {
@@ -749,6 +754,9 @@ const SimpleBookingForm = () => {
           </Card>
         </div>
       </div>
+
+      {/* PWA Install-Hinweis nach Formularabsendung */}
+      <PWAInstallPrompt showAfterSuccess={showPWAPrompt} />
     </section>
   );
 };
