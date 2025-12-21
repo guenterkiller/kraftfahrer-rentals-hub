@@ -1735,12 +1735,12 @@ const Admin = () => {
                                     >
                                       Zuweisen
                                     </Button>
-                                    {req.status !== 'pending' && (
+                                    {req.status !== 'pending' && req.status !== 'completed' && (
                                       <Button
                                         size="sm"
                                         variant={req.sent_at ? "outline" : "default"}
                                         onClick={() => handleSendJobToAllDrivers(req.id)}
-                                        disabled={sendingJobToAll === req.id || req.status === 'completed'}
+                                        disabled={sendingJobToAll === req.id}
                                         title={req.sent_at ? "Job erneut an alle verfügbaren Fahrer senden" : "Job prüfen und an alle Fahrer freigeben"}
                                         className={!req.sent_at ? "bg-green-600 hover:bg-green-700" : ""}
                                       >
@@ -1999,13 +1999,13 @@ const Admin = () => {
                               >
                                 👤 Fahrer zuweisen
                               </Button>
-                              {req.status !== 'pending' && (
+                              {req.status !== 'pending' && req.status !== 'completed' && (
                                 <div className="flex gap-2">
                                   <Button
                                     size="sm"
                                     variant={req.sent_at ? "outline" : "default"}
                                     onClick={() => handleSendJobToAllDrivers(req.id)}
-                                    disabled={sendingJobToAll === req.id || req.status === 'completed'}
+                                    disabled={sendingJobToAll === req.id}
                                     className={`flex-1 h-11 ${!req.sent_at ? "bg-green-600 hover:bg-green-700" : ""}`}
                                   >
                                     <Mail className="h-4 w-4 mr-1" />
