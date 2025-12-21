@@ -225,7 +225,7 @@ const handler = async (req: Request): Promise<Response> => {
       fuehrerscheinklasse: 'C+E',
       besonderheiten: anforderungen.length > 0 ? anforderungen.join(", ") : null,
       nachricht: nachricht,
-      status: 'pending', // NEU: Anfragen starten als 'pending' - Admin muss freigeben
+      status: 'open', // Anfragen starten als 'open' (erlaubte Werte: open, assigned, completed, cancelled)
       billing_model: billing_model
     };
 
@@ -249,7 +249,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    console.log("Job request saved with status 'pending' - waiting for admin approval:", jobRequest);
+    console.log("Job request saved with status 'open'");
 
     // WICHTIG: Kein sofortiger Broadcast an Fahrer mehr!
     // Der Versand erfolgt erst nach Admin-Freigabe über admin-approve-job
