@@ -9,6 +9,9 @@ verify_jwt = true
 [functions.admin-auth-check]
 verify_jwt = true
 
+[functions.admin-approve-job]
+verify_jwt = true
+
 [functions.admin-complete-old-jobs]
 verify_jwt = true
 

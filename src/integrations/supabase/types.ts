@@ -627,6 +627,8 @@ export type Database = {
       }
       job_requests: {
         Row: {
+          approved_at: string | null
+          approved_by: string | null
           besonderheiten: string | null
           billing_model:
             | Database["public"]["Enums"]["billing_model_enum"]
@@ -651,6 +653,7 @@ export type Database = {
           id: string
           nachricht: string
           payout_status: string | null
+          sent_at: string | null
           status: string
           subcontractor_invoice_id: string | null
           subcontractor_invoice_status:
@@ -660,6 +663,8 @@ export type Database = {
           zeitraum: string
         }
         Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
           besonderheiten?: string | null
           billing_model?:
             | Database["public"]["Enums"]["billing_model_enum"]
@@ -684,6 +689,7 @@ export type Database = {
           id?: string
           nachricht: string
           payout_status?: string | null
+          sent_at?: string | null
           status?: string
           subcontractor_invoice_id?: string | null
           subcontractor_invoice_status?:
@@ -693,6 +699,8 @@ export type Database = {
           zeitraum: string
         }
         Update: {
+          approved_at?: string | null
+          approved_by?: string | null
           besonderheiten?: string | null
           billing_model?:
             | Database["public"]["Enums"]["billing_model_enum"]
@@ -717,6 +725,7 @@ export type Database = {
           id?: string
           nachricht?: string
           payout_status?: string | null
+          sent_at?: string | null
           status?: string
           subcontractor_invoice_id?: string | null
           subcontractor_invoice_status?:
@@ -978,6 +987,8 @@ export type Database = {
       admin_get_job: {
         Args: { _job_id: string }
         Returns: {
+          approved_at: string | null
+          approved_by: string | null
           besonderheiten: string | null
           billing_model:
             | Database["public"]["Enums"]["billing_model_enum"]
@@ -1002,6 +1013,7 @@ export type Database = {
           id: string
           nachricht: string
           payout_status: string | null
+          sent_at: string | null
           status: string
           subcontractor_invoice_id: string | null
           subcontractor_invoice_status:
