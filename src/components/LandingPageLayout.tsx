@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation";
 import FahreranfrageSection from "@/components/FahreranfrageSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
+import SafeFAQAnswer from "@/components/SafeFAQAnswer";
 import { useSEO } from "@/hooks/useSEO";
 
 interface LandingPageLayoutProps {
@@ -133,7 +134,7 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
                     {item.question}
                     <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
                   </summary>
-                  <div className="mt-3 text-muted-foreground" dangerouslySetInnerHTML={{ __html: item.answer }} />
+                  <SafeFAQAnswer text={item.answer} className="mt-3 text-muted-foreground" />
                 </details>
               ))}
             </div>
