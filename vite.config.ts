@@ -49,8 +49,10 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
-        // Nur statische Assets cachen, keine API-Calls
-        globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,woff,woff2}'],
+        // Nur statische Assets cachen, große Uploads ausschließen
+        globPatterns: ['**/*.{js,css,html,ico,woff,woff2}'],
+        // lovable-uploads enthält große Bilder - nicht precachen
+        globIgnores: ['**/lovable-uploads/**', '**/assets/*.png'],
         // Keine Runtime-Caching für API-Requests (DSGVO-konform)
         runtimeCaching: [
           {
