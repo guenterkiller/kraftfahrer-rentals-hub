@@ -327,7 +327,7 @@ const handler = async (req: Request): Promise<Response> => {
            })() : [])
     };
     
-    console.log("Insert data being sent:", JSON.stringify(insertData, null, 2));
+    console.log("Processing driver registration for:", insertData.email?.split('@')[0] + '@***');
     
     const { data, error } = await supabase
       .from('fahrer_profile')

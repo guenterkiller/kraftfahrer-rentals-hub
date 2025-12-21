@@ -103,7 +103,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Safely parse JSON body
     const requestData: FahrerAnfrageRequest = await req.json().catch(() => ({} as any));
     
-    console.log('Received payload:', requestData);
+    console.log('Received booking request');
     
     // Extract data directly from the flat structure sent by SimpleBookingForm
     const vorname = String(requestData.vorname || '').trim();
@@ -229,7 +229,7 @@ const handler = async (req: Request): Promise<Response> => {
       billing_model: billing_model
     };
 
-    console.log('Inserting job request:', jobRequestData);
+    console.log('Inserting job request for:', customer_city);
 
     // Save job request to database
     const { data: jobRequest, error: jobError } = await supabase
