@@ -225,7 +225,7 @@ const handler = async (req: Request): Promise<Response> => {
       fuehrerscheinklasse: 'C+E',
       besonderheiten: anforderungen.length > 0 ? anforderungen.join(", ") : null,
       nachricht: nachricht,
-      status: 'open',
+      status: 'pending', // NEU: Anfragen starten als 'pending' - Admin muss freigeben
       billing_model: billing_model
     };
 
@@ -249,35 +249,10 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    console.log("Job request saved:", jobRequest);
+    console.log("Job request saved with status 'pending' - waiting for admin approval:", jobRequest);
 
-    // Send broadcast to drivers with new system
-    if (jobRequest && jobRequest.id) {
-      try {
-        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/broadcast-job-to-drivers`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-internal-fn": Deno.env.get("INTERNAL_FN_SECRET")!,
-          },
-          body: JSON.stringify({
-            jobRequestId: jobRequest.id,
-            job: {
-              fahrzeugtyp: jobRequestData.fahrzeugtyp,
-              fuehrerscheinklasse: jobRequestData.fuehrerscheinklasse,
-            },
-            customer: {
-              name: jobRequestData.customer_name,
-              email: jobRequestData.customer_email,
-              phone: jobRequestData.customer_phone,
-            },
-          }),
-        });
-        console.log("Driver broadcast initiated");
-      } catch (broadcastError) {
-        console.error("Error with driver broadcast:", broadcastError);
-      }
-    }
+    // WICHTIG: Kein sofortiger Broadcast an Fahrer mehr!
+    // Der Versand erfolgt erst nach Admin-Freigabe über admin-approve-job
 
     // Send customer notification email
     try {

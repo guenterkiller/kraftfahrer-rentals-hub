@@ -87,6 +87,8 @@ const Admin = () => {
   const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
   const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
+  const [approvingJob, setApprovingJob] = useState<string | null>(null);
+  const [rejectingJob, setRejectingJob] = useState<string | null>(null);
   
   
   
@@ -966,6 +968,86 @@ const Admin = () => {
     }
   };
 
+  // Handler für Admin-Freigabe von Buchungsanfragen
+  const handleApproveJob = async (jobId: string) => {
+    setApprovingJob(jobId);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-approve-job', {
+        body: { jobId, action: 'approve' }
+      });
+
+      if (error) {
+        console.error('❌ Error approving job:', error);
+        toast({
+          title: "Fehler beim Freigeben",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Job approved:', data);
+      
+      toast({
+        title: "Anfrage freigegeben",
+        description: data.message || `Job wurde an ${data.sentToCount || 0} Fahrer gesendet.`,
+      });
+
+      // Reload job requests to show updated status
+      await loadJobRequests();
+      
+    } catch (error) {
+      console.error('❌ Unexpected error in handleApproveJob:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setApprovingJob(null);
+    }
+  };
+
+  const handleRejectJob = async (jobId: string) => {
+    setRejectingJob(jobId);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-approve-job', {
+        body: { jobId, action: 'reject' }
+      });
+
+      if (error) {
+        console.error('❌ Error rejecting job:', error);
+        toast({
+          title: "Fehler beim Ablehnen",
+          description: `Fehler: ${error.message || 'Unbekannter Fehler'}`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('✅ Job rejected:', data);
+      
+      toast({
+        title: "Anfrage abgelehnt",
+        description: "Die Anfrage wurde abgelehnt. Keine Fahrer-E-Mails wurden versendet.",
+      });
+
+      await loadJobRequests();
+      
+    } catch (error) {
+      console.error('❌ Unexpected error in handleRejectJob:', error);
+      toast({
+        title: "Unerwarteter Fehler",
+        description: `Ein Fehler ist aufgetreten: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setRejectingJob(null);
+    }
+  };
+
   const handleMarkNoShow = (assignment: any) => {
     setSelectedAssignment(assignment);
     setNoShowDialogOpen(true);
@@ -1571,13 +1653,25 @@ const Admin = () => {
                                 req.status === 'completed' ? 'outline' :
                                 req.status === 'confirmed' ? 'default' :
                                 req.status === 'assigned' ? 'secondary' :
+                                req.status === 'sent' ? 'default' :
+                                req.status === 'approved' ? 'secondary' :
+                                req.status === 'rejected' ? 'destructive' :
+                                req.status === 'pending' ? 'outline' :
                                 req.status === 'no_show' ? 'destructive' : 'outline'
+                              }
+                              className={
+                                req.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
+                                req.status === 'sent' ? 'bg-green-100 text-green-800 border-green-300' : ''
                               }
                             >
                               {req.status === 'confirmed' ? 'Bestätigt' : 
                                 req.status === 'assigned' ? 'Zugewiesen' : 
                                 req.status === 'no_show' ? 'No-Show' :
-                                req.status === 'completed' ? 'Erledigt' : 'Offen'}
+                                req.status === 'completed' ? 'Erledigt' : 
+                                req.status === 'pending' ? '⏳ Wartet auf Freigabe' :
+                                req.status === 'approved' ? 'Freigegeben' :
+                                req.status === 'sent' ? '✓ An Fahrer gesendet' :
+                                req.status === 'rejected' ? 'Abgelehnt' : 'Offen'}
                             </Badge>
                             {(!req.customer_street || !req.customer_house_number || !req.customer_postal_code || !req.customer_city || !/^\d{5}$/.test(req.customer_postal_code || '')) && (
                               <Badge 
@@ -1595,27 +1689,64 @@ const Admin = () => {
                             const a = activeByJob.get(req.id);
                             console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
                             
+                              // Pending-Status: Freigabe-Buttons anzeigen
+                              if (req.status === 'pending') {
+                                return (
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <Button 
+                                      size="sm" 
+                                      className="bg-green-600 hover:bg-green-700 text-white"
+                                      onClick={() => handleApproveJob(req.id)}
+                                      disabled={approvingJob === req.id}
+                                    >
+                                      {approvingJob === req.id ? '⏳ Freigabe...' : '✅ Freigeben & Senden'}
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-red-600 border-red-300 hover:bg-red-50"
+                                      onClick={() => handleRejectJob(req.id)}
+                                      disabled={rejectingJob === req.id}
+                                    >
+                                      {rejectingJob === req.id ? '⏳...' : '❌ Ablehnen'}
+                                    </Button>
+                                  </div>
+                                );
+                              }
+
+                              // Rejected-Status: Nur Info anzeigen
+                              if (req.status === 'rejected') {
+                                return (
+                                  <div className="text-sm text-gray-500 italic">
+                                    Abgelehnt – keine weitere Aktion möglich
+                                  </div>
+                                );
+                              }
+
                               if (!a) {
                                 return (
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <Button 
                                       size="sm" 
                                       onClick={() => handleAssignDriver(req.id)}
-                                      disabled={req.status === 'completed'}
-                                      title={req.status === 'completed' ? 'Erledigte Aufträge können nicht zugewiesen werden' : 'Fahrer zuweisen'}
+                                      disabled={req.status === 'completed' || req.status === 'pending'}
+                                      title={req.status === 'completed' ? 'Erledigte Aufträge können nicht zugewiesen werden' : 
+                                             req.status === 'pending' ? 'Erst freigeben, dann zuweisen' : 'Fahrer zuweisen'}
                                     >
                                       Zuweisen
                                     </Button>
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => handleSendJobToAllDrivers(req.id)}
-                                      disabled={sendingJobToAll === req.id || req.status === 'completed'}
-                                      title="Job an alle verfügbaren Fahrer senden"
-                                    >
-                                      <Mail className="h-3 w-3 mr-1" />
-                                      {sendingJobToAll === req.id ? 'Sende...' : 'An alle senden'}
-                                    </Button>
+                                    {req.status !== 'pending' && (
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => handleSendJobToAllDrivers(req.id)}
+                                        disabled={sendingJobToAll === req.id || req.status === 'completed'}
+                                        title="Job erneut an alle verfügbaren Fahrer senden"
+                                      >
+                                        <Mail className="h-3 w-3 mr-1" />
+                                        {sendingJobToAll === req.id ? 'Sende...' : 'Erneut senden'}
+                                      </Button>
+                                    )}
                                     {!req.customer_street && (
                                       <Button
                                         size="sm"
@@ -1742,14 +1873,25 @@ const Admin = () => {
                                   req.status === 'completed' ? 'outline' :
                                   req.status === 'confirmed' ? 'default' :
                                   req.status === 'assigned' ? 'secondary' :
+                                  req.status === 'sent' ? 'default' :
+                                  req.status === 'approved' ? 'secondary' :
+                                  req.status === 'rejected' ? 'destructive' :
+                                  req.status === 'pending' ? 'outline' :
                                   req.status === 'no_show' ? 'destructive' : 'outline'
                                 }
-                                className="text-xs"
+                                className={`text-xs ${
+                                  req.status === 'pending' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
+                                  req.status === 'sent' ? 'bg-green-100 text-green-800 border-green-300' : ''
+                                }`}
                               >
                                 {req.status === 'confirmed' ? 'Bestätigt' : 
                                   req.status === 'assigned' ? 'Zugewiesen' : 
                                   req.status === 'no_show' ? 'No-Show' :
-                                  req.status === 'completed' ? 'Erledigt' : 'Offen'}
+                                  req.status === 'completed' ? 'Erledigt' : 
+                                  req.status === 'pending' ? '⏳ Wartet' :
+                                  req.status === 'approved' ? 'Freigegeben' :
+                                  req.status === 'sent' ? '✓ Gesendet' :
+                                  req.status === 'rejected' ? 'Abgelehnt' : 'Offen'}
                               </Badge>
                             </div>
                           </div>
@@ -1821,39 +1963,66 @@ const Admin = () => {
                                 </Button>
                               </div>
                             </div>
+                          ) : req.status === 'pending' ? (
+                            /* Pending: Freigabe-Buttons für Mobile */
+                            <div className="space-y-2">
+                              <Button 
+                                size="sm" 
+                                className="w-full h-11 bg-green-600 hover:bg-green-700 text-white"
+                                onClick={() => handleApproveJob(req.id)}
+                                disabled={approvingJob === req.id}
+                              >
+                                {approvingJob === req.id ? '⏳ Freigabe...' : '✅ Freigeben & an Fahrer senden'}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="w-full h-11 text-red-600 border-red-300 hover:bg-red-50"
+                                onClick={() => handleRejectJob(req.id)}
+                                disabled={rejectingJob === req.id}
+                              >
+                                {rejectingJob === req.id ? '⏳...' : '❌ Ablehnen'}
+                              </Button>
+                            </div>
+                          ) : req.status === 'rejected' ? (
+                            <div className="text-sm text-gray-500 italic text-center py-2">
+                              Abgelehnt – keine weitere Aktion möglich
+                            </div>
                           ) : (
                             <div className="space-y-2">
                               <Button 
                                 size="sm" 
                                 onClick={() => handleAssignDriver(req.id)}
-                                disabled={req.status === 'completed'}
+                                disabled={req.status === 'completed' || req.status === 'pending'}
                                 className="w-full h-11"
                               >
                                 👤 Fahrer zuweisen
                               </Button>
-                              <div className="flex gap-2">
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleSendJobToAllDrivers(req.id)}
-                                  disabled={sendingJobToAll === req.id || req.status === 'completed'}
-                                  className="flex-1 h-11"
-                                >
-                                  <Mail className="h-4 w-4 mr-1" />
-                                  {sendingJobToAll === req.id ? 'Sende...' : 'An alle senden'}
-                                </Button>
-                                {!req.customer_street && (
+                              {req.status !== 'pending' && (
+                                <div className="flex gap-2">
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    onClick={() => handleOpenContactDialog(req.id)}
-                                    className="flex-1 text-orange-600 border-orange-300 hover:bg-orange-50 h-11"
+                                    onClick={() => handleSendJobToAllDrivers(req.id)}
+                                    disabled={sendingJobToAll === req.id || req.status === 'completed'}
+                                    className="flex-1 h-11"
                                   >
-                                    <Edit className="h-4 w-4 mr-1" />
-                                    Adresse
+                                    <Mail className="h-4 w-4 mr-1" />
+                                    {sendingJobToAll === req.id ? 'Sende...' : 'Erneut senden'}
                                   </Button>
-                                )}
-                              </div>
+                                  {!req.customer_street && (
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => handleOpenContactDialog(req.id)}
+                                      className="flex-1 text-orange-600 border-orange-300 hover:bg-orange-50 h-11"
+                                    >
+                                      <Edit className="h-4 w-4 mr-1" />
+                                      Adresse
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
                             </div>
                           )}
 
