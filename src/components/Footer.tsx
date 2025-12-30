@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Lock } from "lucide-react";
 import { FEATURE_FLAGS } from "@/utils/featureFlags";
+import { PWAInstallButton } from "@/components/PWAInstallButton";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -120,7 +121,10 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© {currentYear} Fahrerexpress-Agentur • Günter Killer • USt-IdNr: DE207642217</p>
+          <div className="flex items-center gap-4">
+            <p>© {currentYear} Fahrerexpress-Agentur • Günter Killer • USt-IdNr: DE207642217</p>
+            <PWAInstallButton />
+          </div>
           <div className="flex gap-4 items-center">
             <Link 
               to="/admin/login" 
