@@ -11,8 +11,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PWAInstallButton } from "@/components/PWAInstallButton";
+import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 
 const SimpleBookingForm = () => {
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [agreedToPrices, setAgreedToPrices] = useState(false);
   const [agreedToData, setAgreedToData] = useState(false);
@@ -129,6 +131,9 @@ const SimpleBookingForm = () => {
         title: "Anfrage erfolgreich gesendet!",
         description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
       });
+
+      // Zeige PWA-Installationshinweis nach Erfolg
+      setFormSubmitted(true);
 
       // Reset form
       if (e.currentTarget) {
@@ -749,6 +754,9 @@ const SimpleBookingForm = () => {
                   )}
                 </Button>
               </form>
+
+              {/* PWA Install-Hinweis nach erfolgreicher Absendung */}
+              {formSubmitted && <PWAInstallSuccessBox />}
             </CardContent>
           </Card>
         </div>
