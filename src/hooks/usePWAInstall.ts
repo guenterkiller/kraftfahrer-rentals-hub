@@ -12,42 +12,43 @@ interface BeforeInstallPromptEvent extends Event {
 const STORAGE_KEY = 'pwa-install-dismissed';
 
 /**
- * PWA Install Hook - DSGVO-konform
- * - Kein Tracking
- * - Speichert Entscheidung nur lokal
- * - Zeigt Prompt maximal 1× an
+ * PWA Install Hook - Zuverlässig & DSGVO-konform
+ * - Fängt beforeinstallprompt ab
+ * - Speichert Entscheidung lokal
+ * - Kein Auto-Popup
  */
 export function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [canInstall, setCanInstall] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [wasDismissed, setWasDismissed] = useState(false);
 
   useEffect(() => {
-    // Check if already dismissed or installed
-    const dismissed = localStorage.getItem(STORAGE_KEY);
-    if (dismissed === 'true') {
-      setWasDismissed(true);
-      return;
-    }
-
     // Check if already installed (standalone mode)
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    const isStandalone = 
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true;
+    
+    if (isStandalone) {
       setIsInstalled(true);
+      console.log('[PWA] Already installed (standalone mode)');
       return;
     }
 
-    // iOS Safari check (no beforeinstallprompt event)
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    // Check if dismissed before
+    const wasDismissed = localStorage.getItem(STORAGE_KEY) === 'true';
     
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
+      console.log('[PWA] beforeinstallprompt event fired');
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setCanInstall(true);
+      // Nur anzeigen wenn nicht dismissed
+      if (!wasDismissed) {
+        setCanInstall(true);
+      }
     };
 
     const handleAppInstalled = () => {
+      console.log('[PWA] App installed');
       setIsInstalled(true);
       setCanInstall(false);
       setDeferredPrompt(null);
@@ -56,9 +57,12 @@ export function usePWAInstall() {
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     window.addEventListener('appinstalled', handleAppInstalled);
 
-    // For iOS, we can show manual instructions
-    if (isIOS && isSafari && !dismissed) {
+    // iOS Safari: Kann manuell installiert werden
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isIOS && isSafari && !wasDismissed) {
       setCanInstall(true);
+      console.log('[PWA] iOS Safari detected - manual install possible');
     }
 
     return () => {
@@ -69,17 +73,19 @@ export function usePWAInstall() {
 
   const promptInstall = useCallback(async () => {
     if (!deferredPrompt) {
-      // iOS Safari - show manual instructions
-      return { outcome: 'ios-manual' as const };
+      console.log('[PWA] No deferred prompt available');
+      return { outcome: 'unavailable' as const };
     }
 
     try {
+      console.log('[PWA] Triggering install prompt');
       await deferredPrompt.prompt();
       const choiceResult = await deferredPrompt.userChoice;
       
+      console.log('[PWA] User choice:', choiceResult.outcome);
+      
       if (choiceResult.outcome === 'dismissed') {
         localStorage.setItem(STORAGE_KEY, 'true');
-        setWasDismissed(true);
       }
       
       setDeferredPrompt(null);
@@ -87,25 +93,26 @@ export function usePWAInstall() {
       
       return choiceResult;
     } catch (error) {
-      console.error('PWA install error:', error);
+      console.error('[PWA] Install error:', error);
       return { outcome: 'error' as const };
     }
   }, [deferredPrompt]);
 
   const dismissPrompt = useCallback(() => {
     localStorage.setItem(STORAGE_KEY, 'true');
-    setWasDismissed(true);
     setCanInstall(false);
   }, []);
 
   const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   return {
-    canInstall: canInstall && !wasDismissed && !isInstalled,
+    canInstall,
     isInstalled,
-    wasDismissed,
     isIOS,
     promptInstall,
     dismissPrompt,
+    // Debug: Ob Event abgefangen wurde
+    hasPromptEvent: !!deferredPrompt,
   };
 }
+
