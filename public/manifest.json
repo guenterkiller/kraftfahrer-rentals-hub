@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/lovable-uploads/favicon-truck-512-full.png",
+      "src": "/favicon-truck-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/lovable-uploads/favicon-truck-512-full.png",
+      "src": "/favicon-truck-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
@@ -33,6 +33,13 @@
       "type": "image/jpeg",
       "form_factor": "wide",
       "label": "Fahrerexpress - LKW-Fahrer bundesweit mieten"
+    },
+    {
+      "src": "/favicon-truck-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Fahrerexpress App Icon"
     }
   ],
   "categories": ["business", "productivity"],
