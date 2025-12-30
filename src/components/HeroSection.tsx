@@ -3,7 +3,8 @@ import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // LCP-optimiert: Statischer Pfad für konsistentes Preloading in Dev & Production
-const heroImageUrl = "/assets/lkw-autobahn-hero.jpg";
+// WICHTIG: Muss exakt mit dem Preload in index.html übereinstimmen!
+const heroImageUrl = "/hero/lkw-autobahn-professionell.jpg";
 
 const HeroSection = () => {
   return (
