@@ -1,19 +1,21 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/lkw-autobahn-professionell.jpg";
+
+// LCP-optimiert: Statischer Pfad für konsistentes Preloading in Dev & Production
+const heroImageUrl = "/assets/lkw-autobahn-hero.jpg";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32 sm:pb-40 md:pb-48">
-      {/* Hero image optimiert für Core Web Vitals */}
+      {/* Hero image optimiert für Core Web Vitals - LCP Element */}
       <div className="absolute inset-0">
         <img
-          src={heroImage}
+          src={heroImageUrl}
           alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
           className="w-full h-full object-cover object-center"
           loading="eager"
-          decoding="async"
+          decoding="sync"
           fetchPriority="high"
           width={1920}
           height={1080}
