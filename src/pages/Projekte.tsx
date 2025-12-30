@@ -142,6 +142,10 @@ const Projekte = () => {
                         src={projekt.bild} 
                         alt={`${projekt.title} - Erfolgreicher ${projekt.fahrzeugtyp}-Fahrereinsatz in ${projekt.ort} für ${projekt.kunde} durch Fahrerexpress vermittelt`}
                         className="w-full h-64 md:h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        width={600}
+                        height={400}
                       />
                     </div>
                     

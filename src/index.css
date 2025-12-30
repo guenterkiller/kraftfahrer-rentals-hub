@@ -16,10 +16,14 @@ All colors MUST be HSL.
 
 /* Ensure proper font loading and rendering */
 html {
-  font-display: swap;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
+
+/* Font-display swap für alle Schriftarten (Performance) */
+@font-face {
+  font-display: swap;
 }
 
 /* Mobile-first responsive images */
