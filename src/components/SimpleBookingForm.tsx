@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { PWAInstallButton } from "@/components/PWAInstallButton";
 
 const SimpleBookingForm = () => {
   const [loading, setLoading] = useState(false);
@@ -187,10 +188,13 @@ const SimpleBookingForm = () => {
         <div className="max-w-4xl mx-auto">
           <Card id="booking-form">
             <CardHeader>
-              <CardTitle className="text-2xl text-center">
-                Unverbindliche Fahreranfrage in 2 Minuten
-              </CardTitle>
-              <p className="text-center text-muted-foreground mb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+                <CardTitle className="text-2xl">
+                  Unverbindliche Fahreranfrage in 2 Minuten
+                </CardTitle>
+                <PWAInstallButton />
+              </div>
+              <p className="text-center sm:text-left text-muted-foreground mb-4">
                 Beschreiben Sie Ihren Fahrbedarf - wir melden uns innerhalb von 6 Stunden mit einer Rückmeldung
               </p>
               

@@ -1,7 +1,7 @@
 {
   "name": "Fahrerexpress - LKW-Fahrer mieten",
   "short_name": "Fahrerexpress",
-  "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer und Baumaschinenführer",
+  "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer und Baumaschinenführer. Im Notfall sofort erreichbar.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -12,16 +12,32 @@
       "src": "/lovable-uploads/favicon-truck-512-full.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/lovable-uploads/favicon-truck-512-full.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-truck.png",
+      "sizes": "64x64",
       "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/uploads/facebook-preview-v2.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Fahrerexpress - LKW-Fahrer bundesweit mieten"
     }
   ],
   "categories": ["business", "productivity"],
   "lang": "de",
   "scope": "/",
-  "related_applications": []
+  "id": "/",
+  "prefer_related_applications": false
 }
