@@ -3,17 +3,12 @@
   "short_name": "Fahrerexpress",
   "description": "Bundesweite Vermittlung selbstständiger LKW-Fahrer und Baumaschinenführer. Im Notfall sofort erreichbar.",
   "start_url": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#C73E1D",
   "orientation": "portrait-primary",
   "icons": [
-    {
-      "src": "/favicon-truck-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
     {
       "src": "/favicon-truck-192.png",
       "sizes": "192x192",
@@ -21,9 +16,16 @@
       "purpose": "any"
     },
     {
-      "src": "/favicon-truck.png",
-      "sizes": "64x64",
-      "type": "image/png"
+      "src": "/favicon-truck-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-truck-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -45,6 +47,5 @@
   "categories": ["business", "productivity"],
   "lang": "de",
   "scope": "/",
-  "id": "/",
   "prefer_related_applications": false
 }
