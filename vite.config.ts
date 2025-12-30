@@ -99,9 +99,9 @@ export default defineConfig(({ mode }) => ({
           }
         ]
       },
-      // Keine Push-Benachrichtigungen
+      // PWA auch in Entwicklung für Tests aktiviert
       devOptions: {
-        enabled: false // PWA nur im Production-Build
+        enabled: true
       }
     }),
     {
