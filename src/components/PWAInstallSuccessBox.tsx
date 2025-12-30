@@ -25,7 +25,9 @@ export function PWAInstallSuccessBox() {
   // Nicht anzeigen wenn bereits installiert oder vom User geschlossen
   if (isInstalled || dismissed) return null;
 
-  const handleInstallClick = async () => {
+  const handleInstallClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (hasPromptEvent) {
       // Chrome/Edge: Nutze das native beforeinstallprompt Event
       await promptInstall();
@@ -56,6 +58,7 @@ export function PWAInstallSuccessBox() {
             Speichern Sie Fahrerexpress als App auf Ihrem Gerät, damit Sie uns bei der nächsten Fahrer-Anfrage sofort wiederfinden.
           </p>
           <Button
+            type="button"
             onClick={handleInstallClick}
             variant="default"
             size="sm"

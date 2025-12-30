@@ -17,7 +17,9 @@ export function PWAInstallButton() {
   // Nicht anzeigen wenn kein Install-Event vorhanden
   if (!canInstall) return null;
 
-  const handleInstall = async () => {
+  const handleInstall = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     await promptInstall();
   };
 
@@ -35,6 +37,7 @@ export function PWAInstallButton() {
 
   return (
     <Button
+      type="button"
       onClick={handleInstall}
       variant="outline"
       size="sm"
