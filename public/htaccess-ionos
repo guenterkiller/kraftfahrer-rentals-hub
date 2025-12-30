@@ -83,6 +83,12 @@ RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|json|woff|woff2|ttf|otf
 # Bekannte statische Dateien im Root
 RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico|manifest\.json)$ - [L]
 
+# PWA-Dateien explizit ausschließen (VitePWA generiert diese)
+RewriteRule ^manifest\.webmanifest$ - [L]
+RewriteRule ^sw\.js$ - [L]
+RewriteRule ^registerSW\.js$ - [L]
+RewriteRule ^workbox-.*\.js$ - [L]
+
 # SPA Catch-all: Alles andere → index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
