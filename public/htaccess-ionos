@@ -1,27 +1,12 @@
-# IONOS-kompatible .htaccess Konfiguration
-# Version: 2025-01-06 - Cache-Optimierung
+# IONOS Minimal .htaccess – Nur SPA-Fallback + Caching
+# Version: 2025-01-06
 RewriteEngine On
 
-# Bypass all rewrites for admin-check.html (serve static)
-RewriteRule ^admin-check\.html$ - [L]
-
-# MIME types for images and fonts
-AddType image/jpeg .jpg .jpeg
-AddType image/png .png
-AddType image/webp .webp
-AddType image/avif .avif
-AddType image/svg+xml .svg
-AddType image/gif .gif
-AddType font/woff2 .woff2
-AddType font/woff .woff
-AddType font/ttf .ttf
-AddType font/otf .otf
-
 # ============================================================
-# CACHE-KONTROLLE (IONOS-kompatibel mit IfModule-Fallbacks)
+# CACHE-KONTROLLE
 # ============================================================
 
-# --- 1) index.html: KEIN Cache (Updates sofort sichtbar) ---
+# 1) index.html: KEIN Cache (Updates sofort sichtbar)
 <IfModule mod_headers.c>
   <FilesMatch "^index\.html$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
@@ -30,41 +15,33 @@ AddType font/otf .otf
   </FilesMatch>
 </IfModule>
 
-# --- 2) JS/CSS Assets: 1 Jahr immutable Cache ---
+# 2) JS/CSS Assets: 1 Jahr immutable Cache
 <IfModule mod_headers.c>
   <FilesMatch "\.(js|css)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 </IfModule>
 
-# --- 3) Bilder: 1 Jahr immutable Cache ---
+# 3) Bilder: 1 Jahr immutable Cache
 <IfModule mod_headers.c>
   <FilesMatch "\.(jpg|jpeg|png|gif|webp|avif|svg|ico)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 </IfModule>
 
-# --- 4) Fonts: 1 Jahr immutable Cache ---
+# 4) Fonts: 1 Jahr immutable Cache
 <IfModule mod_headers.c>
   <FilesMatch "\.(woff2|woff|ttf|otf|eot)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
-    Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
 </IfModule>
 
-# --- Fallback mit mod_expires (falls mod_headers nicht greift) ---
+# Fallback mit mod_expires
 <IfModule mod_expires.c>
   ExpiresActive On
-  
-  # HTML: Kein Cache
   ExpiresByType text/html "access plus 0 seconds"
-  
-  # JS/CSS: 1 Jahr
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType text/javascript "access plus 1 year"
-  
-  # Bilder: 1 Jahr
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
   ExpiresByType image/gif "access plus 1 year"
@@ -72,91 +49,41 @@ AddType font/otf .otf
   ExpiresByType image/avif "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType image/x-icon "access plus 1 year"
-  
-  # Fonts: 1 Jahr
   ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType font/woff "access plus 1 year"
   ExpiresByType font/ttf "access plus 1 year"
   ExpiresByType font/otf "access plus 1 year"
   ExpiresByType application/font-woff "access plus 1 year"
   ExpiresByType application/font-woff2 "access plus 1 year"
-  ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
 </IfModule>
 
-# Security headers
-<IfModule mod_headers.c>
-  Header always set X-Content-Type-Options "nosniff"
-  Header always set X-Frame-Options "DENY"
-  Header always set X-XSS-Protection "1; mode=block"
-</IfModule>
-
-# Compression für bessere Performance
+# 5) Gzip Compression (optional)
 <IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/plain
   AddOutputFilterByType DEFLATE text/html
-  AddOutputFilterByType DEFLATE text/xml
   AddOutputFilterByType DEFLATE text/css
-  AddOutputFilterByType DEFLATE application/xml
-  AddOutputFilterByType DEFLATE application/xhtml+xml
-  AddOutputFilterByType DEFLATE application/rss+xml
   AddOutputFilterByType DEFLATE application/javascript
-  AddOutputFilterByType DEFLATE application/x-javascript
-  AddOutputFilterByType DEFLATE font/woff
-  AddOutputFilterByType DEFLATE font/woff2
-  AddOutputFilterByType DEFLATE font/ttf
-  AddOutputFilterByType DEFLATE font/otf
   AddOutputFilterByType DEFLATE image/svg+xml
 </IfModule>
 
-# Force HTTPS + WWW (IONOS-spezifisch)
-# Canonical: https://www.kraftfahrer-mieten.com/
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
+# ============================================================
+# SPA-FALLBACK (React/Vite)
+# ============================================================
 
-# Force WWW auch bei HTTPS
-RewriteCond %{HTTP_HOST} ^kraftfahrer-mieten\.com$ [NC]
-RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
-
-# Remove legacy Fahrerbörse URLs
-Redirect 410 /fahrerboerse
-Redirect 410 /fahrerbörse
-
-# Canonical 301 redirects for legacy .html URLs
-RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
-RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
-RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/agb [R=301,L]
-
-# Referenzen variants
-RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
-RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
-
-# Generic .html removal
-RewriteCond %{REQUEST_URI} \.html$ [NC]
-RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
-
-# SPA fallback routing
 RewriteBase /
 
-# Explicitly allow static assets (prevent rewriting)
+# Statische Assets nicht umschreiben
 RewriteRule ^assets/ - [L]
 RewriteRule ^uploads/ - [L]
 RewriteRule ^lovable-uploads/ - [L]
-RewriteRule ^public/ - [L]
+RewriteRule ^hero/ - [L]
 
-# Allow static files
-RewriteRule ^.*\.(css|js|jpg|jpeg|png|gif|webp|svg|ico|json|woff|woff2|ttf|eot)$ - [L]
+# Statische Dateien direkt ausliefern
+RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|json|woff|woff2|ttf|otf|eot|mp4|pdf)$ - [L]
 
-RewriteRule ^index\.html$ - [L]
+# Bekannte statische Dateien im Root
+RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico|manifest\.json)$ - [L]
 
-# Admin routes
-RewriteRule ^admin/?$ /index.html [L]
-RewriteRule ^admin/login/?$ /index.html [L]
-
-# Catch-all SPA fallback (only for routes, not files)
+# SPA Catch-all: Alles andere → index.html
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|manifest\.json)
 RewriteRule . /index.html [L]
