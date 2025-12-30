@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import PageLoader from "./components/PageLoader";
+import { usePrefetchRoutes } from "./hooks/usePrefetchRoutes";
 
 // Critical path: Index page loaded synchronously for fast initial render
 import Index from "./pages/Index";
@@ -52,24 +54,39 @@ const queryClient = new QueryClient();
 
 // ============================================
 // DEFERRED ANALYTICS: Tracking nach initialem Render
+// Verwendet useRef um doppelte Events zu verhindern
 // ============================================
 function DeferredAnalytics() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
-    // Tracking erst nach initialem Render laden (requestIdleCallback oder setTimeout)
+    // Nur einmal laden - keine doppelten Events
+    let mounted = true;
+    
+    const loadAnalytics = () => {
+      if (mounted) {
+        setShouldLoad(true);
+      }
+    };
+
+    // Tracking erst nach initialem Render laden
     if ('requestIdleCallback' in window) {
-      (window as any).requestIdleCallback(() => setShouldLoad(true), { timeout: 2000 });
+      const id = (window as any).requestIdleCallback(loadAnalytics, { timeout: 2000 });
+      return () => {
+        mounted = false;
+        (window as any).cancelIdleCallback(id);
+      };
     } else {
-      // Fallback: nach 1s laden
-      const timer = setTimeout(() => setShouldLoad(true), 1000);
-      return () => clearTimeout(timer);
+      const timer = setTimeout(loadAnalytics, 1000);
+      return () => {
+        mounted = false;
+        clearTimeout(timer);
+      };
     }
   }, []);
 
   if (!shouldLoad) return null;
 
-  // Dynamisch importieren nach idle
   return <LazyAnalyticsTracker />;
 }
 
@@ -78,8 +95,13 @@ const LazyAnalyticsTracker = lazy(() =>
   import("./components/AnalyticsTracker").then(module => ({ default: module.AnalyticsTracker }))
 );
 
-// Minimal loading fallback (kein visueller Spinner für schnellere wahrgenommene Performance)
-const PageFallback = () => null;
+// ============================================
+// PREFETCH COMPONENT: Lädt wichtige Chunks nach First Paint
+// ============================================
+function RoutePrefetcher() {
+  usePrefetchRoutes();
+  return null;
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -90,11 +112,15 @@ const App = () => (
           <DeferredAnalytics />
         </Suspense>
         
+        {/* Prefetch wichtige Landingpages nach First Paint */}
+        <RoutePrefetcher />
+        
         <Toaster />
         <Sonner />
         <ScrollToTop />
         
-        <Suspense fallback={<PageFallback />}>
+        {/* Gemeinsames Suspense mit leichtgewichtigem PageLoader */}
+        <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Critical path: Index synchron geladen */}
             <Route path="/" element={<Index />} />
