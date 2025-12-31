@@ -31,20 +31,38 @@ export default defineConfig(({ mode }) => ({
         categories: ['business', 'productivity'],
         icons: [
           {
-            src: '/lovable-uploads/favicon-truck-512-full.png',
+            src: '/favicon-truck-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/favicon-truck-512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: '/lovable-uploads/favicon-truck-512-full.png',
-            sizes: '192x192',
-            type: 'image/png'
+            src: '/favicon-truck-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          }
+        ],
+        screenshots: [
+          {
+            src: '/uploads/facebook-preview-v2.jpg',
+            sizes: '1200x630',
+            type: 'image/jpeg',
+            form_factor: 'wide',
+            label: 'Fahrerexpress Desktop Ansicht'
           },
           {
-            src: '/favicon-truck.png',
-            sizes: '64x64',
-            type: 'image/png'
+            src: '/favicon-truck-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'Fahrerexpress Mobile Ansicht'
           }
         ]
       },
