@@ -11,6 +11,14 @@ interface BeforeInstallPromptEvent extends Event {
 
 const STORAGE_KEY = 'pwa-install-dismissed';
 
+const getIsEmbedded = () => {
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+};
+
 /**
  * PWA Install Hook - Zuverlässig & DSGVO-konform
  * - Fängt beforeinstallprompt ab
@@ -21,6 +29,9 @@ export function usePWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [canInstall, setCanInstall] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+
+  const isEmbedded = typeof window !== 'undefined' ? getIsEmbedded() : false;
+  const isSecureContext = typeof window !== 'undefined' ? window.isSecureContext : false;
 
   useEffect(() => {
     // Check if already installed (standalone mode)
@@ -109,6 +120,8 @@ export function usePWAInstall() {
     canInstall,
     isInstalled,
     isIOS,
+    isEmbedded,
+    isSecureContext,
     promptInstall,
     dismissPrompt,
     // Debug: Ob Event abgefangen wurde
