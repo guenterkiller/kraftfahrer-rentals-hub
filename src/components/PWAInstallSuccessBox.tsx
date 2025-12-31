@@ -39,11 +39,23 @@ export function PWAInstallSuccessBox() {
       // Chrome/Edge: Nutze das native beforeinstallprompt Event
       console.log('[PWA] Using native install prompt');
       await promptInstall();
-    } else {
-      // Fallback: Zeige manuelle Anleitung
-      console.log('[PWA] No prompt event, showing manual instructions');
-      setShowFallbackModal(true);
+      return;
     }
+
+    // Kein natives Prompt verfügbar → nur Hinweis (kein Popup automatisch)
+    console.log('[PWA] No prompt event, showing hint only');
+    toast({
+      title: 'App-Installation über das Browser-Menü',
+      description: isIOS
+        ? 'Safari: Teilen → „Zum Home-Bildschirm“.'
+        : 'Öffnen Sie das Browser-Menü (⋮) und wählen Sie „App installieren“ / „Zum Startbildschirm hinzufügen“.',
+    });
+  };
+
+  const handleHowToClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowFallbackModal(true);
   };
 
   return (
@@ -66,16 +78,26 @@ export function PWAInstallSuccessBox() {
           <p className="text-sm text-muted-foreground">
             Speichern Sie Fahrerexpress als App auf Ihrem Gerät, damit Sie uns bei der nächsten Fahrer-Anfrage sofort wiederfinden.
           </p>
-          <Button
-            type="button"
-            onClick={handleInstallClick}
-            variant="default"
-            size="sm"
-            className="gap-2"
-          >
-            <Download className="h-4 w-4" />
-            App installieren
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              type="button"
+              onClick={handleInstallClick}
+              variant="default"
+              size="sm"
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              App installieren
+            </Button>
+            <Button
+              type="button"
+              onClick={handleHowToClick}
+              variant="outline"
+              size="sm"
+            >
+              Anleitung anzeigen
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
