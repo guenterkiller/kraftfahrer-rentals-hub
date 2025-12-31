@@ -19,6 +19,15 @@ const getIsEmbedded = () => {
   }
 };
 
+const getIsLovablePreviewHost = () => {
+  try {
+    const host = window.location.hostname;
+    return host.endsWith('lovableproject.com') || host.endsWith('lovable.dev');
+  } catch {
+    return false;
+  }
+};
+
 /**
  * PWA Install Hook - Zuverlässig & DSGVO-konform
  * - Fängt beforeinstallprompt ab
@@ -32,6 +41,7 @@ export function usePWAInstall() {
 
   const isEmbedded = typeof window !== 'undefined' ? getIsEmbedded() : false;
   const isSecureContext = typeof window !== 'undefined' ? window.isSecureContext : false;
+  const isLovablePreviewHost = typeof window !== 'undefined' ? getIsLovablePreviewHost() : false;
 
   useEffect(() => {
     // Check if already installed (standalone mode)
@@ -122,6 +132,7 @@ export function usePWAInstall() {
     isIOS,
     isEmbedded,
     isSecureContext,
+    isLovablePreviewHost,
     promptInstall,
     dismissPrompt,
     // Debug: Ob Event abgefangen wurde

@@ -26,6 +26,7 @@ export function PWAInstallSuccessBox() {
     isIOS,
     isEmbedded,
     isSecureContext,
+    isLovablePreviewHost,
   } = usePWAInstall();
   const [showFallbackModal, setShowFallbackModal] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -33,9 +34,25 @@ export function PWAInstallSuccessBox() {
   // Nicht anzeigen wenn bereits installiert oder vom User geschlossen
   if (isInstalled || dismissed) return null;
 
+  const openLiveForInstall = () => {
+    const liveBase = 'https://www.kraftfahrer-mieten.com';
+    const path = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    window.open(`${liveBase}${path}`, '_blank', 'noopener,noreferrer');
+  };
+
   const handleInstallClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // Auf lovableproject.com ist das Manifest in Chrome wegen CORS/Redirect blockiert → kein Prompt möglich.
+    if (!isIOS && isLovablePreviewHost) {
+      toast({
+        title: 'Installation in der Vorschau nicht möglich',
+        description: 'Ich öffne die Live-Seite im neuen Tab – dort klappt die Installation in Chrome.',
+      });
+      openLiveForInstall();
+      return;
+    }
 
     // PWA-Install ist in iFrames (z.B. Lovable Preview) meist nicht verfügbar.
     if (!isIOS && isEmbedded) {
@@ -93,7 +110,11 @@ export function PWAInstallSuccessBox() {
             className="gap-2"
           >
             <Download className="h-4 w-4" />
-            {!isIOS && isEmbedded ? 'Im Browser öffnen' : 'App installieren'}
+            {!isIOS && isLovablePreviewHost
+              ? 'Live-Seite öffnen'
+              : !isIOS && isEmbedded
+                ? 'Im Browser öffnen'
+                : 'App installieren'}
           </Button>
         </CardContent>
       </Card>
