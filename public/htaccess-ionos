@@ -78,16 +78,23 @@ RewriteRule ^lovable-uploads/ - [L]
 RewriteRule ^hero/ - [L]
 
 # Statische Dateien direkt ausliefern
-RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|json|woff|woff2|ttf|otf|eot|mp4|pdf)$ - [L]
+RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2|ttf|otf|eot|mp4|pdf)$ - [L]
 
 # Bekannte statische Dateien im Root
-RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico|manifest\.json)$ - [L]
+RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico)$ - [L]
 
-# PWA-Dateien explizit ausschließen (VitePWA generiert diese)
+# PWA-Dateien explizit durchlassen mit korrektem MIME-Type
+RewriteRule ^manifest\.json$ - [L]
 RewriteRule ^manifest\.webmanifest$ - [L]
 RewriteRule ^sw\.js$ - [L]
 RewriteRule ^registerSW\.js$ - [L]
 RewriteRule ^workbox-.*\.js$ - [L]
+
+# MIME-Type für Manifest (wichtig für Chrome PWA-Erkennung)
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+  AddType application/manifest+json manifest.json
+</IfModule>
 
 # SPA Catch-all: Alles andere → index.html
 RewriteCond %{REQUEST_FILENAME} !-f

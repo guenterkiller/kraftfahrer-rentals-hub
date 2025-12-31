@@ -31,19 +31,19 @@ export default defineConfig(({ mode }) => ({
         categories: ['business', 'productivity'],
         icons: [
           {
-            src: '/favicon-truck-192.png',
+            src: '/pwa-icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon-truck-512.png',
+            src: '/pwa-icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/favicon-truck-512.png',
+            src: '/pwa-icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => ({
             label: 'Fahrerexpress Desktop Ansicht'
           },
           {
-            src: '/favicon-truck-512.png',
+            src: '/pwa-icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             form_factor: 'narrow',

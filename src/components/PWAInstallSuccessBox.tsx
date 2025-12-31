@@ -24,9 +24,6 @@ export function PWAInstallSuccessBox() {
     hasPromptEvent,
     isInstalled,
     isIOS,
-    isEmbedded,
-    isSecureContext,
-    isLovablePreviewHost,
   } = usePWAInstall();
   const [showFallbackModal, setShowFallbackModal] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -34,50 +31,17 @@ export function PWAInstallSuccessBox() {
   // Nicht anzeigen wenn bereits installiert oder vom User geschlossen
   if (isInstalled || dismissed) return null;
 
-  const openLiveForInstall = () => {
-    const liveBase = 'https://www.kraftfahrer-mieten.com';
-    const path = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    window.open(`${liveBase}${path}`, '_blank', 'noopener,noreferrer');
-  };
-
   const handleInstallClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    // Auf lovableproject.com ist das Manifest in Chrome wegen CORS/Redirect blockiert → kein Prompt möglich.
-    if (!isIOS && isLovablePreviewHost) {
-      toast({
-        title: 'Installation in der Vorschau nicht möglich',
-        description: 'Ich öffne die Live-Seite im neuen Tab – dort klappt die Installation in Chrome.',
-      });
-      openLiveForInstall();
-      return;
-    }
-
-    // PWA-Install ist in iFrames (z.B. Lovable Preview) meist nicht verfügbar.
-    if (!isIOS && isEmbedded) {
-      toast({
-        title: 'Hinweis',
-        description: 'Bitte in einem neuen Tab öffnen – dort kann Chrome die App installieren.',
-      });
-      window.open(window.location.href, '_blank', 'noopener,noreferrer');
-      return;
-    }
-
-    // In nicht-sicheren Kontexten (ohne HTTPS) wird kein Prompt angeboten.
-    if (!isIOS && !isSecureContext) {
-      toast({
-        title: 'Installation nicht möglich',
-        description: 'Chrome benötigt dafür HTTPS. Bitte auf der Live-Domain öffnen.',
-      });
-      return;
-    }
-
     if (hasPromptEvent) {
       // Chrome/Edge: Nutze das native beforeinstallprompt Event
+      console.log('[PWA] Using native install prompt');
       await promptInstall();
     } else {
       // Fallback: Zeige manuelle Anleitung
+      console.log('[PWA] No prompt event, showing manual instructions');
       setShowFallbackModal(true);
     }
   };
@@ -110,11 +74,7 @@ export function PWAInstallSuccessBox() {
             className="gap-2"
           >
             <Download className="h-4 w-4" />
-            {!isIOS && isLovablePreviewHost
-              ? 'Live-Seite öffnen'
-              : !isIOS && isEmbedded
-                ? 'Im Browser öffnen'
-                : 'App installieren'}
+            App installieren
           </Button>
         </CardContent>
       </Card>
