@@ -84,7 +84,8 @@ const PerformanceOptimizedImage = ({
         height={height}
         sizes={sizes}
         loading={priority ? 'eager' : 'lazy'}
-        fetchPriority={priority ? 'high' : 'auto'}
+        // @ts-expect-error fetchpriority is a valid HTML attribute
+        fetchpriority={priority ? 'high' : 'auto'}
         onLoad={handleLoad}
         onError={handleError}
         className={`absolute inset-0 w-full h-full transition-opacity duration-300 ${
