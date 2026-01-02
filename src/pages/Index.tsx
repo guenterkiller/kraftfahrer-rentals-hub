@@ -18,7 +18,7 @@ const Index = () => {
   const navigate = useNavigate();
   
   useSEO({
-    title: "LKW-Fahrer mieten – Ersatzfahrer & CE-Fahrer bundesweit",
+    title: "LKW Fahrer buchen & mieten – deutschlandweit ab 349 €",
     description: "LKW Fahrer deutschlandweit buchen – Ersatzfahrer, Aushilfsfahrer & Mietfahrer bundesweit. Kurzfristig, auf Abruf, ohne Arbeitnehmerüberlassung.",
     keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit, Ersatzfahrer LKW, Aushilfsfahrer LKW, Mietfahrer LKW, Leihfahrer LKW, Fahrer leihen, Fahrer bestellen, Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer, Urlaubsvertretung Fahrer, Krankheitsvertretung Fahrer, Vertretungsfahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, Baumaschinenführer buchen, LKW Fahrer Vermittlung, Fahrer kurzfristig verfügbar",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
@@ -110,13 +110,13 @@ const Index = () => {
       <main id="main-content">
         <HeroSection />
         
-        {/* SEO H2-Struktur für Keyword-Abdeckung */}
-        <section aria-label="SEO-Überschriften" className="py-8 bg-background">
+        {/* SEO H2-Struktur für Keyword-Abdeckung (mieten, leihen, etc.) */}
+        <section aria-label="Leistungsübersicht" className="py-8 bg-background">
           <div className="container mx-auto px-4 max-w-4xl space-y-4">
-            <h2 className="text-2xl font-bold text-foreground">Ersatzfahrer & Aushilfsfahrer für LKW – kurzfristig verfügbar</h2>
-            <h2 className="text-2xl font-bold text-foreground">LKW-Fahrer mieten für Spedition, Baustelle & Industrie</h2>
+            <h2 className="text-2xl font-bold text-foreground">LKW-Fahrer mieten oder leihen – flexibel & kurzfristig</h2>
+            <h2 className="text-2xl font-bold text-foreground">Ersatzfahrer & Aushilfsfahrer bei Fahrerausfall</h2>
             <h2 className="text-2xl font-bold text-foreground">CE-Fahrer, Kipperfahrer & Baustellenfahrer bundesweit</h2>
-            <h2 className="text-2xl font-bold text-foreground">Schnell & unkompliziert Fahrer buchen – ohne Zeitarbeit</h2>
+            <h2 className="text-2xl font-bold text-foreground">Mietfahrer & Leihfahrer ohne Arbeitnehmerüberlassung</h2>
           </div>
         </section>
 

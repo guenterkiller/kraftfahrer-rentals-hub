@@ -13,9 +13,9 @@ const Mietfahrer = () => {
   }, []);
 
   const seoData = {
-    title: "Mietfahrer – LKW Fahrer tageweise mieten | deutschlandweit",
-    description: "Mietfahrer für LKW tageweise oder wochenweise mieten. Flexibel buchbar, keine Bindung, keine Arbeitnehmerüberlassung. Ab 349 €/Tag deutschlandweit.",
-    keywords: "Mietfahrer, LKW Fahrer mieten, Fahrer mieten, Mietfahrer LKW, Leihfahrer, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Zeit, temporärer Fahrer, flexibler Fahrer, Fahrer ohne Vertrag, Fahrer kurzfristig mieten, Miet-LKW-Fahrer",
+    title: "Mietfahrer LKW – tageweise mieten ab 349 €",
+    description: "Mietfahrer für LKW tageweise oder wochenweise mieten. Flexibel, keine Bindung, keine AÜG. Ab 349 €/Tag deutschlandweit.",
+    keywords: "Mietfahrer, LKW Fahrer mieten, Fahrer mieten, Mietfahrer LKW, Leihfahrer, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Zeit, temporärer Fahrer, flexibler Fahrer, Miet-LKW-Fahrer",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/mietfahrer',
       'x-default': 'https://www.kraftfahrer-mieten.com/mietfahrer'
@@ -59,8 +59,8 @@ const Mietfahrer = () => {
   };
 
   const heroData = {
-    h1: "Mietfahrer – LKW Fahrer flexibel mieten",
-    intro: "Brauchen Sie einen Fahrer nur für bestimmte Tage oder Wochen? Mit unseren Mietfahrern buchen Sie genau die Kapazität, die Sie brauchen – ohne langfristige Bindung. Selbstständige LKW-Fahrer deutschlandweit, ab 349 € pro Tag.",
+    h1: "Mietfahrer LKW – flexibel tageweise buchen",
+    intro: "Brauchen Sie einen Fahrer nur für bestimmte Tage oder Wochen? Mit unseren Mietfahrern buchen Sie genau die Kapazität, die Sie brauchen – ohne langfristige Bindung. Ab 349 € pro Tag.",
     bullets: ["Tageweise buchbar", "Keine Vertragsbindung", "Flexible Verlängerung"]
   };
 

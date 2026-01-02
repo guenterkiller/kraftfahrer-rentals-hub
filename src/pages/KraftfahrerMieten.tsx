@@ -2,8 +2,8 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const KraftfahrerMieten = () => {
   const seoData = {
-    title: "Kraftfahrer mieten deutschlandweit – Fahrer leihen & bestellen",
-    description: "Kraftfahrer mieten, leihen oder bestellen – Aushilfsfahrer, Mietfahrer, Leihfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
+    title: "Kraftfahrer mieten – Fahrer leihen deutschlandweit",
+    description: "Kraftfahrer mieten oder leihen – Aushilfsfahrer, Mietfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
     keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer",
     structuredData: {
       "@context": "https://schema.org",
@@ -31,8 +31,8 @@ const KraftfahrerMieten = () => {
   };
 
   const heroData = {
-    h1: "Kraftfahrer mieten, leihen oder bestellen – deutschlandweit",
-    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit auf Abruf. Fahrer tageweise oder wochenweise bestellen. Ihr Ansprechpartner für externe Fahrer-Dienstleistungen – selbstständige LKW-Fahrer auf Abruf.",
+    h1: "Kraftfahrer mieten – deutschlandweit auf Abruf",
+    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit verfügbar. Fahrer tageweise oder wochenweise bestellen. Selbstständige LKW-Fahrer auf Abruf.",
     bullets: [
       "Aushilfsfahrer bei Fahrerausfall",
       "Fahrer auf Abruf – tageweise/wochenweise",
