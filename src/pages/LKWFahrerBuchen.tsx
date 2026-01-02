@@ -12,8 +12,8 @@ const LKWFahrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "LKW CE Fahrer buchen deutschlandweit – ab 349 €/Tag",
-    description: "LKW Fahrer buchen, mieten oder leihen – Ersatzfahrer, Aushilfsfahrer, Mietfahrer deutschlandweit. Kurzfristig auf Abruf, tageweise. 349 €/Tag.",
+    title: "LKW CE Fahrer buchen – ab 349 €/Tag deutschlandweit",
+    description: "LKW Fahrer buchen oder mieten – Ersatzfahrer, Mietfahrer deutschlandweit. Kurzfristig auf Abruf, tageweise. 349 €/Tag.",
     keywords: "LKW Fahrer buchen, LKW Fahrer mieten, LKW Fahrer leihen, Ersatzfahrer LKW, Ersatzfahrer LKW sofort, LKW Fahrer Krankheitsvertretung, Aushilfsfahrer LKW, LKW Mietfahrer, LKW Leihfahrer, Fahrer bestellen, externe Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer LKW, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW Fahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, CE Fahrer, ADR-Fahrer, LKW Fahrer Vermittlung",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
@@ -107,8 +107,8 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW Fahrer buchen, mieten oder leihen – deutschlandweit",
-    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. Externe LKW Fahrer als Fahrer-Dienstleister. 349 € pro Tag (8h).",
+    h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
+    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. 349 € pro Tag (8h).",
     bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer sofort auf Abruf", "Transparente Tagessätze"]
   };
 

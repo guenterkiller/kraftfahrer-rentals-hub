@@ -1,7 +1,8 @@
 # SEO-Strukturbericht – kraftfahrer-mieten.com
 
 **Erstellt am:** 02.01.2026  
-**Status:** ✅ Keine kritischen Dopplungen gefunden
+**Letzte Aktualisierung:** 02.01.2026  
+**Status:** ✅ Optimiert – Alle Prüfungen bestanden
 
 ---
 
@@ -22,11 +23,17 @@
 
 | Element | Inhalt | Zeichen |
 |---------|--------|---------|
-| **Title** | LKW-Fahrer mieten – Ersatzfahrer & CE-Fahrer bundesweit | 54 ✅ |
-| **H1** | LKW-Fahrer buchen, mieten oder leihen – deutschlandweit | 52 ✅ |
+| **Title** | LKW Fahrer buchen & mieten – deutschlandweit ab 349 € | 53 ✅ |
+| **H1** | LKW Fahrer buchen – deutschlandweit | 36 ✅ |
 | **Description** | LKW Fahrer deutschlandweit buchen – Ersatzfahrer, Aushilfsfahrer & Mietfahrer bundesweit. Kurzfristig, auf Abruf, ohne Arbeitnehmerüberlassung. | 143 ✅ |
 
-**Bewertung:** ✅ Title ≠ H1 (keine exakte Dopplung). Intent-Varianten korrekt verteilt.
+**H2-Struktur (Keywords ausgelagert):**
+- LKW-Fahrer mieten oder leihen – flexibel & kurzfristig
+- Ersatzfahrer & Aushilfsfahrer bei Fahrerausfall
+- CE-Fahrer, Kipperfahrer & Baustellenfahrer bundesweit
+- Mietfahrer & Leihfahrer ohne Arbeitnehmerüberlassung
+
+**Bewertung:** ✅ H1 fokussiert auf "buchen". Keywords "mieten/leihen" in H2 ausgelagert.
 
 ---
 
@@ -34,11 +41,11 @@
 
 | Element | Inhalt | Zeichen |
 |---------|--------|---------|
-| **Title** | LKW CE Fahrer buchen deutschlandweit – ab 349 €/Tag | 50 ✅ |
-| **H1** | LKW Fahrer buchen, mieten oder leihen – deutschlandweit | 52 ✅ |
-| **Description** | LKW Fahrer buchen, mieten oder leihen – Ersatzfahrer, Aushilfsfahrer, Mietfahrer deutschlandweit. Kurzfristig auf Abruf, tageweise. 349 €/Tag. | 142 ✅ |
+| **Title** | LKW CE Fahrer buchen – ab 349 €/Tag deutschlandweit | 50 ✅ |
+| **H1** | LKW CE Fahrer buchen – deutschlandweit verfügbar | 47 ✅ |
+| **Description** | LKW Fahrer buchen oder mieten – Ersatzfahrer, Mietfahrer deutschlandweit. Kurzfristig auf Abruf, tageweise. 349 €/Tag. | 117 ✅ |
 
-**Bewertung:** ✅ Fokus auf "buchen" + "CE Fahrer". Title ergänzt mit Preis.
+**Bewertung:** ✅ Fokus auf "CE Fahrer buchen". Title ≠ H1.
 
 ---
 
