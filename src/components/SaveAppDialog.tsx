@@ -85,7 +85,7 @@ IconIndex=0`;
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
-          <button className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-1.5">
+          <button className="text-primary font-medium hover:text-primary/80 transition-colors text-sm flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 rounded-md hover:bg-primary/20">
             <Smartphone className="h-4 w-4" />
             Fahrerexpress speichern
           </button>
