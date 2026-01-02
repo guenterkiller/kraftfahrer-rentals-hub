@@ -110,6 +110,16 @@ const Index = () => {
       <main id="main-content">
         <HeroSection />
         
+        {/* SEO H2-Struktur für Keyword-Abdeckung */}
+        <section aria-label="SEO-Überschriften" className="py-8 bg-background">
+          <div className="container mx-auto px-4 max-w-4xl space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">Ersatzfahrer & Aushilfsfahrer für LKW – kurzfristig verfügbar</h2>
+            <h2 className="text-2xl font-bold text-foreground">LKW-Fahrer mieten für Spedition, Baustelle & Industrie</h2>
+            <h2 className="text-2xl font-bold text-foreground">CE-Fahrer, Kipperfahrer & Baustellenfahrer bundesweit</h2>
+            <h2 className="text-2xl font-bold text-foreground">Schnell & unkompliziert Fahrer buchen – ohne Zeitarbeit</h2>
+          </div>
+        </section>
+
         {/* AUFGABE 1: Zentraler Definitions-Block für Google & KI */}
         <section aria-label="Leistungsdefinition Fahrerexpress" className="py-8 bg-background">
           <div className="container mx-auto px-4 max-w-4xl">
