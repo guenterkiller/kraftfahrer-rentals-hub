@@ -7,10 +7,7 @@
     <meta name="theme-color" content="#C73E1D" />
     
     <!-- Performance & Core Web Vitals - Resource Hints -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Google Fonts nicht verwendet - System-Fonts für schnelleres Rendering -->
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     
     <!-- Google Tag Manager -->
@@ -23,7 +20,9 @@
     
     
     <!-- Preload critical resources for better LCP (Largest Contentful Paint) -->
-    <link rel="preload" as="image" href="/hero/lkw-autobahn-professionell.jpg" fetchpriority="high" />
+    <!-- AVIF für moderne Browser, WebP als Fallback -->
+    <link rel="preload" as="image" href="/hero/lkw-autobahn-professionell.avif" type="image/avif" fetchpriority="high" />
+    <link rel="preload" as="image" href="/hero/lkw-autobahn-professionell.webp" type="image/webp" />
     <link rel="preload" href="/src/index.css" as="style" />
     
     <!-- Icons and manifest -->
