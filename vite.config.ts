@@ -16,63 +16,21 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.png', 'favicon-truck.png', 'lovable-uploads/favicon-truck-512-full.png'],
-      manifest: {
-        name: 'Fahrerexpress - LKW-Fahrer mieten',
-        short_name: 'Fahrerexpress',
-        description: 'Bundesweite Vermittlung selbstständiger LKW-Fahrer und Baumaschinenführer. Im Notfall sofort erreichbar.',
-        theme_color: '#C73E1D',
-        background_color: '#ffffff',
-        display: 'standalone',
-        orientation: 'portrait-primary',
-        start_url: '/',
-        scope: '/',
-        lang: 'de',
-        categories: ['business', 'productivity'],
-        icons: [
-          {
-            src: '/pwa-icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any'
-          },
-          {
-            src: '/pwa-icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any'
-          },
-          {
-            src: '/pwa-icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable'
-          }
-        ],
-        screenshots: [
-          {
-            src: '/uploads/facebook-preview-v2.jpg',
-            sizes: '1200x630',
-            type: 'image/jpeg',
-            form_factor: 'wide',
-            label: 'Fahrerexpress Desktop Ansicht'
-          },
-          {
-            src: '/pwa-icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            form_factor: 'narrow',
-            label: 'Fahrerexpress Mobile Ansicht'
-          }
-        ]
+      // KEIN manifest: {} - wir nutzen ausschließlich public/manifest.webmanifest
+      manifest: false,
+      // Nutze das manuelle Manifest
+      injectManifest: {
+        injectionPoint: undefined
       },
+      includeAssets: ['favicon.png', 'favicon-truck.png', 'lovable-uploads/favicon-truck-512-full.png', 'manifest.webmanifest'],
       workbox: {
         // Nur JS/CSS/Fonts precachen - NICHT HTML (NetworkFirst für aktuelle Inhalte)
         globPatterns: ['**/*.{js,css,ico,woff,woff2}'],
         // lovable-uploads enthält große Bilder - nicht precachen
-        globIgnores: ['**/lovable-uploads/**', '**/assets/*.png'],
+        // manifest.webmanifest wird manuell in public/ gepflegt
+        globIgnores: ['**/lovable-uploads/**', '**/assets/*.png', '**/manifest.json'],
         // Navigation (HTML) immer NetworkFirst für aktuelle Inhalte
-        navigateFallback: null, // Kein Fallback - immer Netzwerk für Navigation
+        navigateFallback: null,
         runtimeCaching: [
           {
             // HTML/Navigation: NetworkFirst - immer aktuelle Inhalte
@@ -117,7 +75,6 @@ export default defineConfig(({ mode }) => ({
           }
         ]
       },
-      // PWA auch in Entwicklung für Tests aktiviert
       devOptions: {
         enabled: true
       }
