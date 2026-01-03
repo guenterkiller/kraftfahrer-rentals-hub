@@ -13,8 +13,8 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32 sm:pb-40 md:pb-48">
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}
-      <div className="absolute inset-0">
-        <picture>
+      <div className="absolute inset-0 z-0">
+        <picture className="absolute inset-0 w-full h-full">
           {/* WebP: Primäres Format */}
           <source
             type="image/webp"
@@ -24,7 +24,7 @@ const HeroSection = () => {
           <img
             src="/uploads/lkw-autobahn-professionell.jpg"
             alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
-            className="w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-center"
             loading="eager"
             decoding="sync"
             // @ts-expect-error fetchpriority is a valid HTML attribute
@@ -35,7 +35,7 @@ const HeroSection = () => {
             style={{ filter: 'brightness(1.05) contrast(1.05)' }}
           />
         </picture>
-        <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
       </div>
       
       <div className="relative z-10 container mx-auto px-4 text-center text-white animate-fade-in">
