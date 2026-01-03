@@ -18,6 +18,7 @@ import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
+import { CustomerNewsletterDialog } from "@/components/CustomerNewsletterDialog";
 // JobInvitesStatus ausgeblendet - Fahrer antworten jetzt per Telefon
 import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
@@ -85,7 +86,8 @@ const Admin = () => {
   const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
   const [completingOldJobs, setCompletingOldJobs] = useState(false);
   const [markingCompleted, setMarkingCompleted] = useState<string | null>(null);
-  const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
+const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
+  const [customerNewsletterDialogOpen, setCustomerNewsletterDialogOpen] = useState(false);
   const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
   const [approvingJob, setApprovingJob] = useState<string | null>(null);
   const [rejectingJob, setRejectingJob] = useState<string | null>(null);
@@ -1345,7 +1347,16 @@ const Admin = () => {
                   className="bg-blue-600 hover:bg-blue-700 flex-1 md:flex-none"
                 >
                   <Mail className="h-4 w-4 mr-2" />
-                  Rundschreiben
+                  Fahrer-Rundschreiben
+                </Button>
+                <Button 
+                  onClick={() => setCustomerNewsletterDialogOpen(true)}
+                  variant="default"
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700 flex-1 md:flex-none"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Kunden-CSV-Newsletter
                 </Button>
                 <Button 
                   onClick={loadFahrerData} 
@@ -2251,6 +2262,12 @@ const Admin = () => {
       <DriverNewsletterDialog
         open={newsletterDialogOpen}
         onOpenChange={setNewsletterDialogOpen}
+      />
+
+      {/* Customer Newsletter Dialog (CSV Upload) */}
+      <CustomerNewsletterDialog
+        open={customerNewsletterDialogOpen}
+        onOpenChange={setCustomerNewsletterDialogOpen}
       />
 
       {/* Performance Monitor */}
