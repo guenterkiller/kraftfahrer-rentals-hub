@@ -110,10 +110,6 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules/react-router')) {
             return 'router-vendor';
           }
-          // Recharts: NUR für Admin, wird lazy geladen
-          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) {
-            return 'charts-vendor';
-          }
           // Formulare: NUR bei Bedarf
           if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform')) {
             return 'form-vendor';
@@ -126,17 +122,13 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules/lucide-react')) {
             return 'ui-vendor';
           }
+          // Recharts/D3: NICHT separieren - Rollup handled das besser automatisch
+          // (separate chunks verursachen "Cannot access before initialization" Fehler)
         }
       }
     },
     chunkSizeWarningLimit: 1000,
-    // Bessere Kompression
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true
-      }
-    }
+    // esbuild statt terser - schneller und weniger Probleme mit komplexen Libs
+    minify: 'esbuild',
   },
 }));
