@@ -90,6 +90,9 @@ verify_jwt = false
 [functions.send-nurture-email]
 verify_jwt = false
 
+[functions.send-customer-newsletter]
+verify_jwt = false
+
 [functions.submit-fahrer-anfrage]
 verify_jwt = false
 
