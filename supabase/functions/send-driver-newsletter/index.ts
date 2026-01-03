@@ -71,24 +71,52 @@ serve(async (req) => {
           continue;
         }
 
-        const emailBody = `
-Hallo ${driver.vorname} ${driver.nachname},
-
-${message}
-
-Mit freundlichen Grüßen
-Ihr Fahrerexpress Team
+        const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+    <h1 style="color: white; margin: 0; font-size: 24px;">Fahrerexpress</h1>
+    <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0; font-size: 12px;">Informationen für unsere Fahrer</p>
+  </div>
+  
+  <div style="background: #ffffff; padding: 30px; border: 1px solid #e5e5e5; border-top: none;">
+    <p style="margin: 0 0 15px 0;">Hallo ${driver.vorname} ${driver.nachname},</p>
+    ${message.split('\n').map((line: string) => line.trim() ? `<p style="margin: 0 0 10px 0;">${line}</p>` : '<br>').join('')}
+  </div>
+  
+  <div style="background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 8px 8px; border: 1px solid #e5e5e5; border-top: none;">
+    <p style="margin: 0; color: #666; font-size: 14px;">
+      Mit freundlichen Grüßen<br>
+      <strong>Ihr Fahrerexpress-Team</strong>
+    </p>
+    <p style="margin: 15px 0 0 0; color: #999; font-size: 12px;">
+      Fahrerexpress GmbH | Tel: +49 (0) 123 456789<br>
+      <a href="https://fahrerexpress.de" style="color: #059669;">www.fahrerexpress.de</a>
+    </p>
+    <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
+    <p style="margin: 0; color: #999; font-size: 11px;">
+      Sie erhalten diese E-Mail als registrierter Fahrer bei Fahrerexpress.<br>
+      <a href="mailto:info@fahrerexpress.de?subject=Abmeldung%20Fahrer-Newsletter&body=Bitte%20melden%20Sie%20mich%20vom%20Fahrer-Rundschreiben%20ab.%20E-Mail:%20${encodeURIComponent(driver.email)}" style="color: #999;">Von Fahrer-Infos abmelden</a>
+    </p>
+  </div>
+</body>
+</html>
         `.trim();
 
         const emailPayload = {
-          from: `Fahrerexpress <${Deno.env.get('MAIL_FROM')}>`,
-          reply_to: 'info@kraftfahrer-mieten.com',
+          from: `Fahrerexpress Fahrer-Team <${Deno.env.get('MAIL_FROM')}>`,
+          reply_to: 'fahrer@fahrerexpress.de',
           to: [driver.email],
           subject: subject,
-          text: emailBody,
+          html: emailHtml,
         };
 
-        console.log(`Sending email to ${driver.email} with payload:`, emailPayload);
+        console.log(`Sending email to ${driver.email}`);
 
         const response = await fetch('https://api.resend.com/emails', {
           method: 'POST',
