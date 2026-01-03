@@ -74,6 +74,7 @@ const handler = async (req: Request): Promise<Response> => {
             <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
               <div style="background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%); padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
                 <h1 style="color: white; margin: 0; font-size: 24px;">Fahrerexpress</h1>
+                <p style="color: rgba(255,255,255,0.8); margin: 5px 0 0 0; font-size: 12px;">Informationen für unsere Kunden</p>
               </div>
               
               <div style="background: #ffffff; padding: 30px; border: 1px solid #e5e5e5; border-top: none;">
@@ -88,6 +89,11 @@ const handler = async (req: Request): Promise<Response> => {
                 <p style="margin: 15px 0 0 0; color: #999; font-size: 12px;">
                   Fahrerexpress GmbH | Tel: +49 (0) 123 456789<br>
                   <a href="https://fahrerexpress.de" style="color: #2d5a87;">www.fahrerexpress.de</a>
+                </p>
+                <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
+                <p style="margin: 0; color: #999; font-size: 11px;">
+                  Sie erhalten diese E-Mail als Geschäftskunde von Fahrerexpress.<br>
+                  <a href="mailto:info@fahrerexpress.de?subject=Abmeldung%20Kunden-Newsletter&body=Bitte%20melden%20Sie%20mich%20vom%20Kunden-Newsletter%20ab.%20E-Mail:%20${encodeURIComponent(customer.email)}" style="color: #999;">Von Kunden-Infos abmelden</a>
                 </p>
               </div>
             </body>

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Upload, Send, FileSpreadsheet, X, Users } from "lucide-react";
+import { Upload, Send, FileSpreadsheet, X, Users, TestTube, AlertTriangle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CustomerNewsletterDialogProps {
@@ -29,8 +29,10 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [sendingTest, setSendingTest] = useState(false);
   const [customers, setCustomers] = useState<CustomerContact[]>([]);
   const [fileName, setFileName] = useState<string | null>(null);
+  const [testEmail, setTestEmail] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const parseCSV = (text: string): CustomerContact[] => {
@@ -136,6 +138,58 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
     }
   };
 
+  const handleSendTest = async () => {
+    if (!subject.trim() || !message.trim()) {
+      toast({
+        title: "Fehlende Daten",
+        description: "Bitte Betreff und Nachricht ausfüllen",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!testEmail.trim() || !testEmail.includes('@')) {
+      toast({
+        title: "Ungültige Test-E-Mail",
+        description: "Bitte eine gültige E-Mail-Adresse eingeben",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setSendingTest(true);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('send-customer-newsletter', {
+        body: {
+          subject: `[TEST] ${subject}`,
+          message,
+          customers: [{
+            email: testEmail,
+            name: 'Test-Empfänger',
+            firma: 'Testfirma'
+          }]
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Test-E-Mail versendet",
+        description: `Test-E-Mail wurde an ${testEmail} gesendet`
+      });
+    } catch (error: any) {
+      console.error("Test email error:", error);
+      toast({
+        title: "Fehler beim Versenden",
+        description: error.message || "Test-E-Mail konnte nicht gesendet werden",
+        variant: "destructive"
+      });
+    } finally {
+      setSendingTest(false);
+    }
+  };
+
   const handleSend = async () => {
     if (!subject.trim() || !message.trim()) {
       toast({
@@ -182,6 +236,7 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
       setMessage("");
       setCustomers([]);
       setFileName(null);
+      setTestEmail("");
       onOpenChange(false);
     } catch (error: any) {
       console.error("Newsletter error:", error);
@@ -295,6 +350,38 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
             </p>
           </div>
           
+          {/* Test Email Section */}
+          <div className="space-y-2 border-t pt-4">
+            <Label className="flex items-center gap-2 text-sm">
+              <TestTube className="h-4 w-4" />
+              Test-E-Mail senden (optional)
+            </Label>
+            <div className="flex gap-2">
+              <Input
+                placeholder="test@example.com"
+                value={testEmail}
+                onChange={(e) => setTestEmail(e.target.value)}
+                className="flex-1"
+              />
+              <Button 
+                variant="outline"
+                onClick={handleSendTest}
+                disabled={sendingTest || !subject.trim() || !message.trim()}
+                size="sm"
+              >
+                {sendingTest ? "Sendet..." : "Testen"}
+              </Button>
+            </div>
+          </div>
+          
+          {/* Warning */}
+          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md text-sm">
+            <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+            <div className="text-amber-800 dark:text-amber-200">
+              <strong>Nur Kunden-CSV!</strong> Fahrer niemals aus CSV versenden. Für Fahrer das separate "Fahrer-Rundschreiben" nutzen.
+            </div>
+          </div>
+          
           {/* Actions */}
           <div className="flex justify-end gap-2 pt-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
@@ -309,7 +396,7 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
               ) : (
                 <>
                   <Send className="h-4 w-4 mr-2" />
-                  An {customers.length} Empfänger senden
+                  An {customers.length} Kunden senden
                 </>
               )}
             </Button>
