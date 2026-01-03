@@ -80,7 +80,6 @@ RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2|ttf|otf|eot|
 RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico)$ - [L]
 
 # PWA-Dateien explizit durchlassen mit korrektem MIME-Type
-RewriteRule ^manifest\.json$ - [L]
 RewriteRule ^manifest\.webmanifest$ - [L]
 RewriteRule ^sw\.js$ - [L]
 RewriteRule ^registerSW\.js$ - [L]
@@ -89,7 +88,6 @@ RewriteRule ^workbox-.*\.js$ - [L]
 # MIME-Type für Manifest (wichtig für Chrome PWA-Erkennung)
 <IfModule mod_mime.c>
   AddType application/manifest+json .webmanifest
-  AddType application/manifest+json manifest.json
 </IfModule>
 
 # SPA Catch-all: Alles andere → index.html

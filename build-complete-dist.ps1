@@ -42,7 +42,7 @@ $criticalFiles = @(
     "public\admin-check.html", 
     "public\cookies.html",
     "public\datenschutz.html",
-    "public\manifest.json",
+    "public\manifest.webmanifest",
     "public\robots.txt",
     "public\sitemap.xml",
     "public\version.txt",
@@ -131,7 +131,7 @@ Set-Content -Path "$distDir\version.txt" -Value $buildVersion -Encoding UTF8
 
 Write-Host "10. Validierung..." -ForegroundColor Yellow
 $expectedFiles = @(
-    "index.html", ".htaccess", "robots.txt", "sitemap.xml", "manifest.json",
+    "index.html", ".htaccess", "robots.txt", "sitemap.xml", "manifest.webmanifest",
     "admin-check.html", "cookies.html", "datenschutz.html", "version.txt"
 )
 
