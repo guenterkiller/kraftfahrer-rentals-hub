@@ -2,27 +2,52 @@ import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// LCP-optimiert: Statischer Pfad für konsistentes Preloading in Dev & Production
-// WICHTIG: Muss exakt mit dem Preload in index.html übereinstimmen!
-const heroImageUrl = "/hero/lkw-autobahn-professionell.jpg";
-
+/**
+ * LCP-optimierte Hero Section mit:
+ * - Picture-Element für AVIF/WebP/JPG Fallback
+ * - Responsive srcset für mobile/desktop
+ * - Explizite width/height für CLS-Vermeidung
+ * - fetchpriority="high" für priorisiertes Laden
+ */
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32 sm:pb-40 md:pb-48">
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}
       <div className="absolute inset-0">
-        <img
-          src={heroImageUrl}
-          alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
-          className="w-full h-full object-cover object-center"
-          loading="eager"
-          decoding="sync"
-          // @ts-expect-error fetchpriority is a valid HTML attribute
-          fetchpriority="high"
-          width={1920}
-          height={1080}
-          style={{ filter: 'brightness(1.05) contrast(1.05)' }}
-        />
+        <picture>
+          {/* AVIF: Bestes Format, ~50% kleiner als WebP */}
+          <source
+            type="image/avif"
+            media="(min-width: 768px)"
+            srcSet="/hero/lkw-autobahn-professionell.avif"
+          />
+          {/* WebP Desktop: ~30% kleiner als JPG */}
+          <source
+            type="image/webp"
+            media="(min-width: 768px)"
+            srcSet="/hero/lkw-autobahn-professionell.webp"
+          />
+          {/* WebP Mobile: Optimiertes Seitenverhältnis */}
+          <source
+            type="image/webp"
+            media="(max-width: 767px)"
+            srcSet="/hero/lkw-autobahn-professionell-mobile.webp"
+          />
+          {/* JPG Fallback für ältere Browser */}
+          <img
+            src="/hero/lkw-autobahn-professionell.jpg"
+            alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
+            className="w-full h-full object-cover object-center"
+            loading="eager"
+            decoding="sync"
+            // @ts-expect-error fetchpriority is a valid HTML attribute
+            fetchpriority="high"
+            width={1920}
+            height={1080}
+            sizes="100vw"
+            style={{ filter: 'brightness(1.05) contrast(1.05)' }}
+          />
+        </picture>
         <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
       </div>
       

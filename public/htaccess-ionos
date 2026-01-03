@@ -15,11 +15,16 @@ RewriteEngine On
   </FilesMatch>
 </IfModule>
 
-# 2) Statische Assets: 1 Jahr immutable Cache
+# 2) Statische Assets: 1 Jahr immutable Cache (inkl. AVIF)
 <IfModule mod_headers.c>
-  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|svg|woff2)$">
+  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|woff2)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
+</IfModule>
+
+# AVIF MIME-Type (für moderne Browser)
+<IfModule mod_mime.c>
+  AddType image/avif .avif
 </IfModule>
 
 # Fallback mit mod_expires

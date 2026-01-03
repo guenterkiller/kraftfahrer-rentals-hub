@@ -101,17 +101,42 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['lucide-react'],
-          'charts-vendor': ['recharts'],
-          'router-vendor': ['react-router-dom'],
-          'form-vendor': ['react-hook-form', '@hookform/resolvers'],
-          'date-vendor': ['date-fns'],
-          'misc-vendor': ['clsx', 'class-variance-authority', 'tailwind-merge']
+        manualChunks(id) {
+          // React-Core: Immer benötigt
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'react-vendor';
+          }
+          // Router: Initial benötigt
+          if (id.includes('node_modules/react-router')) {
+            return 'router-vendor';
+          }
+          // Recharts: NUR für Admin, wird lazy geladen
+          if (id.includes('node_modules/recharts') || id.includes('node_modules/d3-')) {
+            return 'charts-vendor';
+          }
+          // Formulare: NUR bei Bedarf
+          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform')) {
+            return 'form-vendor';
+          }
+          // Date-fns: Bei Bedarf
+          if (id.includes('node_modules/date-fns')) {
+            return 'date-vendor';
+          }
+          // Lucide Icons: Werden tree-shaken
+          if (id.includes('node_modules/lucide-react')) {
+            return 'ui-vendor';
+          }
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1000,
+    // Bessere Kompression
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
 }));
