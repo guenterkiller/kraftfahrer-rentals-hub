@@ -15,27 +15,14 @@ const HeroSection = () => {
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}
       <div className="absolute inset-0">
         <picture>
-          {/* AVIF: Bestes Format, ~50% kleiner als WebP */}
-          <source
-            type="image/avif"
-            media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-professionell.avif"
-          />
-          {/* WebP Desktop: ~30% kleiner als JPG */}
+          {/* WebP: Primäres Format */}
           <source
             type="image/webp"
-            media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-professionell.webp"
-          />
-          {/* WebP Mobile: Optimiertes Seitenverhältnis */}
-          <source
-            type="image/webp"
-            media="(max-width: 767px)"
-            srcSet="/hero/lkw-autobahn-professionell-mobile.webp"
+            srcSet="/uploads/lkw-autobahn-professionell.webp"
           />
           {/* JPG Fallback für ältere Browser */}
           <img
-            src="/hero/lkw-autobahn-professionell.jpg"
+            src="/uploads/lkw-autobahn-professionell.jpg"
             alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
             className="w-full h-full object-cover object-center"
             loading="eager"
