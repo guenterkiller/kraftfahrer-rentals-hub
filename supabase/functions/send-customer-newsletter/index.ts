@@ -172,9 +172,10 @@ const handler = async (req: Request): Promise<Response> => {
                   <a href="https://kraftfahrer-mieten.com" style="color: #2d5a87;">www.kraftfahrer-mieten.com</a>
                 </p>
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
-                <p style="margin: 0; color: #666; font-size: 12px;">
+                <p style="margin: 0; color: #444; font-size: 13px; line-height: 1.45;">
                   Sie erhalten diese E-Mail, weil wir bereits geschäftlich Kontakt hatten.<br>
-                  <a href="${unsubscribeUrl}" style="color: #2d5a87; text-decoration: underline;">Newsletter abmelden</a>
+                  <strong>Abmelden:</strong>
+                  <a href="${unsubscribeUrl}" style="color: #2d5a87; text-decoration: underline; font-weight: 700;">${unsubscribeUrl}</a>
                 </p>
               </div>
             </body>
