@@ -157,7 +157,7 @@ const handler = async (req: Request): Promise<Response> => {
         const senderEmail = Deno.env.get("NEWSLETTER_FROM") || "info@kraftfahrer-mieten.com";
         
         const emailResponse = await resend.emails.send({
-          from: `Fahrerexpress-Agentur <${senderEmail}>`,
+          from: `"Fahrerexpress-Agentur" <${senderEmail}>`,
           reply_to: senderEmail,
           to: [customer.email],
           subject: personalizedSubject,
@@ -186,6 +186,9 @@ const handler = async (req: Request): Promise<Response> => {
                 <p style="margin: 15px 0 0 0; color: #999; font-size: 12px;">
                   Tel.: +49 (0) 1577 1442285<br>
                   <a href="https://www.kraftfahrer-mieten.com" style="color: #2d5a87;">www.kraftfahrer-mieten.com</a>
+                </p>
+                <p style="margin: 12px 0 0 0; color: #1a365d; font-size: 13px; font-weight: bold;">
+                  Bitte speichern Sie sich diese Seite als Favorit ab – für den Notfall.
                 </p>
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
                 <p style="margin: 0; color: #444; font-size: 13px; line-height: 1.45;">
