@@ -103,7 +103,9 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Opt-out list contains ${optOutEmails.size} emails`);
 
     // Send emails with rate limiting (1 per second to avoid Resend limits)
-    for (const customer of normalizedCustomers) {
+    for (let i = 0; i < normalizedCustomers.length; i++) {
+      const customer = normalizedCustomers[i];
+
       // Check opt-out list - only affects this newsletter, nothing else
       if (optOutEmails.has(customer.email)) {
         console.log(`Skipping ${customer.email} - opted out of customer newsletter`);
@@ -117,22 +119,24 @@ const handler = async (req: Request): Promise<Response> => {
 
         // Generate unique unsubscribe token for this email
         const unsubscribeToken = generateToken();
-        
+
         // Store token in database
         await supabase
-          .from('customer_newsletter_tokens')
+          .from("customer_newsletter_tokens")
           .insert({
             email: customer.email,
-            token: unsubscribeToken
+            token: unsubscribeToken,
           });
 
         const unsubscribeUrl = `${UNSUBSCRIBE_BASE_URL}?token=${unsubscribeToken}`;
 
         // Convert line breaks to HTML
         const htmlMessage = personalizedMessage
-          .split('\n')
-          .map(line => line.trim() ? `<p style="margin: 0 0 10px 0;">${line}</p>` : '<br>')
-          .join('');
+          .split("\n")
+          .map((line) =>
+            line.trim() ? `<p style="margin: 0 0 10px 0;">${line}</p>` : "<br>"
+          )
+          .join("");
 
         const emailResponse = await resend.emails.send({
           from: "Fahrerexpress <info@fahrerexpress.de>",
@@ -175,30 +179,35 @@ const handler = async (req: Request): Promise<Response> => {
           `,
         });
 
+        // Resend returns { data, error } and may NOT throw on delivery errors
+        if ((emailResponse as any)?.error) {
+          throw new Error((emailResponse as any).error.message || "Resend error");
+        }
+
         console.log(`Email sent to ${customer.email}:`, emailResponse);
         sent++;
 
-        // Rate limit: wait 1 second between emails
-        if (sent < normalizedCustomers.length) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+        // Rate limit: wait 1 second between attempts (except after last item)
+        if (i < normalizedCustomers.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
       } catch (emailError: any) {
         console.error(`Failed to send to ${customer.email}:`, emailError);
         failed++;
-        errors.push(`${customer.email}: ${emailError.message}`);
+        errors.push(`${customer.email}: ${emailError?.message || String(emailError)}`);
       }
     }
 
     console.log(`Newsletter complete: ${sent} sent, ${failed} failed, ${skipped} skipped (opt-out)`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        sent, 
+      JSON.stringify({
+        success: failed === 0,
+        sent,
         failed,
         skipped,
         total: normalizedCustomers.length,
-        errors: errors.length > 0 ? errors : undefined
+        errors: errors.length > 0 ? errors : undefined,
       }),
       { 
         status: 200, 
