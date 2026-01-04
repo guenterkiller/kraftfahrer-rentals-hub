@@ -226,10 +226,13 @@ const handler = async (req: Request): Promise<Response> => {
                 Günter Killer<br>
                 Vermittlung gewerblicher Fahrer
               </p>
-              <p style="margin: 16px 0 0 0; padding: 12px 20px; background-color: #bb2c29; border-radius: 6px;">
+              <p style="margin: 16px 0 8px 0; padding: 12px 20px; background-color: #bb2c29; border-radius: 6px;">
                 <a href="https://www.kraftfahrer-mieten.com" style="color: #ffffff; font-size: 14px; font-weight: bold; text-decoration: none;">
                   ⭐ Jetzt Seite als Favorit speichern – für den Notfall!
                 </a>
+              </p>
+              <p style="margin: 0; color: #888888; font-size: 11px; line-height: 1.5; font-style: italic;">
+                Hinweis: Nach dem Klick öffnet sich unsere Seite. Bitte speichern Sie diese anschließend selbst als Favorit in Ihrem Browser, damit Sie uns im Notfall sofort wiederfinden.
               </p>
             </td>
           </tr>
