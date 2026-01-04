@@ -50,7 +50,8 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
     
     const nummerIdx = findIndex(['nummer', 'number', 'nr']);
     const firmaIdx = findIndex(['firma', 'company', 'unternehmen']);
-    const nameIdx = findIndex(['name', 'ansprechpartner', 'kontakt']);
+    // Extended contact name mapping: name, kontakt, kontaktname, ansprechpartner, empfänger
+    const nameIdx = findIndex(['name', 'kontakt', 'kontaktname', 'ansprechpartner', 'empfänger', 'empfaenger']);
     const strasseIdx = findIndex(['strasse', 'straße', 'street', 'adresse']);
     const stadtIdx = findIndex(['stadt', 'city', 'ort', 'plz']);
     const telefonIdx = findIndex(['telefon', 'phone', 'tel']);
@@ -74,10 +75,15 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
       const email = emailIdx >= 0 ? values[emailIdx] || '' : '';
       if (!email || !email.includes('@')) continue;
       
+      // Get contact name - fallback to firma if name is empty
+      const rawName = nameIdx >= 0 ? values[nameIdx]?.trim() || '' : '';
+      const rawFirma = firmaIdx >= 0 ? values[firmaIdx]?.trim() || '' : '';
+      const contactName = rawName || rawFirma;
+      
       contacts.push({
         nummer: nummerIdx >= 0 ? values[nummerIdx] || '' : '',
-        firma: firmaIdx >= 0 ? values[firmaIdx] || '' : '',
-        name: nameIdx >= 0 ? values[nameIdx] || '' : '',
+        firma: rawFirma,
+        name: contactName,
         strasse: strasseIdx >= 0 ? values[strasseIdx] || '' : '',
         stadt: stadtIdx >= 0 ? values[stadtIdx] || '' : '',
         telefon: telefonIdx >= 0 ? values[telefonIdx] || '' : '',
