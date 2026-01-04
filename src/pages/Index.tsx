@@ -20,15 +20,21 @@ const BookingPriorityBanner = lazy(() => import("@/components/BookingPriorityBan
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-// Leichtgewichtiger Placeholder für lazy-loaded Sections
+// Layout-stabiler Placeholder mit fixer Höhe für CLS-Vermeidung
 const SectionLoader = () => (
-  <div className="py-16 bg-background animate-pulse">
+  <div 
+    className="py-16 bg-background" 
+    style={{ minHeight: '400px' }}
+    aria-hidden="true"
+  >
     <div className="container mx-auto px-4">
-      <div className="h-8 bg-muted rounded w-1/3 mx-auto mb-4" />
-      <div className="h-4 bg-muted rounded w-2/3 mx-auto" />
+      <div className="h-8 bg-muted/50 rounded w-1/3 mx-auto mb-6" />
+      <div className="h-4 bg-muted/30 rounded w-2/3 mx-auto mb-3" />
+      <div className="h-4 bg-muted/30 rounded w-1/2 mx-auto" />
     </div>
   </div>
 );
+
 const Index = () => {
   const navigate = useNavigate();
   
