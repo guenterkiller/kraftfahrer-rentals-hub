@@ -166,8 +166,8 @@ const handler = async (req: Request): Promise<Response> => {
                 </p>
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
                 <p style="margin: 0; color: #999; font-size: 11px;">
-                  Sie erhalten diese E-Mail als Geschäftskunde von Fahrerexpress.<br>
-                  <a href="${unsubscribeUrl}" style="color: #999;">Von Kunden-Newsletter abmelden</a>
+                  Sie erhalten diese E-Mail, weil wir bereits geschäftlich Kontakt hatten.<br>
+                  <a href="${unsubscribeUrl}" style="color: #999;">Abmelden</a>
                 </p>
               </div>
             </body>
