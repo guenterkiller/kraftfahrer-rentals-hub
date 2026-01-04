@@ -14,7 +14,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const UNSUBSCRIBE_BASE_URL = "https://fahrerexpress.de/unsubscribe";
+const UNSUBSCRIBE_BASE_URL = "https://kraftfahrer-mieten.com/unsubscribe";
 
 interface CustomerContact {
   email: string;
@@ -172,9 +172,9 @@ const handler = async (req: Request): Promise<Response> => {
                   <a href="https://kraftfahrer-mieten.com" style="color: #2d5a87;">www.kraftfahrer-mieten.com</a>
                 </p>
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
-                <p style="margin: 0; color: #999; font-size: 11px;">
+                <p style="margin: 0; color: #666; font-size: 12px;">
                   Sie erhalten diese E-Mail, weil wir bereits geschäftlich Kontakt hatten.<br>
-                  <a href="${unsubscribeUrl}" style="color: #999;">Abmelden</a>
+                  <a href="${unsubscribeUrl}" style="color: #2d5a87; text-decoration: underline;">Newsletter abmelden</a>
                 </p>
               </div>
             </body>
