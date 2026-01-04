@@ -93,6 +93,9 @@ verify_jwt = false
 [functions.send-customer-newsletter]
 verify_jwt = false
 
+[functions.customer-unsubscribe]
+verify_jwt = false
+
 [functions.submit-fahrer-anfrage]
 verify_jwt = false
 

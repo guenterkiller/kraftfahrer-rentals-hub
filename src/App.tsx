@@ -49,6 +49,7 @@ const FahrerVermittlungsbedingungen = lazy(() => import("./pages/FahrerVermittlu
 // Legal (lazy)
 const Impressum = lazy(() => import("./pages/Impressum"));
 const Datenschutz = lazy(() => import("./pages/Datenschutz"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 
 const queryClient = new QueryClient();
 
@@ -165,6 +166,7 @@ const App = () => (
             {/* Legal */}
             <Route path="/impressum" element={<Impressum />} />
             <Route path="/datenschutz" element={<Datenschutz />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
