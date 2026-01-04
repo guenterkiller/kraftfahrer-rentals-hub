@@ -185,8 +185,27 @@ const handler = async (req: Request): Promise<Response> => {
 
         // Resend returns { data, error } and may NOT throw on delivery errors
         if ((emailResponse as any)?.error) {
+          // Log failed email
+          await supabase.from("email_log").insert({
+            recipient: customer.email,
+            template: "customer_newsletter",
+            subject: personalizedSubject,
+            status: "failed",
+            error_message: (emailResponse as any).error.message || "Resend error",
+            delivery_mode: "live",
+          });
           throw new Error((emailResponse as any).error.message || "Resend error");
         }
+
+        // Log successful email
+        await supabase.from("email_log").insert({
+          recipient: customer.email,
+          template: "customer_newsletter",
+          subject: personalizedSubject,
+          status: "sent",
+          sent_at: new Date().toISOString(),
+          delivery_mode: "live",
+        });
 
         console.log(`Email sent to ${customer.email}:`, emailResponse);
         sent++;
