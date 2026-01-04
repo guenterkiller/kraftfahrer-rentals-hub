@@ -52,6 +52,23 @@ const replaceVariables = (text: string, customer: CustomerContact): string => {
     .replace(/\{firma\}/g, customer.firma || '');
 };
 
+// Remove common greeting patterns from the message content since we add greeting automatically
+const stripDuplicateGreeting = (message: string): string => {
+  // Pattern matches: "Guten Tag," or "Guten Tag Name," or "Sehr geehrte..." etc. at the start
+  const greetingPatterns = [
+    /^Guten Tag[^,]*,?\s*/i,
+    /^Sehr geehrte[^,]*,?\s*/i,
+    /^Hallo[^,]*,?\s*/i,
+    /^Liebe[^,]*,?\s*/i,
+  ];
+  
+  let cleaned = message.trim();
+  for (const pattern of greetingPatterns) {
+    cleaned = cleaned.replace(pattern, '');
+  }
+  return cleaned.trim();
+};
+
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
@@ -143,8 +160,11 @@ const handler = async (req: Request): Promise<Response> => {
         
         const greetingLine = greetingName ? `Guten Tag ${greetingName},` : 'Guten Tag,';
 
+        // Clean any duplicate greetings the admin may have included
+        const cleanedMessage = stripDuplicateGreeting(personalizedMessage);
+        
         // Convert line breaks to HTML - admin message is CONTENT ONLY
-        const contentHtml = personalizedMessage
+        const contentHtml = cleanedMessage
           .split("\n")
           .map((line) =>
             line.trim() ? `<p style="margin: 0 0 10px 0;">${line}</p>` : "<br>"
