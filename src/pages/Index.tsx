@@ -20,20 +20,62 @@ const BookingPriorityBanner = lazy(() => import("@/components/BookingPriorityBan
 const ContactSection = lazy(() => import("@/components/ContactSection"));
 const Footer = lazy(() => import("@/components/Footer"));
 
-// Layout-stabiler Placeholder mit fixer Höhe für CLS-Vermeidung
-const SectionLoader = () => (
-  <div 
-    className="py-16 bg-background" 
-    style={{ minHeight: '400px' }}
-    aria-hidden="true"
-  >
+// Individuelle Skeleton-Fallbacks mit passenden Höhen pro Section-Typ
+const ProductCardsSkeleton = () => (
+  <div className="py-12 bg-background" style={{ minHeight: '320px' }} aria-hidden="true">
     <div className="container mx-auto px-4">
-      <div className="h-8 bg-muted/50 rounded w-1/3 mx-auto mb-6" />
-      <div className="h-4 bg-muted/30 rounded w-2/3 mx-auto mb-3" />
-      <div className="h-4 bg-muted/30 rounded w-1/2 mx-auto" />
+      <div className="h-8 bg-muted/40 rounded w-1/4 mx-auto mb-8" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[1, 2, 3].map(i => <div key={i} className="h-48 bg-muted/30 rounded-lg" />)}
+      </div>
     </div>
   </div>
 );
+
+const ProcessSkeleton = () => (
+  <div className="py-12 bg-muted" style={{ minHeight: '280px' }} aria-hidden="true">
+    <div className="container mx-auto px-4">
+      <div className="h-8 bg-background/50 rounded w-1/3 mx-auto mb-6" />
+      <div className="flex justify-center gap-4">
+        {[1, 2, 3, 4].map(i => <div key={i} className="h-20 w-20 bg-background/40 rounded-full" />)}
+      </div>
+    </div>
+  </div>
+);
+
+const TestimonialsSkeleton = () => (
+  <div className="py-12 bg-background" style={{ minHeight: '240px' }} aria-hidden="true">
+    <div className="container mx-auto px-4">
+      <div className="h-6 bg-muted/40 rounded w-1/4 mx-auto mb-6" />
+      <div className="h-24 bg-muted/30 rounded-lg max-w-2xl mx-auto" />
+    </div>
+  </div>
+);
+
+const FormSkeleton = () => (
+  <div className="py-16 bg-muted" style={{ minHeight: '400px' }} aria-hidden="true">
+    <div className="container mx-auto px-4 max-w-2xl">
+      <div className="h-8 bg-background/50 rounded w-1/2 mx-auto mb-8" />
+      <div className="space-y-4">
+        {[1, 2, 3].map(i => <div key={i} className="h-12 bg-background/40 rounded" />)}
+      </div>
+    </div>
+  </div>
+);
+
+const SmallSectionSkeleton = () => (
+  <div className="py-8 bg-background" style={{ minHeight: '160px' }} aria-hidden="true">
+    <div className="container mx-auto px-4">
+      <div className="h-6 bg-muted/40 rounded w-1/3 mx-auto mb-4" />
+      <div className="h-4 bg-muted/30 rounded w-2/3 mx-auto" />
+    </div>
+  </div>
+);
+
+const FooterSkeleton = () => (
+  <div className="py-12 bg-foreground" style={{ minHeight: '200px' }} aria-hidden="true" />
+);
+
 
 const Index = () => {
   const navigate = useNavigate();
@@ -165,32 +207,32 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Below-the-fold: Lazy-loaded für bessere Mobile-Performance */}
-        <Suspense fallback={<SectionLoader />}>
+        {/* Below-the-fold: Lazy-loaded mit individuellen Skeleton-Höhen */}
+        <Suspense fallback={<ProductCardsSkeleton />}>
           <ProductCards />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<ProcessSkeleton />}>
           <ProcessSteps />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SmallSectionSkeleton />}>
           <WhyFahrerexpress />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<TestimonialsSkeleton />}>
           <TestimonialsSection />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<FormSkeleton />}>
           <FahreranfrageSection />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SmallSectionSkeleton />}>
           <LegalSecuritySection />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SmallSectionSkeleton />}>
           <BookingPriorityBanner />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SmallSectionSkeleton />}>
           <EUDriverRecruitment />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        <Suspense fallback={<SmallSectionSkeleton />}>
           <ContactSection />
         </Suspense>
         
@@ -287,7 +329,7 @@ const Index = () => {
         </section>
       </main>
       
-      <Suspense fallback={<div className="py-8 bg-muted" />}>
+      <Suspense fallback={<FooterSkeleton />}>
         <Footer />
       </Suspense>
     </div>
