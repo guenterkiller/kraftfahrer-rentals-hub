@@ -350,7 +350,7 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
             />
           </div>
           
-          <div className="space-y-3 flex-1 min-h-0">
+          <div className="space-y-3">
             <Label htmlFor="message" className="text-base font-semibold">
               Nachricht (nur Inhalt)
             </Label>
@@ -359,23 +359,24 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
               placeholder="wir möchten Sie über unser neues Angebot informieren...&#10;&#10;Bei Fragen stehen wir gerne zur Verfügung."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="min-h-[180px] resize-none text-base leading-relaxed"
+              className="min-h-[140px] resize-none text-base leading-relaxed"
             />
-            <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700 rounded-lg">
-              <div className="flex items-start gap-3">
-                <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-                <div className="space-y-1 text-amber-900 dark:text-amber-100">
-                  <p className="font-bold text-base">ℹ️ Bitte geben Sie hier nur den Nachrichtentext ein.</p>
-                  <p className="text-sm">Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
-                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-2">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
-                </div>
+          </div>
+          
+          {/* Info Box - separate section */}
+          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded-lg">
+            <div className="flex items-start gap-2">
+              <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+              <div className="text-amber-900 dark:text-amber-100 text-sm">
+                <p className="font-semibold">Bitte geben Sie hier nur den Nachrichtentext ein.</p>
+                <p className="text-xs mt-1">Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
               </div>
             </div>
           </div>
           
           {/* Test Email Section */}
-          <div className="space-y-2 border-t pt-4">
-            <Label className="flex items-center gap-2 text-sm">
+          <div className="space-y-2 border-t pt-3 mt-3">
+            <Label className="flex items-center gap-2 text-sm font-medium">
               <TestTube className="h-4 w-4" />
               Test-E-Mail senden (optional)
             </Label>
@@ -390,11 +391,11 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
                 variant="outline"
                 onClick={handleSendTest}
                 disabled={sendingTest || !subject.trim() || !message.trim()}
-                size="sm"
               >
                 {sendingTest ? "Sendet..." : "Testen"}
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
           </div>
           
           {/* Warning */}
