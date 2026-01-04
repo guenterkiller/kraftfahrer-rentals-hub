@@ -1,20 +1,43 @@
+import { lazy, Suspense } from "react";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
-import ProductCards from "@/components/ProductCards";
-import ProcessSteps from "@/components/ProcessSteps";
-import WhyFahrerexpress from "@/components/WhyFahrerexpress";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import EUDriverRecruitment from "@/components/EUDriverRecruitment";
-import FahreranfrageSection from "@/components/FahreranfrageSection";
-import LegalSecuritySection from "@/components/LegalSecuritySection";
-import BookingPriorityBanner from "@/components/BookingPriorityBanner";
-import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
+// ============================================
+// MOBILE PERFORMANCE: Below-the-fold lazy loading
+// Diese Komponenten werden erst geladen wenn sichtbar/interaktiv
+// ============================================
+const ProductCards = lazy(() => import("@/components/ProductCards"));
+const ProcessSteps = lazy(() => import("@/components/ProcessSteps"));
+const WhyFahrerexpress = lazy(() => import("@/components/WhyFahrerexpress"));
+const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
+const EUDriverRecruitment = lazy(() => import("@/components/EUDriverRecruitment"));
+const FahreranfrageSection = lazy(() => import("@/components/FahreranfrageSection"));
+const LegalSecuritySection = lazy(() => import("@/components/LegalSecuritySection"));
+const BookingPriorityBanner = lazy(() => import("@/components/BookingPriorityBanner"));
+const ContactSection = lazy(() => import("@/components/ContactSection"));
+const Footer = lazy(() => import("@/components/Footer"));
+
+// Layout-stabiler Placeholder mit fixer Höhe für CLS-Vermeidung
+const SectionLoader = () => (
+  <div 
+    className="py-16 bg-background" 
+    style={{ minHeight: '400px' }}
+    aria-hidden="true"
+  >
+    <div className="container mx-auto px-4">
+      <div className="h-8 bg-muted/50 rounded w-1/3 mx-auto mb-6" />
+      <div className="h-4 bg-muted/30 rounded w-2/3 mx-auto mb-3" />
+      <div className="h-4 bg-muted/30 rounded w-1/2 mx-auto" />
+    </div>
+  </div>
+);
+
 const Index = () => {
+  const navigate = useNavigate();
+  
   useSEO({
     title: "LKW Fahrer buchen & mieten – deutschlandweit ab 349 €",
     description: "LKW Fahrer deutschlandweit buchen – Ersatzfahrer, Aushilfsfahrer & Mietfahrer bundesweit. Kurzfristig, auf Abruf, ohne Arbeitnehmerüberlassung.",
@@ -142,16 +165,34 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Alle Komponenten synchron geladen - kein Lazy Loading */}
-        <ProductCards />
-        <ProcessSteps />
-        <WhyFahrerexpress />
-        <TestimonialsSection />
-        <FahreranfrageSection />
-        <LegalSecuritySection />
-        <BookingPriorityBanner />
-        <EUDriverRecruitment />
-        <ContactSection />
+        {/* Below-the-fold: Lazy-loaded für bessere Mobile-Performance */}
+        <Suspense fallback={<SectionLoader />}>
+          <ProductCards />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <ProcessSteps />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <WhyFahrerexpress />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <TestimonialsSection />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <FahreranfrageSection />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <LegalSecuritySection />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <BookingPriorityBanner />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <EUDriverRecruitment />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <ContactSection />
+        </Suspense>
         
         {/* SEO-Block für Flüssigboden-Service */}
         <section className="py-16 bg-background">
@@ -246,7 +287,9 @@ const Index = () => {
         </section>
       </main>
       
-      <Footer />
+      <Suspense fallback={<div className="py-8 bg-muted" />}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };
