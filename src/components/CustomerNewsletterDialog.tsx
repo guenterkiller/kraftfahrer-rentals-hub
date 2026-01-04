@@ -337,33 +337,37 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
           )}
           
           {/* Email Content */}
-          <div className="space-y-2">
-            <Label htmlFor="subject">Betreff</Label>
+          <div className="space-y-3">
+            <Label htmlFor="subject" className="text-base font-semibold">
+              Betreff (E-Mail-Titel)
+            </Label>
             <Input
               id="subject"
               placeholder="z.B. Neues Angebot von Fahrerexpress"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
+              className="text-base h-12"
             />
           </div>
           
-          <div className="space-y-2 flex-1 min-h-0">
-            <Label htmlFor="message">Nachricht (nur Inhalt)</Label>
+          <div className="space-y-3 flex-1 min-h-0">
+            <Label htmlFor="message" className="text-base font-semibold">
+              Nachricht (nur Inhalt)
+            </Label>
             <Textarea
               id="message"
               placeholder="wir möchten Sie über unser neues Angebot informieren...&#10;&#10;Bei Fragen stehen wir gerne zur Verfügung."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="min-h-[150px] resize-none"
+              className="min-h-[180px] resize-none text-base leading-relaxed"
             />
-            <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <div className="flex items-start gap-2">
-                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                <div className="space-y-1 text-sm text-blue-800 dark:text-blue-200">
-                  <p className="font-semibold">Hinweis:</p>
-                  <p>Bitte geben Sie hier nur den Nachrichtentext ein.</p>
-                  <p>Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
-                  <p className="text-xs text-blue-600 dark:text-blue-300 mt-2">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700 rounded-lg">
+              <div className="flex items-start gap-3">
+                <Info className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                <div className="space-y-1 text-amber-900 dark:text-amber-100">
+                  <p className="font-bold text-base">ℹ️ Bitte geben Sie hier nur den Nachrichtentext ein.</p>
+                  <p className="text-sm">Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
+                  <p className="text-xs text-amber-700 dark:text-amber-300 mt-2">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
                 </div>
               </div>
             </div>

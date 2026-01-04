@@ -167,48 +167,56 @@ const handler = async (req: Request): Promise<Response> => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${personalizedSubject}</title>
+  <style>
+    @media only screen and (max-width: 600px) {
+      .mobile-padding { padding-left: 20px !important; padding-right: 20px !important; }
+      .mobile-header { padding: 20px !important; }
+      .mobile-text { font-size: 16px !important; line-height: 1.6 !important; }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f4f6f8;">
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f4f6f8">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="#f8f9fa" style="padding: 20px 0;">
     <tr>
-      <td align="center" style="padding: 30px 20px;">
-        <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" style="max-width: 600px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-          <!-- Header -->
+      <td align="center">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" style="max-width: 600px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <!-- Header - Corporate Red -->
           <tr>
-            <td bgcolor="#1a365d" style="padding: 25px 30px; text-align: center; background: linear-gradient(135deg, #1a365d 0%, #2d5a87 100%);">
-              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">Fahrerexpress</h1>
-              <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.8); font-size: 13px; font-family: Arial, Helvetica, sans-serif;">Informationen für unsere Kunden</p>
+            <td class="mobile-header" style="background: linear-gradient(135deg, #bb2c29, #8b2120); padding: 30px 40px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: bold;">Fahrerexpress-Agentur</h1>
+              <p style="margin: 5px 0 0 0; color: #ffffff; font-size: 14px; opacity: 0.95;">LKW CE Fahrer, Baumaschinenführer & Mischmeister</p>
             </td>
           </tr>
           <!-- Content -->
           <tr>
-            <td bgcolor="#ffffff" style="padding: 35px 30px; font-size: 15px; line-height: 1.6; color: #333333; font-family: Arial, Helvetica, sans-serif;">
+            <td class="mobile-padding" bgcolor="#ffffff" style="padding: 40px; font-size: 14px; line-height: 1.6; color: #1a1a1a;">
               ${htmlMessage}
             </td>
           </tr>
           <!-- Footer Signature -->
           <tr>
-            <td bgcolor="#f8f9fa" style="padding: 25px 30px; text-align: center; border-top: 1px solid #e5e5e5;">
-              <p style="margin: 0; color: #666666; font-size: 14px; font-family: Arial, Helvetica, sans-serif;">
-                Mit freundlichen Grüßen<br>
-                <strong style="color: #333333;">Fahrerexpress-Agentur – Günter Killer</strong>
+            <td class="mobile-padding" bgcolor="#f8f9fa" style="padding: 30px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0 0 10px 0; color: #1a1a1a; font-size: 16px; font-weight: bold;">Fahrerexpress-Agentur</p>
+              <p style="margin: 0 0 15px 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
+                📧 info@kraftfahrer-mieten.com<br>
+                📱 01577 1442285
               </p>
-              <p style="margin: 15px 0 0 0; color: #888888; font-size: 12px; font-family: Arial, Helvetica, sans-serif;">
-                Tel.: +49 (0) 1577 1442285<br>
-                <a href="https://www.kraftfahrer-mieten.com" style="color: #2d5a87; text-decoration: none;">www.kraftfahrer-mieten.com</a>
+              <p style="margin: 0; color: #6b7280; font-size: 12px; line-height: 1.5;">
+                Günter Killer<br>
+                Vermittlung gewerblicher Fahrer
               </p>
-              <p style="margin: 15px 0 0 0; color: #1a365d; font-size: 13px; font-weight: bold; font-family: Arial, Helvetica, sans-serif;">
+              <p style="margin: 15px 0 0 0; color: #bb2c29; font-size: 13px; font-weight: bold;">
                 Bitte speichern Sie sich diese Seite als Favorit ab – für den Notfall.
               </p>
             </td>
           </tr>
           <!-- Legal Footer -->
           <tr>
-            <td bgcolor="#f0f2f4" style="padding: 20px 30px; text-align: center; border-top: 1px solid #e0e0e0;">
-              <p style="margin: 0; color: #555555; font-size: 12px; line-height: 1.5; font-family: Arial, Helvetica, sans-serif;">
+            <td class="mobile-padding" bgcolor="#f0f1f3" style="padding: 20px 40px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0; color: #6b7280; font-size: 12px; line-height: 1.5;">
                 Sie erhalten diese E-Mail, weil wir bereits geschäftlich Kontakt hatten.<br>
                 <strong>Abmelden:</strong>
-                <a href="${unsubscribeUrl}" style="color: #2d5a87; text-decoration: underline; font-weight: 600;">${unsubscribeUrl}</a>
+                <a href="${unsubscribeUrl}" style="color: #bb2c29; text-decoration: underline;">${unsubscribeUrl}</a>
               </p>
             </td>
           </tr>
