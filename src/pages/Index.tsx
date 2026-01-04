@@ -160,17 +160,24 @@ const Index = () => {
         {/* AUFGABE 1: Zentraler Definitions-Block für Google & KI */}
         <section aria-label="Leistungsdefinition Fahrerexpress" className="py-8 bg-background">
           <div className="container mx-auto px-4 max-w-4xl">
-            <p className="text-muted-foreground leading-relaxed">
-              Fahrerexpress ist eine Vermittlungsagentur für selbstständige LKW-Fahrer (CE),
-              Baumaschinenführer und Mischmeister in Deutschland und der EU.
-              Wir stellen keine Fahrzeuge und betreiben keine Zeitarbeit.
-              Die Fahrer arbeiten selbstständig und werden rechtssicher über eine
-              Agenturabrechnung vermittelt.
+            <h3 className="text-xl font-semibold mb-3 text-foreground">Was macht Fahrerexpress?</h3>
+            <p className="text-muted-foreground leading-relaxed mb-6">
+              Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer (CE), Baumaschinenführer und Mischmeister bundesweit und EU-weit. Es handelt sich nicht um Arbeitnehmerüberlassung, sondern um eine rechtssichere Vermittlung selbstständiger Unternehmer auf Basis einer Agenturabrechnung.
             </p>
+            
+            {/* AUFGABE 2: Geeignet-für Block */}
+            <h4 className="font-semibold mb-2 text-foreground">Geeignet für:</h4>
+            <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-6">
+              <li>Speditionen & Logistikunternehmen</li>
+              <li>Bauunternehmen & Tiefbau</li>
+              <li>Entsorgungsbetriebe</li>
+              <li>Event- & Projektlogistik</li>
+              <li>Unternehmen mit kurzfristigem Fahrerausfall</li>
+            </ul>
           </div>
         </section>
 
-        {/* AUFGABE 2: Klarstellung Mieten/Leihen */}
+        {/* Klarstellung Mieten/Leihen */}
         <section aria-label="Begriffsklarstellung" className="pb-8 bg-background">
           <div className="container mx-auto px-4 max-w-4xl">
             <p className="text-sm text-muted-foreground">

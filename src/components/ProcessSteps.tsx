@@ -53,6 +53,13 @@ const ProcessSteps = () => {
           })}
         </div>
 
+        {/* AUFGABE 3: Kurz-Prozesssatz */}
+        <div className="text-center mb-8 max-w-3xl mx-auto">
+          <p className="text-muted-foreground leading-relaxed">
+            <strong>Kurz erklärt:</strong> Anfrage senden → passende selbstständige Fahrer werden vorgeschlagen → Einsatz erfolgt nach Bestätigung ohne Arbeitnehmerüberlassung.
+          </p>
+        </div>
+
         <div className="text-center bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
           <p className="text-sm text-blue-900">
             <strong>Selbstständige Zusammenarbeit</strong> – Sie arbeiten direkt mit selbstständigen Unternehmern zusammen.
