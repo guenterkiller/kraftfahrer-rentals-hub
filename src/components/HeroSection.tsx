@@ -13,16 +13,30 @@ const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32 sm:pb-40 md:pb-48">
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}
+      {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
         <picture className="absolute inset-0 w-full h-full">
-          {/* WebP: Primäres Format */}
+          {/* AVIF: Beste Kompression für moderne Browser */}
+          <source
+            type="image/avif"
+            media="(min-width: 768px)"
+            srcSet="/hero/lkw-autobahn-professionell.avif"
+          />
+          {/* WebP Desktop */}
           <source
             type="image/webp"
-            srcSet="/uploads/lkw-autobahn-professionell.webp"
+            media="(min-width: 768px)"
+            srcSet="/hero/lkw-autobahn-professionell.webp"
           />
-          {/* JPG Fallback für ältere Browser */}
+          {/* WebP Mobile - kleinere Datei für schnelleres LCP */}
+          <source
+            type="image/webp"
+            media="(max-width: 767px)"
+            srcSet="/hero/lkw-autobahn-professionell-mobile.webp"
+          />
+          {/* JPG Fallback */}
           <img
-            src="/uploads/lkw-autobahn-professionell.jpg"
+            src="/hero/lkw-autobahn-professionell.jpg"
             alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
             className="absolute inset-0 w-full h-full object-cover object-center"
             loading="eager"
@@ -31,7 +45,7 @@ const HeroSection = () => {
             fetchpriority="high"
             width={1920}
             height={1080}
-            sizes="100vw"
+            sizes="(max-width: 767px) 100vw, 1920px"
             style={{ filter: 'brightness(1.05) contrast(1.05)' }}
           />
         </picture>

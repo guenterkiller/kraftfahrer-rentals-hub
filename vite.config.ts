@@ -110,7 +110,7 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules/react-router')) {
             return 'router-vendor';
           }
-          // Formulare: NUR bei Bedarf
+          // Formulare: NUR bei Bedarf (Below-the-fold)
           if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform')) {
             return 'form-vendor';
           }
@@ -118,17 +118,28 @@ export default defineConfig(({ mode }) => ({
           if (id.includes('node_modules/date-fns')) {
             return 'date-vendor';
           }
-          // Lucide Icons: Werden tree-shaken
+          // Lucide Icons: Tree-shaken, separater Chunk
           if (id.includes('node_modules/lucide-react')) {
+            return 'icons-vendor';
+          }
+          // Radix UI: Separater Chunk für UI-Komponenten
+          if (id.includes('node_modules/@radix-ui')) {
             return 'ui-vendor';
           }
+          // Tanstack Query: Separater Chunk
+          if (id.includes('node_modules/@tanstack')) {
+            return 'query-vendor';
+          }
           // Recharts/D3: NICHT separieren - Rollup handled das besser automatisch
-          // (separate chunks verursachen "Cannot access before initialization" Fehler)
         }
       }
     },
     chunkSizeWarningLimit: 1000,
-    // esbuild statt terser - schneller und weniger Probleme mit komplexen Libs
+    // esbuild statt terser - schneller und weniger Probleme
     minify: 'esbuild',
+    // Sourcemaps nur in dev
+    sourcemap: false,
+    // CSS Code-Splitting
+    cssCodeSplit: true,
   },
 }));

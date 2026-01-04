@@ -179,3 +179,27 @@ img {
 .animate-drive {
   animation: drive 2s ease-in-out infinite;
 }
+
+/* Optimized fade-in animation - GPU accelerated */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Reduce animation on low-power devices */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-drive {
+    animation: none;
+  }
+}
+
+/* Content-visibility for below-fold sections - reduces initial render */
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
