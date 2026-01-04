@@ -226,9 +226,14 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
 
       if (error) throw error;
 
+      const resultParts = [];
+      resultParts.push(`${data.sent} gesendet`);
+      if (data.skipped > 0) resultParts.push(`${data.skipped} übersprungen (Opt-Out)`);
+      if (data.failed > 0) resultParts.push(`${data.failed} fehlgeschlagen`);
+
       toast({
-        title: "E-Mails versendet",
-        description: `${data.sent} von ${customers.length} E-Mails erfolgreich gesendet`
+        title: "Newsletter versendet",
+        description: resultParts.join(', '),
       });
       
       // Reset form

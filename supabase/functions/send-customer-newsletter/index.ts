@@ -14,6 +14,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const UNSUBSCRIBE_BASE_URL = "https://fahrerexpress.de/unsubscribe";
+
 interface CustomerContact {
   email: string;
   name: string;
@@ -25,6 +27,24 @@ interface NewsletterRequest {
   message: string;
   customers: CustomerContact[];
 }
+
+// Normalize email: trim, lowercase, handle comma-separated emails
+const normalizeEmail = (email: string): string[] => {
+  if (!email) return [];
+  
+  // Split by comma or semicolon, then normalize each
+  return email
+    .split(/[,;]/)
+    .map(e => e.trim().toLowerCase())
+    .filter(e => e.length > 0 && e.includes('@'));
+};
+
+// Generate a secure random token
+const generateToken = (): string => {
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+};
 
 const replaceVariables = (text: string, customer: CustomerContact): string => {
   return text
@@ -50,6 +70,25 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Normalize all customer emails
+    const normalizedCustomers: CustomerContact[] = [];
+    const seenEmails = new Set<string>();
+
+    for (const customer of customers) {
+      const emails = normalizeEmail(customer.email);
+      for (const email of emails) {
+        if (!seenEmails.has(email)) {
+          seenEmails.add(email);
+          normalizedCustomers.push({
+            ...customer,
+            email: email
+          });
+        }
+      }
+    }
+
+    console.log(`Normalized ${customers.length} entries to ${normalizedCustomers.length} unique emails`);
+
     let sent = 0;
     let failed = 0;
     let skipped = 0;
@@ -64,9 +103,9 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`Opt-out list contains ${optOutEmails.size} emails`);
 
     // Send emails with rate limiting (1 per second to avoid Resend limits)
-    for (const customer of customers) {
+    for (const customer of normalizedCustomers) {
       // Check opt-out list - only affects this newsletter, nothing else
-      if (optOutEmails.has(customer.email.toLowerCase())) {
+      if (optOutEmails.has(customer.email)) {
         console.log(`Skipping ${customer.email} - opted out of customer newsletter`);
         skipped++;
         continue;
@@ -75,6 +114,19 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         const personalizedSubject = replaceVariables(subject, customer);
         const personalizedMessage = replaceVariables(message, customer);
+
+        // Generate unique unsubscribe token for this email
+        const unsubscribeToken = generateToken();
+        
+        // Store token in database
+        await supabase
+          .from('customer_newsletter_tokens')
+          .insert({
+            email: customer.email,
+            token: unsubscribeToken
+          });
+
+        const unsubscribeUrl = `${UNSUBSCRIBE_BASE_URL}?token=${unsubscribeToken}`;
 
         // Convert line breaks to HTML
         const htmlMessage = personalizedMessage
@@ -115,7 +167,7 @@ const handler = async (req: Request): Promise<Response> => {
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
                 <p style="margin: 0; color: #999; font-size: 11px;">
                   Sie erhalten diese E-Mail als Geschäftskunde von Fahrerexpress.<br>
-                  <a href="mailto:info@fahrerexpress.de?subject=Abmeldung%20Kunden-Newsletter&body=Bitte%20melden%20Sie%20mich%20vom%20Kunden-Newsletter%20ab.%20E-Mail:%20${encodeURIComponent(customer.email)}" style="color: #999;">Von Kunden-Infos abmelden</a>
+                  <a href="${unsubscribeUrl}" style="color: #999;">Von Kunden-Newsletter abmelden</a>
                 </p>
               </div>
             </body>
@@ -127,7 +179,7 @@ const handler = async (req: Request): Promise<Response> => {
         sent++;
 
         // Rate limit: wait 1 second between emails
-        if (sent < customers.length) {
+        if (sent < normalizedCustomers.length) {
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
       } catch (emailError: any) {
@@ -145,6 +197,7 @@ const handler = async (req: Request): Promise<Response> => {
         sent, 
         failed,
         skipped,
+        total: normalizedCustomers.length,
         errors: errors.length > 0 ? errors : undefined
       }),
       { 
