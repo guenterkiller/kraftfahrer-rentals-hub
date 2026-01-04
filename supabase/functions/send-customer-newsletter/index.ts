@@ -202,7 +202,7 @@ const handler = async (req: Request): Promise<Response> => {
         <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0" bgcolor="#ffffff" style="max-width: 600px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
           <!-- Header - Corporate Red -->
           <tr>
-            <td class="mobile-header" style="background: linear-gradient(135deg, #bb2c29, #8b2120); padding: 30px 40px; text-align: center;">
+            <td class="mobile-header" bgcolor="#bb2c29" style="background-color: #bb2c29; background: linear-gradient(135deg, #bb2c29, #8b2120); padding: 30px 40px; text-align: center;">
               <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: bold;">Fahrerexpress-Agentur</h1>
               <p style="margin: 5px 0 0 0; color: #ffffff; font-size: 14px; opacity: 0.95;">LKW CE Fahrer, Baumaschinenführer & Mischmeister</p>
             </td>
