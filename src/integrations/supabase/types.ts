@@ -254,6 +254,24 @@ export type Database = {
           },
         ]
       }
+      customer_newsletter_optout: {
+        Row: {
+          email: string
+          id: string
+          opted_out_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          opted_out_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          opted_out_at?: string
+        }
+        Relationships: []
+      }
       email_log: {
         Row: {
           assignment_id: string | null

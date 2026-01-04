@@ -1,7 +1,13 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -46,10 +52,26 @@ const handler = async (req: Request): Promise<Response> => {
 
     let sent = 0;
     let failed = 0;
+    let skipped = 0;
     const errors: string[] = [];
+
+    // Fetch opt-out list for customer newsletter ONLY
+    const { data: optOuts } = await supabase
+      .from('customer_newsletter_optout')
+      .select('email');
+    
+    const optOutEmails = new Set((optOuts || []).map(o => o.email.toLowerCase()));
+    console.log(`Opt-out list contains ${optOutEmails.size} emails`);
 
     // Send emails with rate limiting (1 per second to avoid Resend limits)
     for (const customer of customers) {
+      // Check opt-out list - only affects this newsletter, nothing else
+      if (optOutEmails.has(customer.email.toLowerCase())) {
+        console.log(`Skipping ${customer.email} - opted out of customer newsletter`);
+        skipped++;
+        continue;
+      }
+
       try {
         const personalizedSubject = replaceVariables(subject, customer);
         const personalizedMessage = replaceVariables(message, customer);
@@ -115,13 +137,14 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    console.log(`Newsletter complete: ${sent} sent, ${failed} failed`);
+    console.log(`Newsletter complete: ${sent} sent, ${failed} failed, ${skipped} skipped (opt-out)`);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         sent, 
         failed,
+        skipped,
         errors: errors.length > 0 ? errors : undefined
       }),
       { 
