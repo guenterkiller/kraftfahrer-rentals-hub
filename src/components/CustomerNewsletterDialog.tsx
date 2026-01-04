@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import { Upload, Send, FileSpreadsheet, X, Users, TestTube, AlertTriangle } from "lucide-react";
+import { Upload, Send, FileSpreadsheet, X, Users, TestTube, AlertTriangle, Info } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface CustomerNewsletterDialogProps {
@@ -350,9 +350,16 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
               onChange={(e) => setMessage(e.target.value)}
               className="min-h-[150px] resize-none"
             />
-            <div className="space-y-1 p-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded text-xs text-blue-800 dark:text-blue-200">
-              <p><strong>Nur Inhalt eingeben</strong> – Anrede („Guten Tag {'{name}'},"), Signatur und Abmeldelink werden automatisch ergänzt.</p>
-              <p className="text-blue-600 dark:text-blue-300">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="flex items-start gap-2">
+                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                <div className="space-y-1 text-sm text-blue-800 dark:text-blue-200">
+                  <p className="font-semibold">Hinweis:</p>
+                  <p>Bitte geben Sie hier nur den Nachrichtentext ein.</p>
+                  <p>Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
+                  <p className="text-xs text-blue-600 dark:text-blue-300 mt-2">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
+                </div>
+              </div>
             </div>
           </div>
           
