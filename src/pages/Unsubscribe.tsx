@@ -80,20 +80,26 @@ const Unsubscribe = () => {
               <CheckCircle className="h-16 w-16 text-green-600 dark:text-green-400" />
             </div>
             <h1 className="text-2xl font-bold text-foreground mb-2">
-              Erfolgreich abgemeldet
+              Sie wurden erfolgreich vom Kunden-Newsletter abgemeldet.
             </h1>
             <p className="text-muted-foreground mb-4">
               {email && (
                 <>
-                  <span className="font-medium">{email}</span> wurde vom Kunden-Newsletter abgemeldet.
+                  Die E-Mail-Adresse <span className="font-medium">{email}</span> erhält keine Kunden-Newsletter mehr.
                 </>
               )}
               {!email && "Sie erhalten keine Kunden-Newsletter mehr."}
             </p>
-            <div className="bg-muted p-4 rounded-lg text-sm text-muted-foreground">
+            <div className="bg-muted p-4 rounded-lg text-sm text-muted-foreground mb-6">
               <Mail className="h-5 w-5 inline mr-2" />
               Diese Abmeldung betrifft nur den Kunden-Newsletter. Wichtige Auftragsbenachrichtigungen erhalten Sie weiterhin.
             </div>
+            <Link 
+              to="/" 
+              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+            >
+              Zur Startseite
+            </Link>
           </>
         )}
 
@@ -136,14 +142,16 @@ const Unsubscribe = () => {
           </>
         )}
 
-        <div className="mt-8 pt-6 border-t border-border">
-          <Link 
-            to="/" 
-            className="text-primary hover:underline text-sm"
-          >
-            ← Zurück zur Startseite
-          </Link>
-        </div>
+        {status !== "success" && (
+          <div className="mt-8 pt-6 border-t border-border">
+            <Link 
+              to="/" 
+              className="text-primary hover:underline text-sm"
+            >
+              ← Zurück zur Startseite
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
