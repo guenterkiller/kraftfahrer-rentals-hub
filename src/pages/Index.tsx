@@ -1,85 +1,20 @@
-import { lazy, Suspense } from "react";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import ProductCards from "@/components/ProductCards";
+import ProcessSteps from "@/components/ProcessSteps";
+import WhyFahrerexpress from "@/components/WhyFahrerexpress";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import EUDriverRecruitment from "@/components/EUDriverRecruitment";
+import FahreranfrageSection from "@/components/FahreranfrageSection";
+import LegalSecuritySection from "@/components/LegalSecuritySection";
+import BookingPriorityBanner from "@/components/BookingPriorityBanner";
+import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 import { useSEO } from "@/hooks/useSEO";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-// ============================================
-// MOBILE PERFORMANCE: Below-the-fold lazy loading
-// Diese Komponenten werden erst geladen wenn sichtbar/interaktiv
-// ============================================
-const ProductCards = lazy(() => import("@/components/ProductCards"));
-const ProcessSteps = lazy(() => import("@/components/ProcessSteps"));
-const WhyFahrerexpress = lazy(() => import("@/components/WhyFahrerexpress"));
-const TestimonialsSection = lazy(() => import("@/components/TestimonialsSection"));
-const EUDriverRecruitment = lazy(() => import("@/components/EUDriverRecruitment"));
-const FahreranfrageSection = lazy(() => import("@/components/FahreranfrageSection"));
-const LegalSecuritySection = lazy(() => import("@/components/LegalSecuritySection"));
-const BookingPriorityBanner = lazy(() => import("@/components/BookingPriorityBanner"));
-const ContactSection = lazy(() => import("@/components/ContactSection"));
-const Footer = lazy(() => import("@/components/Footer"));
-
-// Individuelle Skeleton-Fallbacks mit passenden Höhen pro Section-Typ
-const ProductCardsSkeleton = () => (
-  <div className="py-12 bg-background" style={{ minHeight: '320px' }} aria-hidden="true">
-    <div className="container mx-auto px-4">
-      <div className="h-8 bg-muted/40 rounded w-1/4 mx-auto mb-8" />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[1, 2, 3].map(i => <div key={i} className="h-48 bg-muted/30 rounded-lg" />)}
-      </div>
-    </div>
-  </div>
-);
-
-const ProcessSkeleton = () => (
-  <div className="py-12 bg-muted" style={{ minHeight: '280px' }} aria-hidden="true">
-    <div className="container mx-auto px-4">
-      <div className="h-8 bg-background/50 rounded w-1/3 mx-auto mb-6" />
-      <div className="flex justify-center gap-4">
-        {[1, 2, 3, 4].map(i => <div key={i} className="h-20 w-20 bg-background/40 rounded-full" />)}
-      </div>
-    </div>
-  </div>
-);
-
-const TestimonialsSkeleton = () => (
-  <div className="py-12 bg-background" style={{ minHeight: '240px' }} aria-hidden="true">
-    <div className="container mx-auto px-4">
-      <div className="h-6 bg-muted/40 rounded w-1/4 mx-auto mb-6" />
-      <div className="h-24 bg-muted/30 rounded-lg max-w-2xl mx-auto" />
-    </div>
-  </div>
-);
-
-const FormSkeleton = () => (
-  <div className="py-16 bg-muted" style={{ minHeight: '400px' }} aria-hidden="true">
-    <div className="container mx-auto px-4 max-w-2xl">
-      <div className="h-8 bg-background/50 rounded w-1/2 mx-auto mb-8" />
-      <div className="space-y-4">
-        {[1, 2, 3].map(i => <div key={i} className="h-12 bg-background/40 rounded" />)}
-      </div>
-    </div>
-  </div>
-);
-
-const SmallSectionSkeleton = () => (
-  <div className="py-8 bg-background" style={{ minHeight: '160px' }} aria-hidden="true">
-    <div className="container mx-auto px-4">
-      <div className="h-6 bg-muted/40 rounded w-1/3 mx-auto mb-4" />
-      <div className="h-4 bg-muted/30 rounded w-2/3 mx-auto" />
-    </div>
-  </div>
-);
-
-const FooterSkeleton = () => (
-  <div className="py-12 bg-foreground" style={{ minHeight: '200px' }} aria-hidden="true" />
-);
-
-
 const Index = () => {
-  const navigate = useNavigate();
-  
   useSEO({
     title: "LKW Fahrer buchen & mieten – deutschlandweit ab 349 €",
     description: "LKW Fahrer deutschlandweit buchen – Ersatzfahrer, Aushilfsfahrer & Mietfahrer bundesweit. Kurzfristig, auf Abruf, ohne Arbeitnehmerüberlassung.",
@@ -207,34 +142,16 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Below-the-fold: Lazy-loaded mit individuellen Skeleton-Höhen */}
-        <Suspense fallback={<ProductCardsSkeleton />}>
-          <ProductCards />
-        </Suspense>
-        <Suspense fallback={<ProcessSkeleton />}>
-          <ProcessSteps />
-        </Suspense>
-        <Suspense fallback={<SmallSectionSkeleton />}>
-          <WhyFahrerexpress />
-        </Suspense>
-        <Suspense fallback={<TestimonialsSkeleton />}>
-          <TestimonialsSection />
-        </Suspense>
-        <Suspense fallback={<FormSkeleton />}>
-          <FahreranfrageSection />
-        </Suspense>
-        <Suspense fallback={<SmallSectionSkeleton />}>
-          <LegalSecuritySection />
-        </Suspense>
-        <Suspense fallback={<SmallSectionSkeleton />}>
-          <BookingPriorityBanner />
-        </Suspense>
-        <Suspense fallback={<SmallSectionSkeleton />}>
-          <EUDriverRecruitment />
-        </Suspense>
-        <Suspense fallback={<SmallSectionSkeleton />}>
-          <ContactSection />
-        </Suspense>
+        {/* Alle Komponenten synchron geladen - kein Lazy Loading */}
+        <ProductCards />
+        <ProcessSteps />
+        <WhyFahrerexpress />
+        <TestimonialsSection />
+        <FahreranfrageSection />
+        <LegalSecuritySection />
+        <BookingPriorityBanner />
+        <EUDriverRecruitment />
+        <ContactSection />
         
         {/* SEO-Block für Flüssigboden-Service */}
         <section className="py-16 bg-background">
@@ -329,9 +246,7 @@ const Index = () => {
         </section>
       </main>
       
-      <Suspense fallback={<FooterSkeleton />}>
-        <Footer />
-      </Suspense>
+      <Footer />
     </div>
   );
 };
