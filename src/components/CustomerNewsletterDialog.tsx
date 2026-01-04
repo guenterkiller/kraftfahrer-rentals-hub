@@ -342,17 +342,18 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
           </div>
           
           <div className="space-y-2 flex-1 min-h-0">
-            <Label htmlFor="message">Nachricht</Label>
+            <Label htmlFor="message">Nachricht (nur Inhalt)</Label>
             <Textarea
               id="message"
-              placeholder="Guten Tag {name},&#10;&#10;wir möchten Sie über..."
+              placeholder="wir möchten Sie über unser neues Angebot informieren...&#10;&#10;Bei Fragen stehen wir gerne zur Verfügung."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="min-h-[150px] resize-none"
             />
-            <p className="text-xs text-muted-foreground">
-              Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname
-            </p>
+            <div className="space-y-1 p-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded text-xs text-blue-800 dark:text-blue-200">
+              <p><strong>Nur Inhalt eingeben</strong> – Anrede („Guten Tag {'{name}'},"), Signatur und Abmeldelink werden automatisch ergänzt.</p>
+              <p className="text-blue-600 dark:text-blue-300">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
+            </div>
           </div>
           
           {/* Test Email Section */}

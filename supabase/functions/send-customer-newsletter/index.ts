@@ -130,13 +130,20 @@ const handler = async (req: Request): Promise<Response> => {
 
         const unsubscribeUrl = `${UNSUBSCRIBE_BASE_URL}?token=${unsubscribeToken}`;
 
-        // Convert line breaks to HTML
-        const htmlMessage = personalizedMessage
+        // Automatically add greeting (Admin only provides content, not greeting)
+        const customerName = customer.name || 'Kunde';
+        const greetingLine = `Guten Tag ${customerName},`;
+
+        // Convert line breaks to HTML - admin message is CONTENT ONLY
+        const contentHtml = personalizedMessage
           .split("\n")
           .map((line) =>
             line.trim() ? `<p style="margin: 0 0 10px 0;">${line}</p>` : "<br>"
           )
           .join("");
+        
+        // Full message = auto greeting + admin content (footer is in template below)
+        const htmlMessage = `<p style="margin: 0 0 16px 0;">${greetingLine}</p>${contentHtml}`;
 
         const senderEmail = Deno.env.get("NEWSLETTER_FROM") || "info@kraftfahrer-mieten.com";
         
