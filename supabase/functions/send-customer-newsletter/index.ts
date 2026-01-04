@@ -14,7 +14,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const UNSUBSCRIBE_BASE_URL = "https://kraftfahrer-mieten.com/unsubscribe";
+const UNSUBSCRIBE_BASE_URL = "https://www.kraftfahrer-mieten.com/unsubscribe";
 
 interface CustomerContact {
   email: string;
@@ -130,9 +130,18 @@ const handler = async (req: Request): Promise<Response> => {
 
         const unsubscribeUrl = `${UNSUBSCRIBE_BASE_URL}?token=${unsubscribeToken}`;
 
-        // Automatically add greeting (Admin only provides content, not greeting)
-        const customerName = customer.name || 'Kunde';
-        const greetingLine = `Guten Tag ${customerName},`;
+        // Determine greeting name with proper fallback:
+        // 1. If name provided → use name
+        // 2. Else if firma provided → "Team {firma}"
+        // 3. Else → just "Guten Tag,"
+        let greetingName = '';
+        if (customer.name && customer.name.trim()) {
+          greetingName = customer.name.trim();
+        } else if (customer.firma && customer.firma.trim()) {
+          greetingName = `Team ${customer.firma.trim()}`;
+        }
+        
+        const greetingLine = greetingName ? `Guten Tag ${greetingName},` : 'Guten Tag,';
 
         // Convert line breaks to HTML - admin message is CONTENT ONLY
         const contentHtml = personalizedMessage
@@ -172,11 +181,11 @@ const handler = async (req: Request): Promise<Response> => {
               <div style="background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 8px 8px; border: 1px solid #e5e5e5; border-top: none;">
                 <p style="margin: 0; color: #666; font-size: 14px;">
                   Mit freundlichen Grüßen<br>
-                  <strong>Ihr Fahrerexpress-Team</strong>
+                  <strong>Fahrerexpress-Agentur – Günter Killer</strong>
                 </p>
                 <p style="margin: 15px 0 0 0; color: #999; font-size: 12px;">
-                  Fahrerexpress GmbH | Tel: +49 (0) 123 456789<br>
-                  <a href="https://kraftfahrer-mieten.com" style="color: #2d5a87;">www.kraftfahrer-mieten.com</a>
+                  Tel.: +49 (0) 1577 1442285<br>
+                  <a href="https://www.kraftfahrer-mieten.com" style="color: #2d5a87;">www.kraftfahrer-mieten.com</a>
                 </p>
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
                 <p style="margin: 0; color: #444; font-size: 13px; line-height: 1.45;">
@@ -190,16 +199,20 @@ const handler = async (req: Request): Promise<Response> => {
           `,
         });
 
+        // Determine if this is a test email (subject starts with [TEST])
+        const isTestEmail = personalizedSubject.startsWith('[TEST]');
+        const templateName = isTestEmail ? 'customer_newsletter_test' : 'customer_newsletter';
+
         // Resend returns { data, error } and may NOT throw on delivery errors
         if ((emailResponse as any)?.error) {
           // Log failed email
           await supabase.from("email_log").insert({
             recipient: customer.email,
-            template: "customer_newsletter",
+            template: templateName,
             subject: personalizedSubject,
             status: "failed",
             error_message: (emailResponse as any).error.message || "Resend error",
-            delivery_mode: "live",
+            delivery_mode: isTestEmail ? "test" : "live",
           });
           throw new Error((emailResponse as any).error.message || "Resend error");
         }
@@ -207,11 +220,11 @@ const handler = async (req: Request): Promise<Response> => {
         // Log successful email
         await supabase.from("email_log").insert({
           recipient: customer.email,
-          template: "customer_newsletter",
+          template: templateName,
           subject: personalizedSubject,
           status: "sent",
           sent_at: new Date().toISOString(),
-          delivery_mode: "live",
+          delivery_mode: isTestEmail ? "test" : "live",
         });
 
         console.log(`Email sent to ${customer.email}:`, emailResponse);
