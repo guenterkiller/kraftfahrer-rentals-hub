@@ -16,24 +16,17 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      // KEIN manifest: {} - wir nutzen ausschließlich public/manifest.webmanifest
       manifest: false,
-      // Nutze das manuelle Manifest
       injectManifest: {
         injectionPoint: undefined
       },
       includeAssets: ['favicon.png', 'favicon-truck.png', 'lovable-uploads/favicon-truck-512-full.png', 'manifest.webmanifest'],
       workbox: {
-        // Nur JS/CSS/Fonts precachen - NICHT HTML (NetworkFirst für aktuelle Inhalte)
         globPatterns: ['**/*.{js,css,ico,woff,woff2}'],
-        // lovable-uploads enthält große Bilder - nicht precachen
-        // manifest.webmanifest wird manuell in public/ gepflegt
         globIgnores: ['**/lovable-uploads/**', '**/assets/*.png', '**/manifest.json'],
-        // Navigation (HTML) immer NetworkFirst für aktuelle Inhalte
         navigateFallback: null,
         runtimeCaching: [
           {
-            // HTML/Navigation: NetworkFirst - immer aktuelle Inhalte
             urlPattern: ({ request }) => request.mode === 'navigate',
             handler: 'NetworkFirst',
             options: {
@@ -41,35 +34,7 @@ export default defineConfig(({ mode }) => ({
               networkTimeoutSeconds: 3,
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 1 Tag
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 Jahr
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
-              }
-            }
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'gstatic-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365
-              },
-              cacheableResponse: {
-                statuses: [0, 200]
+                maxAgeSeconds: 60 * 60 * 24
               }
             }
           }
@@ -101,45 +66,17 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
+        // Vereinfachtes Chunking: nur 2 Bundles
         manualChunks(id) {
-          // React-Core: Immer benötigt
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
-            return 'react-vendor';
+          // Alle node_modules in einen Vendor-Chunk
+          if (id.includes('node_modules')) {
+            return 'vendor';
           }
-          // Router: Initial benötigt
-          if (id.includes('node_modules/react-router')) {
-            return 'router-vendor';
-          }
-          // Formulare: NUR bei Bedarf (Below-the-fold)
-          if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform')) {
-            return 'form-vendor';
-          }
-          // Date-fns: Bei Bedarf
-          if (id.includes('node_modules/date-fns')) {
-            return 'date-vendor';
-          }
-          // Lucide Icons: Tree-shaken, separater Chunk
-          if (id.includes('node_modules/lucide-react')) {
-            return 'icons-vendor';
-          }
-          // Radix UI: Separater Chunk für UI-Komponenten
-          if (id.includes('node_modules/@radix-ui')) {
-            return 'ui-vendor';
-          }
-          // Tanstack Query: Separater Chunk
-          if (id.includes('node_modules/@tanstack')) {
-            return 'query-vendor';
-          }
-          // Recharts/D3: NICHT separieren - Rollup handled das besser automatisch
         }
       }
     },
     chunkSizeWarningLimit: 1000,
-    // esbuild statt terser - schneller und weniger Probleme
     minify: 'esbuild',
-    // Sourcemaps nur in dev
     sourcemap: false,
-    // CSS Code-Splitting
-    cssCodeSplit: true,
   },
 }));
