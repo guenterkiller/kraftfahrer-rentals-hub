@@ -75,15 +75,14 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
       const email = emailIdx >= 0 ? values[emailIdx] || '' : '';
       if (!email || !email.includes('@')) continue;
       
-      // Get contact name - fallback to firma if name is empty
+      // Get contact name ONLY from name/contact columns (do not fall back to firma here)
       const rawName = nameIdx >= 0 ? values[nameIdx]?.trim() || '' : '';
       const rawFirma = firmaIdx >= 0 ? values[firmaIdx]?.trim() || '' : '';
-      const contactName = rawName || rawFirma;
       
       contacts.push({
         nummer: nummerIdx >= 0 ? values[nummerIdx] || '' : '',
         firma: rawFirma,
-        name: contactName,
+        name: rawName,
         strasse: strasseIdx >= 0 ? values[strasseIdx] || '' : '',
         stadt: stadtIdx >= 0 ? values[stadtIdx] || '' : '',
         telefon: telefonIdx >= 0 ? values[telefonIdx] || '' : '',
