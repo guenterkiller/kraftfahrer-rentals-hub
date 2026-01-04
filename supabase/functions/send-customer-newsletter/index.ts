@@ -138,8 +138,11 @@ const handler = async (req: Request): Promise<Response> => {
           )
           .join("");
 
+        const senderEmail = Deno.env.get("NEWSLETTER_FROM") || "info@kraftfahrer-mieten.com";
+        
         const emailResponse = await resend.emails.send({
-          from: "Fahrerexpress <info@fahrerexpress.de>",
+          from: `Fahrerexpress-Agentur <${senderEmail}>`,
+          reply_to: senderEmail,
           to: [customer.email],
           subject: personalizedSubject,
           html: `
@@ -166,7 +169,7 @@ const handler = async (req: Request): Promise<Response> => {
                 </p>
                 <p style="margin: 15px 0 0 0; color: #999; font-size: 12px;">
                   Fahrerexpress GmbH | Tel: +49 (0) 123 456789<br>
-                  <a href="https://fahrerexpress.de" style="color: #2d5a87;">www.fahrerexpress.de</a>
+                  <a href="https://kraftfahrer-mieten.com" style="color: #2d5a87;">www.kraftfahrer-mieten.com</a>
                 </p>
                 <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
                 <p style="margin: 0; color: #999; font-size: 11px;">
