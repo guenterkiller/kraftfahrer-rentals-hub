@@ -25,34 +25,34 @@ export default defineConfig(({ mode }) => ({
         'manifest.webmanifest'
       ],
       workbox: {
-        // Stabilität: alte Caches entfernen & neue SW-Version sofort übernehmen
+        // Stabilität: alte Caches sofort entfernen bei neuem SW
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true,
 
-        // Nur JS/CSS/Fonts precachen - NICHT HTML/Bilder
-        globPatterns: ['**/*.{js,css,ico,woff,woff2}'],
+        // NUR JS/CSS precachen - Bilder/HTML via runtimeCaching
+        globPatterns: ['**/*.{js,css,woff,woff2}'],
         globIgnores: [
           '**/lovable-uploads/**',
           '**/hero/**',
-          '**/*.{png,jpg,jpeg,webp,avif}',
+          '**/*.map',
           '**/manifest.json'
         ],
 
-        // Navigation (HTML) nicht precachen (NetworkFirst via runtimeCaching)
-        navigateFallback: null,
+        // SPA-Fallback für Offline-Navigation
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/, /\.[a-z]+$/i],
 
         runtimeCaching: [
           {
-            // HTML/Navigation: NetworkFirst - immer aktuelle Inhalte
-            urlPattern: ({ request }) => request.mode === 'navigate',
-            handler: 'NetworkFirst',
+            // Bilder: CacheFirst mit langer Expiration
+            urlPattern: /\.(?:png|jpg|jpeg|webp|avif|ico|svg)$/i,
+            handler: 'CacheFirst',
             options: {
-              cacheName: 'pages-cache',
-              networkTimeoutSeconds: 3,
+              cacheName: 'images-cache',
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 // 1 Tag
+                maxEntries: 60,
+                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 Tage
               }
             }
           },
