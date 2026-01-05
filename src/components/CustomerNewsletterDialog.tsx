@@ -263,7 +263,7 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader>
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2">
             <FileSpreadsheet className="h-5 w-5" />
             Kunden-Newsletter versenden
@@ -273,157 +273,160 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
-          {/* CSV Upload */}
-          <div className="space-y-2">
-            <Label>CSV-Datei hochladen</Label>
-            <div className="flex gap-2">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".csv,.txt"
-                onChange={handleFileUpload}
-                className="hidden"
-                id="csv-upload"
-              />
-              <Button
-                variant="outline"
-                onClick={() => fileInputRef.current?.click()}
-                className="flex-1"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                {fileName || "CSV auswählen"}
-              </Button>
-              {customers.length > 0 && (
-                <Button variant="ghost" size="icon" onClick={clearAll}>
-                  <X className="h-4 w-4" />
+        <ScrollArea className="flex-1 pr-4">
+          <div className="flex flex-col gap-4 pb-4">
+            {/* CSV Upload */}
+            <div className="flex flex-col gap-2">
+              <Label className="text-sm font-medium">CSV-Datei hochladen</Label>
+              <div className="flex gap-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".csv,.txt"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="csv-upload"
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex-1"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  {fileName || "CSV auswählen"}
                 </Button>
-              )}
-            </div>
-          </div>
-          
-          {/* Customer Preview */}
-          {customers.length > 0 && (
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                {customers.length} Empfänger
-              </Label>
-              <ScrollArea className="h-32 border rounded-md p-2">
-                <div className="space-y-1">
-                  {customers.map((c, idx) => (
-                    <div key={idx} className="flex items-center justify-between text-sm py-1 px-2 bg-muted/50 rounded">
-                      <span className="truncate">
-                        {c.firma && <span className="font-medium">{c.firma}</span>}
-                        {c.firma && c.name && ' – '}
-                        {c.name && <span>{c.name}</span>}
-                        {!c.firma && !c.name && <span>{c.email}</span>}
-                        <span className="text-muted-foreground ml-2">({c.email})</span>
-                      </span>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-6 w-6 p-0"
-                        onClick={() => removeCustomer(idx)}
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </div>
-          )}
-          
-          {/* Email Content */}
-          <div className="space-y-3">
-            <Label htmlFor="subject" className="text-base font-semibold">
-              Betreff (E-Mail-Titel)
-            </Label>
-            <Input
-              id="subject"
-              placeholder="z.B. Neues Angebot von Fahrerexpress"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="text-base h-12"
-            />
-          </div>
-          
-          <div className="space-y-3">
-            <Label htmlFor="message" className="text-base font-semibold">
-              Nachricht (nur Inhalt)
-            </Label>
-            <Textarea
-              id="message"
-              placeholder="wir möchten Sie über unser neues Angebot informieren...&#10;&#10;Bei Fragen stehen wir gerne zur Verfügung."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="min-h-[140px] resize-none text-base leading-relaxed"
-            />
-          </div>
-          
-          {/* Info Box - separate section */}
-          <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded-lg">
-            <div className="flex items-start gap-2">
-              <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
-              <div className="text-amber-900 dark:text-amber-100 text-sm">
-                <p className="font-semibold">Bitte geben Sie hier nur den Nachrichtentext ein.</p>
-                <p className="text-xs mt-1">Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
+                {customers.length > 0 && (
+                  <Button variant="ghost" size="icon" onClick={clearAll}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                )}
               </div>
             </div>
-          </div>
-          
-          {/* Test Email Section */}
-          <div className="space-y-2 border-t pt-3 mt-3">
-            <Label className="flex items-center gap-2 text-sm font-medium">
-              <TestTube className="h-4 w-4" />
-              Test-E-Mail senden (optional)
-            </Label>
-            <div className="flex gap-2">
+            
+            {/* Customer Preview */}
+            {customers.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <Label className="flex items-center gap-2 text-sm font-medium">
+                  <Users className="h-4 w-4" />
+                  {customers.length} Empfänger
+                </Label>
+                <div className="h-32 border rounded-md p-2 overflow-y-auto">
+                  <div className="flex flex-col gap-1">
+                    {customers.map((c, idx) => (
+                      <div key={idx} className="flex items-center justify-between text-sm py-1 px-2 bg-muted/50 rounded">
+                        <span className="truncate flex-1 min-w-0">
+                          {c.firma && <span className="font-medium">{c.firma}</span>}
+                          {c.firma && c.name && ' – '}
+                          {c.name && <span>{c.name}</span>}
+                          {!c.firma && !c.name && <span>{c.email}</span>}
+                          <span className="text-muted-foreground ml-2">({c.email})</span>
+                        </span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 w-6 p-0 flex-shrink-0"
+                          onClick={() => removeCustomer(idx)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Email Content */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="subject" className="text-sm font-medium">
+                Betreff (E-Mail-Titel)
+              </Label>
               <Input
-                placeholder="test@example.com"
-                value={testEmail}
-                onChange={(e) => setTestEmail(e.target.value)}
-                className="flex-1"
+                id="subject"
+                placeholder="z.B. Neues Angebot von Fahrerexpress"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="text-sm"
               />
-              <Button 
-                variant="outline"
-                onClick={handleSendTest}
-                disabled={sendingTest || !subject.trim() || !message.trim()}
-              >
-                {sendingTest ? "Sendet..." : "Testen"}
-              </Button>
             </div>
-            <p className="text-xs text-muted-foreground">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
-          </div>
-          
-          {/* Warning */}
-          <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md text-sm">
-            <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
-            <div className="text-amber-800 dark:text-amber-200">
-              <strong>Nur Kunden-CSV!</strong> Fahrer niemals aus CSV versenden. Für Fahrer das separate "Fahrer-Rundschreiben" nutzen.
+            
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="message" className="text-sm font-medium">
+                Nachricht (nur Inhalt)
+              </Label>
+              <Textarea
+                id="message"
+                placeholder="wir möchten Sie über unser neues Angebot informieren...&#10;&#10;Bei Fragen stehen wir gerne zur Verfügung."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="min-h-[120px] resize-none text-sm leading-relaxed"
+              />
+            </div>
+            
+            {/* Info Box */}
+            <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 rounded-lg">
+              <div className="flex items-start gap-2">
+                <Info className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                <div className="text-amber-900 dark:text-amber-100 text-sm leading-relaxed">
+                  <p className="font-medium">Bitte geben Sie hier nur den Nachrichtentext ein.</p>
+                  <p className="text-xs mt-1">Anrede, Signatur und Abmelde-Link werden automatisch ergänzt.</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Test Email Section */}
+            <div className="flex flex-col gap-2 border-t pt-4">
+              <Label className="flex items-center gap-2 text-sm font-medium">
+                <TestTube className="h-4 w-4" />
+                Test-E-Mail senden (optional)
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="test@example.com"
+                  value={testEmail}
+                  onChange={(e) => setTestEmail(e.target.value)}
+                  className="flex-1 text-sm"
+                />
+                <Button 
+                  variant="outline"
+                  onClick={handleSendTest}
+                  disabled={sendingTest || !subject.trim() || !message.trim()}
+                  className="flex-shrink-0"
+                >
+                  {sendingTest ? "Sendet..." : "Testen"}
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground">Platzhalter: {'{name}'} = Kontaktname, {'{firma}'} = Firmenname</p>
+            </div>
+            
+            {/* Warning */}
+            <div className="flex items-start gap-2 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-md">
+              <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-amber-800 dark:text-amber-200 leading-relaxed">
+                <strong>Nur Kunden-CSV!</strong> Fahrer niemals aus CSV versenden. Für Fahrer das separate "Fahrer-Rundschreiben" nutzen.
+              </p>
             </div>
           </div>
-          
-          {/* Actions */}
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Abbrechen
-            </Button>
-            <Button 
-              onClick={handleSend} 
-              disabled={sending || customers.length === 0 || !subject.trim() || !message.trim()}
-            >
-              {sending ? (
-                "Wird gesendet..."
-              ) : (
-                <>
-                  <Send className="h-4 w-4 mr-2" />
-                  An {customers.length} Kunden senden
-                </>
-              )}
-            </Button>
-          </div>
+        </ScrollArea>
+        
+        {/* Actions - fixed at bottom */}
+        <div className="flex justify-end gap-2 pt-4 border-t flex-shrink-0">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Abbrechen
+          </Button>
+          <Button 
+            onClick={handleSend} 
+            disabled={sending || customers.length === 0 || !subject.trim() || !message.trim()}
+          >
+            {sending ? (
+              "Wird gesendet..."
+            ) : (
+              <>
+                <Send className="h-4 w-4 mr-2" />
+                An {customers.length} Kunden senden
+              </>
+            )}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
