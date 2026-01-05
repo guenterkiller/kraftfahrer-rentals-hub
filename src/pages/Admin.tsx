@@ -593,10 +593,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   async function resendDriverConfirmationNew(assignmentId: string) {
     try {
+      // No need to pass email - JWT is sent automatically via Authorization header
       const { error } = await supabase.functions.invoke(
         "send-driver-confirmation",
         { body: { 
-          email: "guenter.killer@t-online.de",
           assignment_id: assignmentId, 
           stage: "resend" 
         } }
@@ -698,13 +698,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       });
       if (rpcErr) throw rpcErr;
 
-      // 2) E-Mail + PDF an Fahrer (BCC an Admin)
+      // 2) E-Mail + PDF an Fahrer (BCC an Admin) - JWT sent automatically
       const { error: fnErr } = await supabase.functions.invoke(
         "send-driver-confirmation",
-        { body: { 
-          email: "guenter.killer@t-online.de",
-          assignment_id: assignmentId 
-        } }
+        { body: { assignment_id: assignmentId } }
       );
       if (fnErr) throw fnErr;
 
@@ -728,13 +725,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   const resendDriverConfirmation = async (assignmentId: string) => {
     try {
+      // JWT sent automatically via Authorization header
       const { error } = await supabase.functions.invoke(
         "send-driver-confirmation",
-        { body: { 
-          email: "guenter.killer@t-online.de",
-          assignment_id: assignmentId, 
-          resend: true 
-        } }
+        { body: { assignment_id: assignmentId, resend: true } }
       );
       if (error) throw error;
       toast({
@@ -756,17 +750,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     setApprovingDriver(driverId);
     
     try {
-      // Get admin email from localStorage
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Admin session not found');
-      }
-      
-      const session = JSON.parse(adminSession);
-      const adminEmail = session.email;
-      
+      // JWT sent automatically via Authorization header - no need for localStorage email
       const { data, error } = await supabase.functions.invoke('approve-driver-and-send-jobs', {
-        body: { email: adminEmail, driverId }
+        body: { driverId }
       });
 
       if (error) {
