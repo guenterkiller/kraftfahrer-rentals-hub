@@ -28,11 +28,11 @@ const HeroSection = () => {
             media="(min-width: 768px)"
             srcSet="/hero/lkw-autobahn-professionell.webp"
           />
-          {/* WebP Mobile - kleinere Datei für schnelleres LCP */}
+          {/* WebP Mobile - optimiert/komprimiert für schnelleres LCP */}
           <source
             type="image/webp"
             media="(max-width: 767px)"
-            srcSet="/hero/lkw-autobahn-professionell-mobile.webp"
+            srcSet="/hero/lkw-autobahn-professionell-mobile-optimized.webp"
           />
           {/* JPG Fallback */}
           <img
