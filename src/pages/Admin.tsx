@@ -397,35 +397,52 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const handleLogout = async () => {
     console.log("📤 Admin: Abmeldung...");
     
-    if (user) {
-      await logAdminEvent('manual_logout', user.email);
-    }
-    
-    // Mark sessions as inactive
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      await supabase
-        .from('admin_sessions')
-        .update({ is_active: false })
-        .eq('user_id', session.user.id);
-    }
-    
-    // Sign out from Supabase
-    await supabase.auth.signOut();
-    setUser(null);
-    setFahrer([]);
-    setDocuments({});
-    
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer);
-    }
-    
-    toast({
-      title: "Abgemeldet",
-      description: "Sie wurden erfolgreich abgemeldet"
-    });
+    try {
+      if (user) {
+        await logAdminEvent('manual_logout', user.email);
+      }
+      
+      // Mark sessions as inactive - wrap in try/catch to not block logout
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          await supabase
+            .from('admin_sessions')
+            .update({ is_active: false })
+            .eq('user_id', session.user.id);
+        }
+      } catch (sessionError) {
+        console.warn("⚠️ Could not update session status:", sessionError);
+      }
+      
+      // Clear local state first
+      setUser(null);
+      setFahrer([]);
+      setDocuments({});
+      localStorage.removeItem('adminSession');
+      
+      if (inactivityTimer) {
+        clearTimeout(inactivityTimer);
+      }
+      
+      // Sign out from Supabase
+      await supabase.auth.signOut();
+      
+      toast({
+        title: "Abgemeldet",
+        description: "Sie wurden erfolgreich abgemeldet"
+      });
 
-    navigate('/admin/login');
+      navigate('/admin/login');
+    } catch (error) {
+      console.error("❌ Admin: Logout-Fehler:", error);
+      // Force logout anyway
+      setUser(null);
+      setFahrer([]);
+      setDocuments({});
+      localStorage.removeItem('adminSession');
+      navigate('/admin/login');
+    }
   };
 
 
@@ -1052,6 +1069,22 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
     try {
+      // Check if session is still valid before making the request
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        console.error("❌ Admin: Session abgelaufen oder ungültig");
+        toast({
+          title: "Session abgelaufen",
+          description: "Bitte melden Sie sich erneut an",
+          variant: "destructive"
+        });
+        navigate('/admin/login');
+        return;
+      }
+      
+      console.log("🔐 Admin: Session gültig, Token vorhanden:", !!session.access_token);
+      
       // Use admin-data-fetch edge function - session token is automatically included by Supabase client
       const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
         body: { dataType: 'fahrer' }
@@ -1059,6 +1092,19 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       if (error) {
         console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
+        
+        // Check if it's an auth error (401)
+        if (error.message?.includes('401') || error.message?.includes('Unauthorized') || error.message?.includes('Invalid token')) {
+          toast({
+            title: "Session abgelaufen",
+            description: "Bitte melden Sie sich erneut an",
+            variant: "destructive"
+          });
+          await supabase.auth.signOut();
+          navigate('/admin/login');
+          return;
+        }
+        
         toast({
           title: "Fehler beim Laden",
           description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
@@ -1069,6 +1115,18 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       if (!response?.success) {
         console.error("❌ Admin: API-Fehler:", response?.error);
+        
+        // Check for auth errors in response
+        if (response?.error?.includes('token') || response?.error?.includes('Unauthorized')) {
+          toast({
+            title: "Session abgelaufen",
+            description: "Bitte melden Sie sich erneut an",
+            variant: "destructive"
+          });
+          await supabase.auth.signOut();
+          navigate('/admin/login');
+          return;
+        }
         return;
       }
 
