@@ -12,30 +12,6 @@ const ORIGINS = new Set([
   "https://hxnabnsoffzevqhruvar.supabase.co",
 ]);
 
-// Magic byte signatures for file validation
-const FILE_SIGNATURES = {
-  pdf: [0x25, 0x50, 0x44, 0x46], // %PDF
-  jpeg: [0xFF, 0xD8, 0xFF],
-  png: [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A],
-};
-
-// Validate file content by checking magic bytes
-function validateMagicBytes(bytes: Uint8Array, ext: string): boolean {
-  if (ext === 'pdf') {
-    return FILE_SIGNATURES.pdf.every((byte, i) => bytes[i] === byte);
-  } else if (ext === 'jpg' || ext === 'jpeg') {
-    return FILE_SIGNATURES.jpeg.every((byte, i) => bytes[i] === byte);
-  } else if (ext === 'png') {
-    return FILE_SIGNATURES.png.every((byte, i) => bytes[i] === byte);
-  }
-  return false;
-}
-
-// Sanitize filename to prevent path traversal
-function sanitizeFilename(filename: string): string {
-  return filename.replace(/[^a-zA-Z0-9._-]/g, '_');
-}
-
 function corsHeaders(req: Request) {
   const origin = req.headers.get("origin");
   const allow = origin && ORIGINS.has(origin) ? origin : "*";
@@ -114,24 +90,10 @@ serve(async (req) => {
       throw new Error("Unzulässige Dateiendung.");
     }
 
-    // Validate file content via magic bytes
-    const buffer = await file.arrayBuffer();
-    const bytes = new Uint8Array(buffer);
-    
-    if (bytes.length < 8) {
-      throw new Error("Datei ungültig oder leer.");
-    }
-    
-    if (!validateMagicBytes(bytes, ext)) {
-      throw new Error(`Dateiinhalt stimmt nicht mit Dateityp überein: ${ext}`);
-    }
-
-    // Sanitize document type for path
-    const safeDocType = sanitizeFilename(dokument_typ);
     const uuid = crypto.randomUUID();
-    const path = `${fahrer_id}/${safeDocType}/${uuid}.${ext}`;
+    const path = `${fahrer_id}/${dokument_typ}/${uuid}.${ext}`;
 
-    console.log(`Uploading to path: ${path} (content validated)`);
+    console.log(`Uploading to path: ${path}`);
 
     // Upload in privaten Bucket
     const { error: upErr } = await supabase

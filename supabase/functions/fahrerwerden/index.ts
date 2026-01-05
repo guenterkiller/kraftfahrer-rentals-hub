@@ -8,61 +8,6 @@ import { AdminDriverNotification } from '../_shared/email-templates/admin-driver
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
-// Magic byte signatures for file validation
-const FILE_SIGNATURES = {
-  pdf: [0x25, 0x50, 0x44, 0x46], // %PDF
-  jpeg: [0xFF, 0xD8, 0xFF],
-  png: [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A],
-};
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB (reduced from 50MB)
-
-// Validate file content by checking magic bytes
-async function validateFileContent(file: File): Promise<{ valid: boolean; error?: string }> {
-  if (file.size > MAX_FILE_SIZE) {
-    return { valid: false, error: `Datei zu groß: ${file.name} (max. 10MB erlaubt)` };
-  }
-
-  const buffer = await file.arrayBuffer();
-  const bytes = new Uint8Array(buffer);
-  
-  if (bytes.length < 8) {
-    return { valid: false, error: `Datei ungültig: ${file.name}` };
-  }
-
-  // Check file extension
-  const ext = file.name.split('.').pop()?.toLowerCase() || '';
-  const allowedExts = ['pdf', 'jpg', 'jpeg', 'png'];
-  if (!allowedExts.includes(ext)) {
-    return { valid: false, error: `Dateityp nicht erlaubt: ${ext}` };
-  }
-
-  // Validate magic bytes match file type
-  if (ext === 'pdf') {
-    const isPdf = FILE_SIGNATURES.pdf.every((byte, i) => bytes[i] === byte);
-    if (!isPdf) {
-      return { valid: false, error: `Ungültige PDF-Datei: ${file.name}` };
-    }
-  } else if (ext === 'jpg' || ext === 'jpeg') {
-    const isJpeg = FILE_SIGNATURES.jpeg.every((byte, i) => bytes[i] === byte);
-    if (!isJpeg) {
-      return { valid: false, error: `Ungültige JPEG-Datei: ${file.name}` };
-    }
-  } else if (ext === 'png') {
-    const isPng = FILE_SIGNATURES.png.every((byte, i) => bytes[i] === byte);
-    if (!isPng) {
-      return { valid: false, error: `Ungültige PNG-Datei: ${file.name}` };
-    }
-  }
-
-  return { valid: true };
-}
-
-// Sanitize filename to prevent path traversal
-function sanitizeFilename(filename: string): string {
-  return filename.replace(/[^a-zA-Z0-9._-]/g, '_');
-}
-
 // Initialize Supabase client
 const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
@@ -249,35 +194,10 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // Upload files to storage first with validation
-    console.log("Uploading files to storage with content validation...");
+    // Upload files to storage first
+    console.log("Uploading files to storage...");
     const uploadedFiles: { [key: string]: string } = {};
-    const emailSafe = sanitizeFilename(requestData.email);
-    
-    // Helper function for secure file upload with validation
-    async function uploadValidatedFile(file: File, docType: string, index: number): Promise<string | null> {
-      // Validate file content (magic bytes + size)
-      const validation = await validateFileContent(file);
-      if (!validation.valid) {
-        console.error(`File validation failed: ${validation.error}`);
-        return null;
-      }
-      
-      const fileExt = sanitizeFilename(file.name.split('.').pop() || 'pdf');
-      const fileName = `uploads/${emailSafe}/${docType}_${index + 1}.${fileExt}`;
-      
-      const { error: uploadError } = await supabase.storage
-        .from('fahrer-dokumente')
-        .upload(fileName, file, { upsert: true });
-      
-      if (uploadError) {
-        console.error(`Upload error for ${docType} ${index + 1}:`, uploadError);
-        return null;
-      }
-      
-      console.log(`${docType} ${index + 1} uploaded successfully: ${fileName}`);
-      return fileName;
-    }
+    const emailSafe = requestData.email.replace(/[^a-zA-Z0-9@.-]/g, '_');
     
     // Upload Führerschein files
     const fuehrerscheinFiles = formData ? (formData.getAll("fuehrerschein") as File[]) : [];
@@ -286,8 +206,19 @@ const handler = async (req: Request): Promise<Response> => {
       for (let i = 0; i < fuehrerscheinFiles.length; i++) {
         const file = fuehrerscheinFiles[i];
         if (file && file.size > 0) {
-          const path = await uploadValidatedFile(file, 'fuehrerschein', i);
-          if (path) fuehrerscheinPaths.push(path);
+          const fileExt = file.name.split('.').pop() || 'pdf';
+          const fileName = `uploads/${emailSafe}/fuehrerschein_${i + 1}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('fahrer-dokumente')
+            .upload(fileName, file, { upsert: true });
+          
+          if (uploadError) {
+            console.error(`Upload error for Führerschein ${i + 1}:`, uploadError);
+          } else {
+            fuehrerscheinPaths.push(fileName);
+            console.log(`Führerschein ${i + 1} uploaded successfully: ${fileName}`);
+          }
         }
       }
       if (fuehrerscheinPaths.length > 0) {
@@ -302,8 +233,19 @@ const handler = async (req: Request): Promise<Response> => {
       for (let i = 0; i < fahrerkarteFiles.length; i++) {
         const file = fahrerkarteFiles[i];
         if (file && file.size > 0) {
-          const path = await uploadValidatedFile(file, 'fahrerkarte', i);
-          if (path) fahrerkartePaths.push(path);
+          const fileExt = file.name.split('.').pop() || 'pdf';
+          const fileName = `uploads/${emailSafe}/fahrerkarte_${i + 1}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('fahrer-dokumente')
+            .upload(fileName, file, { upsert: true });
+          
+          if (uploadError) {
+            console.error(`Upload error for Fahrerkarte ${i + 1}:`, uploadError);
+          } else {
+            fahrerkartePaths.push(fileName);
+            console.log(`Fahrerkarte ${i + 1} uploaded successfully: ${fileName}`);
+          }
         }
       }
       if (fahrerkartePaths.length > 0) {
@@ -318,8 +260,19 @@ const handler = async (req: Request): Promise<Response> => {
       for (let i = 0; i < zertifikatFiles.length; i++) {
         const file = zertifikatFiles[i];
         if (file && file.size > 0) {
-          const path = await uploadValidatedFile(file, 'zertifikat', i);
-          if (path) zertifikatPaths.push(path);
+          const fileExt = file.name.split('.').pop() || 'pdf';
+          const fileName = `uploads/${emailSafe}/zertifikat_${i + 1}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('fahrer-dokumente')
+            .upload(fileName, file, { upsert: true });
+          
+          if (uploadError) {
+            console.error(`Upload error for Zertifikat ${i + 1}:`, uploadError);
+          } else {
+            zertifikatPaths.push(fileName);
+            console.log(`Zertifikat ${i + 1} uploaded successfully: ${fileName}`);
+          }
         }
       }
       if (zertifikatPaths.length > 0) {
@@ -327,7 +280,7 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
     
-    console.log("File uploads completed with validation. Uploaded files:", uploadedFiles);
+    console.log("File uploads completed. Uploaded files:", uploadedFiles);
 
     // Save to database
     console.log("Email is unique, proceeding with registration...");

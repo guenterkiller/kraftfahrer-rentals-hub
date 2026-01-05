@@ -79,43 +79,30 @@ export const TruckerLocationMap = ({ clusters, center }: TruckerLocationMapProps
 
       const marker = L.marker([cluster.lat, cluster.lng], { icon });
 
-      // 4) Marker-Popup mit aktiven Fahrern und Zeitlabels (XSS-sicher ohne innerHTML)
+      // 4) Marker-Popup mit aktiven Fahrern und Zeitlabels
       const popupContent = document.createElement("div");
       popupContent.className = "text-sm";
       
-      // Titel
-      const title = document.createElement("p");
-      title.className = "font-semibold mb-1";
-      title.textContent = `${cluster.count} Fahrer in dieser Nähe`;
-      popupContent.appendChild(title);
+      // Erstelle Fahrer-Liste mit Zeitlabels (max 5)
+      const driversList = cluster.drivers.slice(0, 5).map(driver => {
+        const minutesAgo = driver.updated_at 
+          ? Math.floor((Date.now() - new Date(driver.updated_at).getTime()) / 60000)
+          : 0;
+        const timeLabel = minutesAgo < 5 ? 'online' : `vor ${minutesAgo} Min.`;
+        return `<li class="text-xs text-muted-foreground">${driver.user_name} – ${timeLabel}</li>`;
+      }).join('');
       
-      // Autohof-Hinweis
-      if (cluster.place_name) {
-        const placeHint = document.createElement("p");
-        placeHint.className = "text-xs text-muted-foreground mb-2";
-        placeHint.textContent = "Autohof / Rastplatz in der Nähe";
-        popupContent.appendChild(placeHint);
-      }
-      
-      // Fahrer-Liste (max 5)
-      if (cluster.drivers.length > 0) {
-        const list = document.createElement("ul");
-        list.className = "space-y-1 mt-2";
-        
-        cluster.drivers.slice(0, 5).forEach(driver => {
-          const minutesAgo = driver.updated_at 
-            ? Math.floor((Date.now() - new Date(driver.updated_at).getTime()) / 60000)
-            : 0;
-          const timeLabel = minutesAgo < 5 ? 'online' : `vor ${minutesAgo} Min.`;
-          
-          const li = document.createElement("li");
-          li.className = "text-xs text-muted-foreground";
-          li.textContent = `${driver.user_name} – ${timeLabel}`;
-          list.appendChild(li);
-        });
-        
-        popupContent.appendChild(list);
-      }
+      popupContent.innerHTML = `
+        <p class="font-semibold mb-1">
+          ${cluster.count} Fahrer in dieser Nähe
+        </p>
+        ${
+          cluster.place_name
+            ? '<p class="text-xs text-muted-foreground mb-2">Autohof / Rastplatz in der Nähe</p>'
+            : ""
+        }
+        ${driversList ? `<ul class="space-y-1 mt-2">${driversList}</ul>` : ''}
+      `;
 
       marker.bindPopup(popupContent);
       marker.addTo(layer);

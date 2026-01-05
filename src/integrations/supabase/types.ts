@@ -1121,9 +1121,7 @@ export type Database = {
         Returns: undefined
       }
       is_admin: { Args: { user_uuid: string }; Returns: boolean }
-      is_admin_user:
-        | { Args: never; Returns: boolean }
-        | { Args: { user_uuid?: string }; Returns: boolean }
+      is_admin_user: { Args: never; Returns: boolean }
       log_job_mail: {
         Args: {
           p_driver_snapshot?: Json

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -24,96 +24,6 @@ import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
-
-// Helper: Force logout that ALWAYS works
-const forceLogout = async (navigate: ReturnType<typeof useNavigate>, toast: ReturnType<typeof useToast>['toast'], reason?: string) => {
-  console.log("🚪 Admin: Force logout:", reason);
-  
-  try {
-    await supabase.auth.signOut();
-  } catch (e) {
-    console.warn("⚠️ Supabase signOut failed:", e);
-  }
-  
-  // Always clear storage
-  try {
-    localStorage.removeItem('adminSession');
-    localStorage.removeItem('sb-hxnabnsoffzevqhruvar-auth-token');
-    sessionStorage.clear();
-  } catch (e) {
-    console.warn("⚠️ Storage clear failed:", e);
-  }
-
-  if (reason) {
-    toast({
-      title: "Abgemeldet",
-      description: reason,
-      variant: "destructive"
-    });
-  }
-
-  navigate('/admin/login', { replace: true });
-};
-
-// Helper: Get session token or redirect to login
-const getSessionTokenOrRedirect = async (
-  navigate: ReturnType<typeof useNavigate>, 
-  toast: ReturnType<typeof useToast>['toast']
-): Promise<string | null> => {
-  try {
-    const { data: { session }, error } = await supabase.auth.getSession();
-    
-    if (error || !session?.access_token) {
-      console.error("❌ Admin: Keine gültige Session");
-      await forceLogout(navigate, toast, "Session abgelaufen");
-      return null;
-    }
-    
-    return session.access_token;
-  } catch (error) {
-    console.error("❌ Admin: Session-Fehler:", error);
-    await forceLogout(navigate, toast, "Session-Fehler");
-    return null;
-  }
-};
-
-// Helper: Invoke admin edge function with explicit token
-const invokeAdminFunction = async <T = any>(
-  functionName: string,
-  body: Record<string, any>,
-  token: string
-): Promise<{ data: T | null; error: Error | null; isAuthError: boolean }> => {
-  try {
-    const { data, error } = await supabase.functions.invoke(functionName, {
-      body,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    if (error) {
-      const errorMsg = error.message || "";
-      const isAuthError = 
-        errorMsg.includes("401") || 
-        errorMsg.includes("403") ||
-        errorMsg.includes("Unauthorized") || 
-        errorMsg.includes("Invalid token") ||
-        errorMsg.includes("non-2xx");
-      
-      return { data: null, error, isAuthError };
-    }
-
-    // Check for auth errors in response body
-    if (data?.error?.includes("token") || data?.error?.includes("Unauthorized") || data?.error?.includes("forbidden")) {
-      return { data: null, error: new Error(data.error), isAuthError: true };
-    }
-
-    return { data, error: null, isAuthError: false };
-  } catch (error) {
-    console.error("❌ Admin: Function invoke error:", error);
-    return { data: null, error: error as Error, isAuthError: false };
-  }
-};
 
 interface FahrerProfile {
   id: string;
@@ -487,53 +397,27 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const handleLogout = async () => {
     console.log("📤 Admin: Abmeldung...");
     
-    // Clear inactivity timer first
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer);
+    if (user) {
+      await logAdminEvent('manual_logout', user.email);
     }
     
-    // Log event if possible (don't block on failure)
-    try {
-      if (user) {
-        await logAdminEvent('manual_logout', user.email);
-      }
-    } catch (e) {
-      console.warn("⚠️ Could not log logout event:", e);
+    // Mark sessions as inactive
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await supabase
+        .from('admin_sessions')
+        .update({ is_active: false })
+        .eq('user_id', session.user.id);
     }
     
-    // Mark sessions as inactive (don't block on failure)
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        await supabase
-          .from('admin_sessions')
-          .update({ is_active: false })
-          .eq('user_id', session.user.id);
-      }
-    } catch (sessionError) {
-      console.warn("⚠️ Could not update session status:", sessionError);
-    }
-    
-    // ALWAYS clear all state and storage - this must succeed
+    // Sign out from Supabase
+    await supabase.auth.signOut();
     setUser(null);
     setFahrer([]);
     setDocuments({});
-    setJobRequests([]);
-    setJobAssignments([]);
     
-    try {
-      localStorage.removeItem('adminSession');
-      localStorage.removeItem('sb-hxnabnsoffzevqhruvar-auth-token');
-      sessionStorage.clear();
-    } catch (e) {
-      console.warn("⚠️ Storage clear failed:", e);
-    }
-    
-    // Sign out from Supabase (don't block on failure)
-    try {
-      await supabase.auth.signOut();
-    } catch (e) {
-      console.warn("⚠️ Supabase signOut failed:", e);
+    if (inactivityTimer) {
+      clearTimeout(inactivityTimer);
     }
     
     toast({
@@ -541,8 +425,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       description: "Sie wurden erfolgreich abgemeldet"
     });
 
-    // ALWAYS redirect - this is the most important part
-    navigate('/admin/login', { replace: true });
+    navigate('/admin/login');
   };
 
 
@@ -553,27 +436,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     try {
       console.log("📋 Admin: Lade Jobanfragen...");
       
-      // Get token first
-      const token = await getSessionTokenOrRedirect(navigate, toast);
-      if (!token) return;
-      
-      // Use admin-data-fetch edge function with explicit token
-      const { data: response, error, isAuthError } = await invokeAdminFunction(
-        'admin-data-fetch', 
-        { dataType: 'jobs' },
-        token
-      );
-
-      if (isAuthError) {
-        await forceLogout(navigate, toast, "Session abgelaufen");
-        return;
-      }
+      // Use admin-data-fetch edge function
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { dataType: 'jobs' }
+      });
 
       if (error) {
         console.error("❌ Admin: Fehler beim Laden der Fahreranfragen:", error);
         toast({
-          title: "Serverfehler",
-          description: "Bitte Seite neu laden",
+          title: "Fehler beim Laden",
+          description: `Jobanfragen konnten nicht geladen werden: ${error.message}`,
           variant: "destructive"
         });
         return;
@@ -591,6 +463,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       console.log("✅ Admin: Fahreranfragen erfolgreich geladen:", response.data?.length || 0);
       setJobRequests(response.data || []);
+      toast({
+        title: "Aktualisiert",
+        description: `${response.data?.length || 0} Fahreranfragen geladen`,
+      });
     } catch (error) {
       console.error("❌ Admin: Unerwarteter Fehler beim Laden der Fahreranfragen:", error);
       toast({
@@ -1176,29 +1052,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
     try {
-      // Get token first - redirects to login if invalid
-      const token = await getSessionTokenOrRedirect(navigate, toast);
-      if (!token) return;
-      
-      console.log("🔐 Admin: Token vorhanden, lade Daten...");
-      
-      // Use admin-data-fetch edge function with explicit token in header
-      const { data: response, error, isAuthError } = await invokeAdminFunction(
-        'admin-data-fetch', 
-        { dataType: 'fahrer' },
-        token
-      );
-
-      if (isAuthError) {
-        await forceLogout(navigate, toast, "Session abgelaufen");
-        return;
-      }
+      // Use admin-data-fetch edge function - session token is automatically included by Supabase client
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { dataType: 'fahrer' }
+      });
 
       if (error) {
         console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
         toast({
-          title: "Serverfehler",
-          description: "Bitte Seite neu laden",
+          title: "Fehler beim Laden",
+          description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
           variant: "destructive"
         });
         return;
@@ -1222,6 +1085,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       if (data) {
         loadDocumentCounts(data);
       }
+      
+      toast({
+        title: "Daten aktualisiert",
+        description: `${data?.length || 0} Fahrer geladen`
+      });
     } catch (error) {
       console.error("❌ Admin: Unerwarteter Fehler:", error);
       toast({
@@ -1237,18 +1105,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const loadDocumentCounts = async (fahrerData: FahrerProfile[]) => {
     try {
       const fahrerIds = fahrerData.map(f => f.id);
-      
-      // Get token
-      const token = await getSessionTokenOrRedirect(navigate, toast);
-      if (!token) return;
 
-      const { data: response, error, isAuthError } = await invokeAdminFunction(
-        'admin-data-fetch', 
-        { dataType: 'document-counts', fahrerIds },
-        token
-      );
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { dataType: 'document-counts', fahrerIds }
+      });
 
-      if (isAuthError || error || !response?.success) {
+      if (error || !response?.success) {
         console.error("❌ Admin: Fehler beim Laden der Dokumentanzahl:", error);
         return;
       }
@@ -1264,21 +1126,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
     try {
       console.log("📄 Admin: Lade Dokumente für Fahrer:", fahrerId);
-      
-      // Get token
-      const token = await getSessionTokenOrRedirect(navigate, toast);
-      if (!token) return;
 
-      const { data: response, error, isAuthError } = await invokeAdminFunction(
-        'admin-data-fetch', 
-        { dataType: 'documents', fahrerId },
-        token
-      );
-
-      if (isAuthError) {
-        await forceLogout(navigate, toast, "Session abgelaufen");
-        return;
-      }
+      const { data: response, error } = await supabase.functions.invoke('admin-data-fetch', {
+        body: { dataType: 'documents', fahrerId }
+      });
 
       if (error || !response?.success) {
         console.error("❌ Admin: Fehler beim Laden der Dokumente:", error);
@@ -1294,7 +1145,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         id: doc.id,
         filename: doc.filename,
         filepath: doc.filepath,
-        url: doc.url,
+        url: doc.url, // This will be replaced with signed URL when needed
         type: doc.type,
         uploaded_at: doc.uploaded_at,
         fahrer_id: doc.fahrer_id
@@ -1324,20 +1175,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     try {
       console.log(`📁 Previewing document: ${doc.filename} at ${doc.filepath}`);
       
-      // Get token
-      const token = await getSessionTokenOrRedirect(navigate, toast);
-      if (!token) return;
-      
-      const { data, error, isAuthError } = await invokeAdminFunction(
-        'get-document-preview', 
-        { filepath: doc.filepath, ttl: 600 },
-        token
-      );
-      
-      if (isAuthError) {
-        await forceLogout(navigate, toast, "Session abgelaufen");
-        return;
-      }
+      const { data, error } = await supabase.functions.invoke('get-document-preview', {
+        body: { filepath: doc.filepath, ttl: 600 }
+      });
       
       if (error) {
         throw error;
@@ -1372,20 +1212,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     try {
       console.log(`📥 Downloading document: ${doc.filename} at ${doc.filepath}`);
       
-      // Get token
-      const token = await getSessionTokenOrRedirect(navigate, toast);
-      if (!token) return;
-      
-      const { data, error, isAuthError } = await invokeAdminFunction(
-        'get-document-preview', 
-        { filepath: doc.filepath, ttl: 300 },
-        token
-      );
-      
-      if (isAuthError) {
-        await forceLogout(navigate, toast, "Session abgelaufen");
-        return;
-      }
+      const { data, error } = await supabase.functions.invoke('get-document-preview', {
+        body: { filepath: doc.filepath, ttl: 300 }
+      });
       
       if (error) {
         throw error;

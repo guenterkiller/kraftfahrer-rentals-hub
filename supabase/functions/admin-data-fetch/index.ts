@@ -13,46 +13,45 @@ Deno.serve(async (req) => {
   try {
     console.log('Admin data fetch request received');
 
-    // 1) Extract JWT token from Authorization header
-    const authHeader = req.headers.get('authorization') || req.headers.get('Authorization') || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-    
-    if (!token) {
-      console.log('Missing or invalid authorization header');
+    // Get JWT token from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.log('Missing authorization header');
       return new Response(
         JSON.stringify({ error: 'Unauthorized - missing token' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    // 2) Create Supabase Admin client
+    // JWT is already validated by Supabase (verify_jwt = true in config.toml)
+    // Create a client with the user's token to get user info
+    const token = authHeader.replace('Bearer ', '');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
-      auth: { autoRefreshToken: false, persistSession: false }
-    });
     
-    // 3) Verify the token and get user
-    const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
+    // Use service role client to verify the token and get user
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
     
-    if (userError || !userData?.user) {
-      console.log('Failed to get user from token:', userError?.message || 'No user returned');
+    // Get user from the JWT (no API call, just validates the token we already have)
+    const { data: { user }, error: userError } = await supabaseAdmin.auth.getUser(token);
+    
+    if (userError || !user) {
+      console.log('Failed to get user from token:', userError?.message);
       return new Response(
         JSON.stringify({ error: 'Invalid token' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const user = userData.user;
     console.log('User ID from JWT:', user.id);
 
-    // 4) Verify admin role
+    // Verify admin role
     const { data: roleData, error: roleError } = await supabaseAdmin
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
       .eq('role', 'admin')
-      .maybeSingle();
+      .single();
 
     if (roleError || !roleData) {
       console.log('User is not an admin:', user.id);
@@ -64,7 +63,7 @@ Deno.serve(async (req) => {
 
     console.log('Admin verified:', user.id);
 
-    // 5) Parse request body
+    // Parse request body
     const { dataType, fahrerId, fahrerIds } = await req.json();
     console.log('Request for dataType:', dataType);
 
