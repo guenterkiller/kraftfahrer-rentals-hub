@@ -78,13 +78,32 @@ const AdminLogin = () => {
 
       console.log('Auth successful, verifying admin role...');
 
-      // Verify admin role
-      const { data: roleData, error: roleError } = await supabase
+      // Verify admin role - with self-healing for the known admin
+      let { data: roleData, error: roleError } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', authData.user.id)
         .eq('role', 'admin')
-        .single();
+        .maybeSingle();
+
+      // Self-healing: If this is the known admin email but role is missing, create it
+      const KNOWN_ADMIN_EMAIL = 'guenter.killer@t-online.de';
+      if ((!roleData || roleError) && authData.user.email?.toLowerCase() === KNOWN_ADMIN_EMAIL) {
+        console.log('Admin role missing for known admin, attempting self-healing...');
+        
+        // Use the database function to assign admin role (bypasses RLS)
+        const { error: assignError } = await supabase.rpc('assign_admin_role', {
+          _user_id: authData.user.id
+        });
+
+        if (!assignError) {
+          console.log('✅ Self-healing: Admin role assigned successfully');
+          roleData = { role: 'admin' };
+          roleError = null;
+        } else {
+          console.error('Self-healing failed:', assignError);
+        }
+      }
 
       if (roleError || !roleData) {
         console.error('Role verification failed:', roleError);
