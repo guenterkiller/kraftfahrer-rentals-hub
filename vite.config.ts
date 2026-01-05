@@ -24,13 +24,33 @@ export default defineConfig(({ mode }) => ({
       },
       includeAssets: ['favicon.png', 'favicon-truck.png', 'lovable-uploads/favicon-truck-512-full.png', 'manifest.webmanifest'],
       workbox: {
-        // Nur JS/CSS/Fonts precachen - NICHT HTML (NetworkFirst für aktuelle Inhalte)
-        globPatterns: ['**/*.{js,css,ico,woff,woff2}'],
-        // lovable-uploads enthält große Bilder - nicht precachen
-        // manifest.webmanifest wird manuell in public/ gepflegt
-        globIgnores: ['**/lovable-uploads/**', '**/assets/*.png', '**/manifest.json'],
+        // Nur JS/CSS precachen - keine Bilder/Fonts/HTML (verhindert 404 bei fehlenden Assets)
+        globPatterns: ['**/*.{js,css}'],
+        // Alle problematischen Assets ausschließen
+        globIgnores: [
+          '**/lovable-uploads/**',
+          '**/assets/**',
+          '**/hero/**',
+          '**/uploads/**',
+          '**/*.png',
+          '**/*.jpg',
+          '**/*.webp',
+          '**/*.avif',
+          '**/*.ico',
+          '**/*.woff',
+          '**/*.woff2',
+          '**/manifest.json',
+          '**/manifest.webmanifest'
+        ],
+        // Alte Caches automatisch löschen (verhindert bad-precaching-response)
+        cleanupOutdatedCaches: true,
+        // Sofort aktivieren ohne Warten
+        skipWaiting: true,
+        clientsClaim: true,
         // Navigation (HTML) immer NetworkFirst für aktuelle Inhalte
         navigateFallback: null,
+        // Keine sourcemaps precachen
+        sourcemap: false,
         runtimeCaching: [
           {
             // HTML/Navigation: NetworkFirst - immer aktuelle Inhalte
