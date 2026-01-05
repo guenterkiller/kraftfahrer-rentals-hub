@@ -59,20 +59,9 @@ export function AdminAssignmentDialog({
 
   const loadJobData = async () => {
     try {
-      // Get admin session
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Keine Admin-Session gefunden');
-      }
-      
-      const session = JSON.parse(adminSession);
-      
-      // Use admin-data-fetch instead of direct Supabase query
+      // JWT sent automatically via Authorization header
       const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
-        body: {
-          email: session.email,
-          dataType: 'jobs'
-        }
+        body: { dataType: 'jobs' }
       });
       
       if (error) throw error;
@@ -128,20 +117,9 @@ export function AdminAssignmentDialog({
   const loadDrivers = async () => {
     setIsLoadingDrivers(true);
     try {
-      // Get admin session
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Keine Admin-Session gefunden');
-      }
-      
-      const session = JSON.parse(adminSession);
-      
-      // Use the same edge function as the rest of the admin system
+      // JWT sent automatically via Authorization header
       const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
-        body: {
-          email: session.email,
-          dataType: 'fahrer'
-        }
+        body: { dataType: 'fahrer' }
       });
       
       if (error) {
@@ -213,16 +191,9 @@ export function AdminAssignmentDialog({
         email,
       });
       
-      // Get admin session
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) throw new Error('Admin-Session nicht gefunden');
-      
-      const session = JSON.parse(adminSession);
-      
-      // Use edge function with service role to update contact data
+      // JWT sent automatically via Authorization header
       const { data, error } = await supabase.functions.invoke('admin-update-contact', {
         body: {
-          email: session.email,
           jobId: jobId,
           cName: cName,
           contact: contact,
@@ -232,7 +203,7 @@ export function AdminAssignmentDialog({
           city: city,
           phone: phone,
           contactEmail: email,
-          einsatzort: einsatzort, // Add location field
+          einsatzort: einsatzort,
         }
       });
 
@@ -269,19 +240,7 @@ export function AdminAssignmentDialog({
     setIsAssigning(true);
     
     try {
-      // Get admin session
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) throw new Error('Admin-Session nicht gefunden');
-      
-      const session = JSON.parse(adminSession);
-      if (!session.isAdmin || session.email !== 'guenter.killer@t-online.de') {
-        throw new Error('Kein Admin-Recht');
-      }
-      
-      // Check if session is still valid (24 hours)
-      if (Date.now() - session.loginTime > 24 * 60 * 60 * 1000) {
-        throw new Error('Admin-Session abgelaufen');
-      }
+      // JWT sent automatically via Authorization header - no need for localStorage email check
 
       // Always save contact data before assignment to ensure fresh data
       await saveContactData();
@@ -290,10 +249,9 @@ export function AdminAssignmentDialog({
         description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
       });
 
-      // 1) Zuweisen über Edge Function (verwendet Service Role)
+      // 1) Zuweisen über Edge Function (JWT sent automatically)
       const { data: assignResult, error: assignError } = await supabase.functions.invoke('admin-assign-driver', {
         body: {
-          email: session.email,
           jobId: jobId,
           driverId: selectedDriverId,
           rateType: rateType,
@@ -311,11 +269,10 @@ export function AdminAssignmentDialog({
       const assignmentId = assignResult.assignmentId;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 2) E-Mail versenden (Edge Function)
+      // 2) E-Mail versenden (Edge Function - JWT sent automatically)
       try {
         const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
           body: { 
-            email: "guenter.killer@t-online.de",
             assignment_id: assignmentId, 
             mode: attachPdf ? 'both' : 'inline' 
           }

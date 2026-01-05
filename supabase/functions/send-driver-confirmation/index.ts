@@ -11,17 +11,14 @@ const corsHeaders = {
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
 serve(async (req) => {
-  const FUNCTION_VERSION = "v2.0-new-template";
-  console.log(`📧 send-driver-confirmation ${FUNCTION_VERSION} called: ${req.method} ${req.url}`);
+  const FUNCTION_VERSION = "v3.0-jwt-auth";
+  console.log(`📧 send-driver-confirmation ${FUNCTION_VERSION} called: ${req.method}`);
   
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    console.log('📧 Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders });
   }
 
   if (req.method !== "POST") {
-    console.log(`📧 Method not allowed: ${req.method}`);
     return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { 
       status: 405,
       headers: { 'Content-Type': 'application/json', ...corsHeaders }
@@ -29,26 +26,63 @@ serve(async (req) => {
   }
 
   try {
-    // Parse request body
-    const bodyData = await req.json();
-    console.log('📧 Request body parsed successfully');
-
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (bodyData.email !== ADMIN_EMAIL) {
-      console.log('Unauthorized access attempt by:', bodyData.email);
-      return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert' }),
-        { 
-          status: 403, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
-      );
+    // 1) Extract and validate JWT from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.error('Missing or invalid Authorization header');
+      return new Response(JSON.stringify({ ok: false, error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
 
-    // Check required fields
+    const token = authHeader.replace('Bearer ', '');
+
+    // 2) Create Supabase client with service role
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+      console.error('Missing Supabase configuration');
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), { 
+        status: 500, 
+        headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+      });
+    }
+
+    const supa = createClient(supabaseUrl, supabaseServiceKey);
+
+    // 3) Verify the JWT and get user
+    const { data: { user }, error: authError } = await supa.auth.getUser(token);
+    if (authError || !user) {
+      console.error('Invalid token');
+      return new Response(JSON.stringify({ ok: false, error: 'Invalid token' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // 4) Verify admin role
+    const { data: roleData, error: roleError } = await supa
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (roleError || !roleData) {
+      console.error('User is not an admin');
+      return new Response(JSON.stringify({ ok: false, error: 'Forbidden - Admin access required' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    console.log('✅ Admin verified:', user.email);
+
+    // 5) Parse request body
+    const bodyData = await req.json();
     const { assignment_id } = bodyData;
-    console.log(`📧 Received assignment_id: ${assignment_id}`);
     
     if (!assignment_id) {
       console.log('📧 ERROR: assignment_id missing from payload');
@@ -57,24 +91,6 @@ serve(async (req) => {
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
-
-    // Create Supabase client with service role key
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
-
-    if (!supabaseUrl || !supabaseServiceKey) {
-      console.error('Missing Supabase configuration');
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        { 
-          status: 500, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
-      );
-    }
-
-    const supa = createClient(supabaseUrl, supabaseServiceKey);
-    console.log('📧 Starting main processing logic');
 
     // Get assignment data with complete job and driver information
     const { data: assignment, error: assignmentError } = await supa
@@ -96,27 +112,17 @@ serve(async (req) => {
 
     if (assignmentError || !assignment) {
       console.error('📧 Assignment not found:', assignmentError);
-      console.error('📧 Query result:', assignment);
       return new Response(JSON.stringify({ ok: false, error: "assignment not found" }), { 
         status: 404,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       });
     }
 
-    console.log('📧 Assignment data loaded:', {
-      assignment_id: assignment.id,
-      job_title: assignment.job_requests?.fahrzeugtyp,
-      location: assignment.job_requests?.einsatzort,
-      start_date: assignment.start_date,
-      end_date: assignment.end_date,
-      rate: `${assignment.rate_value} ${assignment.rate_type}`
-    });
-
     const driver = assignment.fahrer_profile;
     const job = assignment.job_requests;
 
     if (!driver || !driver.email || !driver.vorname || !driver.nachname) {
-      console.error('📧 Driver data incomplete:', driver);
+      console.error('📧 Driver data incomplete');
       return new Response(JSON.stringify({ ok: false, error: "Fahrerdaten unvollständig" }), { 
         status: 400,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
@@ -125,7 +131,7 @@ serve(async (req) => {
 
     console.log(`📧 Sending email to driver: ${driver.email}`);
 
-    // Helper function to format rate
+    // Helper functions
     function formatRate(rateType: string | null, rateValue: number | null, currency = 'EUR'): string | null {
       if (!rateType || rateValue == null) return null;
       const v = Number(rateValue).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -136,7 +142,6 @@ serve(async (req) => {
       return `${v} ${currency}/${unit}`;
     }
 
-    // Helper function to format date range
     function formatDateRange(startDate: string | null, endDate: string | null): string {
       if (!startDate && !endDate) return '—';
       
@@ -160,48 +165,20 @@ serve(async (req) => {
       }
     }
 
-    // Helper function to clean placeholder values
-    function cleanValue(value: string | null | undefined, fallback = '—'): string {
-      if (!value || value.trim() === '' || 
-          value === 'Bitte wählen' || 
-          value === 'Siehe Nachricht' || 
-          value === 'nachzutragen' ||
-          value === 'Nachzutragen') {
-        return fallback;
-      }
-      return value.trim();
-    }
-
-    // Prepare email data - use original values directly, only clean if actually empty/placeholder
+    // Prepare email data
     const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
     const location = job?.einsatzort || 'wird noch bekannt gegeben';
     const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || job?.zeitraum || 'nach Absprache';
     const rateFormatted = formatRate(assignment.rate_type, assignment.rate_value) || 'nach Absprache';
     const vehicleType = job?.fahrzeugtyp || 'wird bekannt gegeben';
-    const notes = job?.besonderheiten?.trim() || null;
     const contactPerson = job?.customer_name || 'wird ergänzt';
     const contactPhone = job?.customer_phone || 'wird ergänzt';
     const contactEmail = job?.customer_email || 'wird ergänzt';
     const companyName = job?.company || job?.customer_name || 'wird ergänzt';
     
-    console.log('📧 Email data prepared:', {
-      jobTitle,
-      location,
-      dateRange,
-      contactPerson,
-      contactPhone,
-      contactEmail,
-      companyName,
-      raw_job_data: job
-    });
-    const confirmUrl = `https://kraftfahrer-mieten.com/driver/assignments/${assignment_id}/confirm`;
-    
-    // Create subject in exact format: "Einsatzbestätigung – {fahrzeugtyp} – {einsatzort} am {zeitraum}"
     const emailSubject = `Einsatzbestätigung – ${jobTitle} – ${location} am ${dateRange}`;
-      
-    console.log(`📧 Generated subject: "${emailSubject}"`);
 
-    // Create email content exactly matching the style from images
+    // Create email content (same template as before)
     const emailContent = `
 <!DOCTYPE html>
 <html>
@@ -244,7 +221,7 @@ serve(async (req) => {
                     <p style="margin: 3px 0;"><strong>• Datum/Zeitraum:</strong> ${dateRange}</p>
                     <p style="margin: 3px 0;"><strong>• Einsatzort / Treffpunkt:</strong> ${location}</p>
                     <p style="margin: 3px 0;"><strong>• Fahrzeug/Typ:</strong> ${vehicleType}</p>
-                    <p style="margin: 3px 0;"><strong>• Besonderheiten:</strong> ${job?.besonderheiten || notes || '—'}</p>
+                    <p style="margin: 3px 0;"><strong>• Besonderheiten:</strong> ${job?.besonderheiten || '—'}</p>
                 </div>
             </div>
             
@@ -267,7 +244,6 @@ serve(async (req) => {
                     <p style="margin: 8px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
                     <p style="margin: 8px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
                     <p style="margin: 8px 0;"><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an; die Geltendmachung eines weitergehenden Schadens bleibt vorbehalten.</p>
-                    <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
                     <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung). Der Fahrer stellt sicher, dass erforderliche Qualifikationen/Berechtigungen/Versicherungen vorliegen.</p>
                 </div>
             </div>
@@ -339,7 +315,15 @@ serve(async (req) => {
       message_id: emailResult.data?.id
     });
 
-    console.log(`📧 Email logged successfully with subject: "${emailSubject}"`);
+    // Log admin action
+    await supa.from('admin_actions').insert({
+      action: 'send_driver_confirmation',
+      job_id: assignment.job_id,
+      assignment_id: assignment_id,
+      admin_email: user.email,
+      note: `Confirmation sent to ${driver.email}`
+    });
+
     console.log(`📧 Function ${FUNCTION_VERSION} completed successfully`);
 
     return new Response(JSON.stringify({ 
@@ -354,7 +338,7 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('📧 Unexpected error:', error);
-    return new Response(JSON.stringify({ ok: false, error: "unexpected error" }), { 
+    return new Response(JSON.stringify({ ok: false, error: 'Internal server error' }), { 
       status: 500,
       headers: { 'Content-Type': 'application/json', ...corsHeaders }
     });

@@ -8,51 +8,69 @@ const corsHeaders = {
 };
 
 interface CompleteOldJobsRequest {
-  email: string;
-  daysOld?: number; // Default 30 days
+  daysOld?: number;
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log('Admin complete old jobs request received');
+    console.log('admin-complete-old-jobs v2.0-jwt-auth request received');
     
-    // Parse request body
-    const { email, daysOld = 30 }: CompleteOldJobsRequest = await req.json();
-    console.log(`Request from: ${email}, days old: ${daysOld}`);
-    
-    // Validate admin email
-    const ADMIN_EMAIL = "guenter.killer@t-online.de";
-    if (email !== ADMIN_EMAIL) {
-      console.log('Unauthorized access attempt by:', email);
-      return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert' }),
-        { 
-          status: 403, 
-          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
-        }
-      );
+    // 1) Extract and validate JWT from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.error('Missing or invalid Authorization header');
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
     }
+
+    const token = authHeader.replace('Bearer ', '');
 
     // Initialize Supabase client with service role key
     const supabaseServiceRole = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
-      }
+      { auth: { autoRefreshToken: false, persistSession: false } }
     );
 
-    console.log(`Calling admin_mark_old_jobs_completed with ${daysOld} days...`);
-    
-    // Call the database function using service role
+    // 2) Verify the JWT and get user
+    const { data: { user }, error: authError } = await supabaseServiceRole.auth.getUser(token);
+    if (authError || !user) {
+      console.error('Invalid token');
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // 3) Verify admin role
+    const { data: roleData, error: roleError } = await supabaseServiceRole
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (roleError || !roleData) {
+      console.error('User is not an admin');
+      return new Response(JSON.stringify({ error: 'Forbidden - Admin access required' }), {
+        status: 403,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    console.log('✅ Admin verified:', user.email);
+
+    // Parse request body
+    const { daysOld = 30 }: CompleteOldJobsRequest = await req.json();
+    console.log('Request to complete jobs older than:', daysOld, 'days');
+
+    // 4) Call the database function using service role
     const { data, error } = await supabaseServiceRole.rpc('admin_mark_old_jobs_completed', {
       _days_old: daysOld
     });
@@ -68,7 +86,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         data,
-        message: data?.message || `${data?.updated_count || 0} alte Aufträge als erledigt markiert.`
+        message: data?.message || `${data?.updated_count || 0} alte Aufträge wurden als erledigt markiert.`
       }),
       { 
         status: 200, 
@@ -81,7 +99,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message || 'Fehler beim Abschließen alter Aufträge' 
+        error: 'Fehler beim Abschließen alter Jobs' 
       }),
       { 
         status: 500, 

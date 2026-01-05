@@ -6,32 +6,64 @@ import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import { DriverApprovalEmail } from './_templates/driver-approval-email.tsx';
 import { AdminDriverApprovalNotification } from './_templates/admin-driver-approval-notification.tsx';
 
-// Initialize Supabase client
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-// Initialize Resend
-const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface ApproveDriverRequest {
-  driverId: string;
-}
-
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log('🚀 approve-driver-and-send-jobs function called');
+    console.log('🚀 approve-driver-and-send-jobs v2.0-jwt-auth called');
     
+    // 1) Extract and validate JWT from Authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.error('Missing or invalid Authorization header');
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+
+    // Initialize Supabase client with service role
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // 2) Verify the JWT and get user
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      console.error('Invalid token');
+      return new Response(JSON.stringify({ error: 'Invalid token' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // 3) Verify admin role
+    const { data: roleData, error: roleError } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (roleError || !roleData) {
+      console.error('User is not an admin');
+      return new Response(JSON.stringify({ error: 'Forbidden - Admin access required' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    console.log('✅ Admin verified:', user.email);
+
     // Runtime guard for MAIL_FROM domain
     const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
     const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
@@ -39,21 +71,10 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
     }
     
-    // Parse request body to get email and driverId
-    const { email, driverId }: { email?: string; driverId?: string } = await req.json();
+    // Parse request body to get driverId
+    const { driverId }: { driverId?: string } = await req.json();
     
-    console.log('📧 Request from email:', email);
     console.log('👤 Driver ID to approve:', driverId);
-    
-    // Check admin email authorization
-    const ADMIN_EMAIL = 'guenter.killer@t-online.de';
-    if (!email || email !== ADMIN_EMAIL) {
-      console.error('❌ Unauthorized email:', email);
-      return new Response(JSON.stringify({ error: 'Unauthorized - Invalid admin email' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
-    }
 
     if (!driverId) {
       console.error('❌ Missing driver ID');
@@ -63,7 +84,8 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    console.log('✅ Admin email verified:', email);
+    // Initialize Resend
+    const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
     // 1. Get driver details
     const { data: driver, error: driverError } = await supabase
@@ -112,7 +134,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (jobsError) {
       console.error('❌ Failed to fetch jobs:', jobsError);
-      // Continue with email even if jobs can't be fetched
     }
 
     console.log('📋 Found jobs:', jobs?.length || 0);
@@ -219,6 +240,13 @@ const handler = async (req: Request): Promise<Response> => {
       console.error('❌ Failed to log admin notification:', logError);
     }
 
+    // 10. Log admin action
+    await supabase.from('admin_actions').insert({
+      action: 'approve_driver',
+      admin_email: user.email,
+      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email})`
+    });
+
     console.log('✅ Process completed successfully');
 
     return new Response(JSON.stringify({
@@ -236,7 +264,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error) {
     console.error('❌ Unexpected error:', error);
     return new Response(JSON.stringify({
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: 'Internal server error'
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }

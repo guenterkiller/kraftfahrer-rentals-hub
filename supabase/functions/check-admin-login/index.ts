@@ -1,95 +1,35 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
 
-Deno.serve(async (req) => {
-  // Handle CORS preflight requests
+/**
+ * DEPRECATED: This function is deprecated and should not be used.
+ * Admin authentication should be done via Supabase Auth + user_roles table.
+ * 
+ * This endpoint is kept for backward compatibility but always returns an error
+ * directing users to use the proper authentication flow.
+ */
+serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    console.log('Admin login attempt received');
+  console.log('⚠️ check-admin-login called - this endpoint is deprecated');
 
-    // Get the admin password from Supabase secrets
-    const adminPassword = Deno.env.get('ADMIN_SECRET_PASSWORD');
-    if (!adminPassword) {
-      console.error('ADMIN_SECRET_PASSWORD environment variable not found');
-      return new Response(
-        JSON.stringify({ error: 'Server configuration error' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+  // Log deprecation warning
+  return new Response(
+    JSON.stringify({ 
+      success: false, 
+      error: 'Diese Authentifizierungsmethode ist veraltet. Bitte verwenden Sie die Supabase-Authentifizierung über /admin/login.',
+      deprecated: true
+    }),
+    { 
+      status: 410, // Gone - resource no longer available
+      headers: { 'Content-Type': 'application/json', ...corsHeaders } 
     }
-
-    // Parse request body
-    const { email, password } = await req.json();
-    console.log('Login attempt for email:', email);
-
-    // Validate required fields
-    if (!email || !password) {
-      console.log('Missing email or password');
-      return new Response(
-        JSON.stringify({ error: 'E-Mail und Passwort sind erforderlich' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    // Check if email matches exactly
-    const ADMIN_EMAIL = 'guenter.killer@t-online.de';
-    if (email !== ADMIN_EMAIL) {
-      console.log('Email does not match admin email');
-      return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert - ungültige Anmeldedaten' }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    // Check if password matches
-    if (password !== adminPassword) {
-      console.log('Password does not match');
-      return new Response(
-        JSON.stringify({ error: 'Zugriff verweigert - ungültige Anmeldedaten' }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
-
-    // Successful login
-    console.log('Admin login successful');
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: 'Login erfolgreich',
-        user: { email: ADMIN_EMAIL }
-      }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
-
-  } catch (error) {
-    console.error('Error in admin login:', error);
-    return new Response(
-      JSON.stringify({ error: 'Interner Serverfehler' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
-  }
+  );
 });
