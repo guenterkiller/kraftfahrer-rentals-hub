@@ -18,19 +18,30 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       // KEIN manifest: {} - wir nutzen ausschließlich public/manifest.webmanifest
       manifest: false,
-      // Nutze das manuelle Manifest
-      injectManifest: {
-        injectionPoint: undefined
-      },
-      includeAssets: ['favicon.png', 'favicon-truck.png', 'lovable-uploads/favicon-truck-512-full.png', 'manifest.webmanifest'],
+      includeAssets: [
+        'favicon.png',
+        'favicon-truck.png',
+        'lovable-uploads/favicon-truck-512-full.png',
+        'manifest.webmanifest'
+      ],
       workbox: {
-        // Nur JS/CSS/Fonts precachen - NICHT HTML (NetworkFirst für aktuelle Inhalte)
+        // Stabilität: alte Caches entfernen & neue SW-Version sofort übernehmen
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
+
+        // Nur JS/CSS/Fonts precachen - NICHT HTML/Bilder
         globPatterns: ['**/*.{js,css,ico,woff,woff2}'],
-        // lovable-uploads enthält große Bilder - nicht precachen
-        // manifest.webmanifest wird manuell in public/ gepflegt
-        globIgnores: ['**/lovable-uploads/**', '**/assets/*.png', '**/manifest.json'],
-        // Navigation (HTML) immer NetworkFirst für aktuelle Inhalte
+        globIgnores: [
+          '**/lovable-uploads/**',
+          '**/hero/**',
+          '**/*.{png,jpg,jpeg,webp,avif}',
+          '**/manifest.json'
+        ],
+
+        // Navigation (HTML) nicht precachen (NetworkFirst via runtimeCaching)
         navigateFallback: null,
+
         runtimeCaching: [
           {
             // HTML/Navigation: NetworkFirst - immer aktuelle Inhalte
@@ -76,7 +87,8 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       devOptions: {
-        enabled: true
+        // Dev/Preview: Service Worker deaktivieren, um Lighthouse/Debugging nicht zu verfälschen
+        enabled: false
       }
     }),
     {
