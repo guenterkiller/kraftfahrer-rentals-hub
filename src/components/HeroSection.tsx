@@ -16,17 +16,11 @@ const HeroSection = () => {
       {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
         <picture className="absolute inset-0 w-full h-full">
-          {/* AVIF: Beste Kompression für moderne Browser */}
-          <source
-            type="image/avif"
-            media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-professionell.avif"
-          />
-          {/* WebP Desktop */}
+          {/* WebP Desktop - neues Hero-Bild (16:9) */}
           <source
             type="image/webp"
             media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-professionell.webp"
+            srcSet="/hero/lkw-autobahn-desktop-hero.webp"
           />
           {/* WebP Mobile - neues optimiertes Hero-Bild (3:4 Portrait) */}
           <source
@@ -34,10 +28,10 @@ const HeroSection = () => {
             media="(max-width: 767px)"
             srcSet="/hero/lkw-autobahn-mobile-hero.webp"
           />
-          {/* JPG Fallback */}
+          {/* Fallback - Desktop Hero */}
           <img
-            src="/hero/lkw-autobahn-professionell.jpg"
-            alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
+            src="/hero/lkw-autobahn-desktop-hero.webp"
+            alt="Professioneller roter Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
             className="absolute inset-0 w-full h-full object-cover object-center"
             loading="eager"
             decoding="sync"
