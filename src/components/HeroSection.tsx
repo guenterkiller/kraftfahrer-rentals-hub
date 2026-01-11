@@ -16,17 +16,17 @@ const HeroSection = () => {
       {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
         <picture className="absolute inset-0 w-full h-full">
-          {/* AVIF Desktop - neues Hero-Bild */}
+          {/* AVIF: Beste Kompression für moderne Browser */}
           <source
             type="image/avif"
             media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-desktop-hero.webp"
+            srcSet="/hero/lkw-autobahn-professionell.avif"
           />
-          {/* WebP Desktop - neues Hero-Bild (roter LKW, deutsches Kennzeichen) */}
+          {/* WebP Desktop */}
           <source
             type="image/webp"
             media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-desktop-hero.webp"
+            srcSet="/hero/lkw-autobahn-professionell.webp"
           />
           {/* WebP Mobile - neues Hero-Bild (roter LKW, deutsches Kennzeichen) */}
           <source
