@@ -3,7 +3,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
 const ALLOWED = new Set(["image/jpeg", "image/png", "application/pdf"]);
-const MAX = 10 * 1024 * 1024; // 10 MB
+const MAX = 5 * 1024 * 1024; // 5 MB - matches storage bucket limit
 const BUCKET = "fahrer-dokumente";
 const ORIGINS = new Set([
   "https://www.kraftfahrer-mieten.com",
