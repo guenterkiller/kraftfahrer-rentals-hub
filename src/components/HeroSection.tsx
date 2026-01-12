@@ -20,30 +20,30 @@ const HeroSection = () => {
           <source
             type="image/avif"
             media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-professionell.avif"
+            srcSet="/hero/hero-desktop.avif"
           />
           {/* AVIF Mobile */}
           <source
             type="image/avif"
             media="(max-width: 767px)"
-            srcSet="/hero/lkw-autobahn-mobile-hero.avif"
+            srcSet="/hero/hero-mobile.avif"
           />
           {/* WebP Desktop */}
           <source
             type="image/webp"
             media="(min-width: 768px)"
-            srcSet="/hero/lkw-autobahn-professionell.webp"
+            srcSet="/hero/hero-desktop.webp"
           />
           {/* WebP Mobile */}
           <source
             type="image/webp"
             media="(max-width: 767px)"
-            srcSet="/hero/lkw-autobahn-mobile-hero.webp"
+            srcSet="/hero/hero-mobile.webp"
           />
-          {/* JPG Fallback */}
+          {/* WebP Fallback */}
           <img
-            src="/hero/lkw-autobahn-professionell.jpg"
-            alt="Professioneller Scania-Sattelzug auf deutscher Autobahn - LKW-Fahrer und Kraftfahrer bundesweit buchen"
+            src="/hero/hero-desktop.webp"
+            alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
             className="absolute inset-0 w-full h-full object-cover object-center"
             loading="eager"
             decoding="sync"
@@ -52,7 +52,6 @@ const HeroSection = () => {
             width={1920}
             height={1080}
             sizes="(max-width: 767px) 100vw, 1920px"
-            style={{ filter: 'brightness(1.05) contrast(1.05)' }}
           />
         </picture>
         <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
