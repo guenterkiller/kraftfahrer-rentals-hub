@@ -129,22 +129,6 @@ const Index = () => {
       <Navigation />
       
       <main id="main-content">
-        {/* Tipp-Block für Favoriten speichern - statisch, kein JS */}
-        <section aria-label="Favoriten-Tipp" className="bg-amber-50 border-b border-amber-200">
-          <div className="container mx-auto px-4 py-4 max-w-4xl">
-            <div className="flex items-start gap-3">
-              <span className="text-xl" aria-hidden="true">⭐</span>
-              <div>
-                <p className="font-semibold text-amber-900 mb-1">Tipp für den Notfall</p>
-                <p className="text-sm text-amber-800 leading-relaxed">
-                  Bitte speichern Sie diese Seite jetzt als Favorit in Ihrem Browser, damit Sie im Bedarfsfall sofort darauf zugreifen können.<br />
-                  <span className="text-amber-700">Desktop: Stern ⭐ in der Browserleiste • Smartphone: „Zum Startbildschirm hinzufügen"</span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-        
         <HeroSection />
         
         {/* SEO H2-Struktur für Keyword-Abdeckung (mieten, leihen, etc.) */}
