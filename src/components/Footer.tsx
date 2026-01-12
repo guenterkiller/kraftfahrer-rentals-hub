@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Lock } from "lucide-react";
 import { FEATURE_FLAGS } from "@/utils/featureFlags";
-import { PWAInstallButton } from "@/components/PWAInstallButton";
-import { SaveAppDialog } from "@/components/SaveAppDialog";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -124,8 +122,6 @@ const Footer = () => {
         <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-4 flex-wrap">
             <p>© {currentYear} Fahrerexpress-Agentur • Günter Killer • USt-IdNr: DE207642217</p>
-            <SaveAppDialog />
-            <PWAInstallButton />
           </div>
           <div className="flex gap-4 items-center">
             <Link 
