@@ -16,18 +16,6 @@ const HeroSection = () => {
       {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
         <picture className="absolute inset-0 w-full h-full">
-          {/* AVIF Desktop: Beste Kompression für moderne Browser */}
-          <source
-            type="image/avif"
-            media="(min-width: 768px)"
-            srcSet="/hero/hero-desktop.avif"
-          />
-          {/* AVIF Mobile */}
-          <source
-            type="image/avif"
-            media="(max-width: 767px)"
-            srcSet="/hero/hero-mobile.avif"
-          />
           {/* WebP Desktop */}
           <source
             type="image/webp"
@@ -40,17 +28,17 @@ const HeroSection = () => {
             media="(max-width: 767px)"
             srcSet="/hero/hero-mobile.webp"
           />
-          {/* WebP Fallback */}
+          {/* Fallback für Mobile */}
           <img
-            src="/hero/hero-desktop.webp"
+            src="/hero/hero-mobile.webp"
             alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
             className="absolute inset-0 w-full h-full object-cover object-center"
             loading="eager"
             decoding="sync"
             // @ts-expect-error fetchpriority is a valid HTML attribute
             fetchpriority="high"
-            width={1920}
-            height={1080}
+            width={768}
+            height={1024}
             sizes="(max-width: 767px) 100vw, 1920px"
           />
         </picture>
