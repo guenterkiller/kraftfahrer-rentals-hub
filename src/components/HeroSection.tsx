@@ -16,11 +16,17 @@ const HeroSection = () => {
       {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
         <picture className="absolute inset-0 w-full h-full">
-          {/* AVIF: Beste Kompression für moderne Browser */}
+          {/* AVIF Desktop: Beste Kompression für moderne Browser */}
           <source
             type="image/avif"
             media="(min-width: 768px)"
             srcSet="/hero/lkw-autobahn-professionell.avif"
+          />
+          {/* AVIF Mobile */}
+          <source
+            type="image/avif"
+            media="(max-width: 767px)"
+            srcSet="/hero/lkw-autobahn-mobile-hero.avif"
           />
           {/* WebP Desktop */}
           <source
@@ -28,7 +34,7 @@ const HeroSection = () => {
             media="(min-width: 768px)"
             srcSet="/hero/lkw-autobahn-professionell.webp"
           />
-          {/* WebP Mobile - neues Hero-Bild (roter LKW, deutsches Kennzeichen) */}
+          {/* WebP Mobile */}
           <source
             type="image/webp"
             media="(max-width: 767px)"
