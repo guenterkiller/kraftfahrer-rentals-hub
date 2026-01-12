@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Lock } from "lucide-react";
-import { FEATURE_FLAGS } from "@/utils/featureFlags";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -77,13 +76,6 @@ const Footer = () => {
                   Vermittlungsbedingungen
                 </Link>
               </li>
-              {FEATURE_FLAGS.TRUCKER_CHAT_ENABLED && (
-                <li>
-                  <Link to="/trucker-ladies" className="text-muted-foreground hover:text-primary transition-colors">
-                    Fahrer-Community-Chat
-                  </Link>
-                </li>
-              )}
             </ul>
             <p className="text-xs text-muted-foreground font-semibold">
               🇩🇪 Bundesweit verfügbar<br />
