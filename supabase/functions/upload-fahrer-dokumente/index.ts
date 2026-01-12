@@ -1,10 +1,12 @@
 // Deno Edge Function for secure document upload
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { 
+  DRIVER_DOCS_BUCKET, 
+  ALLOWED_MIME_TYPES, 
+  MAX_FILE_SIZE 
+} from "../_shared/storage-config.ts";
 
-const ALLOWED = new Set(["image/jpeg", "image/png", "application/pdf"]);
-const MAX = 5 * 1024 * 1024; // 5 MB - matches storage bucket limit
-const BUCKET = "fahrer-dokumente";
 const ORIGINS = new Set([
   "https://www.kraftfahrer-mieten.com",
   "http://localhost:5173",
@@ -77,12 +79,12 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    if (!ALLOWED.has(file.type)) {
+    if (!ALLOWED_MIME_TYPES.has(file.type)) {
       throw new Error("Nur JPG/PNG/PDF erlaubt.");
     }
     
-    if (file.size > MAX) {
-      throw new Error("Datei größer als 10 MB.");
+    if (file.size > MAX_FILE_SIZE) {
+      throw new Error("Datei größer als 5 MB.");
     }
 
     const ext = (file.name.split(".").pop() || "").toLowerCase();
@@ -98,7 +100,7 @@ serve(async (req) => {
     // Upload in privaten Bucket
     const { error: upErr } = await supabase
       .storage
-      .from(BUCKET)
+      .from(DRIVER_DOCS_BUCKET)
       .upload(path, file, {
         contentType: file.type,
         upsert: true,
@@ -136,7 +138,7 @@ serve(async (req) => {
     if (dbErr) {
       console.error("Database insert error:", dbErr);
       // Try to clean up uploaded file
-      await supabase.storage.from(BUCKET).remove([path]);
+      await supabase.storage.from(DRIVER_DOCS_BUCKET).remove([path]);
       throw dbErr;
     }
 
@@ -144,7 +146,7 @@ serve(async (req) => {
 
     // Kurzlebige Vorschau-URL für direkte Anzeige
     const { data: signed } = await supabase
-      .storage.from(BUCKET)
+      .storage.from(DRIVER_DOCS_BUCKET)
       .createSignedUrl(path, 60);
 
     console.log("Upload completed successfully");

@@ -6,6 +6,10 @@ import {
   createErrorResponse,
   logAdminAction 
 } from "../_shared/admin-auth.ts";
+import { 
+  DRIVER_DOCS_BUCKET, 
+  LEGACY_DRIVER_DOCS_BUCKET 
+} from "../_shared/storage-config.ts";
 
 serve(async (req) => {
   const corsHeaders = createCorsHeaders();
@@ -41,22 +45,23 @@ serve(async (req) => {
       return createErrorResponse('Invalid filepath format', 400, corsHeaders);
     }
 
-    // Create signed URL with correct bucket priority
+    // Create signed URL - try primary bucket first, then legacy bucket for backward compatibility
     let signedData: { signedUrl: string } | null = null;
 
-    // Try 'driver-documents' bucket first
+    // Try primary bucket 'fahrer-dokumente' first
     const primary = await supabase.storage
-      .from('driver-documents')
+      .from(DRIVER_DOCS_BUCKET)
       .createSignedUrl(filepath, ttl);
 
     if (primary.error) {
-      console.error('Primary bucket error, trying fallback:', primary.error);
+      console.log('Primary bucket not found, trying legacy bucket...');
+      // Fallback to legacy 'driver-documents' bucket for old files
       const fallback = await supabase.storage
-        .from('fahrer-dokumente')
+        .from(LEGACY_DRIVER_DOCS_BUCKET)
         .createSignedUrl(filepath, ttl);
       
       if (fallback.error) {
-        console.error('Fallback bucket error:', fallback.error);
+        console.error('Both buckets failed:', fallback.error);
         return createErrorResponse('File not found', 404, corsHeaders);
       }
       signedData = fallback.data as { signedUrl: string };
