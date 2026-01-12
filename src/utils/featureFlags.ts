@@ -29,6 +29,5 @@ export async function isFeatureFlagEnabled(flagName: string): Promise<boolean> {
  * Feature flag constants
  */
 export const FEATURE_FLAGS = {
-  ORDER_CONFIRMATION_ENABLED: 'ORDER_CONFIRMATION_ENABLED',
-  TRUCKER_CHAT_ENABLED: false // Set to true to re-enable chat
+  ORDER_CONFIRMATION_ENABLED: 'ORDER_CONFIRMATION_ENABLED'
 } as const;
