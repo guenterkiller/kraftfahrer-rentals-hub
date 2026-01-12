@@ -20,9 +20,9 @@
     
     
     <!-- Preload critical resources for better LCP (Largest Contentful Paint) -->
-    <!-- Mobile: AVIF/WebP, Desktop: AVIF mit media-Attribut -->
-    <link rel="preload" as="image" href="/hero/lkw-autobahn-mobile-hero.avif" type="image/avif" media="(max-width: 767px)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/hero/lkw-autobahn-professionell.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high" />
+    <!-- Mobile: AVIF, Desktop: AVIF mit media-Attribut -->
+    <link rel="preload" as="image" href="/hero/hero-mobile.avif" type="image/avif" media="(max-width: 767px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/hero/hero-desktop.avif" type="image/avif" media="(min-width: 768px)" fetchpriority="high" />
     
     <!-- Critical CSS Inline (~2KB minified) - nur Above-the-fold -->
     <style>
