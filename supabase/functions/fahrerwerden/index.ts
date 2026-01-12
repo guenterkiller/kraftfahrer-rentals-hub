@@ -5,6 +5,7 @@ import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
 import { DriverRegistrationConfirmation } from '../_shared/email-templates/driver-registration-confirmation.tsx';
 import { AdminDriverNotification } from '../_shared/email-templates/admin-driver-notification.tsx';
+import { DRIVER_DOCS_BUCKET } from '../_shared/storage-config.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -210,7 +211,7 @@ const handler = async (req: Request): Promise<Response> => {
           const fileName = `uploads/${emailSafe}/fuehrerschein_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('fahrer-dokumente')
+            .from(DRIVER_DOCS_BUCKET)
             .upload(fileName, file, { upsert: true });
           
           if (uploadError) {
@@ -237,7 +238,7 @@ const handler = async (req: Request): Promise<Response> => {
           const fileName = `uploads/${emailSafe}/fahrerkarte_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('fahrer-dokumente')
+            .from(DRIVER_DOCS_BUCKET)
             .upload(fileName, file, { upsert: true });
           
           if (uploadError) {
@@ -264,7 +265,7 @@ const handler = async (req: Request): Promise<Response> => {
           const fileName = `uploads/${emailSafe}/zertifikat_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
-            .from('fahrer-dokumente')
+            .from(DRIVER_DOCS_BUCKET)
             .upload(fileName, file, { upsert: true });
           
           if (uploadError) {
