@@ -1327,201 +1327,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
           <AdminAnalyticsDashboard />
         </div>
 
-        <Card>
-          <CardHeader>
-            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
-              <CardTitle className="text-lg md:text-xl">Registrierte Fahrer ({fahrer.length})</CardTitle>
-              <div className="flex gap-2 flex-wrap">
-                <Button 
-                  onClick={() => setNewsletterDialogOpen(true)}
-                  variant="default"
-                  size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 flex-1 md:flex-none"
-                >
-                  <Mail className="h-4 w-4 mr-2" />
-                  Fahrer-Rundschreiben
-                </Button>
-                <Button 
-                  onClick={() => setCustomerNewsletterDialogOpen(true)}
-                  variant="default"
-                  size="sm"
-                  className="bg-green-600 hover:bg-green-700 flex-1 md:flex-none"
-                >
-                  <Mail className="h-4 w-4 mr-2" />
-                  Kunden-CSV-Newsletter
-                </Button>
-                <Button 
-                  onClick={loadFahrerData} 
-                  variant="outline" 
-                  size="sm"
-                  disabled={isLoadingData}
-                  className="flex-1 md:flex-none"
-                >
-                  {isLoadingData ? "Lädt..." : "Aktualisieren"}
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-4 md:p-6">
-            {fahrer.length === 0 ? (
-              <p className="text-gray-500 italic text-center py-4">Keine Fahrer registriert.</p>
-            ) : (
-              <>
-                {/* Desktop Table View - only show on very large screens */}
-                <div className="hidden xl:block overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="min-w-[150px]">Name</TableHead>
-                        <TableHead className="min-w-[130px]">Telefon</TableHead>
-                        <TableHead className="min-w-[120px]">Führerschein</TableHead>
-                        <TableHead className="min-w-[300px]">Nachricht</TableHead>
-                        <TableHead className="min-w-[150px]">Aktionen</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {sortedFahrer.map((f) => (
-                        <TableRow key={f.id}>
-                          <TableCell className="font-medium">
-                            {f.vorname} {f.nachname}
-                          </TableCell>
-                          <TableCell>
-                            {f.telefon}
-                          </TableCell>
-                          <TableCell>
-                            {f.fuehrerscheinklassen?.join(", ") || "-"}
-                          </TableCell>
-                          <TableCell className="max-w-[300px]">
-                            <div className="text-sm">
-                              {f.beschreibung || "Keine Nachricht"}
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              {f.is_blocked && (
-                                <Badge variant="destructive" className="bg-red-600">
-                                  🚫 GESPERRT
-                                </Badge>
-                              )}
-                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                               {f.status === 'pending' && (
-                                 <Button
-                                   size="sm"
-                                   className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
-                                   onClick={() => handleApproveDriver(f.id)}
-                                   disabled={approvingDriver === f.id}
-                                 >
-                                   {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
-                                 </Button>
-                               )}
-                               {f.status === 'active' && (
-                                 <Button
-                                   size="sm"
-                                   variant="outline"
-                                   className="text-orange-600 border-orange-300 hover:bg-orange-50"
-                                   onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
-                                 >
-                                   ↻ Zurücksetzen
-                                 </Button>
-                               )}
-                               <Button
-                                 size="sm"
-                                 variant={f.is_blocked ? "outline" : "outline"}
-                                 className={f.is_blocked 
-                                   ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700" 
-                                   : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700"}
-                                 onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
-                               >
-                                 {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
-                               </Button>
-                             </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-
-                {/* Mobile & Tablet Card View - show on all screens except very large */}
-                <div className="xl:hidden space-y-3">
-                  {sortedFahrer.map((f) => (
-                    <Card key={f.id} className="shadow-sm border-gray-200">
-                      <CardContent className="p-4">
-                        <div className="space-y-3">
-                          <div className="flex justify-between items-start gap-3">
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-base truncate">{f.vorname} {f.nachname}</h3>
-                              <a href={`tel:${f.telefon}`} className="text-sm text-blue-600 hover:underline">{f.telefon}</a>
-                            </div>
-                            <div className="flex-shrink-0 flex gap-1">
-                              {f.is_blocked && (
-                                <Badge variant="destructive" className="bg-red-600 text-xs">
-                                  🚫
-                                </Badge>
-                              )}
-                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                            </div>
-                          </div>
-                          
-                          {f.is_blocked && f.blocked_reason && (
-                            <div className="text-xs text-red-600 bg-red-50 dark:bg-red-950/20 p-2 rounded">
-                              <strong>Sperrgrund:</strong> {f.blocked_reason}
-                            </div>
-                          )}
-                          
-                          <div className="text-sm space-y-1">
-                            <p className="text-gray-700">
-                              <span className="font-medium">Führerschein:</span> {f.fuehrerscheinklassen?.join(", ") || "-"}
-                            </p>
-                            {f.beschreibung && (
-                              <p className="text-gray-600 bg-gray-50 p-2 rounded text-xs">
-                                <span className="font-medium">Nachricht:</span> {f.beschreibung}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="flex gap-2 pt-1 flex-wrap">
-                            {f.status === 'pending' && (
-                              <Button
-                                size="sm"
-                                className="bg-green-600 hover:bg-green-700 text-white font-medium flex-1"
-                                onClick={() => handleApproveDriver(f.id)}
-                                disabled={approvingDriver === f.id}
-                              >
-                                {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
-                              </Button>
-                            )}
-                            {f.status === 'active' && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
-                                onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
-                              >
-                                ↻ Zurücksetzen
-                              </Button>
-                            )}
-                            <Button
-                              size="sm"
-                              variant={f.is_blocked ? "outline" : "outline"}
-                              className={f.is_blocked 
-                                ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700 flex-1" 
-                                : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 flex-1"}
-                              onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
-                            >
-                              {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
-                            </Button>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
-
         {/* Job Requests Section */}
         <Card className="mt-6 md:mt-8">
           <CardHeader>
@@ -2077,6 +1882,202 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                       </Card>
                     );
                   })}
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Registrierte Fahrer Section - jetzt unter Fahreranfragen */}
+        <Card className="mt-6 md:mt-8">
+          <CardHeader>
+            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+              <CardTitle className="text-lg md:text-xl">Registrierte Fahrer ({fahrer.length})</CardTitle>
+              <div className="flex gap-2 flex-wrap">
+                <Button 
+                  onClick={() => setNewsletterDialogOpen(true)}
+                  variant="default"
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 flex-1 md:flex-none"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Fahrer-Rundschreiben
+                </Button>
+                <Button 
+                  onClick={() => setCustomerNewsletterDialogOpen(true)}
+                  variant="default"
+                  size="sm"
+                  className="bg-green-600 hover:bg-green-700 flex-1 md:flex-none"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Kunden-CSV-Newsletter
+                </Button>
+                <Button 
+                  onClick={loadFahrerData} 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isLoadingData}
+                  className="flex-1 md:flex-none"
+                >
+                  {isLoadingData ? "Lädt..." : "Aktualisieren"}
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 md:p-6">
+            {fahrer.length === 0 ? (
+              <p className="text-gray-500 italic text-center py-4">Keine Fahrer registriert.</p>
+            ) : (
+              <>
+                {/* Desktop Table View - only show on very large screens */}
+                <div className="hidden xl:block overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="min-w-[150px]">Name</TableHead>
+                        <TableHead className="min-w-[130px]">Telefon</TableHead>
+                        <TableHead className="min-w-[120px]">Führerschein</TableHead>
+                        <TableHead className="min-w-[300px]">Nachricht</TableHead>
+                        <TableHead className="min-w-[150px]">Aktionen</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {sortedFahrer.map((f) => (
+                        <TableRow key={f.id}>
+                          <TableCell className="font-medium">
+                            {f.vorname} {f.nachname}
+                          </TableCell>
+                          <TableCell>
+                            {f.telefon}
+                          </TableCell>
+                          <TableCell>
+                            {f.fuehrerscheinklassen?.join(", ") || "-"}
+                          </TableCell>
+                          <TableCell className="max-w-[300px]">
+                            <div className="text-sm">
+                              {f.beschreibung || "Keine Nachricht"}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              {f.is_blocked && (
+                                <Badge variant="destructive" className="bg-red-600">
+                                  🚫 GESPERRT
+                                </Badge>
+                              )}
+                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                               {f.status === 'pending' && (
+                                 <Button
+                                   size="sm"
+                                   className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
+                                   onClick={() => handleApproveDriver(f.id)}
+                                   disabled={approvingDriver === f.id}
+                                 >
+                                   {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                                 </Button>
+                               )}
+                               {f.status === 'active' && (
+                                 <Button
+                                   size="sm"
+                                   variant="outline"
+                                   className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                   onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
+                                 >
+                                   ↻ Zurücksetzen
+                                 </Button>
+                               )}
+                               <Button
+                                 size="sm"
+                                 variant={f.is_blocked ? "outline" : "outline"}
+                                 className={f.is_blocked 
+                                   ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700" 
+                                   : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700"}
+                                 onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
+                               >
+                                 {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
+                               </Button>
+                             </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Mobile & Tablet Card View - show on all screens except very large */}
+                <div className="xl:hidden space-y-3">
+                  {sortedFahrer.map((f) => (
+                    <Card key={f.id} className="shadow-sm border-gray-200">
+                      <CardContent className="p-4">
+                        <div className="space-y-3">
+                          <div className="flex justify-between items-start gap-3">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-base truncate">{f.vorname} {f.nachname}</h3>
+                              <a href={`tel:${f.telefon}`} className="text-sm text-blue-600 hover:underline">{f.telefon}</a>
+                            </div>
+                            <div className="flex-shrink-0 flex gap-1">
+                              {f.is_blocked && (
+                                <Badge variant="destructive" className="bg-red-600 text-xs">
+                                  🚫
+                                </Badge>
+                              )}
+                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                            </div>
+                          </div>
+                          
+                          {f.is_blocked && f.blocked_reason && (
+                            <div className="text-xs text-red-600 bg-red-50 dark:bg-red-950/20 p-2 rounded">
+                              <strong>Sperrgrund:</strong> {f.blocked_reason}
+                            </div>
+                          )}
+                          
+                          <div className="text-sm space-y-1">
+                            <p className="text-gray-700">
+                              <span className="font-medium">Führerschein:</span> {f.fuehrerscheinklassen?.join(", ") || "-"}
+                            </p>
+                            {f.beschreibung && (
+                              <p className="text-gray-600 bg-gray-50 p-2 rounded text-xs">
+                                <span className="font-medium">Nachricht:</span> {f.beschreibung}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex gap-2 pt-1 flex-wrap">
+                            {f.status === 'pending' && (
+                              <Button
+                                size="sm"
+                                className="bg-green-600 hover:bg-green-700 text-white font-medium flex-1"
+                                onClick={() => handleApproveDriver(f.id)}
+                                disabled={approvingDriver === f.id}
+                              >
+                                {approvingDriver === f.id ? "✓ Läuft..." : "🚀 Genehmigen"}
+                              </Button>
+                            )}
+                            {f.status === 'active' && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
+                                onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
+                              >
+                                ↻ Zurücksetzen
+                              </Button>
+                            )}
+                            <Button
+                              size="sm"
+                              variant={f.is_blocked ? "outline" : "outline"}
+                              className={f.is_blocked 
+                                ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700 flex-1" 
+                                : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 flex-1"}
+                              onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
+                            >
+                              {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </>
             )}
