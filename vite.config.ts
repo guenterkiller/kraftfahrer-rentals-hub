@@ -30,13 +30,15 @@ export default defineConfig(({ mode }) => ({
         skipWaiting: true,
         clientsClaim: true,
 
-        // NUR JS/CSS precachen - Bilder/HTML via runtimeCaching
-        globPatterns: ['**/*.{js,css,woff,woff2}'],
+        // NUR Vendor-Chunks precachen - Page-Chunks via NetworkFirst
+        // Verhindert 404-Fehler bei Deployments mit neuen Hashes
+        globPatterns: ['**/*-vendor*.js', '**/*.css', '**/*.{woff,woff2}'],
         globIgnores: [
           '**/lovable-uploads/**',
           '**/hero/**',
           '**/*.map',
-          '**/manifest.json'
+          '**/manifest.json',
+          '**/index-*.js'
         ],
 
         // SPA-Fallback für Offline-Navigation
@@ -44,6 +46,19 @@ export default defineConfig(({ mode }) => ({
         navigateFallbackDenylist: [/^\/api/, /\.[a-z]+$/i],
 
         runtimeCaching: [
+          {
+            // Page-Chunks: NetworkFirst für immer aktuelle Versionen
+            urlPattern: /\/assets\/.*\.js$/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'js-chunks-cache',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 Tage
+              },
+              networkTimeoutSeconds: 3
+            }
+          },
           {
             // Bilder: CacheFirst mit langer Expiration
             urlPattern: /\.(?:png|jpg|jpeg|webp|avif|ico|svg)$/i,
