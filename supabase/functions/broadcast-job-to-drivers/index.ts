@@ -7,7 +7,7 @@ import { JobNotificationEmail } from "./_templates/job-notification.tsx";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-internal-fn",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -49,20 +49,11 @@ serve(async (req) => {
     const { jobRequestId, jobId } = body;
     const actualJobId = jobRequestId || jobId; // Support both parameter names
 
-    // Authentication: Allow either internal secret OR admin JWT
-    const internalSecret = req.headers.get("x-internal-fn");
-    const expectedSecret = Deno.env.get("INTERNAL_FN_SECRET");
-    const authHeader = req.headers.get("Authorization");
-    
-    const isInternalAuth = internalSecret && internalSecret === expectedSecret;
-    const hasJWT = authHeader && authHeader.startsWith("Bearer ");
-    
-    if (!isInternalAuth && !hasJWT) {
-      console.error("Unauthorized: No valid authentication provided");
-      return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+    // Authentication: Only allow service role key
+    const authHeader = req.headers.get("authorization");
+    if (authHeader !== `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`) {
+      console.error("Unauthorized: Invalid service role key");
+      return new Response("Unauthorized", { status: 401, headers: corsHeaders });
     }
 
     if (!actualJobId) {
