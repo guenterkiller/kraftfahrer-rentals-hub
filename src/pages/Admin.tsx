@@ -919,12 +919,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const handleSendJobToAllDrivers = async (jobId: string) => {
-    console.log('📧 Sending job to all drivers:', jobId);
+    console.log('📧 Sending job to all drivers via admin-approve-job:', jobId);
     setSendingJobToAll(jobId);
     
     try {
-      const { data, error } = await supabase.functions.invoke('broadcast-job-to-drivers', {
-        body: { jobRequestId: jobId }
+      // Use admin-approve-job which has proper service role authentication
+      const { data, error } = await supabase.functions.invoke('admin-approve-job', {
+        body: { jobId, action: 'approve' }
       });
 
       if (error) {
@@ -941,8 +942,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       
       toast({
         title: "Job erfolgreich versendet",
-        description: `Job wurde an ${data.sentToCount || 0} aktive Fahrer gesendet.`,
+        description: data?.broadcast?.sentToCount 
+          ? `Job wurde an ${data.broadcast.sentToCount} aktive Fahrer gesendet.`
+          : "Job wurde an alle aktiven Fahrer gesendet.",
       });
+
+      // Refresh jobs list
+      await loadJobRequests();
 
     } catch (error) {
       console.error('❌ Unexpected error in handleSendJobToAllDrivers:', error);

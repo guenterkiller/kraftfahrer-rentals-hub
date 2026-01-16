@@ -169,7 +169,7 @@ serve(async (req) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-internal-fn": Deno.env.get("INTERNAL_FN_SECRET")!,
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
         },
         body: JSON.stringify({
           jobRequestId: jobId,
