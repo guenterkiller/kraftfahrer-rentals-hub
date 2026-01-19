@@ -48,13 +48,30 @@ serve(async (req) => {
     const body = await req.json();
     const { jobRequestId, jobId } = body;
     const actualJobId = jobRequestId || jobId; // Support both parameter names
-
     // Authentication: Only allow service role key
     const authHeader = req.headers.get("authorization");
-    if (authHeader !== `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`) {
-      console.error("Unauthorized: Invalid service role key");
-      return new Response("Unauthorized", { status: 401, headers: corsHeaders });
+    const expectedKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    // Check if service role key is set
+    if (!expectedKey) {
+      console.error("SUPABASE_SERVICE_ROLE_KEY is not set in environment");
+      return new Response(JSON.stringify({ error: "Server configuration error" }), { 
+        status: 500, 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      });
     }
+    
+    // Verify authorization - compare header with expected key
+    if (!authHeader || authHeader !== `Bearer ${expectedKey}`) {
+      console.error("Unauthorized: Invalid or missing service role key");
+      console.error(`Auth header present: ${!!authHeader}, Auth header prefix: ${authHeader?.substring(0, 15)}...`);
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+        status: 401, 
+        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+      });
+    }
+    
+    console.log("✅ Service role authentication successful");
 
     if (!actualJobId) {
       return new Response(
