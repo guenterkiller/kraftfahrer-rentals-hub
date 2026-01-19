@@ -5,84 +5,72 @@ Mobile PageSpeed/Lighthouse verbessern (insb. LCP/Speed Index), ohne Design/Cont
 
 ---
 
-## A) VORHER-MESSUNG (LIVE bei IONOS - fahrerexpress.de)
+## A) VORHER-MESSUNG (LIVE bei IONOS - fahrerexpress.de) ✅ DOKUMENTIERT
 
-**⚠️ WICHTIG: Messung muss VOR dem Deployment auf der LIVE-Seite erfolgen!**
+**Lighthouse MOBILE auf https://fahrerexpress.de/ – Chrome Inkognito (19.01.2026, 20:04 MEZ)**
 
-### Durchführung (Chrome Inkognito):
-1. Öffne https://fahrerexpress.de/ in Chrome Inkognito-Fenster
-2. DevTools öffnen (F12) → Lighthouse Tab
-3. Einstellungen: Mobile, Performance, Standard-Throttling
-4. Messung starten und Ergebnisse dokumentieren:
+| Metrik | Wert |
+|--------|------|
+| **Performance Score** | **93** |
+| FCP | 0,4 s |
+| LCP | **1,7 s** |
+| TBT | 0 ms |
+| CLS | 0 |
+| Speed Index | 1,0 s |
+| LCP-Element | `/hero/hero-mobile.webp` |
+| Größtes Asset | `hero-mobile.webp` – **1.140,9 KiB** |
 
-```
-Baseline Messung (VORHER):
-==========================
-Datum/Uhrzeit: ________________
-
-Performance Score: ____
-FCP: ____ ms
-LCP: ____ ms
-TBT: ____ ms
-CLS: ____
-Speed Index: ____ ms
-
-LCP-Element: __________________
-Top 3 größte Assets:
-1. _________________ (_____ KB)
-2. _________________ (_____ KB)
-3. _________________ (_____ KB)
-
-Service Worker aktiv: ☐ Ja  ☐ Nein
-```
+### Lighthouse-Diagnose:
+- **hero-mobile.webp: 1.140 KB** → Einsparung von **1.012 KB** empfohlen
+- Bild ist 864x1125 aber nur 760x1041 angezeigt
+- Höhere Komprimierung könnte ~982,7 KB sparen
+- Responsive Sizing könnte weitere ~211,7 KB sparen
 
 ---
 
 ## B) DURCHGEFÜHRTE OPTIMIERUNGEN
 
-### 1. Bagger-Icon PNG → SVG (KRITISCH für LCP)
+### 1. Hero-Mobile Bild neu komprimiert (KRITISCH für LCP)
 
 **Problem:** 
-- `dist/assets/bagger-icon-*.png` war ~995 KB
-- Wurde nur als 20×20px Icon verwendet (massiv überdimensioniert)
-- Icon wurde im sichtbaren Bereich der /preise-ablauf Seite geladen
+- `hero-mobile.webp` war **1.140 KB** – das LCP-Element
+- Bild wurde als 760x1041 angezeigt, war aber 864x1125
+- Hauptverantwortlich für LCP-Verzögerung
 
 **Lösung:**
-- Ersetzt durch SVG (~1 KB, 99.9% Reduktion)
-- Datei: `src/assets/bagger-icon.svg`
-- Import in `src/pages/PreiseUndAblauf.tsx` aktualisiert
+- Hero-Bild mit höherer Kompression neu generiert
+- Aspect Ratio 3:4 beibehalten für mobile Darstellung
+- Datei: `public/hero/hero-mobile.webp` (ersetzt)
 
 **Vorher/Nachher:**
 | Asset | Vorher | Nachher | Reduktion |
 |-------|--------|---------|-----------|
-| bagger-icon | ~995 KB (PNG) | ~1 KB (SVG) | **99.9%** |
+| hero-mobile.webp | 1.140 KB | ~150-200 KB (geschätzt) | **~85%** |
 
-### 2. Unbenutzte Assets entfernt
+### 2. Bagger-Icon PNG → SVG (bereits umgesetzt)
+
+**Problem:** 
+- `dist/assets/bagger-icon-*.png` war ~995 KB
+- Wurde nur als 20×20px Icon verwendet (massiv überdimensioniert)
+
+**Lösung:**
+- Ersetzt durch SVG (~1 KB, 99.9% Reduktion)
+- Datei: `src/assets/bagger-icon.svg`
+
+### 3. Unbenutzte Assets entfernt
 
 Gelöschte Dateien:
 - `src/assets/bagger-icon.png` (995 KB)
 - `src/assets/bagger-icon-new.png` (unbenutzt)
 - `src/assets/excavator-icon.png` (unbenutzt)
 
-**Gesamtersparnis:** ~2 MB im Source-Bundle
+### 4. Admin-Chunk (bereits optimiert) ✅
 
-### 3. Admin-Chunk (bereits optimiert)
+Admin-Seiten sind bereits korrekt via `React.lazy()` code-split.
 
-Admin-Seiten sind bereits korrekt via `React.lazy()` code-split:
-- `const Admin = lazy(() => import("./pages/Admin"))`
-- `const AdminLogin = lazy(() => import("./pages/AdminLogin"))`
+### 5. PWA/Service Worker (bereits optimiert) ✅
 
-**Status:** ✅ Keine Änderung nötig - Admin-Chunk wird NICHT im Initial Load geladen.
-
-### 4. PWA/Service Worker (bereits optimiert)
-
-Konfiguration in `vite.config.ts`:
-- `skipWaiting: true` - Neue SW-Version aktiviert sofort
-- `clientsClaim: true` - Übernimmt Clients sofort
-- `cleanupOutdatedCaches: true` - Alte Caches werden entfernt
-- `NetworkFirst` für JS-Chunks - Vermeidet 404 bei neuen Deployments
-
-**Status:** ✅ Keine Änderung nötig.
+Konfiguration in `vite.config.ts` mit skipWaiting, clientsClaim etc.
 
 ---
 
@@ -118,7 +106,7 @@ Datum/Uhrzeit: ________________
 
 Performance Score: ____
 FCP: ____ ms
-LCP: ____ ms
+LCP: ____ ms  (Ziel: < 1,0 s)
 TBT: ____ ms
 CLS: ____
 Speed Index: ____ ms
@@ -132,12 +120,21 @@ LCP-Element: __________________
 
 | Metrik | Vorher | Nachher | Verbesserung |
 |--------|--------|---------|--------------|
-| Performance Score | ____ | ____ | ____ |
-| FCP | ____ ms | ____ ms | ____ ms |
-| LCP | ____ ms | ____ ms | ____ ms |
-| TBT | ____ ms | ____ ms | ____ ms |
-| CLS | ____ | ____ | ____ |
-| Speed Index | ____ ms | ____ ms | ____ ms |
+| Performance Score | 93 | ____ | ____ |
+| FCP | 0,4 s | ____ | ____ |
+| LCP | **1,7 s** | ____ | ____ |
+| TBT | 0 ms | ____ | ____ |
+| CLS | 0 | ____ | ____ |
+| Speed Index | 1,0 s | ____ | ____ |
+
+---
+
+## Erwartete Verbesserung
+
+Mit dem optimierten Hero-Bild (~150-200 KB statt 1.140 KB):
+- **LCP**: von 1,7 s auf ~0,8-1,0 s (geschätzt)
+- **Performance Score**: von 93 auf 95-98 (geschätzt)
+- **Netzwerk-Payload**: ~1 MB weniger auf Mobile
 
 ---
 
@@ -149,6 +146,6 @@ LCP-Element: __________________
 - [ ] Service Worker deregistriert (falls vorhanden)
 - [ ] Site Data gecleart
 - [ ] Lighthouse Mobile-Test durchgeführt
-- [ ] Ergebnisse dokumentiert
+- [ ] Ergebnisse in Tabelle E dokumentiert
 - [ ] SPA-Routing funktioniert (/preise-ablauf, /impressum etc.)
 - [ ] PWA installierbar (Manifest erkannt)
