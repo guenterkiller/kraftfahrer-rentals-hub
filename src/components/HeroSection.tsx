@@ -34,7 +34,7 @@ const HeroSection = () => {
             alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
             className="absolute inset-0 w-full h-full object-cover object-center"
             loading="eager"
-            decoding="sync"
+            decoding="async"
             // @ts-expect-error fetchpriority is a valid HTML attribute
             fetchpriority="high"
             width={768}
