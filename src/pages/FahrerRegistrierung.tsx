@@ -1068,13 +1068,13 @@ const FahrerRegistrierung = () => {
                    <div className="space-y-3 border-t pt-6">
                      <div className="flex items-start space-x-2">
                        <Checkbox id="datenschutz" required />
-                       <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
-                         Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
-                         <Link to="/datenschutz" className="text-primary hover:underline">
-                           Datenschutzerklärung
-                         </Link>{" "}
-                         zu. *
-                       </Label>
+                        <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
+                          Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
+                          <Link to="/datenschutz" className="text-primary underline decoration-primary/50 hover:decoration-primary">
+                            Datenschutzerklärung
+                          </Link>{" "}
+                          zu. *
+                        </Label>
                      </div>
                      
                       
@@ -1087,7 +1087,7 @@ const FahrerRegistrierung = () => {
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
                           Ich bin selbstständig tätig und akzeptiere die Vermittlungsbedingungen, die mir nach Registrierung bereitgestellt werden. *{" "}
-                          <Link to="/vermittlung" className="text-primary hover:underline">
+                          <Link to="/vermittlung" className="text-primary underline decoration-primary/50 hover:decoration-primary">
                             Mehr Informationen
                           </Link>
                         </Label>

@@ -13,22 +13,22 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Fahrer buchen</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/lkw-fahrer-buchen" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/lkw-fahrer-buchen" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   LKW CE Fahrer buchen
                 </Link>
               </li>
               <li>
-                <Link to="/baumaschinenfuehrer-buchen" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/baumaschinenfuehrer-buchen" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Baumaschinenführer buchen
                 </Link>
               </li>
               <li>
-                <Link to="/fluessigboden-service" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/fluessigboden-service" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Flüssigboden-Service (Mischmeister)
                 </Link>
               </li>
               <li>
-                <Link to="/preise-und-ablauf" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/preise-und-ablauf" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Preise & Ablauf
                 </Link>
               </li>
@@ -40,22 +40,22 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Informationen</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/vermittlung" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/vermittlung" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Vermittlung
                 </Link>
               </li>
               <li>
-                <Link to="/vermittlungsbedingungen" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/vermittlungsbedingungen" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Vermittlungsbedingungen
                 </Link>
               </li>
               <li>
-                <Link to="/wissenswertes" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/wissenswertes" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Wissenswertes
                 </Link>
               </li>
               <li>
-                <Link to="/projekte" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/projekte" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Referenz-Projekte
                 </Link>
               </li>
@@ -67,12 +67,12 @@ const Footer = () => {
             <h3 className="font-bold text-lg mb-4">Für Fahrer</h3>
             <ul className="space-y-2 text-sm mb-4">
               <li>
-                <Link to="/fahrer-registrierung" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/fahrer-registrierung" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Partner werden
                 </Link>
               </li>
               <li>
-                <Link to="/fahrer-vermittlungsbedingungen" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/fahrer-vermittlungsbedingungen" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   Vermittlungsbedingungen
                 </Link>
               </li>
@@ -89,13 +89,13 @@ const Footer = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <Phone className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
-                <a href="tel:+4915771442285" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="tel:+4915771442285" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
                   01577 1442285
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
-                <a href="mailto:info@kraftfahrer-mieten.com" className="text-muted-foreground hover:text-primary transition-colors break-all">
+                <a href="mailto:info@kraftfahrer-mieten.com" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors break-all">
                   info@kraftfahrer-mieten.com
                 </a>
               </li>
@@ -123,10 +123,10 @@ const Footer = () => {
               <Lock className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Admin</span>
             </Link>
-            <Link to="/impressum" className="hover:text-primary transition-colors">
+            <Link to="/impressum" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
               Impressum
             </Link>
-            <Link to="/datenschutz" className="hover:text-primary transition-colors">
+            <Link to="/datenschutz" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
               Datenschutz
             </Link>
           </div>

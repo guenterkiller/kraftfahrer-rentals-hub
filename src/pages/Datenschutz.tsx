@@ -16,7 +16,7 @@ const Datenschutz = () => {
         <div className="mb-8">
           <Link 
             to="/" 
-            className="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors mb-4"
+            className="inline-flex items-center gap-2 text-primary underline decoration-primary/50 hover:decoration-primary transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
             Zurück zur Startseite
@@ -31,7 +31,7 @@ const Datenschutz = () => {
               <p className="font-semibold">Fahrerexpress-Agentur – Günter Killer</p>
               <p>Walther-von-Cronberg-Platz 12<br />
               60594 Frankfurt am Main</p>
-              <p>E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary hover:underline">info@kraftfahrer-mieten.com</a></p>
+              <p>E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary underline decoration-primary/50 hover:decoration-primary">info@kraftfahrer-mieten.com</a></p>
               <p>Telefon: 01577 1442285</p>
             </div>
           </section>
@@ -125,7 +125,7 @@ const Datenschutz = () => {
             </ul>
             <p className="mt-4 text-muted-foreground">
               Bitte richten Sie Ihr Anliegen an{" "}
-              <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary hover:underline">
+              <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary underline decoration-primary/50 hover:decoration-primary">
                 info@kraftfahrer-mieten.com
               </a>.
             </p>
@@ -145,7 +145,7 @@ const Datenschutz = () => {
                   href="http://www.datenschutz.hessen.de" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-primary hover:underline"
+                  className="text-primary underline decoration-primary/50 hover:decoration-primary"
                 >
                   www.datenschutz.hessen.de
                 </a>

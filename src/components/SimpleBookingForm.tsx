@@ -300,7 +300,7 @@ const SimpleBookingForm = () => {
               <div className="text-center mb-6">
                 <Link 
                   to="/preise-und-ablauf" 
-                  className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                  className="inline-flex items-center gap-1 text-sm font-medium text-primary underline decoration-primary/50 hover:decoration-primary"
                 >
                   Details: Preise & Konditionen →
                 </Link>
