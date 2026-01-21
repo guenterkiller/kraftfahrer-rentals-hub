@@ -126,17 +126,17 @@ const Vermittlungsbedingungen = () => {
               {/* Kontakt */}
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">Kontakt</h2>
-                <div className="flex flex-col sm:flex-row gap-4 text-muted-foreground">
+                <div className="flex flex-col sm:flex-row gap-4 text-foreground">
                   <a 
                     href="mailto:info@kraftfahrer-mieten.com" 
-                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                    className="flex items-center gap-2 underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors"
                   >
                     <Mail className="h-5 w-5" />
                     info@kraftfahrer-mieten.com
                   </a>
                   <a 
                     href="tel:+4915771442285" 
-                    className="flex items-center gap-2 hover:text-primary transition-colors"
+                    className="flex items-center gap-2 underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors"
                   >
                     <Phone className="h-5 w-5" />
                     01577 1442285

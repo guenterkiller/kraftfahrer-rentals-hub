@@ -135,7 +135,7 @@ const Unsubscribe = () => {
             </p>
             <p className="text-sm text-muted-foreground">
               Bei Problemen kontaktieren Sie uns unter{" "}
-              <a href="mailto:info@fahrerexpress.de" className="text-primary hover:underline">
+              <a href="mailto:info@fahrerexpress.de" className="text-primary underline decoration-primary/50 hover:decoration-primary">
                 info@fahrerexpress.de
               </a>
             </p>
@@ -146,7 +146,7 @@ const Unsubscribe = () => {
           <div className="mt-8 pt-6 border-t border-border">
             <Link 
               to="/" 
-              className="text-primary hover:underline text-sm"
+              className="text-primary underline decoration-primary/50 hover:decoration-primary text-sm"
             >
               ← Zurück zur Startseite
             </Link>

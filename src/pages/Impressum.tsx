@@ -91,7 +91,7 @@ const Impressum = () => {
                   Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                  <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer" className="text-primary underline decoration-primary/50 hover:decoration-primary">
                     https://ec.europa.eu/consumers/odr
                   </a>
                 </p>

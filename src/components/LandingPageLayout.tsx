@@ -156,7 +156,7 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
                   </CardHeader>
                   <CardContent>
                     <Button asChild variant="outline" className="w-full">
-                      <Link to={service.path}>Mehr erfahren</Link>
+                      <Link to={service.path} className="no-underline">Mehr erfahren</Link>
                     </Button>
                   </CardContent>
                 </Card>

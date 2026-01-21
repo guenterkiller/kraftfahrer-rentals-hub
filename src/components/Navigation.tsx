@@ -186,7 +186,7 @@ const Navigation = () => {
                 <Link 
                   to="/lkw-fahrer-buchen"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  className="block px-4 py-2.5 text-sm text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary hover:bg-muted/50 rounded-md transition-colors"
                   role="menuitem"
                 >
                   LKW CE Fahrer
@@ -194,7 +194,7 @@ const Navigation = () => {
                 <Link 
                   to="/baumaschinenfuehrer-buchen"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  className="block px-4 py-2.5 text-sm text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary hover:bg-muted/50 rounded-md transition-colors"
                   role="menuitem"
                 >
                   Baumaschinenführer
@@ -202,7 +202,7 @@ const Navigation = () => {
                 <Link 
                   to="/fluessigboden-service"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  className="block px-4 py-2.5 text-sm text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary hover:bg-muted/50 rounded-md transition-colors"
                   role="menuitem"
                 >
                   Flüssigboden-Service
@@ -210,7 +210,7 @@ const Navigation = () => {
                 <Link 
                   to="/preise-und-ablauf"
                   onClick={() => setIsMenuOpen(false)}
-                  className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-md transition-colors"
+                  className="block px-4 py-2.5 text-sm text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary hover:bg-muted/50 rounded-md transition-colors"
                   role="menuitem"
                 >
                   Preise & Ablauf

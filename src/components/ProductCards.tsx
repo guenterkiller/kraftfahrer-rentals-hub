@@ -222,7 +222,7 @@ const ProductCards = () => {
         <div className="text-center mt-8 mb-8">
           <Link 
             to="/fluessigboden-service" 
-            className="text-primary hover:text-primary/80 transition-colors inline-flex items-center gap-2"
+            className="text-primary underline decoration-primary/50 hover:decoration-primary transition-colors inline-flex items-center gap-2"
           >
             Mischmeister für Flüssigboden – bundesweit buchbar →
           </Link>
