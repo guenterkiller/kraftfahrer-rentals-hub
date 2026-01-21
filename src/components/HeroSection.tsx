@@ -16,36 +16,25 @@ const HeroSection = () => {
       {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
         <picture>
-          {/* AVIF Desktop (beste Kompression) */}
-          <source
-            type="image/avif"
-            media="(min-width: 768px)"
-            srcSet="/hero/hero-desktop.avif"
-          />
-          {/* AVIF Mobile */}
-          <source
-            type="image/avif"
-            media="(max-width: 767px)"
-            srcSet="/hero/hero-mobile.avif"
-          />
-          {/* WebP Desktop Fallback */}
+          {/* WebP Desktop - Primär */}
           <source
             type="image/webp"
             media="(min-width: 768px)"
             srcSet="/hero/hero-desktop.webp"
           />
-          {/* WebP Mobile Fallback */}
+          {/* WebP Mobile - Primär */}
           <source
             type="image/webp"
             media="(max-width: 767px)"
             srcSet="/hero/hero-mobile.webp"
           />
-          {/* Fallback img */}
+          {/* Fallback img mit expliziten Dimensionen für CLS */}
           <img
             src="/hero/hero-mobile.webp"
             alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
-            className="w-full h-full object-cover object-center"
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+            width={768}
+            height={1024}
             loading="eager"
             decoding="sync"
             // @ts-expect-error fetchpriority is a valid HTML attribute
