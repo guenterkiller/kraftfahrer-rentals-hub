@@ -95,9 +95,18 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-2">
                 <Mail className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
-                <a href="mailto:info@kraftfahrer-mieten.com" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors break-all">
-                  info@kraftfahrer-mieten.com
-                </a>
+                <div className="flex flex-col">
+                  <Link 
+                    to="/#anfrage" 
+                    className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors break-all"
+                    title="Bitte nutzen Sie das Formular – nur so erreichen Anfragen verfügbare Fahrer automatisch."
+                  >
+                    info@kraftfahrer-mieten.com
+                  </Link>
+                  <span className="text-xs text-muted-foreground mt-1">
+                    Nur Anfragen über das Formular werden automatisch an verfügbare Fahrer weitergeleitet.
+                  </span>
+                </div>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
