@@ -97,7 +97,16 @@ const Footer = () => {
                 <Mail className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" aria-hidden="true" />
                 <div className="flex flex-col">
                   <Link 
-                    to="/#anfrage" 
+                    to="/"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const element = document.querySelector('#fahreranfrage');
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      } else {
+                        window.location.href = '/#fahreranfrage';
+                      }
+                    }}
                     className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors break-all"
                     title="Bitte nutzen Sie das Formular – nur so erreichen Anfragen verfügbare Fahrer automatisch."
                   >
