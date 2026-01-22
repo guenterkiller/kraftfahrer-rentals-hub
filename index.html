@@ -8,14 +8,38 @@
     
     <!-- Performance & Core Web Vitals - Resource Hints -->
     <!-- Google Fonts nicht verwendet - System-Fonts für schnelleres Rendering -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <!-- GTM preconnect entfernt - wird verzögert geladen -->
     
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PVHZRCM');</script>
+    <!-- Google Tag Manager - Verzögert für bessere TBT -->
+    <!-- Lädt nach requestIdleCallback ODER erster User-Interaktion -->
+    <script>
+    (function() {
+      var gtmLoaded = false;
+      function loadGTM() {
+        if (gtmLoaded) return;
+        gtmLoaded = true;
+        var w = window, d = document, s = 'script', l = 'dataLayer', i = 'GTM-PVHZRCM';
+        w[l] = w[l] || [];
+        w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      }
+      // Lade nach erster User-Interaktion
+      ['scroll', 'click', 'touchstart', 'keydown'].forEach(function(evt) {
+        document.addEventListener(evt, loadGTM, { once: true, passive: true });
+      });
+      // Oder nach requestIdleCallback / 3s Fallback
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGTM, { timeout: 3000 });
+      } else {
+        setTimeout(loadGTM, 3000);
+      }
+    })();
+    </script>
     <!-- End Google Tag Manager -->
     
     
