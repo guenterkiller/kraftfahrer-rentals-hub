@@ -1,5 +1,4 @@
-import { Suspense, lazy, ComponentType, ReactNode } from 'react';
-import { useLazySection } from '@/hooks/useLazySection';
+import { Suspense, lazy, ComponentType, useRef, useState, useEffect } from 'react';
 
 interface LazySectionProps {
   /** Lazy-loaded component factory */
@@ -30,10 +29,10 @@ const SectionPlaceholder = ({ minHeight = '400px' }: { minHeight?: string }) => 
 );
 
 /**
- * LazySection - Lädt Komponenten erst wenn sie im/nahe Viewport sind
+ * LazySection - Lädt Komponenten mit IntersectionObserver oder Fallback-Timer
  * 
- * Verwendet IntersectionObserver mit rootMargin: 200px für Preloading
- * bevor die Section sichtbar wird. Zeigt stabilen Placeholder für CLS = 0.
+ * FIX: Komponente wird sofort nach kurzer Verzögerung geladen,
+ * IntersectionObserver beschleunigt das Laden wenn sichtbar
  */
 export function LazySection({ 
   component, 
@@ -41,33 +40,62 @@ export function LazySection({
   className = '',
   componentProps = {}
 }: LazySectionProps) {
-  const [ref, isVisible] = useLazySection('200px');
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  
+  // Memoize lazy component to prevent recreation on each render
+  const LazyComponentRef = useRef<ComponentType<any> | null>(null);
+  
+  if (!LazyComponentRef.current) {
+    LazyComponentRef.current = lazy(component);
+  }
+  
+  const LazyComponent = LazyComponentRef.current;
+
+  useEffect(() => {
+    const element = ref.current;
+    
+    // Sofort laden nach 500ms als Fallback
+    const fallbackTimer = setTimeout(() => {
+      setShouldLoad(true);
+    }, 500);
+
+    if (!element) return () => clearTimeout(fallbackTimer);
+
+    // IntersectionObserver für schnelleres Laden wenn sichtbar
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          clearTimeout(fallbackTimer);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '300px',
+        threshold: 0
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+      observer.disconnect();
+    };
+  }, []);
 
   return (
     <div ref={ref} className={className}>
-      {isVisible ? (
+      {shouldLoad ? (
         <Suspense fallback={<SectionPlaceholder minHeight={minHeight} />}>
-          <LazyComponentWrapper component={component} props={componentProps} />
+          <LazyComponent {...componentProps} />
         </Suspense>
       ) : (
         <SectionPlaceholder minHeight={minHeight} />
       )}
     </div>
   );
-}
-
-/**
- * Wrapper um lazy() aufzurufen wenn Component geladen werden soll
- */
-function LazyComponentWrapper({ 
-  component, 
-  props 
-}: { 
-  component: () => Promise<{ default: ComponentType<any> }>;
-  props: Record<string, any>;
-}) {
-  const LazyComponent = lazy(component);
-  return <LazyComponent {...props} />;
 }
 
 export default LazySection;

@@ -13,11 +13,17 @@ export function useLazySection(rootMargin = '200px'): [RefObject<HTMLDivElement>
     const element = ref.current;
     if (!element) return;
 
+    // Fallback: Nach 2 Sekunden trotzdem laden (für Preview/Edge-Cases)
+    const fallbackTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 2000);
+
     // IntersectionObserver für Viewport-Tracking
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
+          clearTimeout(fallbackTimer);
           // Observer entfernen nach erstem Laden
           observer.disconnect();
         }
@@ -30,7 +36,10 @@ export function useLazySection(rootMargin = '200px'): [RefObject<HTMLDivElement>
 
     observer.observe(element);
 
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(fallbackTimer);
+      observer.disconnect();
+    };
   }, [rootMargin]);
 
   return [ref, isVisible];
