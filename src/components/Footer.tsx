@@ -100,11 +100,11 @@ const Footer = () => {
                     to="/"
                     onClick={(e) => {
                       e.preventDefault();
-                      const element = document.querySelector('#fahreranfrage');
+                      const element = document.querySelector('#booking-form');
                       if (element) {
                         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
                       } else {
-                        window.location.href = '/#fahreranfrage';
+                        window.location.href = '/#booking-form';
                       }
                     }}
                     className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors break-all"
