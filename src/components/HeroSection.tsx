@@ -18,7 +18,7 @@ const HeroSection = () => {
         {/* Einziges Hero-Bild - identisch zu IONOS */}
         <img
           src="/uploads/lkw-autobahn-professionell.webp"
-          alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
+          alt="Professioneller LKW-Transport auf deutscher Autobahn – LKW Fahrer mieten und Kraftfahrer buchen bundesweit"
           className="absolute inset-0 w-full h-full object-cover object-center"
           width={1920}
           height={1080}
