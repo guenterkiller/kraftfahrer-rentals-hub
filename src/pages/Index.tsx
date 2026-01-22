@@ -3,12 +3,24 @@ import HeroSection from "@/components/HeroSection";
 import { useSEO } from "@/hooks/useSEO";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LazySection } from "@/components/LazySection";
+import { Suspense, lazy } from "react";
 
 // ============================================
-// MOBILE PERFORMANCE: IntersectionObserver-basiertes Lazy Loading
-// Komponenten werden erst geladen wenn sie nahe am Viewport sind
+// DIRECT IMPORTS für zuverlässiges Rendering
+// Lazy-loading nur für Footer (below-fold)
 // ============================================
+import ProductCards from "@/components/ProductCards";
+import ProcessSteps from "@/components/ProcessSteps";
+import WhyFahrerexpress from "@/components/WhyFahrerexpress";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import FahreranfrageSection from "@/components/FahreranfrageSection";
+import LegalSecuritySection from "@/components/LegalSecuritySection";
+import BookingPriorityBanner from "@/components/BookingPriorityBanner";
+import EUDriverRecruitment from "@/components/EUDriverRecruitment";
+import ContactSection from "@/components/ContactSection";
+
+// Footer lazy-loaded (ganz unten)
+const Footer = lazy(() => import("@/components/Footer"));
 
 const Index = () => {
   useSEO({
@@ -158,43 +170,16 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Below-the-fold: IntersectionObserver-basiertes Lazy Loading */}
-        <LazySection 
-          component={() => import("@/components/ProductCards")} 
-          minHeight="500px"
-        />
-        <LazySection 
-          component={() => import("@/components/ProcessSteps")} 
-          minHeight="400px"
-        />
-        <LazySection 
-          component={() => import("@/components/WhyFahrerexpress")} 
-          minHeight="350px"
-        />
-        <LazySection 
-          component={() => import("@/components/TestimonialsSection")} 
-          minHeight="450px"
-        />
-        <LazySection 
-          component={() => import("@/components/FahreranfrageSection")} 
-          minHeight="600px"
-        />
-        <LazySection 
-          component={() => import("@/components/LegalSecuritySection")} 
-          minHeight="300px"
-        />
-        <LazySection 
-          component={() => import("@/components/BookingPriorityBanner")} 
-          minHeight="200px"
-        />
-        <LazySection 
-          component={() => import("@/components/EUDriverRecruitment")} 
-          minHeight="350px"
-        />
-        <LazySection 
-          component={() => import("@/components/ContactSection")} 
-          minHeight="300px"
-        />
+        {/* Direkt gerenderte Sektionen für zuverlässiges Rendering */}
+        <ProductCards />
+        <ProcessSteps />
+        <WhyFahrerexpress />
+        <TestimonialsSection />
+        <FahreranfrageSection />
+        <LegalSecuritySection />
+        <BookingPriorityBanner />
+        <EUDriverRecruitment />
+        <ContactSection />
         
         {/* SEO-Block für Flüssigboden-Service */}
         <section className="py-16 bg-background">
@@ -289,10 +274,10 @@ const Index = () => {
         </section>
       </main>
       
-      <LazySection 
-        component={() => import("@/components/Footer")} 
-        minHeight="200px"
-      />
+      {/* Footer lazy-loaded */}
+      <Suspense fallback={<div className="py-8 bg-muted" style={{ minHeight: '200px' }} />}>
+        <Footer />
+      </Suspense>
     </div>
   );
 };
