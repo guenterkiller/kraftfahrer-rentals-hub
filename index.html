@@ -15,9 +15,25 @@
     <script>
     (function() {
       var gtmLoaded = false;
-      function loadGTM() {
+      var perfDebug = new URLSearchParams(window.location.search).get('perfdebug') === '1';
+      var triggerType = '';
+      
+      function loadGTM(trigger) {
         if (gtmLoaded) return;
         gtmLoaded = true;
+        triggerType = trigger || 'unknown';
+        
+        // Debug-Log bei perfdebug=1
+        if (perfDebug) {
+          var ts = performance.now();
+          console.log('%c[GTM TRIGGER EVENT]', 'color: #ff00ff; font-weight: bold;');
+          console.log('[GTM] Geladen nach ' + Math.round(ts) + 'ms (' + (ts/1000).toFixed(2) + 's)');
+          console.log('[GTM] Trigger: ' + triggerType);
+          if (window.__perfDebugGTMLoaded) {
+            window.__perfDebugGTMLoaded(triggerType, ts);
+          }
+        }
+        
         var w = window, d = document, s = 'script', l = 'dataLayer', i = 'GTM-PVHZRCM';
         w[l] = w[l] || [];
         w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
@@ -28,15 +44,16 @@
         j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
       }
+      
       // Lade nach erster User-Interaktion
       ['scroll', 'click', 'touchstart', 'keydown'].forEach(function(evt) {
-        document.addEventListener(evt, loadGTM, { once: true, passive: true });
+        document.addEventListener(evt, function() { loadGTM('interaction:' + evt); }, { once: true, passive: true });
       });
       // Oder nach requestIdleCallback / 3s Fallback
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadGTM, { timeout: 3000 });
+        requestIdleCallback(function() { loadGTM('idle-callback'); }, { timeout: 3000 });
       } else {
-        setTimeout(loadGTM, 3000);
+        setTimeout(function() { loadGTM('timeout-3s'); }, 3000);
       }
     })();
     </script>
