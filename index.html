@@ -20,9 +20,8 @@
     
     
     <!-- Preload critical resources for better LCP (Largest Contentful Paint) -->
-    <!-- Mobile: WebP, Desktop: WebP mit media-Attribut -->
-    <link rel="preload" as="image" href="/hero/hero-mobile.webp" type="image/webp" media="(max-width: 767px)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/hero/hero-desktop.webp" type="image/webp" media="(min-width: 768px)" fetchpriority="high" />
+    <!-- Einziges Hero-Bild - identisch zu IONOS (~79 KB WebP) -->
+    <link rel="preload" as="image" href="/uploads/lkw-autobahn-professionell.webp" type="image/webp" fetchpriority="high" />
     
     <!-- Critical CSS Inline (~2KB minified) - nur Above-the-fold -->
     <style>
