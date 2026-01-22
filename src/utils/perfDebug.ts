@@ -12,22 +12,31 @@ const FORBIDDEN_PATTERNS = [
 ];
 
 export function initPerfDebug(): void {
-  // Nur aktivieren wenn ?perfdebug=1
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('perfdebug') !== '1') {
+  // Guard für SSR/Build-Zeit
+  if (typeof window === 'undefined') {
     return;
   }
+  
+  try {
+    // Nur aktivieren wenn ?perfdebug=1
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('perfdebug') !== '1') {
+      return;
+    }
 
-  console.log('%c[PERF DEBUG] Modus aktiviert', 'color: #00ff00; font-weight: bold;');
+    console.log('%c[PERF DEBUG] Modus aktiviert', 'color: #00ff00; font-weight: bold;');
 
-  // Warte auf window.load für vollständige Resource-Liste
-  if (document.readyState === 'complete') {
-    runResourceAnalysis();
-  } else {
-    window.addEventListener('load', () => {
-      // Kurz warten damit alle Resources erfasst sind
-      setTimeout(runResourceAnalysis, 500);
-    });
+    // Warte auf window.load für vollständige Resource-Liste
+    if (document.readyState === 'complete') {
+      runResourceAnalysis();
+    } else {
+      window.addEventListener('load', () => {
+        // Kurz warten damit alle Resources erfasst sind
+        setTimeout(runResourceAnalysis, 500);
+      });
+    }
+  } catch (e) {
+    // Silent fail - Debug ist optional
   }
 }
 
@@ -140,17 +149,26 @@ declare global {
 }
 
 export function setupGTMDebugLogger(): void {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('perfdebug') !== '1') {
+  // Guard für SSR/Build-Zeit
+  if (typeof window === 'undefined') {
     return;
   }
   
-  window.__perfDebugGTMLoaded = (trigger: string, timestamp: number) => {
-    console.log('%c[GTM TRIGGER EVENT]', 'color: #ff00ff; font-weight: bold;');
-    console.table({
-      'Trigger': trigger,
-      'Zeit seit Navigation (ms)': Math.round(timestamp),
-      'Zeit seit Navigation (s)': (timestamp / 1000).toFixed(2),
-    });
-  };
+  try {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('perfdebug') !== '1') {
+      return;
+    }
+    
+    window.__perfDebugGTMLoaded = (trigger: string, timestamp: number) => {
+      console.log('%c[GTM TRIGGER EVENT]', 'color: #ff00ff; font-weight: bold;');
+      console.table({
+        'Trigger': trigger,
+        'Zeit seit Navigation (ms)': Math.round(timestamp),
+        'Zeit seit Navigation (s)': (timestamp / 1000).toFixed(2),
+      });
+    };
+  } catch (e) {
+    // Silent fail - Debug ist optional
+  }
 }
