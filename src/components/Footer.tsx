@@ -102,10 +102,7 @@ const Footer = () => {
                       e.preventDefault();
                       const element = document.querySelector('#booking-form');
                       if (element) {
-                        const headerOffset = 100;
-                        const elementPosition = element.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                       } else {
                         window.location.href = '/#booking-form';
                       }
