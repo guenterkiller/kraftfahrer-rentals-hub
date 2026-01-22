@@ -30,9 +30,9 @@ export default defineConfig(({ mode }) => ({
         skipWaiting: true,
         clientsClaim: true,
 
-        // NUR Vendor-Chunks precachen - Page-Chunks via NetworkFirst
+        // Vendor-Chunks + index.html precachen für domain-neutralen Betrieb
         // Verhindert 404-Fehler bei Deployments mit neuen Hashes
-        globPatterns: ['**/*-vendor*.js', '**/*.css', '**/*.{woff,woff2}'],
+        globPatterns: ['**/*-vendor*.js', '**/*.css', '**/*.{woff,woff2}', 'index.html'],
         globIgnores: [
           '**/lovable-uploads/**',
           '**/hero/**',
@@ -41,8 +41,8 @@ export default defineConfig(({ mode }) => ({
           '**/index-*.js'
         ],
 
-        // SPA-Fallback für Offline-Navigation
-        navigateFallback: '/index.html',
+        // SPA-Fallback RELATIV für Multi-Domain-Betrieb (fahrerexpress.de + kraftfahrer-mieten.com)
+        navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/api/, /\.[a-z]+$/i],
 
         runtimeCaching: [
