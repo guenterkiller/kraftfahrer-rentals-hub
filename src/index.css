@@ -167,6 +167,32 @@ img {
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Accessibility: Focus-Styles für alle interaktiven Elemente */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Accessibility: Links in Content müssen unterstrichen sein (WCAG SC 1.4.1) */
+  /* Ausnahme: Buttons und Navigation-Links mit eigenem Styling */
+  main a:not([class*="button"]):not([role="button"]),
+  article a,
+  .prose a,
+  footer a:not([class*="button"]):not([role="button"]),
+  p a,
+  li a:not([class*="button"]) {
+    @apply underline decoration-primary/50 underline-offset-2 hover:decoration-primary hover:text-primary transition-colors;
+  }
+
+  /* Accessibility: Erhöhter Kontrast für muted-foreground auf hellen Hintergründen */
+  .text-muted-foreground {
+    color: hsl(215.4 25% 25%);
+  }
 }
 
 /* Custom animations for IONOS compatibility */
