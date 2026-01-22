@@ -15,32 +15,18 @@ const HeroSection = () => {
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}
       {/* Mobile: 768px, Desktop: 1920px - responsive srcset für optimale Ladezeiten */}
       <div className="absolute inset-0 z-0">
-        <picture>
-          {/* WebP Desktop - Primär */}
-          <source
-            type="image/webp"
-            media="(min-width: 768px)"
-            srcSet="/hero/hero-desktop.webp"
-          />
-          {/* WebP Mobile - Primär */}
-          <source
-            type="image/webp"
-            media="(max-width: 767px)"
-            srcSet="/hero/hero-mobile.webp"
-          />
-          {/* Fallback img mit expliziten Dimensionen für CLS */}
-          <img
-            src="/hero/hero-mobile.webp"
-            alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
-            className="absolute inset-0 w-full h-full object-cover object-center"
-            width={768}
-            height={1024}
-            loading="eager"
-            decoding="sync"
-            // @ts-expect-error fetchpriority is a valid HTML attribute
-            fetchpriority="high"
-          />
-        </picture>
+        {/* Einziges Hero-Bild - identisch zu IONOS */}
+        <img
+          src="/uploads/lkw-autobahn-professionell.webp"
+          alt="Roter LKW-Sattelzug auf Autobahn bei Sonnenuntergang - LKW-Fahrer und Kraftfahrer bundesweit buchen"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+          width={1920}
+          height={1080}
+          loading="eager"
+          decoding="async"
+          // @ts-expect-error fetchpriority is a valid HTML attribute
+          fetchpriority="high"
+        />
         <div className="absolute inset-0 z-10 bg-gradient-to-br from-black/50 via-black/40 to-primary/30" />
       </div>
       
