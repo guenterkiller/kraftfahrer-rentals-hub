@@ -305,13 +305,8 @@ const SimpleBookingForm = () => {
                 </Link>
               </div>
 
-              {/* Verbindlicher Auftrag Hinweis */}
-              <div className="bg-amber-50 border-2 border-amber-400 rounded-lg p-4 mb-2">
-                <p className="text-sm font-semibold text-amber-900">
-                  ⚠️ Wichtig: Mit Absenden dieses Formulars entsteht ein verbindlicher Auftrag.
-                  Eine telefonische Rückbestätigung ist nicht erforderlich.
-                </p>
-              </div>
+
+
 
               <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahrer-Bestellformular">
                 <div>
@@ -682,19 +677,14 @@ const SimpleBookingForm = () => {
                   />
                 </div>
 
-                {/* Stornierungsregelung */}
+                {/* Stornierungsregelung (statischer Hinweis) */}
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                  <h4 className="font-semibold text-amber-800 mb-2 flex items-center gap-2">
-                    ⚠️ Stornierungsregelung
-                  </h4>
+                  <h4 className="font-semibold text-amber-800 mb-2">Stornierungsregelung</h4>
                   <ul className="text-sm text-amber-900 space-y-1">
-                    <li>• <strong>Storno bis 24 Std. vorher</strong> → kostenlos</li>
-                    <li>• <strong>Storno unter 24 Std.</strong> → 80 % des Tagessatzes</li>
-                    <li>• <strong>Same-Day-Buchungen ausgeschlossen</strong> (Mindestvorlauf 24h werktags)</li>
+                    <li>• Storno bis 24 Std. vorher → kostenlos</li>
+                    <li>• Storno unter 24 Std. → 80 % des Tagessatzes</li>
+                    <li>• Same-Day-Buchungen ausgeschlossen (Mindestvorlauf 24h werktags)</li>
                   </ul>
-                  <p className="text-xs text-amber-800 mt-3 italic">
-                    Das Unterlassen einer telefonischen Rückmeldung oder kurzfristige Absagen heben die Verbindlichkeit der Bestellung nicht auf.
-                  </p>
                 </div>
 
                 {/* Consents */}
@@ -739,14 +729,7 @@ const SimpleBookingForm = () => {
                       Mir ist bekannt, dass bei Rücktritt oder Absage Stornokosten gemäß Stornoregelung anfallen. *
                     </Label>
                   </div>
-                  <p className="text-xs text-red-700 font-medium ml-1">
-                    Stornierungen nach Absenden der Bestellung sind kostenpflichtig, auch wenn der Einsatz noch nicht begonnen hat.
-                  </p>
                 </div>
-
-                <p className="text-xs text-muted-foreground text-center mb-2">
-                  Mit Klick auf „Verbindlich bestellen" geben Sie einen kostenpflichtigen Auftrag ab.
-                </p>
 
                 <Button 
                   type="submit" 
@@ -761,6 +744,10 @@ const SimpleBookingForm = () => {
                     </div>
                   )}
                 </Button>
+
+                <p className="text-xs text-muted-foreground text-center mt-3">
+                  Hinweis: Diese Buchung ist verbindlich. Es gelten die veröffentlichten Storno- und Zahlungsbedingungen.
+                </p>
               </form>
 
               {/* PWA Install-Hinweis nach erfolgreicher Absendung */}
