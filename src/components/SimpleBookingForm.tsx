@@ -308,6 +308,14 @@ const SimpleBookingForm = () => {
                 </Link>
               </div>
 
+              {/* Verbindlicher Auftrag Hinweis */}
+              <div className="bg-amber-50 border-2 border-amber-400 rounded-lg p-4 mb-2">
+                <p className="text-sm font-semibold text-amber-900">
+                  ⚠️ Wichtig: Mit Absenden dieses Formulars entsteht ein verbindlicher Auftrag.
+                  Eine telefonische Rückbestätigung ist nicht erforderlich.
+                </p>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahreranfrage-Formular">
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Ihre Anfrage</h3>
@@ -687,6 +695,9 @@ const SimpleBookingForm = () => {
                     <li>• <strong>Storno unter 24 Std.</strong> → 80 % des Tagessatzes</li>
                     <li>• <strong>Same-Day-Buchungen ausgeschlossen</strong> (Mindestvorlauf 24h werktags)</li>
                   </ul>
+                  <p className="text-xs text-amber-800 mt-3 italic">
+                    Das Unterlassen einer telefonischen Rückmeldung oder kurzfristige Absagen heben die Verbindlichkeit der Bestellung nicht auf.
+                  </p>
                 </div>
 
                 {/* Consents */}
@@ -750,6 +761,9 @@ const SimpleBookingForm = () => {
                       Mir ist bekannt, dass bei Rücktritt oder Absage Stornokosten gemäß Stornoregelung anfallen. *
                     </Label>
                   </div>
+                  <p className="text-xs text-red-700 font-medium ml-1">
+                    Stornierungen nach Absenden der Bestellung sind kostenpflichtig, auch wenn der Einsatz noch nicht begonnen hat.
+                  </p>
                 </div>
 
                 <Button 
