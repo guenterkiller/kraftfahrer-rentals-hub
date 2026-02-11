@@ -106,10 +106,10 @@ const Navigation = () => {
               <Link 
                 to="/#fahreranfrage"
                 onClick={(e) => {
-                  const localForm = document.querySelector('#fahreranfrage');
-                  if (localForm) {
+                  const form = document.querySelector('#booking-form');
+                  if (form) {
                     e.preventDefault();
-                    localForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }
                 }}
                 aria-label="Fahrer buchen - Zum Formular"
@@ -148,10 +148,10 @@ const Navigation = () => {
                   to="/#fahreranfrage"
                   onClick={(e) => {
                     setIsMenuOpen(false);
-                    const localForm = document.querySelector('#fahreranfrage');
-                    if (localForm) {
+                    const form = document.querySelector('#booking-form');
+                    if (form) {
                       e.preventDefault();
-                      localForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
                   role="menuitem"
