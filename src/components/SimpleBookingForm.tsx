@@ -16,9 +16,7 @@ import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [agreedToPrices, setAgreedToPrices] = useState(false);
   const [agreedToData, setAgreedToData] = useState(false);
-  const [agreedToStorno, setAgreedToStorno] = useState(false);
   const [agreedToBinding, setAgreedToBinding] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
@@ -103,7 +101,7 @@ const SimpleBookingForm = () => {
       };
 
       console.log('Sending payload:', payload);
-      console.log('Consent states - prices:', agreedToPrices, 'data:', agreedToData);
+      console.log('Consent states - data:', agreedToData, 'binding:', agreedToBinding);
 
       // Track conversion with category
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer';
@@ -140,9 +138,8 @@ const SimpleBookingForm = () => {
       if (e.currentTarget) {
         e.currentTarget.reset();
       }
-      setAgreedToPrices(false);
       setAgreedToData(false);
-      setAgreedToStorno(false);
+      setAgreedToBinding(false);
       setAgreedToBinding(false);
       setNewsletter(false);
       setAdrRequired(false);
@@ -702,25 +699,6 @@ const SimpleBookingForm = () => {
 
                 {/* Consents */}
                 <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="prices" 
-                      checked={agreedToPrices}
-                      onCheckedChange={(checked) => setAgreedToPrices(checked as boolean)}
-                      required
-                    />
-                    <Label htmlFor="prices">Ich habe die Preise gelesen und verstanden. *</Label>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="storno" 
-                      checked={agreedToStorno}
-                      onCheckedChange={(checked) => setAgreedToStorno(checked as boolean)}
-                      required
-                    />
-                    <Label htmlFor="storno">Ich habe die Stornierungsregelung gelesen und akzeptiere diese. *</Label>
-                  </div>
                   
                   <div className="flex items-center space-x-2">
                     <Checkbox 
@@ -757,7 +735,7 @@ const SimpleBookingForm = () => {
                       className="mt-0.5"
                     />
                     <Label htmlFor="binding" className="text-sm leading-snug">
-                      Ich bestätige, dass diese Anfrage eine verbindliche Bestellung darstellt.
+                      Ich bestätige, dass diese Buchung eine verbindliche Bestellung darstellt.
                       Mir ist bekannt, dass bei Rücktritt oder Absage Stornokosten gemäß Stornoregelung anfallen. *
                     </Label>
                   </div>
@@ -769,7 +747,7 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || !agreedToPrices || !agreedToData || !agreedToStorno || !agreedToBinding || !fahrzeugtyp}
+                  disabled={loading || !agreedToData || !agreedToBinding || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                   {loading ? "Wird gesendet..." : (
