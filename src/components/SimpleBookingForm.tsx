@@ -19,6 +19,7 @@ const SimpleBookingForm = () => {
   const [agreedToPrices, setAgreedToPrices] = useState(false);
   const [agreedToData, setAgreedToData] = useState(false);
   const [agreedToStorno, setAgreedToStorno] = useState(false);
+  const [agreedToBinding, setAgreedToBinding] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
@@ -142,6 +143,7 @@ const SimpleBookingForm = () => {
       setAgreedToPrices(false);
       setAgreedToData(false);
       setAgreedToStorno(false);
+      setAgreedToBinding(false);
       setNewsletter(false);
       setAdrRequired(false);
       setCraneRequired(false);
@@ -190,7 +192,7 @@ const SimpleBookingForm = () => {
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
                 <CardTitle className="text-2xl">
-                  Unverbindliche Fahreranfrage in 2 Minuten
+                   Fahreranfrage – verbindliche Bestellung
                 </CardTitle>
                 <PWAInstallButton />
               </div>
@@ -203,7 +205,7 @@ const SimpleBookingForm = () => {
                 <div className="grid sm:grid-cols-3 gap-3 text-sm">
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Unverbindlich</strong> – keine versteckten Kosten</span>
+                    <span><strong>Verbindlich</strong> – klare Storno- & Zahlungsbedingungen</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
@@ -734,16 +736,26 @@ const SimpleBookingForm = () => {
                       Ich möchte über neue Fahrer und Angebote per E-Mail informiert werden
                     </Label>
                   </div>
-                </div>
 
-                <p className="text-sm text-muted-foreground text-center">
-                  Mit Absenden der Anfrage gelten unsere Stornierungsregelungen.
-                </p>
+                  <div className="flex items-start space-x-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                    <Checkbox 
+                      id="binding" 
+                      checked={agreedToBinding}
+                      onCheckedChange={(checked) => setAgreedToBinding(checked as boolean)}
+                      required
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="binding" className="text-sm leading-snug">
+                      Ich bestätige, dass diese Anfrage eine verbindliche Bestellung darstellt.
+                      Mir ist bekannt, dass bei Rücktritt oder Absage Stornokosten gemäß Stornoregelung anfallen. *
+                    </Label>
+                  </div>
+                </div>
 
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || !agreedToPrices || !agreedToData || !agreedToStorno || !fahrzeugtyp}
+                  disabled={loading || !agreedToPrices || !agreedToData || !agreedToStorno || !agreedToBinding || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                   {loading ? "Wird gesendet..." : (
@@ -753,6 +765,10 @@ const SimpleBookingForm = () => {
                     </div>
                   )}
                 </Button>
+
+                <p className="text-xs text-red-700 font-medium text-center mt-3 bg-red-50 border border-red-200 rounded p-2">
+                  Hinweis: Diese Anfrage ist verbindlich. Nach Absenden gelten die veröffentlichten Storno- und Zahlungsbedingungen.
+                </p>
               </form>
 
               {/* PWA Install-Hinweis nach erfolgreicher Absendung */}

@@ -27,13 +27,12 @@ export const CustomerBookingConfirmation = ({
     </Heading>
 
     <Text {...getTextProps(textStyles.paragraph)}>
-      vielen Dank für Ihre Anfrage über unsere Website!
+      Vielen Dank für Ihre verbindliche Fahrerbestellung. Ihre Anfrage gilt als Auftrag im Sinne unserer Stornoregelungen.
     </Text>
 
     <Section {...getBoxProps(boxStyles.warningBox)}>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        <strong>Wichtiger Hinweis:</strong> Dies ist eine Eingangsbestätigung Ihrer unverbindlichen Anfrage – noch kein Auftrag.
-        Ein verbindlicher Auftrag kommt erst zustande, wenn ein selbstständiger Fahrer den Einsatz annimmt und Sie von uns eine separate Auftragsbestätigung erhalten.
+        <strong>Wichtiger Hinweis:</strong> Ein verbindlicher Einsatz kommt zustande, wenn ein selbstständiger Fahrer den Einsatz annimmt und Sie von uns eine separate Auftragsbestätigung erhalten. Die Stornierungsregelungen gelten ab dem Zeitpunkt dieser Bestellung.
       </Text>
     </Section>
 
