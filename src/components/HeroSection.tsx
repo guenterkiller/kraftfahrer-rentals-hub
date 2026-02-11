@@ -66,7 +66,7 @@ const HeroSection = () => {
             className="text-sm sm:text-base md:text-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-7 bg-primary hover:bg-primary/90 text-primary-foreground hover:text-primary-foreground shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 focus:ring-2 focus:ring-primary/50 focus:outline-none w-full sm:w-auto rounded-xl font-bold [&>a]:text-primary-foreground [&>a:hover]:text-primary-foreground [&>a:visited]:text-primary-foreground" 
             asChild
           >
-            <a 
+            <a className="text-primary-foreground" 
               href="#fahreranfrage"
               onClick={(e) => {
                 e.preventDefault();
