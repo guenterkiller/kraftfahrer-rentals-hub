@@ -27,18 +27,18 @@ export const CustomerBookingConfirmation = ({
     </Heading>
 
     <Text {...getTextProps(textStyles.paragraph)}>
-      Vielen Dank für Ihre verbindliche Fahrerbestellung. Ihre Anfrage gilt als Auftrag im Sinne unserer Stornoregelungen.
+      Vielen Dank für Ihre verbindliche Fahrerbestellung.
+    </Text>
+    <Text {...getTextProps(textStyles.paragraph)}>
+      Mit Absenden des Formulars ist ein kostenpflichtiger Auftrag gemäß unseren Stornierungsregelungen zustande gekommen.
     </Text>
 
     <Section {...getBoxProps(boxStyles.warningBox)}>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-        <strong>Wichtiger Hinweis:</strong> Ein verbindlicher Einsatz kommt zustande, wenn ein selbstständiger Fahrer den Einsatz annimmt und Sie von uns eine separate Auftragsbestätigung erhalten. Die Stornierungsregelungen gelten ab dem Zeitpunkt dieser Bestellung.
+        <strong>Wichtiger Hinweis:</strong> Die Durchführung des Einsatzes erfolgt unter dem Vorbehalt der tatsächlichen Fahrerverfügbarkeit.
       </Text>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-        Bitte beachten Sie: Eine Absage oder Änderung nach Auftragserteilung ist stornopflichtig, unabhängig davon, ob der Einsatz telefonisch abgestimmt wurde.
-      </Text>
-      <Text {...getTextProps({ ...textStyles.muted, margin: '0', fontSize: '12px', fontStyle: 'italic' })}>
-        Das Unterlassen einer telefonischen Rückmeldung oder kurzfristige Absagen heben die Verbindlichkeit der Bestellung nicht auf.
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+        Sollte kein geeigneter Fahrer verfügbar sein, kommt es zu keiner Durchführung und es entstehen Ihnen keine Kosten.
       </Text>
     </Section>
 
@@ -71,17 +71,17 @@ export const CustomerBookingConfirmation = ({
     </Section>
 
     <Section {...getBoxProps(boxStyles.highlightBox)}>
-      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Unverbindliche Preisübersicht</Heading>
-      <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold' })}>
-        Die nachfolgenden Preise sind unverbindliche Richtwerte. Die verbindlichen Konditionen werden Ihnen mit der Auftragsbestätigung nach Annahme durch einen Fahrer mitgeteilt.
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Preisübersicht gemäß Bestellung</Heading>
+      <Text {...getTextProps({ ...textStyles.paragraph })}>
+        Die Abrechnung erfolgt auf Basis der bei Bestellung veröffentlichten Preise. Die finale Abrechnung richtet sich nach dem tatsächlichen Einsatzumfang.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph })}>
-        Die Fahrleistung wird von selbstständigen Unternehmern erbracht. Die Fahrerexpress-Agentur koordiniert den Einsatz und erstellt nach Durchführung eine Rechnung gemäß Auftragsbestätigung. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die in der Auftragsbestätigung vereinbarten Konditionen hinaus.
+        Die Fahrleistung wird von selbstständigen Unternehmern erbracht. Die Fahrerexpress-Agentur koordiniert den Einsatz und erstellt nach Durchführung eine Rechnung. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren.
       </Text>
 
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />
 
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer (Richtwert)</Heading>
+      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
         <strong>ab 349 € pro Tag</strong> (8 Stunden) | <strong>ab 30 € pro Überstunde</strong>
       </Text>
@@ -90,7 +90,7 @@ export const CustomerBookingConfirmation = ({
         Kühltransport, Baustellenverkehr, Event- und Messe-Logistik u. v. m.
       </Text>
 
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Baumaschinenführer (Richtwert)</Heading>
+      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Baumaschinenführer</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
         <strong>ab 459 € pro Tag</strong> (8 Stunden) | <strong>ab 60 € pro Überstunde</strong>
       </Text>
@@ -106,18 +106,15 @@ export const CustomerBookingConfirmation = ({
       </ul>
 
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
-        Alle Preise verstehen sich als unverbindliche Richtwerte netto zzgl. gesetzlicher MwSt., Fahrt- und ggf. Übernachtungskosten.
-        Die verbindliche Abrechnung erfolgt nach tatsächlichem Einsatzumfang gemäß Auftragsbestätigung.
+        Alle Preise netto zzgl. gesetzlicher MwSt., Fahrt- und ggf. Übernachtungskosten.
+        Die Abrechnung erfolgt nach tatsächlichem Einsatzumfang.
       </Text>
     </Section>
 
     <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
-      <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung (gilt erst nach Auftragsbestätigung)</Heading>
+      <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung (gilt ab Bestellung)</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-        Die nachfolgenden Stornierungsbedingungen gelten erst, wenn ein verbindlicher Auftrag zustande gekommen ist (nach Annahme durch einen Fahrer und Versand der Auftragsbestätigung).
-      </Text>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-        Eine kostenfreie Stornierung bestätigter Aufträge ist bis 24 Stunden vor Einsatzbeginn möglich.
+        Eine kostenfreie Stornierung ist bis 24 Stunden vor Einsatzbeginn möglich.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
         Bei einer Stornierung unter 24 Stunden vor Einsatzbeginn werden 80 % des vereinbarten Tagessatzes berechnet.
@@ -136,7 +133,7 @@ export const CustomerBookingConfirmation = ({
         <li>Wir prüfen verfügbare selbstständige Fahrer in Ihrer Region</li>
         <li>Sie erhalten spätestens am nächsten Werktag unsere Rückmeldung</li>
         <li>Bei Verfügbarkeit vermitteln wir einen passenden Fahrer</li>
-        <li>Erst nach Annahme durch den Fahrer erhalten Sie eine verbindliche Auftragsbestätigung mit den finalen Konditionen</li>
+        <li>Nach Annahme durch den Fahrer erhalten Sie eine Einsatzbestätigung mit den finalen Details</li>
       </ol>
     </Section>
 
