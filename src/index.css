@@ -180,12 +180,12 @@ img {
 
   /* Accessibility: Links in Content müssen unterstrichen sein (WCAG SC 1.4.1) */
   /* Ausnahme: Buttons und Navigation-Links mit eigenem Styling */
-  main a:not([class*="button"]):not([role="button"]),
-  article a,
+  main a:not([class*="button"]):not([role="button"]):not([class*="primary-foreground"]),
+  article a:not([class*="primary-foreground"]),
   .prose a,
-  footer a:not([class*="button"]):not([role="button"]),
-  p a,
-  li a:not([class*="button"]) {
+  footer a:not([class*="button"]):not([role="button"]):not([class*="primary-foreground"]),
+  p a:not([class*="primary-foreground"]),
+  li a:not([class*="button"]):not([class*="primary-foreground"]) {
     @apply underline decoration-primary/50 underline-offset-2 hover:decoration-primary hover:text-primary transition-colors;
   }
 
