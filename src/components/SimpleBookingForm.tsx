@@ -127,7 +127,7 @@ const SimpleBookingForm = () => {
       }
 
       toast({
-        title: "Anfrage erfolgreich gesendet!",
+        title: "Bestellung erfolgreich gesendet!",
         description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
       });
 
@@ -313,9 +313,9 @@ const SimpleBookingForm = () => {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahreranfrage-Formular">
+              <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahrer-Bestellformular">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Ihre Anfrage</h3>
+                  <h3 className="text-lg font-semibold mb-4">Ihre Bestellung</h3>
                   <p id="form-description" className="text-sm text-muted-foreground mb-4">
                     Bitte geben Sie Ihre Kontaktdaten und Details zu Ihrem Fahrbedarf an
                   </p>
@@ -744,6 +744,10 @@ const SimpleBookingForm = () => {
                   </p>
                 </div>
 
+                <p className="text-xs text-muted-foreground text-center mb-2">
+                  Mit Klick auf „Verbindlich bestellen" geben Sie einen kostenpflichtigen Auftrag ab.
+                </p>
+
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
@@ -752,15 +756,11 @@ const SimpleBookingForm = () => {
                 >
                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
-                      <div>Fahrer buchen</div>
+                      <div>Verbindlich bestellen</div>
                       <div className="text-sm opacity-90">ab 349 € netto</div>
                     </div>
                   )}
                 </Button>
-
-                <p className="text-xs text-red-700 font-medium text-center mt-3 bg-red-50 border border-red-200 rounded p-2">
-                  Hinweis: Diese Anfrage ist verbindlich. Nach Absenden gelten die veröffentlichten Storno- und Zahlungsbedingungen.
-                </p>
               </form>
 
               {/* PWA Install-Hinweis nach erfolgreicher Absendung */}
