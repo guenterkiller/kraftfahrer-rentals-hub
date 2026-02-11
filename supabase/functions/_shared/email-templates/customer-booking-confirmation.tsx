@@ -31,8 +31,14 @@ export const CustomerBookingConfirmation = ({
     </Text>
 
     <Section {...getBoxProps(boxStyles.warningBox)}>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
         <strong>Wichtiger Hinweis:</strong> Ein verbindlicher Einsatz kommt zustande, wenn ein selbstständiger Fahrer den Einsatz annimmt und Sie von uns eine separate Auftragsbestätigung erhalten. Die Stornierungsregelungen gelten ab dem Zeitpunkt dieser Bestellung.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+        Bitte beachten Sie: Eine Absage oder Änderung nach Auftragserteilung ist stornopflichtig, unabhängig davon, ob der Einsatz telefonisch abgestimmt wurde.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.muted, margin: '0', fontSize: '12px', fontStyle: 'italic' })}>
+        Das Unterlassen einer telefonischen Rückmeldung oder kurzfristige Absagen heben die Verbindlichkeit der Bestellung nicht auf.
       </Text>
     </Section>
 
