@@ -39,9 +39,9 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
   useSEO(seoData);
 
   const scrollToBooking = () => {
-    const element = document.querySelector('#fahreranfrage');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const form = document.querySelector('#booking-form');
+    if (form) {
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 

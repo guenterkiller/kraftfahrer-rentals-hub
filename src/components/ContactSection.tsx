@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 const ContactSection = () => {
   const scrollToForm = (e: React.MouseEvent) => {
     e.preventDefault();
-    const element = document.querySelector('#fahreranfrage');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const form = document.querySelector('#booking-form');
+    if (form) {
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 

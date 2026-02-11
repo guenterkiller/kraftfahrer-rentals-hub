@@ -188,7 +188,7 @@ const SimpleBookingForm = () => {
     <section className="py-16 bg-background" id="fahreranfrage">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
-          <Card id="booking-form">
+          <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
                 <CardTitle className="text-2xl">
@@ -325,7 +325,7 @@ const SimpleBookingForm = () => {
                 </div>
 
                 {/* Personal Data */}
-                <div className="grid md:grid-cols-2 gap-4">
+                <div id="booking-form" className="grid md:grid-cols-2 gap-4 scroll-mt-20">
                   <div>
                     <Label htmlFor="vorname">Vorname *</Label>
                     <Input id="vorname" name="vorname" required />
