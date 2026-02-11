@@ -133,7 +133,7 @@ export const CustomerBookingConfirmation = ({
         <li>Wir prüfen verfügbare selbstständige Fahrer in Ihrer Region</li>
         <li>Sie erhalten spätestens am nächsten Werktag unsere Rückmeldung</li>
         <li>Bei Verfügbarkeit vermitteln wir einen passenden Fahrer</li>
-        <li>Nach Annahme durch den Fahrer erhalten Sie eine Einsatzbestätigung mit den finalen Details</li>
+        <li>Nach erfolgreicher Disposition erhalten Sie eine Einsatzbestätigung mit den organisatorischen Details (Fahrer, Zeiten, Ablauf)</li>
       </ol>
     </Section>
 
