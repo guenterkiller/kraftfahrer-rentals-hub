@@ -183,10 +183,10 @@ serve(async (req) => {
                 <div style="color: #000; font-size: 13px;">
                     <p style="margin: 8px 0;"><strong>1) Vermittlungsprovision:</strong> 15 % des Nettohonorars – ausschließlich für den vermittelten Einsatz; fällig nur bei tatsächlichem Einsatz.</p>
                     <p style="margin: 8px 0;"><strong>1a) Provisionsbasis:</strong> Die Provision bemisst sich auf das gesamte vom Fahrer dem Auftraggeber berechnete Nettohonorar, einschließlich im Zusammenhang mit dem Einsatz abgerechneter Nebenkosten.</p>
-                    <p style="margin: 8px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet direkt mit dem Auftraggeber ab (Zahlungsziel: 14 Tage, ohne Abzug). Die Provision wird dem Fahrer von Fahrerexpress gesondert in Rechnung gestellt.</p>
+                    <p style="margin: 8px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer rechnet seine Leistung direkt mit dem Auftraggeber ab. Fahrerexpress ist nicht Zahlungspartei.</p>
                     <p style="margin: 8px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
                     <p style="margin: 8px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-                    <p style="margin: 8px 0;"><strong>5) Vertragsstrafe:</strong> Bei Verstoß gegen Ziff. 3) oder 4) fällt eine Vertragsstrafe von 2.500 € je Verstoß an.</p>
+                    <p style="margin: 8px 0;"><strong>5) Pauschalierter Schadensersatz:</strong> Bei Verstoß gegen die Ziffern 3 oder 4 schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 2.500 € je Verstoß, sofern kein geringerer Schaden nachgewiesen wird.</p>
                     <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
                 </div>
             </div>
@@ -195,9 +195,9 @@ serve(async (req) => {
             <div style="margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #cc0000; font-size: 16px; font-weight: bold;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
                 <div style="color: #000; font-size: 13px;">
-                    <p style="margin: 8px 0;">Erscheint der Fahrer ohne triftigen Grund nicht zum vereinbarten Einsatzbeginn oder sagt er ≤ 24 Stunden vorher ab, gilt dies als No-Show.</p>
-                    <p style="margin: 8px 0;">In diesem Fall schuldet der Fahrer dem Auftraggeber einen pauschalierten Schadensersatz i. H. v. 150 € (alternativ: 30 % des Tages-/Einsatzsatzes, max. 250 €).</p>
-                    <p style="margin: 8px 0;"><strong>Höhere Gewalt</strong> (z. B. akute Krankheit mit Attest, Unfall) ist ausgenommen.</p>
+                    <p style="margin: 8px 0;">Bei Nichterscheinen oder Absage ≤ 24 Stunden vor Einsatzbeginn schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 150 €, es sei denn, höhere Gewalt liegt vor.</p>
+                    <p style="margin: 8px 0;">Etwaige Ansprüche des Auftraggebers bleiben hiervon unberührt.</p>
+                </div>
                 </div>
             </div>
             
