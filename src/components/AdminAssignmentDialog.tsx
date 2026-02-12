@@ -269,7 +269,15 @@ export function AdminAssignmentDialog({
       const assignmentId = assignResult.assignmentId;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 2) E-Mail versenden (Edge Function - JWT sent automatically)
+      // 2) Confirm assignment (sets status to 'confirmed' so button disappears)
+      const { error: confirmErr } = await supabase.rpc("admin_confirm_assignment", {
+        _assignment_id: assignmentId,
+      });
+      if (confirmErr) {
+        console.error('Confirm error (non-fatal):', confirmErr);
+      }
+
+      // 3) E-Mail versenden (Edge Function - JWT sent automatically)
       try {
         const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
           body: { 
