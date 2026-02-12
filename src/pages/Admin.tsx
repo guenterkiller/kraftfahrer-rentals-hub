@@ -791,49 +791,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  const handleResetJobsByEmail = async () => {
-    try {
-      // Get admin email from localStorage
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Admin session not found');
-      }
-      
-      const session = JSON.parse(adminSession);
-      const adminEmail = session.email;
-
-      const { data, error } = await supabase.functions.invoke('admin-reset-jobs', {
-        body: { email: adminEmail }
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (!data.success) {
-        throw new Error(data.error || 'Reset fehlgeschlagen');
-      }
-
-      toast({
-        title: "Jobs zurückgesetzt",
-        description: data.message,
-      });
-
-      // Reload data
-      await Promise.all([
-        loadJobRequests(),
-        loadJobAssignments()
-      ]);
-
-    } catch (error) {
-      console.error('❌ Error resetting jobs:', error);
-      toast({
-        title: "Fehler beim Zurücksetzen",
-        description: `Fehler: ${error instanceof Error ? error.message : 'Unbekannter Fehler'}`,
-        variant: "destructive"
-      });
-    }
-  };
 
   const handleResetDriverStatus = async (driverId: string, driverName: string) => {
     try {
@@ -1349,14 +1306,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                   className="bg-green-50 hover:bg-green-100 text-green-700 border-green-300 hidden md:inline-flex"
                 >
                   {completingOldJobs ? 'Wird abgeschlossen...' : 'Alte Aufträge abschließen (30 Tage)'}
-                </Button>
-                <Button 
-                  onClick={handleResetJobsByEmail} 
-                  variant="destructive" 
-                  size="sm"
-                  className="hidden md:inline-flex"
-                >
-                  Test zurücksetzen
                 </Button>
                 <Button 
                   onClick={loadJobRequests} 
