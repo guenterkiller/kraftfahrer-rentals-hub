@@ -1380,7 +1380,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                   <Table>
                   <TableHeader>
                     <TableRow>
-                       <TableHead className="min-w-[50px]">Erledigt</TableHead>
+                       <TableHead className="min-w-[50px]">Status</TableHead>
                        <TableHead className="min-w-[200px]">Name & Details</TableHead>
                        <TableHead className="min-w-[150px]">Kontakt</TableHead>
                        <TableHead className="min-w-[120px]">Einsatz</TableHead>
@@ -1394,23 +1394,29 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     <React.Fragment key={req.id}>
                       <TableRow>
                         <TableCell className="text-center">
-                          <div className="flex items-center justify-center gap-2">
+                          <div className="flex items-center justify-center">
                             {(() => {
-                              // Checkbox ist IMMER klickbar - Admin kann jeden Job als erledigt markieren
                               const isBeingProcessed = markingCompleted === req.id;
-                              const hasActiveAssignment = req.status === 'assigned' || req.status === 'confirmed';
+                              const isCompleted = req.status === 'completed';
                               
                               return (
-                                <Checkbox
-                                  checked={req.status === 'completed'}
-                                  onCheckedChange={async (checked) => {
-                                    if (checked) {
-                                      await handleMarkJobCompleted(req.id);
-                                    } else {
+                                <button
+                                  onClick={async () => {
+                                    if (isCompleted) {
                                       await handleMarkJobOpen(req.id);
+                                    } else {
+                                      await handleMarkJobCompleted(req.id);
                                     }
                                   }}
                                   disabled={isBeingProcessed}
+                                  className="relative w-6 h-6 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50"
+                                  style={{
+                                    backgroundColor: isCompleted ? '#dc2626' : '#16a34a',
+                                    boxShadow: isCompleted 
+                                      ? '0 0 8px rgba(220, 38, 38, 0.5)' 
+                                      : '0 0 8px rgba(22, 163, 74, 0.5)',
+                                  }}
+                                  title={isCompleted ? 'Klicken um wieder zu öffnen' : 'Klicken um als erledigt zu markieren'}
                                 />
                               );
                             })()}
@@ -1657,17 +1663,23 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           {/* Header mit Checkbox und Status */}
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-start gap-3 flex-1 min-w-0">
-                              <Checkbox
-                                checked={req.status === 'completed'}
-                                onCheckedChange={async (checked) => {
-                                  if (checked) {
-                                    await handleMarkJobCompleted(req.id);
-                                  } else {
+                              <button
+                                onClick={async () => {
+                                  if (req.status === 'completed') {
                                     await handleMarkJobOpen(req.id);
+                                  } else {
+                                    await handleMarkJobCompleted(req.id);
                                   }
                                 }}
                                 disabled={isBeingProcessed}
-                                className="mt-1"
+                                className="relative w-5 h-5 rounded-full mt-1 transition-all duration-200 focus:outline-none disabled:opacity-50 flex-shrink-0"
+                                style={{
+                                  backgroundColor: req.status === 'completed' ? '#dc2626' : '#16a34a',
+                                  boxShadow: req.status === 'completed' 
+                                    ? '0 0 6px rgba(220, 38, 38, 0.5)' 
+                                    : '0 0 6px rgba(22, 163, 74, 0.5)',
+                                }}
+                                title={req.status === 'completed' ? 'Klicken um wieder zu öffnen' : 'Klicken um als erledigt zu markieren'}
                               />
                               <div className="flex-1 min-w-0">
                                 <h3 className="font-semibold text-base truncate">{req.customer_name}</h3>
