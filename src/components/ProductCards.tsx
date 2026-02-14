@@ -28,7 +28,7 @@ const ProductCards = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           
           {/* LKW CE Fahrer - Featured Card */}
           <Card className="relative overflow-hidden border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fade-in">
@@ -89,6 +89,68 @@ const ProductCards = () => {
                 size="lg"
               >
                 LKW-Fahrer anfragen
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Fernfahrer-Pauschale */}
+          <Card className="relative overflow-hidden border-2 hover:border-green-500/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 animate-fade-in">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/5 rounded-full -mr-16 -mt-16" />
+            <Badge className="absolute top-2 right-2 md:top-3 md:right-3 z-10 bg-green-600 text-white">
+              NEU
+            </Badge>
+            
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-green-600 to-green-500 shadow-lg">
+                  <Truck className="h-7 w-7 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-semibold">Fernfahrer-Pauschale</h3>
+                  <p className="text-sm text-muted-foreground">Fernverkehr mit Übernachtung</p>
+                </div>
+              </div>
+            </CardHeader>
+            
+            <CardContent>
+              <div className="mb-6 pb-6 border-b border-border">
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="text-5xl font-bold text-green-700">450 €</span>
+                  <span className="text-muted-foreground">/Tag</span>
+                </div>
+                <p className="text-sm text-muted-foreground mb-3">Pauschale pro Einsatztag (netto)</p>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-100 border border-green-300">
+                  <span className="text-sm font-semibold text-green-700">Keine Stundenabrechnung</span>
+                </div>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start gap-3">
+                  <div className="mt-0.5 p-1 rounded-full bg-green-100">
+                    <Check className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-sm text-foreground">Bis 10 Std. abgegolten</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="mt-0.5 p-1 rounded-full bg-green-100">
+                    <Check className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-sm text-foreground">Übernachtung im Führerhaus</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="mt-0.5 p-1 rounded-full bg-green-100">
+                    <Check className="h-4 w-4 text-green-600" />
+                  </div>
+                  <span className="text-sm text-foreground">Pauschal – keine Überstundenrechnung</span>
+                </li>
+              </ul>
+
+              <Button 
+                onClick={scrollToForm}
+                className="w-full h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all bg-green-600 hover:bg-green-700 text-white"
+                size="lg"
+              >
+                Fernfahrer buchen
               </Button>
             </CardContent>
           </Card>
