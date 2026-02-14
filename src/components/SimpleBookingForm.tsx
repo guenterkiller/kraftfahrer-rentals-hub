@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Car, ShieldAlert, Construction } from "lucide-react";
+import { Car, ShieldAlert, Construction, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -444,10 +444,10 @@ const SimpleBookingForm = () => {
                   <p id="fahrertyp-hint" className="text-sm opacity-80 mb-3" aria-live="polite">
                     Beispiel: <em>7,5 t</em>, <em>40 t</em>, <em>ADR</em>, <em>Tankwagen</em>, <em>Baumaschinenführer</em>, <em>Ladekran</em>.
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
                     <label 
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'LKW CE' 
+                        fahrzeugtyp === 'LKW CE' && !longDistance
                           ? 'border-red-500 bg-red-50' 
                           : 'border-border hover:border-red-300 hover:bg-red-50/50'
                       }`}
@@ -456,14 +456,35 @@ const SimpleBookingForm = () => {
                         type="radio"
                         name="fahrzeugtyp"
                         value="LKW CE"
-                        checked={fahrzeugtyp === 'LKW CE'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); }}
+                        checked={fahrzeugtyp === 'LKW CE' && !longDistance}
+                        onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(false); }}
                         className="w-5 h-5 text-red-600"
                         required
                       />
                       <div className="flex items-center gap-2">
                         <Car className="h-5 w-5 text-red-600" />
                         <span className="font-medium">LKW CE Fahrer</span>
+                      </div>
+                    </label>
+                    
+                    <label 
+                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'LKW CE' && longDistance
+                          ? 'border-green-500 bg-green-50' 
+                          : 'border-border hover:border-green-300 hover:bg-green-50/50'
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="fahrzeugtyp"
+                        value="Fernfahrer"
+                        checked={fahrzeugtyp === 'LKW CE' && longDistance}
+                        onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(true); }}
+                        className="w-5 h-5 text-green-600"
+                      />
+                      <div className="flex items-center gap-2">
+                        <Truck className="h-5 w-5 text-green-600" />
+                        <span className="font-medium">Fernfahrer-Pauschale</span>
                       </div>
                     </label>
                     
