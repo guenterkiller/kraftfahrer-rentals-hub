@@ -57,17 +57,33 @@ const PreiseUndAblauf = () => {
             {/* Aktuelle Tagespreise */}
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-center mb-8">Mietfahrer & Leihfahrer – Tagespreise (netto)</h2>
-              <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <CardTitle className="text-xl text-red-900">LKW Fahrer buchen</CardTitle>
-                    <CardDescription className="text-red-700">Ersatzfahrer, Mietfahrer für Kipper, Sattelzug, Baustelle</CardDescription>
+                    <CardDescription className="text-red-700">Nahverkehr, Baustelle, Verteiler</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center mb-4">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
                       <p className="text-red-700 text-xs mt-2">30 € je Überstunde</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-green-900 flex items-center gap-2">
+                      🛣️ Fernfahrer-Pauschale
+                    </CardTitle>
+                    <CardDescription className="text-green-700">Fernverkehr mit Übernachtung</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center mb-4">
+                      <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
+                      <p className="text-green-800 font-medium text-sm">Pauschale pro Einsatztag (netto)</p>
+                      <p className="text-green-700 text-xs mt-2">Bis 10 Std. abgegolten – keine Stundenabrechnung</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -104,12 +120,23 @@ const PreiseUndAblauf = () => {
                 </Card>
               </div>
               
+              {/* Fernfahrer-Pauschale Detail */}
+              <Card className="bg-green-50 border-green-200 max-w-4xl mx-auto mb-6">
+                <CardContent className="pt-6">
+                  <div className="space-y-2 text-sm">
+                    <p><strong>🚛 Fernfahrer-Pauschale:</strong> Pauschalvergütung pro Einsatztag für Fernverkehr mit Übernachtung im Führerhaus. Gesetzlich zulässige Lenk- und Arbeitszeiten sind möglich, begründen jedoch keinen Anspruch auf zusätzliche Vergütung innerhalb der Pauschale.</p>
+                    <p><strong>Arbeitszeit bis 10 Stunden ist mit der Pauschale abgegolten.</strong></p>
+                    <p>Ab Überschreitung von 10 Stunden fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag (gemäß Auftragsbestätigung).</p>
+                  </div>
+                </CardContent>
+              </Card>
+
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-4xl mx-auto">
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                   <div className="space-y-2 text-sm text-blue-900">
-                    <p><strong>👉 Mindestbuchung:</strong> 1 Einsatztag = 8 Stunden</p>
-                    <p><strong>👉 Abrechnungstaktung:</strong> im 15-Minuten-Takt nach der 8. Stunde</p>
+                    <p><strong>👉 Mindestbuchung:</strong> 1 Einsatztag = 8 Stunden (bzw. Pauschale bei Fernverkehr)</p>
+                    <p><strong>👉 Abrechnungstaktung:</strong> im 15-Minuten-Takt nach der 8. Stunde (nicht bei Fernfahrer-Pauschale)</p>
                     <p><strong>👉 Alle Preise:</strong> Netto-Preise zzgl. gesetzlicher MwSt.</p>
                   </div>
                 </div>
@@ -189,13 +216,17 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <p className="font-semibold text-red-700 mb-2">LKW CE Fahrer:</p>
+                    <p className="font-semibold text-red-700 mb-2">LKW CE Fahrer (Nahverkehr):</p>
                     <p className="text-muted-foreground">30 € je Überstunde (ab 9. Stunde)</p>
                   </div>
                   <div>
                     <p className="font-semibold text-orange-700 mb-2">Baumaschinenführer:</p>
                     <p className="text-muted-foreground">60 € je Überstunde (ab 9. Stunde)</p>
                   </div>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                  <p className="font-semibold text-green-900 mb-1">Fernfahrer-Pauschale:</p>
+                  <p className="text-sm text-green-800">Keine Stundenabrechnung. Arbeitszeit bis 10 Stunden ist mit der Tagespauschale (450 €) abgegolten. Ab Überschreitung von 10 Stunden fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag.</p>
                 </div>
                 <div className="bg-muted rounded-lg p-4 space-y-2">
                   <p className="font-semibold">Zuschläge auf den Stundensatz:</p>
@@ -230,6 +261,10 @@ const PreiseUndAblauf = () => {
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                       <span>LKW CE Fahrer: 349 € pro Tag (8 Std.)</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>Fernfahrer-Pauschale: 450 € pro Einsatztag (bis 10 Std., keine Stundenabrechnung)</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />

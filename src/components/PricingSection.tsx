@@ -20,7 +20,8 @@ const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-16 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 max-w-7xl mx-auto">
+          {/* LKW CE Fahrer */}
           <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow">
             <CardHeader className="bg-primary/10 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
@@ -30,7 +31,7 @@ const PricingSection = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Für alle Einsatzarten</h3>
+                <h3 className="font-semibold text-lg mb-2">Nahverkehr & Baustelle</h3>
                 <p className="text-2xl font-bold text-primary">349 € / Tag</p>
                 <p className="text-sm text-muted-foreground">8 Std. • 30 € Überstunde</p>
               </div>
@@ -38,7 +39,7 @@ const PricingSection = () => {
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Nah-, Fern- und Verteilerverkehr</span>
+                    <span>Nah- und Verteilerverkehr</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -68,6 +69,55 @@ const PricingSection = () => {
             </CardContent>
           </Card>
 
+          {/* Fernfahrer-Pauschale */}
+          <Card className="border-green-500 bg-green-50 hover:shadow-lg transition-shadow">
+            <CardHeader className="bg-green-100 rounded-t-lg">
+              <CardTitle className="text-xl flex items-center gap-2">
+                Fernfahrer-Pauschale
+                <Badge className="bg-green-600 text-white">NEU</Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Fernverkehr mit Übernachtung</h3>
+                <p className="text-2xl font-bold text-green-700">450 € / Tag</p>
+                <p className="text-sm text-muted-foreground">Pauschale pro Einsatztag</p>
+              </div>
+              <div className="pt-3 border-t">
+                <ul className="text-sm space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>Bis 10 Std. abgegolten</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>Keine Stundenabrechnung</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span>Übernachtung im Führerhaus</span>
+                  </li>
+                </ul>
+              </div>
+              <Button 
+                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white"
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'category_click_fernfahrer', {
+                      event_category: 'Pricing Section',
+                      event_label: 'Fernfahrer-Pauschale',
+                      value: 450
+                    });
+                  }
+                  scrollToBooking();
+                }}
+              >
+                Fernfahrer buchen
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Baumaschinenführer */}
           <Card className="border-muted bg-muted/10 hover:shadow-lg transition-shadow">
             <CardHeader className="bg-muted/20 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
@@ -116,6 +166,7 @@ const PricingSection = () => {
             </CardContent>
           </Card>
 
+          {/* Mischmeister */}
           <Card className="border-blue-500 bg-blue-50 hover:shadow-lg transition-shadow">
             <CardHeader className="bg-blue-100 rounded-t-lg">
               <CardTitle className="text-xl flex items-center gap-2">
@@ -164,7 +215,21 @@ const PricingSection = () => {
           </Card>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
+        {/* Fernfahrer-Pauschale Details */}
+        <Card className="bg-green-50 border-green-200 max-w-5xl mx-auto mb-8">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              🚛 Fernfahrer-Pauschale – Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-2">
+            <p>Fernfahrer-Pauschale: Pauschalvergütung pro Einsatztag für Fernverkehr mit Übernachtung im Führerhaus. Gesetzlich zulässige Lenk- und Arbeitszeiten sind möglich, begründen jedoch keinen Anspruch auf zusätzliche Vergütung innerhalb der Pauschale.</p>
+            <p><strong>Arbeitszeit bis 10 Stunden ist mit der Pauschale abgegolten.</strong></p>
+            <p>Ab Überschreitung von 10 Stunden fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag (gemäß Auftragsbestätigung).</p>
+          </CardContent>
+        </Card>
+
+        <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-5xl mx-auto">
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Fahrtkosten</CardTitle>

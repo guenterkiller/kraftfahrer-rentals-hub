@@ -81,7 +81,7 @@ const SimpleBookingForm = () => {
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Ladekran-Erfahrung',
-          longDistance && 'Langstrecke',
+          longDistance && 'Fernverkehr / Übernachtung im LKW',
           nightShift && 'Nachtschicht',
           weekendWork && 'Wochenendarbeit',
           heavyLift && 'Schwerlast',
@@ -232,12 +232,12 @@ const SimpleBookingForm = () => {
                   Ihre Fahrerpreise
                 </h3>
                 <p className="text-sm text-muted-foreground text-center">
-                  Preise verstehen sich <strong>netto je 8-Stunden-Tag</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten
+                  Preise verstehen sich <strong>netto</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. Fernfahrer-Pauschale: Einsatztag-Pauschale ohne Stundenabrechnung.
                 </p>
               </div>
 
-              {/* Pricing Cards - 2 separate Karten */}
-              <div className="grid md:grid-cols-2 gap-4 mb-6">
+              {/* Pricing Cards */}
+              <div className="grid md:grid-cols-3 gap-4 mb-6">
                 {/* LKW CE Fahrer Card */}
                 <Card className="border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-all">
                   <CardHeader className="pb-3">
@@ -256,11 +256,31 @@ const SimpleBookingForm = () => {
                     <ul className="text-xs space-y-1.5 text-gray-700">
                       <li className="flex items-start gap-1.5">
                         <span className="text-red-600 mt-0.5 font-bold">✓</span>
-                        <span>Nah-, Fern- und Baustellenverkehr</span>
+                        <span>Nah- und Baustellenverkehr</span>
                       </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                {/* Fernfahrer-Pauschale Card */}
+                <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-all">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2 text-green-900">
+                      🛣️ Fernfahrer-Pauschale
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="bg-white rounded-lg p-4 border-2 border-green-200 shadow-sm">
+                      <div className="text-3xl font-bold text-green-700 mb-1">450 €</div>
+                      <div className="text-sm text-gray-600">Pauschale pro Einsatztag (netto)</div>
+                      <div className="mt-3 pt-3 border-t border-green-200">
+                        <div className="text-sm font-medium text-green-600">Bis 10 Std. abgegolten</div>
+                      </div>
+                    </div>
+                    <ul className="text-xs space-y-1.5 text-gray-700">
                       <li className="flex items-start gap-1.5">
-                        <span className="text-red-600 mt-0.5 font-bold">✓</span>
-                        <span>ADR, Fahrmischer, Kranführer</span>
+                        <span className="text-green-600 mt-0.5 font-bold">✓</span>
+                        <span>Fernverkehr, Übernachtung im LKW</span>
                       </li>
                     </ul>
                   </CardContent>
@@ -285,10 +305,6 @@ const SimpleBookingForm = () => {
                       <li className="flex items-start gap-1.5">
                         <span className="text-orange-600 mt-0.5 font-bold">✓</span>
                         <span>Bagger, Radlader, Walzen</span>
-                      </li>
-                      <li className="flex items-start gap-1.5">
-                        <span className="text-orange-600 mt-0.5 font-bold">✓</span>
-                        <span>Kranführer, Spezialmaschinen</span>
                       </li>
                     </ul>
                   </CardContent>
@@ -627,6 +643,30 @@ const SimpleBookingForm = () => {
                   </div>
                 </fieldset>
 
+                {/* Fernverkehr / Übernachtung Checkbox */}
+                {fahrzeugtyp === 'LKW CE' && (
+                  <fieldset>
+                    <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4">
+                      <div className="flex items-start space-x-2">
+                        <Checkbox 
+                          id="fernverkehr" 
+                          checked={longDistance}
+                          onCheckedChange={(checked) => setLongDistance(checked as boolean)}
+                          className="mt-0.5"
+                        />
+                        <div>
+                          <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
+                            🛣️ Fernverkehr / Übernachtung im LKW
+                          </Label>
+                          <p className="text-xs text-green-800 mt-1">
+                            Es gilt die Fernfahrer-Pauschale (450 €/Tag netto). Arbeitszeit bis 10 Stunden ist mit der Pauschale abgegolten. Keine Stundenabrechnung, keine Überstunden im Standard.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+                )}
+
                 {/* Begleitfahrzeuge Requirements */}
                 <fieldset>
                   <div className="flex items-center gap-2 mb-2">
@@ -737,10 +777,10 @@ const SimpleBookingForm = () => {
                   disabled={loading || !agreedToData || !agreedToBinding || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
-                  {loading ? "Wird gesendet..." : (
+                   {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindlich bestellen</div>
-                      <div className="text-sm opacity-90">ab 349 € netto</div>
+                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto' : 'ab 349 € netto'}</div>
                     </div>
                   )}
                 </Button>
