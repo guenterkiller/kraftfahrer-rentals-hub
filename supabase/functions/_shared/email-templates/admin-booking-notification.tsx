@@ -14,6 +14,7 @@ interface AdminBookingNotificationProps {
   message: string;
   billingModel: string;
   jobId: string;
+  isFernfahrerTarif?: boolean;
 }
 
 export const AdminBookingNotification = ({
@@ -28,6 +29,7 @@ export const AdminBookingNotification = ({
   message,
   billingModel,
   jobId,
+  isFernfahrerTarif = false,
 }: AdminBookingNotificationProps) => (
   <BaseEmail previewText={`Neue Buchungsanfrage: ${driverType} in ${address}`}>
     <Heading style={{ ...textStyles.heading2, color: colors.primary }}>
@@ -77,6 +79,12 @@ export const AdminBookingNotification = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Fahrertyp:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }}>{driverType}</td>
         </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tarif:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold', color: isFernfahrerTarif ? '#3b82f6' : undefined }}>
+            {isFernfahrerTarif ? 'Fernfahrer-Tarif (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
+          </td>
+        </tr>
         {requirements.length > 0 && (
           <tr>
             <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Anforderungen:</strong></td>
@@ -89,6 +97,14 @@ export const AdminBookingNotification = ({
         </tr>
       </table>
     </Section>
+
+    {isFernfahrerTarif && (
+      <Section style={{ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6' }}>
+        <Text style={{ ...textStyles.paragraph, margin: '0' }}>
+          <strong>ℹ️ Fernfahrer-Tarif aktiv:</strong> Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.
+        </Text>
+      </Section>
+    )}
 
     <Section style={{ ...boxStyles.infoBox, backgroundColor: '#fef3f2' }}>
       <Heading style={textStyles.heading3}>💼 Abrechnungsdetails</Heading>

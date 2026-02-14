@@ -123,6 +123,11 @@ const handler = async (req: Request): Promise<Response> => {
     const nachricht = String(requestData.nachricht || '').trim();
     const anforderungen = Array.isArray(requestData.anforderungen) ? requestData.anforderungen : [];
     
+    // Detect Fernfahrer-Tarif from anforderungen
+    const isFernfahrerTarif = anforderungen.some((a: string) => 
+      a.toLowerCase().includes('fernverkehr') || a.toLowerCase().includes('fernfahrer')
+    );
+    
     // Consent data
     const datenschutz = Boolean(requestData.datenschutz);
     const newsletter = Boolean(requestData.newsletter);
@@ -272,7 +277,8 @@ const handler = async (req: Request): Promise<Response> => {
           customer_house_number: customer_house_number,
           customer_postal_code: customer_postal_code,
           customer_city: customer_city,
-          einsatzort: einsatzort
+          einsatzort: einsatzort,
+          isFernfahrerTarif: isFernfahrerTarif
         }
       });
 
@@ -312,6 +318,7 @@ const handler = async (req: Request): Promise<Response> => {
             message: nachricht,
             billingModel: billing_model,
             jobId: jobRequest.id,
+            isFernfahrerTarif: isFernfahrerTarif,
           })
         );
 
