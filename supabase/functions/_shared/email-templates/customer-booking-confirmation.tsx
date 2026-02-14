@@ -10,6 +10,7 @@ interface CustomerBookingConfirmationProps {
   timeframe: string;
   location: string;
   message: string;
+  isFernfahrerTarif?: boolean;
 }
 
 export const CustomerBookingConfirmation = ({
@@ -20,6 +21,7 @@ export const CustomerBookingConfirmation = ({
   timeframe,
   location,
   message,
+  isFernfahrerTarif = false,
 }: CustomerBookingConfirmationProps) => (
   <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
     <Heading {...getTextProps(textStyles.heading2, 'heading')}>
@@ -49,6 +51,12 @@ export const CustomerBookingConfirmation = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{driverType}</td>
         </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Tarif:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
+            {isFernfahrerTarif ? 'Fernfahrer-Tarif (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
+          </td>
+        </tr>
         {requirements.length > 0 && (
           <tr>
             <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Spezialanforderungen:</strong></td>
@@ -70,6 +78,14 @@ export const CustomerBookingConfirmation = ({
       </table>
     </Section>
 
+    {isFernfahrerTarif && (
+      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeftColor: '#3b82f6' })}>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+          Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.
+        </Text>
+      </Section>
+    )}
+
     <Section {...getBoxProps(boxStyles.highlightBox)}>
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Preisübersicht gemäß Bestellung</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph })}>
@@ -81,14 +97,29 @@ export const CustomerBookingConfirmation = ({
 
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />
 
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer</Heading>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
-        <strong>ab 349 € pro Tag</strong> (8 Stunden) | <strong>ab 30 € pro Überstunde</strong>
-      </Text>
-      <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
-        Gilt für: Fahrmischer, Fernverkehr, Nahverkehr, ADR, Container, Wechselbrücke,
-        Kühltransport, Baustellenverkehr, Event- und Messe-Logistik u. v. m.
-      </Text>
+      {isFernfahrerTarif ? (
+        <>
+          <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Fernfahrer-Tarif (LKW CE)</Heading>
+          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
+            <strong>450 € netto pro Einsatztag</strong>
+          </Text>
+          <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
+            Pauschale pro Einsatztag – keine Stundenabrechnung.
+            Gilt für Fernverkehr mit Übernachtung im LKW.
+          </Text>
+        </>
+      ) : (
+        <>
+          <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer</Heading>
+          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
+            <strong>ab 349 € pro Tag</strong> (8 Stunden) | <strong>ab 30 € pro Überstunde</strong>
+          </Text>
+          <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
+            Gilt für: Fahrmischer, Fernverkehr, Nahverkehr, ADR, Container, Wechselbrücke,
+            Kühltransport, Baustellenverkehr, Event- und Messe-Logistik u. v. m.
+          </Text>
+        </>
+      )}
 
       <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Baumaschinenführer</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>

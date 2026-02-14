@@ -27,6 +27,7 @@ interface FahrerAnfrageEmailRequest {
   customer_postal_code?: string;
   customer_city?: string;
   einsatzort?: string;
+  isFernfahrerTarif?: boolean;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -52,7 +53,8 @@ const handler = async (req: Request): Promise<Response> => {
       customer_house_number,
       customer_postal_code,
       customer_city,
-      einsatzort
+      einsatzort,
+      isFernfahrerTarif = false
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();
@@ -103,6 +105,7 @@ const handler = async (req: Request): Promise<Response> => {
         timeframe: zeitraumText,
         location: adresseText || einsatzort || 'Nicht angegeben',
         message: message,
+        isFernfahrerTarif: isFernfahrerTarif,
       })
     );
 
