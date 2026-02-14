@@ -232,7 +232,7 @@ const SimpleBookingForm = () => {
                   Ihre Fahrerpreise
                 </h3>
                 <p className="text-sm text-muted-foreground text-center">
-                  Preise verstehen sich <strong>netto</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. Fernfahrer-Pauschale: Einsatztag-Pauschale ohne Stundenabrechnung.
+                  Preise verstehen sich <strong>netto</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. Fernfahrer-Pauschale (nur LKW CE): Pauschale pro Einsatztag – keine Stundenabrechnung.
                 </p>
               </div>
 
@@ -274,7 +274,7 @@ const SimpleBookingForm = () => {
                       <div className="text-3xl font-bold text-green-700 mb-1">450 €</div>
                       <div className="text-sm text-gray-600">Pauschale pro Einsatztag (netto)</div>
                       <div className="mt-3 pt-3 border-t border-green-200">
-                        <div className="text-sm font-medium text-green-600">Bis 10 Std. abgegolten</div>
+                        <div className="text-sm font-medium text-green-600">Pauschale – keine Stundenabrechnung</div>
                       </div>
                     </div>
                     <ul className="text-xs space-y-1.5 text-gray-700">
@@ -433,7 +433,7 @@ const SimpleBookingForm = () => {
                         name="fahrzeugtyp"
                         value="LKW CE"
                         checked={fahrzeugtyp === 'LKW CE'}
-                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        onChange={(e) => { setFahrzeugtyp(e.target.value); }}
                         className="w-5 h-5 text-red-600"
                         required
                       />
@@ -455,7 +455,7 @@ const SimpleBookingForm = () => {
                         name="fahrzeugtyp"
                         value="Baumaschinenführer"
                         checked={fahrzeugtyp === 'Baumaschinenführer'}
-                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                         className="w-5 h-5 text-orange-600"
                       />
                       <div className="flex items-center gap-2">
@@ -476,7 +476,7 @@ const SimpleBookingForm = () => {
                         name="fahrzeugtyp"
                         value="Mischmeister"
                         checked={fahrzeugtyp === 'Mischmeister'}
-                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                         className="w-5 h-5 text-blue-600"
                       />
                       <div className="flex items-center gap-2">
@@ -497,7 +497,7 @@ const SimpleBookingForm = () => {
                         name="fahrzeugtyp"
                         value="Begleitfahrzeugführer BF3"
                         checked={fahrzeugtyp === 'Begleitfahrzeugführer BF3'}
-                        onChange={(e) => setFahrzeugtyp(e.target.value)}
+                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                         className="w-5 h-5 text-purple-600"
                       />
                       <div className="flex items-center gap-2">
@@ -643,44 +643,46 @@ const SimpleBookingForm = () => {
                   </div>
                 </fieldset>
 
-                {/* Fernverkehr / Übernachtung Checkbox – für alle Fahrertypen sichtbar */}
-                <fieldset>
-                  <div className={`border-2 rounded-lg p-4 ${longDistance ? 'bg-green-50 border-green-400' : 'bg-green-50/50 border-green-200'}`}>
-                    <div className="flex items-start space-x-2">
-                      <Checkbox 
-                        id="fernverkehr" 
-                        checked={longDistance}
-                        onCheckedChange={(checked) => setLongDistance(checked as boolean)}
-                        className="mt-0.5"
-                      />
-                      <div>
-                        <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
-                          🛣️ Fernverkehr (Übernachtung im LKW / Fernfahrer-Pauschale)
-                        </Label>
-                        {longDistance ? (
-                          <div className="mt-2 space-y-2">
-                            <p className="text-sm text-green-800 font-medium">
-                              Dieser Einsatz wird pauschal pro Einsatztag abgerechnet (Fernfahrer-Pauschale). Keine Stundenabrechnung.
-                            </p>
-                            <p className="text-xs text-green-700">
-                              Gesetzlich zulässige Lenk- und Arbeitszeiten sind mit der Fernfahrer-Pauschale abgegolten. Es erfolgt keine Nachberechnung nach Stunden.
-                            </p>
-                            <div className="bg-white/70 rounded p-2 text-xs text-green-800 border border-green-200">
-                              <strong>450 € netto/Einsatztag</strong> · Arbeitszeit bis 10 Std. abgegolten · Ab Überschreitung von 10 Std. fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag.
+                {/* Fernverkehr / Übernachtung Checkbox – nur für LKW CE sichtbar */}
+                {fahrzeugtyp === 'LKW CE' && (
+                  <fieldset>
+                    <div className={`border-2 rounded-lg p-4 ${longDistance ? 'bg-green-50 border-green-400' : 'bg-green-50/50 border-green-200'}`}>
+                      <div className="flex items-start space-x-2">
+                        <Checkbox 
+                          id="fernverkehr" 
+                          checked={longDistance}
+                          onCheckedChange={(checked) => setLongDistance(checked as boolean)}
+                          className="mt-0.5"
+                        />
+                        <div>
+                          <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
+                            🛣️ Fernverkehr (Übernachtung im LKW / Fernfahrer-Pauschale)
+                          </Label>
+                          {longDistance ? (
+                            <div className="mt-2 space-y-2">
+                              <p className="text-sm text-green-800 font-medium">
+                                Dieser Einsatz wird pauschal pro Einsatztag abgerechnet (Fernfahrer-Pauschale). Keine Stundenabrechnung.
+                              </p>
+                              <p className="text-xs text-green-700">
+                                Gesetzlich zulässige Lenk- und Arbeitszeiten sind mit der Fernfahrer-Pauschale abgegolten. Es erfolgt keine Nachberechnung nach Stunden.
+                              </p>
+                              <div className="bg-white/70 rounded p-2 text-xs text-green-800 border border-green-200">
+                                <strong>450 € netto/Einsatztag</strong> · Pauschale pro Einsatztag – keine Stundenabrechnung.
+                              </div>
                             </div>
-                          </div>
-                        ) : (
-                          <p className="text-xs text-green-800 mt-1">
-                            Fernfahrer-Pauschale: 450 €/Tag netto, bis 10 Std. abgegolten, keine Stundenabrechnung.
-                          </p>
-                        )}
+                          ) : (
+                            <p className="text-xs text-green-800 mt-1">
+                              Fernfahrer-Pauschale: 450 €/Tag netto, Pauschale pro Einsatztag – keine Stundenabrechnung.
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </fieldset>
+                  </fieldset>
+                )}
 
-                {/* Auto-Hinweis bei Kühltransport oder Langstrecke ohne aktive Fernverkehr-Checkbox */}
-                {(temperatureControlled) && !longDistance && (
+                {/* Auto-Hinweis bei Kühltransport ohne aktive Fernverkehr-Checkbox – nur LKW CE */}
+                {fahrzeugtyp === 'LKW CE' && temperatureControlled && !longDistance && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
                     ℹ️ Bei mehrtägigem Fernverkehr mit Übernachtung im LKW gilt die Fernfahrer-Pauschale. Bitte aktivieren Sie oben die Fernverkehr-Option.
                   </div>
@@ -799,7 +801,7 @@ const SimpleBookingForm = () => {
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindlich bestellen</div>
-                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto' : 'ab 349 € netto'}</div>
+                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' ? '459' : fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
                     </div>
                   )}
                 </Button>
