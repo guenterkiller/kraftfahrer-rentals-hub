@@ -643,28 +643,47 @@ const SimpleBookingForm = () => {
                   </div>
                 </fieldset>
 
-                {/* Fernverkehr / Übernachtung Checkbox */}
-                {fahrzeugtyp === 'LKW CE' && (
-                  <fieldset>
-                    <div className="bg-green-50 border-2 border-green-300 rounded-lg p-4">
-                      <div className="flex items-start space-x-2">
-                        <Checkbox 
-                          id="fernverkehr" 
-                          checked={longDistance}
-                          onCheckedChange={(checked) => setLongDistance(checked as boolean)}
-                          className="mt-0.5"
-                        />
-                        <div>
-                          <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
-                            🛣️ Fernverkehr / Übernachtung im LKW
-                          </Label>
+                {/* Fernverkehr / Übernachtung Checkbox – für alle Fahrertypen sichtbar */}
+                <fieldset>
+                  <div className={`border-2 rounded-lg p-4 ${longDistance ? 'bg-green-50 border-green-400' : 'bg-green-50/50 border-green-200'}`}>
+                    <div className="flex items-start space-x-2">
+                      <Checkbox 
+                        id="fernverkehr" 
+                        checked={longDistance}
+                        onCheckedChange={(checked) => setLongDistance(checked as boolean)}
+                        className="mt-0.5"
+                      />
+                      <div>
+                        <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
+                          🛣️ Fernverkehr (Übernachtung im LKW / Fernfahrer-Pauschale)
+                        </Label>
+                        {longDistance ? (
+                          <div className="mt-2 space-y-2">
+                            <p className="text-sm text-green-800 font-medium">
+                              Dieser Einsatz wird pauschal pro Einsatztag abgerechnet (Fernfahrer-Pauschale). Keine Stundenabrechnung.
+                            </p>
+                            <p className="text-xs text-green-700">
+                              Gesetzlich zulässige Lenk- und Arbeitszeiten sind mit der Fernfahrer-Pauschale abgegolten. Es erfolgt keine Nachberechnung nach Stunden.
+                            </p>
+                            <div className="bg-white/70 rounded p-2 text-xs text-green-800 border border-green-200">
+                              <strong>450 € netto/Einsatztag</strong> · Arbeitszeit bis 10 Std. abgegolten · Ab Überschreitung von 10 Std. fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag.
+                            </div>
+                          </div>
+                        ) : (
                           <p className="text-xs text-green-800 mt-1">
-                            Es gilt die Fernfahrer-Pauschale (450 €/Tag netto). Arbeitszeit bis 10 Stunden ist mit der Pauschale abgegolten. Keine Stundenabrechnung, keine Überstunden im Standard.
+                            Fernfahrer-Pauschale: 450 €/Tag netto, bis 10 Std. abgegolten, keine Stundenabrechnung.
                           </p>
-                        </div>
+                        )}
                       </div>
                     </div>
-                  </fieldset>
+                  </div>
+                </fieldset>
+
+                {/* Auto-Hinweis bei Kühltransport oder Langstrecke ohne aktive Fernverkehr-Checkbox */}
+                {(temperatureControlled) && !longDistance && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
+                    ℹ️ Bei mehrtägigem Fernverkehr mit Übernachtung im LKW gilt die Fernfahrer-Pauschale. Bitte aktivieren Sie oben die Fernverkehr-Option.
+                  </div>
                 )}
 
                 {/* Begleitfahrzeuge Requirements */}
