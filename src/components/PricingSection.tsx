@@ -10,6 +10,17 @@ const PricingSection = () => {
     }
   };
 
+  const trackClick = (event: string, label: string, value: number) => {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', event, {
+        event_category: 'Pricing Section',
+        event_label: label,
+        value
+      });
+    }
+    scrollToBooking();
+  };
+
   return (
     <section id="pricing" className="py-20 bg-secondary/5">
       <div className="container mx-auto px-4">
@@ -22,20 +33,20 @@ const PricingSection = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 max-w-7xl mx-auto">
           {/* LKW CE Fahrer */}
-          <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow">
+          <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader className="bg-primary/10 rounded-t-lg">
-              <CardTitle className="text-xl flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2">
                 LKW CE Fahrer
                 <Badge className="bg-primary text-primary-foreground">Vermittelt</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Nahverkehr & Baustelle</h3>
+                <h3 className="font-semibold text-base mb-2">Nahverkehr & Baustelle</h3>
                 <p className="text-2xl font-bold text-primary">349 € / Tag</p>
                 <p className="text-sm text-muted-foreground">8 Std. • 30 € Überstunde</p>
               </div>
-              <div className="pt-3 border-t">
+              <div className="pt-3 border-t flex-1">
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -52,17 +63,8 @@ const PricingSection = () => {
                 </ul>
               </div>
               <Button 
-                className="w-full mt-4 bg-primary hover:bg-primary/90"
-                onClick={() => {
-                  if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_lkw', {
-                      event_category: 'Pricing Section',
-                      event_label: 'LKW CE Fahrer',
-                      value: 349
-                    });
-                  }
-                  scrollToBooking();
-                }}
+                className="w-full mt-auto bg-primary hover:bg-primary/90"
+                onClick={() => trackClick('category_click_lkw', 'LKW CE Fahrer', 349)}
               >
                 CE-Fahrer buchen
               </Button>
@@ -70,20 +72,20 @@ const PricingSection = () => {
           </Card>
 
           {/* Fernfahrer-Pauschale */}
-          <Card className="border-green-500 bg-green-50 hover:shadow-lg transition-shadow">
+          <Card className="border-green-500 bg-green-50 hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader className="bg-green-100 rounded-t-lg">
-              <CardTitle className="text-xl flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2">
                 Fernfahrer-Pauschale
                 <Badge className="bg-green-600 text-white">NEU</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Fernverkehr mit Übernachtung</h3>
+                <h3 className="font-semibold text-base mb-2">Fernverkehr + Übernachtung</h3>
                 <p className="text-2xl font-bold text-green-700">450 € / Tag</p>
                 <p className="text-sm text-muted-foreground">Pauschale pro Einsatztag</p>
               </div>
-              <div className="pt-3 border-t">
+              <div className="pt-3 border-t flex-1">
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-green-600 mt-0.5">✓</span>
@@ -100,17 +102,8 @@ const PricingSection = () => {
                 </ul>
               </div>
               <Button 
-                className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white"
-                onClick={() => {
-                  if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_fernfahrer', {
-                      event_category: 'Pricing Section',
-                      event_label: 'Fernfahrer-Pauschale',
-                      value: 450
-                    });
-                  }
-                  scrollToBooking();
-                }}
+                className="w-full mt-auto bg-green-600 hover:bg-green-700 text-white"
+                onClick={() => trackClick('category_click_fernfahrer', 'Fernfahrer-Pauschale', 450)}
               >
                 Fernfahrer buchen
               </Button>
@@ -118,20 +111,20 @@ const PricingSection = () => {
           </Card>
 
           {/* Baumaschinenführer */}
-          <Card className="border-muted bg-muted/10 hover:shadow-lg transition-shadow">
+          <Card className="border-muted bg-muted/10 hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader className="bg-muted/20 rounded-t-lg">
-              <CardTitle className="text-xl flex items-center gap-2">
-                Baumaschinenführer
+              <CardTitle className="text-lg flex items-center gap-2">
+                Baumaschinen­führer
                 <Badge variant="secondary">Vermittelt</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Bagger, Radlader & mehr</h3>
+                <h3 className="font-semibold text-base mb-2">Bagger, Radlader & mehr</h3>
                 <p className="text-2xl font-bold text-foreground">459 € / Tag</p>
                 <p className="text-sm text-muted-foreground">8 Std. • 60 € Überstunde</p>
               </div>
-              <div className="pt-3 border-t">
+              <div className="pt-3 border-t flex-1">
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -148,18 +141,9 @@ const PricingSection = () => {
                 </ul>
               </div>
               <Button 
-                className="w-full mt-4"
+                className="w-full mt-auto"
                 variant="outline"
-                onClick={() => {
-                  if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_baumaschinen', {
-                      event_category: 'Pricing Section',
-                      event_label: 'Baumaschinenführer',
-                      value: 459
-                    });
-                  }
-                  scrollToBooking();
-                }}
+                onClick={() => trackClick('category_click_baumaschinen', 'Baumaschinenführer', 459)}
               >
                 Baumaschinenführer buchen
               </Button>
@@ -167,20 +151,20 @@ const PricingSection = () => {
           </Card>
 
           {/* Mischmeister */}
-          <Card className="border-blue-500 bg-blue-50 hover:shadow-lg transition-shadow">
+          <Card className="border-blue-500 bg-blue-50 hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader className="bg-blue-100 rounded-t-lg">
-              <CardTitle className="text-xl flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2">
                 Mischmeister
                 <Badge className="bg-blue-600 text-white">Flüssigboden</Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
               <div>
-                <h3 className="font-semibold text-lg mb-2">Anlagenbediener Flüssigboden</h3>
+                <h3 className="font-semibold text-base mb-2">Anlagenbediener Flüssigboden</h3>
                 <p className="text-2xl font-bold text-blue-700">489 € / Tag</p>
                 <p className="text-sm text-muted-foreground">8 Std. • 65 € Überstunde</p>
               </div>
-              <div className="pt-3 border-t">
+              <div className="pt-3 border-t flex-1">
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 mt-0.5">✓</span>
@@ -197,17 +181,8 @@ const PricingSection = () => {
                 </ul>
               </div>
               <Button 
-                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => {
-                  if (typeof window !== 'undefined' && (window as any).gtag) {
-                    (window as any).gtag('event', 'category_click_mischmeister', {
-                      event_category: 'Pricing Section',
-                      event_label: 'Mischmeister',
-                      value: 489
-                    });
-                  }
-                  scrollToBooking();
-                }}
+                className="w-full mt-auto bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => trackClick('category_click_mischmeister', 'Mischmeister', 489)}
               >
                 Mischmeister buchen
               </Button>
@@ -259,7 +234,6 @@ const PricingSection = () => {
             <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Abrechnung erfolgt über Fahrerexpress.</p>
           </CardContent>
         </Card>
-
       </div>
     </section>
   );
