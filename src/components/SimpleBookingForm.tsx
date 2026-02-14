@@ -643,7 +643,7 @@ const SimpleBookingForm = () => {
                   </div>
                 </fieldset>
 
-                {/* Fernverkehr / Übernachtung Checkbox – nur für LKW CE sichtbar */}
+                {/* Fernfahrer-Tarif – nur für LKW CE sichtbar */}
                 {fahrzeugtyp === 'LKW CE' && (
                   <fieldset>
                     <div className={`border-2 rounded-lg p-4 ${longDistance ? 'bg-green-50 border-green-400' : 'bg-green-50/50 border-green-200'}`}>
@@ -656,36 +656,15 @@ const SimpleBookingForm = () => {
                         />
                         <div>
                           <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
-                            🛣️ Fernverkehr (Übernachtung im LKW / Fernfahrer-Pauschale)
+                            🛣️ Fernfahrer-Tarif (Woche / im LKW übernachten)
                           </Label>
-                          {longDistance ? (
-                            <div className="mt-2 space-y-2">
-                              <p className="text-sm text-green-800 font-medium">
-                                Dieser Einsatz wird pauschal pro Einsatztag abgerechnet (Fernfahrer-Pauschale). Keine Stundenabrechnung.
-                              </p>
-                              <p className="text-xs text-green-700">
-                                Gesetzlich zulässige Lenk- und Arbeitszeiten sind mit der Fernfahrer-Pauschale abgegolten. Es erfolgt keine Nachberechnung nach Stunden.
-                              </p>
-                              <div className="bg-white/70 rounded p-2 text-xs text-green-800 border border-green-200">
-                                <strong>450 € netto/Einsatztag</strong> · Pauschale pro Einsatztag – keine Stundenabrechnung.
-                              </div>
-                            </div>
-                          ) : (
-                            <p className="text-xs text-green-800 mt-1">
-                              Fernfahrer-Pauschale: 450 €/Tag netto, Pauschale pro Einsatztag – keine Stundenabrechnung.
-                            </p>
-                          )}
+                          <p className="text-xs text-green-800 mt-1">
+                            Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.
+                          </p>
                         </div>
                       </div>
                     </div>
                   </fieldset>
-                )}
-
-                {/* Auto-Hinweis bei Kühltransport ohne aktive Fernverkehr-Checkbox – nur LKW CE */}
-                {fahrzeugtyp === 'LKW CE' && temperatureControlled && !longDistance && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-800">
-                    ℹ️ Bei mehrtägigem Fernverkehr mit Übernachtung im LKW gilt die Fernfahrer-Pauschale. Bitte aktivieren Sie oben die Fernverkehr-Option.
-                  </div>
                 )}
 
                 {/* Begleitfahrzeuge Requirements */}
@@ -801,7 +780,7 @@ const SimpleBookingForm = () => {
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindlich bestellen</div>
-                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' ? '459' : fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
+                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Tarif 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' ? '459' : fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
                     </div>
                   )}
                 </Button>
