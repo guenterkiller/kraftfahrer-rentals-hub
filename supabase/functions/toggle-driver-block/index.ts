@@ -19,6 +19,32 @@ interface BlockDriverRequest {
   reason?: string;
 }
 
+// Check if the reason indicates a voluntary newsletter unsubscribe (not misconduct)
+function isNewsletterOptOut(reason?: string): boolean {
+  if (!reason) return false;
+  const normalized = reason.toLowerCase().trim();
+  const optOutPatterns = [
+    'abmeldung vom rundschreiben',
+    'keine weiteren e-mails',
+    'keine emails mehr',
+    'keine e-mails mehr',
+    'vom verteiler abmelden',
+    'verteilerabmeldung',
+    'newsletter abmelden',
+    'newsletter abbestellen',
+    'rundschreiben abmelden',
+    'möchte keine mails',
+    'will keine mails',
+    'will keine e-mails',
+    'keine benachrichtigungen',
+    'abmeldung vom newsletter',
+    'opt-out',
+    'opt out',
+    'unsubscribe',
+  ];
+  return optOutPatterns.some(p => normalized.includes(p));
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -32,6 +58,44 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // ── Newsletter opt-out path (no block, no punitive email) ──
+    if (isBlocked && isNewsletterOptOut(reason)) {
+      console.log(`📧 Newsletter opt-out for driver ${driverId} – no block triggered`);
+
+      const { error: optOutError } = await supabase
+        .from('fahrer_profile')
+        .update({
+          email_opt_out: true,
+          status: 'inactive',
+          blocked_reason: 'Inaktiv – Verteilerabmeldung auf Wunsch',
+          // Explicitly NOT setting is_blocked = true
+          is_blocked: false,
+          blocked_at: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', driverId);
+
+      if (optOutError) {
+        console.error('❌ Failed to set newsletter opt-out:', optOutError);
+        return new Response(JSON.stringify({ error: 'Failed to update driver status' }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+
+      console.log(`✅ Driver ${driverId} marked as inactive (newsletter opt-out). No block email sent.`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        type: 'newsletter_optout',
+        message: 'Kein Fehlverhalten – freiwillige Abmeldung. Fahrer bleibt technisch verfügbar, aber nicht im Verteiler.',
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    // ── Standard block/unblock path ──
     console.log(`🔄 ${isBlocked ? 'Blocking' : 'Unblocking'} driver ${driverId}`);
 
     const updateData: any = {
@@ -62,7 +126,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`✅ Driver ${isBlocked ? 'blocked' : 'unblocked'} successfully`);
 
-    // Send email notification to driver in background
+    // Send email notification to driver in background (only for real blocks)
     if (isBlocked) {
       EdgeRuntime.waitUntil(sendBlockNotification(driverId, reason || 'Keine Begründung angegeben', supabase));
     }
