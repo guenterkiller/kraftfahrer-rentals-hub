@@ -13,9 +13,44 @@ serve(async (req) => {
   }
 
   try {
+    // Authentication: accept EITHER x-newsletter-secret header OR valid admin JWT
+    const secret = req.headers.get('x-newsletter-secret');
+    const expectedSecret = Deno.env.get('INTERNAL_FN_SECRET');
+    const authHeader = req.headers.get('authorization');
+    
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    
+    let isAuthorized = false;
+    
+    // Path 1: Header-based secret (for system/cron calls)
+    if (secret && expectedSecret && secret === expectedSecret) {
+      isAuthorized = true;
+    }
+    
+    // Path 2: JWT-based admin check (for admin panel)
+    if (!isAuthorized && authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+      if (!authError && user) {
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('role', 'admin')
+          .maybeSingle();
+        if (roleData) isAuthorized = true;
+      }
+    }
+    
+    if (!isAuthorized) {
+      console.error('Unauthorized newsletter request – no valid secret or admin JWT');
+      return new Response(
+        JSON.stringify({ error: 'Forbidden' }),
+        { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     const { subject, message } = await req.json();
 
