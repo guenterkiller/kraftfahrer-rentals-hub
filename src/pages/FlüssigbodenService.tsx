@@ -141,7 +141,7 @@ const FlüssigbodenService = () => {
                 <span className="font-semibold">info@kraftfahrer-mieten.com</span>
               </div>
               <div className="text-sm text-muted-foreground">
-                <strong>Verfügbarkeit:</strong> Deutschlandweit • <strong>Reaktionszeit:</strong> Meist &lt; 24h
+                <strong>Verfügbarkeit:</strong> Deutschlandweit • <strong>Rückmeldung:</strong> nach Verfügbarkeit
               </div>
             </div>
           </div>

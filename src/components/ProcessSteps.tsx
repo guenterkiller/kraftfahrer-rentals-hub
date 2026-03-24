@@ -59,13 +59,13 @@ const ProcessSteps = () => {
             <strong>Kurz erklärt:</strong> Anfrage senden → passende selbstständige Unternehmer werden vorgeschlagen → Einsatz erfolgt nach Bestätigung. Keine Arbeitnehmerüberlassung (AÜG).
           </p>
           <p className="text-sm text-muted-foreground">
-            Anfragen sind unverbindlich. Ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress. Die Auftragsbestätigung kann in Textform erfolgen; eine Bestätigung per E-Mail ist ausreichend.
+            Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage zur Fahrerdisposition. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Die Auftragsbestätigung kann in Textform erfolgen; eine Bestätigung per E-Mail ist ausreichend.
           </p>
         </div>
 
         <div className="text-center bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
           <p className="text-sm text-blue-900">
-            <strong>Die Abrechnung erfolgt über die Fahrerexpress-Agentur.</strong> Vertragspartner ist Fahrerexpress. Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.
+            <strong>Die Abrechnung erfolgt über die Fahrerexpress-Agentur.</strong> Vertragspartner ist Fahrerexpress. Die Fahrer arbeiten eigenverantwortlich auf Basis eines Dienst- oder Werkvertrags – keine Arbeitnehmerüberlassung.
           </p>
         </div>
       </div>

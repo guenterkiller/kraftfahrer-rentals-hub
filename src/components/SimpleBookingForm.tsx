@@ -194,7 +194,7 @@ const SimpleBookingForm = () => {
                 <PWAInstallButton />
               </div>
               <p className="text-center sm:text-left text-muted-foreground mb-4">
-                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. Anfragen sind unverbindlich. Ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress.
+                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage zur Fahrerdisposition. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung.
               </p>
               
               {/* Quick Benefits */}
@@ -206,7 +206,7 @@ const SimpleBookingForm = () => {
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Schnell</strong> – Antwort in 2-6h</span>
+                    <span><strong>Schnell</strong> – zügige Rückmeldung</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
@@ -824,14 +824,14 @@ const SimpleBookingForm = () => {
                 >
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
-                      <div>Verbindlich bestellen</div>
+                      <div>Verbindliche Anfrage senden</div>
                       <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Tarif 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' ? '459' : fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
                     </div>
                   )}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-3">
-                  Hinweis: Diese Buchung ist verbindlich. Es gelten die veröffentlichten Storno- und Zahlungsbedingungen.
+                  Hinweis: Mit Absenden stellen Sie eine verbindliche Anfrage. Es gelten die veröffentlichten Storno- und Zahlungsbedingungen.
                 </p>
               </form>
 

@@ -55,7 +55,7 @@ const LKWFahrerBuchen = () => {
         answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer sofort buchbar."
       },
       {
-        question: "Kann ich einen Fahrer sofort oder für heute bestellen?",
+        question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
         answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
       },
       {
@@ -109,7 +109,7 @@ const LKWFahrerBuchen = () => {
   const heroData = {
     h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
     intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. 349 € pro Tag (8h).",
-    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer sofort auf Abruf", "Transparente Tagessätze"]
+    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig auf Abruf", "Transparente Tagessätze"]
   };
 
   const faqData = {
@@ -148,7 +148,7 @@ const LKWFahrerBuchen = () => {
         answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer sofort buchbar."
       },
       {
-        question: "Kann ich einen Fahrer sofort oder für heute bestellen?",
+        question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
         answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
       },
       {

@@ -44,7 +44,7 @@ const LegalSecuritySection = () => {
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    <strong>Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.</strong> Die Zusammenarbeit erfolgt auf Basis einer eigenständigen unternehmerischen Leistung.
+                    <strong>Die Fahrer arbeiten eigenverantwortlich auf Basis eines Dienst- oder Werkvertrags.</strong> Es erfolgt keine Eingliederung in den Betrieb des Auftraggebers (keine Arbeitnehmerüberlassung).
                   </p>
                 </div>
 
