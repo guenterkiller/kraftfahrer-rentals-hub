@@ -387,7 +387,7 @@ const FlüssigbodenService = () => {
                   <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div className="mt-3 text-muted-foreground">
-                  Die vollständige Verantwortung für Materialqualität, Rezeptur, Anlagenwartung und Gewährleistung liegt beim Auftraggeber. Der Mischmeister führt die Arbeiten ausschließlich nach Ihren Anweisungen aus.
+                  Die vollständige Verantwortung für Materialqualität, Rezeptur, Anlagenwartung und Gewährleistung liegt beim Auftraggeber. Der Mischmeister führt die Arbeiten ausschließlich auf Grundlage der vom Auftraggeber vorgegebenen Einsatz- und Projektdaten aus.
                 </div>
               </details>
               
