@@ -11,17 +11,17 @@ const HowItWorksTimeline = () => {
     {
       icon: Settings,
       title: "2. Disposition",
-      description: "Wir prüfen verfügbare Fahrer und weisen den passenden Kandidaten über unseren Adminbereich zu. Schnell und zielgerichtet."
+      description: "Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung."
     },
     {
       icon: CheckCircle,
       title: "3. Einsatzbestätigung",
-      description: "Sie erhalten die Bestätigung mit allen Details. Der Fahrer nimmt direkten Kontakt auf und koordiniert den Einsatzstart."
+      description: "Sie erhalten die Bestätigung mit allen Details. Mit Bestätigung des Einsatzes entsteht ein verbindlicher Auftrag. Der selbstständige Unternehmer nimmt direkten Kontakt auf."
     },
     {
       icon: Receipt,
       title: "4. Abrechnung",
-      description: "Sie erhalten eine übersichtliche Rechnung für die erbrachte Leistung. Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags – keine Arbeitnehmerüberlassung."
+      description: "Sie erhalten eine übersichtliche Rechnung von der Fahrerexpress-Agentur. Die eingesetzten selbstständigen Unternehmer arbeiten auf Basis eines Dienst-/Werkvertrags – keine Arbeitnehmerüberlassung."
     }
   ];
 

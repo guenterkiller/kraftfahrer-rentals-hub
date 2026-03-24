@@ -172,9 +172,12 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
 
         {/* Legal Disclaimer */}
         <section className="py-8 px-4 bg-muted/30">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto text-center space-y-2">
             <p className="text-sm text-muted-foreground font-medium">
-              Dienst-/Werkleistung durch selbstständige Subunternehmer – keine Arbeitnehmerüberlassung.
+              Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Keine Arbeitnehmerüberlassung (AÜG). Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.
             </p>
           </div>
         </section>
