@@ -5,34 +5,47 @@ import { CookieConsent } from '@/components/CookieConsent';
 import { initPerfDebug, setupGTMDebugLogger } from '@/utils/perfDebug';
 import './index.css'
 
-// ============================================
-// PREVIEW GUARD: SW + Cache Cleanup in Lovable Preview
-// Verhindert CORS-Fehler durch auth-bridge Fetches
-// ============================================
-const isLovablePreview =
-  window.location.hostname.includes('lovable.app') ||
-  window.location.hostname.includes('lovableproject.com') ||
-  window.location.hostname.includes('lovable.dev') ||
-  window.location.search.includes('__lovable_token');
+const hostname = window.location.hostname;
+const search = window.location.search;
 
-if (isLovablePreview && 'serviceWorker' in navigator) {
-  // Alle bestehenden SW deregistrieren + Caches leeren
-  navigator.serviceWorker.getRegistrations().then(regs => {
-    regs.forEach(r => {
-      r.unregister();
-      console.log('[SW-Guard] Service Worker deregistriert:', r.scope);
-    });
-  });
-  caches.keys().then(names => {
-    names.forEach(name => {
-      caches.delete(name);
-      console.log('[SW-Guard] Cache gelöscht:', name);
-    });
-  });
-  console.log('[SW-Guard] Lovable Preview erkannt – SW deaktiviert');
+const isLovablePreview =
+  hostname.includes('lovable.app') ||
+  hostname.includes('lovableproject.com') ||
+  hostname.includes('lovable.dev') ||
+  search.includes('__lovable_token');
+
+const isProductionSwDomain =
+  hostname === 'kraftfahrer-mieten.com' ||
+  hostname === 'www.kraftfahrer-mieten.com' ||
+  hostname === 'fahrerexpress.de' ||
+  hostname === 'www.fahrerexpress.de';
+
+async function cleanupPreviewServiceWorkers() {
+  if (!('serviceWorker' in navigator)) return;
+
+  const registrations = await navigator.serviceWorker.getRegistrations();
+  await Promise.all(registrations.map((registration) => registration.unregister()));
+
+  if ('caches' in window) {
+    const cacheNames = await caches.keys();
+    await Promise.all(
+      cacheNames
+        .filter((name) => name.includes('workbox') || name.includes('vite-pwa') || name.includes('js-chunks-cache'))
+        .map((name) => caches.delete(name))
+    );
+  }
+
+  console.log('[SW-Guard] Lovable Preview erkannt – Service Worker bereinigt');
 }
 
-// Performance Debug initialisieren (nur bei ?perfdebug=1)
+if (isLovablePreview) {
+  void cleanupPreviewServiceWorkers();
+} else if (isProductionSwDomain && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    void navigator.serviceWorker.register('/sw.js', { scope: '/' });
+  });
+}
+
 setupGTMDebugLogger();
 initPerfDebug();
 
