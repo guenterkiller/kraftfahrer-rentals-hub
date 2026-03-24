@@ -417,7 +417,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Ja. Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer bundesweit in ganz Deutschland. Sie können LKW-Fahrer buchen deutschlandweit – unsere Fahrer-Vermittlung ist bundesweit aktiv.
+                    Ja. Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer deutschlandweit. Sie können LKW-Fahrer deutschlandweit buchen – unsere Fahrer-Vermittlung ist bundesweit aktiv.
                   </p>
                 </CardContent>
               </Card>
