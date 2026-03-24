@@ -49,8 +49,11 @@ const PreiseUndAblauf = () => {
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Fahrer mieten, leihen oder bestellen – Preise & Ablauf
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Ersatzfahrer, Aushilfsfahrer, Mietfahrer & Leihfahrer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-3">
+                Selbstständige Unternehmer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
+              </p>
+              <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
+                Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.
               </p>
             </div>
 
@@ -155,13 +158,13 @@ const PreiseUndAblauf = () => {
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">✅</div>
-                    <p className="font-semibold text-green-900 mb-1">Kein AÜG</p>
-                    <p className="text-sm text-muted-foreground">Keine Arbeitnehmerüberlassungs-regelungen</p>
+                    <p className="font-semibold text-green-900 mb-1">Keine Arbeitnehmerüberlassung (AÜG)</p>
+                    <p className="text-sm text-muted-foreground">Vermittlung selbstständiger Unternehmer</p>
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">💰</div>
                     <p className="font-semibold text-green-900 mb-1">Keine Lohnnebenkosten</p>
-                    <p className="text-sm text-muted-foreground">Kein Sozialversicherungsaufwand, keine Verwaltung</p>
+                    <p className="text-sm text-muted-foreground">Selbstständige Unternehmer – keine Verwaltung</p>
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">⚡</div>
@@ -170,7 +173,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung – professionelle Vermittlung für B2B-Kunden.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern.</p>
                 </div>
               </CardContent>
             </Card>
@@ -364,8 +367,7 @@ const PreiseUndAblauf = () => {
                     <CardTitle>Fahrer-Prüfung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Wir prüfen freie Fahrer mit passenden Qualifikationen und schlagen geeignete Kandidaten vor.</p>
-                    <p className="text-sm text-primary font-semibold">⏱️ Antwortzeit: 2–6 Stunden</p>
+                    <p className="text-muted-foreground mb-2">Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung.</p>
                   </CardContent>
                 </Card>
 
@@ -377,9 +379,8 @@ const PreiseUndAblauf = () => {
                     <CardTitle>Einsatz startet & Abrechnung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Der Fahrer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur mit transparenter Abrechnung der erbrachten Leistung.</p>
-                    <p className="text-sm text-primary font-semibold">💼 Professionelle Abwicklung</p>
-                    <p className="text-xs text-muted-foreground mt-2">Hinweis: Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.</p>
+                    <p className="text-muted-foreground mb-2">Der selbstständige Unternehmer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur.</p>
+                    <p className="text-sm text-primary font-semibold">💼 Mit Bestätigung des Einsatzes entsteht ein verbindlicher Auftrag.</p>
                   </CardContent>
                 </Card>
               </div>
@@ -448,82 +449,6 @@ const PreiseUndAblauf = () => {
               </div>
             </div>
 
-            {/* Was bleibt beim Fahrer übrig - Infobox */}
-            <div className="mb-4 text-center">
-              <h2 className="text-2xl font-bold text-emerald-900 mb-2">Transparenz für Auftraggeber</h2>
-              <p className="text-muted-foreground">Warum der Tagessatz fair kalkuliert ist – ein Blick hinter die Zahlen</p>
-            </div>
-            <Card className="mb-12 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50">
-              <CardHeader>
-                <CardTitle className="text-xl flex items-center gap-2 text-emerald-900">
-                  <Euro className="h-6 w-6 text-emerald-600" />
-                  Was bleibt beim Fahrer realistisch übrig?
-                </CardTitle>
-                <CardDescription className="text-emerald-700">
-                  Orientierungsrechnung für selbstständige LKW-Fahrer (CE)
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-white rounded-lg p-4 border border-emerald-200">
-                  <p className="font-semibold text-emerald-900 mb-3">Beispiel: 20 Einsatztage im Monat</p>
-                  <div className="space-y-2 text-sm md:text-base">
-                    <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">Monatliche Einnahmen (20 Tage)</span>
-                      <span className="font-semibold">ca. 5.900 €</span>
-                    </div>
-                    
-                    <p className="text-xs text-muted-foreground pt-2 pb-1 font-medium">Typische Abgaben als Selbstständiger:</p>
-                    
-                    <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">– Krankenversicherung (gesetzl./privat)</span>
-                      <span className="font-semibold text-red-600">– ca. 450–650 €</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">– Altersvorsorge / Rentenversicherung</span>
-                      <span className="font-semibold text-red-600">– ca. 300–500 €</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">– Einkommensteuer (geschätzt)</span>
-                      <span className="font-semibold text-red-600">– ca. 700–1.000 €</span>
-                    </div>
-                    <div className="flex justify-between py-2 border-b border-emerald-100">
-                      <span className="text-muted-foreground">– Betriebsausgaben (Telefon, Buchhaltung etc.)</span>
-                      <span className="font-semibold text-red-600">– ca. 100–200 €</span>
-                    </div>
-                  </div>
-                  
-                  {/* Ergebnis hervorgehoben */}
-                  <div className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg p-4 text-white">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-                      <span className="font-bold text-lg">≈ Netto beim Fahrer:</span>
-                      <span className="font-bold text-2xl sm:text-3xl">ca. 3.800 – 4.000 €</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Zusätzliche Einnahmen */}
-                <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
-                  <p className="font-semibold text-emerald-900 mb-2">💡 Zusätzliche Einnahmen möglich:</p>
-                  <ul className="space-y-1 text-sm text-emerald-800">
-                    <li>• Überstunden (30 € je Stunde ab der 9. Std.)</li>
-                    <li>• Zuschläge für Nacht-, Wochenend- & Feiertagsarbeit</li>
-                    <li>• Fahrtkosten-Erstattung ab dem 26. km</li>
-                    <li>• Übernachtungspauschale bei Fernverkehr</li>
-                  </ul>
-                </div>
-
-                {/* Disclaimer */}
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mt-4">
-                  <div className="flex items-start gap-2">
-                    <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                    <div className="text-xs md:text-sm text-amber-900">
-                      <p className="font-semibold mb-1">⚠️ Wichtiger Hinweis</p>
-                      <p>Die dargestellten Werte sind Durchschnittswerte und begründen keinen Anspruch auf tatsächliche oder zukünftige Einnahmen. Die tatsächlichen Abgaben hängen von individuellen Faktoren ab (Familienstand, gewählte Versicherungen, absetzbare Betriebsausgaben). Diese Berechnung dient ausschließlich der Orientierung und stellt <strong>keine Steuer- oder Rechtsberatung</strong> dar.</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
             {/* Rechtliche Hinweise */}
             <Card className="mb-12 border-blue-200 bg-blue-50/50">
@@ -535,19 +460,26 @@ const PreiseUndAblauf = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Selbstständige Fahrer</h3>
-                  <p className="text-muted-foreground">Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Subunternehmer ist in der Ausführung seiner Tätigkeit fachlich eigenverantwortlich und nicht in die Arbeitsorganisation des Auftraggebers eingegliedert.</p>
+                  <h3 className="font-semibold text-lg mb-2">Kein eigenes Fahrpersonal</h3>
+                  <p className="text-muted-foreground">Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe. Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Zusammenarbeit</h3>
-                  <p className="text-muted-foreground">Die Einsätze werden über die Fahrerexpress-Agentur koordiniert. Die Fahrleistung wird von selbstständigen Unternehmern erbracht, Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.</p>
+                  <h3 className="font-semibold text-lg mb-2">Keine Arbeitnehmerüberlassung (AÜG)</h3>
+                  <p className="text-muted-foreground">Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer auf Basis eines Dienst-/Werkvertrags. Der Subunternehmer ist in der Ausführung seiner Tätigkeit fachlich eigenverantwortlich und nicht in die Arbeitsorganisation des Auftraggebers eingegliedert.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Weisungsrecht</h3>
+                  <p className="text-muted-foreground">Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen. Die Zusammenarbeit erfolgt auf Basis einer eigenständigen unternehmerischen Leistung.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Sozialversicherung</h3>
+                  <p className="text-muted-foreground">Die eingesetzten Unternehmer sind eigenständig tätig. Eine sozialversicherungsrechtliche Bewertung erfolgt im Einzelfall durch die zuständigen Behörden.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Haftung & Versicherung</h3>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Der Fahrer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
-                    <li>• Keine Sozialversicherungspflicht für Sie als Auftraggeber.</li>
-                    <li>• Keine AÜG-Meldepflichten erforderlich.</li>
+                    <li>• Der selbstständige Unternehmer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
+                    <li>• Für Schäden im Zusammenhang mit der Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</li>
                   </ul>
                 </div>
               </CardContent>

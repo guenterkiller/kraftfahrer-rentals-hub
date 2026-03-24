@@ -9,13 +9,13 @@ const ProcessSteps = () => {
     },
     {
       icon: UserCheck,
-      title: "Passende Fahrer vorgeschlagen bekommen",
-      description: "Wir prüfen verfügbare, selbstständige Fahrer mit passenden Qualifikationen und melden uns telefonisch oder per Mail."
+      title: "Passende Unternehmer vorgeschlagen bekommen",
+      description: "Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung."
     },
     {
       icon: Truck,
       title: "Einsatz starten",
-      description: "Der Fahrer stimmt die Details direkt mit Ihnen ab und erscheint pünktlich zum Einsatz."
+      description: "Der selbstständige Unternehmer stimmt die Details direkt mit Ihnen ab. Mit Bestätigung des Einsatzes entsteht ein verbindlicher Auftrag."
     }
   ];
 

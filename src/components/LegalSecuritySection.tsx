@@ -27,41 +27,55 @@ const LegalSecuritySection = () => {
             </CardHeader>
             <CardContent className="pt-6">
               <div className="space-y-4">
-              <div className="flex items-start gap-2 md:gap-3">
+                <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    <strong>Alle vermittelten Fahrer sind selbstständige Unternehmer mit eigenem Gewerbe</strong> und arbeiten auf Basis eines Dienst-/Werkvertrags.
+                    <strong>Es wird kein eigenes Fahrpersonal gestellt.</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe.
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    <strong>Die Fahrerexpress-Agentur beschäftigt keine Fahrer</strong> – wir vermitteln und organisieren selbstständige Subunternehmer.
+                    <strong>Keine Arbeitnehmerüberlassung (AÜG).</strong> Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer.
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    Es handelt sich <strong>nicht um Arbeitnehmerüberlassung</strong> (kein AÜG).
+                    <strong>Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.</strong> Die Zusammenarbeit erfolgt auf Basis einer eigenständigen unternehmerischen Leistung.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2 md:gap-3">
+                  <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+                    Die eingesetzten Unternehmer sind eigenständig tätig. <strong>Eine sozialversicherungsrechtliche Bewertung erfolgt im Einzelfall durch die zuständigen Behörden.</strong>
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    Sie erhalten eine <strong>übersichtliche Rechnung direkt von der Fahrerexpress-Agentur</strong>. Die Einsätze werden über uns gebündelt abgerechnet.
+                    Sie erhalten eine <strong>übersichtliche Rechnung direkt von der Fahrerexpress-Agentur</strong>. Keine zusätzlichen Vermittlungsgebühren – transparente Tagessätze ohne versteckte Kosten.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2 md:gap-3">
+                  <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm md:text-base text-gray-700 leading-relaxed">
+                    Für Schäden im Zusammenhang mit der Durchführung des Einsatzes <strong>haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</strong>
                   </p>
                 </div>
                 
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    <strong>Keine zusätzlichen Vermittlungsgebühren</strong> über die vereinbarten Tages- und Nebenkosten hinaus – transparente Tagessätze ohne versteckte Kosten.
+                    Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – <strong>Fahrzeuge werden nicht gestellt.</strong>
                   </p>
                 </div>
-                
+
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
