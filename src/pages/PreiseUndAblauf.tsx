@@ -364,8 +364,7 @@ const PreiseUndAblauf = () => {
                     <CardTitle>Fahrer-Prüfung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Wir prüfen freie Fahrer mit passenden Qualifikationen und schlagen geeignete Kandidaten vor.</p>
-                    <p className="text-sm text-primary font-semibold">⏱️ Antwortzeit: 2–6 Stunden</p>
+                    <p className="text-muted-foreground mb-2">Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung.</p>
                   </CardContent>
                 </Card>
 
