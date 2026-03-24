@@ -206,7 +206,7 @@ const SimpleBookingForm = () => {
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Schnell</strong> – Antwort in 2-6h</span>
+                    <span><strong>Schnell</strong> – zügige Rückmeldung</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
