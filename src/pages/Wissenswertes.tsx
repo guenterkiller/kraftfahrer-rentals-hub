@@ -66,7 +66,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    24–72 h Vorlauf
+                    Kurzfristige Vermittlung nach Verfügbarkeit
                   </p>
                 </CardContent>
               </Card>

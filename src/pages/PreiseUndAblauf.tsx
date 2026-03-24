@@ -53,7 +53,7 @@ const PreiseUndAblauf = () => {
                 Selbstständige Unternehmer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
               </p>
               <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
-                Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.
+                Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen – Fahrzeuge werden nicht gestellt.
               </p>
             </div>
 
@@ -173,7 +173,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern.</p>
                 </div>
               </CardContent>
             </Card>
@@ -464,8 +464,8 @@ const PreiseUndAblauf = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Kein eigenes Fahrpersonal</h3>
-                  <p className="text-muted-foreground">Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe. Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.</p>
+                  <h3 className="font-semibold text-lg mb-2">Keine eigene Fahrerstellung</h3>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen – Fahrzeuge werden nicht gestellt.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Keine Arbeitnehmerüberlassung (AÜG)</h3>

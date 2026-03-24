@@ -55,10 +55,10 @@ const EUDriverRecruitment = () => {
             EU-Fahrer willkommen – Kierowcy z UE mile widziani
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-2">
-            Wir vermitteln qualifizierte LKW-Fahrer, Baumaschinenführer und Mischmeister aus der gesamten Europäischen Union
+            EU/EWR-Fahrer verfügbar – je nach Qualifikation, Einsatzart und rechtlicher Einsatzmöglichkeit
           </p>
           <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto italic">
-            We place qualified truck drivers, construction machine operators and liquid screed specialists from across the European Union
+            EU/EEA drivers available – depending on qualification, type of assignment and legal eligibility
           </p>
         </div>
 

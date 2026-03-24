@@ -430,7 +430,7 @@ const SimpleBookingForm = () => {
                       })()}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Frühester Einsatz: nächster Werktag (24–72 h Vorlauf); kein Same-Day
+                      Frühester Einsatz: nächster Werktag (ausreichend Vorlauf nötig); kein Same-Day
                     </p>
                   </div>
                   <div>

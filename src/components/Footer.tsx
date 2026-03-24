@@ -68,7 +68,7 @@ const Footer = () => {
             <ul className="space-y-2 text-sm mb-4">
               <li>
                 <Link to="/fahrer-registrierung" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
-                  Partner werden
+                  Als Fahrer registrieren
                 </Link>
               </li>
               <li>

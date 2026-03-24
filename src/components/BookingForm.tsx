@@ -435,7 +435,7 @@ const BookingForm = () => {
                   <p className="font-medium mb-2">⏰ Wichtige Timing-Hinweise:</p>
                   <ul className="space-y-1">
                     <li>• <strong>Frühester Einsatz:</strong> nächster Werktag nach schriftlicher Bestätigung (werktags)</li>
-                    <li>• <strong>Same-Day nicht möglich</strong> - Planung benötigt 24–72h Vorlauf</li>
+                    <li>• <strong>Same-Day nicht möglich</strong> - Planung benötigt ausreichend Vorlauf</li>
                     <li>• <strong>Weite Einsätze (&gt;150 km):</strong> Anreise am Vortag empfohlen; Übernachtung nach Vereinbarung</li>
                   </ul>
                 </div>
