@@ -109,7 +109,7 @@ const LKWFahrerBuchen = () => {
   const heroData = {
     h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
     intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. 349 € pro Tag (8h).",
-    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer sofort auf Abruf", "Transparente Tagessätze"]
+    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig auf Abruf", "Transparente Tagessätze"]
   };
 
   const faqData = {
