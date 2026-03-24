@@ -101,14 +101,14 @@ const Wissenswertes = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                     <FileText className="h-5 w-5 text-red-600" />
-                    Kein Arbeitsrecht
+                    Einfache Abrechnung
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Keine Lohnabrechnung
+                    Keine Lohnabrechnung nötig – Abrechnung über Fahrerexpress
                   </p>
                 </CardContent>
               </Card>
@@ -117,7 +117,7 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Shield className="h-5 w-5 text-orange-600" />
-                    Zusammenarbeit auf Vertragsbasis
+                    Zusammenarbeit auf klar geregelter vertraglicher Basis
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -156,7 +156,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>✓ Keine detaillierten Arbeitszeiten vorschreiben</li>
+                    <li>✓ Die Zusammenarbeit erfolgt auf Basis eines Dienst- oder Werkvertrags ohne Eingliederung in die Betriebsorganisation des Auftraggebers</li>
                     <li>✓ Ergebnis definieren, nicht den Weg</li>
                     <li>✓ Fahrer nicht in Dienstpläne integrieren</li>
                     <li>✓ Fahrer sollte mehrere Auftraggeber haben</li>
@@ -219,7 +219,7 @@ const Wissenswertes = () => {
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>• Der Auftraggeber bleibt Fahrzeughalter nach StVG</li>
                     <li>• Schäden am Fahrzeug werden über die Fahrzeugversicherung des Auftraggebers reguliert</li>
-                    <li>• Der Fahrer haftet nur bei Vorsatz oder grober Fahrlässigkeit</li>
+                    <li>• Die Haftung richtet sich nach den gesetzlichen Bestimmungen sowie den individuell vereinbarten Vertragsregelungen</li>
                     <li>• Eine Betriebshaftpflicht des Fahrers deckt Schäden außerhalb des Fahrzeugs</li>
                     <li>• Haftungsausschlüsse und Verantwortlichkeiten sollen vertraglich eindeutig festgelegt werden</li>
                   </ul>
@@ -395,19 +395,19 @@ const Wissenswertes = () => {
                 </Card>
 
               <Card>
-400:                 <CardHeader>
-401:                   <CardTitle className="text-lg">
-402:                     Wie ist die Qualifikation der Fahrer sichergestellt?
-403:                   </CardTitle>
-404:                 </CardHeader>
-405:                 <CardContent>
-406:                   <p className="text-muted-foreground">
-407:                     Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
-408:                     entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
-409:                     oder Kranführerschein, je nach Anforderung.
-410:                   </p>
-411:                 </CardContent>
-412:               </Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Wie ist die Qualifikation der Fahrer sichergestellt?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
+                    entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
+                    oder Kranführerschein, je nach Anforderung.
+                  </p>
+                </CardContent>
+              </Card>
 
               <Card>
                 <CardHeader>
@@ -417,7 +417,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Ja. Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer bundesweit in ganz Deutschland. Sie können LKW-Fahrer buchen deutschlandweit – unsere Fahrer-Vermittlung ist bundesweit aktiv.
+                    Ja. Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer, Kraftfahrer und Baumaschinenführer deutschlandweit. Sie können LKW-Fahrer deutschlandweit buchen – unsere Fahrer-Vermittlung ist bundesweit aktiv.
                   </p>
                 </CardContent>
               </Card>
@@ -456,7 +456,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer deutschlandweit organisieren – kurzfristige Vermittlung nach Verfügbarkeit. Kraftfahrer mieten ist bundesweit möglich.
+                    Bei kurzfristigen Ausfällen können wir einen Ersatzfahrer deutschlandweit organisieren – kurzfristig im Rahmen der Verfügbarkeit. Kraftfahrer mieten ist bundesweit möglich.
                   </p>
                 </CardContent>
               </Card>
@@ -504,7 +504,7 @@ const Wissenswertes = () => {
                     <a href="/#contact">Kostenlose Beratung</a>
                   </Button>
                   <Button variant="outline" asChild>
-                    <a href="tel:+49123456789">📞 Anrufen</a>
+                    <a href="tel:+4915771442285">📞 Anrufen: 01577 1442285</a>
                   </Button>
                 </div>
               </CardContent>
