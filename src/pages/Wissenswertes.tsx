@@ -117,7 +117,7 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Shield className="h-5 w-5 text-orange-600" />
-                    Rechtssichere Zusammenarbeit
+                    Zusammenarbeit auf Vertragsbasis
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -312,8 +312,8 @@ const Wissenswertes = () => {
                   <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg mb-2">5. Verbot der Direktabwerbung</h4>
-                  <p className="text-muted-foreground">Der Auftraggeber verpflichtet sich, Fahrer nicht direkt oder am System vorbei zu beauftragen.</p>
+                  <h4 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h4>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist unzulässig.</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">6. Gerichtsstand</h4>
@@ -338,9 +338,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    In der Regel können erfahrene selbstständige Fahrer sehr kurzfristig eingesetzt werden. 
-                    In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen.
-                    Fahrer verfügbar sind.
+                    Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Kurzfristige Vermittlung nach Verfügbarkeit.
                   </p>
                 </CardContent>
               </Card>
@@ -445,7 +443,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Nein. Unsere Fahrer sind selbstständige LKW-Fahrer, Baumaschinenführer oder Mischmeister und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung.
+                    Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag.
                   </p>
                 </CardContent>
               </Card>
@@ -458,7 +456,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer oder Notfallfahrer deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich.
+                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer deutschlandweit organisieren – kurzfristige Vermittlung nach Verfügbarkeit. Kraftfahrer mieten ist bundesweit möglich.
                   </p>
                 </CardContent>
               </Card>

@@ -41,7 +41,7 @@ const HeroSection = () => {
         
         <div className="bg-white/15 backdrop-blur-md px-4 py-3 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-2xl border-2 border-white/30 shadow-xl animate-fade-in">
           <p className="text-xs sm:text-sm md:text-base text-white font-medium">
-            🇪🇺 <strong className="text-white">EU/EWR-Fahrer verfügbar:</strong> Qualifizierte Kraftfahrer aus Deutschland und der gesamten Europäischen Union
+            🇪🇺 <strong className="text-white">EU/EWR-Fahrer verfügbar</strong> – je nach Qualifikation, Einsatzart und rechtlicher Einsatzmöglichkeit
           </p>
         </div>
         

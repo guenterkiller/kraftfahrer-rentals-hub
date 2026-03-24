@@ -609,7 +609,7 @@ const FahrerRegistrierung = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇩🇪 Deutsch</p>
-                      <p className="text-muted-foreground text-xs">Wir vermitteln Fahrer aus allen EU/EWR-Ländern. Rechtssichere Zusammenarbeit garantiert.</p>
+                      <p className="text-muted-foreground text-xs">Wir vermitteln selbstständige Unternehmer aus allen EU/EWR-Ländern – je nach Qualifikation und rechtlicher Einsatzmöglichkeit.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇬🇧 English</p>

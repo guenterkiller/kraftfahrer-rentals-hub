@@ -337,6 +337,10 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                  <p><strong>Absage am Einsatztag oder Nichterscheinen</strong> → 100 % des vereinbarten Tagessatzes</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
                   <p><strong>Same-Day-Buchungen</strong> sind ausgeschlossen (Mindestvorlauf 24h werktags)</p>
                 </div>
               </CardContent>
@@ -537,8 +541,8 @@ const PreiseUndAblauf = () => {
                   <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktabwerbung</h3>
-                  <p className="text-muted-foreground">Der Auftraggeber verpflichtet sich, Fahrer nicht direkt oder am System vorbei zu beauftragen.</p>
+                  <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist unzulässig.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>

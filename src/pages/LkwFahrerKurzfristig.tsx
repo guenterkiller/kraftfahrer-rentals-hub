@@ -60,8 +60,8 @@ const LkwFahrerKurzfristig = () => {
 
   const heroData = {
     h1: "LKW Fahrer kurzfristig buchen – Schnelle Hilfe",
-    intro: "Fahrer krank? Auftrag reinbekommen? Engpass in der Disposition? Wir vermitteln LKW-Fahrer kurzfristig – deutschlandweit, in 24-72 Stunden. Keine langen Vorlaufzeiten, keine Verträge. Einfach buchen, Fahrer kommt.",
-    bullets: ["24-72h Reaktionszeit", "Keine Kurzfristigkeitszuschläge", "Deutschlandweit verfügbar"]
+    intro: "Fahrer krank? Auftrag reinbekommen? Engpass in der Disposition? Wir vermitteln LKW-Fahrer kurzfristig – deutschlandweit. Kurzfristige Vermittlung nach Verfügbarkeit. Keine langen Vorlaufzeiten.",
+    bullets: ["Kurzfristige Vermittlung", "Keine Kurzfristigkeitszuschläge", "Deutschlandweit verfügbar"]
   };
 
   const faqData = {
@@ -69,7 +69,7 @@ const LkwFahrerKurzfristig = () => {
     items: [
       {
         question: "Was bedeutet kurzfristig bei Ihnen?",
-        answer: "Wir können Fahrer in der Regel innerhalb von <strong>24–72 Stunden</strong> (werktags) bereitstellen. Das ist schneller als die meisten Personalagenturen – aber Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Same-Day ist ausgeschlossen."
       },
       {
         question: "Warum kein Same-Day-Service?",

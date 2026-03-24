@@ -62,7 +62,7 @@ const Index = () => {
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",
-        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Anfragen sind unverbindlich – ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -70,7 +70,7 @@ const Index = () => {
       },
       {
         question: "Sind die Fahrer versichert?",
-        answer: "Ja, alle Fahrer verfügen über entsprechende Berufshaftpflicht- und Fahrzeugversicherungen. Vollständiger Versicherungsschutz garantiert."
+        answer: "Ja, alle selbstständigen Unternehmer verfügen über entsprechende Berufshaftpflicht- und Gewerbeversicherungen."
       }
     ],
     structuredData: {
@@ -131,7 +131,7 @@ const Index = () => {
           <div className="container mx-auto px-4 max-w-4xl">
             <h3 className="text-xl font-semibold mb-3 text-foreground">Was macht Fahrerexpress?</h3>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer (CE), Baumaschinenführer und Mischmeister bundesweit und EU-weit. Es handelt sich nicht um Arbeitnehmerüberlassung, sondern um eine rechtssichere Vermittlung selbstständiger Unternehmer auf Basis einer Agenturabrechnung.
+              Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe – LKW-Fahrer (CE), Baumaschinenführer und Mischmeister bundesweit und EU-weit. Es handelt sich nicht um Arbeitnehmerüberlassung, sondern um die Vermittlung selbstständiger Unternehmer auf Basis eines Dienst- oder Werkvertrags. Fahrzeuge werden nicht gestellt.
             </p>
             
             {/* AUFGABE 2: Geeignet-für Block */}
@@ -188,7 +188,7 @@ const Index = () => {
               Mischmeister für Flüssigboden
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Ergänzend zu unseren Fahrerdiensten bieten wir auch den Einsatz eines Mischmeisters für fließfähige Verfüllmaterialien an. Der Einsatz erfolgt als selbstständiger Subunternehmer inklusive Bedienung der bauseits gestellten Mischanlage, Radlader/Bagger sowie CE-Fahrmischer. Durch diese Kombination können auf der Baustelle bis zu zwei zusätzliche Mitarbeiter eingespart werden. Alle Arbeiten erfolgen ausschließlich nach Rezeptur und Anweisung des Auftraggebers, ohne Gewährleistungs- oder Betreiberverantwortung.
+              Ergänzend zu unseren Fahrerdiensten bieten wir auch den Einsatz eines Mischmeisters für fließfähige Verfüllmaterialien an. Der Einsatz erfolgt als selbstständiger Subunternehmer inklusive Bedienung der bauseits gestellten Mischanlage, Radlader/Bagger sowie CE-Fahrmischer. Durch diese Kombination können auf der Baustelle bis zu zwei zusätzliche Mitarbeiter eingespart werden. Alle Arbeiten erfolgen ausschließlich auf Grundlage der vom Auftraggeber vorgegebenen Einsatz- und Projektdaten, ohne Gewährleistungs- oder Betreiberverantwortung.
             </p>
             <div className="flex justify-center">
               <Button 
@@ -236,7 +236,7 @@ const Index = () => {
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Brauchen wir eine Arbeitnehmerüberlassung?</h3>
                 <p className="text-muted-foreground">
-                  Nein. Unsere Fahrer sind selbstständige LKW-Fahrer, Baumaschinenführer oder Mischmeister/Anlagenbediener. Die Vermittlung erfolgt rechtssicher per Dienstleistungs- oder Werkvertrag – ohne klassische Arbeitnehmerüberlassung.
+                  Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">

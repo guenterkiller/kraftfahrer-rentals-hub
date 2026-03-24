@@ -21,15 +21,15 @@ const EUDriverRecruitment = () => {
       icon: <CreditCard className="h-8 w-8 text-primary" />,
       title: "Transparente Bezahlung",
       titleEn: "Transparent Payment",
-      description: "Faire Tagessätze ab 349 € – pünktliche Auszahlung garantiert",
-      descriptionEn: "Fair daily rates from €349 – punctual payment guaranteed"
+      description: "Faire Tagessätze ab 349 € – faire und transparente Vergütung",
+      descriptionEn: "Fair daily rates from €349 – fair and transparent compensation"
     },
     {
       icon: <Shield className="h-8 w-8 text-primary" />,
-      title: "Rechtssicher",
-      titleEn: "Legally Secure",
-      description: "Selbstständige Tätigkeit ohne Scheinselbstständigkeit-Risiko",
-      descriptionEn: "Self-employed work without fake self-employment risk"
+      title: "Klare Vertragsstruktur",
+      titleEn: "Clear Contract Structure",
+      description: "Selbstständige Tätigkeit auf Basis klarer Vertrags- und Abrechnungsstrukturen",
+      descriptionEn: "Self-employed work based on clear contract and billing structures"
     },
     {
       icon: <Users className="h-8 w-8 text-primary" />,
@@ -42,8 +42,8 @@ const EUDriverRecruitment = () => {
       icon: <Globe className="h-8 w-8 text-primary" />,
       title: "EU-weite Vermittlung",
       titleEn: "EU-wide Placement",
-      description: "Wir vermitteln Fahrer aus allen EU/EWR-Ländern",
-      descriptionEn: "We place drivers from all EU/EEA countries"
+      description: "Wir vermitteln selbstständige Unternehmer aus allen EU/EWR-Ländern – je nach Qualifikation und rechtlicher Einsatzmöglichkeit",
+      descriptionEn: "We place self-employed professionals from all EU/EEA countries – depending on qualifications and legal requirements"
     }
   ];
 

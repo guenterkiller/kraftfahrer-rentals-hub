@@ -28,7 +28,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -48,7 +48,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Brauchen wir eine Arbeitnehmerüberlassung?",
-        answer: "Nein. Unsere Fahrer sind selbstständige LKW-Fahrer und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung."
+        answer: "Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag."
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
@@ -121,7 +121,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",

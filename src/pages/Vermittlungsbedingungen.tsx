@@ -8,7 +8,7 @@ import { useSEO } from "@/hooks/useSEO";
 const Vermittlungsbedingungen = () => {
   useSEO({
     title: "Vermittlungsbedingungen für Auftraggeber – Fahrerexpress",
-    description: "Vermittlungsbedingungen für Auftraggeber der Fahrerexpress-Agentur. Rechtssichere Vermittlung selbstständiger LKW-Fahrer.",
+    description: "Vermittlungsbedingungen für Auftraggeber der Fahrerexpress-Agentur. Vermittlung selbstständiger LKW-Fahrer als Subunternehmer.",
     keywords: "Vermittlungsbedingungen, Auftraggeber, Fahrerexpress, LKW Fahrer Vermittlung"
   });
 

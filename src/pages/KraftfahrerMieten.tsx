@@ -69,7 +69,7 @@ const KraftfahrerMieten = () => {
       },
       {
         question: "Brauchen wir eine Arbeitnehmerüberlassung?",
-        answer: "Nein. Unsere Fahrer sind <strong>selbstständige Kraftfahrer, Baumaschinenführer oder Mischmeister</strong>. Die Vermittlung erfolgt rechtssicher per Dienstleistungs- oder Werkvertrag – ohne klassische Arbeitnehmerüberlassung."
+        answer: "Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag."
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
