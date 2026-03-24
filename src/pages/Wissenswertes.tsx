@@ -156,7 +156,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>✓ Keine detaillierten Arbeitszeiten vorschreiben</li>
+                    <li>✓ Die Zusammenarbeit erfolgt auf Basis eines Dienst- oder Werkvertrags ohne Eingliederung in die Betriebsorganisation des Auftraggebers</li>
                     <li>✓ Ergebnis definieren, nicht den Weg</li>
                     <li>✓ Fahrer nicht in Dienstpläne integrieren</li>
                     <li>✓ Fahrer sollte mehrere Auftraggeber haben</li>
