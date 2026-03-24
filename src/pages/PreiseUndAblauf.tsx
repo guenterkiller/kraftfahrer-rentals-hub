@@ -49,8 +49,11 @@ const PreiseUndAblauf = () => {
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Fahrer mieten, leihen oder bestellen – Preise & Ablauf
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Ersatzfahrer, Aushilfsfahrer, Mietfahrer & Leihfahrer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-3">
+                Selbstständige Unternehmer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
+              </p>
+              <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
+                Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.
               </p>
             </div>
 
