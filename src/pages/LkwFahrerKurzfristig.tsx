@@ -60,8 +60,8 @@ const LkwFahrerKurzfristig = () => {
 
   const heroData = {
     h1: "LKW Fahrer kurzfristig buchen – Schnelle Hilfe",
-    intro: "Fahrer krank? Auftrag reinbekommen? Engpass in der Disposition? Wir vermitteln LKW-Fahrer kurzfristig – deutschlandweit, in 24-72 Stunden. Keine langen Vorlaufzeiten, keine Verträge. Einfach buchen, Fahrer kommt.",
-    bullets: ["24-72h Reaktionszeit", "Keine Kurzfristigkeitszuschläge", "Deutschlandweit verfügbar"]
+    intro: "Fahrer krank? Auftrag reinbekommen? Engpass in der Disposition? Wir vermitteln LKW-Fahrer kurzfristig – deutschlandweit. Kurzfristige Vermittlung nach Verfügbarkeit. Keine langen Vorlaufzeiten.",
+    bullets: ["Kurzfristige Vermittlung", "Keine Kurzfristigkeitszuschläge", "Deutschlandweit verfügbar"]
   };
 
   const faqData = {
