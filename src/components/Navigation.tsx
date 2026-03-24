@@ -170,9 +170,9 @@ const Navigation = () => {
                   to="/fahrer-registrierung"
                   onClick={() => setIsMenuOpen(false)}
                   role="menuitem"
-                  aria-label="Partner werden - Jetzt registrieren"
+                  aria-label="Als selbstständiger Fahrer registrieren und Aufträge erhalten"
                 >
-                  🚀 Partner werden
+                  🚀 Als Fahrer registrieren
                 </Link>
               </Button>
               
