@@ -70,7 +70,7 @@ const Index = () => {
       },
       {
         question: "Sind die Fahrer versichert?",
-        answer: "Ja, alle Fahrer verfügen über entsprechende Berufshaftpflicht- und Fahrzeugversicherungen. Vollständiger Versicherungsschutz garantiert."
+        answer: "Ja, alle selbstständigen Unternehmer verfügen über entsprechende Berufshaftpflicht- und Gewerbeversicherungen."
       }
     ],
     structuredData: {
