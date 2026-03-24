@@ -906,7 +906,7 @@ const FahrerRegistrierung = () => {
                           <SelectValue placeholder="Verfügbarkeit wählen" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="sofort">Sofort verfügbar</SelectItem>
+                          <SelectItem value="sofort">Kurzfristig verfügbar</SelectItem>
                           <SelectItem value="1woche">In 1 Woche</SelectItem>
                           <SelectItem value="2wochen">In 2 Wochen</SelectItem>
                           <SelectItem value="1monat">In 1 Monat</SelectItem>

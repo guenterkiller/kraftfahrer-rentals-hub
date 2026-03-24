@@ -174,7 +174,7 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
         <section className="py-8 px-4 bg-muted/30">
           <div className="max-w-4xl mx-auto text-center space-y-2">
             <p className="text-sm text-muted-foreground font-medium">
-              Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe.
+              Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen.
             </p>
             <p className="text-sm text-muted-foreground">
               Keine Arbeitnehmerüberlassung (AÜG). Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.
