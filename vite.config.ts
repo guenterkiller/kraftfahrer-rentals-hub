@@ -14,8 +14,9 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === 'development' && componentTagger(),
-    // PWA: SW nur im Production-Build aktiv, in Preview deaktiviert (Guard in main.tsx)
+    // PWA: keine automatische SW-Injektion ins HTML; Registrierung erfolgt manuell nur auf echten Produktivdomains
     VitePWA({
+      injectRegister: null,
       registerType: 'autoUpdate',
       // KEIN manifest: {} - wir nutzen ausschließlich public/manifest.webmanifest
       manifest: false,
