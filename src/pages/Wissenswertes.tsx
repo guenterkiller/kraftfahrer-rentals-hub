@@ -219,7 +219,7 @@ const Wissenswertes = () => {
                   <ul className="space-y-1 text-sm text-muted-foreground">
                     <li>• Der Auftraggeber bleibt Fahrzeughalter nach StVG</li>
                     <li>• Schäden am Fahrzeug werden über die Fahrzeugversicherung des Auftraggebers reguliert</li>
-                    <li>• Der Fahrer haftet nur bei Vorsatz oder grober Fahrlässigkeit</li>
+                    <li>• Die Haftung richtet sich nach den gesetzlichen Bestimmungen sowie den individuell vereinbarten Vertragsregelungen</li>
                     <li>• Eine Betriebshaftpflicht des Fahrers deckt Schäden außerhalb des Fahrzeugs</li>
                     <li>• Haftungsausschlüsse und Verantwortlichkeiten sollen vertraglich eindeutig festgelegt werden</li>
                   </ul>
