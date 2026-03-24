@@ -337,6 +337,10 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                  <p><strong>Absage am Einsatztag oder Nichterscheinen</strong> → 100 % des vereinbarten Tagessatzes</p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
                   <p><strong>Same-Day-Buchungen</strong> sind ausgeschlossen (Mindestvorlauf 24h werktags)</p>
                 </div>
               </CardContent>
