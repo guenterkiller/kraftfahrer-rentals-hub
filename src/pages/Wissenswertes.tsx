@@ -117,7 +117,7 @@ const Wissenswertes = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Shield className="h-5 w-5 text-orange-600" />
-                    Zusammenarbeit auf Vertragsbasis
+                    Zusammenarbeit auf klar geregelter vertraglicher Basis
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
