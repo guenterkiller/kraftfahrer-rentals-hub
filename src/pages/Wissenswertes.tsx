@@ -456,7 +456,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer deutschlandweit organisieren – kurzfristige Vermittlung nach Verfügbarkeit. Kraftfahrer mieten ist bundesweit möglich.
+                    Bei kurzfristigen Ausfällen können wir einen Ersatzfahrer deutschlandweit organisieren – kurzfristig im Rahmen der Verfügbarkeit. Kraftfahrer mieten ist bundesweit möglich.
                   </p>
                 </CardContent>
               </Card>
