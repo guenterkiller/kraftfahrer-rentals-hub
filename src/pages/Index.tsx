@@ -62,7 +62,7 @@ const Index = () => {
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",
-        answer: "In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Anfragen sind unverbindlich – ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
