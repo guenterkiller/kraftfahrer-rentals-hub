@@ -407,7 +407,7 @@ const FlüssigbodenService = () => {
                   <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div className="mt-3 text-muted-foreground">
-                  Nein. Es erfolgt <strong>keine Beratung, keine Systemfreigabe und keine Gewährleistungsübernahme</strong>. Der Mischmeister arbeitet ausschließlich nach Ihren bereitgestellten Rezepturen und Arbeitsanweisungen.
+                  Nein. Es erfolgt <strong>keine Beratung, keine Systemfreigabe und keine Gewährleistungsübernahme</strong>. Der Mischmeister arbeitet ausschließlich auf Grundlage der vom Auftraggeber bereitgestellten Rezepturen und Projektdaten.
                 </div>
               </details>
             </div>
