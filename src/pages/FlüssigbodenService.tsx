@@ -205,7 +205,7 @@ const FlüssigbodenService = () => {
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <FileText className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Arbeit erfolgt ausschließlich nach Anweisung & Rezeptur des Auftraggebers</span>
+                        <span className="text-sm">Arbeit erfolgt ausschließlich auf Grundlage der vom Auftraggeber vorgegebenen Einsatz- und Projektdaten</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
