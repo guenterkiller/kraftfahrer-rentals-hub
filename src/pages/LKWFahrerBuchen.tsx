@@ -121,7 +121,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "In der Regel <strong>24–72 Stunden Vorlauf</strong> (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",

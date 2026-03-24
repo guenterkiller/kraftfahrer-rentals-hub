@@ -312,8 +312,8 @@ const Wissenswertes = () => {
                   <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-lg mb-2">5. Verbot der Direktabwerbung</h4>
-                  <p className="text-muted-foreground">Der Auftraggeber verpflichtet sich, Fahrer nicht direkt oder am System vorbei zu beauftragen.</p>
+                  <h4 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h4>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist unzulässig.</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">6. Gerichtsstand</h4>

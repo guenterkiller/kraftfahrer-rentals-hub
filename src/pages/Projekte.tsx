@@ -92,10 +92,10 @@ const Projekte = () => {
   ];
 
   const statistiken = [
-    { icon: Users, label: "Zufriedene Kunden", wert: "150+" },
-    { icon: Truck, label: "Erfolgreiche Einsätze", wert: "500+" },
-    { icon: Clock, label: "Einsatzstunden", wert: "10.000+" },
-    { icon: Star, label: "Durchschnittsbewertung", wert: "4.9/5" }
+    { icon: Users, label: "Zufriedene Auftraggeber", wert: "Bundesweit" },
+    { icon: Truck, label: "Erfolgreiche Einsätze", wert: "Zahlreich" },
+    { icon: Clock, label: "Branchen­erfahrung", wert: "Langjährig" },
+    { icon: Star, label: "Kundenzufriedenheit", wert: "Hoch" }
   ];
 
   return (
