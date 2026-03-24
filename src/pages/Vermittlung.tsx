@@ -34,7 +34,9 @@ const Vermittlung = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <p className="text-lg text-muted-foreground">
-                Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer, es handelt sich nicht um Arbeitnehmerüberlassung. Für Sie entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.
+                Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen.
+                Die Einsätze werden zentral über die Agentur koordiniert und abgerechnet.
+                Es handelt sich nicht um Arbeitnehmerüberlassung.
               </p>
 
               <Card>
@@ -46,14 +48,14 @@ const Vermittlung = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p>
-                    Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. Für Sie entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.
+                    Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet. Die Vergütung erfolgt transparent auf Basis der vereinbarten Tages- und Nebenkosten.
                   </p>
                   <p>
-                    Sie erhalten transparente Tagessätze (LKW CE-Fahrer 349 €, Baumaschinenführer 459 €) und eine klare Abrechnung.
+                    Sie erhalten transparente und klar definierte Tagessätze (z.&nbsp;B. LKW CE-Fahrer ab 349&nbsp;€, Baumaschinenführer ab 459&nbsp;€).
                   </p>
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                     <p className="font-semibold">
-                      Hinweis: Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung.
+                      Die Fahrer arbeiten als selbstständige Unternehmer mit eigenem Gewerbe auf Basis eines Dienst- oder Werkvertrags. Es erfolgt keine Arbeitnehmerüberlassung.
                     </p>
                   </div>
                 </CardContent>
@@ -68,7 +70,7 @@ const Vermittlung = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p>
-                    Als selbstständiger Fahrer erhalten Sie Zugang zu qualifizierten Aufträgen in Ihrer Region.
+                    Als selbstständiger Fahrer erhalten Sie Zugang zu passenden Aufträgen entsprechend Ihrer Qualifikation und Verfügbarkeit.
                   </p>
                   
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
@@ -92,7 +94,7 @@ const Vermittlung = () => {
 
               <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                 <p className="text-sm">
-                  Für Rückfragen zur Abrechnung stehen wir Ihnen jederzeit zur Verfügung:{" "}
+                  Für Rückfragen zur Abrechnung stehen wir Ihnen gerne zur Verfügung:{" "}
                   <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary hover:underline">
                     info@kraftfahrer-mieten.com
                   </a>
@@ -102,7 +104,7 @@ const Vermittlung = () => {
               <div className="text-center pt-6">
                 <Button asChild size="lg">
                   <Link to="/fahrer-registrierung">
-                    Jetzt als Fahrer registrieren
+                    Jetzt als selbstständiger Fahrer registrieren
                   </Link>
                 </Button>
               </div>
