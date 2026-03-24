@@ -446,7 +446,7 @@ const BookingForm = () => {
                   disabled={loading || vehicleTypes.length === 0 || !startDate}
                   aria-label="Jetzt Fahrer anfragen"
                 >
-                  {loading ? "Wird gesendet..." : (qualifications.includes('Fernverkehr / Übernachtung im LKW') && vehicleTypes.some(t => t.includes('LKW CE')) ? "Verbindlich bestellen – Fernfahrer-Tarif 450 € netto" : "Jetzt Fahrer anfragen")}
+                  {loading ? "Wird gesendet..." : (qualifications.includes('Fernverkehr / Übernachtung im LKW') && vehicleTypes.some(t => t.includes('LKW CE')) ? "Verbindliche Anfrage senden – Fernfahrer-Tarif 450 € netto" : "Jetzt Fahrer anfragen")}
                 </Button>
               </form>
             </CardContent>

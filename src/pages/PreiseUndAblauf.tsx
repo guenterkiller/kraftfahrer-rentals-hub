@@ -473,7 +473,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Weisungsrecht</h3>
-                  <p className="text-muted-foreground">Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen. Die Zusammenarbeit erfolgt auf Basis einer eigenständigen unternehmerischen Leistung.</p>
+                  <p className="text-muted-foreground">Die Fahrer arbeiten eigenverantwortlich auf Basis eines Dienst- oder Werkvertrags. Es erfolgt keine Eingliederung in den Betrieb des Auftraggebers (keine Arbeitnehmerüberlassung).</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Sozialversicherung</h3>

@@ -831,7 +831,7 @@ const SimpleBookingForm = () => {
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-3">
-                  Hinweis: Diese Buchung ist verbindlich. Es gelten die veröffentlichten Storno- und Zahlungsbedingungen.
+                  Hinweis: Mit Absenden stellen Sie eine verbindliche Anfrage. Es gelten die veröffentlichten Storno- und Zahlungsbedingungen.
                 </p>
               </form>
 

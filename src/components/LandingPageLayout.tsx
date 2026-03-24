@@ -177,7 +177,7 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
               Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen.
             </p>
             <p className="text-sm text-muted-foreground">
-              Keine Arbeitnehmerüberlassung (AÜG). Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.
+              Die Fahrer arbeiten eigenverantwortlich auf Basis eines Dienst- oder Werkvertrags. Es erfolgt keine Eingliederung in den Betrieb des Auftraggebers (keine Arbeitnehmerüberlassung).
             </p>
           </div>
         </section>

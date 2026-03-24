@@ -246,7 +246,7 @@ const Index = () => {
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">
-                <h3 className="font-semibold text-lg mb-2">Kann ich einen Fahrer sofort oder für heute bestellen?</h3>
+                <h3 className="font-semibold text-lg mb-2">Wie kurzfristig kann ein Fahrer eingesetzt werden?</h3>
                 <p className="text-muted-foreground">
                   Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Für kurzfristigen Bedarf empfehlen wir, Ihren Fahrer-Dienstleister frühzeitig zu kontaktieren.
                 </p>
