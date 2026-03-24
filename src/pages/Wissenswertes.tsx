@@ -443,7 +443,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Nein. Unsere Fahrer sind selbstständige LKW-Fahrer, Baumaschinenführer oder Mischmeister und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung.
+                    Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag.
                   </p>
                 </CardContent>
               </Card>
