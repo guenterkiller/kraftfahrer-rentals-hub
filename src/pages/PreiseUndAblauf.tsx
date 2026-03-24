@@ -457,19 +457,26 @@ const PreiseUndAblauf = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Selbstständige Fahrer</h3>
-                  <p className="text-muted-foreground">Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst-/Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung. Der Subunternehmer ist in der Ausführung seiner Tätigkeit fachlich eigenverantwortlich und nicht in die Arbeitsorganisation des Auftraggebers eingegliedert.</p>
+                  <h3 className="font-semibold text-lg mb-2">Kein eigenes Fahrpersonal</h3>
+                  <p className="text-muted-foreground">Es wird kein eigenes Fahrpersonal gestellt. Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe. Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Zusammenarbeit</h3>
-                  <p className="text-muted-foreground">Die Einsätze werden über die Fahrerexpress-Agentur koordiniert. Die Fahrleistung wird von selbstständigen Unternehmern erbracht, Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Für Sie als Auftraggeber entstehen keine zusätzlichen Vermittlungsgebühren über die vereinbarten Tages- und Nebenkosten hinaus.</p>
+                  <h3 className="font-semibold text-lg mb-2">Keine Arbeitnehmerüberlassung (AÜG)</h3>
+                  <p className="text-muted-foreground">Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer auf Basis eines Dienst-/Werkvertrags. Der Subunternehmer ist in der Ausführung seiner Tätigkeit fachlich eigenverantwortlich und nicht in die Arbeitsorganisation des Auftraggebers eingegliedert.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Weisungsrecht</h3>
+                  <p className="text-muted-foreground">Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen. Die Zusammenarbeit erfolgt auf Basis einer eigenständigen unternehmerischen Leistung.</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-lg mb-2">Sozialversicherung</h3>
+                  <p className="text-muted-foreground">Die eingesetzten Unternehmer sind eigenständig tätig. Eine sozialversicherungsrechtliche Bewertung erfolgt im Einzelfall durch die zuständigen Behörden.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Haftung & Versicherung</h3>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Der Fahrer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
-                    <li>• Keine Sozialversicherungspflicht für Sie als Auftraggeber.</li>
-                    <li>• Keine AÜG-Meldepflichten erforderlich.</li>
+                    <li>• Der selbstständige Unternehmer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
+                    <li>• Für Schäden im Zusammenhang mit der Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</li>
                   </ul>
                 </div>
               </CardContent>
