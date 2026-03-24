@@ -56,7 +56,7 @@ const BegleitfahrzeugeBF3 = () => {
 
   const heroData = {
     h1: "BF3-Fahrer deutschlandweit buchen – ab 649 € netto/Tag",
-    intro: "Sie benötigen kurzfristig einen qualifizierten BF3-Fahrer für Schwertransporte? Wir vermitteln ausschließlich Fahrer mit gültiger BF3-Berechtigung – keine Begleitfahrzeuge. Das entsprechend ausgerüstete Begleitfahrzeug mit WVZA-Anlage stellt der Auftraggeber. Rechtssichere Dienst-/Werkleistung ohne Arbeitnehmerüberlassung.",
+    intro: "Sie benötigen kurzfristig einen qualifizierten BF3-Fahrer für Schwertransporte? Wir vermitteln ausschließlich Fahrer mit gültiger BF3-Berechtigung – keine Begleitfahrzeuge. Das entsprechend ausgerüstete Begleitfahrzeug mit WVZA-Anlage stellt der Auftraggeber. Vermittlung selbstständiger Unternehmer auf Basis eines Dienst- oder Werkvertrags.",
     bullets: [
       "Nur Fahrer – kein Begleitfahrzeug",
       "Gültige BF3-Berechtigung",
