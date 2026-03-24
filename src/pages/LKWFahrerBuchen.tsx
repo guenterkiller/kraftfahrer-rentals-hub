@@ -48,7 +48,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Brauchen wir eine Arbeitnehmerüberlassung?",
-        answer: "Nein. Unsere Fahrer sind selbstständige LKW-Fahrer und arbeiten auf Basis eines Dienst- oder Werkvertrags. Die Vermittlung erfolgt rechtssicher ohne klassische Arbeitnehmerüberlassung."
+        answer: "Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag."
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
