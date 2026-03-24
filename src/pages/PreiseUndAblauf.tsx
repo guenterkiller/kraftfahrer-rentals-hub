@@ -155,13 +155,13 @@ const PreiseUndAblauf = () => {
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">✅</div>
-                    <p className="font-semibold text-green-900 mb-1">Kein AÜG</p>
-                    <p className="text-sm text-muted-foreground">Keine Arbeitnehmerüberlassungs-regelungen</p>
+                    <p className="font-semibold text-green-900 mb-1">Keine Arbeitnehmerüberlassung (AÜG)</p>
+                    <p className="text-sm text-muted-foreground">Vermittlung selbstständiger Unternehmer</p>
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">💰</div>
                     <p className="font-semibold text-green-900 mb-1">Keine Lohnnebenkosten</p>
-                    <p className="text-sm text-muted-foreground">Kein Sozialversicherungsaufwand, keine Verwaltung</p>
+                    <p className="text-sm text-muted-foreground">Selbstständige Unternehmer – keine Verwaltung</p>
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">⚡</div>
