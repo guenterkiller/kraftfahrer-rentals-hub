@@ -92,8 +92,9 @@ const Navigation = () => {
               className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300 focus:ring-2 focus:ring-blue-500/50 focus:outline-none text-xs sm:text-sm px-2 sm:px-4 py-1.5 sm:py-2 whitespace-nowrap" 
               asChild
             >
-              <Link to="/fahrer-registrierung" aria-label="Partner werden - Jetzt registrieren">
-                🚀 Partner werden
+              <Link to="/fahrer-registrierung" aria-label="Als selbstständiger Fahrer registrieren und Aufträge erhalten" title="Als selbstständiger Fahrer registrieren und Aufträge erhalten">
+                <span className="hidden sm:inline">🚀 Als Fahrer registrieren</span>
+                <span className="sm:hidden">🚀 Fahrer registrieren</span>
               </Link>
             </Button>
             
@@ -169,9 +170,9 @@ const Navigation = () => {
                   to="/fahrer-registrierung"
                   onClick={() => setIsMenuOpen(false)}
                   role="menuitem"
-                  aria-label="Partner werden - Jetzt registrieren"
+                  aria-label="Als selbstständiger Fahrer registrieren und Aufträge erhalten"
                 >
-                  🚀 Partner werden
+                  🚀 Als Fahrer registrieren
                 </Link>
               </Button>
               

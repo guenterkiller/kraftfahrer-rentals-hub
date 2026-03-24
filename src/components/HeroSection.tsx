@@ -60,6 +60,23 @@ const HeroSection = () => {
           </div>
         </div>
         
+        {/* Fahrer-CTA */}
+        <div className="mb-8 animate-fade-in">
+          <p className="text-sm sm:text-base text-white/90 mb-2">
+            Sie sind Fahrer?
+          </p>
+          <Button
+            size="sm"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-300"
+            asChild
+          >
+            <Link to="/fahrer-registrierung">
+              🚀 Jetzt registrieren und Aufträge erhalten
+            </Link>
+          </Button>
+          <p className="text-xs text-white/70 mt-1.5">Für selbstständige Fahrer, die Aufträge suchen</p>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 md:gap-8 justify-center max-w-2xl mx-auto animate-scale-in">
           <Button 
             size="lg" 
