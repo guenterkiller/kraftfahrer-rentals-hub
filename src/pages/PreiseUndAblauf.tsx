@@ -53,7 +53,7 @@ const PreiseUndAblauf = () => {
                 Selbstständige Unternehmer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
               </p>
               <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
-                Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – Fahrzeuge werden nicht gestellt.
+                Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen – Fahrzeuge werden nicht gestellt.
               </p>
             </div>
 
