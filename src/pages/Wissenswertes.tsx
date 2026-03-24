@@ -504,7 +504,7 @@ const Wissenswertes = () => {
                     <a href="/#contact">Kostenlose Beratung</a>
                   </Button>
                   <Button variant="outline" asChild>
-                    <a href="tel:+49123456789">📞 Anrufen</a>
+                    <a href="tel:+4915771442285">📞 Anrufen: 01577 1442285</a>
                   </Button>
                 </div>
               </CardContent>
