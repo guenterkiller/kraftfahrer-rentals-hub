@@ -8,7 +8,7 @@ import { useSEO } from "@/hooks/useSEO";
 const Vermittlung = () => {
   useSEO({
     title: "Fahrervermittlung deutschlandweit – LKW Fahrer bundesweit",
-    description: "Fahrervermittlung deutschlandweit – selbstständige Berufskraftfahrer bundesweit. Rechtssicher, ohne Arbeitnehmerüberlassung.",
+    description: "Fahrervermittlung deutschlandweit – selbstständige Berufskraftfahrer bundesweit. Vermittlung selbstständiger Unternehmer auf Basis eines Dienst- oder Werkvertrags.",
     keywords: "Fahrervermittlung deutschlandweit, selbstständige Fahrer bundesweit, LKW Fahrer Vermittlung deutschlandweit, Fahrerservice bundesweit, Subunternehmer Fahrer deutschlandweit, Fahrer buchen ohne Arbeitnehmerüberlassung"
   });
   return (
