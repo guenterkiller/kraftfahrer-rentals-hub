@@ -72,7 +72,7 @@ const LegalSecuritySection = () => {
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    Es wird ausschließlich Fahrpersonal durch selbstständige Unternehmer vermittelt – <strong>Fahrzeuge werden nicht gestellt.</strong>
+                    Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen – <strong>Fahrzeuge werden nicht gestellt.</strong>
                   </p>
                 </div>
 
