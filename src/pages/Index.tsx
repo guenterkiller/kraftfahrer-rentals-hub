@@ -236,7 +236,7 @@ const Index = () => {
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Brauchen wir eine Arbeitnehmerüberlassung?</h3>
                 <p className="text-muted-foreground">
-                  Nein. Unsere Fahrer sind selbstständige LKW-Fahrer, Baumaschinenführer oder Mischmeister/Anlagenbediener. Die Vermittlung erfolgt rechtssicher per Dienstleistungs- oder Werkvertrag – ohne klassische Arbeitnehmerüberlassung.
+                  Nein. Keine Arbeitnehmerüberlassung (AÜG). Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer per Dienstleistungs- oder Werkvertrag.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">
