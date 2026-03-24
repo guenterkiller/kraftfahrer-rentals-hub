@@ -69,7 +69,7 @@ const LkwFahrerKurzfristig = () => {
     items: [
       {
         question: "Was bedeutet kurzfristig bei Ihnen?",
-        answer: "Wir können Fahrer in der Regel innerhalb von <strong>24–72 Stunden</strong> (werktags) bereitstellen. Das ist schneller als die meisten Personalagenturen – aber Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Same-Day ist ausgeschlossen."
       },
       {
         question: "Warum kein Same-Day-Service?",

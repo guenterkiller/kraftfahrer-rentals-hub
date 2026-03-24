@@ -73,7 +73,7 @@ const ErsatzfahrerLkw = () => {
       },
       {
         question: "Wie schnell kann ein Ersatzfahrer starten?",
-        answer: "In der Regel <strong>24–72 Stunden</strong> (werktags) ab Bestätigung. Same-Day ist ausgeschlossen – wir brauchen Zeit für Matching und Anfahrt."
+        answer: "Wir melden uns schnellstmöglich nach Eingang Ihrer Anfrage. Same-Day ist ausgeschlossen – wir brauchen Zeit für Matching und Anfahrt."
       },
       {
         question: "Sind Ersatzfahrer teurer als reguläre Fahrer?",
