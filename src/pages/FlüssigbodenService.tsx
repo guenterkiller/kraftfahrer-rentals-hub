@@ -161,7 +161,7 @@ const FlüssigbodenService = () => {
                     <div className="text-base text-muted-foreground leading-relaxed space-y-3">
                       <p>
                         Der Einsatz erfolgt ausschließlich als selbstständiger Subunternehmer.
-                        Die Herstellung und Verarbeitung fließfähiger Verfüllmaterialien erfolgt auf Grundlage der vom Auftraggeber bereitgestellten Technik, Rezeptur und Anweisung.
+                        Die Herstellung und Verarbeitung fließfähiger Verfüllmaterialien erfolgt auf Grundlage der vom Auftraggeber vorgegebenen Einsatz- und Projektdaten.
                       </p>
                       <p>
                         Ich betreibe die Mischanlage, versorge diese per Radlader/Bagger und kann bei Bedarf den Fahrmischer selbst fahren (CE). Die Verantwortung für Technik, Material, Mischparameter und Gewährleistung liegt vollständig beim Auftraggeber.
