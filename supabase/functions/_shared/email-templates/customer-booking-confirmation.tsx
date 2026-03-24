@@ -29,18 +29,18 @@ export const CustomerBookingConfirmation = ({
     </Heading>
 
     <Text {...getTextProps(textStyles.paragraph)}>
-      Vielen Dank für Ihre verbindliche Fahrerbestellung.
+      Vielen Dank für Ihre Anfrage über unser Buchungsformular.
     </Text>
     <Text {...getTextProps(textStyles.paragraph)}>
-      Mit Absenden des Formulars ist ein kostenpflichtiger Auftrag gemäß unseren Stornierungsregelungen zustande gekommen.
+      Mit dem Absenden des Formulars haben Sie eine verbindliche Anfrage zur Fahrerdisposition gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
     </Text>
 
     <Section {...getBoxProps(boxStyles.warningBox)}>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-        <strong>Wichtiger Hinweis:</strong> Die Durchführung des Einsatzes erfolgt unter dem Vorbehalt der tatsächlichen Fahrerverfügbarkeit.
+        <strong>Wichtiger Hinweis:</strong> Die Durchführung des Einsatzes erfolgt ausschließlich unter dem Vorbehalt der tatsächlichen Verfügbarkeit eines geeigneten Fahrers.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Sollte kein geeigneter Fahrer verfügbar sein, kommt es zu keiner Durchführung und es entstehen Ihnen keine Kosten.
+        Sollte kein passender Fahrer verfügbar sein, kommt kein Einsatz zustande und es entstehen Ihnen keinerlei Kosten.
       </Text>
     </Section>
 
