@@ -338,9 +338,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    In der Regel können erfahrene selbstständige Fahrer sehr kurzfristig eingesetzt werden. 
-                    In der Regel 24–72 Stunden Vorlauf (werktags) ab schriftlicher Bestätigung. Same-Day ist ausgeschlossen.
-                    Fahrer verfügbar sind.
+                    Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Kurzfristige Vermittlung nach Verfügbarkeit.
                   </p>
                 </CardContent>
               </Card>
