@@ -194,7 +194,7 @@ const SimpleBookingForm = () => {
                 <PWAInstallButton />
               </div>
               <p className="text-center sm:text-left text-muted-foreground mb-4">
-                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. Anfragen sind unverbindlich. Ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress.
+                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage zur Fahrerdisposition. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung.
               </p>
               
               {/* Quick Benefits */}
