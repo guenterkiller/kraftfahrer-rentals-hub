@@ -62,7 +62,7 @@ const Index = () => {
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Anfragen sind unverbindlich – ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage – ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
