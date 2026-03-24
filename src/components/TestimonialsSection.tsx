@@ -70,20 +70,20 @@ const TestimonialsSection = () => {
         <div className="text-center mt-12 space-y-4">
           <div className="inline-flex items-center gap-6 bg-white rounded-lg px-6 py-4 shadow-md">
             <div className="text-center border-r pr-6">
-              <div className="text-3xl font-bold text-primary">500+</div>
-              <div className="text-xs text-muted-foreground">Erfolgreiche<br/>Vermittlungen</div>
+              <div className="text-3xl font-bold text-primary">Bundesweit</div>
+              <div className="text-xs text-muted-foreground">Deutschlandweite<br/>Vermittlung</div>
             </div>
             <div className="text-center border-r pr-6">
-              <div className="text-3xl font-bold text-green-600">8/10</div>
-              <div className="text-xs text-muted-foreground">Kunden buchen<br/>erneut</div>
+              <div className="text-3xl font-bold text-green-600">B2B</div>
+              <div className="text-xs text-muted-foreground">Professionelle<br/>Abwicklung</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-orange-600">15+</div>
-              <div className="text-xs text-muted-foreground">Jahre<br/>Erfahrung</div>
+              <div className="text-3xl font-bold text-orange-600">Erfahren</div>
+              <div className="text-xs text-muted-foreground">Langjährige<br/>Branchenkenntnis</div>
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
-            Bundesweite Vermittlung • Rechtskonforme Abwicklung • Faire Konditionen
+            Bundesweite Vermittlung • Faire Konditionen • Selbstständige Unternehmer
           </p>
         </div>
       </div>

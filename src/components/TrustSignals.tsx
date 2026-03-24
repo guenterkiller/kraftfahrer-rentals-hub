@@ -4,19 +4,19 @@ const TrustSignals = () => {
   const signals = [
     {
       icon: CheckCircle,
-      text: "Alle Fahrer geprüft & versichert"
+      text: "Selbstständige Unternehmer mit eigenem Gewerbe"
     },
     {
       icon: FileCheck,
-      text: "Transparente Abrechnung"
+      text: "Transparente Abrechnung über Fahrerexpress"
     },
     {
       icon: Shield,
-      text: "Keine Sozialversicherungspflicht"
+      text: "Keine Arbeitnehmerüberlassung (AÜG)"
     },
     {
       icon: Users,
-      text: "Über 500 erfolgreiche Vermittlungen"
+      text: "Bundesweite Vermittlung"
     }
   ];
 

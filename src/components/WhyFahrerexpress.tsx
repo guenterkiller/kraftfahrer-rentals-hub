@@ -29,8 +29,8 @@ const WhyFahrerexpress = () => {
     },
     {
       icon: TrendingUp,
-      title: "Fahrer sofort deutschlandweit",
-      description: "Fahrer-Vermittlung bundesweit – Notfallfahrer in 24-72 Stunden"
+      title: "Fahrer deutschlandweit",
+      description: "Fahrer-Vermittlung bundesweit – kurzfristige Vermittlung nach Verfügbarkeit"
     }
   ];
 

@@ -194,7 +194,7 @@ const SimpleBookingForm = () => {
                 <PWAInstallButton />
               </div>
               <p className="text-center sm:text-left text-muted-foreground mb-4">
-                Beschreiben Sie Ihren Fahrbedarf - wir melden uns innerhalb von 6 Stunden mit einer Rückmeldung
+                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. Anfragen sind unverbindlich. Ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress.
               </p>
               
               {/* Quick Benefits */}
