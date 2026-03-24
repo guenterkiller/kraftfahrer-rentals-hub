@@ -824,7 +824,7 @@ const SimpleBookingForm = () => {
                 >
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
-                      <div>Verbindlich bestellen</div>
+                      <div>Verbindliche Anfrage senden</div>
                       <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Tarif 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' ? '459' : fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
                     </div>
                   )}
