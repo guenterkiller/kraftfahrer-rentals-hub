@@ -456,7 +456,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer oder Notfallfahrer deutschlandweit organisieren – je nach Verfügbarkeit meist innerhalb von 24–72 Stunden. Kraftfahrer mieten ist bundesweit kurzfristig möglich.
+                    Bei kurzfristigen Ausfällen können wir in der Regel sehr schnell einen Ersatzfahrer deutschlandweit organisieren – kurzfristige Vermittlung nach Verfügbarkeit. Kraftfahrer mieten ist bundesweit möglich.
                   </p>
                 </CardContent>
               </Card>
