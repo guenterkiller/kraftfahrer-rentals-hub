@@ -131,7 +131,7 @@ const Index = () => {
           <div className="container mx-auto px-4 max-w-4xl">
             <h3 className="text-xl font-semibold mb-3 text-foreground">Was macht Fahrerexpress?</h3>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Die Fahrerexpress-Agentur vermittelt selbstständige LKW-Fahrer (CE), Baumaschinenführer und Mischmeister bundesweit und EU-weit. Es handelt sich nicht um Arbeitnehmerüberlassung, sondern um eine rechtssichere Vermittlung selbstständiger Unternehmer auf Basis einer Agenturabrechnung.
+              Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe – LKW-Fahrer (CE), Baumaschinenführer und Mischmeister bundesweit und EU-weit. Es handelt sich nicht um Arbeitnehmerüberlassung, sondern um die Vermittlung selbstständiger Unternehmer auf Basis eines Dienst- oder Werkvertrags. Fahrzeuge werden nicht gestellt.
             </p>
             
             {/* AUFGABE 2: Geeignet-für Block */}
