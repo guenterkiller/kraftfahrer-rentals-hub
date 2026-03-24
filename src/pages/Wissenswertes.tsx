@@ -395,19 +395,19 @@ const Wissenswertes = () => {
                 </Card>
 
               <Card>
-400:                 <CardHeader>
-401:                   <CardTitle className="text-lg">
-402:                     Wie ist die Qualifikation der Fahrer sichergestellt?
-403:                   </CardTitle>
-404:                 </CardHeader>
-405:                 <CardContent>
-406:                   <p className="text-muted-foreground">
-407:                     Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
-408:                     entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
-409:                     oder Kranführerschein, je nach Anforderung.
-410:                   </p>
-411:                 </CardContent>
-412:               </Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    Wie ist die Qualifikation der Fahrer sichergestellt?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
+                    entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
+                    oder Kranführerschein, je nach Anforderung.
+                  </p>
+                </CardContent>
+              </Card>
 
               <Card>
                 <CardHeader>
