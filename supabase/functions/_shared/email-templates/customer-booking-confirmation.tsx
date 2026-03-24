@@ -161,9 +161,9 @@ export const CustomerBookingConfirmation = ({
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>🔄 Wie es jetzt weitergeht</Heading>
       <ol style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li>Wir prüfen verfügbare selbstständige Fahrer in Ihrer Region</li>
-        <li>Sie erhalten spätestens am nächsten Werktag unsere Rückmeldung</li>
-        <li>Bei Verfügbarkeit vermitteln wir einen passenden Fahrer</li>
+        <li>Wir prüfen verfügbare selbstständige Unternehmer in Ihrer Region</li>
+        <li>Sie erhalten eine Rückmeldung zur Verfügbarkeit</li>
+        <li>Bei Verfügbarkeit vermitteln wir einen passenden selbstständigen Fahrer</li>
         <li>Nach erfolgreicher Disposition erhalten Sie eine Einsatzbestätigung mit den organisatorischen Details (Fahrer, Zeiten, Ablauf)</li>
       </ol>
     </Section>
