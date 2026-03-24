@@ -38,7 +38,7 @@ const TestimonialsSection = () => {
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-4">Kundenbewertungen & Erfahrungen</h2>
         <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Über 500 erfolgreiche Vermittlungen – Vertrauen Sie auf die Erfahrungen unserer zufriedenen Kunden
+          Vertrauen Sie auf die Erfahrungen unserer zufriedenen Auftraggeber
         </p>
         
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
