@@ -53,16 +53,19 @@ const ProcessSteps = () => {
           })}
         </div>
 
-        {/* AUFGABE 3: Kurz-Prozesssatz */}
-        <div className="text-center mb-8 max-w-3xl mx-auto">
+        {/* Hinweise */}
+        <div className="text-center mb-8 max-w-3xl mx-auto space-y-3">
           <p className="text-muted-foreground leading-relaxed">
-            <strong>Kurz erklärt:</strong> Anfrage senden → passende selbstständige Fahrer werden vorgeschlagen → Einsatz erfolgt nach Bestätigung ohne Arbeitnehmerüberlassung.
+            <strong>Kurz erklärt:</strong> Anfrage senden → passende selbstständige Unternehmer werden vorgeschlagen → Einsatz erfolgt nach Bestätigung. Keine Arbeitnehmerüberlassung (AÜG).
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Anfragen sind unverbindlich. Ein verbindlicher Auftrag entsteht erst nach Bestätigung durch Fahrerexpress. Die Auftragsbestätigung kann in Textform erfolgen; eine Bestätigung per E-Mail ist ausreichend.
           </p>
         </div>
 
         <div className="text-center bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-3xl mx-auto">
           <p className="text-sm text-blue-900">
-            <strong>Selbstständige Zusammenarbeit</strong> – Sie arbeiten direkt mit selbstständigen Unternehmern zusammen.
+            <strong>Die Abrechnung erfolgt über die Fahrerexpress-Agentur.</strong> Vertragspartner ist Fahrerexpress. Der Auftraggeber erteilt keine arbeitsrechtlichen Weisungen.
           </p>
         </div>
       </div>
