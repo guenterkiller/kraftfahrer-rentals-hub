@@ -101,14 +101,14 @@ const Wissenswertes = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2">
                     <FileText className="h-5 w-5 text-red-600" />
-                    Kein Arbeitsrecht
+                    Einfache Abrechnung
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Keine Lohnabrechnung
+                    Keine Lohnabrechnung nötig – Abrechnung über Fahrerexpress
                   </p>
                 </CardContent>
               </Card>
