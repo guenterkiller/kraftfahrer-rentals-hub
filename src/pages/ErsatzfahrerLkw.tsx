@@ -23,7 +23,7 @@ const ErsatzfahrerLkw = () => {
     faqData: [
       {
         question: "Wie schnell bekomme ich einen Ersatzfahrer bei Fahrerausfall?",
-        answer: "In der Regel 24–72 Stunden Vorlauf (werktags). Wir haben deutschlandweit Fahrer auf Abruf."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Vermittlung nach Verfügbarkeit – deutschlandweit."
       },
       {
         question: "Was kostet ein Ersatzfahrer pro Tag?",
