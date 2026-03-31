@@ -121,12 +121,21 @@ const SimpleBookingForm = () => {
       });
 
       if (error) {
-        // Enhanced error logging to see exact server response
         console.error('Function error:', error);
         // @ts-ignore
         const responseText = await error.context?.response?.text?.();
         console.error('Function error body:', responseText || error.message);
         throw new Error(responseText || error.message);
+      }
+
+      // Check for duplicate response (409)
+      if (data?.error?.includes('Duplikat') || data?.existing_job_id) {
+        toast({
+          title: "Anfrage bereits gesendet",
+          description: "Ihre Anfrage wurde bereits erfolgreich übermittelt. Wir melden uns bei Ihnen.",
+        });
+        setFormSubmitted(true);
+        return;
       }
 
       toast({
