@@ -165,13 +165,19 @@ const SimpleBookingForm = () => {
       setRequiresBf3(false);
       setFahrzeugtyp('');
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error);
+      const isDuplicate = error?.message?.includes('Duplikat');
       toast({
-        title: "Fehler beim Senden",
-        description: "Bitte versuchen Sie es erneut oder rufen Sie uns an.",
-        variant: "destructive",
+        title: isDuplicate ? "Anfrage bereits gesendet" : "Fehler beim Senden",
+        description: isDuplicate 
+          ? "Ihre Anfrage wurde bereits erfolgreich übermittelt. Wir melden uns bei Ihnen."
+          : "Bitte versuchen Sie es erneut oder rufen Sie uns an.",
+        variant: isDuplicate ? "default" : "destructive",
       });
+      if (!isDuplicate) {
+        setSubmitted(false); // allow retry on real errors
+      }
     } finally {
       setLoading(false);
     }
