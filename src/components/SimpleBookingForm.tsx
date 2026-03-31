@@ -16,6 +16,7 @@ import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false); // prevents double-submit
   const [agreedToData, setAgreedToData] = useState(false);
   const [agreedToBinding, setAgreedToBinding] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
