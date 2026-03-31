@@ -43,8 +43,10 @@ const SimpleBookingForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitted || loading) return; // block double-submit
     console.log('Form submission started');
     setLoading(true);
+    setSubmitted(true);
 
     const formData = new FormData(e.currentTarget);
     
