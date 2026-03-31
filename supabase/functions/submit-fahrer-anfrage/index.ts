@@ -234,7 +234,31 @@ const handler = async (req: Request): Promise<Response> => {
       billing_model: billing_model
     };
 
-    console.log('Inserting job request for:', customer_city);
+    console.log('Checking for duplicates before inserting...');
+
+    // Duplikat-Schutz: gleiche E-Mail + Einsatzort innerhalb 5 Minuten blockieren
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { data: existingJobs } = await supabase
+      .from('job_requests')
+      .select('id, created_at')
+      .eq('customer_email', email)
+      .eq('einsatzort', einsatzort)
+      .gte('created_at', fiveMinutesAgo)
+      .limit(1);
+
+    if (existingJobs && existingJobs.length > 0) {
+      console.log('Duplicate detected, existing job:', existingJobs[0].id);
+      return new Response(JSON.stringify({
+        error: 'Duplikat erkannt',
+        details: 'Eine identische Anfrage wurde bereits innerhalb der letzten 5 Minuten gesendet.',
+        existing_job_id: existingJobs[0].id
+      }), {
+        status: 409,
+        headers: jsonCors
+      });
+    }
+
+    console.log('No duplicate found, inserting job request for:', customer_city);
 
     // Save job request to database
     const { data: jobRequest, error: jobError } = await supabase
