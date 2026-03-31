@@ -16,6 +16,7 @@ import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false); // prevents double-submit
   const [agreedToData, setAgreedToData] = useState(false);
   const [agreedToBinding, setAgreedToBinding] = useState(false);
   const [newsletter, setNewsletter] = useState(false);
@@ -42,8 +43,10 @@ const SimpleBookingForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (submitted || loading) return; // block double-submit
     console.log('Form submission started');
     setLoading(true);
+    setSubmitted(true);
 
     const formData = new FormData(e.currentTarget);
     
@@ -118,12 +121,21 @@ const SimpleBookingForm = () => {
       });
 
       if (error) {
-        // Enhanced error logging to see exact server response
         console.error('Function error:', error);
         // @ts-ignore
         const responseText = await error.context?.response?.text?.();
         console.error('Function error body:', responseText || error.message);
         throw new Error(responseText || error.message);
+      }
+
+      // Check for duplicate response (409)
+      if (data?.error?.includes('Duplikat') || data?.existing_job_id) {
+        toast({
+          title: "Anfrage bereits gesendet",
+          description: "Ihre Anfrage wurde bereits erfolgreich übermittelt. Wir melden uns bei Ihnen.",
+        });
+        setFormSubmitted(true);
+        return;
       }
 
       toast({
@@ -162,13 +174,19 @@ const SimpleBookingForm = () => {
       setRequiresBf3(false);
       setFahrzeugtyp('');
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting form:', error);
+      const isDuplicate = error?.message?.includes('Duplikat');
       toast({
-        title: "Fehler beim Senden",
-        description: "Bitte versuchen Sie es erneut oder rufen Sie uns an.",
-        variant: "destructive",
+        title: isDuplicate ? "Anfrage bereits gesendet" : "Fehler beim Senden",
+        description: isDuplicate 
+          ? "Ihre Anfrage wurde bereits erfolgreich übermittelt. Wir melden uns bei Ihnen."
+          : "Bitte versuchen Sie es erneut oder rufen Sie uns an.",
+        variant: isDuplicate ? "default" : "destructive",
       });
+      if (!isDuplicate) {
+        setSubmitted(false); // allow retry on real errors
+      }
     } finally {
       setLoading(false);
     }
@@ -819,7 +837,7 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || !agreedToData || !agreedToBinding || !fahrzeugtyp}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
