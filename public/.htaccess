@@ -1,3 +1,7 @@
+# HINWEIS: Diese Datei ist NUR für die Lovable-Preview.
+# Für IONOS-Produktion → public/htaccess-ionos verwenden!
+# (wird automatisch beim Build nach dist/.htaccess kopiert)
+
 Options -MultiViews
 
 RewriteEngine On
