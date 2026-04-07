@@ -72,45 +72,43 @@ AddType image/png .png
   Header set Accept-Ranges none
 </IfModule>
 
-# Canonical 301 redirects for legacy .html URLs (one hop, HTTPS + WWW)
-# IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
-RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
-RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
-RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/agb [R=301,L]
+# Legacy .html → clean URLs (RELATIV, kein absoluter Redirect)
+RewriteRule ^index\.html$ / [R=301,L]
+RewriteRule ^impressum\.html$ /impressum [R=301,L]
+RewriteRule ^datenschutzerklaerung\.html$ /datenschutz [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ /agb [R=301,L]
 # Legacy mobile/smartphone/printable/vgapda URLs → Homepage
-RewriteRule ^mobile/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^smartphone/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^printable/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^vgapda/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^mobile/.* / [R=301,L]
+RewriteRule ^smartphone/.* / [R=301,L]
+RewriteRule ^printable/.* / [R=301,L]
+RewriteRule ^vgapda/.* / [R=301,L]
 
-# Referenzen variants (mobile/smartphone/printable .../default.html)
-RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
-RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
+# Referenzen variants
+RewriteRule ^referenzen/default\.html$ /referenzen [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ /referenzen [R=301,L]
 
-# Any PHP files → Homepage
+# PHP files → Homepage
 RewriteCond %{REQUEST_URI} \.php$ [NC]
-RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/ [R=301,L]
-# Generic: any other .html → sans extension, except admin-check.html
-RewriteCond %{REQUEST_URI} \.html$ [NC]
+RewriteRule ^ / [R=301,L]
+# Generic .html → clean URL (außer admin-check.html)
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
 
-# Remove legacy Fahrerbörse URLs
-Redirect gone /fahrerboerse
-Redirect gone /fahrerbörse
-
-# (HTTPS redirect moved to top for correct order)
+# Entfernte Seiten
+RewriteRule ^fahrerboerse$ - [G,L]
 
 # SPA fallback routing
 RewriteBase /
-RewriteRule ^index\.html$ - [L]
 
-# Explicit SPA routes for admin (avoid any external redirects)
-RewriteRule ^admin$ /index.html [L]
-RewriteRule ^admin/login$ /index.html [L]
+# Statische Dateien direkt ausliefern
+RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2|ttf|otf|eot|mp4|pdf|map)$ - [L]
+RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico|favicon\.png|admin-check\.html)$ - [L]
+RewriteRule ^manifest\.webmanifest$ - [L]
+RewriteRule ^sw\.js$ - [L]
+RewriteRule ^workbox-.*\.js$ - [L]
+RewriteRule ^assets/ - [L]
 
+# SPA Catch-all (INTERNER REWRITE – kein Redirect!)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
-RewriteRule . /index.html [L]
+RewriteRule ^ /index.html [L]
