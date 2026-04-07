@@ -72,11 +72,19 @@ AddType image/png .png
   Header set Accept-Ranges none
 </IfModule>
 
-# Legacy .html → clean URLs (RELATIV, kein absoluter Redirect)
+# Legacy .html → clean URLs (THE_REQUEST = nur echte Browser-Anfragen, nicht SPA-Rewrite)
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+impressum\.html[\s?] [NC]
 RewriteRule ^impressum\.html$ /impressum [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+datenschutzerklaerung\.html[\s?] [NC]
 RewriteRule ^datenschutzerklaerung\.html$ /datenschutz [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+allgemeine-geschaeftsbedingungen\.html[\s?] [NC]
 RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ /agb [R=301,L]
+
 # Legacy mobile/smartphone/printable/vgapda URLs → Homepage
 RewriteRule ^mobile/.* / [R=301,L]
 RewriteRule ^smartphone/.* / [R=301,L]
@@ -90,8 +98,11 @@ RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ /referenz
 # PHP files → Homepage
 RewriteCond %{REQUEST_URI} \.php$ [NC]
 RewriteRule ^ / [R=301,L]
-# Generic .html → clean URL (außer admin-check.html)
+
+# Generic .html → clean URL (außer admin-check.html und index.html)
+RewriteCond %{THE_REQUEST} \.html[\s?] [NC]
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
+RewriteCond %{REQUEST_URI} !^/index\.html$ [NC]
 RewriteRule ^(.+)\.html$ /$1 [R=301,L]
 
 # Entfernte Seiten

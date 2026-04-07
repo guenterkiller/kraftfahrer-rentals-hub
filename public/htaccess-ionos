@@ -89,9 +89,17 @@ RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 # ============================================================
 
 # Legacy .html → clean URLs (301)
+# THE_REQUEST prüft den ORIGINALEN Request – greift NICHT bei internem SPA-Rewrite!
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
 RewriteRule ^index\.html$ / [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+impressum\.html[\s?] [NC]
 RewriteRule ^impressum\.html$ /impressum [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+datenschutzerklaerung\.html[\s?] [NC]
 RewriteRule ^datenschutzerklaerung\.html$ /datenschutz [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+allgemeine-geschaeftsbedingungen\.html[\s?] [NC]
 RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ /agb [R=301,L]
 
 # Legacy mobile/smartphone/printable/vgapda → Homepage
@@ -108,8 +116,11 @@ RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ /referenz
 RewriteCond %{REQUEST_URI} \.php$ [NC]
 RewriteRule ^ / [R=301,L]
 
-# Generische .html → clean URL (außer admin-check.html)
+# Generische .html → clean URL (außer admin-check.html und index.html)
+# THE_REQUEST verhindert, dass der SPA-Fallback-Rewrite auf /index.html hier erneut greift
+RewriteCond %{THE_REQUEST} \.html[\s?] [NC]
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
+RewriteCond %{REQUEST_URI} !^/index\.html$ [NC]
 RewriteRule ^(.+)\.html$ /$1 [R=301,L]
 
 # Entfernte Seiten (410 Gone)
