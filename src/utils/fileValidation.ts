@@ -14,7 +14,7 @@ export function validateFiles(files: File[]): string[] {
     
     // Check file size
     if (file.size > MAX_FILE_SIZE) {
-      errors.push(`„${file.name}": größer als 10 MB.`);
+      errors.push(`„${file.name}": größer als 5 MB.`);
       continue;
     }
     
