@@ -1,6 +1,6 @@
 // File validation utilities for driver registration
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'application/pdf'];
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB (must match server-side limit)
 
 export function validateFiles(files: File[]): string[] {
   const errors: string[] = [];
