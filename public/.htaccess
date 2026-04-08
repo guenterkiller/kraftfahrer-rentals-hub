@@ -1,7 +1,3 @@
-# HINWEIS: Diese Datei ist NUR für die Lovable-Preview.
-# Für IONOS-Produktion → public/htaccess-ionos verwenden!
-# (wird automatisch beim Build nach dist/.htaccess kopiert)
-
 Options -MultiViews
 
 RewriteEngine On
@@ -72,54 +68,45 @@ AddType image/png .png
   Header set Accept-Ranges none
 </IfModule>
 
-# Legacy .html → clean URLs (THE_REQUEST = nur echte Browser-Anfragen, nicht SPA-Rewrite)
-RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
-RewriteRule ^index\.html$ / [R=301,L]
-
-RewriteCond %{THE_REQUEST} \s/+impressum\.html[\s?] [NC]
-RewriteRule ^impressum\.html$ /impressum [R=301,L]
-
-RewriteCond %{THE_REQUEST} \s/+datenschutzerklaerung\.html[\s?] [NC]
-RewriteRule ^datenschutzerklaerung\.html$ /datenschutz [R=301,L]
-
-RewriteCond %{THE_REQUEST} \s/+allgemeine-geschaeftsbedingungen\.html[\s?] [NC]
-RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ /agb [R=301,L]
-
+# Canonical 301 redirects for legacy .html URLs (one hop, HTTPS + WWW)
+# IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
+RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/agb [R=301,L]
 # Legacy mobile/smartphone/printable/vgapda URLs → Homepage
-RewriteRule ^mobile/.* / [R=301,L]
-RewriteRule ^smartphone/.* / [R=301,L]
-RewriteRule ^printable/.* / [R=301,L]
-RewriteRule ^vgapda/.* / [R=301,L]
+RewriteRule ^mobile/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^smartphone/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^printable/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^vgapda/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
 
-# Referenzen variants
-RewriteRule ^referenzen/default\.html$ /referenzen [R=301,L]
-RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ /referenzen [R=301,L]
+# Referenzen variants (mobile/smartphone/printable .../default.html)
+RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
 
-# PHP files → Homepage
+# Any PHP files → Homepage
 RewriteCond %{REQUEST_URI} \.php$ [NC]
-RewriteRule ^ / [R=301,L]
-
-# Generic .html → clean URL (außer admin-check.html und index.html)
-RewriteCond %{THE_REQUEST} \.html[\s?] [NC]
+RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+# Generic: any other .html → sans extension, except admin-check.html
+RewriteCond %{REQUEST_URI} \.html$ [NC]
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteCond %{REQUEST_URI} !^/index\.html$ [NC]
-RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 
-# Entfernte Seiten
-RewriteRule ^fahrerboerse$ - [G,L]
+# Remove legacy Fahrerbörse URLs
+Redirect gone /fahrerboerse
+Redirect gone /fahrerbörse
+
+# (HTTPS redirect moved to top for correct order)
 
 # SPA fallback routing
 RewriteBase /
+RewriteRule ^index\.html$ - [L]
 
-# Statische Dateien direkt ausliefern
-RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2|ttf|otf|eot|mp4|pdf|map)$ - [L]
-RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico|favicon\.png|admin-check\.html)$ - [L]
-RewriteRule ^manifest\.webmanifest$ - [L]
-RewriteRule ^sw\.js$ - [L]
-RewriteRule ^workbox-.*\.js$ - [L]
-RewriteRule ^assets/ - [L]
+# Explicit SPA routes for admin (avoid any external redirects)
+RewriteRule ^admin$ /index.html [L]
+RewriteRule ^admin/login$ /index.html [L]
 
-# SPA Catch-all (INTERNER REWRITE – kein Redirect!)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ /index.html [L]
+RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
+RewriteRule . /index.html [L]
