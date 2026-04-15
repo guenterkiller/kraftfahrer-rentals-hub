@@ -1636,6 +1636,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 {req.customer_company && (
                                   <p className="text-sm text-gray-600 truncate">{req.customer_company}</p>
                                 )}
+                                {req.einsatzort && (
+                                  <p className="text-xs text-gray-400 truncate">📍 {req.einsatzort}</p>
+                                )}
                               </div>
                             </div>
                             <div className="flex-shrink-0">
