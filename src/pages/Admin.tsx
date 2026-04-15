@@ -1388,6 +1388,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <div>
                                 <div className="font-semibold">{req.customer_name}</div>
                                 <div className="text-xs text-gray-500">{req.customer_company || '–'}</div>
+                                {req.einsatzort && <div className="text-xs text-gray-400">📍 {req.einsatzort}</div>}
                               </div>
                               <CollapsibleTrigger asChild>
                                 <Button variant="ghost" size="sm" className="p-0 h-auto">
