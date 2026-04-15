@@ -1387,7 +1387,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             <div className="flex items-center justify-between">
                               <div>
                                 <div className="font-semibold">{req.customer_name}</div>
-                                <div className="text-xs text-gray-500">{req.customer_company || '–'}</div>
+                                <div className="text-xs text-gray-500">{req.company || '–'}</div>
                                 {req.einsatzort && <div className="text-xs text-gray-400">📍 {req.einsatzort}</div>}
                               </div>
                               <CollapsibleTrigger asChild>
@@ -1633,8 +1633,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               />
                               <div className="flex-1 min-w-0">
                                 <h3 className="font-semibold text-base truncate">{req.customer_name}</h3>
-                                {req.customer_company && (
-                                  <p className="text-sm text-gray-600 truncate">{req.customer_company}</p>
+                                {req.company && (
+                                  <p className="text-sm text-gray-600 truncate">{req.company}</p>
                                 )}
                                 {req.einsatzort && (
                                   <p className="text-xs text-gray-400 truncate">📍 {req.einsatzort}</p>
