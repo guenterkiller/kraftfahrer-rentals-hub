@@ -69,10 +69,15 @@ AddType image/png .png
 </IfModule>
 
 # Canonical 301 redirects for legacy .html URLs (one hop, HTTPS + WWW)
-# IMPORTANT: Do NOT redirect admin-check.html so the static health check stays reachable
+# IMPORTANT: THE_REQUEST guards ensure only direct browser requests are redirected,
+# NOT internal SPA rewrites (which would cause 301 loops)
+RewriteCond %{THE_REQUEST} \s/index\.html\s [NC]
 RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteCond %{THE_REQUEST} \s/impressum\.html\s [NC]
 RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteCond %{THE_REQUEST} \s/datenschutzerklaerung\.html\s [NC]
 RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteCond %{THE_REQUEST} \s/allgemeine-geschaeftsbedingungen\.html\s [NC]
 RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/agb [R=301,L]
 # Legacy mobile/smartphone/printable/vgapda URLs → Homepage
 RewriteRule ^mobile/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
@@ -88,7 +93,8 @@ RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://w
 RewriteCond %{REQUEST_URI} \.php$ [NC]
 RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/ [R=301,L]
 # Generic: any other .html → sans extension, except admin-check.html
-RewriteCond %{REQUEST_URI} \.html$ [NC]
+# Only redirect direct browser requests, not internal rewrites
+RewriteCond %{THE_REQUEST} \.html\s [NC]
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
 RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 

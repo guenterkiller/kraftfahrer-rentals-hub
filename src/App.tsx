@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -45,6 +46,7 @@ const Projekte = lazy(() => import("./pages/Projekte"));
 const Vermittlung = lazy(() => import("./pages/Vermittlung"));
 const Vermittlungsbedingungen = lazy(() => import("./pages/Vermittlungsbedingungen"));
 const FahrerVermittlungsbedingungen = lazy(() => import("./pages/FahrerVermittlungsbedingungen"));
+const Versicherung = lazy(() => import("./pages/Versicherung"));
 
 // Legal (lazy)
 const Impressum = lazy(() => import("./pages/Impressum"));
@@ -149,6 +151,7 @@ const App = () => (
             
             {/* Fahrer-Bereich */}
             <Route path="/fahrer-registrierung" element={<FahrerRegistrierung />} />
+            <Route path="/fahrer-werden" element={<Navigate to="/fahrer-registrierung" replace />} />
             <Route path="/fahrer-infos" element={<FahrerInfos />} />
             
             {/* Info-Seiten */}
@@ -157,6 +160,7 @@ const App = () => (
             <Route path="/fahrer-vermittlungsbedingungen" element={<FahrerVermittlungsbedingungen />} />
             <Route path="/wissenswertes" element={<Wissenswertes />} />
             <Route path="/projekte" element={<Projekte />} />
+            <Route path="/versicherung" element={<Versicherung />} />
             
             {/* Admin-Bereich - lazy loaded */}
             <Route path="/admin" element={<Admin />} />
