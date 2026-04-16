@@ -29,15 +29,15 @@ const Index = () => {
     keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit, Ersatzfahrer LKW, Aushilfsfahrer LKW, Mietfahrer LKW, Leihfahrer LKW, Fahrer leihen, Fahrer bestellen, Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer, Urlaubsvertretung Fahrer, Krankheitsvertretung Fahrer, Vertretungsfahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, Baumaschinenführer buchen, LKW Fahrer Vermittlung, Fahrer kurzfristig verfügbar",
     ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
-      'de': 'https://kraftfahrer-mieten.com/',
-      'de-AT': 'https://kraftfahrer-mieten.com/',
-      'de-CH': 'https://kraftfahrer-mieten.com/',
-      'en': 'https://kraftfahrer-mieten.com/',
-      'pl': 'https://kraftfahrer-mieten.com/',
-      'ro': 'https://kraftfahrer-mieten.com/',
-      'bg': 'https://kraftfahrer-mieten.com/',
-      'hu': 'https://kraftfahrer-mieten.com/',
-      'x-default': 'https://kraftfahrer-mieten.com/'
+      'de': 'https://www.kraftfahrer-mieten.com/',
+      'de-AT': 'https://www.kraftfahrer-mieten.com/',
+      'de-CH': 'https://www.kraftfahrer-mieten.com/',
+      'en': 'https://www.kraftfahrer-mieten.com/',
+      'pl': 'https://www.kraftfahrer-mieten.com/',
+      'ro': 'https://www.kraftfahrer-mieten.com/',
+      'bg': 'https://www.kraftfahrer-mieten.com/',
+      'hu': 'https://www.kraftfahrer-mieten.com/',
+      'x-default': 'https://www.kraftfahrer-mieten.com/'
     },
     faqData: [
       {
