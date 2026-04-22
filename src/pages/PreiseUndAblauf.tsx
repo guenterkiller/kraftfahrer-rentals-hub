@@ -70,7 +70,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center mb-4">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
-                      <p className="text-red-700 text-xs mt-2">30 € je Überstunde</p>
+                      <p className="text-red-700 text-xs mt-2">30 € je Überstunde (ab der 9. Stunde)</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -86,7 +86,8 @@ const PreiseUndAblauf = () => {
                     <div className="text-center mb-4">
                       <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
                       <p className="text-green-800 font-medium text-sm">Pauschale pro Einsatztag (netto)</p>
-                      <p className="text-green-700 text-xs mt-2">Bis 10 Std. abgegolten – keine Stundenabrechnung</p>
+                      <p className="text-green-700 text-xs mt-2">✔ Arbeitszeit bis 10 Stunden inklusive<br/>✔ Keine Stundenabrechnung innerhalb der Pauschale</p>
+                      <p className="text-green-700 text-xs mt-2">➡️ Ab mehr als 10 Stunden: Zuschlag oder zusätzlicher Einsatztag gemäß Auftragsbestätigung</p>
                     </div>
                   </CardContent>
                 </Card>
