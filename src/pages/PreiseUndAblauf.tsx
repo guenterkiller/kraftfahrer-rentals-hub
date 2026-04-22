@@ -60,6 +60,9 @@ const PreiseUndAblauf = () => {
             {/* Aktuelle Tagespreise */}
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-center mb-8">Mietfahrer & Leihfahrer – Tagespreise (netto)</h2>
+              <p className="text-center text-sm text-muted-foreground max-w-3xl mx-auto mb-6">
+                Hinweis: Fahrtkosten sind bei allen Tarifen nicht enthalten und werden gemäß unserer Fahrtkostenregelung separat berechnet.
+              </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
