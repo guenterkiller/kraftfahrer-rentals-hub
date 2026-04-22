@@ -177,7 +177,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern. Die eingesetzten Unternehmer entscheiden eigenständig über die konkrete Ausführung der Tätigkeit im Rahmen des vereinbarten Auftrags.</p>
                 </div>
               </CardContent>
             </Card>
@@ -539,7 +539,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">3. Haftung</h3>
-                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, sofern nicht grobe Fahrlässigkeit vorliegt.</p>
+                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, soweit gesetzlich zulässig und kein vorsätzliches oder grob fahrlässiges Verhalten vorliegt.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">4. Abrechnung</h3>
@@ -547,7 +547,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
-                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist unzulässig.</p>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist nur mit Zustimmung der Fahrerexpress-Agentur zulässig.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
