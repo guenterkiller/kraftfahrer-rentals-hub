@@ -204,6 +204,7 @@ const PreiseUndAblauf = () => {
                 <div className="space-y-2 text-muted-foreground">
                   <p>➡ Berechnungsgrundlage: Wohnort des eingesetzten Unternehmers zum Einsatzort</p>
                   <p>➡ Parkgebühren, Maut, Tunnel, Fähren → 1:1 an Auftraggeber weiterberechnet</p>
+                  <p>➡ Der Einsatzort des Unternehmers wird dem Auftraggeber vor Einsatzbeginn mitgeteilt.</p>
                 </div>
                 <div className="bg-muted rounded-lg p-4">
                   <p className="font-semibold mb-2">Beispiel:</p>
