@@ -177,7 +177,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern. Die eingesetzten Unternehmer entscheiden eigenständig über die konkrete Ausführung der Tätigkeit im Rahmen des vereinbarten Auftrags.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern. Die eingesetzten Unternehmer entscheiden eigenständig über die konkrete Ausführung der Tätigkeit im Rahmen des vereinbarten Auftrags. Der Auftraggeber beschränkt sich auf die Beschreibung des gewünschten Arbeitsergebnisses. Eine fachliche Weisungsbefugnis gegenüber dem eingesetzten Unternehmer besteht nicht.</p>
                 </div>
               </CardContent>
             </Card>
@@ -204,6 +204,7 @@ const PreiseUndAblauf = () => {
                 <div className="space-y-2 text-muted-foreground">
                   <p>➡ Berechnungsgrundlage: Wohnort des eingesetzten Unternehmers zum Einsatzort</p>
                   <p>➡ Parkgebühren, Maut, Tunnel, Fähren → 1:1 an Auftraggeber weiterberechnet</p>
+                  <p>➡ Der Einsatzort des Unternehmers wird dem Auftraggeber vor Einsatzbeginn mitgeteilt.</p>
                 </div>
                 <div className="bg-muted rounded-lg p-4">
                   <p className="font-semibold mb-2">Beispiel:</p>
@@ -338,7 +339,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <p><strong>Storno unter 24 Std.</strong> → 80 % des Tagessatzes</p>
+                  <p><strong>Storno unter 24 Std.</strong> → Wir behalten uns vor, den entgangenen Aufwand pauschal mit 80 % des vereinbarten Tagessatzes zu berechnen, sofern kein geringerer Schaden nachgewiesen wird.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
@@ -489,6 +490,7 @@ const PreiseUndAblauf = () => {
                   <ul className="space-y-1 text-muted-foreground ml-4">
                     <li>• Der selbstständige Unternehmer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
                     <li>• Für Schäden im Zusammenhang mit der Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</li>
+                    <li>• Die Fahrerexpress-Agentur haftet nur für eigenes Verschulden sowie für Auswahlverschulden bei der Vermittlung geeigneter Unternehmer.</li>
                   </ul>
                 </div>
               </CardContent>
@@ -531,7 +533,7 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-4">
                 <div>
                   <h3 className="font-semibold text-lg mb-2">1. Vertragsverhältnis</h3>
-                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur.</p>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur. Die Fahrerexpress-Agentur schuldet die Organisation und Vermittlung der Dienstleistung. Die konkrete Leistungserbringung erfolgt durch selbstständige Unternehmer in eigener Verantwortung.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">2. Einsatzdurchführung</h3>
@@ -547,7 +549,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
-                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist nur mit Zustimmung der Fahrerexpress-Agentur zulässig.</p>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist nur mit Zustimmung der Fahrerexpress-Agentur zulässig. Dies gilt auch für einen Zeitraum von 12 Monaten nach Einsatzende.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
