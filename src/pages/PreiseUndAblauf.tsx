@@ -532,7 +532,7 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-4">
                 <div>
                   <h3 className="font-semibold text-lg mb-2">1. Vertragsverhältnis</h3>
-                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur.</p>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur. Die Fahrerexpress-Agentur schuldet die Organisation und Vermittlung der Dienstleistung. Die konkrete Leistungserbringung erfolgt durch selbstständige Unternehmer in eigener Verantwortung.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">2. Einsatzdurchführung</h3>
