@@ -490,6 +490,7 @@ const PreiseUndAblauf = () => {
                   <ul className="space-y-1 text-muted-foreground ml-4">
                     <li>• Der selbstständige Unternehmer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
                     <li>• Für Schäden im Zusammenhang mit der Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</li>
+                    <li>• Die Fahrerexpress-Agentur haftet nur für eigenes Verschulden sowie für Auswahlverschulden bei der Vermittlung geeigneter Unternehmer.</li>
                   </ul>
                 </div>
               </CardContent>
@@ -548,7 +549,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
-                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist nur mit Zustimmung der Fahrerexpress-Agentur zulässig.</p>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist nur mit Zustimmung der Fahrerexpress-Agentur zulässig. Dies gilt auch für einen Zeitraum von 12 Monaten nach Einsatzende.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
