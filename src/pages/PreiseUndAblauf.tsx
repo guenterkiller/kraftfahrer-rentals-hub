@@ -70,7 +70,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center mb-4">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
-                      <p className="text-red-700 text-xs mt-2">30 € je Überstunde (ab der 9. Stunde)</p>
+                      <p className="text-red-700 text-xs mt-2">30 € je Überstunde</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -86,8 +86,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center mb-4">
                       <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
                       <p className="text-green-800 font-medium text-sm">Pauschale pro Einsatztag (netto)</p>
-                      <p className="text-green-700 text-xs mt-2">✔ Arbeitszeit bis 10 Stunden inklusive<br/>✔ Keine Stundenabrechnung innerhalb der Pauschale</p>
-                      <p className="text-green-700 text-xs mt-2">➡️ Ab mehr als 10 Stunden: Zuschlag oder zusätzlicher Einsatztag gemäß Auftragsbestätigung</p>
+                      <p className="text-green-700 text-xs mt-2">Bis 10 Std. abgegolten – keine Stundenabrechnung</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -240,7 +239,6 @@ const PreiseUndAblauf = () => {
                     <li>• <strong>Sonntag</strong>: +50 %</li>
                     <li>• <strong>Feiertage</strong>: +100 %</li>
                   </ul>
-                  <p className="text-sm text-muted-foreground mt-2">➡️ Zuschläge gelten nicht für die Fernfahrer-Pauschale, sofern nicht ausdrücklich vereinbart.</p>
                 </div>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
                   <p className="text-sm text-blue-900"><strong>⏱️ Wichtig:</strong> Wartezeiten und Standzeiten gelten als Arbeitszeit und werden entsprechend abgerechnet.</p>
