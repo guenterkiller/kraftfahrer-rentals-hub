@@ -60,6 +60,9 @@ const PreiseUndAblauf = () => {
             {/* Aktuelle Tagespreise */}
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-center mb-8">Mietfahrer & Leihfahrer – Tagespreise (netto)</h2>
+              <p className="text-center text-sm text-muted-foreground max-w-3xl mx-auto mb-6">
+                Hinweis: Fahrtkosten sind bei allen Tarifen nicht enthalten und werden gemäß unserer Fahrtkostenregelung separat berechnet.
+              </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
@@ -87,6 +90,7 @@ const PreiseUndAblauf = () => {
                       <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
                       <p className="text-green-800 font-medium text-sm">Pauschale pro Einsatztag (netto)</p>
                       <p className="text-green-700 text-xs mt-2">Bis 10 Std. abgegolten – keine Stundenabrechnung</p>
+                      <p className="text-green-700 text-xs mt-2">Die Pauschale beinhaltet ausschließlich die Fahrerdienstleistung. Fahrtkosten werden zusätzlich gemäß Fahrtkostenregelung berechnet.</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -173,7 +177,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern. Die eingesetzten Unternehmer entscheiden eigenständig über die konkrete Ausführung der Tätigkeit im Rahmen des vereinbarten Auftrags.</p>
                 </div>
               </CardContent>
             </Card>
@@ -198,12 +202,12 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="space-y-2 text-muted-foreground">
-                  <p>➡ Berechnungsgrundlage: Wohnort des Fahrers zum Einsatzort</p>
+                  <p>➡ Berechnungsgrundlage: Wohnort des eingesetzten Unternehmers zum Einsatzort</p>
                   <p>➡ Parkgebühren, Maut, Tunnel, Fähren → 1:1 an Auftraggeber weiterberechnet</p>
                 </div>
                 <div className="bg-muted rounded-lg p-4">
                   <p className="font-semibold mb-2">Beispiel:</p>
-                  <p className="text-muted-foreground">Entfernung 60 km → 35 km zu berechnen × 2 (Hin & Rück) × 0,40 € = <strong className="text-foreground">28,00 € Fahrtkosten netto</strong></p>
+                  <p className="text-muted-foreground">60 km Gesamtstrecke – 25 km frei = 35 km kostenpflichtig × 2 (Hin & Rück) × 0,40 € = <strong className="text-foreground">28,00 € Fahrtkosten netto</strong></p>
                 </div>
               </CardContent>
             </Card>
@@ -239,6 +243,7 @@ const PreiseUndAblauf = () => {
                     <li>• <strong>Sonntag</strong>: +50 %</li>
                     <li>• <strong>Feiertage</strong>: +100 %</li>
                   </ul>
+                  <p className="text-sm text-muted-foreground mt-2">Zuschläge gelten nicht für die Fernfahrer-Pauschale, sofern nicht ausdrücklich vereinbart.</p>
                 </div>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
                   <p className="text-sm text-blue-900"><strong>⏱️ Wichtig:</strong> Wartezeiten und Standzeiten gelten als Arbeitszeit und werden entsprechend abgerechnet.</p>
@@ -534,7 +539,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">3. Haftung</h3>
-                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, sofern nicht grobe Fahrlässigkeit vorliegt.</p>
+                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, soweit gesetzlich zulässig und kein vorsätzliches oder grob fahrlässiges Verhalten vorliegt.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">4. Abrechnung</h3>
@@ -542,7 +547,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
-                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist unzulässig.</p>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist nur mit Zustimmung der Fahrerexpress-Agentur zulässig.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
