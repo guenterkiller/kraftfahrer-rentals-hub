@@ -339,7 +339,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                  <p><strong>Storno unter 24 Std.</strong> → 80 % des Tagessatzes</p>
+                  <p><strong>Storno unter 24 Std.</strong> → Wir behalten uns vor, den entgangenen Aufwand pauschal mit 80 % des vereinbarten Tagessatzes zu berechnen, sofern kein geringerer Schaden nachgewiesen wird.</p>
                 </div>
                 <div className="flex items-start gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
