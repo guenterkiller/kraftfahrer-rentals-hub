@@ -177,7 +177,7 @@ const PreiseUndAblauf = () => {
                   </div>
                 </div>
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern. Die eingesetzten Unternehmer entscheiden eigenständig über die konkrete Ausführung der Tätigkeit im Rahmen des vereinbarten Auftrags.</p>
+                  <p className="text-sm text-green-900"><strong>💡 Unser Modell:</strong> Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen auf Basis eines Dienst-/Werkvertrags. Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern. Die eingesetzten Unternehmer entscheiden eigenständig über die konkrete Ausführung der Tätigkeit im Rahmen des vereinbarten Auftrags. Der Auftraggeber beschränkt sich auf die Beschreibung des gewünschten Arbeitsergebnisses. Eine fachliche Weisungsbefugnis gegenüber dem eingesetzten Unternehmer besteht nicht.</p>
                 </div>
               </CardContent>
             </Card>
