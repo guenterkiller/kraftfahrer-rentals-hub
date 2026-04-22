@@ -240,6 +240,7 @@ const PreiseUndAblauf = () => {
                     <li>• <strong>Sonntag</strong>: +50 %</li>
                     <li>• <strong>Feiertage</strong>: +100 %</li>
                   </ul>
+                  <p className="text-sm text-muted-foreground mt-2">➡️ Zuschläge gelten nicht für die Fernfahrer-Pauschale, sofern nicht ausdrücklich vereinbart.</p>
                 </div>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
                   <p className="text-sm text-blue-900"><strong>⏱️ Wichtig:</strong> Wartezeiten und Standzeiten gelten als Arbeitszeit und werden entsprechend abgerechnet.</p>
