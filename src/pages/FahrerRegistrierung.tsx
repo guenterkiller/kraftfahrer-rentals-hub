@@ -571,23 +571,27 @@ const FahrerRegistrierung = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Gültiger Führerschein (C, CE, oder entsprechende Klassen)</span>
+                    <span>Gültiger Führerschein der passenden Klasse, z.&nbsp;B. C, CE oder entsprechende Klassen</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Fahrerkarte (digitaler Tachograph)</span>
+                    <span>Fahrerkarte für den digitalen Tachographen</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Mindestens 2 Jahre Berufserfahrung als Kraftfahrer</span>
+                    <span>Berufserfahrung als Kraftfahrer, idealerweise mindestens 2 Jahre</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
                     <span>Selbstständige Gewerbeanmeldung oder Bereitschaft zur Anmeldung</span>
                   </div>
                   <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <span>Eigene steuerliche und sozialversicherungsrechtliche Verantwortung als selbstständiger Unternehmer</span>
+                  </div>
+                  <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
-                    <span className="font-medium">🇪🇺 EU/EWR-Bürger: Fahrer aus Deutschland, allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren</span>
+                    <span className="font-medium">🇪🇺 Bei EU/EWR-Fahrern: anerkennungsfähige Fahrerlaubnis und erforderliche Berufskraftfahrerqualifikation</span>
                   </div>
                 </div>
               </CardContent>
