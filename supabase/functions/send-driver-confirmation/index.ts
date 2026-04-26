@@ -64,8 +64,10 @@ serve(async (req) => {
       return createErrorResponse("assignment not found", 404, corsHeaders);
     }
 
-    const driver = assignment.fahrer_profile;
-    const job = assignment.job_requests;
+    const _fp: any = (assignment as any).fahrer_profile;
+    const _jr: any = (assignment as any).job_requests;
+    const driver: any = Array.isArray(_fp) ? _fp[0] : _fp;
+    const job: any = Array.isArray(_jr) ? _jr[0] : _jr;
 
     if (!driver || !driver.email || !driver.vorname || !driver.nachname) {
       console.error('📧 Driver data incomplete');
