@@ -128,7 +128,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email notification to driver in background (only for real blocks)
     if (isBlocked) {
-      EdgeRuntime.waitUntil(sendBlockNotification(driverId, reason || 'Keine Begründung angegeben', supabase));
+      (globalThis as any).EdgeRuntime?.waitUntil(sendBlockNotification(driverId, reason || 'Keine Begründung angegeben', supabase));
     }
 
     return new Response(JSON.stringify({ 
