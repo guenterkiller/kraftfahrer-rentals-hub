@@ -126,7 +126,7 @@ const handler = async (req: Request): Promise<Response> => {
       from: MAIL_FROM,
       to: [job.customer_email],
       bcc: [adminEmail],
-      replyTo: 'info@kraftfahrer-mieten.com',
+      reply_to: 'info@kraftfahrer-mieten.com',
       subject,
       html: emailHtml,
     });
