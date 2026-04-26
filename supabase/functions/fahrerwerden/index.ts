@@ -313,8 +313,8 @@ const handler = async (req: Request): Promise<Response> => {
       stundensatz: parsedRate,
       status: 'pending',
       dokumente: uploadedFiles,
-      bf2_erlaubnis: requestData.bf2_erlaubnis === 'true' || requestData.bf2_erlaubnis === true,
-      bf3_erlaubnis: requestData.bf3_erlaubnis === 'true' || requestData.bf3_erlaubnis === true,
+      bf2_erlaubnis: (requestData.bf2_erlaubnis as any) === 'true' || (requestData.bf2_erlaubnis as any) === true,
+      bf3_erlaubnis: (requestData.bf3_erlaubnis as any) === 'true' || (requestData.bf3_erlaubnis as any) === true,
       spezialanforderungen: Array.isArray(requestData.spezialanforderungen) 
         ? requestData.spezialanforderungen 
         : (requestData.spezialanforderungen ? 
@@ -363,7 +363,7 @@ const handler = async (req: Request): Promise<Response> => {
       
       // Also create entries in fahrer_dokumente table for admin preview
       const fahrerId = dbData.id;
-      const documentInserts = [];
+      const documentInserts: any[] = [];
       
       // Create entries for each uploaded file
       if (uploadedFiles.fuehrerschein) {

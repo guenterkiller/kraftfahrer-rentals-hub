@@ -180,7 +180,7 @@ const handler = async (req: Request): Promise<Response> => {
           });
 
           results.push({ driver: driver.email, status: 'sent', jobs: invites.length });
-        } catch (emailError) {
+        } catch (emailError: any) {
           console.error(`❌ Failed to send mail to ${driver.email}:`, emailError);
           
           await supabase.from("email_log").insert({
