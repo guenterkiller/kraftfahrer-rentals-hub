@@ -252,7 +252,7 @@ const handler = async (req: Request): Promise<Response> => {
           .order("created_at", { ascending: false })
           .limit(1);
 
-      } catch (emailError) {
+      } catch (emailError: any) {
         console.error('❌ Failed to send admin notification:', emailError);
         
         // Update email_log with error
