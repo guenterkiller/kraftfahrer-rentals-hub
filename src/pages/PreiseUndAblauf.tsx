@@ -545,7 +545,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">4. Abrechnung</h3>
-                  <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
+                  <p className="text-muted-foreground">Vertragspartner des Auftraggebers ist die Fahrerexpress-Agentur. Die Rechnungsstellung erfolgt nach Einsatzende durch die Fahrerexpress-Agentur gemäß Auftragsbestätigung.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
