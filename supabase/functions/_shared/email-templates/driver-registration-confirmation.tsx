@@ -178,20 +178,24 @@ export const DriverRegistrationConfirmation = ({
         Jeder Einsatz wird Ihnen vorab einzeln angeboten. Dabei teilen wir Einsatzort, Zeitraum, Tätigkeit, besondere Anforderungen und die vorgesehene Vergütung mit. Sie entscheiden als selbstständiger Unternehmer eigenverantwortlich, ob Sie das konkrete Auftragsangebot zu den genannten Konditionen annehmen.
       </Text>
 
+      <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', backgroundColor: '#fef3c7', padding: '12px', borderRadius: '4px', marginTop: '10px' })}>
+        ⚠️ Wichtig: Maßgeblich ist ausschließlich das konkrete Auftragsangebot, das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Es besteht kein Automatismus, dass Sie 80 % oder 75 % eines auf der Webseite sichtbaren Preises erhalten. Öffentliche Webseitenpreise sind unverbindliche Orientierungswerte gegenüber Auftraggebern und nicht die Grundlage Ihrer Vergütung.
+      </Text>
+
       <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', marginTop: '15px', marginBottom: '5px' })}>
-        Internes Vergütungsmodell (nur für registrierte Fahrer):
+        Internes Orientierungsmodell (nur für registrierte Fahrer, unverbindlich):
       </Text>
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li>
-          <strong>Standardaufträge:</strong> 80 % Fahreranteil / 20 % Fahrerexpress-Anteil
+          <strong>Standardaufträge (Richtwert):</strong> ca. 80 % Fahreranteil / 20 % Fahrerexpress-Anteil
         </li>
         <li>
-          <strong>Kurzfristige Einsätze, Eventaufträge, Pauschalpreise, Sonderfahrten, Überführungen oder Einsätze mit besonderen Bedingungen:</strong> 75 % Fahreranteil / 25 % Fahrerexpress-Anteil
+          <strong>Kurzfristige Einsätze, Eventaufträge, Pauschalpreise, Sonderfahrten, Überführungen oder Einsätze mit besonderen Bedingungen (Richtwert):</strong> ca. 75 % Fahreranteil / 25 % Fahrerexpress-Anteil
         </li>
       </ul>
 
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '15px' })}>
-        Diese Aufteilung bezieht sich ausschließlich auf den jeweils von Fahrerexpress kalkulierten und mit dem Auftraggeber vereinbarten Einsatzpreis – nicht auf öffentlich sichtbare Webseitenpreise.
+        Diese Richtwerte dienen ausschließlich der internen Orientierung und beziehen sich auf den jeweils von Fahrerexpress kalkulierten und mit dem Auftraggeber vereinbarten Einsatzpreis – <strong>nicht auf öffentlich sichtbare Webseitenpreise</strong>. Im Einzelfall kann die tatsächliche Vergütung im konkreten Auftragsangebot abweichen.
       </Text>
 
       <Text {...getTextProps(textStyles.paragraph)}>
@@ -199,7 +203,7 @@ export const DriverRegistrationConfirmation = ({
       </Text>
 
       <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', marginBottom: '0' })}>
-        Maßgeblich ist immer das konkrete Auftragsangebot, das Ihnen vor Einsatzbeginn mitgeteilt wird und das Sie eigenverantwortlich annehmen. Ein fester Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises besteht nicht.
+        Verbindlich ist allein das konkrete Auftragsangebot, das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt und das Sie eigenverantwortlich annehmen oder ablehnen. Ein fester Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises besteht ausdrücklich nicht.
       </Text>
 
       <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '12px', fontStyle: 'italic', color: '#64748b', marginTop: '15px', marginBottom: '0' })}>
