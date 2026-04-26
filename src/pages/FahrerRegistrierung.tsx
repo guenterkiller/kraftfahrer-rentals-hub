@@ -616,19 +616,19 @@ const FahrerRegistrierung = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇩🇪 Deutsch</p>
-                      <p className="text-muted-foreground text-xs">Wir vermitteln selbstständige Unternehmer aus allen EU/EWR-Ländern – je nach Qualifikation und rechtlicher Einsatzmöglichkeit.</p>
+                      <p className="text-muted-foreground text-xs">Wir vermitteln selbstständige Unternehmer aus allen EU/EWR-Ländern – die Einsatzmöglichkeit wird individuell anhand Qualifikation und rechtlicher Voraussetzungen geprüft.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇬🇧 English</p>
-                      <p className="text-muted-foreground text-xs">We place drivers from all EU/EEA countries. Legal cooperation guaranteed.</p>
+                      <p className="text-muted-foreground text-xs">We support legally compliant cooperation with self-employed drivers from EU/EEA countries – eligibility is reviewed individually.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇵🇱 Polski</p>
-                      <p className="text-muted-foreground text-xs">Pośredniczymy w współpracy z kierowcami ze wszystkich krajów UE/EOG.</p>
+                      <p className="text-muted-foreground text-xs">Pośredniczymy we współpracy z samodzielnymi kierowcami z krajów UE/EOG – możliwość współpracy jest oceniana indywidualnie.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇷🇴 Română</p>
-                      <p className="text-muted-foreground text-xs">Plasăm șoferi din toate țările UE/SEE. Cooperare legală garantată.</p>
+                      <p className="text-muted-foreground text-xs">Intermediem colaborarea cu șoferi independenți din țările UE/SEE – eligibilitatea este verificată individual.</p>
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-primary/20">
@@ -888,17 +888,20 @@ const FahrerRegistrierung = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="stundensatz">Stundensatz (€) *</Label>
+                      <Label htmlFor="stundensatz">Honorarvorstellung netto (€) *</Label>
                       <Input
                         id="stundensatz"
                         type="number"
                         step="0.50"
-                        placeholder="z.B. 25"
+                        placeholder="z. B. 35"
                         value={formData.stundensatz}
                         onChange={(e) => handleInputChange('stundensatz', e.target.value)}
                         className={validationErrors.stundensatz ? "border-destructive" : ""}
                         required
                       />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Bitte geben Sie Ihre gewünschte Netto-Honorarvorstellung als selbstständiger Unternehmer an.
+                      </p>
                       {validationErrors.stundensatz && (
                         <p id="stundensatz-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.stundensatz}</p>
                       )}
