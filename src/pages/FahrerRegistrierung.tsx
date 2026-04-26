@@ -471,84 +471,87 @@ const FahrerRegistrierung = () => {
                       💬 Warum selbstständige Fahrer bei uns mehr erreichen
                     </h2>
                     <p className="text-lg text-muted-foreground">
-                      Stell dir vor, du bestimmst selbst, wann, wo und für wen du fährst – ganz ohne Disponenten, 
-                      Schichtpläne oder endlose Diskussionen mit der Dispo.
+                      Sie entscheiden eigenverantwortlich, welche Auftragsangebote Sie annehmen.
+                      Einsatzort, Zeitraum, Fahrzeugart und Konditionen werden vor jedem Auftrag transparent abgestimmt.
                     </p>
                     <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
                       <p className="text-sm font-medium text-primary">
-                        🇪🇺 EU/EWR-Fahrer willkommen: Fahrer aus allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren.
+                        🇪🇺 Fahrer aus Deutschland, allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren – sofern Führerschein, Fahrerkarte, Qualifikation und rechtliche Einsatzvoraussetzungen passen.
                       </p>
                     </div>
                   </div>
 
                   <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
                     <p className="text-lg mb-4">
-                      Bei Fahrerexpress bist du nicht „nur ein Fahrer". Du bist Partner auf Augenhöhe – 
-                      mit klaren Aufträgen, ehrlicher Bezahlung und einem Ansprechpartner, der selbst jahrelang auf dem Bock saß.
+                      Bei Fahrerexpress arbeiten Sie als selbstständiger Unternehmer auf Augenhöhe –
+                      mit klar abgestimmten Aufträgen, transparenten Honoraren und einem Ansprechpartner, der die Branche aus eigener Erfahrung kennt.
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-4 my-6">
                       <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
                         <span className="text-2xl">🚛</span>
-                        <span className="text-sm">Du willst mehr verdienen als mit Festanstellung?</span>
+                        <span className="text-sm">Sie möchten als selbstständiger Unternehmer eigenverantwortlich arbeiten?</span>
                       </div>
                       <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
                         <span className="text-2xl">🧭</span>
-                        <span className="text-sm">Du willst selbst bestimmen, wann du fährst – und wann du Pause machst?</span>
+                        <span className="text-sm">Sie möchten selbst entscheiden, welche Auftragsangebote zu Ihnen passen?</span>
                       </div>
                       <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
                         <span className="text-2xl">💼</span>
-                        <span className="text-sm">Du willst raus aus dem Hamsterrad und dein eigener Chef sein?</span>
+                        <span className="text-sm">Sie möchten Ihre unternehmerische Freiheit nutzen und eigene Konditionen vereinbaren?</span>
                       </div>
                     </div>
 
                     <div className="text-center bg-primary/10 rounded-lg p-4 mb-6">
                       <p className="text-lg font-semibold text-primary">
-                        👉 Dann ist jetzt der richtige Moment, dich bei uns zu registrieren.
+                        👉 Dann ist jetzt der richtige Moment, sich bei uns zu registrieren.
                       </p>
                     </div>
                   </div>
 
                   <div className="bg-card/50 rounded-lg p-6 border border-green-500/20">
                     <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                      ✅ Was du bekommst:
+                      ✅ Was Sie erwartet:
                     </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-3">
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Planbare Aufträge, deutschlandweit – keine „Springerdienste"</span>
+                          <span>Planbare Auftragsangebote deutschlandweit – jeder Einsatz wird vorab einzeln abgestimmt</span>
                         </div>
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Transparente Honorare – keine Lohnverhandlungen oder Tricks</span>
+                          <span>Transparente Honorare – klare Konditionen vor jedem Auftrag</span>
                         </div>
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Keine Lohnabzüge wie bei Zeitarbeit – du schreibst deine eigene Rechnung</span>
+                          <span>Keine klassische Lohnabrechnung wie bei Arbeitnehmern – Sie rechnen Ihre vereinbarte Leistung als selbstständiger Unternehmer ab</span>
                         </div>
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Persönliche Betreuung – kein Callcenter, kein Systemdruck</span>
+                          <span>Persönliche Betreuung – direkter Ansprechpartner statt Callcenter</span>
                         </div>
                       </div>
                     </div>
+                    <p className="text-xs text-muted-foreground mt-4">
+                      Hinweis: Es handelt sich nicht um Zeitarbeit und nicht um eine Festanstellung. Es besteht kein Anspruch auf bestimmte Aufträge – jeder Fahrer entscheidet selbst, ob er ein konkretes Auftragsangebot annimmt.
+                    </p>
                   </div>
 
                   <div className="bg-primary/10 rounded-lg p-6 text-center">
                     <div className="space-y-4">
                       <p className="text-lg flex items-center justify-center gap-2">
                         <span className="text-2xl">🔧</span>
-                        Du bringst Erfahrung, Führerschein und Motivation mit – wir liefern dir die passenden Aufträge.
+                        Sie bringen Erfahrung, Führerschein und unternehmerische Motivation mit – wir vermitteln Ihnen passende Auftragsangebote.
                       </p>
                       <div className="border-t border-primary/20 pt-4">
                         <p className="text-xl font-bold text-primary mb-2">
-                          📝 Trag dich jetzt ein – kostenlos & unverbindlich.
+                          📝 Tragen Sie sich jetzt ein – kostenlos & unverbindlich.
                         </p>
                         <p className="text-lg text-muted-foreground">
-                          Und vielleicht ist dein erster Auftrag schon morgen drin.
+                          Vielleicht passt schon bald ein erstes Auftragsangebot zu Ihnen.
                         </p>
                       </div>
                     </div>
@@ -568,23 +571,27 @@ const FahrerRegistrierung = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Gültiger Führerschein (C, CE, oder entsprechende Klassen)</span>
+                    <span>Gültiger Führerschein der passenden Klasse, z.&nbsp;B. C, CE oder entsprechende Klassen</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Fahrerkarte (digitaler Tachograph)</span>
+                    <span>Fahrerkarte für den digitalen Tachographen</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Mindestens 2 Jahre Berufserfahrung als Kraftfahrer</span>
+                    <span>Berufserfahrung als Kraftfahrer, idealerweise mindestens 2 Jahre</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
                     <span>Selbstständige Gewerbeanmeldung oder Bereitschaft zur Anmeldung</span>
                   </div>
                   <div className="flex items-start gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                    <span>Eigene steuerliche und sozialversicherungsrechtliche Verantwortung als selbstständiger Unternehmer</span>
+                  </div>
+                  <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
-                    <span className="font-medium">🇪🇺 EU/EWR-Bürger: Fahrer aus Deutschland, allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren</span>
+                    <span className="font-medium">🇪🇺 Bei EU/EWR-Fahrern: anerkennungsfähige Fahrerlaubnis und erforderliche Berufskraftfahrerqualifikation</span>
                   </div>
                 </div>
               </CardContent>
@@ -609,19 +616,19 @@ const FahrerRegistrierung = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇩🇪 Deutsch</p>
-                      <p className="text-muted-foreground text-xs">Wir vermitteln selbstständige Unternehmer aus allen EU/EWR-Ländern – je nach Qualifikation und rechtlicher Einsatzmöglichkeit.</p>
+                      <p className="text-muted-foreground text-xs">Wir vermitteln selbstständige Unternehmer aus allen EU/EWR-Ländern – die Einsatzmöglichkeit wird individuell anhand Qualifikation und rechtlicher Voraussetzungen geprüft.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇬🇧 English</p>
-                      <p className="text-muted-foreground text-xs">We place drivers from all EU/EEA countries. Legal cooperation guaranteed.</p>
+                      <p className="text-muted-foreground text-xs">We support legally compliant cooperation with self-employed drivers from EU/EEA countries – eligibility is reviewed individually.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇵🇱 Polski</p>
-                      <p className="text-muted-foreground text-xs">Pośredniczymy w współpracy z kierowcami ze wszystkich krajów UE/EOG.</p>
+                      <p className="text-muted-foreground text-xs">Pośredniczymy we współpracy z samodzielnymi kierowcami z krajów UE/EOG – możliwość współpracy jest oceniana indywidualnie.</p>
                     </div>
                     <div className="bg-card p-3 rounded">
                       <p className="font-medium mb-1">🇷🇴 Română</p>
-                      <p className="text-muted-foreground text-xs">Plasăm șoferi din toate țările UE/SEE. Cooperare legală garantată.</p>
+                      <p className="text-muted-foreground text-xs">Intermediem colaborarea cu șoferi independenți din țările UE/SEE – eligibilitatea este verificată individual.</p>
                     </div>
                   </div>
                   <div className="mt-4 pt-4 border-t border-primary/20">
@@ -881,17 +888,20 @@ const FahrerRegistrierung = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="stundensatz">Stundensatz (€) *</Label>
+                      <Label htmlFor="stundensatz">Honorarvorstellung netto (€) *</Label>
                       <Input
                         id="stundensatz"
                         type="number"
                         step="0.50"
-                        placeholder="z.B. 25"
+                        placeholder="z. B. 35"
                         value={formData.stundensatz}
                         onChange={(e) => handleInputChange('stundensatz', e.target.value)}
                         className={validationErrors.stundensatz ? "border-destructive" : ""}
                         required
                       />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Bitte geben Sie Ihre gewünschte Netto-Honorarvorstellung als selbstständiger Unternehmer an.
+                      </p>
                       {validationErrors.stundensatz && (
                         <p id="stundensatz-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.stundensatz}</p>
                       )}
