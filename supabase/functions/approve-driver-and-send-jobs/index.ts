@@ -118,7 +118,7 @@ serve(async (req) => {
         html: driverHtml,
       });
 
-      driverMessageId = emailResponse.id || null;
+      driverMessageId = (emailResponse as any)?.data?.id ?? (emailResponse as any)?.id ?? null;
       driverEmailStatus = 'sent';
       console.log('✅ Driver email sent successfully:', driverMessageId);
     } catch (error) {
@@ -169,7 +169,7 @@ serve(async (req) => {
         html: adminHtml,
       });
 
-      adminMessageId = adminEmailResponse.id || null;
+      adminMessageId = (adminEmailResponse as any)?.data?.id ?? (adminEmailResponse as any)?.id ?? null;
       adminEmailStatus = 'sent';
       console.log('✅ Admin notification sent successfully:', adminMessageId);
     } catch (error) {
