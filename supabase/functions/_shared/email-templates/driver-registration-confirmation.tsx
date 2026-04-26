@@ -167,6 +167,46 @@ export const DriverRegistrationConfirmation = ({
       </Text>
     </Section>
 
+    <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#f0f9ff', borderLeft: `4px solid ${colors.primary}` })}>
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📌 Vergütung und Auftragsangebote</Heading>
+
+      <Text {...getTextProps(textStyles.paragraph)}>
+        Die Registrierung bei Fahrerexpress begründet keinen Anspruch auf bestimmte Einsätze, eine bestimmte Anzahl von Aufträgen oder eine bestimmte Vergütung.
+      </Text>
+
+      <Text {...getTextProps(textStyles.paragraph)}>
+        Jeder Einsatz wird Ihnen vorab einzeln angeboten. Dabei teilen wir Einsatzort, Zeitraum, Tätigkeit, besondere Anforderungen und die vorgesehene Vergütung mit. Sie entscheiden als selbstständiger Unternehmer eigenverantwortlich, ob Sie das konkrete Auftragsangebot zu den genannten Konditionen annehmen.
+      </Text>
+
+      <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', marginTop: '15px', marginBottom: '5px' })}>
+        Internes Vergütungsmodell (nur für registrierte Fahrer):
+      </Text>
+      <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+        <li>
+          <strong>Standardaufträge:</strong> 80 % Fahreranteil / 20 % Fahrerexpress-Anteil
+        </li>
+        <li>
+          <strong>Kurzfristige Einsätze, Eventaufträge, Pauschalpreise, Sonderfahrten, Überführungen oder Einsätze mit besonderen Bedingungen:</strong> 75 % Fahreranteil / 25 % Fahrerexpress-Anteil
+        </li>
+      </ul>
+
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '15px' })}>
+        Diese Aufteilung bezieht sich ausschließlich auf den jeweils von Fahrerexpress kalkulierten und mit dem Auftraggeber vereinbarten Einsatzpreis – nicht auf öffentlich sichtbare Webseitenpreise.
+      </Text>
+
+      <Text {...getTextProps(textStyles.paragraph)}>
+        Die gegenüber Auftraggebern angebotenen Preise können je nach Einsatz, Region, Kundenbedarf, Wettbewerbssituation, Auftragsumfang und wirtschaftlicher Zumutbarkeit angepasst werden. Insbesondere in Logistik, Spedition, Bauwesen und bei kurzfristigen Einsätzen besteht häufig erheblicher Kostendruck, sodass Preise marktgerecht angepasst werden, um Aufträge überhaupt realisieren zu können.
+      </Text>
+
+      <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', marginBottom: '0' })}>
+        Maßgeblich ist immer das konkrete Auftragsangebot, das Ihnen vor Einsatzbeginn mitgeteilt wird und das Sie eigenverantwortlich annehmen. Ein fester Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises besteht nicht.
+      </Text>
+
+      <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '12px', fontStyle: 'italic', color: '#64748b', marginTop: '15px', marginBottom: '0' })}>
+        Hinweis: Diese Konditionen sind ausschließlich für registrierte Fahrer bestimmt und vertraulich zu behandeln.
+      </Text>
+    </Section>
+
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>📞 Kontakt</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
