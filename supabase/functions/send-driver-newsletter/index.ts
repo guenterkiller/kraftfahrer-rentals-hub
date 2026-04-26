@@ -196,7 +196,7 @@ serve(async (req) => {
               error_message: `HTTP ${response.status}: ${responseText}`,
             });
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error(`❌ Exception sending email to ${driver.email}:`, error);
         errorCount++;
         

@@ -117,7 +117,7 @@ Deno.serve(async (req) => {
           );
         }
         
-        const counts = {};
+        const counts: Record<string, number> = {};
         for (const fahrerId of fahrerIds) {
           const countResult = await supabaseAdmin
             .from("fahrer_dokumente")
@@ -154,7 +154,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log(`Successfully fetched ${data?.length || 0} records for ${dataType}`);
+    console.log(`Successfully fetched ${Array.isArray(data) ? data.length : 0} records for ${dataType}`);
     return new Response(
       JSON.stringify({ success: true, data }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
