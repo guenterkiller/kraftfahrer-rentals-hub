@@ -124,10 +124,11 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Error in admin-mark-job-open function:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
       JSON.stringify({ 
         success: false, 
-        error: error.message || 'Fehler beim Markieren des Auftrags als offen' 
+        error: errorMessage || 'Fehler beim Markieren des Auftrags als offen' 
       }),
       { 
         status: 500, 

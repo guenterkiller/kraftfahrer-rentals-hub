@@ -186,8 +186,9 @@ Deno.serve(async (req) => {
 
   } catch (error) {
     console.error('Error in admin-assign-driver function:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return new Response(
-      JSON.stringify({ error: 'Server error: ' + error.message }),
+      JSON.stringify({ error: 'Server error: ' + errorMessage }),
       { 
         status: 500, 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
