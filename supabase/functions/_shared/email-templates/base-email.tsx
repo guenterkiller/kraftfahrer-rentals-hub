@@ -10,6 +10,16 @@ import {
 } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 
+// Technischer Typ-Shim: erlaubt native HTML-Tags (style, br, strong, ...) in JSX
+// innerhalb der Edge-Function-Typprüfung. Keine Laufzeitwirkung.
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: any;
+    }
+  }
+}
+
 // Brand colors from design system
 export const colors = {
   primary: '#bb2c29',        // hsl(0 73% 41%)
@@ -58,7 +68,7 @@ const mobileStyles = `
 
 interface BaseEmailProps {
   previewText: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const BaseEmail = ({ previewText, children }: BaseEmailProps) => (
@@ -166,7 +176,7 @@ const footerSubtext = {
 };
 
 // Reusable box styles with mobile support
-export const boxStyles = {
+const _boxStylesBase = {
   infoBox: {
     backgroundColor: '#fef3f2',
     borderLeft: `4px solid ${colors.primary}`,
@@ -197,13 +207,23 @@ export const boxStyles = {
   },
 };
 
+// Public boxStyles inkl. technischer Aliase (info/success/warning/highlight)
+// für bestehende Templates. Werte unverändert.
+export const boxStyles = {
+  ..._boxStylesBase,
+  info: _boxStylesBase.infoBox,
+  success: _boxStylesBase.successBox,
+  warning: _boxStylesBase.warningBox,
+  highlight: _boxStylesBase.highlightBox,
+};
+
 // Helper to add mobile classes to box sections
 export const getBoxProps = (style: any) => ({
   style,
   className: 'mobile-box',
 });
 
-export const textStyles = {
+const _textStylesBase = {
   heading2: {
     color: colors.foreground,
     fontSize: '20px',
@@ -230,6 +250,15 @@ export const textStyles = {
     color: colors.muted,
     fontSize: '13px',
   },
+};
+
+// Public textStyles inkl. technischer Aliase (h1/h2/h3) für bestehende Templates.
+// Werte unverändert; h1 ist Alias auf heading2 (größtes vorhandenes Heading).
+export const textStyles = {
+  ..._textStylesBase,
+  h1: _textStylesBase.heading2,
+  h2: _textStylesBase.heading2,
+  h3: _textStylesBase.heading3,
 };
 
 // Helper to add mobile classes to text elements
