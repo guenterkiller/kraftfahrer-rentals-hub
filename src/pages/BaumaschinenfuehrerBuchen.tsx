@@ -6,14 +6,14 @@ const BaumaschinenfuehrerBuchen = () => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'category_view_baumaschinen', {
         event_category: 'Page View',
-        event_label: 'Baumaschinenführer',
-        value: 459
+        event_label: 'Baumaschinenführer / Mischmeister',
+        value: 489
       });
     }
   }, []);
   const seoData = {
-    title: "Baumaschinenführer buchen deutschlandweit – ab 459 €/Tag",
-    description: "Baumaschinenführer mieten, leihen oder bestellen – Baggerfahrer, Radladerfahrer auf Abruf. Tageweise, ohne AÜG. 459 €/Tag.",
+    title: "Baumaschinenführer buchen deutschlandweit – ab 489 €/Einsatztag",
+    description: "Baumaschinenführer & Mischmeister mieten, leihen oder bestellen – Baggerfahrer, Radladerfahrer, Flüssigboden auf Abruf. Tageweise, ohne AÜG. 489 €/Einsatztag.",
     keywords: "Baumaschinenführer buchen, Baumaschinenführer mieten, Baumaschinenführer leihen, Baggerfahrer bestellen, Radladerfahrer mieten, Baustellen Fahrer, Fahrer auf Abruf, Fahrer tageweise, Aushilfsfahrer Baustelle, Ersatzfahrer Baumaschine, Mietfahrer Bagger, externe Fahrer-Dienstleistungen, Fahrer Dienstleister Bau",
     structuredData: {
       "@context": "https://schema.org",
@@ -42,8 +42,8 @@ const BaumaschinenfuehrerBuchen = () => {
 
   const heroData = {
     h1: "Baumaschinenführer deutschlandweit buchen",
-    intro: "Qualifizierte Bediener für Bagger, Radlader, Fahrmischer, Flüssigboden-Mischanlagen deutschlandweit. Wir vermitteln ausschließlich selbstständige Maschinenführer – keine Maschinen. Gerät/Anlage stellt der Auftraggeber. 459 € pro Tag (8h), 60 € Überstunde.",
-    bullets: ["Nur Bediener – keine Maschinen", "Deutschlandweit kurzfristig verfügbar", "459 € pro Tag"]
+    intro: "Qualifizierte Bediener für Bagger, Radlader, Fahrmischer, Flüssigboden-Mischanlagen deutschlandweit. Wir vermitteln ausschließlich selbstständige Maschinenführer und Mischmeister – keine Maschinen. Gerät/Anlage stellt der Auftraggeber. 489 € pro Einsatztag (bis 8 Std.), zzgl. An- und Abfahrt.",
+    bullets: ["Nur Bediener – keine Maschinen", "Deutschlandweit kurzfristig verfügbar", "489 € pro Einsatztag"]
   };
 
   const faqData = {
@@ -67,7 +67,7 @@ const BaumaschinenfuehrerBuchen = () => {
       },
       {
         question: "Wie sind die Konditionen?",
-        answer: "<strong>459 € pro Tag (8 Stunden), 60 € pro Überstunde.</strong> Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Sie stellen die Geräte/Maschinen/Anlagen."
+        answer: "<strong>489 € pro Einsatztag (bis 8 Stunden).</strong> An- und Abfahrt zusätzlich: 25 km frei, danach 0,40 € pro Kilometer. Sie stellen die Geräte/Maschinen/Anlagen."
       },
       {
         question: "Vermitteln Sie Baggerfahrer und Radladerfahrer deutschlandweit?",
