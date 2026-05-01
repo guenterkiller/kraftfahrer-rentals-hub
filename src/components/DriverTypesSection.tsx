@@ -19,7 +19,7 @@ const DriverTypesSection = () => {
     {
       title: "Baumaschinenführer / Mischmeister",
       subtitle: "Vermittelte Bediener",
-      description: "489 € pro Einsatztag (bis 8 Std.) · zzgl. An- und Abfahrt",
+      description: "489 € pro Einsatztag · gültig für: bis 8 Stunden · zzgl. An- und Abfahrt",
       image: kranFahrer,
       features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
       path: "/baumaschinenfuehrer-buchen",

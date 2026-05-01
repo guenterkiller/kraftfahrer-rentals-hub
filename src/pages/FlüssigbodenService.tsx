@@ -212,10 +212,6 @@ const FlüssigbodenService = () => {
                         <span className="text-sm">Einsatz bundesweit möglich</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Unterkunft bauseits (Pflicht)</span>
-                      </div>
-                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
                         <span className="text-sm">Keine Gewährleistung / keine Systemfreigaben</span>
                       </div>
@@ -249,10 +245,6 @@ const FlüssigbodenService = () => {
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span className="text-sm">Überschaubare Tagesmengen</span>
                       </div>
-                      <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
-                        <AlertCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Unterkunft bauseits zu stellen</span>
-                      </div>
                       <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
                         <span className="text-sm font-medium">Keine Haftung für Material, Anlage oder Ergebnisse</span>
@@ -269,54 +261,22 @@ const FlüssigbodenService = () => {
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <div className="p-4 bg-background rounded-lg border-2 border-primary/30">
-                      <div className="text-sm text-muted-foreground mb-1">Tagessatz (8 Std.)</div>
+                      <div className="text-sm text-muted-foreground mb-1">Baumaschinenführer / Mischmeister</div>
                       <div className="text-3xl font-bold text-primary">489 €</div>
-                      <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
-                    </div>
-                    <div className="p-4 bg-background rounded-lg border-2 border-orange-200 shadow-sm">
-                      <div className="text-sm text-muted-foreground mb-1">Überstunden</div>
-                      <div className="text-3xl font-bold text-orange-600">65 €/Std.</div>
-                      <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
+                      <div className="text-xs text-muted-foreground mt-1">pro Einsatztag · zzgl. MwSt.</div>
+                      <div className="text-xs text-muted-foreground mt-1">Gültig für: bis 8 Stunden</div>
                     </div>
                     <div className="p-4 bg-background rounded-lg border">
-                      <div className="text-sm text-muted-foreground mb-1">Fahrtkosten</div>
-                      <div className="text-2xl font-bold text-foreground">0,75 €/km</div>
-                      <div className="text-xs text-muted-foreground mt-1">zzgl. MwSt.</div>
-                    </div>
-                    <div className="p-4 bg-background rounded-lg border">
-                      <div className="text-sm text-muted-foreground mb-1">Unterkunft</div>
-                      <div className="text-lg font-bold text-foreground">Bauseits zu stellen</div>
-                      <div className="text-xs text-muted-foreground mt-1">Pflicht, keine Pauschale</div>
-                    </div>
-                  </div>
-                  
-                  <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary mb-6">
-                    <h5 className="font-semibold mb-3 text-foreground">Zuschläge</h5>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Samstag:</span>
-                        <span className="font-semibold">+50%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Sonntag:</span>
-                        <span className="font-semibold">+100%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Feiertag:</span>
-                        <span className="font-semibold">+100%</span>
-                      </div>
+                      <div className="text-sm text-muted-foreground mb-1">An- und Abfahrt</div>
+                      <div className="text-base font-semibold text-foreground">erste 25 km frei</div>
+                      <div className="text-xs text-muted-foreground mt-1">ab dem 26. km 0,40 € je gefahrenem Kilometer</div>
                     </div>
                   </div>
 
-                  <div className="p-5 bg-green-50 dark:bg-green-950/20 border-2 border-green-500/30 rounded-lg">
-                    <div className="flex items-start gap-3 mb-2">
-                      <CheckCircle className="h-6 w-6 text-green-600 flex-shrink-0 mt-1" />
-                      <div>
-                        <div className="font-semibold text-lg text-foreground mb-1">Komplettpreis bis 10 Stunden</div>
-                        <div className="text-3xl font-bold text-green-600 mb-2">599 € / Tag</div>
-                        <div className="text-sm text-muted-foreground">Inkl. 2 Überstunden • zzgl. MwSt. • Optional verfügbar</div>
-                      </div>
-                    </div>
+                  <div className="p-4 bg-muted/50 rounded-lg border-l-4 border-primary">
+                    <p className="text-sm text-foreground">
+                      Weitere Kosten nur nach vorheriger Vereinbarung. Anlagen, Material und Rezepturen werden bauseits gestellt.
+                    </p>
                   </div>
                 </div>
 
@@ -397,7 +357,7 @@ const FlüssigbodenService = () => {
                   <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div className="mt-3 text-muted-foreground">
-                  <strong>489 € pro Tag (8 Stunden), 65 € pro Überstunde.</strong> Optional: Komplettpreis bis 10 Stunden für 599 €/Tag. Fahrtkosten: 0,75 € pro Kilometer. Unterkunft wird bauseits gestellt (Pflicht). Alle Anlagen und Materialien werden bauseits gestellt. Zuschläge: Samstag +50%, Sonn- und Feiertag +100%.
+                  <strong>489 € pro Einsatztag (gültig für: bis 8 Stunden).</strong> Zusätzlich: An- und Abfahrt – erste 25 km der Gesamtstrecke frei, ab dem 26. km 0,40 € je gefahrenem Kilometer. Anlagen und Materialien werden bauseits gestellt. Weitere Kosten nur nach vorheriger Vereinbarung.
                 </div>
               </details>
               
