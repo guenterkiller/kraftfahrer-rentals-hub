@@ -39,6 +39,7 @@ const SimpleBookingForm = () => {
   const [requiresBf2, setRequiresBf2] = useState(false);
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
+  const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,7 +77,9 @@ const SimpleBookingForm = () => {
         customer_city: formData.get('ort') as string,
         einsatzbeginn: formData.get('einsatzbeginn') as string,
         einsatzdauer: formData.get('einsatzdauer') as string,
-        fahrzeugtyp: fahrzeugtyp || 'lkw',
+        fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
+          ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
+          : (fahrzeugtyp || 'lkw'),
         nachricht: formData.get('beschreibung') as string,
         datenschutz: agreedToData,
         newsletter: false,
@@ -107,7 +110,7 @@ const SimpleBookingForm = () => {
       console.log('Consent states - data:', agreedToData, 'binding:', agreedToBinding);
 
       // Track conversion with category
-      const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer';
+      const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', isBaumaschinen ? 'category_submit_baumaschinen' : 'category_submit_lkw', {
           event_category: 'Form Submission',
@@ -462,7 +465,7 @@ const SimpleBookingForm = () => {
                     
                     <label 
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'Baumaschinenführer' 
+                        fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
                           ? 'border-orange-500 bg-orange-50' 
                           : 'border-border hover:border-orange-300 hover:bg-orange-50/50'
                       }`}
@@ -470,35 +473,14 @@ const SimpleBookingForm = () => {
                       <input
                         type="radio"
                         name="fahrzeugtyp"
-                        value="Baumaschinenführer"
-                        checked={fahrzeugtyp === 'Baumaschinenführer'}
+                        value="Baumaschinenführer / Mischmeister"
+                        checked={fahrzeugtyp === 'Baumaschinenführer / Mischmeister'}
                         onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                         className="w-5 h-5 text-orange-600"
                       />
                       <div className="flex items-center gap-2">
                         <Construction className="h-5 w-5 text-orange-600" />
-                        <span className="font-medium">Baumaschinenführer</span>
-                      </div>
-                    </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'Mischmeister' 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'border-border hover:border-blue-300 hover:bg-blue-50/50'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Mischmeister"
-                        checked={fahrzeugtyp === 'Mischmeister'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
-                        className="w-5 h-5 text-blue-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <ShieldAlert className="h-5 w-5 text-blue-600" />
-                        <span className="font-medium">Mischmeister</span>
+                        <span className="font-medium">Baumaschinenführer / Mischmeister</span>
                       </div>
                     </label>
                     
@@ -523,6 +505,32 @@ const SimpleBookingForm = () => {
                       </div>
                     </label>
                   </div>
+
+                  {/* Optionales Tätigkeits-Dropdown bei Baumaschinen/Mischmeister */}
+                  {fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && (
+                    <div className="mt-4 p-4 rounded-lg border border-orange-200 bg-orange-50/50">
+                      <Label htmlFor="bauTaetigkeit" className="text-sm font-medium">
+                        Welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
+                      </Label>
+                      <select
+                        id="bauTaetigkeit"
+                        value={bauTaetigkeit}
+                        onChange={(e) => setBauTaetigkeit(e.target.value)}
+                        className="mt-2 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                      >
+                        <option value="">Bitte auswählen …</option>
+                        <option value="Baumaschinenführer">Baumaschinenführer</option>
+                        <option value="Mischmeister / Anlagenbediener">Mischmeister / Anlagenbediener</option>
+                        <option value="Flüssigboden">Flüssigboden</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                      </select>
+                      <div className="mt-3 text-xs text-orange-900">
+                        <div className="font-semibold">489 € pro Einsatztag</div>
+                        <div>Gültig für: bis 8 Stunden</div>
+                        <div>Zusätzlich: An- und Abfahrt</div>
+                      </div>
+                    </div>
+                  )}
                 </fieldset>
 
                 {/* Special Requirements */}
@@ -797,7 +805,7 @@ const SimpleBookingForm = () => {
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
-                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Tarif 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' || fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
+                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag' : `ab ${fahrzeugtyp === 'Baumaschinenführer / Mischmeister' ? '489' : '349'} € netto / Einsatztag`}</div>
                     </div>
                   )}
                 </Button>
