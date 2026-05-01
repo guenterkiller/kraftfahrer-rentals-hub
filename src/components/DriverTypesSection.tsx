@@ -17,9 +17,9 @@ const DriverTypesSection = () => {
       isPopular: true
     },
     {
-      title: "Baumaschinenbedienung",
-      subtitle: "Vermittelte Baumaschinenführer",
-      description: "459 € pro Tag (8 Stunden) • 60 € Überstunde",
+      title: "Baumaschinenführer / Mischmeister",
+      subtitle: "Vermittelte Bediener",
+      description: "489 € pro Einsatztag (bis 8 Std.) · zzgl. An- und Abfahrt",
       image: kranFahrer,
       features: ["Bagger, Radlader, Fahrmischer", "Flüssigboden, Mischanlagen", "Störungsbehebung & Reparaturen", "Baustellenlogistik & Materialfluss"],
       path: "/baumaschinenfuehrer-buchen",
@@ -36,7 +36,7 @@ const DriverTypesSection = () => {
           <div className="inline-flex items-center gap-3 bg-green-50 border border-green-200 px-6 py-3 rounded-full">
             <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-green-800 font-semibold">
-              Klare Preisstruktur – LKW CE Fahrer 349€, Baumaschinenführer 459€, Mischmeister 489€
+              Klare Preisstruktur – LKW CE Fahrer 349 €, Baumaschinenführer / Mischmeister 489 €
             </span>
           </div>
         </div>
@@ -104,7 +104,7 @@ const DriverTypesSection = () => {
                       (window as any).gtag('event', type.isPremium ? 'category_click_baumaschinen' : 'category_click_lkw', {
                         event_category: 'Driver Category',
                         event_label: type.title,
-                        value: type.isPremium ? 459 : 349
+                        value: type.isPremium ? 489 : 349
                       });
                     }
                   }}
