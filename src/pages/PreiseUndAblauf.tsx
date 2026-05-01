@@ -64,7 +64,10 @@ const PreiseUndAblauf = () => {
                 Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen. Fahrzeuge werden nicht gestellt. Alle Preise verstehen sich netto zzgl. gesetzlicher MwSt.
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-6">
-                <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
+                <Card className="relative border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
+                  <div className="absolute top-3 right-3 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
+                    Beliebte Bestellung
+                  </div>
                   <CardHeader>
                     <CardTitle className="text-xl text-red-900">LKW-Fahrer CE</CardTitle>
                   </CardHeader>
@@ -108,8 +111,7 @@ const PreiseUndAblauf = () => {
 
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-xl text-orange-900 flex items-center gap-2">
-                      <img src={baggerIcon} alt="Bagger" className="h-5 w-5" />
+                    <CardTitle className="text-lg text-orange-900">
                       Baumaschinenführer / Mischmeister
                     </CardTitle>
                   </CardHeader>
@@ -180,16 +182,7 @@ const PreiseUndAblauf = () => {
                   <ul className="space-y-1 text-muted-foreground ml-4">
                     <li>• erste 25 km der Gesamtstrecke frei</li>
                     <li>• ab dem 26. km: 0,40 € je gefahrenem Kilometer</li>
-                    <li>• Parken, Maut, Fähren oder Tunnel werden nur berechnet, wenn sie tatsächlich anfallen</li>
                   </ul>
-                </div>
-                <div className="bg-muted rounded-lg p-4">
-                  <p className="font-semibold mb-2">Beispiel:</p>
-                  <p className="text-muted-foreground">
-                    Gesamtstrecke An- und Abfahrt: 95 km<br />
-                    25 km frei<br />
-                    70 km × 0,40 € = <strong className="text-foreground">28,00 € netto</strong>
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -295,63 +288,6 @@ const PreiseUndAblauf = () => {
                 </Card>
               </div>
             </div>
-
-            {/* Beispielrechnungen */}
-            <div className="mb-12">
-              <h2 className="text-3xl font-bold text-center mb-8">Beispielrechnungen</h2>
-              <div className="grid md:grid-cols-2 gap-8">
-                <Card className="border-red-200">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-red-900">Beispiel 1: LKW-Fahrer CE</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">LKW-Fahrer CE</span>
-                        <span className="font-semibold">349,00 €</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">An- und Abfahrt</span>
-                        <span className="font-semibold">28,00 €</span>
-                      </div>
-                      <div className="flex justify-between py-3 bg-red-50 rounded-lg px-3 mt-3">
-                        <span className="font-bold text-red-900">Gesamt netto:</span>
-                        <span className="font-bold text-red-900 text-xl">377,00 €</span>
-                      </div>
-                      <div className="text-xs text-muted-foreground text-center mt-2">
-                        zzgl. gesetzlicher MwSt.
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-green-200">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-green-900">Beispiel 2: Fernfahrer</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">Fernfahrer-Pauschale</span>
-                        <span className="font-semibold">450,00 €</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">An- und Abfahrt</span>
-                        <span className="font-semibold">40,00 €</span>
-                      </div>
-                      <div className="flex justify-between py-3 bg-green-50 rounded-lg px-3 mt-3">
-                        <span className="font-bold text-green-900">Gesamt netto:</span>
-                        <span className="font-bold text-green-900 text-xl">490,00 €</span>
-                      </div>
-                      <div className="text-xs text-muted-foreground text-center mt-2">
-                        zzgl. gesetzlicher MwSt.
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
 
             {/* Rechtliche Hinweise */}
             <Card className="mb-12 border-blue-200 bg-blue-50/50">
