@@ -41,7 +41,7 @@ const PricingBanner = () => {
           {/* LKW CE Wochenpreis */}
           <Card className="relative border border-red-200 bg-red-50/60 hover:shadow-xl transition-all duration-300">
             <span className="absolute top-2 right-2 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
-              Planbar &amp; günstiger
+              Planbar buchen
             </span>
             <CardContent className="p-5">
               <div className="text-center">

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Car, ShieldAlert, Construction, Truck } from "lucide-react";
+import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -79,7 +79,9 @@ const SimpleBookingForm = () => {
         einsatzdauer: formData.get('einsatzdauer') as string,
         fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
           ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
-          : (fahrzeugtyp || 'lkw'),
+          : fahrzeugtyp === 'LKW CE Wochenpreis'
+            ? 'LKW-Fahrer CE – Wochenpreis'
+            : (fahrzeugtyp || 'lkw'),
         nachricht: formData.get('beschreibung') as string,
         datenschutz: agreedToData,
         newsletter: false,
@@ -111,11 +113,18 @@ const SimpleBookingForm = () => {
 
       // Track conversion with category
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
+      const isWoche = fahrzeugtyp === 'LKW CE Wochenpreis';
       if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', isBaumaschinen ? 'category_submit_baumaschinen' : 'category_submit_lkw', {
+        const eventName = isBaumaschinen
+          ? 'category_submit_baumaschinen'
+          : isWoche
+            ? 'category_submit_lkw_woche'
+            : 'category_submit_lkw';
+        const value = isBaumaschinen ? 489 : isWoche ? 1645 : (longDistance ? 450 : 349);
+        (window as any).gtag('event', eventName, {
           event_category: 'Form Submission',
           event_label: fahrzeugtyp,
-          value: isBaumaschinen ? 489 : 349
+          value
         });
       }
 
@@ -257,55 +266,55 @@ const SimpleBookingForm = () => {
               </div>
 
               {/* Pricing Cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                <Card className="border-red-200 bg-red-50/60">
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-red-900">LKW-Fahrer CE</CardTitle>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6 items-stretch">
+                <Card className="bg-card border border-border border-t-4 border-t-red-600 flex flex-col h-full">
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-red-700">349 €</div>
-                    <div className="text-xs text-red-800 font-medium">pro Einsatztag</div>
-                    <div className="text-xs text-red-700">Gültig für: bis 10 Stunden</div>
-                    <div className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">349 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                <Card className="relative border border-red-200 bg-red-50/40">
-                  <span className="absolute top-1.5 right-1.5 z-10 bg-red-700 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap">
-                    Planbar
+                <Card className="relative bg-card border border-border border-t-4 border-t-red-600 ring-1 ring-red-200 flex flex-col h-full">
+                  <span className="absolute -top-2 right-2 z-10 bg-red-700 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                    Planbar buchen
                   </span>
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-red-900 pr-12">LKW-Fahrer CE – Wochenpreis</CardTitle>
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE – Wochenpreis</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-red-700">1.645 €</div>
-                    <div className="text-xs text-red-800 font-medium">pro Woche</div>
-                    <div className="text-xs text-red-700">5 Einsatztage à bis 10 Stunden</div>
-                    <div className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">1.645 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Woche</div>
+                    <div className="text-xs text-muted-foreground">5 Einsatztage à bis 10 Stunden</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-green-200 bg-green-50">
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-green-900">Fernfahrer-Pauschale</CardTitle>
+                <Card className="bg-card border border-border border-t-4 border-t-green-600 flex flex-col h-full">
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">Fernfahrer-Pauschale</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-green-700">450 €</div>
-                    <div className="text-xs text-green-800 font-medium">pro Einsatztag</div>
-                    <div className="text-xs text-green-700">1 Fernverkehrs-Einsatztag</div>
-                    <div className="text-xs text-green-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">450 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">1 Fernverkehrs-Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-orange-200 bg-orange-50">
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-orange-900">Baumaschinenführer / Mischmeister</CardTitle>
+                <Card className="bg-card border border-border border-t-4 border-t-orange-500 flex flex-col h-full">
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">Baumaschinenführer / Mischmeister</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-orange-700">489 €</div>
-                    <div className="text-xs text-orange-800 font-medium">pro Einsatztag</div>
-                    <div className="text-xs text-orange-700">Gültig für: bis 8 Stunden</div>
-                    <div className="text-xs text-orange-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">489 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
               </div>
@@ -417,92 +426,99 @@ const SimpleBookingForm = () => {
                 <fieldset>
                   <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Benötigter Fahrertyp / Qualifikation *</legend>
                   <p id="fahrertyp-hint" className="text-sm opacity-80 mb-3" aria-live="polite">
-                    Beispiel: <em>7,5 t</em>, <em>40 t</em>, <em>ADR</em>, <em>Tankwagen</em>, <em>Baumaschinenführer</em>, <em>Ladekran</em>.
+                    Bitte wählen Sie genau eine der vier Hauptkategorien. BF3-Begleitung kann unten als Spezialanforderung gewählt werden.
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
+                    {/* LKW-Fahrer CE */}
+                    <label
+                      className={`flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-red-600 cursor-pointer transition-all ${
                         fahrzeugtyp === 'LKW CE' && !longDistance
-                          ? 'border-red-500 bg-red-50' 
-                          : 'border-border hover:border-red-300 hover:bg-red-50/50'
+                          ? 'ring-2 ring-red-500 shadow-sm'
+                          : 'hover:shadow-sm'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="LKW CE"
-                        checked={fahrzeugtyp === 'LKW CE' && !longDistance}
-                        onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(false); }}
-                        className="w-5 h-5 text-red-600"
-                        required
-                      />
-                      <div className="flex items-center gap-2">
-                        <Car className="h-5 w-5 text-red-600" />
-                        <span className="font-medium">LKW CE Fahrer</span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="LKW CE"
+                          checked={fahrzeugtyp === 'LKW CE' && !longDistance}
+                          onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(false); }}
+                          className="w-5 h-5 accent-red-700"
+                          required
+                        />
+                        <span className="font-semibold text-foreground">LKW-Fahrer CE</span>
                       </div>
+                      <div className="text-xs text-muted-foreground pl-8">349 € pro Einsatztag · bis 10 Stunden · zzgl. An- und Abfahrt</div>
                     </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+
+                    {/* LKW-Fahrer CE – Wochenpreis */}
+                    <label
+                      className={`relative flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-red-600 ring-1 ring-red-200 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'LKW CE Wochenpreis'
+                          ? 'ring-2 ring-red-500 shadow-sm'
+                          : 'hover:shadow-sm'
+                      }`}
+                    >
+                      <span className="absolute -top-2.5 right-3 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+                        Planbar buchen
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="LKW CE Wochenpreis"
+                          checked={fahrzeugtyp === 'LKW CE Wochenpreis'}
+                          onChange={() => { setFahrzeugtyp('LKW CE Wochenpreis'); setLongDistance(false); }}
+                          className="w-5 h-5 accent-red-700"
+                        />
+                        <span className="font-semibold text-foreground">LKW-Fahrer CE – Wochenpreis</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground pl-8">1.645 € pro Woche · 5 Einsatztage à bis 10 Stunden · zzgl. An- und Abfahrt</div>
+                    </label>
+
+                    {/* Fernfahrer-Pauschale */}
+                    <label
+                      className={`flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-green-600 cursor-pointer transition-all ${
                         fahrzeugtyp === 'LKW CE' && longDistance
-                          ? 'border-green-500 bg-green-50' 
-                          : 'border-border hover:border-green-300 hover:bg-green-50/50'
+                          ? 'ring-2 ring-green-500 shadow-sm'
+                          : 'hover:shadow-sm'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Fernfahrer"
-                        checked={fahrzeugtyp === 'LKW CE' && longDistance}
-                        onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(true); }}
-                        className="w-5 h-5 text-green-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <Truck className="h-5 w-5 text-green-600" />
-                        <span className="font-medium">Fernfahrer-Pauschale</span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="Fernfahrer"
+                          checked={fahrzeugtyp === 'LKW CE' && longDistance}
+                          onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(true); }}
+                          className="w-5 h-5 accent-green-700"
+                        />
+                        <span className="font-semibold text-foreground">Fernfahrer-Pauschale</span>
                       </div>
+                      <div className="text-xs text-muted-foreground pl-8">450 € pro Einsatztag · 1 Fernverkehrs-Einsatztag · zzgl. An- und Abfahrt</div>
                     </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+
+                    {/* Baumaschinenführer / Mischmeister */}
+                    <label
+                      className={`flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-orange-500 cursor-pointer transition-all ${
                         fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
-                          ? 'border-orange-500 bg-orange-50' 
-                          : 'border-border hover:border-orange-300 hover:bg-orange-50/50'
+                          ? 'ring-2 ring-orange-500 shadow-sm'
+                          : 'hover:shadow-sm'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Baumaschinenführer / Mischmeister"
-                        checked={fahrzeugtyp === 'Baumaschinenführer / Mischmeister'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
-                        className="w-5 h-5 text-orange-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <Construction className="h-5 w-5 text-orange-600" />
-                        <span className="font-medium">Baumaschinenführer / Mischmeister</span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="Baumaschinenführer / Mischmeister"
+                          checked={fahrzeugtyp === 'Baumaschinenführer / Mischmeister'}
+                          onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
+                          className="w-5 h-5 accent-orange-600"
+                        />
+                        <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister</span>
                       </div>
-                    </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'Begleitfahrzeugführer BF3' 
-                          ? 'border-purple-500 bg-purple-50' 
-                          : 'border-border hover:border-purple-300 hover:bg-purple-50/50'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Begleitfahrzeugführer BF3"
-                        checked={fahrzeugtyp === 'Begleitfahrzeugführer BF3'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
-                        className="w-5 h-5 text-purple-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <ShieldAlert className="h-5 w-5 text-purple-600" />
-                        <span className="font-medium">BF3 Begleitfahrer</span>
-                      </div>
+                      <div className="text-xs text-muted-foreground pl-8">489 € pro Einsatztag · bis 8 Stunden · zzgl. An- und Abfahrt</div>
                     </label>
                   </div>
 
@@ -805,7 +821,15 @@ const SimpleBookingForm = () => {
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
-                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag' : `ab ${fahrzeugtyp === 'Baumaschinenführer / Mischmeister' ? '489' : '349'} € netto / Einsatztag`}</div>
+                      <div className="text-sm opacity-90">{
+                        longDistance && fahrzeugtyp === 'LKW CE'
+                          ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag'
+                          : fahrzeugtyp === 'LKW CE Wochenpreis'
+                            ? 'Wochenpreis 1.645 € netto / Woche'
+                            : fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
+                              ? '489 € netto / Einsatztag'
+                              : '349 € netto / Einsatztag'
+                      }</div>
                     </div>
                   )}
                 </Button>
