@@ -165,7 +165,7 @@ const ProductCards = () => {
                   <Construction className="h-6 w-6 text-secondary-foreground" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-lg font-semibold leading-tight">Baumaschinen­führer</h3>
+                  <h3 className="text-lg font-semibold leading-tight">Baumaschinenführer / Mischmeister</h3>
                   <p className="text-xs text-muted-foreground">Deutschlandweit verfügbar</p>
                 </div>
               </div>
@@ -174,12 +174,12 @@ const ProductCards = () => {
             <CardContent className="flex flex-col flex-1">
               <div className="mb-4 pb-4 border-b border-border">
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-bold text-foreground">459 €</span>
-                  <span className="text-sm text-muted-foreground">/Tag</span>
+                  <span className="text-4xl font-bold text-foreground">489 €</span>
+                  <span className="text-sm text-muted-foreground">/Einsatztag</span>
                 </div>
-                <p className="text-xs text-muted-foreground mb-2">8-Stunden-Tag (netto)</p>
+                <p className="text-xs text-muted-foreground mb-2">bis 8 Std. (netto)</p>
                 <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-secondary/10">
-                  <span className="text-xs font-semibold text-secondary-foreground">Überstunden: 60 €/h</span>
+                  <span className="text-xs font-semibold text-secondary-foreground">zzgl. An- und Abfahrt</span>
                 </div>
               </div>
 
