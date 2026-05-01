@@ -42,7 +42,7 @@ const BaumaschinenfuehrerBuchen = () => {
 
   const heroData = {
     h1: "Baumaschinenführer deutschlandweit buchen",
-    intro: "Qualifizierte Bediener für Bagger, Radlader, Fahrmischer, Flüssigboden-Mischanlagen deutschlandweit. Wir vermitteln ausschließlich selbstständige Maschinenführer und Mischmeister – keine Maschinen. Gerät/Anlage stellt der Auftraggeber. 489 € pro Einsatztag (bis 8 Std.), zzgl. An- und Abfahrt.",
+    intro: "Qualifizierte Bediener für Bagger, Radlader, Fahrmischer, Flüssigboden-Mischanlagen deutschlandweit. Wir vermitteln ausschließlich selbstständige Maschinenführer und Mischmeister – keine Maschinen. Gerät/Anlage stellt der Auftraggeber. 489 € pro Einsatztag, gültig für: bis 8 Stunden, zzgl. An- und Abfahrt.",
     bullets: ["Nur Bediener – keine Maschinen", "Deutschlandweit kurzfristig verfügbar", "489 € pro Einsatztag"]
   };
 
