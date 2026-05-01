@@ -39,6 +39,7 @@ const SimpleBookingForm = () => {
   const [requiresBf2, setRequiresBf2] = useState(false);
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
+  const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,7 +77,9 @@ const SimpleBookingForm = () => {
         customer_city: formData.get('ort') as string,
         einsatzbeginn: formData.get('einsatzbeginn') as string,
         einsatzdauer: formData.get('einsatzdauer') as string,
-        fahrzeugtyp: fahrzeugtyp || 'lkw',
+        fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
+          ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
+          : (fahrzeugtyp || 'lkw'),
         nachricht: formData.get('beschreibung') as string,
         datenschutz: agreedToData,
         newsletter: false,
@@ -107,7 +110,7 @@ const SimpleBookingForm = () => {
       console.log('Consent states - data:', agreedToData, 'binding:', agreedToBinding);
 
       // Track conversion with category
-      const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer';
+      const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', isBaumaschinen ? 'category_submit_baumaschinen' : 'category_submit_lkw', {
           event_category: 'Form Submission',
