@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Euro, FileText, Shield, Truck, AlertCircle } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
 import { Link } from "react-router-dom";
-import baggerIcon from "@/assets/bagger-icon.svg";
-
 const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
