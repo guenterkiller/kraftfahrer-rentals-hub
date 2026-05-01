@@ -178,10 +178,10 @@ serve(async (req) => {
             <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
                 <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">KONDITIONEN</h3>
                 <div style="color: #000; font-size: 14px;">
-                    <p style="margin: 3px 0;"><strong>• Tarif:</strong> ${isFernfahrerTarif ? 'Fernfahrer-Tarif (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung')}</p>
+                    <p style="margin: 3px 0;"><strong>• Tarif:</strong> ${isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung')}</p>
                     ${isFernfahrerTarif 
                       ? `<p style="margin: 3px 0;"><strong>• Abrechnung:</strong> Pauschale pro Einsatztag – keine Stundenabrechnung</p>
-                         <p style="margin: 8px 0; font-size: 13px; color: #555;">Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.</p>`
+                         <p style="margin: 8px 0; font-size: 13px; color: #555;">Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.</p>`
                       : `<p style="margin: 3px 0;"><strong>• Satz:</strong> ${rateFormatted} zzgl. gesetzlicher USt</p>`
                     }
                 </div>

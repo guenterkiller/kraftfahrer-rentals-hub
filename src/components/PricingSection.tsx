@@ -31,77 +31,59 @@ const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 max-w-7xl mx-auto">
-          {/* LKW CE Fahrer */}
-          <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow flex flex-col">
-            <CardHeader className="bg-primary/10 rounded-t-lg">
-              <CardTitle className="text-lg flex items-center gap-2">
-                LKW CE Fahrer
-                <Badge className="bg-primary text-primary-foreground">Vermittelt</Badge>
-              </CardTitle>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 max-w-7xl mx-auto">
+          {/* LKW-Fahrer CE */}
+          <Card className="border-2 border-red-200 bg-red-50/60 hover:shadow-lg transition-shadow flex flex-col">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg text-red-900">LKW-Fahrer CE</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
-              <div>
-                <h3 className="font-semibold text-base mb-2">Nahverkehr & Baustelle</h3>
-                <p className="text-2xl font-bold text-primary">349 € / Tag</p>
-                <p className="text-sm text-muted-foreground">8 Std. • 30 € Überstunde</p>
-              </div>
-              <div className="pt-3 border-t flex-1">
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Nah- und Verteilerverkehr</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Fahrmischer, ADR, Wechselbrücke</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenverkehr, Container</span>
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full mt-auto bg-primary hover:bg-primary/90"
-                onClick={() => trackClick('category_click_lkw', 'LKW CE Fahrer', 349)}
+            <CardContent className="space-y-2 flex flex-col flex-1 pt-0 text-center">
+              <div className="text-4xl font-bold text-red-700">349 €</div>
+              <p className="text-sm text-red-800 font-medium">pro Einsatztag</p>
+              <p className="text-xs text-red-700">Gültig für: bis 10 Stunden</p>
+              <p className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</p>
+              <Button
+                className="w-full mt-auto bg-red-700 hover:bg-red-800 text-white"
+                onClick={() => trackClick('category_click_lkw', 'LKW-Fahrer CE', 349)}
               >
                 CE-Fahrer buchen
               </Button>
             </CardContent>
           </Card>
 
-          {/* Fernfahrer-Pauschale */}
-          <Card className="border-green-500 bg-green-50 hover:shadow-lg transition-shadow flex flex-col">
-            <CardHeader className="bg-green-100 rounded-t-lg">
-              <CardTitle className="text-lg flex items-center gap-2">
-                Fernfahrer-Pauschale
-                <Badge className="bg-green-600 text-white">NEU</Badge>
-              </CardTitle>
+          {/* Wochenpreis */}
+          <Card className="relative border border-red-200 bg-red-50/40 hover:shadow-lg transition-shadow flex flex-col">
+            <span className="absolute top-2 right-2 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+              Planbar &amp; günstiger
+            </span>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg text-red-900 pr-24">LKW-Fahrer CE – Wochenpreis</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
-              <div>
-                <h3 className="font-semibold text-base mb-2">Fernverkehr + Übernachtung</h3>
-                <p className="text-2xl font-bold text-green-700">450 € / Tag</p>
-                <p className="text-sm text-muted-foreground">Pauschale pro Einsatztag</p>
-              </div>
-              <div className="pt-3 border-t flex-1">
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
-                    <span>Bis 10 Std. abgegolten</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
-                    <span>Keine Stundenabrechnung</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
-                    <span>Übernachtung im Führerhaus</span>
-                  </li>
-                </ul>
-              </div>
-              <Button 
+            <CardContent className="space-y-2 flex flex-col flex-1 pt-0 text-center">
+              <div className="text-4xl font-bold text-red-700">1.645 €</div>
+              <p className="text-sm text-red-800 font-medium">pro Woche</p>
+              <p className="text-xs text-red-700">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+              <p className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</p>
+              <Button
+                className="w-full mt-auto bg-red-700 hover:bg-red-800 text-white"
+                onClick={() => trackClick('category_click_lkw_woche', 'LKW-Fahrer CE Wochenpreis', 1645)}
+              >
+                Woche buchen
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Fernfahrer-Pauschale */}
+          <Card className="border-2 border-green-200 bg-green-50 hover:shadow-lg transition-shadow flex flex-col">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg text-green-900">Fernfahrer-Pauschale</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 flex flex-col flex-1 pt-0 text-center">
+              <div className="text-4xl font-bold text-green-700">450 €</div>
+              <p className="text-sm text-green-800 font-medium">pro Einsatztag</p>
+              <p className="text-xs text-green-700">Gültig für: 1 Fernverkehrs-Einsatztag</p>
+              <p className="text-xs text-green-700">Zusätzlich: An- und Abfahrt</p>
+              <Button
                 className="w-full mt-auto bg-green-600 hover:bg-green-700 text-white"
                 onClick={() => trackClick('category_click_fernfahrer', 'Fernfahrer-Pauschale', 450)}
               >
@@ -110,83 +92,45 @@ const PricingSection = () => {
             </CardContent>
           </Card>
 
-          {/* Baumaschinenführer */}
-          <Card className="border-muted bg-muted/10 hover:shadow-lg transition-shadow flex flex-col">
-            <CardHeader className="bg-muted/20 rounded-t-lg">
-              <CardTitle className="text-lg flex items-center gap-2">
-                Baumaschinenführer / Mischmeister
-                <Badge variant="secondary">Vermittelt</Badge>
-              </CardTitle>
+          {/* Baumaschinenführer / Mischmeister */}
+          <Card className="border-2 border-orange-200 bg-orange-50 hover:shadow-lg transition-shadow flex flex-col">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg text-orange-900">Baumaschinenführer / Mischmeister</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
-              <div>
-                <h3 className="font-semibold text-base mb-2">Bagger, Radlader & Flüssigboden</h3>
-                <p className="text-2xl font-bold text-foreground">489 € / Einsatztag</p>
-                <p className="text-sm text-muted-foreground">bis 8 Std. · zzgl. An- und Abfahrt</p>
-              </div>
-              <div className="pt-3 border-t flex-1">
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Bagger, Radlader, Fahrmischer, Mischanlagen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Störungsbehebung & Reparaturen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenlogistik & Flüssigboden</span>
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full mt-auto"
-                variant="outline"
+            <CardContent className="space-y-2 flex flex-col flex-1 pt-0 text-center">
+              <div className="text-4xl font-bold text-orange-700">489 €</div>
+              <p className="text-sm text-orange-800 font-medium">pro Einsatztag</p>
+              <p className="text-xs text-orange-700">Gültig für: bis 8 Stunden</p>
+              <p className="text-xs text-orange-700">Zusätzlich: An- und Abfahrt</p>
+              <Button
+                className="w-full mt-auto bg-orange-600 hover:bg-orange-700 text-white"
                 onClick={() => trackClick('category_click_baumaschinen', 'Baumaschinenführer / Mischmeister', 489)}
               >
                 Baumaschinen / Mischmeister buchen
               </Button>
             </CardContent>
           </Card>
-
         </div>
 
-        {/* Fernfahrer-Pauschale Details */}
-        <Card className="bg-green-50 border-green-200 max-w-5xl mx-auto mb-8">
+        {/* An- und Abfahrt */}
+        <Card className="max-w-5xl mx-auto mb-8">
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
-              🚛 Fernfahrer-Pauschale – Details
-            </CardTitle>
+            <CardTitle className="text-base">An- und Abfahrt</CardTitle>
           </CardHeader>
           <CardContent className="text-sm space-y-2">
-            <p>Fernfahrer-Pauschale: Pauschalvergütung pro Einsatztag für Fernverkehr mit Übernachtung im Führerhaus. Gesetzlich zulässige Lenk- und Arbeitszeiten sind möglich, begründen jedoch keinen Anspruch auf zusätzliche Vergütung innerhalb der Pauschale.</p>
-            <p><strong>Arbeitszeit bis 10 Stunden ist mit der Pauschale abgegolten.</strong></p>
-            <p>Ab Überschreitung von 10 Stunden fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag (gemäß Auftragsbestätigung).</p>
+            <p>Die An- und Abfahrt wird zusätzlich zum Tagessatz berechnet und vor Auftragserteilung klar ausgewiesen.</p>
+            <ul className="ml-4 space-y-1 text-muted-foreground">
+              <li>• erste 25 km der Gesamtstrecke frei</li>
+              <li>• ab dem 26. km: 0,40 € je gefahrenem Kilometer</li>
+            </ul>
           </CardContent>
         </Card>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-12 max-w-5xl mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Fahrtkosten</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm">
-              <p className="font-semibold">25 Kilometer inklusive</p>
-              <p className="text-muted-foreground mt-1">Danach 0,40€ pro Kilometer</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Langzeiteinsätze</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm">
-              <p className="font-semibold">Ab 3 Monaten</p>
-              <p className="text-muted-foreground mt-1">Individuelle Konditionen auf Anfrage</p>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="bg-muted/40 max-w-5xl mx-auto mb-8">
+          <CardContent className="text-sm pt-6">
+            <p>Bei auswärtigen Einsätzen kann zusätzlich eine Übernachtung erforderlich sein. Diese wird vor Auftragserteilung abgestimmt.</p>
+          </CardContent>
+        </Card>
 
         <Card className="bg-muted/50 max-w-5xl mx-auto mb-8">
           <CardHeader>

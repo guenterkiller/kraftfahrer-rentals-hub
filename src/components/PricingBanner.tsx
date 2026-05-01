@@ -24,63 +24,58 @@ const PricingBanner = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto mb-8">
           {/* LKW CE Fahrer */}
           <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-xl transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-5">
               <div className="text-center">
-                <div className="inline-block bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
-                  BELIEBT
-                </div>
-                <h3 className="text-2xl font-bold text-red-900 mb-2">LKW CE Fahrer</h3>
-                <div className="text-5xl font-bold text-red-700 mb-2">349 €</div>
-                <p className="text-red-800 font-medium mb-1">pro Tag (8 Std.)</p>
-                <p className="text-red-700 text-sm mb-4">+ 30 € je Überstunde</p>
-                
-                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 mb-4 text-left text-sm space-y-1">
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span className="text-gray-700">CE-Führerschein inklusive</span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span className="text-gray-700">Bundesweit verfügbar</span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span className="text-gray-700">Geprüft & versichert</span>
-                  </p>
-                </div>
+                <h3 className="text-xl font-bold text-red-900 mb-2">LKW-Fahrer CE</h3>
+                <div className="text-4xl font-bold text-red-700 mb-1">349 €</div>
+                <p className="text-red-800 font-medium text-sm mb-3">pro Einsatztag</p>
+                <p className="text-red-700 text-xs">Gültig für: bis 10 Stunden</p>
+                <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* LKW CE Wochenpreis */}
+          <Card className="relative border border-red-200 bg-red-50/60 hover:shadow-xl transition-all duration-300">
+            <span className="absolute top-2 right-2 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+              Planbar &amp; günstiger
+            </span>
+            <CardContent className="p-5">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-red-900 mb-2 pr-20">LKW-Fahrer CE – Wochenpreis</h3>
+                <div className="text-4xl font-bold text-red-700 mb-1">1.645 €</div>
+                <p className="text-red-800 font-medium text-sm mb-3">pro Woche</p>
+                <p className="text-red-700 text-xs">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+                <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Fernfahrer-Pauschale */}
+          <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-5">
+              <div className="text-center">
+                <h3 className="text-xl font-bold text-green-900 mb-2">Fernfahrer-Pauschale</h3>
+                <div className="text-4xl font-bold text-green-700 mb-1">450 €</div>
+                <p className="text-green-800 font-medium text-sm mb-3">pro Einsatztag</p>
+                <p className="text-green-700 text-xs">Gültig für: 1 Fernverkehrs-Einsatztag</p>
+                <p className="text-green-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
               </div>
             </CardContent>
           </Card>
 
           {/* Baumaschinenführer / Mischmeister */}
           <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-xl transition-all duration-300">
-            <CardContent className="p-6">
+            <CardContent className="p-5">
               <div className="text-center">
-                <div className="inline-block bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
-                  SPEZIALIST
-                </div>
-                <h3 className="text-2xl font-bold text-orange-900 mb-2">Baumaschinenführer / Mischmeister</h3>
-                <div className="text-5xl font-bold text-orange-700 mb-2">489 €</div>
-                <p className="text-orange-800 font-medium mb-1">pro Einsatztag</p>
-                <p className="text-orange-700 text-sm mb-4">bis 8 Stunden · zzgl. An- und Abfahrt</p>
-                
-                <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 mb-4 text-left text-sm space-y-1">
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span className="text-gray-700">Kran, Bagger, Radlader</span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span className="text-gray-700">Baustellen-Erfahrung</span>
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-600">✓</span>
-                    <span className="text-gray-700">Qualifiziert & zertifiziert</span>
-                  </p>
-                </div>
+                <h3 className="text-xl font-bold text-orange-900 mb-2">Baumaschinenführer / Mischmeister</h3>
+                <div className="text-4xl font-bold text-orange-700 mb-1">489 €</div>
+                <p className="text-orange-800 font-medium text-sm mb-3">pro Einsatztag</p>
+                <p className="text-orange-700 text-xs">Gültig für: bis 8 Stunden</p>
+                <p className="text-orange-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
               </div>
             </CardContent>
           </Card>

@@ -7,9 +7,9 @@ import kranFahrer from "@/assets/kran-fahrer.jpg";
 const DriverTypesSection = () => {
   const driverTypes = [
     {
-      title: "LKW CE Fahrer",
+      title: "LKW-Fahrer CE",
       subtitle: "Vermittelte Fahrer",
-      description: "349 € pro Tag (8 Stunden) • 30 € Überstunde",
+      description: "349 € pro Einsatztag (bis 10 Stunden) · zzgl. An- und Abfahrt",
       image: lkwFahrerHero,
       features: ["Alle Logistikeinsätze", "Fahrmischer, ADR, Fernverkehr", "Wechselbrücke, Container, Hängerzug", "Entsorgung, Baustelle, Eventlogistik"],
       path: "/lkw-fahrer-buchen",
@@ -121,7 +121,7 @@ const DriverTypesSection = () => {
         {/* Pricing summary */}
         <div className="mt-12 p-6 bg-muted rounded-lg max-w-3xl mx-auto text-center">
           <p className="text-sm text-muted-foreground mb-2">
-            <strong>Fahrtkosten:</strong> 25 km inklusive, danach 0,40 € pro km • <strong>Wochenpreise:</strong> CE ab 1.490 €/Woche
+            <strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer • <strong>Wochenpreis LKW-Fahrer CE:</strong> 1.645 € (5 Einsatztage)
           </p>
           <p className="text-xs text-muted-foreground">
             Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB. Keine Arbeitnehmerüberlassung.

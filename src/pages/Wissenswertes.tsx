@@ -253,7 +253,7 @@ const Wissenswertes = () => {
                       <li>• Tages-/Stundensatz</li>
                       <li>• Abrechnungsweise</li>
                       <li>• Zahlungsziel</li>
-                      <li>• Spesenregelung</li>
+                      <li>• Klare Preisstruktur</li>
                     </ul>
                   </div>
                   
