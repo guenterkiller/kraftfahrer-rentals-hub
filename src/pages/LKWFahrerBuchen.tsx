@@ -174,7 +174,7 @@ const LKWFahrerBuchen = () => {
     {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
-      description: "Vermittelte Baumaschinenführer – 459 € pro Tag"
+      description: "Baumaschinenführer / Mischmeister – 489 € pro Einsatztag"
     },
     {
       title: "Preise & Konditionen",
