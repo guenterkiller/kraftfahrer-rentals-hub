@@ -80,7 +80,7 @@ const PreiseUndAblauf = () => {
 
                 <Card className="relative border border-red-200 bg-red-50/50 hover:shadow-lg transition-shadow">
                   <span className="absolute top-3 right-3 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
-                    Planbar &amp; günstiger
+                    Planbar buchen
                   </span>
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg sm:text-xl text-red-900 leading-snug pr-28">
