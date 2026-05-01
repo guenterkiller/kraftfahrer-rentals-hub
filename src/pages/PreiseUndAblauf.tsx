@@ -107,7 +107,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center">
                       <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
                       <p className="text-green-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-green-700 text-xs mt-3 leading-snug">Gültig für: Fernverkehrseinsatz</p>
+                      <p className="text-green-700 text-xs mt-3 leading-snug">Gültig für: 1 Fernverkehrs-Einsatztag</p>
                       <p className="text-green-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
