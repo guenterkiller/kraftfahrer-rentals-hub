@@ -101,7 +101,7 @@ const LKWFahrerBuchen = () => {
         "@type": "Offer",
         "price": "349",
         "priceCurrency": "EUR",
-        "description": "LKW-Fahrer (C+E) Tagespreis für 8 Stunden"
+        "description": "LKW-Fahrer (C+E) Tagespreis pro Einsatztag (bis 10 Stunden)"
       }
     }
   };
