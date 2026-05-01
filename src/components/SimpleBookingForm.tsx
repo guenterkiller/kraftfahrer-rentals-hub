@@ -465,7 +465,7 @@ const SimpleBookingForm = () => {
                     
                     <label 
                       className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'Baumaschinenführer' 
+                        fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
                           ? 'border-orange-500 bg-orange-50' 
                           : 'border-border hover:border-orange-300 hover:bg-orange-50/50'
                       }`}
@@ -473,35 +473,14 @@ const SimpleBookingForm = () => {
                       <input
                         type="radio"
                         name="fahrzeugtyp"
-                        value="Baumaschinenführer"
-                        checked={fahrzeugtyp === 'Baumaschinenführer'}
+                        value="Baumaschinenführer / Mischmeister"
+                        checked={fahrzeugtyp === 'Baumaschinenführer / Mischmeister'}
                         onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                         className="w-5 h-5 text-orange-600"
                       />
                       <div className="flex items-center gap-2">
                         <Construction className="h-5 w-5 text-orange-600" />
-                        <span className="font-medium">Baumaschinenführer</span>
-                      </div>
-                    </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'Mischmeister' 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'border-border hover:border-blue-300 hover:bg-blue-50/50'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Mischmeister"
-                        checked={fahrzeugtyp === 'Mischmeister'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
-                        className="w-5 h-5 text-blue-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <ShieldAlert className="h-5 w-5 text-blue-600" />
-                        <span className="font-medium">Mischmeister</span>
+                        <span className="font-medium">Baumaschinenführer / Mischmeister</span>
                       </div>
                     </label>
                     
@@ -526,6 +505,32 @@ const SimpleBookingForm = () => {
                       </div>
                     </label>
                   </div>
+
+                  {/* Optionales Tätigkeits-Dropdown bei Baumaschinen/Mischmeister */}
+                  {fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && (
+                    <div className="mt-4 p-4 rounded-lg border border-orange-200 bg-orange-50/50">
+                      <Label htmlFor="bauTaetigkeit" className="text-sm font-medium">
+                        Welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
+                      </Label>
+                      <select
+                        id="bauTaetigkeit"
+                        value={bauTaetigkeit}
+                        onChange={(e) => setBauTaetigkeit(e.target.value)}
+                        className="mt-2 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                      >
+                        <option value="">Bitte auswählen …</option>
+                        <option value="Baumaschinenführer">Baumaschinenführer</option>
+                        <option value="Mischmeister / Anlagenbediener">Mischmeister / Anlagenbediener</option>
+                        <option value="Flüssigboden">Flüssigboden</option>
+                        <option value="Sonstiges">Sonstiges</option>
+                      </select>
+                      <div className="mt-3 text-xs text-orange-900">
+                        <div className="font-semibold">489 € pro Einsatztag</div>
+                        <div>Gültig für: bis 8 Stunden</div>
+                        <div>Zusätzlich: An- und Abfahrt</div>
+                      </div>
+                    </div>
+                  )}
                 </fieldset>
 
                 {/* Special Requirements */}
