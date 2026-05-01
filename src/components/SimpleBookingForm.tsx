@@ -821,7 +821,15 @@ const SimpleBookingForm = () => {
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
-                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag' : `ab ${fahrzeugtyp === 'Baumaschinenführer / Mischmeister' ? '489' : '349'} € netto / Einsatztag`}</div>
+                      <div className="text-sm opacity-90">{
+                        longDistance && fahrzeugtyp === 'LKW CE'
+                          ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag'
+                          : fahrzeugtyp === 'LKW CE Wochenpreis'
+                            ? 'Wochenpreis 1.645 € netto / Woche'
+                            : fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
+                              ? '489 € netto / Einsatztag'
+                              : '349 € netto / Einsatztag'
+                      }</div>
                     </div>
                   )}
                 </Button>
