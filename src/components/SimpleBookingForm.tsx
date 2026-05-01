@@ -681,7 +681,7 @@ const SimpleBookingForm = () => {
                         />
                         <div>
                           <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
-                            Fernfahrer-Pauschale (Fernverkehrseinsatz)
+                            Fernfahrer-Pauschale (1 Fernverkehrs-Einsatztag)
                           </Label>
                           <p className="text-xs text-green-800 mt-1">
                             450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
