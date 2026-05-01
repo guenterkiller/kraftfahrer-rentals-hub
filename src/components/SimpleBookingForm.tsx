@@ -245,110 +245,64 @@ const SimpleBookingForm = () => {
 
               {/* Pricing Info - Header */}
               <div className="mb-4">
-                <h3 className="text-lg font-semibold text-center mb-2 flex items-center justify-center gap-2">
-                  <span className="text-2xl">💰</span>
+                <h3 className="text-lg font-semibold text-center mb-2">
                   Ihre Fahrerpreise
                 </h3>
                 <p className="text-sm text-muted-foreground text-center">
-                  Preise verstehen sich <strong>netto</strong> zzgl. MwSt., Fahrt- und ggf. Übernachtungskosten. Fernfahrer-Pauschale (nur LKW CE): Pauschale pro Einsatztag – keine Stundenabrechnung.
+                  Preise verstehen sich <strong>netto</strong> zzgl. MwSt. – zusätzlich An- und Abfahrt.
                 </p>
               </div>
 
               {/* Pricing Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                {/* LKW CE Fahrer Card */}
-                <Card className="border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-all">
+                <Card className="border-red-200 bg-red-50/60">
                   <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base flex items-center gap-1.5 text-red-900">
-                      🚛 LKW CE Fahrer
-                    </CardTitle>
+                    <CardTitle className="text-sm lg:text-base text-red-900">LKW-Fahrer CE</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2 px-3 pb-3">
-                    <div className="bg-white rounded-lg p-3 border-2 border-red-200 shadow-sm">
-                      <div className="text-2xl font-bold text-red-700 mb-0.5">349 €</div>
-                      <div className="text-xs text-gray-600">pro 8-Std.-Tag (netto)</div>
-                      <div className="mt-2 pt-2 border-t border-red-200">
-                        <div className="text-xs font-medium text-red-600">Überstunden: 30 €/h</div>
-                      </div>
-                    </div>
-                    <ul className="text-xs space-y-1 text-gray-700">
-                      <li className="flex items-start gap-1">
-                        <span className="text-red-600 font-bold">✓</span>
-                        <span>Nah- und Baustellenverkehr</span>
-                      </li>
-                    </ul>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center">
+                    <div className="text-2xl font-bold text-red-700">349 €</div>
+                    <div className="text-xs text-red-800 font-medium">pro Einsatztag</div>
+                    <div className="text-xs text-red-700">Gültig für: bis 10 Stunden</div>
+                    <div className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                {/* Fernfahrer-Pauschale Card */}
-                <Card className="border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-all">
+                <Card className="relative border border-red-200 bg-red-50/40">
+                  <span className="absolute top-1.5 right-1.5 z-10 bg-red-700 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                    Planbar
+                  </span>
                   <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base flex items-center gap-1.5 text-green-900">
-                      🛣️ Fernfahrer-Tarif
-                    </CardTitle>
+                    <CardTitle className="text-sm lg:text-base text-red-900 pr-12">LKW-Fahrer CE – Wochenpreis</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2 px-3 pb-3">
-                    <div className="bg-white rounded-lg p-3 border-2 border-green-200 shadow-sm">
-                      <div className="text-2xl font-bold text-green-700 mb-0.5">450 €</div>
-                      <div className="text-xs text-gray-600">Pauschale/Tag (netto)</div>
-                      <div className="mt-2 pt-2 border-t border-green-200">
-                        <div className="text-xs font-medium text-green-600">Keine Stundenabrechnung</div>
-                      </div>
-                    </div>
-                    <ul className="text-xs space-y-1 text-gray-700">
-                      <li className="flex items-start gap-1">
-                        <span className="text-green-600 font-bold">✓</span>
-                        <span>Fernverkehr, Übernachtung im LKW</span>
-                      </li>
-                    </ul>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center">
+                    <div className="text-2xl font-bold text-red-700">1.645 €</div>
+                    <div className="text-xs text-red-800 font-medium">pro Woche</div>
+                    <div className="text-xs text-red-700">5 Einsatztage à bis 10 Stunden</div>
+                    <div className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                {/* Baumaschinenführer Card */}
-                <Card className="border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-all">
+                <Card className="border-green-200 bg-green-50">
                   <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base flex items-center gap-1.5 text-orange-900">
-                      🏗️ Baumaschinen
-                    </CardTitle>
+                    <CardTitle className="text-sm lg:text-base text-green-900">Fernfahrer-Pauschale</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2 px-3 pb-3">
-                    <div className="bg-white rounded-lg p-3 border-2 border-orange-200 shadow-sm">
-                    <div className="text-2xl font-bold text-orange-700 mb-0.5">489 €</div>
-                      <div className="text-xs text-gray-600">pro Einsatztag (bis 8 Std., netto)</div>
-                      <div className="mt-2 pt-2 border-t border-orange-200">
-                        <div className="text-xs font-medium text-orange-600">zzgl. An- und Abfahrt</div>
-                      </div>
-                    </div>
-                    <ul className="text-xs space-y-1 text-gray-700">
-                      <li className="flex items-start gap-1">
-                        <span className="text-orange-600 font-bold">✓</span>
-                        <span>Bagger, Radlader, Walzen</span>
-                      </li>
-                    </ul>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center">
+                    <div className="text-2xl font-bold text-green-700">450 €</div>
+                    <div className="text-xs text-green-800 font-medium">pro Einsatztag</div>
+                    <div className="text-xs text-green-700">1 Fernverkehrs-Einsatztag</div>
+                    <div className="text-xs text-green-700">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                {/* Mischmeister Flüssigboden Card */}
-                <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-lg transition-all">
+                <Card className="border-orange-200 bg-orange-50">
                   <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base flex items-center gap-1.5 text-blue-900">
-                      🧪 Mischmeister
-                    </CardTitle>
+                    <CardTitle className="text-sm lg:text-base text-orange-900">Baumaschinenführer / Mischmeister</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2 px-3 pb-3">
-                    <div className="bg-white rounded-lg p-3 border-2 border-blue-200 shadow-sm">
-                      <div className="text-2xl font-bold text-blue-700 mb-0.5">489 €</div>
-                      <div className="text-xs text-gray-600">pro 8-Std.-Tag (netto)</div>
-                      <div className="mt-2 pt-2 border-t border-blue-200">
-                        <div className="text-xs font-medium text-blue-600">Überstunden: 65 €/h</div>
-                      </div>
-                    </div>
-                    <ul className="text-xs space-y-1 text-gray-700">
-                      <li className="flex items-start gap-1">
-                        <span className="text-blue-600 font-bold">✓</span>
-                        <span>Flüssigboden, Mischanlagen</span>
-                      </li>
-                    </ul>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center">
+                    <div className="text-2xl font-bold text-orange-700">489 €</div>
+                    <div className="text-xs text-orange-800 font-medium">pro Einsatztag</div>
+                    <div className="text-xs text-orange-700">Gültig für: bis 8 Stunden</div>
+                    <div className="text-xs text-orange-700">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
               </div>
