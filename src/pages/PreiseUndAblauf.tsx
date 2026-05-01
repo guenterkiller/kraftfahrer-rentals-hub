@@ -134,6 +134,9 @@ const PreiseUndAblauf = () => {
                 <p className="text-sm text-foreground">
                   Weitere Kosten entstehen nur, wenn sie vorher ausdrücklich vereinbart wurden.
                 </p>
+                <p className="text-sm text-foreground mt-2">
+                  Bei auswärtigen Einsätzen kann zusätzlich eine Übernachtung erforderlich sein. Diese wird vor Auftragserteilung abgestimmt.
+                </p>
               </div>
             </div>
 
