@@ -417,92 +417,99 @@ const SimpleBookingForm = () => {
                 <fieldset>
                   <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Benötigter Fahrertyp / Qualifikation *</legend>
                   <p id="fahrertyp-hint" className="text-sm opacity-80 mb-3" aria-live="polite">
-                    Beispiel: <em>7,5 t</em>, <em>40 t</em>, <em>ADR</em>, <em>Tankwagen</em>, <em>Baumaschinenführer</em>, <em>Ladekran</em>.
+                    Bitte wählen Sie genau eine der vier Hauptkategorien. BF3-Begleitung kann unten als Spezialanforderung gewählt werden.
                   </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-describedby="fahrertyp-hint" aria-required="true">
+                    {/* LKW-Fahrer CE */}
+                    <label
+                      className={`flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-red-600 cursor-pointer transition-all ${
                         fahrzeugtyp === 'LKW CE' && !longDistance
-                          ? 'border-red-500 bg-red-50' 
-                          : 'border-border hover:border-red-300 hover:bg-red-50/50'
+                          ? 'ring-2 ring-red-500 shadow-sm'
+                          : 'hover:shadow-sm'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="LKW CE"
-                        checked={fahrzeugtyp === 'LKW CE' && !longDistance}
-                        onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(false); }}
-                        className="w-5 h-5 text-red-600"
-                        required
-                      />
-                      <div className="flex items-center gap-2">
-                        <Car className="h-5 w-5 text-red-600" />
-                        <span className="font-medium">LKW CE Fahrer</span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="LKW CE"
+                          checked={fahrzeugtyp === 'LKW CE' && !longDistance}
+                          onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(false); }}
+                          className="w-5 h-5 accent-red-700"
+                          required
+                        />
+                        <span className="font-semibold text-foreground">LKW-Fahrer CE</span>
                       </div>
+                      <div className="text-xs text-muted-foreground pl-8">349 € pro Einsatztag · bis 10 Stunden · zzgl. An- und Abfahrt</div>
                     </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+
+                    {/* LKW-Fahrer CE – Wochenpreis */}
+                    <label
+                      className={`relative flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-red-600 ring-1 ring-red-200 cursor-pointer transition-all ${
+                        fahrzeugtyp === 'LKW CE Wochenpreis'
+                          ? 'ring-2 ring-red-500 shadow-sm'
+                          : 'hover:shadow-sm'
+                      }`}
+                    >
+                      <span className="absolute -top-2.5 right-3 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+                        Planbar buchen
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="LKW CE Wochenpreis"
+                          checked={fahrzeugtyp === 'LKW CE Wochenpreis'}
+                          onChange={() => { setFahrzeugtyp('LKW CE Wochenpreis'); setLongDistance(false); }}
+                          className="w-5 h-5 accent-red-700"
+                        />
+                        <span className="font-semibold text-foreground">LKW-Fahrer CE – Wochenpreis</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground pl-8">1.645 € pro Woche · 5 Einsatztage à bis 10 Stunden · zzgl. An- und Abfahrt</div>
+                    </label>
+
+                    {/* Fernfahrer-Pauschale */}
+                    <label
+                      className={`flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-green-600 cursor-pointer transition-all ${
                         fahrzeugtyp === 'LKW CE' && longDistance
-                          ? 'border-green-500 bg-green-50' 
-                          : 'border-border hover:border-green-300 hover:bg-green-50/50'
+                          ? 'ring-2 ring-green-500 shadow-sm'
+                          : 'hover:shadow-sm'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Fernfahrer"
-                        checked={fahrzeugtyp === 'LKW CE' && longDistance}
-                        onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(true); }}
-                        className="w-5 h-5 text-green-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <Truck className="h-5 w-5 text-green-600" />
-                        <span className="font-medium">Fernfahrer-Pauschale</span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="Fernfahrer"
+                          checked={fahrzeugtyp === 'LKW CE' && longDistance}
+                          onChange={() => { setFahrzeugtyp('LKW CE'); setLongDistance(true); }}
+                          className="w-5 h-5 accent-green-700"
+                        />
+                        <span className="font-semibold text-foreground">Fernfahrer-Pauschale</span>
                       </div>
+                      <div className="text-xs text-muted-foreground pl-8">450 € pro Einsatztag · 1 Fernverkehrs-Einsatztag · zzgl. An- und Abfahrt</div>
                     </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
+
+                    {/* Baumaschinenführer / Mischmeister */}
+                    <label
+                      className={`flex flex-col gap-1 p-4 rounded-lg border bg-card border-t-4 border-t-orange-500 cursor-pointer transition-all ${
                         fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
-                          ? 'border-orange-500 bg-orange-50' 
-                          : 'border-border hover:border-orange-300 hover:bg-orange-50/50'
+                          ? 'ring-2 ring-orange-500 shadow-sm'
+                          : 'hover:shadow-sm'
                       }`}
                     >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Baumaschinenführer / Mischmeister"
-                        checked={fahrzeugtyp === 'Baumaschinenführer / Mischmeister'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
-                        className="w-5 h-5 text-orange-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <Construction className="h-5 w-5 text-orange-600" />
-                        <span className="font-medium">Baumaschinenführer / Mischmeister</span>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name="fahrzeugtyp"
+                          value="Baumaschinenführer / Mischmeister"
+                          checked={fahrzeugtyp === 'Baumaschinenführer / Mischmeister'}
+                          onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
+                          className="w-5 h-5 accent-orange-600"
+                        />
+                        <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister</span>
                       </div>
-                    </label>
-                    
-                    <label 
-                      className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                        fahrzeugtyp === 'Begleitfahrzeugführer BF3' 
-                          ? 'border-purple-500 bg-purple-50' 
-                          : 'border-border hover:border-purple-300 hover:bg-purple-50/50'
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="fahrzeugtyp"
-                        value="Begleitfahrzeugführer BF3"
-                        checked={fahrzeugtyp === 'Begleitfahrzeugführer BF3'}
-                        onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
-                        className="w-5 h-5 text-purple-600"
-                      />
-                      <div className="flex items-center gap-2">
-                        <ShieldAlert className="h-5 w-5 text-purple-600" />
-                        <span className="font-medium">BF3 Begleitfahrer</span>
-                      </div>
+                      <div className="text-xs text-muted-foreground pl-8">489 € pro Einsatztag · bis 8 Stunden · zzgl. An- und Abfahrt</div>
                     </label>
                   </div>
 
