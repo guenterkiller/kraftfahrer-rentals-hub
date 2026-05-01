@@ -51,7 +51,7 @@ const Vermittlung = () => {
                     Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet. Die Vergütung erfolgt transparent auf Basis der vereinbarten Tages- und Nebenkosten.
                   </p>
                   <p>
-                    Sie erhalten transparente und klar definierte Tagessätze (z.&nbsp;B. LKW CE-Fahrer ab 349&nbsp;€, Baumaschinenführer ab 459&nbsp;€).
+                    Sie erhalten transparente und klar definierte Tagessätze (z.&nbsp;B. LKW CE-Fahrer ab 349&nbsp;€, Baumaschinenführer / Mischmeister 489&nbsp;€).
                   </p>
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                     <p className="font-semibold">
