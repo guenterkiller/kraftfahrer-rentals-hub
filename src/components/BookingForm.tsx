@@ -63,8 +63,8 @@ const BookingForm = () => {
     // Track conversion event
     try {
       // Track with category-specific details
-      const isBaumaschine = vehicleTypes.includes('Baumaschinenführer');
-      const isLKW = vehicleTypes.includes('LKW CE Fahrer');
+      const isBaumaschine = vehicleTypes.some(v => v.startsWith('Baumaschinenführer'));
+      const isLKW = vehicleTypes.some(v => v.startsWith('LKW CE Fahrer'));
       
       if (typeof (window as any).gtag === 'function') {
         (window as any).gtag('event', 'submit_fahrer_buchen', {
