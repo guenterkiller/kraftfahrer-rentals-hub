@@ -57,40 +57,51 @@ const PreiseUndAblauf = () => {
               </p>
             </div>
 
-            {/* Aktuelle Tagespreise */}
+            {/* Kompakte Preisstruktur */}
             <div className="mb-16">
-              <h2 className="text-3xl font-bold text-center mb-8">Mietfahrer & Leihfahrer – Tagespreise (netto)</h2>
-              <p className="text-center text-sm text-muted-foreground max-w-3xl mx-auto mb-6">
-                Hinweis: Fahrtkosten sind bei allen Tarifen nicht enthalten und werden gemäß unserer Fahrtkostenregelung separat berechnet.
+              <h2 className="text-3xl font-bold text-center mb-4">Mietfahrer & selbstständige Fahrer – Preise</h2>
+              <p className="text-center text-sm text-muted-foreground max-w-3xl mx-auto mb-8">
+                Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen. Fahrzeuge werden nicht gestellt. Alle Preise verstehen sich netto zzgl. gesetzlicher MwSt.
               </p>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-xl text-red-900">LKW Fahrer buchen</CardTitle>
-                    <CardDescription className="text-red-700">Nahverkehr, Baustelle, Verteiler</CardDescription>
+                    <CardTitle className="text-xl text-red-900">LKW-Fahrer CE</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center mb-4">
+                    <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
-                      <p className="text-red-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
-                      <p className="text-red-700 text-xs mt-2">30 € je Überstunde</p>
+                      <p className="text-red-800 font-medium text-sm">pro Einsatztag</p>
+                      <p className="text-red-700 text-xs mt-3">Gültig für: bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-2 border-red-300 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-red-900">LKW-Fahrer CE Wochenpreis</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center">
+                      <div className="text-4xl font-bold text-red-700 mb-2">1.645 €</div>
+                      <p className="text-red-800 font-medium text-sm">pro Woche</p>
+                      <p className="text-red-700 text-xs mt-3">Gültig für: 5 Einsatztage à bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-xl text-green-900 flex items-center gap-2">
-                      🛣️ Fernfahrer-Pauschale
-                    </CardTitle>
-                    <CardDescription className="text-green-700">Fernverkehr mit Übernachtung</CardDescription>
+                    <CardTitle className="text-xl text-green-900">Fernfahrer-Pauschale</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center mb-4">
+                    <div className="text-center">
                       <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
-                      <p className="text-green-800 font-medium text-sm">Pauschale pro Einsatztag (netto)</p>
-                      <p className="text-green-700 text-xs mt-2">Bis 10 Std. abgegolten – keine Stundenabrechnung</p>
-                      <p className="text-green-700 text-xs mt-2">Die Pauschale beinhaltet ausschließlich die Fahrerdienstleistung. Fahrtkosten werden zusätzlich gemäß Fahrtkostenregelung berechnet.</p>
+                      <p className="text-green-800 font-medium text-sm">pro Einsatztag</p>
+                      <p className="text-green-700 text-xs mt-3">Gültig für: Fernverkehrseinsatz</p>
+                      <p className="text-green-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -99,54 +110,24 @@ const PreiseUndAblauf = () => {
                   <CardHeader>
                     <CardTitle className="text-xl text-orange-900 flex items-center gap-2">
                       <img src={baggerIcon} alt="Bagger" className="h-5 w-5" />
-                      Baumaschinenführer
+                      Baumaschinenführer / Mischmeister
                     </CardTitle>
-                    <CardDescription className="text-orange-700">Bagger, Radlader & mehr</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center mb-4">
-                      <div className="text-4xl font-bold text-orange-700 mb-2">459 €</div>
-                      <p className="text-orange-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
-                      <p className="text-orange-700 text-xs mt-2">60 € je Überstunde</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-blue-900">Mischmeister</CardTitle>
-                    <CardDescription className="text-blue-700">Anlagenbediener Flüssigboden</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center mb-4">
-                      <div className="text-4xl font-bold text-blue-700 mb-2">489 €</div>
-                      <p className="text-blue-800 font-medium text-sm">pro Tag (8 Std.) netto</p>
-                      <p className="text-blue-700 text-xs mt-2">65 € je Überstunde</p>
+                    <div className="text-center">
+                      <div className="text-4xl font-bold text-orange-700 mb-2">489 €</div>
+                      <p className="text-orange-800 font-medium text-sm">pro Einsatztag</p>
+                      <p className="text-orange-700 text-xs mt-3">Gültig für: bis 8 Stunden</p>
+                      <p className="text-orange-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
               </div>
-              
-              {/* Fernfahrer-Pauschale Detail */}
-              <Card className="bg-green-50 border-green-200 max-w-4xl mx-auto mb-6">
-                <CardContent className="pt-6">
-                  <div className="space-y-2 text-sm">
-                    <p><strong>🚛 Fernfahrer-Pauschale:</strong> Pauschalvergütung pro Einsatztag für Fernverkehr mit Übernachtung im Führerhaus. Gesetzlich zulässige Lenk- und Arbeitszeiten sind möglich, begründen jedoch keinen Anspruch auf zusätzliche Vergütung innerhalb der Pauschale.</p>
-                    <p><strong>Arbeitszeit bis 10 Stunden ist mit der Pauschale abgegolten.</strong></p>
-                    <p>Ab Überschreitung von 10 Stunden fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag (gemäß Auftragsbestätigung).</p>
-                  </div>
-                </CardContent>
-              </Card>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-4xl mx-auto">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <div className="space-y-2 text-sm text-blue-900">
-                    <p><strong>👉 Mindestbuchung:</strong> 1 Einsatztag = 8 Stunden (bzw. Pauschale bei Fernverkehr)</p>
-                    <p><strong>👉 Abrechnungstaktung:</strong> im 15-Minuten-Takt nach der 8. Stunde (nicht bei Fernfahrer-Pauschale)</p>
-                    <p><strong>👉 Alle Preise:</strong> Netto-Preise zzgl. gesetzlicher MwSt.</p>
-                  </div>
-                </div>
+              <div className="bg-muted/50 border border-border rounded-lg p-4 max-w-4xl mx-auto">
+                <p className="text-sm text-foreground">
+                  Weitere Kosten entstehen nur, wenn sie vorher ausdrücklich vereinbart wurden.
+                </p>
               </div>
             </div>
 
@@ -182,145 +163,64 @@ const PreiseUndAblauf = () => {
               </CardContent>
             </Card>
 
-            {/* Fahrtkosten-Regelung */}
+            {/* An- und Abfahrt */}
             <Card className="mb-12">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Truck className="h-6 w-6 text-primary" />
-                  Fahrtkosten-Regelung
+                  An- und Abfahrt
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <p className="font-semibold text-green-900 mb-2">Inklusive:</p>
-                    <p className="text-green-800">Erste 25 km frei (Hin- & Rückweg)</p>
-                  </div>
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                    <p className="font-semibold text-amber-900 mb-2">Ab dem 26. km:</p>
-                    <p className="text-amber-800">0,40 € je gefahrenen Kilometer</p>
-                  </div>
-                </div>
-                <div className="space-y-2 text-muted-foreground">
-                  <p>➡ Berechnungsgrundlage: Wohnort des eingesetzten Unternehmers zum Einsatzort</p>
-                  <p>➡ Parkgebühren, Maut, Tunnel, Fähren → 1:1 an Auftraggeber weiterberechnet</p>
-                  <p>➡ Der Einsatzort des Unternehmers wird dem Auftraggeber vor Einsatzbeginn mitgeteilt.</p>
+                <p className="text-muted-foreground">
+                  Die An- und Abfahrt wird zusätzlich zum Tagessatz berechnet und vor Auftragserteilung klar ausgewiesen.
+                </p>
+                <div>
+                  <p className="font-semibold mb-2">Berechnung:</p>
+                  <ul className="space-y-1 text-muted-foreground ml-4">
+                    <li>• erste 25 km der Gesamtstrecke frei</li>
+                    <li>• ab dem 26. km: 0,40 € je gefahrenem Kilometer</li>
+                    <li>• Parken, Maut, Fähren oder Tunnel werden nur berechnet, wenn sie tatsächlich anfallen</li>
+                  </ul>
                 </div>
                 <div className="bg-muted rounded-lg p-4">
                   <p className="font-semibold mb-2">Beispiel:</p>
-                  <p className="text-muted-foreground">60 km Gesamtstrecke – 25 km frei = 35 km kostenpflichtig × 2 (Hin & Rück) × 0,40 € = <strong className="text-foreground">28,00 € Fahrtkosten netto</strong></p>
+                  <p className="text-muted-foreground">
+                    Gesamtstrecke An- und Abfahrt: 95 km<br />
+                    25 km frei<br />
+                    70 km × 0,40 € = <strong className="text-foreground">28,00 € netto</strong>
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Überstunden & Zuschläge */}
+            {/* Mehrzeiten & Sonderfälle */}
             <Card className="mb-12">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Clock className="h-6 w-6 text-primary" />
-                  Überstunden & Zuschläge
+                  Mehrzeiten & Sonderfälle
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="font-semibold text-red-700 mb-2">LKW CE Fahrer (Nahverkehr):</p>
-                    <p className="text-muted-foreground">30 € je Überstunde (ab 9. Stunde)</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-orange-700 mb-2">Baumaschinenführer:</p>
-                    <p className="text-muted-foreground">60 € je Überstunde (ab 9. Stunde)</p>
-                  </div>
-                </div>
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                  <p className="font-semibold text-green-900 mb-1">Fernfahrer-Pauschale:</p>
-                  <p className="text-sm text-green-800">Keine Stundenabrechnung. Arbeitszeit bis 10 Stunden ist mit der Tagespauschale (450 €) abgegolten. Ab Überschreitung von 10 Stunden fällt ein Zuschlag an oder es gilt ein zusätzlicher Einsatztag.</p>
-                </div>
-                <div className="bg-muted rounded-lg p-4 space-y-2">
-                  <p className="font-semibold">Zuschläge auf den Stundensatz:</p>
-                  <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• <strong>Nachtarbeit</strong> (22:00–06:00 Uhr): +25 %</li>
-                    <li>• <strong>Samstag</strong>: +25 %</li>
-                    <li>• <strong>Sonntag</strong>: +50 %</li>
-                    <li>• <strong>Feiertage</strong>: +100 %</li>
-                  </ul>
-                  <p className="text-sm text-muted-foreground mt-2">Zuschläge gelten nicht für die Fernfahrer-Pauschale, sofern nicht ausdrücklich vereinbart.</p>
-                </div>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
-                  <p className="text-sm text-blue-900"><strong>⏱️ Wichtig:</strong> Wartezeiten und Standzeiten gelten als Arbeitszeit und werden entsprechend abgerechnet.</p>
-                </div>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Die genannten Preise gelten für den vereinbarten Einsatztag bzw. Wochenpreis. Weitere Kosten entstehen nur, wenn sie vor Auftragserteilung ausdrücklich vereinbart wurden, zum Beispiel bei Nacht-, Wochenend-, Feiertagseinsätzen, besonderen Zusatzleistungen oder außergewöhnlichen Mehrzeiten.
+                </p>
               </CardContent>
             </Card>
 
-            {/* Einsatzdauer & Langzeitkonditionen */}
+            {/* Langzeiteinsätze */}
             <Card className="mb-12 border-blue-200 bg-blue-50/30">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Clock className="h-6 w-6 text-blue-600" />
-                  Einsatzdauer & Langzeitkonditionen
+                  Langzeiteinsätze
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="bg-white rounded-lg p-4 border border-blue-200">
-                  <p className="font-semibold text-lg mb-2">Kurz- und Mitteleinsätze (unter 3 Monaten)</p>
-                  <p className="text-muted-foreground">
-                    Für Einsätze bis unter 3 Monaten gelten unsere transparenten Tagessätze ohne Wochenrabatte.
-                  </p>
-                  <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>LKW CE Fahrer: 349 € pro Tag (8 Std.)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Fernfahrer-Pauschale: 450 € pro Einsatztag (bis 10 Std., keine Stundenabrechnung)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Baumaschinenführer: 459 € pro Tag (8 Std.)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>Mischmeister Flüssigboden: 489 € pro Tag (8 Std.)</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-white rounded-lg p-4 border border-blue-200">
-                  <p className="font-semibold text-lg mb-2">Langzeiteinsätze (ab 3 Monaten)</p>
-                  <p className="text-muted-foreground">
-                    Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert – fair für selbstständige Fahrer und Auftraggeber.
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    ➡ Sprechen Sie uns an für ein individuelles Angebot.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Spesen & Übernachtungen */}
-            <Card className="mb-12">
-              <CardHeader>
-                <CardTitle className="text-2xl flex items-center gap-2">
-                  <FileText className="h-6 w-6 text-primary" />
-                  Übernachtungen & Unterbringung
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="font-semibold">Bei Einsätzen über 50 km einfacher Strecke oder mehrtägigen Projekten:</p>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p className="font-semibold text-blue-900 mb-2">Option 1: Übernachtungspauschale</p>
-                    <div className="text-2xl font-bold text-blue-700 mb-1">50 € pro Nacht</div>
-                    <p className="text-sm text-blue-800">Falls keine Schlafkabine im LKW vorhanden ist</p>
-                  </div>
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <p className="font-semibold text-green-900 mb-2">Option 2: Unterkunft durch AG</p>
-                    <p className="text-sm text-green-800">Hotel oder Unterkunft wird direkt vom Auftraggeber gestellt bzw. gebucht</p>
-                  </div>
-                </div>
-                <div className="bg-muted rounded-lg p-3">
-                  <p className="text-sm text-muted-foreground">➡ Bei Fernverkehr mit Schlafkabine entfällt die Übernachtungspauschale.</p>
-                </div>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert. Sprechen Sie uns an für ein individuelles Angebot.
+                </p>
               </CardContent>
             </Card>
 
@@ -402,56 +302,49 @@ const PreiseUndAblauf = () => {
               <div className="grid md:grid-cols-2 gap-8">
                 <Card className="border-red-200">
                   <CardHeader>
-                    <CardTitle className="text-xl text-red-900">Beispiel 1: LKW CE Fahrer – Tageseinsatz Hamburg</CardTitle>
+                    <CardTitle className="text-xl text-red-900">Beispiel 1: LKW-Fahrer CE</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">1 Tag (8 Std.) LKW CE Fahrer</span>
+                        <span className="text-muted-foreground">LKW-Fahrer CE</span>
                         <span className="font-semibold">349,00 €</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">2 Überstunden à 30 €</span>
-                        <span className="font-semibold">60,00 €</span>
-                      </div>
-                      <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground text-sm">Fahrtkosten (45 km → 20 km × 2 × 0,40 €)</span>
-                        <span className="font-semibold">16,00 €</span>
+                        <span className="text-muted-foreground">An- und Abfahrt</span>
+                        <span className="font-semibold">28,00 €</span>
                       </div>
                       <div className="flex justify-between py-3 bg-red-50 rounded-lg px-3 mt-3">
                         <span className="font-bold text-red-900">Gesamt netto:</span>
-                        <span className="font-bold text-red-900 text-xl">425,00 €</span>
+                        <span className="font-bold text-red-900 text-xl">377,00 €</span>
                       </div>
                       <div className="text-xs text-muted-foreground text-center mt-2">
-                        zzgl. gesetzl. MwSt.
+                        zzgl. gesetzlicher MwSt.
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-orange-200">
+                <Card className="border-green-200">
                   <CardHeader>
-                    <CardTitle className="text-xl text-orange-900">Beispiel 2: Baumaschinenführer – Wochenprojekt</CardTitle>
+                    <CardTitle className="text-xl text-green-900">Beispiel 2: Fernfahrer</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground">5 Tage à 459 €</span>
-                        <span className="font-semibold">2.295,00 €</span>
+                        <span className="text-muted-foreground">Fernfahrer-Pauschale</span>
+                        <span className="font-semibold">450,00 €</span>
                       </div>
                       <div className="flex justify-between py-2 border-b">
-                        <span className="text-muted-foreground text-sm">Fahrtkosten 5× (30 km → 5 km × 2 × 0,40 €)</span>
-                        <span className="font-semibold">20,00 €</span>
+                        <span className="text-muted-foreground">An- und Abfahrt</span>
+                        <span className="font-semibold">40,00 €</span>
                       </div>
-                      <div className="flex justify-between py-3 bg-orange-50 rounded-lg px-3 mt-3">
-                        <span className="font-bold text-orange-900">Gesamt netto:</span>
-                        <span className="font-bold text-orange-900 text-xl">2.315,00 €</span>
+                      <div className="flex justify-between py-3 bg-green-50 rounded-lg px-3 mt-3">
+                        <span className="font-bold text-green-900">Gesamt netto:</span>
+                        <span className="font-bold text-green-900 text-xl">490,00 €</span>
                       </div>
                       <div className="text-xs text-muted-foreground text-center mt-2">
-                        zzgl. gesetzl. MwSt.
-                      </div>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
-                        <p className="text-sm text-blue-800">➡ Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert.</p>
+                        zzgl. gesetzlicher MwSt.
                       </div>
                     </div>
                   </CardContent>
