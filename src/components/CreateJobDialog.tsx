@@ -296,7 +296,7 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
                     <SelectValue placeholder="Kategorie wählen" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Baumaschinenführer">Baumaschinenführer (459 €/Tag)</SelectItem>
+                    <SelectItem value="Baumaschinenführer">Baumaschinenführer / Mischmeister (489 €/Einsatztag)</SelectItem>
                     <SelectItem value="LKW CE Fahrer">LKW CE Fahrer (349 €/Tag)</SelectItem>
                   </SelectContent>
                 </Select>
