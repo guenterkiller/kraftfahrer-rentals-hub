@@ -257,55 +257,55 @@ const SimpleBookingForm = () => {
               </div>
 
               {/* Pricing Cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-                <Card className="border-red-200 bg-red-50/60">
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-red-900">LKW-Fahrer CE</CardTitle>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6 items-stretch">
+                <Card className="bg-card border border-border border-t-4 border-t-red-600 flex flex-col h-full">
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-red-700">349 €</div>
-                    <div className="text-xs text-red-800 font-medium">pro Einsatztag</div>
-                    <div className="text-xs text-red-700">Gültig für: bis 10 Stunden</div>
-                    <div className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">349 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                <Card className="relative border border-red-200 bg-red-50/40">
-                  <span className="absolute top-1.5 right-1.5 z-10 bg-red-700 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap">
-                    Planbar
+                <Card className="relative bg-card border border-border border-t-4 border-t-red-600 ring-1 ring-red-200 flex flex-col h-full">
+                  <span className="absolute -top-2 right-2 z-10 bg-red-700 text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                    Planbar buchen
                   </span>
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-red-900 pr-12">LKW-Fahrer CE – Wochenpreis</CardTitle>
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE – Wochenpreis</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-red-700">1.645 €</div>
-                    <div className="text-xs text-red-800 font-medium">pro Woche</div>
-                    <div className="text-xs text-red-700">5 Einsatztage à bis 10 Stunden</div>
-                    <div className="text-xs text-red-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">1.645 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Woche</div>
+                    <div className="text-xs text-muted-foreground">5 Einsatztage à bis 10 Stunden</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-green-200 bg-green-50">
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-green-900">Fernfahrer-Pauschale</CardTitle>
+                <Card className="bg-card border border-border border-t-4 border-t-green-600 flex flex-col h-full">
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">Fernfahrer-Pauschale</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-green-700">450 €</div>
-                    <div className="text-xs text-green-800 font-medium">pro Einsatztag</div>
-                    <div className="text-xs text-green-700">1 Fernverkehrs-Einsatztag</div>
-                    <div className="text-xs text-green-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">450 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">1 Fernverkehrs-Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
 
-                <Card className="border-orange-200 bg-orange-50">
-                  <CardHeader className="pb-2 px-3 pt-3">
-                    <CardTitle className="text-sm lg:text-base text-orange-900">Baumaschinenführer / Mischmeister</CardTitle>
+                <Card className="bg-card border border-border border-t-4 border-t-orange-500 flex flex-col h-full">
+                  <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">Baumaschinenführer / Mischmeister</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-1 px-3 pb-3 text-center">
-                    <div className="text-2xl font-bold text-orange-700">489 €</div>
-                    <div className="text-xs text-orange-800 font-medium">pro Einsatztag</div>
-                    <div className="text-xs text-orange-700">Gültig für: bis 8 Stunden</div>
-                    <div className="text-xs text-orange-700">Zusätzlich: An- und Abfahrt</div>
+                  <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
+                    <div className="text-2xl font-bold text-foreground">489 €</div>
+                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
+                    <div className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden</div>
+                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
               </div>
