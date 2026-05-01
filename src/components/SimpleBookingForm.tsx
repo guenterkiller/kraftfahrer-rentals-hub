@@ -19,7 +19,6 @@ const SimpleBookingForm = () => {
   const [submitted, setSubmitted] = useState(false); // prevents double-submit
   const [agreedToData, setAgreedToData] = useState(false);
   const [agreedToBinding, setAgreedToBinding] = useState(false);
-  const [newsletter, setNewsletter] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
   const [longDistance, setLongDistance] = useState(false);
@@ -165,7 +164,6 @@ const SimpleBookingForm = () => {
       setAgreedToData(false);
       setAgreedToBinding(false);
       setAgreedToBinding(false);
-      setNewsletter(false);
       setAdrRequired(false);
       setCraneRequired(false);
       setLongDistance(false);
@@ -783,17 +781,6 @@ const SimpleBookingForm = () => {
                       <Link to="/datenschutz" className="text-primary hover:underline">
                         Datenschutzerklärung
                       </Link>
-                    </Label>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="newsletter" 
-                      checked={newsletter}
-                      onCheckedChange={(checked) => setNewsletter(checked as boolean)}
-                    />
-                    <Label htmlFor="newsletter">
-                      Ich möchte über neue Fahrer und Angebote per E-Mail informiert werden
                     </Label>
                   </div>
 
