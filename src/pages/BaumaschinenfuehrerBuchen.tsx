@@ -67,7 +67,7 @@ const BaumaschinenfuehrerBuchen = () => {
       },
       {
         question: "Wie sind die Konditionen?",
-        answer: "<strong>489 € pro Einsatztag (bis 8 Stunden).</strong> An- und Abfahrt zusätzlich: 25 km frei, danach 0,40 € pro Kilometer. Sie stellen die Geräte/Maschinen/Anlagen."
+        answer: "<strong>489 € pro Einsatztag (bis 8 Stunden).</strong> Zusätzlich: An- und Abfahrt – erste 25 km frei, danach 0,40 € je gefahrenem Kilometer. Sie stellen die Geräte/Maschinen/Anlagen."
       },
       {
         question: "Vermitteln Sie Baggerfahrer und Radladerfahrer deutschlandweit?",

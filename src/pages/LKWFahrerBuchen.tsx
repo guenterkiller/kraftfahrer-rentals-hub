@@ -36,7 +36,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "Transparente Tagespreise: 349 € pro Tag (8h), 30 € Überstunde. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert. Keine versteckten Kosten."
+        answer: "Transparente Preise: 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
@@ -108,7 +108,7 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
-    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. 349 € pro Tag (8h).",
+    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt.",
     bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig auf Abruf", "Transparente Tagessätze"]
   };
 
@@ -129,7 +129,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "<strong>Transparente Tagespreise:</strong> 349 € pro Tag (8h), 30 € Überstunde. Fahrtkosten: 25 km inklusive, danach 0,40 € pro Kilometer. Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert. Keine versteckten Kosten."
+        answer: "<strong>Transparente Preise:</strong> 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten individuell."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
