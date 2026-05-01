@@ -79,15 +79,15 @@ const PreiseUndAblauf = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-red-300 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
+                <Card className="border border-red-200 bg-red-50/50 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <CardTitle className="text-xl text-red-900">LKW-Fahrer CE Wochenpreis</CardTitle>
+                    <CardTitle className="text-xl text-red-900">LKW-Fahrer CE – Wochenpreis</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">1.645 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Woche</p>
-                      <p className="text-red-700 text-xs mt-3">Gültig für: 5 Einsatztage à bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-3">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
                       <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
