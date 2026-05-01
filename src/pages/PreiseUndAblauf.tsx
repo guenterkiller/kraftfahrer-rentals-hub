@@ -64,9 +64,6 @@ const PreiseUndAblauf = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-3">
-                    <span className="inline-block self-start bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2 w-fit">
-                      Beliebte Bestellung
-                    </span>
                     <CardTitle className="text-lg sm:text-xl text-red-900 leading-snug">
                       LKW-Fahrer CE
                     </CardTitle>
@@ -81,9 +78,12 @@ const PreiseUndAblauf = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border border-red-200 bg-red-50/50 hover:shadow-lg transition-shadow">
+                <Card className="relative border border-red-200 bg-red-50/50 hover:shadow-lg transition-shadow">
+                  <span className="absolute top-3 right-3 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+                    Planbar &amp; günstiger
+                  </span>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-lg sm:text-xl text-red-900 leading-snug">
+                    <CardTitle className="text-lg sm:text-xl text-red-900 leading-snug pr-28">
                       LKW-Fahrer CE – Wochenpreis
                     </CardTitle>
                   </CardHeader>
