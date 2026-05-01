@@ -79,7 +79,9 @@ const SimpleBookingForm = () => {
         einsatzdauer: formData.get('einsatzdauer') as string,
         fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
           ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
-          : (fahrzeugtyp || 'lkw'),
+          : fahrzeugtyp === 'LKW CE Wochenpreis'
+            ? 'LKW-Fahrer CE – Wochenpreis'
+            : (fahrzeugtyp || 'lkw'),
         nachricht: formData.get('beschreibung') as string,
         datenschutz: agreedToData,
         newsletter: false,
@@ -111,11 +113,18 @@ const SimpleBookingForm = () => {
 
       // Track conversion with category
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
+      const isWoche = fahrzeugtyp === 'LKW CE Wochenpreis';
       if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', isBaumaschinen ? 'category_submit_baumaschinen' : 'category_submit_lkw', {
+        const eventName = isBaumaschinen
+          ? 'category_submit_baumaschinen'
+          : isWoche
+            ? 'category_submit_lkw_woche'
+            : 'category_submit_lkw';
+        const value = isBaumaschinen ? 489 : isWoche ? 1645 : (longDistance ? 450 : 349);
+        (window as any).gtag('event', eventName, {
           event_category: 'Form Submission',
           event_label: fahrzeugtyp,
-          value: isBaumaschinen ? 489 : 349
+          value
         });
       }
 
