@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Truck, Check, Construction, Droplets } from "lucide-react";
+import { Check, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ProductCards = () => {
@@ -25,32 +25,23 @@ const ProductCards = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto items-stretch">
 
           {/* LKW-Fahrer CE */}
-          <Card className="relative overflow-hidden border-2 border-red-200 bg-red-50/60 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-red-600 shadow-lg flex-shrink-0">
-                  <Truck className="h-6 w-6 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-semibold leading-tight text-red-900">LKW-Fahrer CE</h3>
-                  <p className="text-xs text-muted-foreground">Bundesweit verfügbar</p>
-                </div>
-              </div>
+          <Card className="bg-card border border-border border-t-4 border-t-red-600 hover:shadow-lg transition-shadow flex flex-col h-full">
+            <CardHeader className="pb-2 min-h-[64px]">
+              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">LKW-Fahrer CE</h3>
             </CardHeader>
-            <CardContent className="flex flex-col flex-1">
-              <div className="mb-4 pb-4 border-b border-border text-center">
-                <div className="text-4xl font-bold text-red-700">349 €</div>
-                <p className="text-sm text-red-800 font-medium">pro Einsatztag</p>
-                <p className="text-xs text-red-700 mt-2">Gültig für: bis 10 Stunden</p>
-                <p className="text-xs text-red-700 mt-1">Zusätzlich: An- und Abfahrt</p>
+            <CardContent className="flex flex-col flex-1 pt-0 text-center">
+              <div className="mb-4 pb-4 border-b border-border space-y-2">
+                <div className="text-4xl font-bold text-foreground">349 €</div>
+                <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
+                <p className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden</p>
+                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               </div>
               <Button
                 onClick={scrollToForm}
-                className="w-full h-11 text-sm font-semibold bg-red-700 hover:bg-red-800 text-white shadow-lg mt-auto"
-                size="lg"
+                className="w-full h-11 text-sm font-semibold bg-red-700 hover:bg-red-800 text-white mt-auto"
               >
                 LKW-Fahrer anfragen
               </Button>
@@ -58,32 +49,23 @@ const ProductCards = () => {
           </Card>
 
           {/* LKW-Fahrer CE – Wochenpreis */}
-          <Card className="relative overflow-hidden border border-red-200 bg-red-50/40 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-            <span className="absolute top-2 right-2 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
-              Planbar &amp; günstiger
+          <Card className="relative bg-card border border-border border-t-4 border-t-red-600 ring-1 ring-red-200 hover:shadow-lg transition-shadow flex flex-col h-full">
+            <span className="absolute -top-2.5 right-3 z-10 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm whitespace-nowrap">
+              Planbar buchen
             </span>
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-red-500 shadow-lg flex-shrink-0">
-                  <Truck className="h-6 w-6 text-white" />
-                </div>
-                <div className="min-w-0 pr-16">
-                  <h3 className="text-lg font-semibold leading-tight text-red-900">LKW-Fahrer CE – Wochenpreis</h3>
-                  <p className="text-xs text-muted-foreground">5 Einsatztage planbar</p>
-                </div>
-              </div>
+            <CardHeader className="pb-2 min-h-[64px]">
+              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">LKW-Fahrer CE – Wochenpreis</h3>
             </CardHeader>
-            <CardContent className="flex flex-col flex-1">
-              <div className="mb-4 pb-4 border-b border-border text-center">
-                <div className="text-4xl font-bold text-red-700">1.645 €</div>
-                <p className="text-sm text-red-800 font-medium">pro Woche</p>
-                <p className="text-xs text-red-700 mt-2">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
-                <p className="text-xs text-red-700 mt-1">Zusätzlich: An- und Abfahrt</p>
+            <CardContent className="flex flex-col flex-1 pt-0 text-center">
+              <div className="mb-4 pb-4 border-b border-border space-y-2">
+                <div className="text-4xl font-bold text-foreground">1.645 €</div>
+                <p className="text-sm font-medium text-foreground">pro Woche</p>
+                <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               </div>
               <Button
                 onClick={scrollToForm}
-                className="w-full h-11 text-sm font-semibold bg-red-700 hover:bg-red-800 text-white shadow-lg mt-auto"
-                size="lg"
+                className="w-full h-11 text-sm font-semibold bg-red-700 hover:bg-red-800 text-white mt-auto"
               >
                 Woche anfragen
               </Button>
@@ -91,29 +73,20 @@ const ProductCards = () => {
           </Card>
 
           {/* Fernfahrer-Pauschale */}
-          <Card className="relative overflow-hidden border-2 border-green-200 bg-green-50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-green-600 shadow-lg flex-shrink-0">
-                  <Truck className="h-6 w-6 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-semibold leading-tight text-green-900">Fernfahrer-Pauschale</h3>
-                  <p className="text-xs text-muted-foreground">1 Fernverkehrs-Einsatztag</p>
-                </div>
-              </div>
+          <Card className="bg-card border border-border border-t-4 border-t-green-600 hover:shadow-lg transition-shadow flex flex-col h-full">
+            <CardHeader className="pb-2 min-h-[64px]">
+              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">Fernfahrer-Pauschale</h3>
             </CardHeader>
-            <CardContent className="flex flex-col flex-1">
-              <div className="mb-4 pb-4 border-b border-border text-center">
-                <div className="text-4xl font-bold text-green-700">450 €</div>
-                <p className="text-sm text-green-800 font-medium">pro Einsatztag</p>
-                <p className="text-xs text-green-700 mt-2">Gültig für: 1 Fernverkehrs-Einsatztag</p>
-                <p className="text-xs text-green-700 mt-1">Zusätzlich: An- und Abfahrt</p>
+            <CardContent className="flex flex-col flex-1 pt-0 text-center">
+              <div className="mb-4 pb-4 border-b border-border space-y-2">
+                <div className="text-4xl font-bold text-foreground">450 €</div>
+                <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
+                <p className="text-xs text-muted-foreground">Gültig für: 1 Fernverkehrs-Einsatztag</p>
+                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               </div>
               <Button
                 onClick={scrollToForm}
-                className="w-full h-11 text-sm font-semibold bg-green-600 hover:bg-green-700 text-white shadow-lg mt-auto"
-                size="lg"
+                className="w-full h-11 text-sm font-semibold bg-green-700 hover:bg-green-800 text-white mt-auto"
               >
                 Fernfahrer anfragen
               </Button>
@@ -121,29 +94,20 @@ const ProductCards = () => {
           </Card>
 
           {/* Baumaschinenführer / Mischmeister */}
-          <Card className="relative overflow-hidden border-2 border-orange-200 bg-orange-50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-orange-600 shadow-lg flex-shrink-0">
-                  <Construction className="h-6 w-6 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-semibold leading-tight text-orange-900">Baumaschinenführer / Mischmeister</h3>
-                  <p className="text-xs text-muted-foreground">Deutschlandweit verfügbar</p>
-                </div>
-              </div>
+          <Card className="bg-card border border-border border-t-4 border-t-orange-500 hover:shadow-lg transition-shadow flex flex-col h-full">
+            <CardHeader className="pb-2 min-h-[64px]">
+              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">Baumaschinenführer / Mischmeister</h3>
             </CardHeader>
-            <CardContent className="flex flex-col flex-1">
-              <div className="mb-4 pb-4 border-b border-border text-center">
-                <div className="text-4xl font-bold text-orange-700">489 €</div>
-                <p className="text-sm text-orange-800 font-medium">pro Einsatztag</p>
-                <p className="text-xs text-orange-700 mt-2">Gültig für: bis 8 Stunden</p>
-                <p className="text-xs text-orange-700 mt-1">Zusätzlich: An- und Abfahrt</p>
+            <CardContent className="flex flex-col flex-1 pt-0 text-center">
+              <div className="mb-4 pb-4 border-b border-border space-y-2">
+                <div className="text-4xl font-bold text-foreground">489 €</div>
+                <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
+                <p className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden</p>
+                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               </div>
               <Button
                 onClick={scrollToForm}
-                className="w-full h-11 text-sm font-semibold bg-orange-600 hover:bg-orange-700 text-white shadow-lg mt-auto"
-                size="lg"
+                className="w-full h-11 text-xs sm:text-sm font-semibold bg-orange-600 hover:bg-orange-700 text-white mt-auto whitespace-normal leading-tight px-2"
               >
                 Baumaschinen / Mischmeister anfragen
               </Button>
