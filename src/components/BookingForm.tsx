@@ -27,7 +27,7 @@ const BookingForm = () => {
   const { toast } = useToast();
 
   const vehicleOptions = [
-    "Baumaschinenführer (459 €/Tag)",
+    "Baumaschinenführer / Mischmeister (489 €/Einsatztag)",
     "LKW CE Fahrer (349 €/Tag)"
   ];
 
@@ -63,8 +63,8 @@ const BookingForm = () => {
     // Track conversion event
     try {
       // Track with category-specific details
-      const isBaumaschine = vehicleTypes.includes('Baumaschinenführer');
-      const isLKW = vehicleTypes.includes('LKW CE Fahrer');
+      const isBaumaschine = vehicleTypes.some(v => v.startsWith('Baumaschinenführer'));
+      const isLKW = vehicleTypes.some(v => v.startsWith('LKW CE Fahrer'));
       
       if (typeof (window as any).gtag === 'function') {
         (window as any).gtag('event', 'submit_fahrer_buchen', {
@@ -79,8 +79,8 @@ const BookingForm = () => {
         if (isBaumaschine) {
           (window as any).gtag('event', 'category_submit_baumaschine', {
             event_category: 'Form Submission',
-            event_label: 'Baumaschinenführer',
-            value: 459
+            event_label: 'Baumaschinenführer / Mischmeister',
+            value: 489
           });
         }
         if (isLKW) {

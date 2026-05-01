@@ -31,7 +31,7 @@ const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16 max-w-7xl mx-auto">
           {/* LKW CE Fahrer */}
           <Card className="border-primary bg-primary/5 hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader className="bg-primary/10 rounded-t-lg">
@@ -114,21 +114,21 @@ const PricingSection = () => {
           <Card className="border-muted bg-muted/10 hover:shadow-lg transition-shadow flex flex-col">
             <CardHeader className="bg-muted/20 rounded-t-lg">
               <CardTitle className="text-lg flex items-center gap-2">
-                Baumaschinen­führer
+                Baumaschinenführer / Mischmeister
                 <Badge variant="secondary">Vermittelt</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
               <div>
-                <h3 className="font-semibold text-base mb-2">Bagger, Radlader & mehr</h3>
-                <p className="text-2xl font-bold text-foreground">459 € / Tag</p>
-                <p className="text-sm text-muted-foreground">8 Std. • 60 € Überstunde</p>
+                <h3 className="font-semibold text-base mb-2">Bagger, Radlader & Flüssigboden</h3>
+                <p className="text-2xl font-bold text-foreground">489 € / Einsatztag</p>
+                <p className="text-sm text-muted-foreground">bis 8 Std. · zzgl. An- und Abfahrt</p>
               </div>
               <div className="pt-3 border-t flex-1">
                 <ul className="text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Bagger, Radlader, Fahrmischer</span>
+                    <span>Bagger, Radlader, Fahrmischer, Mischanlagen</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
@@ -136,58 +136,20 @@ const PricingSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary mt-0.5">✓</span>
-                    <span>Baustellenlogistik</span>
+                    <span>Baustellenlogistik & Flüssigboden</span>
                   </li>
                 </ul>
               </div>
               <Button 
                 className="w-full mt-auto"
                 variant="outline"
-                onClick={() => trackClick('category_click_baumaschinen', 'Baumaschinenführer', 459)}
+                onClick={() => trackClick('category_click_baumaschinen', 'Baumaschinenführer / Mischmeister', 489)}
               >
-                Baumaschinenführer buchen
+                Baumaschinen / Mischmeister buchen
               </Button>
             </CardContent>
           </Card>
 
-          {/* Mischmeister */}
-          <Card className="border-blue-500 bg-blue-50 hover:shadow-lg transition-shadow flex flex-col">
-            <CardHeader className="bg-blue-100 rounded-t-lg">
-              <CardTitle className="text-lg flex items-center gap-2">
-                Mischmeister
-                <Badge className="bg-blue-600 text-white">Flüssigboden</Badge>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 flex flex-col flex-1 pt-4">
-              <div>
-                <h3 className="font-semibold text-base mb-2">Anlagenbediener Flüssigboden</h3>
-                <p className="text-2xl font-bold text-blue-700">489 € / Tag</p>
-                <p className="text-sm text-muted-foreground">8 Std. • 65 € Überstunde</p>
-              </div>
-              <div className="pt-3 border-t flex-1">
-                <ul className="text-sm space-y-2">
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-0.5">✓</span>
-                    <span>Mischanlage bedienen</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-0.5">✓</span>
-                    <span>Radlader, Bagger, Fahrmischer</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-0.5">✓</span>
-                    <span>Anlage bauseits gestellt</span>
-                  </li>
-                </ul>
-              </div>
-              <Button 
-                className="w-full mt-auto bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => trackClick('category_click_mischmeister', 'Mischmeister', 489)}
-              >
-                Mischmeister buchen
-              </Button>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Fernfahrer-Pauschale Details */}

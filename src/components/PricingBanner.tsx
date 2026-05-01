@@ -55,17 +55,17 @@ const PricingBanner = () => {
             </CardContent>
           </Card>
 
-          {/* Baumaschinenführer */}
+          {/* Baumaschinenführer / Mischmeister */}
           <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-xl transition-all duration-300">
             <CardContent className="p-6">
               <div className="text-center">
                 <div className="inline-block bg-orange-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-3">
                   SPEZIALIST
                 </div>
-                <h3 className="text-2xl font-bold text-orange-900 mb-2">Baumaschinenführer</h3>
-                <div className="text-5xl font-bold text-orange-700 mb-2">459 €</div>
-                <p className="text-orange-800 font-medium mb-1">pro Tag (8 Std.)</p>
-                <p className="text-orange-700 text-sm mb-4">+ 60 € je Überstunde</p>
+                <h3 className="text-2xl font-bold text-orange-900 mb-2">Baumaschinenführer / Mischmeister</h3>
+                <div className="text-5xl font-bold text-orange-700 mb-2">489 €</div>
+                <p className="text-orange-800 font-medium mb-1">pro Einsatztag</p>
+                <p className="text-orange-700 text-sm mb-4">bis 8 Stunden · zzgl. An- und Abfahrt</p>
                 
                 <div className="bg-white/60 backdrop-blur-sm rounded-lg p-3 mb-4 text-left text-sm space-y-1">
                   <p className="flex items-center gap-2">
