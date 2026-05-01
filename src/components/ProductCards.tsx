@@ -99,7 +99,7 @@ const ProductCards = () => {
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-lg font-semibold leading-tight text-green-900">Fernfahrer-Pauschale</h3>
-                  <p className="text-xs text-muted-foreground">Fernverkehrseinsatz</p>
+                  <p className="text-xs text-muted-foreground">1 Fernverkehrs-Einsatztag</p>
                 </div>
               </div>
             </CardHeader>
