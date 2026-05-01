@@ -15,7 +15,7 @@ const FlüssigbodenService = () => {
       (window as any).gtag('event', 'category_view_fluessigboden', {
         event_category: 'Page View',
         event_label: 'Flüssigboden Service',
-        value: 459
+        value: 489
       });
     }
   }, []);
@@ -424,7 +424,7 @@ const FlüssigbodenService = () => {
               <Card className="hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-lg">Baumaschinenführer</CardTitle>
-                  <p className="text-sm text-muted-foreground">Bagger, Radlader, Mischanlagen – 459 € pro Tag</p>
+                  <p className="text-sm text-muted-foreground">Bagger, Radlader, Mischanlagen – 489 € pro Einsatztag</p>
                 </CardHeader>
                 <CardContent>
                   <Button asChild variant="outline" className="w-full">
