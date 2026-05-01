@@ -112,7 +112,7 @@ const SimpleBookingForm = () => {
         (window as any).gtag('event', isBaumaschinen ? 'category_submit_baumaschinen' : 'category_submit_lkw', {
           event_category: 'Form Submission',
           event_label: fahrzeugtyp,
-          value: isBaumaschinen ? 459 : 349
+          value: isBaumaschinen ? 489 : 349
         });
       }
 
@@ -313,10 +313,10 @@ const SimpleBookingForm = () => {
                   </CardHeader>
                   <CardContent className="space-y-2 px-3 pb-3">
                     <div className="bg-white rounded-lg p-3 border-2 border-orange-200 shadow-sm">
-                      <div className="text-2xl font-bold text-orange-700 mb-0.5">459 €</div>
-                      <div className="text-xs text-gray-600">pro 8-Std.-Tag (netto)</div>
+                    <div className="text-2xl font-bold text-orange-700 mb-0.5">489 €</div>
+                      <div className="text-xs text-gray-600">pro Einsatztag (bis 8 Std., netto)</div>
                       <div className="mt-2 pt-2 border-t border-orange-200">
-                        <div className="text-xs font-medium text-orange-600">Überstunden: 60 €/h</div>
+                        <div className="text-xs font-medium text-orange-600">zzgl. An- und Abfahrt</div>
                       </div>
                     </div>
                     <ul className="text-xs space-y-1 text-gray-700">
@@ -843,7 +843,7 @@ const SimpleBookingForm = () => {
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
-                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Tarif 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' ? '459' : fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
+                      <div className="text-sm opacity-90">{longDistance && fahrzeugtyp === 'LKW CE' ? 'Fernfahrer-Tarif 450 € netto' : `ab ${fahrzeugtyp === 'Baumaschinenführer' || fahrzeugtyp === 'Mischmeister' ? '489' : '349'} € netto`}</div>
                     </div>
                   )}
                 </Button>
