@@ -61,64 +61,70 @@ const PreiseUndAblauf = () => {
               <p className="text-center text-sm text-muted-foreground max-w-3xl mx-auto mb-8">
                 Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen. Fahrzeuge werden nicht gestellt. Alle Preise verstehen sich netto zzgl. gesetzlicher MwSt.
               </p>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mb-6">
-                <Card className="relative border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
-                  <div className="absolute top-3 right-3 bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full">
-                    Beliebte Bestellung
-                  </div>
-                  <CardHeader>
-                    <CardTitle className="text-xl text-red-900">LKW-Fahrer CE</CardTitle>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto mb-6">
+                <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
+                  <CardHeader className="pb-3">
+                    <span className="inline-block self-start bg-red-700 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full mb-2 w-fit">
+                      Beliebte Bestellung
+                    </span>
+                    <CardTitle className="text-lg sm:text-xl text-red-900 leading-snug">
+                      LKW-Fahrer CE
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-red-700 text-xs mt-3">Gültig für: bis 10 Stunden</p>
-                      <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                      <p className="text-red-700 text-xs mt-3 leading-snug">Gültig für: bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="border border-red-200 bg-red-50/50 hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-red-900">LKW-Fahrer CE – Wochenpreis</CardTitle>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg sm:text-xl text-red-900 leading-snug">
+                      LKW-Fahrer CE – Wochenpreis
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">1.645 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Woche</p>
-                      <p className="text-red-700 text-xs mt-3">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
-                      <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                      <p className="text-red-700 text-xs mt-3 leading-snug">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-xl text-green-900">Fernfahrer-Pauschale</CardTitle>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg sm:text-xl text-green-900 leading-snug">
+                      Fernfahrer-Pauschale
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
                       <p className="text-green-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-green-700 text-xs mt-3">Gültig für: Fernverkehrseinsatz</p>
-                      <p className="text-green-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                      <p className="text-green-700 text-xs mt-3 leading-snug">Gültig für: Fernverkehrseinsatz</p>
+                      <p className="text-green-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="text-lg text-orange-900">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base sm:text-lg text-orange-900 leading-snug">
                       Baumaschinenführer / Mischmeister
                     </CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="pt-0">
                     <div className="text-center">
                       <div className="text-4xl font-bold text-orange-700 mb-2">489 €</div>
                       <p className="text-orange-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-orange-700 text-xs mt-3">Gültig für: bis 8 Stunden</p>
-                      <p className="text-orange-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                      <p className="text-orange-700 text-xs mt-3 leading-snug">Gültig für: bis 8 Stunden</p>
+                      <p className="text-orange-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
                 </Card>
