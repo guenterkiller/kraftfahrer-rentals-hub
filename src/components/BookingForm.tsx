@@ -355,7 +355,7 @@ const BookingForm = () => {
                         />
                         <div>
                           <Label htmlFor="fernverkehr-booking" className="font-semibold text-green-900">
-                            Fernfahrer-Pauschale (Fernverkehrseinsatz)
+                            Fernfahrer-Pauschale (1 Fernverkehrs-Einsatztag)
                           </Label>
                           <p className="text-xs text-green-800 mt-1">
                             450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
@@ -437,7 +437,7 @@ const BookingForm = () => {
                   <ul className="space-y-1">
                     <li>• <strong>Frühester Einsatz:</strong> nächster Werktag nach schriftlicher Bestätigung (werktags)</li>
                     <li>• <strong>Same-Day nicht möglich</strong> - Planung benötigt ausreichend Vorlauf</li>
-                    <li>• <strong>Weite Einsätze (&gt;150 km):</strong> Anreise am Vortag empfohlen; Übernachtung nach Vereinbarung</li>
+                    <li>• <strong>Weite Einsätze (&gt;150 km):</strong> Anreise am Vortag empfohlen; Details nach Vereinbarung</li>
                   </ul>
                 </div>
 
