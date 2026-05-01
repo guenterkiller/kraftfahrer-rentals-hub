@@ -113,9 +113,9 @@
 
 | Element | Inhalt | Zeichen |
 |---------|--------|---------|
-| **Title** | Baumaschinenführer buchen deutschlandweit – ab 459 €/Tag | 56 ✅ |
+| **Title** | Baumaschinenführer buchen deutschlandweit – ab 489 €/Tag | 56 ✅ |
 | **H1** | Baumaschinenführer deutschlandweit buchen | 40 ✅ |
-| **Description** | Baumaschinenführer mieten, leihen oder bestellen – Baggerfahrer, Radladerfahrer auf Abruf. Tageweise, ohne AÜG. 459 €/Tag. | 120 ✅ |
+| **Description** | Baumaschinenführer mieten, leihen oder bestellen – Baggerfahrer, Radladerfahrer auf Abruf. Tageweise, ohne AÜG. 489 €/Tag. | 120 ✅ |
 
 **Bewertung:** ✅ Eigene Produktkategorie (Baumaschinen ≠ LKW).
 
