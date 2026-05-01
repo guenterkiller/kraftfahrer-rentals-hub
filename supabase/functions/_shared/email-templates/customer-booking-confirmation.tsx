@@ -54,7 +54,7 @@ export const CustomerBookingConfirmation = ({
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Tarif:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
-            {isFernfahrerTarif ? 'Fernfahrer-Tarif (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
+            {isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
           </td>
         </tr>
         {requirements.length > 0 && (
@@ -81,7 +81,7 @@ export const CustomerBookingConfirmation = ({
     {isFernfahrerTarif && (
       <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeftColor: '#3b82f6' })}>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.
+          Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
         </Text>
       </Section>
     )}
@@ -97,48 +97,18 @@ export const CustomerBookingConfirmation = ({
 
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />
 
-      {isFernfahrerTarif ? (
-        <>
-          <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Fernfahrer-Tarif (LKW CE)</Heading>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
-            <strong>450 € netto pro Einsatztag</strong>
-          </Text>
-          <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
-            Pauschale pro Einsatztag – keine Stundenabrechnung.
-            Gilt für Fernverkehr mit Übernachtung im LKW.
-          </Text>
-        </>
-      ) : (
-        <>
-          <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>LKW CE Fahrer</Heading>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
-            <strong>ab 349 € pro Tag</strong> (8 Stunden) | <strong>ab 30 € pro Überstunde</strong>
-          </Text>
-          <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
-            Gilt für: Fahrmischer, Fernverkehr, Nahverkehr, ADR, Container, Wechselbrücke,
-            Kühltransport, Baustellenverkehr, Event- und Messe-Logistik u. v. m.
-          </Text>
-        </>
-      )}
-
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Baumaschinenführer</Heading>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 5px 0' })}>
-        <strong>ab 459 € pro Tag</strong> (8 Stunden) | <strong>ab 60 € pro Überstunde</strong>
+      <Text {...getTextProps({ ...textStyles.paragraph })}>
+        Preis gemäß Auswahl zzgl. An- und Abfahrt. Weitere Kosten nur nach vorheriger Vereinbarung.
       </Text>
-      <Text {...getTextProps({ ...textStyles.muted, marginBottom: '20px' })}>
-        Gilt für: Bagger, Radlader, Fahrmischer, Flüssigboden, Mischanlagen,
-        Störungsbehebung, Baustellenlogistik & Materialfluss.
-      </Text>
-
-      <Heading {...getTextProps({ ...textStyles.heading3, fontSize: '15px', marginBottom: '10px' }, 'small-heading')}>Fahrtkosten & Langzeiteinsätze</Heading>
-      <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li><strong>Fahrtkosten:</strong> 25 km inklusive, danach 0,40 €/km (Hin- und Rückweg)</li>
-        <li><strong>Langzeiteinsätze:</strong> Ab 3 Monaten individuelle Konditionen auf Anfrage</li>
+      <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+        <li><strong>LKW-Fahrer CE:</strong> 349 € pro Einsatztag (bis 10 Stunden)</li>
+        <li><strong>LKW-Fahrer CE – Wochenpreis:</strong> 1.645 € pro Woche (5 Einsatztage à bis 10 Stunden)</li>
+        <li><strong>Fernfahrer-Pauschale:</strong> 450 € pro Fernverkehrs-Einsatztag</li>
+        <li><strong>Baumaschinenführer / Mischmeister:</strong> 489 € pro Einsatztag (bis 8 Stunden)</li>
+        <li><strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer</li>
       </ul>
-
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
-        Alle Preise netto zzgl. gesetzlicher MwSt., Fahrt- und ggf. Übernachtungskosten.
-        Die Abrechnung erfolgt nach tatsächlichem Einsatzumfang.
+        Alle Preise netto zzgl. gesetzlicher MwSt.
       </Text>
     </Section>
 

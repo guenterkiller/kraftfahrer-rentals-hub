@@ -82,7 +82,7 @@ export const AdminBookingNotification = ({
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tarif:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold', color: isFernfahrerTarif ? '#3b82f6' : undefined }}>
-            {isFernfahrerTarif ? 'Fernfahrer-Tarif (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
+            {isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
           </td>
         </tr>
         {requirements.length > 0 && (
@@ -101,7 +101,7 @@ export const AdminBookingNotification = ({
     {isFernfahrerTarif && (
       <Section style={{ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6' }}>
         <Text style={{ ...textStyles.paragraph, margin: '0' }}>
-          <strong>ℹ️ Fernfahrer-Tarif aktiv:</strong> Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.
+          <strong>Fernfahrer-Pauschale aktiv:</strong> 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
         </Text>
       </Section>
     )}
