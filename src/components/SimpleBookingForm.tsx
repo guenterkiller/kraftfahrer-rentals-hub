@@ -673,10 +673,10 @@ const SimpleBookingForm = () => {
                         />
                         <div>
                           <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
-                            🛣️ Fernfahrer-Tarif (Woche / im LKW übernachten)
+                            Fernfahrer-Pauschale (Fernverkehrseinsatz)
                           </Label>
                           <p className="text-xs text-green-800 mt-1">
-                            Fernfahrer-Tarif gilt für Fernverkehr mit Übernachtung im LKW und durchgehender Abwesenheit von zuhause. Abrechnung pauschal pro Einsatztag – keine Stundenabrechnung.
+                            450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
                           </p>
                         </div>
                       </div>
