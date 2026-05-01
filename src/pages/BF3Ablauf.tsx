@@ -144,52 +144,21 @@ const BF3Ablauf = () => {
                     💡 Hinweis: Die Preise gelten nur für den Fahrer. Ihr Begleitfahrzeug mit WVZA-Ausrüstung ist nicht enthalten.
                   </p>
                 </div>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4">Standardpreise</h3>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>BF3-Fahrer (pro Stunde)</span>
-                        <span className="font-semibold">45-65€</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>Anfahrtskosten (pro km)</span>
-                        <span className="font-semibold">0,50€</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>Mindestdauer</span>
-                        <span className="font-semibold">4 Stunden</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="text-xl font-semibold mb-4">Zusatzkosten</h3>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>Übernachtung auswärts</span>
-                        <span className="font-semibold">90-120€</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>Wochenend-/Feiertagszuschlag</span>
-                        <span className="font-semibold">+25%</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>Nachtzuschlag (22-6 Uhr)</span>
-                        <span className="font-semibold">+30%</span>
-                      </div>
-                      <div className="flex justify-between items-center border-b pb-2">
-                        <span>Wartezeit (pro Stunde)</span>
-                        <span className="font-semibold">50€</span>
-                      </div>
-                    </div>
+                <div className="grid md:grid-cols-1 gap-6">
+                  <div className="p-5 bg-background rounded-lg border-2 border-primary/20">
+                    <h3 className="text-xl font-semibold mb-3">BF3 Begleitfahrer – Konditionen</h3>
+                    <ul className="space-y-2 text-sm">
+                      <li>• Tagessatz auf Anfrage – abhängig von Einsatzart, Strecke und Dauer</li>
+                      <li>• Zusätzlich: An- und Abfahrt – erste 25 km der Gesamtstrecke frei, ab dem 26. km 0,40 € je gefahrenem Kilometer</li>
+                      <li>• Weitere Kosten nur nach vorheriger Vereinbarung</li>
+                    </ul>
                   </div>
                 </div>
-                
+
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <p className="text-sm">
-                    <strong>💡 Kostentipp:</strong> BF3-Fahrer oft günstiger als Polizeibegleitung bei längeren Transporten (über 300 km). 
-                    Ihr eigenes Begleitfahrzeug spart zusätzliche Mietkosten.
+                    <strong>Hinweis:</strong> BF3-Fahrer können bei längeren Transporten eine wirtschaftliche Alternative zur Polizeibegleitung sein.
+                    Ihr eigenes Begleitfahrzeug mit WVZA bleibt Voraussetzung.
                   </p>
                 </div>
               </CardContent>
