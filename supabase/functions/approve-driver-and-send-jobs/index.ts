@@ -206,7 +206,7 @@ serve(async (req) => {
     const driverHtml = await renderAsync(
       React.createElement(DriverApprovalEmail, {
         driverName: `${driver.vorname} ${driver.nachname}`,
-        jobs: matchingJobs,
+        hasMatchingJobs: invitesToSend.length > 0,
       })
     );
 
@@ -273,6 +273,7 @@ serve(async (req) => {
             <a href="${acceptLink}" style="background:#10b981;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;margin-right:10px;">Ich kann den Auftrag übernehmen</a>
             <a href="${declineLink}" style="background:#ef4444;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Ich kann nicht übernehmen</a>
           </div>
+          <p style="color:#374151;font-size:14px;margin:16px 0;">Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress.</p>
           <p style="color:#666;font-size:13px;">Diese Links sind 48 Stunden gültig.<br/>Rückfragen: +49-1577-1442285 · info@kraftfahrer-mieten.com</p>
         </div>`;
       try {
