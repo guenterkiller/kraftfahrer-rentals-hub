@@ -256,26 +256,52 @@ serve(async (req) => {
       const acceptLink = `${SUPABASE_URL}/functions/v1/respond-invite?a=accept&t=${token}`;
       const declineLink = `${SUPABASE_URL}/functions/v1/respond-invite?a=decline&t=${token}`;
       const inviteSubject = `Auftragsangebot: ${job.fahrzeugtyp} – ${job.einsatzort}`;
-      const inviteHtml = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color:#1f2937;">Neues Auftragsangebot</h2>
-          <p>Hallo ${driver.vorname || ''},</p>
-          <p>für Sie liegt ein passendes Auftragsangebot vor:</p>
-          <div style="background:#f9fafb;border:1px solid #e5e7eb;padding:20px;border-radius:8px;margin:20px 0;">
-            <p><strong>Einsatzort:</strong> ${job.einsatzort || '-'}</p>
-            <p><strong>Zeitraum:</strong> ${job.zeitraum || '-'}</p>
-            <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp || '-'}</p>
-            <p><strong>Führerschein:</strong> ${job.fuehrerscheinklasse || '-'}</p>
-            ${job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${job.besonderheiten}</p>` : ''}
-            ${job.nachricht ? `<p><strong>Tätigkeit:</strong> ${job.nachricht}</p>` : ''}
+      const escape = (s: any) => String(s ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const nl2br = (s: any) => escape(s).replace(/\n/g, '<br/>');
+      const inviteHtml = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f3f4f6;">
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background:#ffffff; padding:24px;">
+          <h2 style="color:#1f2937;margin:0 0 16px 0;">Auftragsangebot</h2>
+          <p style="color:#111827;font-size:15px;">Hallo ${escape(driver.vorname || '')},</p>
+          <p style="color:#111827;font-size:15px;">für Sie liegt ein passendes Auftragsangebot vor.</p>
+
+          <h3 style="color:#1f2937;font-size:16px;margin:24px 0 8px 0;">Einsatzdetails</h3>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;width:100%;">
+            <tr><td style="padding:6px 0;color:#374151;font-size:14px;"><strong>Einsatzort:</strong> ${escape(job.einsatzort || '-')}</td></tr>
+            <tr><td style="padding:6px 0;color:#374151;font-size:14px;"><strong>Zeitraum:</strong> ${escape(job.zeitraum || '-')}</td></tr>
+            <tr><td style="padding:6px 0;color:#374151;font-size:14px;"><strong>Fahrzeugtyp:</strong> ${escape(job.fahrzeugtyp || '-')}</td></tr>
+            <tr><td style="padding:6px 0;color:#374151;font-size:14px;"><strong>Führerschein:</strong> ${escape(job.fuehrerscheinklasse || '-')}</td></tr>
+            ${job.besonderheiten ? `<tr><td style="padding:6px 0;color:#374151;font-size:14px;"><strong>Besonderheiten:</strong> ${escape(job.besonderheiten)}</td></tr>` : ''}
+          </table>
+
+          ${job.nachricht ? `
+          <h3 style="color:#1f2937;font-size:16px;margin:24px 0 8px 0;">Aufgabenbeschreibung laut Auftrag</h3>
+          <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;color:#374151;font-size:14px;line-height:1.5;">${nl2br(job.nachricht)}</div>
+          ` : ''}
+
+          <h3 style="color:#1f2937;font-size:16px;margin:28px 0 12px 0;">Ihre Rückmeldung</h3>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 8px 0;">
+            <tr><td style="padding:6px 0;">
+              <a href="${acceptLink}" style="background:#10b981;color:#ffffff;padding:14px 24px;text-decoration:none;border-radius:6px;display:inline-block;font-weight:600;font-size:15px;min-width:240px;text-align:center;">Ich kann den Auftrag übernehmen</a>
+            </td></tr>
+            <tr><td style="padding:6px 0;">
+              <a href="${declineLink}" style="background:#6b7280;color:#ffffff;padding:14px 24px;text-decoration:none;border-radius:6px;display:inline-block;font-weight:600;font-size:15px;min-width:240px;text-align:center;">Ich kann nicht übernehmen</a>
+            </td></tr>
+          </table>
+
+          <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:12px 16px;margin:20px 0;color:#92400e;font-size:14px;">
+            <strong>Hinweis:</strong> Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress.
           </div>
-          <div style="margin:24px 0;">
-            <a href="${acceptLink}" style="background:#10b981;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;margin-right:10px;">Ich kann den Auftrag übernehmen</a>
-            <a href="${declineLink}" style="background:#ef4444;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Ich kann nicht übernehmen</a>
-          </div>
-          <p style="color:#374151;font-size:14px;margin:16px 0;">Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress.</p>
-          <p style="color:#666;font-size:13px;">Diese Links sind 48 Stunden gültig.<br/>Rückfragen: +49-1577-1442285 · info@kraftfahrer-mieten.com</p>
-        </div>`;
+
+          <p style="color:#6b7280;font-size:13px;margin:16px 0;">Diese Links sind 48 Stunden gültig.</p>
+
+          <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;"/>
+          <p style="color:#374151;font-size:13px;margin:0;">
+            <strong>Rückfragen:</strong><br/>
+            Telefon: +49 1577 1442285<br/>
+            E-Mail: info@kraftfahrer-mieten.com
+          </p>
+        </div></body></html>`;
       try {
         const r = await resend.emails.send({
           from: MAIL_FROM,
