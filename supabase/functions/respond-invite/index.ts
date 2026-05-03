@@ -64,14 +64,13 @@ E-Mail: info@kraftfahrer-mieten.com
 </body>
 </html>`;
 
-  const body = new TextEncoder().encode(html);
   const headers = new Headers();
   headers.set("Content-Type", "text/html; charset=utf-8");
   headers.set("X-Content-Type-Options", "nosniff");
   headers.set("Cache-Control", "no-store");
-  headers.set("Content-Length", String(body.byteLength));
+  headers.set("Access-Control-Allow-Origin", "*");
 
-  return new Response(body, { status: 200, headers });
+  return new Response(html, { status: 200, headers });
 }
 
 const handler = async (req: Request): Promise<Response> => {
