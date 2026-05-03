@@ -9,10 +9,10 @@ function page(msg: string, isSuccess: boolean = true) {
   
   return new Response(
     `<!DOCTYPE html>
-    <html>
+    <html lang="de">
     <head>
-      <title>${msg}</title>
       <meta charset="utf-8">
+      <title>${msg}</title>
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <style>
         body { 
@@ -48,20 +48,20 @@ function page(msg: string, isSuccess: boolean = true) {
     <body>
       <div class="message">
         <h2>${msg}</h2>
-        <p>Vielen Dank! Du kannst dieses Fenster schließen.</p>
+        <p>Vielen Dank. Sie koennen dieses Fenster schliessen.</p>
       </div>
       <div class="contact">
         <p><strong>Bei Fragen:</strong></p>
         <p>
-          📞 +49-1577-1442285<br>
-          ✉️ info@kraftfahrer-mieten.com
+          Telefon: +49 1577 1442285<br>
+          E-Mail: info@kraftfahrer-mieten.com
         </p>
       </div>
     </body>
     </html>`,
     { 
       status: 200,
-      headers: { "content-type": "text/html; charset=utf-8" } 
+      headers: { "Content-Type": "text/html; charset=utf-8" } 
     }
   );
 }
@@ -75,7 +75,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`📩 Invite response: action=${action}, token=${token?.substring(0, 8)}...`);
 
     if (!action || !token || !["accept", "decline"].includes(action)) {
-      return page("❌ Ungültiger Link oder Aktion", false);
+      return page("Ungueltiger Link oder Aktion", false);
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -83,7 +83,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
-      return page("⚠️ Systemfehler: Fehlende Konfiguration", false);
+      return page("Systemfehler: Fehlende Konfiguration", false);
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -97,21 +97,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error("Error fetching invite:", error);
-      return page("⚠️ Fehler beim Laden der Einladung", false);
+      return page("Fehler beim Laden der Einladung", false);
     }
 
     if (!invite) {
-      return page("❌ Einladung nicht gefunden", false);
+      return page("Einladung nicht gefunden", false);
     }
 
     // Status prüfen
     if (invite.status !== "pending") {
-      const statusText = invite.status === "accepted" 
-        ? "angenommen" 
-        : invite.status === "declined" 
-        ? "abgelehnt" 
-        : "abgelaufen";
-      return page(`ℹ️ Bereits beantwortet: "${statusText}"`, false);
+      return page("Ihre Rueckmeldung wurde bereits erfasst.", true);
     }
 
     // Ablaufdatum prüfen
@@ -148,7 +143,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (updateError) {
       console.error("Error updating invite:", updateError);
-      return page("⚠️ Fehler beim Speichern der Antwort", false);
+      return page("Fehler beim Speichern der Antwort", false);
     }
 
     console.log(`✅ Invite ${invite.id} updated to ${newStatus}`);
@@ -220,28 +215,80 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Admin notification error:", mailErr);
     }
 
-    // Bei Accept: Assignment erstellen
+    // Bei Accept: Assignment erstellen oder vorhandenes erkennen
     if (newStatus === "accepted") {
-      const { error: rpcError } = await supabase.rpc("ensure_job_assignment", {
-        p_job_id: invite.job_id,
-        p_driver_id: invite.driver_id
-      });
+      // Doppeltes Assignment erkennen
+      const { data: existingAssignment } = await supabase
+        .from("job_assignments")
+        .select("id, status")
+        .eq("job_id", invite.job_id)
+        .eq("driver_id", invite.driver_id)
+        .maybeSingle();
 
-      if (rpcError) {
-        console.error("Error creating assignment:", rpcError);
-        return page("⚠️ Annahme gespeichert, aber Assignment-Erstellung fehlgeschlagen", false);
+      let assignmentError: any = null;
+      if (!existingAssignment) {
+        const { error: rpcError } = await supabase.rpc("ensure_job_assignment", {
+          p_job_id: invite.job_id,
+          p_driver_id: invite.driver_id,
+        });
+        assignmentError = rpcError ?? null;
+      } else {
+        console.log(`ℹ️ Assignment already exists (${existingAssignment.id}, status=${existingAssignment.status})`);
       }
 
-      console.log(`✅ Assignment created for job ${invite.job_id} and driver ${invite.driver_id}`);
-      return page("✅ Bestätigt: Du hast den Auftrag angenommen", true);
+      if (assignmentError) {
+        console.error("Error creating assignment:", assignmentError);
+        // Admin-Fehlermail
+        try {
+          const resendKey = Deno.env.get("RESEND_API_KEY");
+          const adminTo = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
+          const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
+          if (resendKey) {
+            const { data: drv } = await supabase
+              .from("fahrer_profile")
+              .select("vorname, nachname, email")
+              .eq("id", invite.driver_id)
+              .maybeSingle();
+            const drvName = drv ? `${drv.vorname ?? ""} ${drv.nachname ?? ""}`.trim() : "-";
+            const errMsg = (assignmentError as any)?.message || JSON.stringify(assignmentError);
+            const ts = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+            const errHtml = `
+              <div style="font-family:Arial,sans-serif;max-width:600px;">
+                <h2 style="color:#dc2626;">Fehler bei Assignment-Erstellung nach Fahrerannahme</h2>
+                <p><strong>Fahrername:</strong> ${drvName}</p>
+                <p><strong>Fahrer-E-Mail:</strong> ${drv?.email ?? "-"}</p>
+                <p><strong>Job-ID:</strong> ${invite.job_id}</p>
+                <p><strong>Driver-ID:</strong> ${invite.driver_id}</p>
+                <p><strong>Invite-ID:</strong> ${invite.id}</p>
+                <p><strong>Invite-Status:</strong> ${newStatus}</p>
+                <p><strong>Fehlermeldung:</strong> ${errMsg}</p>
+                <p><strong>Zeitpunkt:</strong> ${ts}</p>
+              </div>`;
+            const resendErr = new Resend(resendKey);
+            await resendErr.emails.send({
+              from: mailFrom,
+              to: [adminTo],
+              subject: "Fehler bei Assignment-Erstellung nach Fahrerannahme",
+              html: errHtml,
+            });
+          }
+        } catch (e) {
+          console.error("Failed to send admin error mail:", e);
+        }
+        // Fahrer sieht keinen technischen Fehler
+        return page("Vielen Dank. Ihre Rueckmeldung wurde uebermittelt. Fahrerexpress meldet sich zur weiteren Abstimmung.", true);
+      }
+
+      console.log(`✅ Assignment ready for job ${invite.job_id} and driver ${invite.driver_id}`);
+      return page("Bestaetigt: Sie haben den Auftrag angenommen.", true);
     } else {
       console.log(`✅ Invite declined for job ${invite.job_id}`);
-      return page("✅ Bestätigt: Du hast den Auftrag abgelehnt", true);
+      return page("Bestaetigt: Sie haben den Auftrag abgelehnt.", true);
     }
 
   } catch (e) {
     console.error("Unexpected error in respond-invite:", e);
-    return page("⚠️ Unerwarteter Fehler. Bitte melde dich beim Disponenten.", false);
+    return page("Unerwarteter Fehler. Bitte melden Sie sich beim Disponenten.", false);
   }
 };
 
