@@ -132,7 +132,9 @@ const handler = async (req: Request): Promise<Response> => {
     const userAgent = req.headers.get("user-agent") ?? "";
     const forwardedFor = req.headers.get("x-forwarded-for") ?? "";
     const realIp = req.headers.get("x-real-ip") ?? "";
-    const ip = forwardedFor || realIp || "";
+    const rawIp = forwardedFor || realIp || "";
+    // x-forwarded-for kann mehrere IPs enthalten, nur die erste verwenden
+    const ip = rawIp.split(",")[0].trim();
 
     const { error: updateError } = await supabase
       .from("assignment_invites")
