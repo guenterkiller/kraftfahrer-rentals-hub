@@ -2202,6 +2202,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                          <Check className="h-4 w-4" />
                          {confirmingAssignment === assignment.id ? "Bestätige..." : "Bestätigen & E-Mail senden"}
                        </Button>
+                       <Button
+                         size="sm"
+                         variant="outline"
+                         onClick={() => cancelAssignment(assignment.id)}
+                         className="flex items-center gap-1 h-10 w-full md:w-auto"
+                       >
+                         <X className="h-4 w-4" />
+                         Zuweisung auflösen
+                       </Button>
                     </div>
                   )}
 
@@ -2215,6 +2224,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                       >
                         <X className="h-4 w-4" />
                         No-Show markieren
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => cancelAssignment(assignment.id)}
+                        className="flex items-center gap-1 h-10 w-full md:w-auto"
+                      >
+                        <X className="h-4 w-4" />
+                        Zuweisung auflösen
                       </Button>
                     </div>
                   )}
