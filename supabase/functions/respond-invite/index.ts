@@ -224,31 +224,41 @@ const handler = async (req: Request): Promise<Response> => {
 
       const driverName = driver ? `${driver.vorname ?? ""} ${driver.nachname ?? ""}`.trim() : "Unbekannt";
       const subject = newStatus === "accepted"
-        ? "Fahrer kann Auftrag übernehmen"
-        : "Fahrer kann Auftrag nicht übernehmen";
+        ? "Fahrer möchte Auftrag übernehmen"
+        : "Fahrer lehnt Auftrag ab";
       const respondedAt = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+
+      const noteHtml = newStatus === "accepted"
+        ? `<p style="background:#fef3c7;border-left:4px solid #f59e0b;padding:12px;color:#92400e;">
+             <strong>Hinweis:</strong> Dies ist nur eine Rückmeldung des Fahrers. Der Auftrag ist noch nicht zugewiesen.
+             Die Zuweisung muss manuell im Adminbereich erfolgen.
+           </p>`
+        : `<p style="background:#fee2e2;border-left:4px solid #dc2626;padding:12px;color:#991b1b;">
+             <strong>Hinweis:</strong> Der Fahrer hat mitgeteilt, dass er diesen Auftrag nicht übernehmen möchte.
+           </p>`;
+
+      const driverContactHtml = newStatus === "accepted"
+        ? `<h3>Fahrer</h3>
+           <p>
+             <strong>Name:</strong> ${driverName}<br/>
+             <strong>E-Mail:</strong> ${driver?.email ?? "-"}<br/>
+             <strong>Telefon:</strong> ${driver?.telefon ?? "-"}
+           </p>`
+        : `<h3>Fahrer</h3>
+           <p><strong>Name:</strong> ${driverName}</p>`;
 
       const html = `
         <div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
           <h2 style="color:${newStatus === "accepted" ? "#16a34a" : "#dc2626"};">${subject}</h2>
-          <h3>Fahrer</h3>
-          <p>
-            <strong>Name:</strong> ${driverName}<br/>
-            <strong>E-Mail:</strong> ${driver?.email ?? "-"}<br/>
-            <strong>Telefon:</strong> ${driver?.telefon ?? "-"}
-          </p>
+          ${driverContactHtml}
           <h3>Auftrag</h3>
           <p>
-            <strong>Fahrzeugtyp:</strong> ${job?.fahrzeugtyp ?? "-"}<br/>
             <strong>Einsatzort:</strong> ${job?.einsatzort ?? "-"}<br/>
             <strong>Zeitraum:</strong> ${job?.zeitraum ?? "-"}<br/>
             <strong>Tätigkeit:</strong> ${job?.nachricht ?? "-"}
           </p>
-          <p>
-            <strong>Antwort:</strong> ${newStatus === "accepted" ? "übernehmen" : "nicht übernehmen"}<br/>
-            <strong>Zeitpunkt:</strong> ${respondedAt}
-          </p>
-          <p style="color:#666;font-size:12px;">Job-ID: ${invite.job_id}<br/>Fahrer-ID: ${invite.driver_id}</p>
+          ${noteHtml}
+          <p style="color:#666;font-size:12px;">Zeitpunkt: ${respondedAt}<br/>Job-ID: ${invite.job_id}<br/>Fahrer-ID: ${invite.driver_id}</p>
         </div>`;
 
       if (resendKey) {
@@ -271,74 +281,14 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Admin notification error:", mailErr);
     }
 
-    // Bei Accept: Assignment erstellen oder vorhandenes erkennen
+    // WICHTIG: respond-invite erstellt KEINE job_assignments mehr.
+    // Die Fahrerantwort ist nur eine Interessens-Rückmeldung.
+    // Die echte Zuweisung erfolgt ausschließlich manuell durch den Admin.
     if (newStatus === "accepted") {
-      // Doppeltes Assignment erkennen
-      const { data: existingAssignment } = await supabase
-        .from("job_assignments")
-        .select("id, status")
-        .eq("job_id", invite.job_id)
-        .eq("driver_id", invite.driver_id)
-        .maybeSingle();
-
-      let assignmentError: any = null;
-      if (!existingAssignment) {
-        const { error: rpcError } = await supabase.rpc("ensure_job_assignment", {
-          p_job_id: invite.job_id,
-          p_driver_id: invite.driver_id,
-        });
-        assignmentError = rpcError ?? null;
-      } else {
-        console.log(`ℹ️ Assignment already exists (${existingAssignment.id}, status=${existingAssignment.status})`);
-      }
-
-      if (assignmentError) {
-        console.error("Error creating assignment:", assignmentError);
-        // Admin-Fehlermail
-        try {
-          const resendKey = Deno.env.get("RESEND_API_KEY");
-          const adminTo = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
-          const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
-          if (resendKey) {
-            const { data: drv } = await supabase
-              .from("fahrer_profile")
-              .select("vorname, nachname, email")
-              .eq("id", invite.driver_id)
-              .maybeSingle();
-            const drvName = drv ? `${drv.vorname ?? ""} ${drv.nachname ?? ""}`.trim() : "-";
-            const errMsg = (assignmentError as any)?.message || JSON.stringify(assignmentError);
-            const ts = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
-            const errHtml = `
-              <div style="font-family:Arial,sans-serif;max-width:600px;">
-                <h2 style="color:#dc2626;">Fehler bei Assignment-Erstellung nach Fahrerannahme</h2>
-                <p><strong>Fahrername:</strong> ${drvName}</p>
-                <p><strong>Fahrer-E-Mail:</strong> ${drv?.email ?? "-"}</p>
-                <p><strong>Job-ID:</strong> ${invite.job_id}</p>
-                <p><strong>Driver-ID:</strong> ${invite.driver_id}</p>
-                <p><strong>Invite-ID:</strong> ${invite.id}</p>
-                <p><strong>Invite-Status:</strong> ${newStatus}</p>
-                <p><strong>Fehlermeldung:</strong> ${errMsg}</p>
-                <p><strong>Zeitpunkt:</strong> ${ts}</p>
-              </div>`;
-            const resendErr = new Resend(resendKey);
-            await resendErr.emails.send({
-              from: mailFrom,
-              to: [adminTo],
-              subject: "Fehler bei Assignment-Erstellung nach Fahrerannahme",
-              html: errHtml,
-            });
-          }
-        } catch (e) {
-          console.error("Failed to send admin error mail:", e);
-        }
-        // Fahrer sieht keinen technischen Fehler
-        return reply("accepted");
-      }
-
-      console.log(`✅ Assignment ready for job ${invite.job_id} and driver ${invite.driver_id}`);
+      console.log(`✅ Invite ${invite.id} accepted (Rückmeldung) – KEINE automatische Zuweisung`);
       return reply("accepted");
     } else {
-      console.log(`✅ Invite declined for job ${invite.job_id}`);
+      console.log(`✅ Invite ${invite.id} declined`);
       return reply("declined");
     }
 
