@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import useSEO from "@/hooks/useSEO";
+import { useSEO } from "@/hooks/useSEO";
 
 type ServerStatus =
   | "accepted"
