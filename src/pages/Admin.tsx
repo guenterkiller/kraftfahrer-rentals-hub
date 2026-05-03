@@ -35,6 +35,9 @@ interface FahrerProfile {
   is_blocked?: boolean;
   blocked_at?: string;
   blocked_reason?: string;
+  email_opt_out?: boolean;
+  unsubscribed_at?: string | null;
+  unsubscribed_reason?: string | null;
   created_at: string;
   dokumente: any;
   fuehrerscheinklassen: string[] | null;
