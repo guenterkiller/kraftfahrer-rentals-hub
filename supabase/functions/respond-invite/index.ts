@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 
 function page(msg: string, isSuccess: boolean = true) {
+  console.log(`[page-v3] msg=${msg}`);
   const bgColor = isSuccess ? '#d4fdf7' : '#fef2f2';
   const borderColor = isSuccess ? '#10b981' : '#ef4444';
   const textColor = isSuccess ? '#065f46' : '#991b1b';
