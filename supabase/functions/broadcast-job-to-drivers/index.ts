@@ -148,19 +148,23 @@ serve(async (req) => {
           continue;
         }
 
+        const supabaseUrlBase = Deno.env.get("SUPABASE_URL")!;
+        const acceptUrl = `${supabaseUrlBase}/functions/v1/respond-invite?a=accept&t=${token}`;
+        const declineUrl = `${supabaseUrlBase}/functions/v1/respond-invite?a=decline&t=${token}`;
+
         const html = await renderAsync(
           React.createElement(JobNotificationEmail, {
             driverName: `${driver.vorname} ${driver.nachname}`,
             driverId: driver.id,
             jobId: actualJobId,
-            customerName: job.customer_name || "Unbekannt",
-            company: job.company,
             einsatzort: job.einsatzort || "Keine Angabe",
             zeitraum: job.zeitraum || "Nach Absprache",
             fahrzeugtyp: job.fahrzeugtyp || "LKW",
             fuehrerscheinklasse: job.fuehrerscheinklasse || "C+E",
             nachricht: job.nachricht || "Keine weiteren Informationen",
             besonderheiten: job.besonderheiten,
+            acceptUrl,
+            declineUrl,
           })
         );
 
