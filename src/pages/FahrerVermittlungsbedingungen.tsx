@@ -42,10 +42,13 @@ const FahrerVermittlungsbedingungen = () => {
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">2. Rechtsstellung des Fahrers</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Der Fahrer handelt als selbstständiger Unternehmer.
+                  Der Fahrer handelt als selbstständiger Unternehmer und ist selbst verantwortlich für Gewerbeanmeldung, Steuern, Sozialabgaben, Versicherungen sowie seine persönliche Absicherung.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Es wird ausdrücklich <strong className="text-foreground">kein Arbeitsverhältnis</strong> begründet.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Es besteht kein Anspruch auf Einsätze oder eine Mindestvergütung. Der Fahrer kann einzelne Auftragsangebote frei annehmen oder ablehnen.
                 </p>
               </section>
 
@@ -64,14 +67,33 @@ const FahrerVermittlungsbedingungen = () => {
 
               <Separator />
 
-              {/* 4. Abrechnung & Auszahlung */}
+              {/* 4. Vermittlungsanteil */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">4. Abrechnung & Auszahlung</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">4. Vermittlungsanteil</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Die Abrechnung der Einsätze erfolgt über die Fahrerexpress-Agentur.
+                  Die Fahrerexpress-Agentur behält für Organisation, Vermittlung, Kundenabwicklung, Rechnungsstellung und Zahlungsüberwachung einen Vermittlungsanteil ein.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  Die Auszahlung an den Fahrer erfolgt erst nach vollständigem Zahlungseingang des Auftraggebers bei der Fahrerexpress-Agentur und spätestens innerhalb von 5 Werktagen danach.
+                  Für Standardeinsätze beträgt der Vermittlungsanteil in der Regel <strong className="text-foreground">20 %</strong> des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises ohne An- und Abfahrt.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Für Sonder-, Projekt-, Pauschal-, kurzfristige oder besonders aufwendige Einsätze kann der Vermittlungsanteil <strong className="text-foreground">bis zu 25 %</strong> betragen.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn. Der Fahrer entscheidet frei, ob er dieses Angebot annimmt oder ablehnt.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Ein Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises besteht nicht.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 5. Auszahlung */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">5. Auszahlung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Die Auszahlung erfolgt nach ordnungsgemäßer Durchführung des Einsatzes und nach Zahlungseingang des Auftraggebers, spätestens 5 Werktage danach, sofern keine berechtigten Einwendungen gegen die Leistung bestehen.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Ein Anspruch auf Vorschuss- oder Abschlagszahlungen besteht nicht.
@@ -80,19 +102,56 @@ const FahrerVermittlungsbedingungen = () => {
 
               <Separator />
 
-              {/* 5. Direktbeauftragungen */}
+              {/* 6. Keine Direktabsprachen */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">5. Direktbeauftragungen</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">6. Keine Direktabsprachen</h2>
+                <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
+                  <li>Auftraggeber dürfen nicht direkt kontaktiert werden, sofern Fahrerexpress dies nicht freigibt.</li>
+                  <li>Keine Preisabsprachen mit Auftraggebern.</li>
+                  <li>Keine Folgeaufträge am Fahrerexpress vorbei.</li>
+                  <li>Keine Weitergabe interner Einsatzdaten an Dritte.</li>
+                </ul>
+              </section>
+
+              <Separator />
+
+              {/* 7. Pflichten bei angenommenem Einsatz */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">7. Pflichten bei angenommenem Einsatz</h2>
+                <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
+                  <li>pünktliches Erscheinen am Einsatzort</li>
+                  <li>ordnungsgemäße Durchführung des Einsatzes</li>
+                  <li>sofortige Meldung bei Problemen oder Verzögerungen</li>
+                  <li>richtige und vollständige Angaben zu Qualifikationen</li>
+                  <li>sorgfältiger Umgang mit Fahrzeugen, Maschinen und Kundenmaterial</li>
+                </ul>
+              </section>
+
+              <Separator />
+
+              {/* 8. Nichterscheinen / Abbruch */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">8. Nichterscheinen / Abbruch</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Direkte Beauftragungen durch Auftraggeber, die über Fahrerexpress vermittelt wurden, sind im sachlichen Zusammenhang mit dem jeweiligen Projekt unzulässig.
+                  Bei schuldhafter Pflichtverletzung, insbesondere bei Nichterscheinen nach angenommener Einsatzbestätigung oder unberechtigtem Abbruch des Einsatzes, kann der Fahrer für daraus entstehende Schäden im gesetzlich zulässigen Umfang haften.
                 </p>
               </section>
 
               <Separator />
 
-              {/* 6. Vertragsschluss */}
+              {/* 9. Sperrung */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">6. Vertragsschluss</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">9. Sperrung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Bei erheblichen Pflichtverletzungen kann Fahrerexpress den Fahrer vorübergehend oder dauerhaft von weiteren Einsatzangeboten ausschließen.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 10. Vertragsschluss */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">10. Vertragsschluss</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Der Vertrag kommt zustande durch:
                 </p>
@@ -107,9 +166,9 @@ const FahrerVermittlungsbedingungen = () => {
 
               <Separator />
 
-              {/* 7. Gerichtsstand */}
+              {/* 11. Gerichtsstand */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">7. Gerichtsstand</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">11. Gerichtsstand</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Gerichtsstand ist – soweit gesetzlich zulässig – Frankfurt am Main.
                 </p>
