@@ -22,16 +22,19 @@ export const DriverApprovalEmail = ({
   jobs = [],
 }: DriverApprovalEmailProps) => {
   return (
-    <BaseEmail previewText="Sie sind freigeschaltet! Aktuelle Fahrergesuche verfügbar">
-      <Heading style={textStyles.h1}>Freischaltung erfolgreich 🎉</Heading>
-      
+    <BaseEmail previewText="Sie sind jetzt bei Fahrerexpress freigeschaltet">
+      <Heading style={textStyles.h1}>Sie sind jetzt bei Fahrerexpress freigeschaltet</Heading>
+
       <Text style={textStyles.paragraph}>
         Hallo {driverName},
       </Text>
-      
+
       <Text style={textStyles.paragraph}>
-        wir freuen uns, Ihnen mitteilen zu können, dass Sie jetzt <strong>freigeschaltet</strong> sind 
-        und Fahrergesuche erhalten können!
+        wir freuen uns, Ihnen mitteilen zu können, dass Ihr Fahrerprofil freigeschaltet wurde.
+      </Text>
+
+      <Text style={textStyles.paragraph}>
+        Sie können ab sofort passende Fahrergesuche von Fahrerexpress erhalten.
       </Text>
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
@@ -95,7 +98,7 @@ export const DriverApprovalEmail = ({
         <Section style={boxStyles.info}>
           <Text style={textStyles.paragraph}>
             Derzeit sind keine offenen Fahrergesuche verfügbar. Wir melden uns bei Ihnen,
-            sobald neue Anfragen eingehen.
+            sobald passende Anfragen eingehen.
           </Text>
         </Section>
       )}
@@ -108,8 +111,19 @@ export const DriverApprovalEmail = ({
           📋 Wichtig: Vermittlungsbedingungen
         </Heading>
         <Text style={textStyles.paragraph}>
-          Für Fahrer gelten transparente Vermittlungsbedingungen, die bei tatsächlichem Einsatz fällig werden.
-          Details hierzu erhalten Sie in Ihrer persönlichen Vereinbarung mit Fahrerexpress.
+          Für die Zusammenarbeit gelten die Vermittlungsbedingungen für Fahrer.
+        </Text>
+        <Text style={textStyles.paragraph}>
+          Jeder Einsatz wird Ihnen vorab einzeln angeboten. Dabei erhalten Sie alle wichtigen
+          Informationen zum Einsatzort, Zeitraum, Fahrzeug, zur Tätigkeit, zu besonderen Anforderungen
+          und zur vorgesehenen Vergütung.
+        </Text>
+        <Text style={textStyles.paragraph}>
+          Sie entscheiden bei jedem Angebot frei, ob Sie den Einsatz übernehmen möchten oder nicht.
+        </Text>
+        <Text style={textStyles.paragraph}>
+          Die konkrete Vergütung und der Vermittlungsanteil ergeben sich ausschließlich aus dem
+          jeweiligen Auftragsangebot vor Einsatzbeginn.
         </Text>
         <Text style={textStyles.paragraph}>
           Sie stellen Ihre Rechnung nach Einsatzabschluss direkt an Fahrerexpress.
