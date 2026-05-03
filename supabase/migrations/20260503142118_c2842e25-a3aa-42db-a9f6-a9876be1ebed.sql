@@ -1,0 +1,1 @@
+UPDATE public.assignment_invites SET status='pending', token_expires_at = now() + interval '1 hour', responded_at = NULL WHERE id IN ('cd31f058-1c75-4c30-bf72-e6ba4ad9faa3','a90bca98-a9db-4548-8f42-7f96caf8b88a');
