@@ -2035,6 +2035,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                                </Button>
+                               {f.email_opt_out && (
+                                 <Button
+                                   size="sm"
+                                   variant="outline"
+                                   className="text-xs h-7 border-orange-500 text-orange-700 hover:bg-orange-50"
+                                   onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
+                                 >
+                                   📬 Auftragsmails wieder aktivieren
+                                 </Button>
+                               )}
                              </div>
                           </TableCell>
                         </TableRow>
@@ -2121,6 +2131,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                             </Button>
+                            {f.email_opt_out && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs h-7 border-orange-500 text-orange-700 hover:bg-orange-50 flex-1"
+                                onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
+                              >
+                                📬 Mails reaktivieren
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </CardContent>
