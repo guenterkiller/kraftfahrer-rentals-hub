@@ -175,7 +175,7 @@ async function sendBlockNotification(
     await resend.emails.send({
       from: mailFrom,
       to: [driver.email],
-      subject: 'Wichtig: Sperrung Ihres Fahrerprofils bei fahrerexpress',
+      subject: 'Ihr Fahrerprofil wurde vorübergehend deaktiviert',
       html: driverEmailHtml,
     });
 
@@ -209,7 +209,7 @@ async function sendBlockNotification(
         template: 'driver_block_notice',
         recipient: driver.email,
         status: 'sent',
-        subject: 'Wichtig: Sperrung Ihres Fahrerprofils bei fahrerexpress'
+        subject: 'Ihr Fahrerprofil wurde vorübergehend deaktiviert'
       },
       {
         template: 'admin_block_notice',
