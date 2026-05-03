@@ -96,6 +96,9 @@ verify_jwt = false
 [functions.customer-unsubscribe]
 verify_jwt = false
 
+[functions.driver-unsubscribe]
+verify_jwt = false
+
 [functions.submit-fahrer-anfrage]
 verify_jwt = false
 
