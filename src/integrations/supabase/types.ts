@@ -912,10 +912,6 @@ export type Database = {
         }[]
       }
       cleanup_old_admin_sessions: { Args: never; Returns: undefined }
-      debug_echo_ids: {
-        Args: { _driver_id: string; _job_id: string }
-        Returns: Json
-      }
       ensure_job_assignment: {
         Args: { p_driver_id: string; p_job_id: string }
         Returns: undefined
