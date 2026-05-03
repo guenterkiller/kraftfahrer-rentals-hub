@@ -12,77 +12,45 @@ export const DriverBlockNotice = ({
   reason,
 }: DriverBlockNoticeProps) => {
   return (
-    <BaseEmail previewText="Wichtig: Sperrung Ihres Fahrerprofils bei fahrerexpress">
-      <Heading style={{ ...textStyles.h1, color: '#d32f2f' }}>
-        ⚠️ Sperrung Ihres Fahrerprofils
+    <BaseEmail previewText="Ihr Fahrerprofil wurde vorübergehend deaktiviert">
+      <Heading style={textStyles.h1}>
+        Ihr Fahrerprofil wurde vorübergehend deaktiviert
       </Heading>
-      
+
       <Text style={textStyles.paragraph}>
         Sehr geehrte/r {driverName},
       </Text>
-      
+
       <Text style={textStyles.paragraph}>
-        Ihr Fahrerprofil bei der Fahrerexpress-Agentur wurde <strong>vorübergehend gesperrt</strong>.
+        Ihr Fahrerprofil bei der Fahrerexpress-Agentur wurde vorübergehend deaktiviert.
       </Text>
 
-      <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
-      
-      {/* GRUND Section */}
-      <Section style={boxStyles.warning}>
-        <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          📋 Grund für die Sperrung
-        </Heading>
-        <Text style={textStyles.paragraph}>
-          {reason}
-        </Text>
-      </Section>
-
-      <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
-      
-      {/* HINWEISE Section */}
       <Section style={boxStyles.info}>
-        <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          ℹ️ Was bedeutet das?
-        </Heading>
-        <Text style={textStyles.paragraph}>
-          Während der Sperrung:
-        </Text>
-        <Text style={textStyles.paragraph}>
-          • Sie erhalten keine neuen Auftragsangebote<br />
-          • Ihr Profil ist für neue Vermittlungen inaktiv<br />
-          • Laufende Einsätze können normal abgeschlossen werden
-        </Text>
+        <Heading style={{ ...textStyles.h3, marginTop: 0 }}>Grund</Heading>
+        <Text style={textStyles.paragraph}>{reason}</Text>
       </Section>
 
-      <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
-      
-      {/* IHRE RECHTE Section */}
-      <Section style={boxStyles.highlight}>
-        <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          ⚖️ Ihre Rechte
-        </Heading>
-        <Text style={textStyles.paragraph}>
-          Sie haben das Recht:
-        </Text>
-        <Text style={textStyles.paragraph}>
-          • Stellungnahme abzugeben und Sachverhalte zu klären<br />
-          • Entsperrung zu beantragen, wenn die Gründe nicht mehr vorliegen<br />
-          • Bei Uneinigkeit rechtliche Schritte einzuleiten
-        </Text>
-        <Text style={{ ...textStyles.paragraph, fontWeight: 'bold' }}>
-          📞 Kontakt aufnehmen:
-        </Text>
-        <Text style={textStyles.paragraph}>
-          Telefon: +49-1577-1442285<br />
-          E-Mail: info@kraftfahrer-mieten.com
-        </Text>
-      </Section>
+      <Text style={textStyles.paragraph}>
+        Während der Deaktivierung erhalten Sie keine neuen Auftragsangebote über Fahrerexpress.
+        Bereits abgestimmte oder laufende Einsätze bleiben davon unberührt, sofern nichts anderes
+        vereinbart wurde.
+      </Text>
 
-      <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
-      
-      <Text style={textStyles.muted}>
-        Diese E-Mail dient ausschließlich Ihrer Information. Bei Fragen oder zur Klärung des Sachverhalts 
-        stehen wir Ihnen gerne zur Verfügung.
+      <Text style={textStyles.paragraph}>
+        Wenn Sie Ihr Profil wieder aktivieren möchten oder Fragen zur Deaktivierung haben, melden
+        Sie sich bitte bei uns.
+      </Text>
+
+      <Text style={textStyles.paragraph}>
+        Telefon: +49 1577 1442285<br />
+        E-Mail: info@kraftfahrer-mieten.com
+      </Text>
+
+      <Text style={textStyles.paragraph}>
+        Mit freundlichen Grüßen<br /><br />
+        Fahrerexpress-Agentur<br />
+        Günter Killer<br />
+        Vermittlung gewerblicher Fahrer
       </Text>
     </BaseEmail>
   );
