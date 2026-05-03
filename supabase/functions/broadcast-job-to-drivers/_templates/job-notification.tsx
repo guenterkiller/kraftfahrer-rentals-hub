@@ -156,22 +156,20 @@ export const JobNotificationEmail = ({
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
       
-      {/* Vermittlungsgebühr Info */}
+      {/* Vergütung & Vermittlungsanteil */}
       <Section style={boxStyles.highlight}>
         <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          📋 Vermittlungsgebühr
+          📋 Vergütung & Vermittlungsanteil
         </Heading>
         <Text style={textStyles.paragraph}>
-          Die Vermittlungsgebühr beträgt bei jedem Einsatz:
+          Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot,
+          das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Maßgeblich ist ausschließlich dieses Angebot.
         </Text>
         <Text style={textStyles.paragraph}>
-          • <strong>15 % für LKW CE Fahrer</strong><br />
-          • <strong>20 % für Baumaschinenführer</strong>
-        </Text>
-        <Text style={textStyles.paragraph}>
-          Die Vermittlungsgebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
-          Sie stellen Ihre Rechnung an Fahrerexpress über den vollen Tagespreis laut Website; 
-          die Provision wird intern einbehalten.
+          Details siehe{' '}
+          <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen" style={{ color: '#2563eb' }}>
+            Vermittlungsbedingungen für Fahrer
+          </a>.
         </Text>
       </Section>
 
