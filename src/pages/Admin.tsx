@@ -726,6 +726,40 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
+  const cancelAssignment = async (assignmentId: string) => {
+    const reason = window.prompt("Grund für die Auflösung der Zuweisung (Pflichtfeld):");
+    if (reason === null) return;
+    const trimmed = reason.trim();
+    if (!trimmed) {
+      toast({
+        title: "Grund erforderlich",
+        description: "Bitte einen kurzen Grund angeben.",
+        variant: "destructive",
+      });
+      return;
+    }
+    try {
+      const { error } = await supabase.rpc("admin_cancel_assignment", {
+        _assignment_id: assignmentId,
+        _reason: trimmed,
+      });
+      if (error) throw error;
+      toast({
+        title: "Zuweisung aufgelöst",
+        description: "Die Zuweisung wurde storniert.",
+      });
+      await loadJobRequests();
+      await loadJobAssignments();
+    } catch (err: any) {
+      console.error(err);
+      toast({
+        title: "Fehler",
+        description: err?.message ?? "Auflösen fehlgeschlagen",
+        variant: "destructive",
+      });
+    }
+  };
+
   const resendDriverConfirmation = async (assignmentId: string) => {
     try {
       // JWT sent automatically via Authorization header
