@@ -24,17 +24,17 @@ export const DriverRegistrationConfirmation = ({
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>✅ So geht es weiter</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Wir prüfen Ihr Profil und melden uns, sobald passende Einsätze verfügbar sind.
-        Jeder Einsatz wird Ihnen vorab einzeln angeboten – Sie entscheiden frei, ob Sie ihn annehmen oder ablehnen.
+        Wir prüfen Ihr Profil. Sobald ein passender Einsatz verfügbar ist, erhalten Sie von uns ein konkretes Auftragsangebot mit allen wichtigen Informationen.
       </Text>
     </Section>
 
     <Section {...getBoxProps(boxStyles.infoBox)}>
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📌 Vergütung & Vermittlungsanteil</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Vergütung und Vermittlungsanteil ergeben sich jeweils aus dem konkreten Auftragsangebot,
-        das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Sie entscheiden als selbstständige/r
-        Unternehmer/in frei, ob Sie das Angebot zu den genannten Konditionen annehmen.
+        Die konkrete Vergütung und der Vermittlungsanteil ergeben sich aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Sie entscheiden als selbstständige/r Unternehmer/in eigenverantwortlich, ob Sie das Angebot zu den genannten Konditionen annehmen.
       </Text>
     </Section>
 
@@ -54,8 +54,8 @@ export const DriverRegistrationConfirmation = ({
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>📞 Kontakt</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        📧 info@kraftfahrer-mieten.com<br />
-        📱 01577 1442285
+        E-Mail: info@kraftfahrer-mieten.com<br />
+        Telefon: 01577 1442285
       </Text>
     </Section>
 
