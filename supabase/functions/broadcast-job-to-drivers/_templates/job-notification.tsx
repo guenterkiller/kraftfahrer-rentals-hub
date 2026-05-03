@@ -1,4 +1,4 @@
-import { Text, Heading, Section, Hr } from 'npm:@react-email/components@0.0.22';
+import { Text, Heading, Section, Hr, Button } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, boxStyles, textStyles, colors } from '../../_shared/email-templates/base-email.tsx';
 
@@ -12,6 +12,8 @@ interface JobNotificationEmailProps {
   fuehrerscheinklasse: string;
   nachricht: string;
   besonderheiten?: string;
+  acceptUrl?: string;
+  declineUrl?: string;
 }
 
 export const JobNotificationEmail = ({
@@ -24,6 +26,8 @@ export const JobNotificationEmail = ({
   fuehrerscheinklasse,
   nachricht,
   besonderheiten,
+  acceptUrl,
+  declineUrl,
 }: JobNotificationEmailProps) => {
   return (
     <BaseEmail previewText={`Neuer Auftrag verfügbar: ${fahrzeugtyp} in ${einsatzort}`}>
@@ -74,41 +78,70 @@ export const JobNotificationEmail = ({
       )}
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
-      
-      {/* Antwort-Hinweis */}
-      <Section style={{ 
-        textAlign: 'center' as const, 
-        margin: '30px 0',
-        padding: '24px',
-        backgroundColor: '#f0fdf4',
-        border: '2px solid #16a34a',
-        borderRadius: '12px'
-      }}>
-        <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>
-          📱 Interesse? Bitte melden Sie sich bei uns!
-        </Heading>
-        <Text style={{ ...textStyles.paragraph, fontSize: '16px', color: '#166534' }}>
-          Bei Interesse an diesem Auftrag kontaktieren Sie uns bitte <strong>ausschließlich direkt</strong>:
-        </Text>
-        <Text style={{ 
-          fontSize: '22px', 
-          fontWeight: 'bold', 
-          color: '#16a34a',
-          margin: '16px 0'
+
+      {/* Antwort-Buttons */}
+      {(acceptUrl || declineUrl) && (
+        <Section style={{
+          textAlign: 'center' as const,
+          margin: '30px 0',
+          padding: '24px',
+          backgroundColor: '#f0fdf4',
+          border: '2px solid #16a34a',
+          borderRadius: '12px'
         }}>
-          📞 +49 1577 1442285
-        </Text>
-        <Text style={{ 
-          fontSize: '16px', 
-          color: '#16a34a',
-          margin: '8px 0'
-        }}>
-          ✉️ info@kraftfahrer-mieten.com
-        </Text>
-        <Text style={{ ...textStyles.paragraph, fontSize: '14px', marginTop: '16px', color: '#166534' }}>
-          Nennen Sie kurz Ihren Namen und dass Sie den Auftrag in <strong>{einsatzort}</strong> übernehmen möchten.
-        </Text>
-      </Section>
+          <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>
+            Können Sie diesen Auftrag übernehmen?
+          </Heading>
+          <Text style={{ ...textStyles.paragraph, fontSize: '15px', color: '#166534', textAlign: 'center' as const }}>
+            Bitte um kurze Rückmeldung über die Buttons:
+          </Text>
+          <table role="presentation" cellPadding={0} cellSpacing={0} style={{ margin: '16px auto' }}>
+            <tr>
+              <td style={{ padding: '6px' }}>
+                {acceptUrl && (
+                  <Button
+                    href={acceptUrl}
+                    style={{
+                      backgroundColor: '#16a34a',
+                      color: '#ffffff',
+                      padding: '14px 22px',
+                      borderRadius: '8px',
+                      fontWeight: 'bold',
+                      fontSize: '15px',
+                      textDecoration: 'none',
+                      display: 'inline-block',
+                    }}
+                  >
+                    ✅ Ich kann den Auftrag übernehmen
+                  </Button>
+                )}
+              </td>
+              <td style={{ padding: '6px' }}>
+                {declineUrl && (
+                  <Button
+                    href={declineUrl}
+                    style={{
+                      backgroundColor: '#dc2626',
+                      color: '#ffffff',
+                      padding: '14px 22px',
+                      borderRadius: '8px',
+                      fontWeight: 'bold',
+                      fontSize: '15px',
+                      textDecoration: 'none',
+                      display: 'inline-block',
+                    }}
+                  >
+                    ❌ Ich kann nicht übernehmen
+                  </Button>
+                )}
+              </td>
+            </tr>
+          </table>
+          <Text style={{ ...textStyles.paragraph, fontSize: '13px', color: '#166534', marginTop: '12px' }}>
+            Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress.
+          </Text>
+        </Section>
+      )}
 
       {/* Wichtiger Hinweis */}
       <Section style={boxStyles.warning}>
