@@ -1,13 +1,10 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
+const corsHeaders = createCorsHeaders();
 
 interface NurtureEmailRequest {
   recipient_email: string;
@@ -160,10 +157,13 @@ const replaceVariables = (text: string, variables: Record<string, string> = {}) 
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return handleCorsPreflightRequest(corsHeaders);
   }
 
   try {
+    const authResult = await verifyAdminAuth(req);
+    if (!authResult.success) return authResult.response;
+
     const { 
       recipient_email, 
       recipient_name, 

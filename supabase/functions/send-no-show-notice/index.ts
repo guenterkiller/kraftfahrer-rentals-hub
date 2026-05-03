@@ -1,14 +1,11 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { Resend } from "npm:resend@2.0.0";
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { NoShowNotice } from '../_shared/email-templates/no-show-notice.tsx';
+import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+const corsHeaders = createCorsHeaders();
 
 interface NoShowNoticeRequest {
   assignment_id: string;
@@ -17,12 +14,16 @@ interface NoShowNoticeRequest {
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return handleCorsPreflightRequest(corsHeaders);
   }
 
   console.log('🚨 No-Show notice request received');
 
   try {
+    const authResult = await verifyAdminAuth(req);
+    if (!authResult.success) return authResult.response;
+    const supabase = authResult.supabase;
+
     const { assignment_id }: NoShowNoticeRequest = await req.json();
 
     // Runtime guard for MAIL_FROM domain
@@ -31,12 +32,6 @@ const handler = async (req: Request): Promise<Response> => {
     if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
       throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
     }
-
-    // Initialize Supabase client
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
 
     // Initialize Resend client
     const resend = new Resend(Deno.env.get('RESEND_API_KEY'));

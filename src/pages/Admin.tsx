@@ -794,20 +794,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   const handleResetDriverStatus = async (driverId: string, driverName: string) => {
     try {
-      const response = await fetch(`https://hxnabnsoffzevqhruvar.supabase.co/functions/v1/reset-driver-status`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh4bmFibnNvZmZ6ZXZxaHJ1dmFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MTI1OTMsImV4cCI6MjA2ODQ4ODU5M30.WI-nu1xYjcjz67ijVTyTGC6GPW77TOsFdy1cpPW4dzc`
-        },
-        body: JSON.stringify({
-          driverId: driverId,
-          newStatus: 'pending'
-        })
+      const { data: result, error: invokeError } = await supabase.functions.invoke('reset-driver-status', {
+        body: { driverId, newStatus: 'pending' }
       });
 
-      const result = await response.json();
-      
+      if (invokeError) throw invokeError;
+
       if (result.success) {
         // Update local state
         setFahrer(prev => 

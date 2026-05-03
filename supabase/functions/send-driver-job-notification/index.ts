@@ -1,12 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "npm:resend@2.0.0";
+import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
+const corsHeaders = createCorsHeaders();
 
 interface JobNotificationRequest {
   jobId: string;
@@ -23,22 +19,23 @@ function randomToken(len = 48): string {
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return handleCorsPreflightRequest(corsHeaders);
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL');
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const authResult = await verifyAdminAuth(req);
+    if (!authResult.success) return authResult.response;
+    const supabase = authResult.supabase;
+
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
 
-    if (!supabaseUrl || !supabaseKey || !resendApiKey) {
+    if (!resendApiKey) {
       return new Response(JSON.stringify({ error: 'Missing environment variables' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
     const resend = new Resend(resendApiKey);
     
     const { jobId, driverId, billingModel }: JobNotificationRequest = await req.json();
