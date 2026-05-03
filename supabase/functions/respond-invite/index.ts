@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
+import { Resend } from "https://esm.sh/resend@4.0.0";
 
 function page(msg: string, isSuccess: boolean = true) {
   const bgColor = isSuccess ? '#d4fdf7' : '#fef2f2';
@@ -149,6 +150,73 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     console.log(`✅ Invite ${invite.id} updated to ${newStatus}`);
+
+    // Admin-Mail senden
+    try {
+      const resendKey = Deno.env.get("RESEND_API_KEY");
+      const adminTo = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
+      const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
+
+      const { data: driver } = await supabase
+        .from("fahrer_profile")
+        .select("vorname, nachname, email, telefon")
+        .eq("id", invite.driver_id)
+        .maybeSingle();
+
+      const { data: job } = await supabase
+        .from("job_requests")
+        .select("fahrzeugtyp, einsatzort, zeitraum, nachricht")
+        .eq("id", invite.job_id)
+        .maybeSingle();
+
+      const driverName = driver ? `${driver.vorname ?? ""} ${driver.nachname ?? ""}`.trim() : "Unbekannt";
+      const subject = newStatus === "accepted"
+        ? "Fahrer kann Auftrag übernehmen"
+        : "Fahrer kann Auftrag nicht übernehmen";
+      const respondedAt = new Date().toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+
+      const html = `
+        <div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
+          <h2 style="color:${newStatus === "accepted" ? "#16a34a" : "#dc2626"};">${subject}</h2>
+          <h3>Fahrer</h3>
+          <p>
+            <strong>Name:</strong> ${driverName}<br/>
+            <strong>E-Mail:</strong> ${driver?.email ?? "-"}<br/>
+            <strong>Telefon:</strong> ${driver?.telefon ?? "-"}
+          </p>
+          <h3>Auftrag</h3>
+          <p>
+            <strong>Fahrzeugtyp:</strong> ${job?.fahrzeugtyp ?? "-"}<br/>
+            <strong>Einsatzort:</strong> ${job?.einsatzort ?? "-"}<br/>
+            <strong>Zeitraum:</strong> ${job?.zeitraum ?? "-"}<br/>
+            <strong>Tätigkeit:</strong> ${job?.nachricht ?? "-"}
+          </p>
+          <p>
+            <strong>Antwort:</strong> ${newStatus === "accepted" ? "übernehmen" : "nicht übernehmen"}<br/>
+            <strong>Zeitpunkt:</strong> ${respondedAt}
+          </p>
+          <p style="color:#666;font-size:12px;">Job-ID: ${invite.job_id}<br/>Fahrer-ID: ${invite.driver_id}</p>
+        </div>`;
+
+      if (resendKey) {
+        const resend = new Resend(resendKey);
+        const { error: mailError } = await resend.emails.send({
+          from: mailFrom,
+          to: [adminTo],
+          subject,
+          html,
+        });
+        if (mailError) {
+          console.error("Admin mail send error:", mailError);
+        } else {
+          console.log(`✅ Admin notified: ${subject}`);
+        }
+      } else {
+        console.warn("RESEND_API_KEY not set – admin mail skipped");
+      }
+    } catch (mailErr) {
+      console.error("Admin notification error:", mailErr);
+    }
 
     // Bei Accept: Assignment erstellen
     if (newStatus === "accepted") {
