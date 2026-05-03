@@ -52,7 +52,6 @@ const Versicherung = lazy(() => import("./pages/Versicherung"));
 const Impressum = lazy(() => import("./pages/Impressum"));
 const Datenschutz = lazy(() => import("./pages/Datenschutz"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
-const FahrerAntwort = lazy(() => import("./pages/FahrerAntwort"));
 
 const queryClient = new QueryClient();
 
@@ -167,7 +166,6 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/driver/accept" element={<DriverJobResponse />} />
-            <Route path="/fahrer-antwort" element={<FahrerAntwort />} />
             
             {/* Legal */}
             <Route path="/impressum" element={<Impressum />} />
