@@ -55,7 +55,7 @@ verify_jwt = true
 verify_jwt = false
 
 [functions.driver-accept-job]
-verify_jwt = false
+verify_jwt = true
 
 [functions.fahrerwerden]
 verify_jwt = false
