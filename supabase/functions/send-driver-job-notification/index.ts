@@ -126,11 +126,10 @@ const handler = async (req: Request): Promise<Response> => {
         </div>
 
         <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px;"><strong>📋 Vermittlungsgebühr:</strong></p>
+          <p style="margin: 0; font-size: 14px;"><strong>📋 Vergütung & Vermittlungsanteil:</strong></p>
           <p style="margin: 5px 0 0 0; font-size: 14px;">
-            • 15 % für LKW CE Fahrer<br>
-            • 20 % für Baumaschinenführer<br><br>
-            Die Gebühr wird automatisch von Ihrem Rechnungsbetrag abgezogen.
+            Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot vor Einsatzbeginn.
+            Details: <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen">Vermittlungsbedingungen für Fahrer</a>.
           </p>
         </div>
 

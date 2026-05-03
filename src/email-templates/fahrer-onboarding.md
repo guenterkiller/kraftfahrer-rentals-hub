@@ -18,13 +18,11 @@ Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfü
 - Keine Arbeitnehmerüberlassung (AÜG). Es entsteht kein Arbeitsverhältnis mit Fahrerexpress.
 - Dieses Angebot richtet sich ausschließlich an Unternehmer i.S.d. § 14 BGB.
 
-💰 **Vermittlungsgebühr & Abrechnung**
+💰 **Vergütung & Vermittlungsanteil**
 
-Die Vermittlungsgebühr beträgt bei jedem Einsatz:
-- **15 % für LKW CE Fahrer**
-- **20 % für Baumaschinenführer**
+Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot, das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Standardeinsätze in der Regel 20 %, Sonder-/Projekt-/Pauschal- oder kurzfristige Einsätze bis zu 25 % des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises ohne An- und Abfahrt. Maßgeblich ist immer das konkrete Auftragsangebot.
 
-**Abrechnung:** Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Ihre Auszahlung erfolgt nach Zahlungseingang.
+**Abrechnung:** Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Auszahlung nach Zahlungseingang des Auftraggebers, spätestens 5 Werktage danach.
 
 **Rechtsgrundlage:** Vermittlungsvertrag nach § 652 BGB (Maklervertrag). Sie erbringen Ihre Leistung als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber.
 
