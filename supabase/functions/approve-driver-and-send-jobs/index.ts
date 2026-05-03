@@ -18,18 +18,56 @@ function randomToken(len = 48): string {
   return Array.from(arr, b => ("0" + b.toString(16)).slice(-2)).join("").slice(0, len);
 }
 
-// Defensive license-class match: job license must be contained in driver's classes
+// Normalize license class strings: "C+E", "C + E", "Klasse CE", "Führerschein CE" → "CE"
+function normalizeClass(raw: string): string {
+  if (!raw) return '';
+  let s = String(raw).toUpperCase();
+  s = s.replace(/KLASSE/g, '').replace(/FÜHRERSCHEIN/g, '').replace(/FUEHRERSCHEIN/g, '');
+  s = s.replace(/[\s+\-_/.]/g, '');
+  return s.trim();
+}
+
+// Defensive license-class match with normalization.
 function driverMatchesJob(driver: any, job: any): boolean {
   const driverClasses: string[] = Array.isArray(driver?.fuehrerscheinklassen)
-    ? driver.fuehrerscheinklassen.map((c: string) => String(c).toUpperCase().trim())
+    ? driver.fuehrerscheinklassen.map((c: string) => normalizeClass(c)).filter(Boolean)
     : [];
   if (driverClasses.length === 0) return false;
-  const required = String(job?.fuehrerscheinklasse || '').toUpperCase().trim();
+  const required = normalizeClass(String(job?.fuehrerscheinklasse || ''));
   if (!required) return false;
-  // Direct match or driver holds a higher class that includes the required one
   if (driverClasses.includes(required)) return true;
-  // CE includes C and C1; C includes C1 — be conservative: only direct equality.
+  // CE driver covers C / C1 jobs (CE > C > C1)
+  if (driverClasses.includes('CE') && (required === 'C' || required === 'C1')) return true;
+  if (driverClasses.includes('C') && required === 'C1') return true;
   return false;
+}
+
+// Defensive freetext date parser for `zeitraum`. Returns true if it's plausibly still active
+// (any extracted D.M.YYYY date is today or in the future). Returns false if clearly past or
+// undecidable (defensive: skip in doubt).
+function zeitraumIsCurrent(zeitraum: string): boolean {
+  if (!zeitraum) return false;
+  const text = String(zeitraum);
+  // Match D.M.YYYY or DD.MM.YYYY (also YY)
+  const re = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dates: Date[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    const d = parseInt(m[1], 10);
+    const mo = parseInt(m[2], 10);
+    let y = parseInt(m[3], 10);
+    if (y < 100) y += 2000;
+    if (y < 2020 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > 31) continue;
+    dates.push(new Date(y, mo - 1, d));
+  }
+  if (dates.length === 0) return false; // defensive: no parseable date → skip
+  // If any date is today or later, treat as active. Add a safety window of +30 days
+  // beyond the latest extracted date to cover "ab X für Y Wochen".
+  const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
+  const cutoff = new Date(maxDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+  return cutoff >= today;
 }
 
 serve(async (req) => {
@@ -96,17 +134,18 @@ serve(async (req) => {
 
     console.log('✅ Driver status updated to approved');
 
-    // 3. Get recent open jobs (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    // 3. Get recent open/sent/pending jobs (last 60 days created window — date check via zeitraum)
+    const sixtyDaysAgo = new Date();
+    sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
+    const OPEN_STATUSES = ['open', 'sent', 'pending'];
     const { data: jobs, error: jobsError } = await supabase
       .from('job_requests')
       .select('*')
-      .eq('status', 'open')
-      .gte('created_at', thirtyDaysAgo.toISOString())
+      .in('status', OPEN_STATUSES)
+      .gte('created_at', sixtyDaysAgo.toISOString())
       .order('created_at', { ascending: false })
-      .limit(50);
+      .limit(100);
 
     if (jobsError) {
       console.error('❌ Failed to fetch jobs:', jobsError);
@@ -114,14 +153,23 @@ serve(async (req) => {
 
     console.log('📋 Found jobs:', jobs?.length || 0);
 
-    // 3b. Filter to jobs that match this driver (defensive)
-    const matchingJobs = (jobs || []).filter((job) => driverMatchesJob(driver, job));
-    console.log(`🎯 Matching jobs for driver: ${matchingJobs.length}/${jobs?.length || 0}`);
+    // 3b. Filter: license match AND zeitraum still current
+    let skippedExpired = 0;
+    let skippedNoMatch = 0;
+    const matchingJobs = (jobs || []).filter((job) => {
+      if (!driverMatchesJob(driver, job)) { skippedNoMatch++; return false; }
+      if (!zeitraumIsCurrent(job.zeitraum)) { skippedExpired++; return false; }
+      return true;
+    });
+    console.log(`🎯 Matching jobs: ${matchingJobs.length}/${jobs?.length || 0} (skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch})`);
 
     // 3c. Create assignment_invites for each matching job (skip if invite already exists)
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
     const invitesToSend: Array<{ job: any; token: string }> = [];
+    let skippedDuplicate = 0;
+    const MAX_INVITES = 5;
     for (const job of matchingJobs) {
+      if (invitesToSend.length >= MAX_INVITES) break;
       const { data: existing } = await supabase
         .from('assignment_invites')
         .select('id, status')
@@ -132,6 +180,7 @@ serve(async (req) => {
 
       if (existing) {
         console.log(`↩️  Invite already exists for job ${job.id} (status=${existing.status}) – skipping`);
+        skippedDuplicate++;
         continue;
       }
 
@@ -312,7 +361,7 @@ serve(async (req) => {
 
     // 10. Log admin action
     await logAdminAction(supabase, 'approve_driver', user.email, {
-      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); invites sent: ${invitesToSend.length}/${matchingJobs.length} matching of ${jobs?.length || 0} open jobs`
+      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); openJobs=${jobs?.length || 0}, matchingJobs=${matchingJobs.length}, invitesSent=${invitesToSend.length}, skippedDuplicate=${skippedDuplicate}, skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch}`
     });
 
     console.log('✅ Process completed successfully');
@@ -322,6 +371,9 @@ serve(async (req) => {
       openJobs: jobs?.length || 0,
       matchingJobs: matchingJobs.length,
       invitesSent: invitesToSend.length,
+      skippedDuplicate,
+      skippedExpired,
+      skippedNoMatch,
       driverEmailSent: driverEmailStatus === 'sent',
       adminEmailSent: adminEmailStatus === 'sent',
       driverMessageId: driverMessageId,
