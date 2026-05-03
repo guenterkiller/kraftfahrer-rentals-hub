@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const DriverJobResponse = lazy(() => import("./pages/DriverJobResponse"));
+const FahrerAntwortBestaetigen = lazy(() => import("./pages/FahrerAntwortBestaetigen"));
 
 // Landing Pages (lazy für reduzierten initialen Bundle)
 const LKWFahrerBuchen = lazy(() => import("./pages/LKWFahrerBuchen"));
@@ -166,6 +167,7 @@ const App = () => (
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/driver/accept" element={<DriverJobResponse />} />
+            <Route path="/fahrer-antwort-bestaetigen" element={<FahrerAntwortBestaetigen />} />
             
             {/* Legal */}
             <Route path="/impressum" element={<Impressum />} />
