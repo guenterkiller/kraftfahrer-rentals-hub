@@ -29,13 +29,15 @@ const DriverJobResponse = () => {
   const billingModel = searchParams.get('billing') as 'direct' | 'agency';
 
   useEffect(() => {
-    if (!jobId || !driverId) {
-      setResult({ type: 'error', message: 'Ungültige Parameter' });
-      setLoading(false);
-      return;
-    }
-
-    loadJobAndDriver();
+    // SECURITY: Diese Legacy-Antwortseite ist deaktiviert.
+    // Fahrer beantworten Aufträge ausschließlich über die sicheren Token-Links
+    // aus der E-Mail (respond-invite / handle-driver-job-response).
+    setResult({
+      type: 'error',
+      message:
+        'Diese Antwortseite wird nicht mehr unterstützt. Bitte nutzen Sie ausschließlich die Annahme-/Ablehnen-Links aus der Auftrags-E-Mail.',
+    });
+    setLoading(false);
   }, [jobId, driverId]);
 
   const loadJobAndDriver = async () => {

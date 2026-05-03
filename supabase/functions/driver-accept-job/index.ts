@@ -26,6 +26,51 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // SECURITY: This legacy endpoint is deprecated. The productive driver
+    // response flow uses token-based `respond-invite` / `handle-driver-job-response`.
+    // Reject any unauthenticated call to prevent unauthorized job_assignment creation.
+    const authHeader = req.headers.get('Authorization') || '';
+    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
+    const isServiceRole = !!serviceRoleKey && authHeader === `Bearer ${serviceRoleKey}`;
+
+    if (!isServiceRole) {
+      // Require a valid admin JWT
+      if (!authHeader.startsWith('Bearer ')) {
+        return new Response(
+          JSON.stringify({ error: 'Unauthorized - this endpoint is deprecated. Use the secure invite link.' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      const token = authHeader.replace('Bearer ', '');
+      const supabaseUrlAuth = Deno.env.get('SUPABASE_URL');
+      const serviceKeyAuth = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+      if (!supabaseUrlAuth || !serviceKeyAuth) {
+        return new Response(JSON.stringify({ error: 'Server configuration error' }), {
+          status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      const authClient = createClient(supabaseUrlAuth, serviceKeyAuth, {
+        auth: { autoRefreshToken: false, persistSession: false }
+      });
+      const { data: userData, error: userErr } = await authClient.auth.getUser(token);
+      if (userErr || !userData?.user) {
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+      const { data: roleRow } = await authClient
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userData.user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+      if (!roleRow) {
+        return new Response(JSON.stringify({ error: 'Forbidden - admin only' }), {
+          status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
