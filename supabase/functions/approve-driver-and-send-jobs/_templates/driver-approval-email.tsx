@@ -2,24 +2,14 @@ import { Text, Heading, Section, Hr } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, boxStyles, textStyles } from '../../_shared/email-templates/base-email.tsx';
 
-interface Job {
-  nachricht: string;
-  einsatzort: string;
-  created_at: string;
-  zeitraum: string;
-  fahrzeugtyp: string;
-  fuehrerscheinklasse: string;
-  besonderheiten?: string;
-}
-
 interface DriverApprovalEmailProps {
   driverName: string;
-  jobs: Job[];
+  hasMatchingJobs: boolean;
 }
 
 export const DriverApprovalEmail = ({
   driverName,
-  jobs = [],
+  hasMatchingJobs,
 }: DriverApprovalEmailProps) => {
   return (
     <BaseEmail previewText="Sie sind jetzt bei Fahrerexpress freigeschaltet">
@@ -30,75 +20,21 @@ export const DriverApprovalEmail = ({
       </Text>
 
       <Text style={textStyles.paragraph}>
-        wir freuen uns, Ihnen mitteilen zu können, dass Ihr Fahrerprofil freigeschaltet wurde.
-      </Text>
-
-      <Text style={textStyles.paragraph}>
-        Sie können ab sofort passende Fahrergesuche von Fahrerexpress erhalten.
+        Ihr Fahrerprofil wurde freigeschaltet.
       </Text>
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
 
-      {/* Jobs Section */}
-      {jobs.length > 0 ? (
-        <>
-          <Heading style={textStyles.h2}>
-            Aktuelle Fahrergesuche ({jobs.length})
-          </Heading>
-          
+      {hasMatchingJobs ? (
+        <Section style={boxStyles.info}>
           <Text style={textStyles.paragraph}>
-            Hier finden Sie die neuesten offenen Aufträge der letzten 30 Tage:
+            Es wurden passende offene Fahrergesuche gefunden. Sie erhalten dazu separate Auftragsangebote per E-Mail mit direkter Antwortmöglichkeit.
           </Text>
-
-          {jobs.map((job, index) => {
-            const startDate = new Date(job.created_at).toLocaleDateString('de-DE');
-            return (
-              <Section key={index} style={boxStyles.info}>
-                <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-                  Auftrag #{index + 1}
-                </Heading>
-                
-                <Text style={textStyles.paragraph}>
-                  <strong>Beschreibung:</strong> {job.nachricht || 'Fahrergesuch'}
-                </Text>
-                <Text style={textStyles.paragraph}>
-                  <strong>Einsatzort:</strong> {job.einsatzort || 'Nicht angegeben'}
-                </Text>
-                <Text style={textStyles.paragraph}>
-                  <strong>Erstellt am:</strong> {startDate}
-                </Text>
-                <Text style={textStyles.paragraph}>
-                  <strong>Zeitraum:</strong> {job.zeitraum || 'Nicht angegeben'}
-                </Text>
-                <Text style={textStyles.paragraph}>
-                  <strong>Fahrzeugtyp:</strong> {job.fahrzeugtyp || 'Nicht angegeben'}
-                </Text>
-                <Text style={textStyles.paragraph}>
-                  <strong>Führerschein:</strong> {job.fuehrerscheinklasse || 'Nicht angegeben'}
-                </Text>
-                {job.besonderheiten && (
-                  <Text style={textStyles.paragraph}>
-                    <strong>Besonderheiten:</strong> {job.besonderheiten}
-                  </Text>
-                )}
-              </Section>
-            );
-          })}
-
-          <Section style={boxStyles.success}>
-            <Text style={{ ...textStyles.paragraph, textAlign: 'center', fontWeight: 'bold' }}>
-              Interessiert an einem Auftrag?
-            </Text>
-            <Text style={{ ...textStyles.paragraph, textAlign: 'center' }}>
-              Antworten Sie einfach auf diese E-Mail oder rufen Sie uns direkt an!
-            </Text>
-          </Section>
-        </>
+        </Section>
       ) : (
         <Section style={boxStyles.info}>
           <Text style={textStyles.paragraph}>
-            Derzeit sind keine offenen Fahrergesuche verfügbar. Wir melden uns bei Ihnen,
-            sobald passende Anfragen eingehen.
+            Derzeit sind keine passenden offenen Fahrergesuche verfügbar. Wir melden uns, sobald passende Anfragen eingehen.
           </Text>
         </Section>
       )}
