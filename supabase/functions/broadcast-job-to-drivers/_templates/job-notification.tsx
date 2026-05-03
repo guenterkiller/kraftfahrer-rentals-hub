@@ -14,6 +14,7 @@ interface JobNotificationEmailProps {
   besonderheiten?: string;
   acceptUrl?: string;
   declineUrl?: string;
+  unsubscribeUrl?: string;
 }
 
 export const JobNotificationEmail = ({
@@ -28,6 +29,7 @@ export const JobNotificationEmail = ({
   besonderheiten,
   acceptUrl,
   declineUrl,
+  unsubscribeUrl,
 }: JobNotificationEmailProps) => {
   return (
     <BaseEmail previewText={`Neuer Auftrag verfügbar: ${fahrzeugtyp} in ${einsatzort}`}>
@@ -185,6 +187,16 @@ export const JobNotificationEmail = ({
           ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
         </Text>
       </Section>
+
+      {unsubscribeUrl && (
+        <Section style={{ marginTop: 16, textAlign: 'center' as const }}>
+          <Text style={{ ...textStyles.muted, fontSize: '12px' }}>
+            <a href={unsubscribeUrl} style={{ color: '#6b7280', textDecoration: 'underline' }}>
+              Keine weiteren Auftragsangebote erhalten
+            </a>
+          </Text>
+        </Section>
+      )}
     </BaseEmail>
   );
 };
