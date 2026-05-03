@@ -904,6 +904,42 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
+  const reactivateDriverEmails = async (id: string, driverName: string) => {
+    if (!confirm(`Auftragsmails für ${driverName} wieder aktivieren?\n\nDie Sperre (falls vorhanden) bleibt unverändert.`)) return;
+    try {
+      const { error } = await supabase
+        .from('fahrer_profile')
+        .update({
+          email_opt_out: false,
+          unsubscribed_at: null,
+          unsubscribed_reason: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id);
+      if (error) throw error;
+
+      setFahrer(prev =>
+        prev.map(f => f.id === id ? {
+          ...f,
+          email_opt_out: false,
+          unsubscribed_at: null,
+          unsubscribed_reason: null,
+        } : f)
+      );
+
+      toast({
+        title: "Auftragsmails reaktiviert",
+        description: `${driverName} erhält wieder Auftragsmails.`,
+      });
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: error?.message ?? "Reaktivierung fehlgeschlagen",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSendJobToAllDrivers = async (jobId: string) => {
     console.log('📧 Sending job to all drivers via admin-approve-job:', jobId);
     setSendingJobToAll(jobId);
@@ -1999,6 +2035,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                                </Button>
+                               {f.email_opt_out && (
+                                 <Button
+                                   size="sm"
+                                   variant="outline"
+                                   className="text-xs h-7 border-orange-500 text-orange-700 hover:bg-orange-50"
+                                   onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
+                                 >
+                                   📬 Auftragsmails wieder aktivieren
+                                 </Button>
+                               )}
                              </div>
                           </TableCell>
                         </TableRow>
@@ -2085,6 +2131,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                             </Button>
+                            {f.email_opt_out && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs h-7 border-orange-500 text-orange-700 hover:bg-orange-50 flex-1"
+                                onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
+                              >
+                                📬 Mails reaktivieren
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </CardContent>
