@@ -329,6 +329,8 @@ export type Database = {
           status: string | null
           stundensatz: number | null
           telefon: string
+          unsubscribed_at: string | null
+          unsubscribed_reason: string | null
           updated_at: string
           verfuegbare_regionen: string[] | null
           verfuegbarkeit: string | null
@@ -358,6 +360,8 @@ export type Database = {
           status?: string | null
           stundensatz?: number | null
           telefon: string
+          unsubscribed_at?: string | null
+          unsubscribed_reason?: string | null
           updated_at?: string
           verfuegbare_regionen?: string[] | null
           verfuegbarkeit?: string | null
@@ -387,6 +391,8 @@ export type Database = {
           status?: string | null
           stundensatz?: number | null
           telefon?: string
+          unsubscribed_at?: string | null
+          unsubscribed_reason?: string | null
           updated_at?: string
           verfuegbare_regionen?: string[] | null
           verfuegbarkeit?: string | null
