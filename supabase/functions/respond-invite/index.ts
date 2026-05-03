@@ -119,7 +119,7 @@ const handler = async (req: Request): Promise<Response> => {
         })
         .eq("id", invite.id);
       
-      return page("⏱️ Dieser Link ist abgelaufen", false);
+      return page("Dieser Link ist abgelaufen.", false);
     }
 
     // Status aktualisieren
