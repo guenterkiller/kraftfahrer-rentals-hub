@@ -148,9 +148,11 @@ serve(async (req) => {
           continue;
         }
 
-        const supabaseUrlBase = Deno.env.get("SUPABASE_URL")!;
-        const acceptUrl = `${supabaseUrlBase}/functions/v1/respond-invite?a=accept&t=${token}`;
-        const declineUrl = `${supabaseUrlBase}/functions/v1/respond-invite?a=decline&t=${token}`;
+        // Links zeigen auf Frontend-Bestätigungsseite (Schutz vor Mail-Link-Scannern).
+        // Erst der Button-Klick auf der Seite löst per POST die Annahme/Ablehnung aus.
+        const SITE_BASE = Deno.env.get("SITE_URL") || "https://www.kraftfahrer-mieten.com";
+        const acceptUrl = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
+        const declineUrl = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=decline&token=${encodeURIComponent(token)}`;
 
         const html = await renderAsync(
           React.createElement(JobNotificationEmail, {
