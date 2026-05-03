@@ -10,22 +10,23 @@ type ResponseStatus =
   | "invalid"
   | "error";
 
-function siteBaseUrl(): string {
-  const candidate =
-    Deno.env.get("SITE_URL") ||
-    Deno.env.get("PUBLIC_SITE_URL") ||
-    Deno.env.get("APP_URL") ||
-    Deno.env.get("WEBSITE_URL") ||
-    "https://www.kraftfahrer-mieten.com";
-  return candidate.replace(/\/+$/, "");
-}
+const MESSAGES: Record<ResponseStatus, string> = {
+  accepted:
+    "Vielen Dank. Ihre Rückmeldung wurde übermittelt. Fahrerexpress meldet sich zur weiteren Abstimmung.",
+  declined: "Vielen Dank. Ihre Rückmeldung wurde übermittelt.",
+  already_answered: "Ihre Rückmeldung wurde bereits erfasst.",
+  expired: "Dieser Link ist abgelaufen.",
+  invalid: "Dieser Link ist ungültig oder wurde nicht gefunden.",
+  error:
+    "Es ist ein Fehler aufgetreten. Bitte melden Sie sich direkt bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285.",
+};
 
-function redirect(status: ResponseStatus): Response {
-  const location = `${siteBaseUrl()}/fahrer-antwort?status=${status}`;
+function reply(status: ResponseStatus): Response {
   const headers = new Headers();
-  headers.set("Location", location);
+  headers.set("Content-Type", "text/plain; charset=utf-8");
   headers.set("Cache-Control", "no-store");
-  return new Response(null, { status: 302, headers });
+  headers.set("X-Content-Type-Options", "nosniff");
+  return new Response(MESSAGES[status], { status: 200, headers });
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -37,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`📩 Invite response: action=${action}, token=${token?.substring(0, 8)}...`);
 
     if (!action || !token || !["accept", "decline"].includes(action)) {
-      return redirect("invalid");
+      return reply("invalid");
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -45,7 +46,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
-      return redirect("error");
+      return reply("error");
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -59,16 +60,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error("Error fetching invite:", error);
-      return redirect("error");
+      return reply("error");
     }
 
     if (!invite) {
-      return redirect("invalid");
+      return reply("invalid");
     }
 
     // Status prüfen
     if (invite.status !== "pending") {
-      return redirect("already_answered");
+      return reply("already_answered");
     }
 
     // Ablaufdatum prüfen
@@ -81,7 +82,7 @@ const handler = async (req: Request): Promise<Response> => {
         })
         .eq("id", invite.id);
       
-      return redirect("expired");
+      return reply("expired");
     }
 
     // Status aktualisieren
@@ -105,7 +106,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (updateError) {
       console.error("Error updating invite:", updateError);
-      return redirect("error");
+      return reply("error");
     }
 
     console.log(`✅ Invite ${invite.id} updated to ${newStatus}`);
@@ -238,19 +239,19 @@ const handler = async (req: Request): Promise<Response> => {
           console.error("Failed to send admin error mail:", e);
         }
         // Fahrer sieht keinen technischen Fehler
-        return redirect("accepted");
+        return reply("accepted");
       }
 
       console.log(`✅ Assignment ready for job ${invite.job_id} and driver ${invite.driver_id}`);
-      return redirect("accepted");
+      return reply("accepted");
     } else {
       console.log(`✅ Invite declined for job ${invite.job_id}`);
-      return redirect("declined");
+      return reply("declined");
     }
 
   } catch (e) {
     console.error("Unexpected error in respond-invite:", e);
-    return redirect("error");
+    return reply("error");
   }
 };
 

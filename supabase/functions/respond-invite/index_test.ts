@@ -15,30 +15,31 @@ async function call(qs: string): Promise<Response> {
   });
 }
 
-async function assertRedirect(res: Response, expectedStatusParam: string) {
-  await res.body?.cancel();
-  assertEquals(res.status, 302);
-  const location = res.headers.get("location") ?? "";
-  assertStringIncludes(location, "/fahrer-antwort?status=");
-  assertStringIncludes(location, `status=${expectedStatusParam}`);
+async function assertText(res: Response, expectedSnippet: string) {
+  assertEquals(res.status, 200);
+  const ct = res.headers.get("content-type") ?? "";
+  assertStringIncludes(ct.toLowerCase(), "text/plain");
+  assertStringIncludes(ct.toLowerCase(), "charset=utf-8");
+  const body = await res.text();
+  assertStringIncludes(body, expectedSnippet);
 }
 
-Deno.test("respond-invite: invalid action redirects to invalid", async () => {
+Deno.test("respond-invite: invalid action returns plain text", async () => {
   const res = await call("?a=foo&t=abc");
-  await assertRedirect(res, "invalid");
+  await assertText(res, "ungültig");
 });
 
-Deno.test("respond-invite: missing params redirects to invalid", async () => {
+Deno.test("respond-invite: missing params returns plain text", async () => {
   const res = await call("");
-  await assertRedirect(res, "invalid");
+  await assertText(res, "ungültig");
 });
 
-Deno.test("respond-invite: unknown token (accept) redirects to invalid", async () => {
+Deno.test("respond-invite: unknown token (accept) returns plain text", async () => {
   const res = await call("?a=accept&t=this-token-does-not-exist-xyz-123");
-  await assertRedirect(res, "invalid");
+  await assertText(res, "ungültig");
 });
 
-Deno.test("respond-invite: unknown token (decline) redirects to invalid", async () => {
+Deno.test("respond-invite: unknown token (decline) returns plain text", async () => {
   const res = await call("?a=decline&t=this-token-does-not-exist-xyz-456");
-  await assertRedirect(res, "invalid");
+  await assertText(res, "ungültig");
 });
