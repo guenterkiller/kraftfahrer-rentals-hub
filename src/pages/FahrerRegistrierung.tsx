@@ -887,42 +887,41 @@ const FahrerRegistrierung = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="stundensatz">Honorarvorstellung netto (€) *</Label>
+                      <Label htmlFor="stundensatz">Gewünschter Tagessatz / Hinweis zur Vergütung (optional)</Label>
                       <Input
                         id="stundensatz"
-                        type="number"
-                        step="0.50"
-                        placeholder="z. B. 35"
+                        type="text"
+                        placeholder="z. B. 350 € / Tag oder freier Hinweis"
                         value={formData.stundensatz}
                         onChange={(e) => handleInputChange('stundensatz', e.target.value)}
                         className={validationErrors.stundensatz ? "border-destructive" : ""}
-                        required
                       />
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Bitte geben Sie Ihre gewünschte Netto-Honorarvorstellung als selbstständiger Unternehmer an.
-                      </p>
                       {validationErrors.stundensatz && (
                         <p id="stundensatz-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.stundensatz}</p>
                       )}
                     </div>
                     <div>
-                      <Label htmlFor="verfuegbarkeit">Verfügbarkeit</Label>
-                      <Select 
-                        value={formData.verfuegbarkeit} 
+                      <Label htmlFor="verfuegbarkeit">Grundsätzliche Verfügbarkeit (optional)</Label>
+                      <Select
+                        value={formData.verfuegbarkeit}
                         onValueChange={(value) => handleInputChange('verfuegbarkeit', value)}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Verfügbarkeit wählen" />
+                          <SelectValue placeholder="Bitte auswählen" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="sofort">Kurzfristig verfügbar</SelectItem>
-                          <SelectItem value="1woche">In 1 Woche</SelectItem>
-                          <SelectItem value="2wochen">In 2 Wochen</SelectItem>
-                          <SelectItem value="1monat">In 1 Monat</SelectItem>
+                          <SelectItem value="kurzfristig">kurzfristig verfügbar</SelectItem>
+                          <SelectItem value="tageweise">tageweise verfügbar</SelectItem>
+                          <SelectItem value="wochenweise">wochenweise verfügbar</SelectItem>
+                          <SelectItem value="absprache">nur nach Absprache</SelectItem>
+                          <SelectItem value="interessiert">aktuell nicht verfügbar, aber interessiert</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
+                  <p className="text-xs text-muted-foreground -mt-2">
+                    Die konkrete Vergütung und der Einsatzzeitraum werden Ihnen jeweils im einzelnen Auftragsangebot mitgeteilt. Sie entscheiden frei, ob Sie ein Angebot annehmen oder ablehnen.
+                  </p>
 
                     {/* Dokument-Uploads */}
                    <div className="space-y-4">
