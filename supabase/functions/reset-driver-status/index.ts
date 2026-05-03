@@ -1,10 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+const corsHeaders = createCorsHeaders();
 
 interface ResetDriverRequest {
   driverId: string;
@@ -14,17 +11,15 @@ interface ResetDriverRequest {
 const handler = async (req: Request): Promise<Response> => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return handleCorsPreflightRequest(corsHeaders);
   }
 
   try {
-    const { driverId, newStatus }: ResetDriverRequest = await req.json();
+    const authResult = await verifyAdminAuth(req);
+    if (!authResult.success) return authResult.response;
+    const supabase = authResult.supabase;
 
-    // Initialize Supabase client with service role
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    const { driverId, newStatus }: ResetDriverRequest = await req.json();
 
     console.log(`🔄 Resetting driver ${driverId} status to ${newStatus}`);
 
