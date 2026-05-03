@@ -67,8 +67,6 @@ E-Mail: info@kraftfahrer-mieten.com
   const headers = new Headers();
   headers.set("Content-Type", "text/html; charset=utf-8");
   headers.set("X-Content-Type-Options", "nosniff");
-  headers.set("Cache-Control", "no-store");
-  headers.set("Access-Control-Allow-Origin", "*");
 
   return new Response(html, { status: 200, headers });
 }
