@@ -6,15 +6,19 @@ function page(msg: string, isSuccess: boolean = true) {
   const bgColor = isSuccess ? '#d4fdf7' : '#fef2f2';
   const borderColor = isSuccess ? '#10b981' : '#ef4444';
   const textColor = isSuccess ? '#065f46' : '#991b1b';
-  
-  return new Response(
-    `<!DOCTYPE html>
-    <html lang="de">
-    <head>
-      <meta charset="utf-8">
-      <title>${msg}</title>
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      <style>
+
+  const safeMsg = String(msg ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  const html = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${safeMsg}</title>
+<style>
         body { 
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
           max-width: 600px;
@@ -43,27 +47,29 @@ function page(msg: string, isSuccess: boolean = true) {
           border-top: 1px solid #ddd;
           color: #666;
         }
-      </style>
-    </head>
-    <body>
-      <div class="message">
-        <h2>${msg}</h2>
-        <p>Vielen Dank. Sie koennen dieses Fenster schliessen.</p>
-      </div>
-      <div class="contact">
-        <p><strong>Bei Fragen:</strong></p>
-        <p>
-          Telefon: +49 1577 1442285<br>
-          E-Mail: info@kraftfahrer-mieten.com
-        </p>
-      </div>
-    </body>
-    </html>`,
-    { 
-      status: 200,
-      headers: { "Content-Type": "text/html; charset=utf-8" } 
-    }
-  );
+</style>
+</head>
+<body>
+<div class="message">
+<h2>${safeMsg}</h2>
+<p>Vielen Dank. Sie koennen dieses Fenster schliessen.</p>
+</div>
+<div class="contact">
+<p><strong>Bei Fragen:</strong></p>
+<p>
+Telefon: +49 1577 1442285<br>
+E-Mail: info@kraftfahrer-mieten.com
+</p>
+</div>
+</body>
+</html>`;
+
+  const headers = new Headers();
+  headers.set("Content-Type", "text/html; charset=utf-8");
+  headers.set("X-Content-Type-Options", "nosniff");
+  headers.set("Cache-Control", "no-store");
+
+  return new Response(html, { status: 200, headers });
 }
 
 const handler = async (req: Request): Promise<Response> => {
