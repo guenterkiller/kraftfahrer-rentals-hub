@@ -1925,6 +1925,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   🚫 GESPERRT
                                 </Badge>
                               )}
+                              {f.email_opt_out && (
+                                <Badge
+                                  variant="outline"
+                                  className="border-orange-500 text-orange-700 bg-orange-50"
+                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                >
+                                  📭 Abgemeldet
+                                </Badge>
+                              )}
                               {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                                {f.status === 'pending' && (
                                  <Button
@@ -1979,6 +1988,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               {f.is_blocked && (
                                 <Badge variant="destructive" className="bg-red-600 text-xs">
                                   🚫
+                                </Badge>
+                              )}
+                              {f.email_opt_out && (
+                                <Badge
+                                  variant="outline"
+                                  className="border-orange-500 text-orange-700 bg-orange-50 text-xs"
+                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                >
+                                  📭
                                 </Badge>
                               )}
                               {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
