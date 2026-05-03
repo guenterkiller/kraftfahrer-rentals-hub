@@ -1,15 +1,12 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { Resend } from "npm:resend@2.0.0";
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { DriverBlockNotice } from '../_shared/email-templates/driver-block-notice.tsx';
 import { AdminBlockNotice } from '../_shared/email-templates/admin-block-notice.tsx';
+import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+const corsHeaders = createCorsHeaders();
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
@@ -47,16 +44,15 @@ function isNewsletterOptOut(reason?: string): boolean {
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return handleCorsPreflightRequest(corsHeaders);
   }
 
   try {
-    const { driverId, isBlocked, reason }: BlockDriverRequest = await req.json();
+    const authResult = await verifyAdminAuth(req);
+    if (!authResult.success) return authResult.response;
+    const supabase = authResult.supabase;
 
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    const { driverId, isBlocked, reason }: BlockDriverRequest = await req.json();
 
     // ── Newsletter opt-out path (no block, no punitive email) ──
     if (isBlocked && isNewsletterOptOut(reason)) {
