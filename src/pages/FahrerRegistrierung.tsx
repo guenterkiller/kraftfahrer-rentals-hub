@@ -190,10 +190,9 @@ const FahrerRegistrierung = () => {
         }
         break;
       case 'stundensatz':
-        if (!value || value.trim() === '') {
-          errors.stundensatz = 'Bitte geben Sie Ihre Honorarvorstellung netto (€) ein';
-        } else if (isNaN(Number(value)) || Number(value) <= 0) {
-          errors.stundensatz = 'Bitte geben Sie Ihre Netto-Honorarvorstellung als gültige Zahl ein (z. B. 35)';
+        // Optionales Feld – nur Zahlenformat prüfen, falls etwas eingegeben wurde
+        if (value && value.trim() !== '' && (isNaN(Number(value)) || Number(value) <= 0)) {
+          errors.stundensatz = 'Bitte als gültige Zahl angeben (z. B. 35) oder Feld leer lassen';
         }
         break;
       case 'fuehrerscheinklassen':
