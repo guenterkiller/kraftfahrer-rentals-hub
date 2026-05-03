@@ -2,73 +2,30 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 
-function page(msg: string, isSuccess: boolean = true) {
-  const bgColor = isSuccess ? '#d4fdf7' : '#fef2f2';
-  const borderColor = isSuccess ? '#10b981' : '#ef4444';
-  const textColor = isSuccess ? '#065f46' : '#991b1b';
+type ResponseStatus =
+  | "accepted"
+  | "declined"
+  | "already_answered"
+  | "expired"
+  | "invalid"
+  | "error";
 
-  const safeMsg = String(msg ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+function siteBaseUrl(): string {
+  const candidate =
+    Deno.env.get("SITE_URL") ||
+    Deno.env.get("PUBLIC_SITE_URL") ||
+    Deno.env.get("APP_URL") ||
+    Deno.env.get("WEBSITE_URL") ||
+    "https://www.kraftfahrer-mieten.com";
+  return candidate.replace(/\/+$/, "");
+}
 
-  const html = `<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${safeMsg}</title>
-<style>
-        body { 
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-          max-width: 600px;
-          margin: 50px auto;
-          padding: 24px;
-          line-height: 1.55;
-        }
-        .message {
-          background: ${bgColor};
-          border: 1px solid ${borderColor};
-          padding: 20px;
-          border-radius: 8px;
-          margin-bottom: 20px;
-        }
-        h2 {
-          color: ${textColor};
-          margin: 0 0 15px 0;
-        }
-        p {
-          color: ${textColor};
-          margin: 10px 0;
-        }
-        .contact {
-          margin-top: 30px;
-          padding-top: 20px;
-          border-top: 1px solid #ddd;
-          color: #666;
-        }
-</style>
-</head>
-<body>
-<div class="message">
-<h2>${safeMsg}</h2>
-<p>Vielen Dank. Sie koennen dieses Fenster schliessen.</p>
-</div>
-<div class="contact">
-<p><strong>Bei Fragen:</strong></p>
-<p>
-Telefon: +49 1577 1442285<br>
-E-Mail: info@kraftfahrer-mieten.com
-</p>
-</div>
-</body>
-</html>`;
-
+function redirect(status: ResponseStatus): Response {
+  const location = `${siteBaseUrl()}/fahrer-antwort?status=${status}`;
   const headers = new Headers();
-  headers.set("Content-Type", "text/html; charset=utf-8");
-  headers.set("X-Content-Type-Options", "nosniff");
-
-  return new Response(html, { status: 200, headers });
+  headers.set("Location", location);
+  headers.set("Cache-Control", "no-store");
+  return new Response(null, { status: 302, headers });
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -80,7 +37,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(`📩 Invite response: action=${action}, token=${token?.substring(0, 8)}...`);
 
     if (!action || !token || !["accept", "decline"].includes(action)) {
-      return page("Ungueltiger Link oder Aktion", false);
+      return redirect("invalid");
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -88,7 +45,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
-      return page("Systemfehler: Fehlende Konfiguration", false);
+      return redirect("error");
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -102,16 +59,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (error) {
       console.error("Error fetching invite:", error);
-      return page("Fehler beim Laden der Einladung", false);
+      return redirect("error");
     }
 
     if (!invite) {
-      return page("Einladung nicht gefunden", false);
+      return redirect("invalid");
     }
 
     // Status prüfen
     if (invite.status !== "pending") {
-      return page("Ihre Rueckmeldung wurde bereits erfasst.", true);
+      return redirect("already_answered");
     }
 
     // Ablaufdatum prüfen
@@ -124,7 +81,7 @@ const handler = async (req: Request): Promise<Response> => {
         })
         .eq("id", invite.id);
       
-      return page("Dieser Link ist abgelaufen.", false);
+      return redirect("expired");
     }
 
     // Status aktualisieren
@@ -148,7 +105,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (updateError) {
       console.error("Error updating invite:", updateError);
-      return page("Fehler beim Speichern der Antwort", false);
+      return redirect("error");
     }
 
     console.log(`✅ Invite ${invite.id} updated to ${newStatus}`);
@@ -281,19 +238,19 @@ const handler = async (req: Request): Promise<Response> => {
           console.error("Failed to send admin error mail:", e);
         }
         // Fahrer sieht keinen technischen Fehler
-        return page("Vielen Dank. Ihre Rueckmeldung wurde uebermittelt. Fahrerexpress meldet sich zur weiteren Abstimmung.", true);
+        return redirect("accepted");
       }
 
       console.log(`✅ Assignment ready for job ${invite.job_id} and driver ${invite.driver_id}`);
-      return page("Bestaetigt: Sie haben den Auftrag angenommen.", true);
+      return redirect("accepted");
     } else {
       console.log(`✅ Invite declined for job ${invite.job_id}`);
-      return page("Bestaetigt: Sie haben den Auftrag abgelehnt.", true);
+      return redirect("declined");
     }
 
   } catch (e) {
     console.error("Unexpected error in respond-invite:", e);
-    return page("Unerwarteter Fehler. Bitte melden Sie sich beim Disponenten.", false);
+    return redirect("error");
   }
 };
 
