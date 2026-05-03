@@ -40,7 +40,8 @@ const handler = async (req: Request): Promise<Response> => {
       .from("fahrer_profile")
       .select("id, vorname, nachname, email")
       .eq("status", "approved")
-      .eq("email_opt_out", false);
+      .eq("email_opt_out", false)
+      .eq("is_blocked", false);
 
     if (driversError) throw driversError;
     if (!drivers || drivers.length === 0) {

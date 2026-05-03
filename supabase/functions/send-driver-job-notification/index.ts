@@ -70,6 +70,14 @@ const handler = async (req: Request): Promise<Response> => {
 
 
     // Generate unique token and store invitation
+    if (driver.email_opt_out || driver.is_blocked) {
+      console.log(`⛔ Skipping driver ${driverId} (email_opt_out=${driver.email_opt_out}, is_blocked=${driver.is_blocked})`);
+      return new Response(JSON.stringify({ skipped: true, reason: driver.email_opt_out ? 'email_opt_out' : 'blocked' }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     const token = randomToken(48);
     const tokenExpiresAt = new Date(Date.now() + 1000 * 60 * 60 * 48); // 48 Stunden
 

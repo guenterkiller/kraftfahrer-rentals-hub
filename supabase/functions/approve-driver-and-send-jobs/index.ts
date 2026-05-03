@@ -3,6 +3,7 @@ import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import { DriverApprovalEmail } from './_templates/driver-approval-email.tsx';
+import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from '../_shared/driver-unsubscribe-token.ts';
 import { AdminDriverApprovalNotification } from './_templates/admin-driver-approval-notification.tsx';
 import { 
   verifyAdminAuth, 
@@ -203,10 +204,15 @@ serve(async (req) => {
     }
 
     // 4. Render driver email HTML using React Email
+    const _unsubSecret = Deno.env.get("INTERNAL_FN_SECRET") || "";
+    const driverUnsubscribeUrl = _unsubSecret
+      ? buildDriverUnsubscribeUrl(await makeDriverUnsubscribeToken(driver.id, _unsubSecret))
+      : undefined;
     const driverHtml = await renderAsync(
       React.createElement(DriverApprovalEmail, {
         driverName: `${driver.vorname} ${driver.nachname}`,
         hasMatchingJobs: invitesToSend.length > 0,
+        unsubscribeUrl: driverUnsubscribeUrl,
       })
     );
 

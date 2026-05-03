@@ -4,6 +4,7 @@ import { Resend } from "npm:resend@4.0.0";
 import React from "npm:react@18.3.1";
 import { renderAsync } from "npm:@react-email/components@0.0.22";
 import { JobNotificationEmail } from "./_templates/job-notification.tsx";
+import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from "../_shared/driver-unsubscribe-token.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -100,8 +101,10 @@ serve(async (req) => {
     // Get all approved drivers with email addresses
     const { data: drivers, error: driversError } = await supabase
       .from("fahrer_profile")
-      .select("id, vorname, nachname, email")
+      .select("id, vorname, nachname, email, email_opt_out, is_blocked")
       .eq("status", "approved")
+      .eq("email_opt_out", false)
+      .eq("is_blocked", false)
       .not("email", "is", null);
 
     if (driversError) {
@@ -154,6 +157,11 @@ serve(async (req) => {
         const acceptUrl = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
         const declineUrl = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=decline&token=${encodeURIComponent(token)}`;
 
+        const unsubSecret = Deno.env.get("INTERNAL_FN_SECRET") || "";
+        const unsubscribeUrl = unsubSecret
+          ? buildDriverUnsubscribeUrl(await makeDriverUnsubscribeToken(driver.id, unsubSecret))
+          : undefined;
+
         const html = await renderAsync(
           React.createElement(JobNotificationEmail, {
             driverName: `${driver.vorname} ${driver.nachname}`,
@@ -167,6 +175,7 @@ serve(async (req) => {
             besonderheiten: job.besonderheiten,
             acceptUrl,
             declineUrl,
+            unsubscribeUrl,
           })
         );
 

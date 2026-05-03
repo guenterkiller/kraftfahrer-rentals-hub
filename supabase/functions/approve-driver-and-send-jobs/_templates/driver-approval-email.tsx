@@ -5,11 +5,13 @@ import { BaseEmail, boxStyles, textStyles } from '../../_shared/email-templates/
 interface DriverApprovalEmailProps {
   driverName: string;
   hasMatchingJobs: boolean;
+  unsubscribeUrl?: string;
 }
 
 export const DriverApprovalEmail = ({
   driverName,
   hasMatchingJobs,
+  unsubscribeUrl,
 }: DriverApprovalEmailProps) => {
   return (
     <BaseEmail previewText="Sie sind jetzt bei Fahrerexpress freigeschaltet">
@@ -78,6 +80,16 @@ export const DriverApprovalEmail = ({
           ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
         </Text>
       </Section>
+
+      {unsubscribeUrl && (
+        <Section style={{ marginTop: 16, textAlign: 'center' as const }}>
+          <Text style={{ ...textStyles.muted, fontSize: '12px' }}>
+            <a href={unsubscribeUrl} style={{ color: '#6b7280', textDecoration: 'underline' }}>
+              Keine weiteren Auftragsangebote erhalten
+            </a>
+          </Text>
+        </Section>
+      )}
     </BaseEmail>
   );
 };
