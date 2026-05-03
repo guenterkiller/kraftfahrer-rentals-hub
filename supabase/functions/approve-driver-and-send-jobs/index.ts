@@ -253,8 +253,11 @@ serve(async (req) => {
 
     // 6b. Send a separate per-job invite email with accept/decline buttons (token-based)
     for (const { job, token } of invitesToSend) {
-      const acceptLink = `${SUPABASE_URL}/functions/v1/respond-invite?a=accept&t=${token}`;
-      const declineLink = `${SUPABASE_URL}/functions/v1/respond-invite?a=decline&t=${token}`;
+      // Links zeigen auf Frontend-Bestätigungsseite (Schutz vor Mail-Link-Scannern).
+      // Erst der Button-Klick auf der Seite löst per POST die Annahme/Ablehnung aus.
+      const SITE_BASE = Deno.env.get("SITE_URL") || "https://www.kraftfahrer-mieten.com";
+      const acceptLink = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
+      const declineLink = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=decline&token=${encodeURIComponent(token)}`;
       const inviteSubject = `Auftragsangebot: ${job.fahrzeugtyp} – ${job.einsatzort}`;
       const escape = (s: any) => String(s ?? '')
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
