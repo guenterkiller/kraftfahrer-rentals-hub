@@ -21,21 +21,114 @@ const MESSAGES: Record<ResponseStatus, string> = {
     "Es ist ein Fehler aufgetreten. Bitte melden Sie sich direkt bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285.",
 };
 
-function reply(status: ResponseStatus): Response {
-  const headers = new Headers();
-  headers.set("Content-Type", "text/plain; charset=utf-8");
-  headers.set("Cache-Control", "no-store");
-  headers.set("X-Content-Type-Options", "nosniff");
-  return new Response(MESSAGES[status], { status: 200, headers });
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+};
+
+function reply(status: ResponseStatus, httpStatus = 200): Response {
+  return new Response(
+    JSON.stringify({ status, message: MESSAGES[status] }),
+    {
+      status: httpStatus,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+        "X-Content-Type-Options": "nosniff",
+      },
+    },
+  );
+}
+
+function safeGetReply(action: string | null, token: string | null): Response {
+  // GET ist immer side-effect-free (Schutz vor Mail-Link-Scannern / Prefetch).
+  // Liefert nur neutralen Hinweis – KEINE DB-Writes, KEINE Admin-Mail.
+  const body = {
+    status: "preview",
+    message:
+      "Bitte bestätigen Sie Ihre Rückmeldung auf der Webseite. Diese Adresse ändert keinen Status.",
+    action: action ?? null,
+    has_token: !!token,
+    confirm_url: token && action
+      ? `https://www.kraftfahrer-mieten.com/fahrer-antwort-bestaetigen?action=${encodeURIComponent(action)}&token=${encodeURIComponent(token)}`
+      : "https://www.kraftfahrer-mieten.com/",
+  };
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
 }
 
 const handler = async (req: Request): Promise<Response> => {
   try {
-    const url = new URL(req.url);
-    const action = url.searchParams.get("a"); // "accept" | "decline"
-    const token = url.searchParams.get("t"); // Einmal-Token
+    if (req.method === "OPTIONS") {
+      return new Response(null, { headers: corsHeaders });
+    }
 
-    console.log(`📩 Invite response: action=${action}, token=${token?.substring(0, 8)}...`);
+    const url = new URL(req.url);
+
+    // ===== GET = side-effect-free =====
+    // Schützt gegen Mail-Link-Scanner / Prefetch (z.B. Go-http-client/2.0 von Google Cloud).
+    if (req.method === "GET") {
+      const a = url.searchParams.get("a") ?? url.searchParams.get("action");
+      const t = url.searchParams.get("t") ?? url.searchParams.get("token");
+      console.log(
+        `🔎 GET (no-op) respond-invite: action=${a}, token=${t?.substring(0, 8)}..., ua=${req.headers.get("user-agent")}`,
+      );
+      return safeGetReply(a, t);
+    }
+
+    // ===== Nur POST darf Status ändern =====
+    if (req.method !== "POST") {
+      return new Response(
+        JSON.stringify({ error: "Method not allowed" }),
+        {
+          status: 405,
+          headers: {
+            ...corsHeaders,
+            "Content-Type": "application/json; charset=utf-8",
+            "Allow": "POST, GET, OPTIONS",
+          },
+        },
+      );
+    }
+
+    // POST: Body kann JSON oder FormData sein. Query-Params als Fallback.
+    let action: string | null = null;
+    let token: string | null = null;
+    const ct = req.headers.get("content-type") || "";
+    try {
+      if (ct.includes("application/json")) {
+        const body = await req.json();
+        action = body?.action ?? body?.a ?? null;
+        token = body?.token ?? body?.t ?? null;
+      } else if (
+        ct.includes("application/x-www-form-urlencoded") ||
+        ct.includes("multipart/form-data")
+      ) {
+        const form = await req.formData();
+        action = (form.get("action") ?? form.get("a")) as string | null;
+        token = (form.get("token") ?? form.get("t")) as string | null;
+      }
+    } catch (_e) {
+      // ignore – fallback auf Query
+    }
+    if (!action) action = url.searchParams.get("action") ?? url.searchParams.get("a");
+    if (!token) token = url.searchParams.get("token") ?? url.searchParams.get("t");
+
+    // Normalisierung: accepted/declined → accept/decline
+    if (action === "accepted") action = "accept";
+    if (action === "declined") action = "decline";
+
+    console.log(`📩 POST respond-invite: action=${action}, token=${token?.substring(0, 8)}...`);
 
     if (!action || !token || !["accept", "decline"].includes(action)) {
       return reply("invalid");
