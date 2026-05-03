@@ -112,7 +112,7 @@ export const JobNotificationEmail = ({
                       display: 'inline-block',
                     }}
                   >
-                    ✅ Ich kann den Auftrag übernehmen
+                    Ich kann den Auftrag übernehmen
                   </Button>
                 )}
               </td>
@@ -131,7 +131,7 @@ export const JobNotificationEmail = ({
                       display: 'inline-block',
                     }}
                   >
-                    ❌ Ich kann nicht übernehmen
+                    Ich kann nicht übernehmen
                   </Button>
                 )}
               </td>
