@@ -351,7 +351,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Die Preise richten sich nach Einsatzart, Dauer, Fahrzeugtyp und Auftragsumfang. Maßgeblich ist die jeweilige Auftragsbestätigung. Eine Übersicht finden Sie auf der Seite „Preise & Ablauf".
+                    Die Preise richten sich nach Einsatzart, Dauer, Fahrzeugtyp und Auftragsumfang. Maßgeblich ist die jeweilige Auftragsbestätigung. Eine Übersicht finden Sie auf der Seite „Preise & Ablauf“.
                   </p>
                 </CardContent>
               </Card>
