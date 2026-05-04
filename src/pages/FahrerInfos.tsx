@@ -75,7 +75,7 @@ const FahrerInfos = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Vergütung</h4>
-                    <p className="text-muted-foreground text-sm">Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot vor Einsatzbeginn. Maßgeblich ist ausschließlich dieses Angebot.</p>
+                    <p className="text-muted-foreground text-sm">Die konkrete Vergütung ergibt sich aus dem jeweiligen Auftragsangebot vor Einsatzbeginn. Maßgeblich ist ausschließlich dieses Angebot.</p>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-1">Pflichten</h4>
