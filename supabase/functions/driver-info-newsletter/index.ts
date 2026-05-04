@@ -14,6 +14,12 @@ const corsHeaders = {
 
 const SUBJECT = "Fahraufträge jetzt einfacher annehmen oder ablehnen";
 
+// Allowlist for test recipients (mode=test). Anything else is rejected.
+const TEST_EMAIL_ALLOWLIST = new Set<string>([
+  "info@kraftfahrer-mieten.com",
+  "guenter.killer@t-online.de",
+]);
+
 function escape(s: string): string {
   return (s ?? "").replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!)
@@ -99,6 +105,40 @@ serve(async (req) => {
     const internalSecret = Deno.env.get("INTERNAL_FN_SECRET") || "";
     if (!internalSecret) throw new Error("INTERNAL_FN_SECRET missing");
 
+    // ------------------------------------------------------------------
+    // AUTH: Require either internal secret header OR valid admin JWT.
+    // Applies to ALL modes (preview / test / send) — no anonymous access.
+    // Mirrors the pattern used in send-driver-newsletter.
+    // ------------------------------------------------------------------
+    const providedSecret = req.headers.get("x-internal-secret");
+    const authHeader = req.headers.get("authorization");
+    let isAuthorized = false;
+
+    if (providedSecret && providedSecret === internalSecret) {
+      isAuthorized = true;
+    }
+
+    if (!isAuthorized && authHeader) {
+      const token = authHeader.replace(/^Bearer\s+/i, "");
+      const { data: userData, error: userErr } = await supabase.auth.getUser(token);
+      if (!userErr && userData?.user) {
+        const { data: roleRow } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userData.user.id)
+          .eq("role", "admin")
+          .maybeSingle();
+        if (roleRow) isAuthorized = true;
+      }
+    }
+
+    if (!isAuthorized) {
+      return new Response(
+        JSON.stringify({ ok: false, error: "Forbidden" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
     let body: any = {};
     try { body = await req.json(); } catch (_e) { /* GET / empty */ }
     const mode: "preview" | "test" | "send" = body.mode ?? "preview";
@@ -117,16 +157,15 @@ serve(async (req) => {
       (d) => d.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email),
     );
 
-    // Vorschau
+    // Vorschau – anonymisiert (keine echten Fahrer-E-Mails / Vornamen ausliefern)
     if (mode === "preview") {
-      const sample = recipients[0] ?? { id: "00000000-0000-0000-0000-000000000000", vorname: "Vorname" };
-      const token = await makeDriverUnsubscribeToken(sample.id, internalSecret);
-      const html = renderHtml(sample.vorname || "Vorname", buildDriverUnsubscribeUrl(token));
+      const dummyId = "00000000-0000-0000-0000-000000000000";
+      const token = await makeDriverUnsubscribeToken(dummyId, internalSecret);
+      const html = renderHtml("Vorname", buildDriverUnsubscribeUrl(token));
       return new Response(
         JSON.stringify({
           ok: true, mode, subject: SUBJECT,
           recipient_count: recipients.length,
-          sample_recipient: sample.email ?? null,
           html_preview: html,
         }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } },
@@ -138,6 +177,18 @@ serve(async (req) => {
 
     // Testmail
     if (mode === "test") {
+      // Test-Empfänger müssen auf der Allowlist stehen
+      const normalizedTest = (testEmail || "").trim().toLowerCase();
+      if (!TEST_EMAIL_ALLOWLIST.has(normalizedTest)) {
+        return new Response(
+          JSON.stringify({
+            ok: false,
+            error: "test_email not allowed. Only internal allowlist addresses are permitted.",
+          }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
       // Fahrer-Datensatz für Token suchen (falls vorhanden), sonst Dummy
       const target = recipients.find((d) => d.email?.toLowerCase() === testEmail.toLowerCase())
         ?? (await supabase.from("fahrer_profile").select("id, vorname, email")
