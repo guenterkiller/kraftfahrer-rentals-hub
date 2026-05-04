@@ -68,7 +68,7 @@ serve(async (req) => {
         <div style="background:#fff;border:1px solid #e5e5e5;padding:20px;border-radius:8px;">
           <h3>Auftragsdetails</h3>
           <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
-          <p><strong>Zeitraum:</strong> ${job.zeitraum}</p>
+          <p><strong>Zeitraum:</strong> ${(job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
           <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
           <p><strong>Führerscheinklasse:</strong> ${job.fuehrerscheinklasse}</p>
           <p><strong>Tätigkeit:</strong> ${job.nachricht}</p>
