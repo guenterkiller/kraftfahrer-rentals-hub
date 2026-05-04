@@ -113,7 +113,7 @@ const handler = async (req: Request): Promise<Response> => {
           <p><strong>Kunde:</strong> ${job.customer_name}</p>
           <p><strong>Unternehmen:</strong> ${job.company || 'Nicht angegeben'}</p>
           <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
-          <p><strong>Zeitraum:</strong> ${job.zeitraum}</p>
+          <p><strong>Zeitraum:</strong> ${(job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
           <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
           <p><strong>Führerscheinklasse:</strong> ${job.fuehrerscheinklasse}</p>
           ${job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${job.besonderheiten}</p>` : ''}
