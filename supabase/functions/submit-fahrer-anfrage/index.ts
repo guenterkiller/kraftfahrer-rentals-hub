@@ -200,15 +200,15 @@ const handler = async (req: Request): Promise<Response> => {
         if (!isNaN(date.getTime())) {
           const formattedDate = date.toLocaleDateString('de-DE');
           zeitraumFormatted = einsatzdauer 
-            ? `Ab ${formattedDate} für ${einsatzdauer} Tag(e)`
+            ? `Ab ${formattedDate} für ${einsatzdauer}`
             : `Ab ${formattedDate}`;
         }
       } catch (dateError) {
         console.error("Date conversion error:", dateError);
-        zeitraumFormatted = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer} Tag(e)` : "");
+        zeitraumFormatted = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
       }
     } else if (einsatzdauer) {
-      zeitraumFormatted = `Dauer: ${einsatzdauer} Tag(e)`;
+      zeitraumFormatted = `Dauer: ${einsatzdauer}`;
     }
     
     // Create einsatzort from address
