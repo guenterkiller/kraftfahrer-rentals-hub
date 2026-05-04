@@ -12,7 +12,7 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
-const SUBJECT = "Neue Funktion: Fahraufträge jetzt einfacher annehmen oder ablehnen";
+const SUBJECT = "Fahraufträge jetzt einfacher annehmen oder ablehnen";
 
 function escape(s: string): string {
   return (s ?? "").replace(/[&<>"']/g, (c) =>
@@ -31,7 +31,7 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
     <p>Ab sofort erhalten Sie passende Auftragsangebote per E-Mail mit direkter Antwortmöglichkeit.</p>
 
     <p><strong>Das bedeutet für Sie:</strong></p>
-    <p>Sie sehen in der E-Mail alle wichtigen Einsatzdaten:</p>
+    <p>In der E-Mail sehen Sie alle wichtigen Einsatzdaten:</p>
     <ul>
       <li>Einsatzort</li>
       <li>Zeitraum</li>
@@ -40,8 +40,9 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
       <li>Aufgabenbeschreibung</li>
     </ul>
 
-    <p>Direkt darunter können Sie einfach auswählen:</p>
+    <p>Direkt darunter können Sie auswählen:</p>
     <p style="margin:6px 0;">✅ <strong>„Ich kann den Auftrag übernehmen“</strong></p>
+    <p style="margin:4px 0;">oder</p>
     <p style="margin:6px 0;">❌ <strong>„Ich kann nicht übernehmen“</strong></p>
 
     <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:12px 14px;margin:18px 0;color:#92400e;">
@@ -57,7 +58,7 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
     <p>Sie entscheiden bei jedem Angebot frei, ob Sie den Einsatz übernehmen möchten oder nicht.</p>
 
     <p style="margin-top:24px;"><strong>Keine weiteren Auftragsangebote gewünscht?</strong></p>
-    <p>Wenn Sie künftig keine Auftragsangebote mehr von Fahrerexpress erhalten möchten, können Sie sich jederzeit abmelden:</p>
+    <p>Wenn Sie künftig keine Auftragsangebote mehr von Fahrerexpress erhalten möchten, können Sie sich jederzeit über den Abmeldelink am Ende der E-Mail abmelden:</p>
     <p style="text-align:center;margin:18px 0;">
       <a href="${unsubscribeUrl}"
          style="display:inline-block;background:#1d4ed8;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:bold;">
@@ -66,7 +67,9 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
     </p>
     <p style="font-size:13px;color:#4b5563;">
       Ihre Daten werden dadurch nicht automatisch gelöscht. Sie erhalten lediglich keine weiteren Fahrerangebote mehr.
-      Wenn Sie zusätzlich eine Löschung Ihrer gespeicherten Daten wünschen, schreiben Sie uns bitte an
+    </p>
+    <p style="font-size:13px;color:#4b5563;">
+      Wenn Sie zusätzlich die Löschung Ihrer gespeicherten Daten wünschen, schreiben Sie uns bitte an
       <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.
     </p>
 
