@@ -20,7 +20,7 @@ const WhyFahrerexpress = () => {
     {
       icon: Phone,
       title: "Fahrer Dienstleister",
-      description: "Ihr Ansprechpartner für externe Fahrer-Dienstleistungen – selbstständige LKW-Fahrer auf Abruf"
+      description: "Ihr Ansprechpartner für externe Fahrer-Dienstleistungen – selbstständige LKW-Fahrer nach Verfügbarkeit"
     },
     {
       icon: Briefcase,

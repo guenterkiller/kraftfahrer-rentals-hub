@@ -36,7 +36,7 @@ const HeroSection = () => {
         </h1>
         
         <p className="text-base sm:text-xl md:text-2xl mb-4 sm:mb-8 drop-shadow-lg max-w-4xl mx-auto leading-relaxed">
-          Ersatzfahrer, Aushilfsfahrer & Mietfahrer ab <span className="text-white font-bold bg-red-600 px-2 py-1 rounded">349 €</span> pro Tag – Fahrer auf Abruf, tageweise oder wochenweise bestellen
+          Ersatzfahrer, Aushilfsfahrer & Mietfahrer ab <span className="text-white font-bold bg-red-600 px-2 py-1 rounded">349 €</span> pro Tag – nach Verfügbarkeit, tageweise oder wochenweise bestellen
         </p>
         
         <div className="bg-white/15 backdrop-blur-md px-4 py-3 mb-6 sm:mb-10 max-w-2xl mx-auto rounded-2xl border-2 border-white/30 shadow-xl animate-fade-in">
@@ -48,7 +48,7 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row gap-3 md:gap-6 justify-center items-center mb-10 sm:mb-16 animate-slide-up">
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
             <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />
-            <span className="text-xs sm:text-sm md:text-base font-semibold">Fahrer auf Abruf</span>
+            <span className="text-xs sm:text-sm md:text-base font-semibold">Nach Verfügbarkeit</span>
           </div>
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border-2 border-white/30 shadow-lg hover:bg-white/25 transition-all duration-300">
             <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary-foreground" aria-hidden="true" />

@@ -242,13 +242,13 @@ const Index = () => {
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?</h3>
                 <p className="text-muted-foreground">
-                  Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer für Speditionen sofort buchbar.
+                  Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit nach Verfügbarkeit anfragbar – tageweise oder wochenweise. Externe LKW Fahrer für Speditionen kurzfristig anfragbar.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Wie kurzfristig kann ein Fahrer eingesetzt werden?</h3>
                 <p className="text-muted-foreground">
-                  Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Für kurzfristigen Bedarf empfehlen wir, Ihren Fahrer-Dienstleister frühzeitig zu kontaktieren.
+                  Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer nach Verfügbarkeit, tageweise oder wochenweise buchbar. Für kurzfristigen Bedarf empfehlen wir, Ihren Fahrer-Dienstleister frühzeitig zu kontaktieren.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">
