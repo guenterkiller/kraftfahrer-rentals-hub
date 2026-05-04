@@ -130,13 +130,13 @@ serve(async (req) => {
       <strong>Ihr Fahrerexpress-Team</strong>
     </p>
     <p style="margin: 15px 0 0 0; color: #999; font-size: 12px;">
-      Fahrerexpress GmbH | Tel: +49 (0) 123 456789<br>
-      <a href="https://fahrerexpress.de" style="color: #059669;">www.fahrerexpress.de</a>
+      Fahrerexpress-Agentur | Tel: 01577 1442285<br>
+      <a href="https://www.kraftfahrer-mieten.com" style="color: #059669;">www.kraftfahrer-mieten.com</a>
     </p>
     <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
     <p style="margin: 0; color: #999; font-size: 11px;">
       Sie erhalten diese E-Mail als registrierter Fahrer bei Fahrerexpress.<br>
-      <a href="mailto:info@fahrerexpress.de?subject=Abmeldung%20Fahrer-Newsletter&body=Bitte%20melden%20Sie%20mich%20vom%20Fahrer-Rundschreiben%20ab.%20E-Mail:%20${encodeURIComponent(driver.email)}" style="color: #999;">Von Fahrer-Infos abmelden</a>
+      <a href="mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter&body=Bitte%20melden%20Sie%20mich%20vom%20Fahrer-Rundschreiben%20ab.%20E-Mail:%20${encodeURIComponent(driver.email)}" style="color: #999;">Von Fahrer-Infos abmelden</a>
     </p>
   </div>
 </body>
@@ -144,8 +144,8 @@ serve(async (req) => {
         `.trim();
 
         const emailPayload = {
-          from: `Fahrerexpress Fahrer-Team <${Deno.env.get('MAIL_FROM')}>`,
-          reply_to: 'fahrer@fahrerexpress.de',
+          from: Deno.env.get('MAIL_FROM') || 'Fahrerexpress Fahrer-Team <info@kraftfahrer-mieten.com>',
+          reply_to: 'info@kraftfahrer-mieten.com',
           to: [driver.email],
           subject: subject,
           html: emailHtml,
