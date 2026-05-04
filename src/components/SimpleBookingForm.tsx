@@ -814,7 +814,7 @@ const SimpleBookingForm = () => {
                             ? 'Wochenpreis 1.645 € netto / Woche'
                             : fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
                               ? '489 € netto / Einsatztag'
-                              : '349 € netto / Einsatztag'
+                              : 'Preis gemäß Auswahl'
                       }</div>
                     </div>
                   )}
