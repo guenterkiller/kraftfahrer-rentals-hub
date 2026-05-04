@@ -13,7 +13,7 @@ const LKWFahrerBuchen = () => {
   }, []);
   const seoData = {
     title: "LKW CE Fahrer buchen – ab 349 €/Tag deutschlandweit",
-    description: "LKW Fahrer buchen oder mieten – Ersatzfahrer, Mietfahrer deutschlandweit. Kurzfristig auf Abruf, tageweise. 349 €/Tag.",
+    description: "LKW Fahrer buchen oder mieten – Ersatzfahrer, Mietfahrer deutschlandweit. Kurzfristig nach Verfügbarkeit, tageweise. 349 €/Tag.",
     keywords: "LKW Fahrer buchen, LKW Fahrer mieten, LKW Fahrer leihen, Ersatzfahrer LKW, Ersatzfahrer LKW sofort, LKW Fahrer Krankheitsvertretung, Aushilfsfahrer LKW, LKW Mietfahrer, LKW Leihfahrer, Fahrer bestellen, externe Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer LKW, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW Fahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, CE Fahrer, ADR-Fahrer, LKW Fahrer Vermittlung",
     hreflang: {
       'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
@@ -52,11 +52,11 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
-        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer sofort buchbar."
+        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen Aushilfsfahrer, Mietfahrer oder Leihfahrer bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit nach Verfügbarkeit buchbar – tageweise oder wochenweise. Externe LKW Fahrer kurzfristig anfragbar."
       },
       {
         question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
-        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
+        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer nach Verfügbarkeit, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
       },
       {
         question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
@@ -108,8 +108,8 @@ const LKWFahrerBuchen = () => {
 
   const heroData = {
     h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
-    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Fahrer auf Abruf – tageweise buchbar. 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt.",
-    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig auf Abruf", "Transparente Tagessätze"]
+    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Selbstständige Fahrer für flexible Einsätze – tageweise buchbar. 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt.",
+    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig nach Verfügbarkeit", "Transparente Tagessätze"]
   };
 
   const faqData = {
@@ -145,11 +145,11 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
-        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe LKW Fahrer sofort buchbar."
+        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit nach Verfügbarkeit buchbar – tageweise oder wochenweise. Externe LKW Fahrer kurzfristig anfragbar."
       },
       {
         question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
-        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
+        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer nach Verfügbarkeit, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren LKW-Fahrer frühzeitig zu bestellen."
       },
       {
         question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
