@@ -248,8 +248,7 @@ const SimpleBookingForm = () => {
               <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-6">
                 <h3 className="font-semibold mb-2">Abrechnungsmodell: Agenturabrechnung – Vertragspartner ist Fahrerexpress</h3>
                 <p className="text-sm text-muted-foreground">
-                  Die Fahrleistung wird von einem selbstständigen Subunternehmer erbracht, der seine Rechnung an Fahrerexpress stellt. 
-                  Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
+                  Die Fahrerdienstleistung wird durch einen selbstständigen Unternehmer erbracht. Die Abrechnung gegenüber dem Auftraggeber erfolgt über Fahrerexpress gemäß Auftragsbestätigung. Dienst-/Werkleistung – keine Arbeitnehmerüberlassung.
                 </p>
               </div>
 
