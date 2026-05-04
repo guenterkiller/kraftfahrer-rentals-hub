@@ -43,8 +43,8 @@ const Wissenswertes = () => {
                   Da der Fahrer kein eigenes Fahrzeug einsetzt, handelt es sich nicht um eine Transportleistung im rechtlichen Sinne.
                 </p>
                 <ul className="space-y-2 pl-6">
-                  <li>➡ Keine Transportversicherung erforderlich.</li>
-                  <li>➡ Keine Vollkaskopflicht für den Fahrer.</li>
+                  <li>➡ Da die vermittelten Fahrer kein eigenes Fahrzeug einsetzen und keine eigene Transportleistung anbieten, ist in der Regel keine eigene Transportversicherung des Fahrers erforderlich. Die konkrete Versicherungssituation sollte im Einzelfall geprüft werden.</li>
+                  <li>➡ Eine Vollkaskoversicherung für das Fahrzeug ist Sache des Fahrzeughalters bzw. Auftraggebers.</li>
                   <li>➡ Empfehlenswert für den Fahrer: eine Betriebshaftpflicht.</li>
                 </ul>
               </CardContent>
@@ -108,7 +108,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Keine Lohnabrechnung nötig – Abrechnung über Fahrerexpress
+                    Keine eigene Personalabrechnung nötig – Abrechnung über Fahrerexpress
                   </p>
                 </CardContent>
               </Card>
@@ -159,7 +159,7 @@ const Wissenswertes = () => {
                     <li>✓ Die Zusammenarbeit erfolgt auf Basis eines Dienst- oder Werkvertrags ohne Eingliederung in die Betriebsorganisation des Auftraggebers</li>
                     <li>✓ Ergebnis definieren, nicht den Weg</li>
                     <li>✓ Fahrer nicht in Dienstpläne integrieren</li>
-                    <li>✓ Fahrer sollte mehrere Auftraggeber haben</li>
+                    <li>✓ Eine selbstständige Tätigkeit sollte nicht auf eine dauerhafte Eingliederung in den Betrieb eines einzelnen Auftraggebers hinauslaufen.</li>
                     <li>✓ Fahrer nutzt eigene Schutzausrüstung (soweit sinnvoll)</li>
                     <li>✓ Selbstständige Rechnungsstellung</li>
                   </ul>
@@ -297,7 +297,7 @@ const Wissenswertes = () => {
               <CardContent className="pt-6 space-y-6">
                 <div>
                   <h4 className="font-semibold text-lg mb-2">1. Vertragsverhältnis</h4>
-                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur.</p>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur organisiert und vermittelt Fahrerdienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur.</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">2. Einsatzdurchführung</h4>
@@ -305,15 +305,15 @@ const Wissenswertes = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">3. Haftung</h4>
-                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, sofern nicht grobe Fahrlässigkeit vorliegt.</p>
+                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, soweit gesetzlich zulässig und kein vorsätzliches oder grob fahrlässiges Verhalten vorliegt.</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">4. Abrechnung</h4>
-                  <p className="text-muted-foreground">Der Auftraggeber erhält eine Rechnung der Fahrerexpress-Agentur. Die Agentur begleicht im Anschluss die Vergütung der eingesetzten Subunternehmer.</p>
+                  <p className="text-muted-foreground">Der Auftraggeber erhält nach Einsatzende eine Rechnung der Fahrerexpress-Agentur gemäß Auftragsbestätigung.</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h4>
-                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung von durch Fahrerexpress vermittelten Unternehmern außerhalb der Agentur ist unzulässig.</p>
+                  <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung eines durch Fahrerexpress vermittelten Unternehmers außerhalb der Fahrerexpress-Agentur ist ohne vorherige Zustimmung von Fahrerexpress unzulässig. Dies gilt für den konkreten Einsatz sowie für Folgeaufträge im sachlichen Zusammenhang für einen Zeitraum von 12 Monaten nach Einsatzende.</p>
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">6. Gerichtsstand</h4>
@@ -351,8 +351,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Typische Stundensätze liegen je nach Fahrzeug und Einsatzart zwischen 45 und 75 Euro. 
-                    Für exakte Angebote kontaktieren Sie uns mit Ihrer Anfrage.
+                    Die Preise richten sich nach Einsatzart, Dauer, Fahrzeugtyp und Auftragsumfang. Maßgeblich ist die jeweilige Auftragsbestätigung. Eine Übersicht finden Sie auf der Seite „Preise & Ablauf".
                   </p>
                 </CardContent>
               </Card>
@@ -384,12 +383,8 @@ const Wissenswertes = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-3">
-                      <strong>Sie erhalten eine Rechnung direkt von Fahrerexpress.</strong>
-                    </p>
                     <p className="text-muted-foreground">
-                      Die Fahrer stellen ihre Rechnung an uns – Sie haben keinen Aufwand mit mehreren Rechnungen. 
-                      Das Abrechnungsmodell ist immer die Agenturabrechnung, bei der Fahrerexpress als Vertragspartner auftritt.
+                      Sie erhalten eine Rechnung direkt von Fahrerexpress gemäß Auftragsbestätigung. Damit haben Sie einen zentralen Ansprechpartner für Abrechnung und Einsatzkoordination.
                     </p>
                   </CardContent>
                 </Card>
@@ -402,9 +397,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Alle über Fahrerexpress vermittelten Fahrer verfügen über gültige Führerscheine, 
-                    entsprechende Berufserfahrung und notwendige Zusatzqualifikationen wie ADR-Schein 
-                    oder Kranführerschein, je nach Anforderung.
+                    Fahrer werden vor Einsatz nach den angegebenen Qualifikationen geprüft. Je nach Einsatzanforderung werden Führerschein, Berufserfahrung und Zusatzqualifikationen wie ADR-Schein oder Kranführerschein berücksichtigt.
                   </p>
                 </CardContent>
               </Card>
