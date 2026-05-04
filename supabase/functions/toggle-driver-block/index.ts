@@ -212,7 +212,7 @@ async function sendBlockNotification(
       },
       {
         template: 'admin_block_notice',
-        recipient: adminEmail,
+        recipient: adminRecipients.join(", "),
         status: 'sent',
         subject: `🚫 Fahrersperrung: ${driver.vorname} ${driver.nachname}`
       }

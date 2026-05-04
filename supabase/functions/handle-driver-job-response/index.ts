@@ -100,7 +100,7 @@ const handler = async (req: Request): Promise<Response> => {
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     // Feste Admin-Empfänger (ADMIN_EMAIL bewusst ignoriert)
     const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
-    const adminEmail = adminRecipients[0]; // Backwards-Compat falls einzeln verwendet
+    const adminRecipientLog = adminRecipients.join(", ");
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");
@@ -167,7 +167,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Log in email_log
     await supabase.from("email_log").insert({
-      recipient: adminEmail,
+      recipient: adminRecipientLog,
       subject: `[Antwort] ${driver?.vorname || "Fahrer"} ${driver?.nachname || ""} – ${friendlyAction} – Job ${job?.customer_name || invite.job_id}`,
       template: "driver-response",
       status: "pending",
@@ -235,12 +235,12 @@ const handler = async (req: Request): Promise<Response> => {
       try {
         const emailResult = await resend.emails.send({
           from: 'Fahrerexpress System <info@kraftfahrer-mieten.com>',
-          to: [adminEmail],
+          to: adminRecipients,
           subject: subject,
           html: html
         });
 
-        console.log(`✅ Admin notification sent to ${adminEmail}:`, emailResult);
+        console.log(`✅ Admin notification sent to ${adminRecipientLog}:`, emailResult);
 
         // Update email_log
         await supabase.from("email_log")
@@ -249,7 +249,7 @@ const handler = async (req: Request): Promise<Response> => {
             sent_at: new Date().toISOString(),
             message_id: emailResult.data?.id 
           })
-          .eq("recipient", adminEmail)
+          .eq("recipient", adminRecipientLog)
           .eq("template", "driver-response")
           .order("created_at", { ascending: false })
           .limit(1);
@@ -263,7 +263,7 @@ const handler = async (req: Request): Promise<Response> => {
             status: "failed",
             error_message: emailError.message || String(emailError)
           })
-          .eq("recipient", adminEmail)
+          .eq("recipient", adminRecipientLog)
           .eq("template", "driver-response")
           .order("created_at", { ascending: false })
           .limit(1);
