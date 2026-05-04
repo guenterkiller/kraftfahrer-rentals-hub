@@ -1,0 +1,1 @@
+UPDATE public.fahrer_profile SET email_opt_out = false, unsubscribed_at = NULL, unsubscribed_reason = NULL WHERE id = '854e0c5d-197b-4ef6-ac84-4652b70ca38a';
