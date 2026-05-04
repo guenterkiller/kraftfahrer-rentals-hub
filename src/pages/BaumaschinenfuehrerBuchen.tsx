@@ -83,11 +83,11 @@ const BaumaschinenfuehrerBuchen = () => {
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
-        answer: "Bei Fahrerausfall können Sie kurzfristig einen <strong>Aushilfsfahrer oder Mietfahrer</strong> bestellen. Unsere Ersatzfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise. Externe Fahrer-Dienstleistungen für Baustellen sofort buchbar."
+        answer: "Bei Fahrerausfall können Sie kurzfristig einen <strong>Aushilfsfahrer oder Mietfahrer</strong> bestellen. Unsere Ersatzfahrer sind deutschlandweit nach Verfügbarkeit anfragbar – tageweise oder wochenweise. Externe Fahrer-Dienstleistungen für Baustellen kurzfristig anfragbar."
       },
       {
         question: "Kann ich einen Baumaschinenführer tageweise oder wochenweise bestellen?",
-        answer: "Ja. Sie können <strong>Fahrer tageweise, wochenweise oder projektbezogen</strong> bestellen. Fahrer auf Abruf – flexibel nach Ihrem Bedarf. Als Fahrer-Dienstleister bieten wir externe Fahrer-Dienstleistungen für Baustellen."
+        answer: "Ja. Sie können <strong>Fahrer tageweise, wochenweise oder projektbezogen</strong> bestellen. Fahrer nach Verfügbarkeit – flexibel nach Ihrem Bedarf. Als Fahrer-Dienstleister bieten wir externe Fahrer-Dienstleistungen für Baustellen."
       }
     ]
   };

@@ -31,11 +31,11 @@ const KraftfahrerMieten = () => {
   };
 
   const heroData = {
-    h1: "Kraftfahrer mieten – deutschlandweit auf Abruf",
-    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit verfügbar. Fahrer tageweise oder wochenweise bestellen. Selbstständige LKW-Fahrer auf Abruf.",
+    h1: "Kraftfahrer mieten – deutschlandweit nach Verfügbarkeit",
+    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit verfügbar. Fahrer tageweise oder wochenweise bestellen. Selbstständige LKW-Fahrer nach Verfügbarkeit.",
     bullets: [
       "Aushilfsfahrer bei Fahrerausfall",
-      "Fahrer auf Abruf – tageweise/wochenweise",
+      "Fahrer nach Verfügbarkeit – tageweise/wochenweise",
       "Kipper, Baustelle, Sattelzug, Fahrmischer"
     ]
   };
@@ -73,11 +73,11 @@ const KraftfahrerMieten = () => {
       },
       {
         question: "Wie schnell bekommen wir einen Ersatzfahrer bei Fahrerausfall?",
-        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit auf Abruf verfügbar – tageweise oder wochenweise."
+        answer: "Bei Fahrerausfall durch Krankheit oder Urlaub können Sie kurzfristig einen <strong>Aushilfsfahrer, Mietfahrer oder Leihfahrer</strong> bestellen. Unsere Ersatzfahrer und Vertretungsfahrer sind deutschlandweit nach Verfügbarkeit anfragbar – tageweise oder wochenweise."
       },
       {
         question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
-        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer auf Abruf, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren Kraftfahrer frühzeitig zu bestellen."
+        answer: "Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens <strong>24 Stunden Vorlauf</strong>. Fahrer nach Verfügbarkeit, tageweise oder wochenweise buchbar. Als Fahrer-Dienstleister empfehlen wir, Ihren Kraftfahrer frühzeitig zu bestellen."
       },
       {
         question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",

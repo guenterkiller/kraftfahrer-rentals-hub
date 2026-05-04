@@ -60,7 +60,7 @@ const ErsatzfahrerLkw = () => {
 
   const heroData = {
     h1: "Ersatzfahrer LKW – Schnelle Hilfe bei Fahrerausfall",
-    intro: "Ihr Fahrer fällt kurzfristig aus? Krankheit, Urlaub oder spontaner Engpass – wir vermitteln Ersatzfahrer und Vertretungsfahrer deutschlandweit. Kein Stillstand, keine verpassten Touren. Selbstständige Fahrer auf Abruf, ab 349 € pro Tag.",
+    intro: "Ihr Fahrer fällt kurzfristig aus? Krankheit, Urlaub oder spontaner Engpass – wir vermitteln Ersatzfahrer und Vertretungsfahrer deutschlandweit. Kein Stillstand, keine verpassten Touren. Selbstständige Fahrer nach Verfügbarkeit, ab 349 € pro Tag.",
     bullets: ["Krankheitsvertretung in 24-72h", "Urlaubsvertretung planbar", "Kein AÜG notwendig"]
   };
 
