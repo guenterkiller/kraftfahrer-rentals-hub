@@ -42,11 +42,21 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
 
     setSendingTest(true);
     try {
-      // For testing, we just call Resend directly through a custom endpoint
-      // In production, this would go through the newsletter function
+      const { data, error } = await supabase.functions.invoke('send-driver-newsletter', {
+        body: { subject, message, testEmail: testEmail.trim() }
+      });
+      if (error) throw error;
+      console.log('Test newsletter response:', data);
       toast({
-        title: "Test-E-Mail Hinweis",
-        description: `Test-Modus: Betreff "${subject}" würde an ${testEmail} gesendet. Für echten Test das Rundschreiben an alle Fahrer verwenden.`
+        title: "Test-E-Mail versendet",
+        description: `Testmail wurde an ${testEmail} gesendet. Bitte Posteingang prüfen.`
+      });
+    } catch (error: any) {
+      console.error('Test newsletter send error:', error);
+      toast({
+        title: "Fehler beim Test-Versand",
+        description: error.message || "Unbekannter Fehler",
+        variant: "destructive"
       });
     } finally {
       setSendingTest(false);
