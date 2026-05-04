@@ -263,16 +263,35 @@ const handler = async (req: Request): Promise<Response> => {
 
       if (resendKey) {
         const resend = new Resend(resendKey);
-        const { error: mailError } = await resend.emails.send({
+        const { data: mailData, error: mailError } = await resend.emails.send({
           from: mailFrom,
           to: [adminTo],
           subject,
           html,
+          reply_to: driver?.email || undefined,
         });
         if (mailError) {
-          console.error("Admin mail send error:", mailError);
+          console.error("Admin mail send error:", JSON.stringify(mailError));
+          await supabase.from("email_log").insert({
+            recipient: adminTo,
+            subject,
+            template: newStatus === "accepted" ? "admin_invite_accepted" : "admin_invite_declined",
+            status: "failed",
+            error_message: typeof mailError === "string" ? mailError : JSON.stringify(mailError),
+            job_id: invite.job_id,
+          });
         } else {
-          console.log(`✅ Admin notified: ${subject}`);
+          const messageId = (mailData as any)?.id ?? null;
+          console.log(`✅ Admin notified: ${subject} (message_id=${messageId}, to=${adminTo}, from=${mailFrom})`);
+          await supabase.from("email_log").insert({
+            recipient: adminTo,
+            subject,
+            template: newStatus === "accepted" ? "admin_invite_accepted" : "admin_invite_declined",
+            status: "sent",
+            message_id: messageId,
+            sent_at: new Date().toISOString(),
+            job_id: invite.job_id,
+          });
         }
       } else {
         console.warn("RESEND_API_KEY not set – admin mail skipped");
