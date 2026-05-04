@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
+import { supabase } from "@/integrations/supabase/client";
 
 type ServerStatus =
   | "accepted"
@@ -10,9 +11,6 @@ type ServerStatus =
   | "invalid"
   | "error"
   | null;
-
-const RESPOND_URL = `${import.meta.env.VITE_SUPABASE_URL ?? ""}/functions/v1/respond-invite`;
-const ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? "";
 
 const STATUS_TEXT: Record<Exclude<ServerStatus, null>, string> = {
   accepted:
@@ -55,15 +53,14 @@ export default function FahrerAntwortBestaetigen() {
     setSubmitting(true);
     setErrorMsg(null);
     try {
-      const res = await fetch(RESPOND_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(ANON_KEY ? { apikey: ANON_KEY, Authorization: `Bearer ${ANON_KEY}` } : {}),
-        },
-        body: JSON.stringify({ action, token }),
+      const { data, error } = await supabase.functions.invoke("respond-invite", {
+        body: { action, token },
       });
-      const data = await res.json().catch(() => ({}));
+      if (error) {
+        console.error("respond-invite error:", error);
+        setResult("error");
+        return;
+      }
       const status: ServerStatus = (data?.status as ServerStatus) ?? "error";
       setResult(status);
     } catch (_e) {
