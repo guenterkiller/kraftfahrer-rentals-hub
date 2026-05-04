@@ -30,31 +30,24 @@ export async function makeUnsubscribeToken(driverId: string): Promise<string> {
   return `${driverId}.${sig}`;
 }
 
-function htmlPage(title: string, body: string): Response {
-  const html = `<!doctype html><html lang="de"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>${title}</title>
-<style>
-  body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f8f9fa;margin:0;padding:32px 16px;color:#1a1a1a}
-  .card{max-width:560px;margin:0 auto;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);padding:32px}
-  h1{font-size:22px;margin:0 0 16px}
-  p{line-height:1.6;font-size:15px}
-  .muted{color:#6b7280;font-size:13px;margin-top:24px}
-  a{color:#bb2c29}
-</style></head><body><div class="card">${body}</div></body></html>`;
-  return new Response(html, {
-    status: 200,
-    headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+function textResponse(message: string, status = 200): Response {
+  return new Response(message, {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "text/plain; charset=utf-8" },
   });
 }
+
+const MSG_INVALID = "Ungültiger Abmeldelink. Bitte kontaktieren Sie info@kraftfahrer-mieten.com.";
+const MSG_ERROR = "Fehler bei der Abmeldung. Bitte kontaktieren Sie info@kraftfahrer-mieten.com.";
+const MSG_ALREADY = "Sie sind bereits abgemeldet. Sie erhalten keine weiteren Auftragsangebote von Fahrerexpress.";
+const MSG_OK = "Abmeldung gespeichert. Sie erhalten keine weiteren Auftragsangebote von Fahrerexpress.";
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   if (!SECRET) {
     console.error("INTERNAL_FN_SECRET not configured");
-    return htmlPage("Fehler", `<h1>Konfigurationsfehler</h1><p>Bitte kontaktieren Sie info@kraftfahrer-mieten.com.</p>`);
+    return textResponse(MSG_ERROR, 500);
   }
 
   const url = new URL(req.url);
@@ -62,12 +55,12 @@ serve(async (req: Request) => {
   const [driverId, providedSig] = token.split(".");
 
   if (!driverId || !providedSig) {
-    return htmlPage("Ungültiger Link", `<h1>Ungültiger Abmeldelink</h1><p>Der Link ist unvollständig oder fehlerhaft. Bitte schreiben Sie an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>`);
+    return textResponse(MSG_INVALID, 400);
   }
 
   const expectedSig = await sign(driverId);
   if (expectedSig !== providedSig) {
-    return htmlPage("Ungültiger Link", `<h1>Ungültiger Abmeldelink</h1><p>Der Link ist nicht gültig. Bitte schreiben Sie an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>`);
+    return textResponse(MSG_INVALID, 400);
   }
 
   const supabase = createClient(
@@ -82,17 +75,12 @@ serve(async (req: Request) => {
     .maybeSingle();
 
   if (error || !driver) {
-    return htmlPage("Nicht gefunden", `<h1>Profil nicht gefunden</h1><p>Bitte schreiben Sie an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>`);
+    return textResponse(MSG_INVALID, 404);
   }
 
   // Bereits abgemeldet?
   if (driver.email_opt_out) {
-    return htmlPage(
-      "Bereits abgemeldet",
-      `<h1>Sie sind bereits abgemeldet</h1>
-       <p>Sie erhalten keine weiteren Auftragsangebote von Fahrerexpress.</p>
-       <p class="muted">Falls Sie Ihr Profil später wieder aktivieren möchten, kontaktieren Sie uns bitte unter <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>`,
-    );
+    return textResponse(MSG_ALREADY);
   }
 
   const nowIso = new Date().toISOString();
@@ -107,7 +95,7 @@ serve(async (req: Request) => {
 
   if (updErr) {
     console.error("Update error:", updErr);
-    return htmlPage("Fehler", `<h1>Fehler bei der Abmeldung</h1><p>Bitte versuchen Sie es später erneut oder schreiben Sie an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>`);
+    return textResponse(MSG_ERROR, 500);
   }
 
   // Admin-Mail
@@ -143,11 +131,5 @@ serve(async (req: Request) => {
     console.error("Admin notification failed:", e);
   }
 
-  return htmlPage(
-    "Abmeldung gespeichert",
-    `<h1>Abmeldung gespeichert</h1>
-     <p>Ihre Abmeldung wurde gespeichert. Sie erhalten keine weiteren Auftragsangebote von Fahrerexpress.</p>
-     <p class="muted">Falls Sie Ihr Profil später wieder aktivieren möchten, kontaktieren Sie uns bitte unter <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>
-     <p class="muted">Wenn Sie zusätzlich die Löschung Ihrer gespeicherten Daten wünschen, schreiben Sie bitte ebenfalls an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.</p>`,
-  );
+  return textResponse(MSG_OK);
 });
