@@ -35,8 +35,8 @@ const Vermittlung = () => {
             <CardContent className="space-y-6">
               <p className="text-lg text-muted-foreground">
                 Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen.
-                Die Einsätze werden zentral über die Agentur koordiniert und abgerechnet.
-                Es handelt sich nicht um Arbeitnehmerüberlassung.
+                Die Einsätze werden zentral über die Agentur koordiniert und gegenüber dem Auftraggeber abgerechnet.
+                Es handelt sich ausdrücklich nicht um Arbeitnehmerüberlassung.
               </p>
 
               <Card>
@@ -48,10 +48,10 @@ const Vermittlung = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p>
-                    Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet. Die Vergütung erfolgt transparent auf Basis der vereinbarten Tages- und Nebenkosten.
+                    Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Abrechnung erfolgt transparent auf Basis der vereinbarten Tagespreise, Einsatzbedingungen und Nebenkosten gemäß Auftragsbestätigung.
                   </p>
                   <p>
-                    Sie erhalten transparente und klar definierte Tagessätze (z.&nbsp;B. LKW CE-Fahrer ab 349&nbsp;€, Baumaschinenführer / Mischmeister 489&nbsp;€).
+                    Sie erhalten klare und nachvollziehbare Tagessätze, z.&nbsp;B. LKW CE-Fahrer ab 349&nbsp;€ netto oder Baumaschinenführer / Mischmeister ab 489&nbsp;€ netto.
                   </p>
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                     <p className="font-semibold">
@@ -75,7 +75,7 @@ const Vermittlung = () => {
                   
                   <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                     <p className="text-sm">
-                      Details zur Zusammenarbeit für Fahrer (Vergütung, Vermittlungsbedingungen, Abrechnung) werden nach Registrierung im Partnerbereich bzw. per E-Mail bereitgestellt.
+                      Details zur Zusammenarbeit für Fahrer, insbesondere zu Auftragsangeboten und Vergütung, werden nach Registrierung per E-Mail bereitgestellt.
                     </p>
                   </div>
                 </CardContent>
@@ -94,7 +94,7 @@ const Vermittlung = () => {
 
               <div className="bg-primary/10 border border-primary/20 rounded-lg p-4">
                 <p className="text-sm">
-                  Für Rückfragen zur Abrechnung stehen wir Ihnen gerne zur Verfügung:{" "}
+                  Für Rückfragen zur Zusammenarbeit oder Abrechnung stehen wir Ihnen gerne zur Verfügung:{" "}
                   <a href="mailto:info@kraftfahrer-mieten.com" className="text-primary hover:underline">
                     info@kraftfahrer-mieten.com
                   </a>
