@@ -98,7 +98,9 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "guenter.killer@t-online.de";
+    // Feste Admin-Empfänger (ADMIN_EMAIL bewusst ignoriert)
+    const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
+    const adminEmail = adminRecipients[0]; // Backwards-Compat falls einzeln verwendet
 
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY");

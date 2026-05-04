@@ -163,6 +163,7 @@ async function sendBlockNotification(
     }
 
     const mailFrom = Deno.env.get('MAIL_FROM') || 'Fahrerexpress <info@kraftfahrer-mieten.com>';
+    const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
 
     // Send email to driver
     const driverEmailHtml = await renderAsync(
@@ -181,9 +182,7 @@ async function sendBlockNotification(
 
     console.log(`✉️ Block notification sent to driver ${driver.email}`);
 
-    // Send notification to admin
-    const adminEmail = Deno.env.get('ADMIN_EMAIL') || 'guenter.killer@t-online.de';
-    
+    // Send notification to admin (feste Liste, ADMIN_EMAIL ignoriert)
     const adminEmailHtml = await renderAsync(
       React.createElement(AdminBlockNotice, {
         driverName: `${driver.vorname} ${driver.nachname}`,
@@ -196,12 +195,12 @@ async function sendBlockNotification(
 
     await resend.emails.send({
       from: mailFrom,
-      to: [adminEmail],
+      to: adminRecipients,
       subject: `🚫 Fahrersperrung: ${driver.vorname} ${driver.nachname}`,
       html: adminEmailHtml,
     });
 
-    console.log(`✉️ Admin notification sent to ${adminEmail}`);
+    console.log(`✉️ Admin notification sent to ${adminRecipients.join(", ")}`);
 
     // Log emails to database
     await supabase.from('email_log').insert([

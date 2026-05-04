@@ -207,9 +207,8 @@ const handler = async (req: Request): Promise<Response> => {
     // Admin-Mail senden
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
-      const primaryAdmin = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
-      const secondaryAdmin = "guenter.killer@t-online.de";
-      const adminRecipients = Array.from(new Set([primaryAdmin, secondaryAdmin].filter(Boolean)));
+      // Feste Admin-Empfänger – ADMIN_TO/ADMIN_EMAIL bewusst ignoriert
+      const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
       const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
 
       const { data: driver } = await supabase
