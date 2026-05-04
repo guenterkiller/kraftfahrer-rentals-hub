@@ -31,7 +31,7 @@ const BookingAdvantagesInfo = () => {
           <span className="text-2xl">📋</span>
           <div>
             <p className="font-semibold mb-1">Vollständige Transparenz</p>
-            <p className="text-sm text-muted-foreground">Sie sehen sofort alle Kosten – keine Überraschungen</p>
+            <p className="text-sm text-muted-foreground">Transparente Preisgrundlage gemäß Auftragsbestätigung</p>
           </div>
         </div>
       </div>
