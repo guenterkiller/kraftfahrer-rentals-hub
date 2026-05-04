@@ -68,15 +68,15 @@ const handler = async (req: Request): Promise<Response> => {
         if (!isNaN(date.getTime())) {
           const formattedDate = date.toLocaleDateString('de-DE');
           zeitraumText = einsatzdauer 
-            ? `Ab ${formattedDate} für ${einsatzdauer} Tag(e)`
+            ? `Ab ${formattedDate} für ${einsatzdauer}`
             : `Ab ${formattedDate}`;
         }
       } catch (dateError) {
         console.error("Date conversion error:", dateError);
-        zeitraumText = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer} Tag(e)` : "");
+        zeitraumText = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
       }
     } else if (einsatzdauer) {
-      zeitraumText = `Dauer: ${einsatzdauer} Tag(e)`;
+      zeitraumText = `Dauer: ${einsatzdauer}`;
     }
 
     // Format address
