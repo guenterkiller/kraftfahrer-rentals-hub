@@ -207,7 +207,9 @@ const handler = async (req: Request): Promise<Response> => {
     // Admin-Mail senden
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
-      const adminTo = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
+      const primaryAdmin = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
+      const secondaryAdmin = "guenter.killer@t-online.de";
+      const adminRecipients = Array.from(new Set([primaryAdmin, secondaryAdmin].filter(Boolean)));
       const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
 
       const { data: driver } = await supabase
@@ -265,7 +267,7 @@ const handler = async (req: Request): Promise<Response> => {
         const resend = new Resend(resendKey);
         const { data: mailData, error: mailError } = await resend.emails.send({
           from: mailFrom,
-          to: [adminTo],
+          to: adminRecipients,
           subject,
           html,
           reply_to: driver?.email || undefined,
@@ -273,7 +275,7 @@ const handler = async (req: Request): Promise<Response> => {
         if (mailError) {
           console.error("Admin mail send error:", JSON.stringify(mailError));
           await supabase.from("email_log").insert({
-            recipient: adminTo,
+            recipient: adminRecipients.join(", "),
             subject,
             template: newStatus === "accepted" ? "admin_invite_accepted" : "admin_invite_declined",
             status: "failed",
@@ -282,9 +284,9 @@ const handler = async (req: Request): Promise<Response> => {
           });
         } else {
           const messageId = (mailData as any)?.id ?? null;
-          console.log(`✅ Admin notified: ${subject} (message_id=${messageId}, to=${adminTo}, from=${mailFrom})`);
+          console.log(`✅ Admin notified: ${subject} (message_id=${messageId}, to=${adminRecipients.join(", ")}, from=${mailFrom})`);
           await supabase.from("email_log").insert({
-            recipient: adminTo,
+            recipient: adminRecipients.join(", "),
             subject,
             template: newStatus === "accepted" ? "admin_invite_accepted" : "admin_invite_declined",
             status: "sent",
