@@ -101,9 +101,11 @@ serve(async (req: Request) => {
   // Admin-Mail
   try {
     const resendKey = Deno.env.get("RESEND_API_KEY");
-    const adminTo = Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
     const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
     const adminSubject = "Fahrer hat sich von Auftragsangeboten abgemeldet";
+    // Feste Empfängerliste für Abmelde-Benachrichtigungen
+    const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
+    const recipientLog = adminRecipients.join(", ");
     if (resendKey) {
       const resend = new Resend(resendKey);
       const ts = new Date(nowIso).toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
@@ -123,13 +125,13 @@ serve(async (req: Request) => {
         </div>`;
       const { data: mail, error: mErr } = await resend.emails.send({
         from: mailFrom,
-        to: [adminTo],
+        to: adminRecipients,
         subject: adminSubject,
         html,
       });
       const sendStatus = mErr ? "failed" : "sent";
       await supabase.from("email_log").insert({
-        recipient: adminTo,
+        recipient: recipientLog,
         subject: adminSubject,
         template: "driver_unsubscribe_admin_notification",
         status: sendStatus,
@@ -142,7 +144,7 @@ serve(async (req: Request) => {
     console.error("Admin notification failed:", e);
     try {
       await supabase.from("email_log").insert({
-        recipient: Deno.env.get("ADMIN_TO") || Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com",
+        recipient: "info@kraftfahrer-mieten.com, guenter.killer@t-online.de",
         subject: "Fahrer hat sich von Auftragsangeboten abgemeldet",
         template: "driver_unsubscribe_admin_notification",
         status: "failed",
