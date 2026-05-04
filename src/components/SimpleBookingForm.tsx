@@ -761,7 +761,7 @@ const SimpleBookingForm = () => {
                   <h4 className="font-semibold text-amber-800 mb-2">Stornierungsregelung</h4>
                   <ul className="text-sm text-amber-900 space-y-1">
                     <li>• Storno bis 24 Std. vorher → kostenlos</li>
-                    <li>• Storno unter 24 Std. → 80 % des Tagessatzes</li>
+                    <li>• Storno unter 24 Std. → 80 % des Tagessatzes, sofern kein geringerer Schaden nachgewiesen wird.</li>
                     <li>• Same-Day-Buchungen ausgeschlossen (Mindestvorlauf 24h werktags)</li>
                   </ul>
                 </div>
