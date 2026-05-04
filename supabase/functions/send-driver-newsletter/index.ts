@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
+import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from "../_shared/driver-unsubscribe-token.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -52,7 +53,7 @@ serve(async (req) => {
       );
     }
 
-    const { subject, message } = await req.json();
+    const { subject, message, testEmail } = await req.json();
 
     if (!subject || !message) {
       return new Response(
@@ -61,13 +62,37 @@ serve(async (req) => {
       );
     }
 
-    // Get all active drivers (both German and English status)
-    // Include drivers with status: active, approved, aktiv
-    const { data: drivers, error: driversError } = await supabase
-      .from('fahrer_profile')
-      .select('email, vorname, nachname, status, email_opt_out')
-      .in('status', ['active', 'approved', 'aktiv'])
-      .eq('email_opt_out', false); // Only drivers who haven't opted out
+    let drivers: any[] | null = null;
+    let driversError: any = null;
+
+    if (testEmail && typeof testEmail === 'string' && testEmail.includes('@')) {
+      // TEST-MODUS: Nur an angegebene Adresse senden, kein Versand an alle
+      console.log(`TEST MODE: sending only to ${testEmail}`);
+      // Versuche, einen passenden Fahrer zu finden (für korrekten Abmeldelink). Sonst Dummy-ID.
+      const { data: matched } = await supabase
+        .from('fahrer_profile')
+        .select('id, email, vorname, nachname, status, email_opt_out')
+        .eq('email', testEmail.toLowerCase().trim())
+        .maybeSingle();
+      drivers = [
+        matched ?? {
+          id: '00000000-0000-0000-0000-000000000000',
+          email: testEmail,
+          vorname: 'Test',
+          nachname: 'Empfänger',
+          status: 'active',
+          email_opt_out: false,
+        },
+      ];
+    } else {
+      const result = await supabase
+        .from('fahrer_profile')
+        .select('id, email, vorname, nachname, status, email_opt_out')
+        .in('status', ['active', 'approved', 'aktiv'])
+        .eq('email_opt_out', false);
+      drivers = result.data;
+      driversError = result.error;
+    }
 
     if (driversError) {
       console.error('Error fetching drivers:', driversError);
@@ -106,6 +131,18 @@ serve(async (req) => {
           continue;
         }
 
+        // Persönlichen Abmeldelink generieren (HMAC, gleiche Logik wie driver-unsubscribe)
+        const unsubSecret = Deno.env.get('INTERNAL_FN_SECRET') || '';
+        let unsubscribeUrl = 'mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter';
+        if (unsubSecret && driver.id) {
+          try {
+            const token = await makeDriverUnsubscribeToken(driver.id, unsubSecret);
+            unsubscribeUrl = buildDriverUnsubscribeUrl(token);
+          } catch (e) {
+            console.error('Could not build unsubscribe token:', e);
+          }
+        }
+
         const emailHtml = `
 <!DOCTYPE html>
 <html>
@@ -134,9 +171,11 @@ serve(async (req) => {
       <a href="https://www.kraftfahrer-mieten.com" style="color: #059669;">www.kraftfahrer-mieten.com</a>
     </p>
     <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 15px 0;" />
-    <p style="margin: 0; color: #999; font-size: 11px;">
-      Sie erhalten diese E-Mail als registrierter Fahrer bei Fahrerexpress.<br>
-      <a href="mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter&body=Bitte%20melden%20Sie%20mich%20vom%20Fahrer-Rundschreiben%20ab.%20E-Mail:%20${encodeURIComponent(driver.email)}" style="color: #999;">Von Fahrer-Infos abmelden</a>
+    <p style="margin: 0; color: #555; font-size: 12px; line-height: 1.5;">
+      Sie erhalten diese E-Mail, weil Sie sich als Fahrer bei Fahrerexpress registriert haben.
+      Wenn Sie künftig keine Fahrerinformationen oder Auftragsbenachrichtigungen mehr erhalten möchten,
+      können Sie sich
+      <a href="${unsubscribeUrl}" style="color: #059669; font-weight: bold; text-decoration: underline;">hier abmelden</a>.
     </p>
   </div>
 </body>
