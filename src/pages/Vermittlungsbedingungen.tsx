@@ -42,13 +42,16 @@ const Vermittlungsbedingungen = () => {
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">2. Vertragsmodell</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige, gewerblich tätige Fahrer.
+                  Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige, gewerblich tätige Unternehmer für Fahrerdienstleistungen.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Es handelt sich ausdrücklich <strong className="text-foreground">nicht</strong> um Arbeitnehmerüberlassung, Personalgestellung oder ein arbeitsrechtliches Vertragsverhältnis.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  Der Einsatz erfolgt auf Grundlage eines projektbezogenen Dienst- oder Werkvertrags.
+                  Der Einsatz erfolgt auf Grundlage eines projektbezogenen Dienst- oder Werkvertrags mit selbstständigen Unternehmern.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Eine Eingliederung des eingesetzten Unternehmers in die Arbeitsorganisation des Auftraggebers sowie eine fachliche Weisungsgebundenheit sind nicht vorgesehen. Der Auftraggeber beschreibt den gewünschten Leistungsumfang, Einsatzort, Zeitraum und die erforderlichen Rahmenbedingungen.
                 </p>
               </section>
 
@@ -61,6 +64,9 @@ const Vermittlungsbedingungen = () => {
                   Fahrerexpress fungiert als Vermittlungs- und Koordinationsagentur.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
+                  Fahrerexpress schuldet die Organisation und Koordination der vermittelten Fahrerdienstleistung. Die konkrete Leistungserbringung erfolgt durch den eingesetzten selbstständigen Unternehmer in eigener Verantwortung.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
                   Die Einsatzkoordination sowie die Abrechnung erfolgen ausschließlich über Fahrerexpress, insbesondere aus Gründen der Qualitätssicherung und der ordnungsgemäßen Dokumentation.
                 </p>
               </section>
@@ -71,34 +77,79 @@ const Vermittlungsbedingungen = () => {
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">4. Abwicklung & Abrechnung</h2>
                 <p className="text-muted-foreground leading-relaxed">
+                  Maßgeblich für Preis, Leistungsumfang, Einsatzzeitraum, Zusatzkosten und besondere Bedingungen ist die jeweilige Auftragsbestätigung der Fahrerexpress-Agentur.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
                   Die Abrechnung der beauftragten Einsätze erfolgt über die Fahrerexpress-Agentur.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Der Auftraggeber erhält eine Rechnung über die vereinbarten Leistungen.
                 </p>
+              </section>
+
+              <Separator />
+
+              {/* 5. Stornoregelung */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">5. Stornoregelung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Storno bis 24 Stunden vor Einsatzbeginn ist kostenfrei.
+                </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  Direkte Beauftragungen von durch Fahrerexpress vermittelten Fahrern im sachlichen Zusammenhang mit dem jeweiligen Projekt sind unzulässig.
+                  Bei Storno unter 24 Stunden vor Einsatzbeginn behält sich Fahrerexpress vor, den entgangenen Aufwand pauschal mit 80 % des vereinbarten Tagessatzes zu berechnen, sofern der Auftraggeber keinen geringeren Schaden nachweist.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers können 100 % des vereinbarten Tagessatzes berechnet werden.
                 </p>
               </section>
 
               <Separator />
 
-              {/* 5. Zahlungsbedingungen */}
+              {/* 6. Direktbeauftragung */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">5. Zahlungsbedingungen</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">6. Direktbeauftragung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Die direkte oder umgehende Beauftragung eines durch Fahrerexpress vermittelten Unternehmers außerhalb der Fahrerexpress-Agentur ist ohne vorherige Zustimmung von Fahrerexpress unzulässig. Dies gilt für den konkreten Einsatz sowie für Folgeaufträge im sachlichen Zusammenhang für einen Zeitraum von 12 Monaten nach Einsatzende.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 7. Haftung */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">7. Haftung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Fahrerexpress haftet nur für eigenes Verschulden sowie für Auswahlverschulden bei der Vermittlung geeigneter Unternehmer.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Für Schäden im Zusammenhang mit der konkreten Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Verantwortung und Versicherung.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Eine Haftung für Folgeschäden ist ausgeschlossen, soweit gesetzlich zulässig und kein vorsätzliches oder grob fahrlässiges Verhalten vorliegt.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 8. Zahlungsbedingungen */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">8. Zahlungsbedingungen</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Rechnungen sind innerhalb von 7 Kalendertagen ab Rechnungsdatum ohne Abzug zu begleichen.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  Es gelten die gesetzlichen Regelungen zum Zahlungsverzug gemäß § 288 BGB.
+                  Bei Zahlungsverzug gelten die gesetzlichen Regelungen des § 288 BGB.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Bei Unternehmern beträgt der Verzugszinssatz für Entgeltforderungen 9 Prozentpunkte über dem Basiszinssatz.
                 </p>
               </section>
 
               <Separator />
 
-              {/* 6. Vertragsschluss */}
+              {/* 9. Vertragsschluss */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">6. Vertragsschluss</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">9. Vertragsschluss</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Der Vertrag kommt zustande durch:
                 </p>
@@ -113,9 +164,9 @@ const Vermittlungsbedingungen = () => {
 
               <Separator />
 
-              {/* 7. Gerichtsstand */}
+              {/* 10. Gerichtsstand */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">7. Gerichtsstand</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">10. Gerichtsstand</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Gerichtsstand für alle Streitigkeiten aus Vertragsverhältnissen, die diesen Vermittlungsbedingungen unterliegen, ist – soweit gesetzlich zulässig – Frankfurt am Main.
                 </p>
