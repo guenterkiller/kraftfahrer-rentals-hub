@@ -48,7 +48,7 @@ const PreiseUndAblauf = () => {
                 Fahrer mieten, leihen oder bestellen – Preise & Ablauf
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-3">
-                Selbstständige Unternehmer tageweise oder wochenweise auf Abruf. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
+                Selbstständige Unternehmer tageweise oder wochenweise für flexible Fahrereinsätze. Transparente Tagessätze für externe Fahrer-Dienstleistungen.
               </p>
               <p className="text-sm text-muted-foreground max-w-3xl mx-auto">
                 Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige Unternehmer mit eigenem Gewerbe für Fahrerdienstleistungen – Fahrzeuge werden nicht gestellt.
@@ -157,8 +157,8 @@ const PreiseUndAblauf = () => {
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">💰</div>
-                    <p className="font-semibold text-green-900 mb-1">Keine Lohnnebenkosten</p>
-                    <p className="text-sm text-muted-foreground">Selbstständige Unternehmer – keine Verwaltung</p>
+                    <p className="font-semibold text-green-900 mb-1">Keine Personalnebenkosten</p>
+                    <p className="text-sm text-muted-foreground">Selbstständige Unternehmer – keine eigene Personalverwaltung</p>
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">⚡</div>
@@ -186,9 +186,12 @@ const PreiseUndAblauf = () => {
                 </p>
                 <div>
                   <p className="font-semibold mb-2">Berechnung:</p>
+                  <p className="text-muted-foreground mb-2">
+                    Die Berechnung erfolgt auf Basis der Entfernung zwischen Wohnort bzw. Standort des eingesetzten Unternehmers und Einsatzort.
+                  </p>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• erste 25 km der Gesamtstrecke frei</li>
-                    <li>• ab dem 26. km: 0,40 € je gefahrenem Kilometer</li>
+                    <li>• Die ersten 25 km bleiben frei.</li>
+                    <li>• Ab dem 26. km werden 0,40 € je gefahrenem Kilometer berechnet.</li>
                   </ul>
                 </div>
               </CardContent>
@@ -369,7 +372,7 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-4">
                 <div>
                   <h3 className="font-semibold text-lg mb-2">1. Vertragsverhältnis</h3>
-                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur erbringt Dienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur. Die Fahrerexpress-Agentur schuldet die Organisation und Vermittlung der Dienstleistung. Die konkrete Leistungserbringung erfolgt durch selbstständige Unternehmer in eigener Verantwortung.</p>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur organisiert und vermittelt Fahrerdienstleistungen mit selbstständigen Subunternehmern. Vertragspartner des Auftraggebers ist ausschließlich die Fahrerexpress-Agentur. Die konkrete Leistungserbringung erfolgt durch selbstständige Unternehmer in eigener Verantwortung.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">2. Einsatzdurchführung</h3>
