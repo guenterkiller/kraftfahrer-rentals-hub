@@ -74,10 +74,16 @@ const FahrerVermittlungsbedingungen = () => {
                   Die Fahrerexpress-Agentur behält für Organisation, Vermittlung, Kundenabwicklung, Rechnungsstellung und Zahlungsüberwachung einen Vermittlungsanteil ein.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  Für Standardeinsätze beträgt der Vermittlungsanteil in der Regel <strong className="text-foreground">20 %</strong> des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises ohne An- und Abfahrt.
+                  Für Standardeinsätze beträgt der Vermittlungsanteil in der Regel <strong className="text-foreground">20 %</strong> der mit dem Auftraggeber vereinbarten Netto-Arbeitsvergütung. Die Arbeitsvergütung umfasst insbesondere Tagessätze, Überstunden und einsatzbezogene Zuschläge.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  An- und Abfahrt, Fahrtkosten, Übernachtungskosten, Maut, Parkgebühren, Bahnkosten oder sonstige Auslagen werden gesondert behandelt und nur berücksichtigt, wenn sie vorab durch Fahrerexpress vereinbart oder freigegeben wurden. Nachweisbare und freigegebene Auslagen können separat erstattet oder in das konkrete Auftragsangebot eingerechnet werden.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Für Sonder-, Projekt-, Pauschal-, kurzfristige oder besonders aufwendige Einsätze kann der Vermittlungsanteil <strong className="text-foreground">bis zu 25 %</strong> betragen.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Bei Pauschal- oder Sonderaufträgen kann sich der Vermittlungsanteil auf den vereinbarten Gesamt-Einsatzwert oder die Gesamtpauschale beziehen, wenn dies im konkreten Auftragsangebot so mitgeteilt wird.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn. Der Fahrer entscheidet frei, ob er dieses Angebot annimmt oder ablehnt.
@@ -89,11 +95,14 @@ const FahrerVermittlungsbedingungen = () => {
 
               <Separator />
 
-              {/* 5. Auszahlung */}
+              {/* 5. Zahlung der vereinbarten Vergütung */}
               <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">5. Auszahlung</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-4">5. Zahlung der vereinbarten Vergütung</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Die Auszahlung erfolgt nach ordnungsgemäßer Durchführung des Einsatzes und nach Zahlungseingang des Auftraggebers, spätestens 5 Werktage danach, sofern keine berechtigten Einwendungen gegen die Leistung bestehen.
+                  Die Zahlung der vereinbarten Vergütung erfolgt auf Grundlage einer ordnungsgemäßen Rechnung des Fahrers nach vollständiger und ordnungsgemäßer Durchführung des Einsatzes.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Soweit im konkreten Auftragsangebot nichts anderes vereinbart ist, erfolgt die Zahlung nach Zahlungseingang des Auftraggebers bei Fahrerexpress, spätestens innerhalb von 5 Werktagen danach, sofern keine berechtigten Einwendungen gegen die Leistung bestehen.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Ein Anspruch auf Vorschuss- oder Abschlagszahlungen besteht nicht.
@@ -106,7 +115,7 @@ const FahrerVermittlungsbedingungen = () => {
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">6. Keine Direktabsprachen</h2>
                 <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-4">
-                  <li>Auftraggeber dürfen nicht direkt kontaktiert werden, sofern Fahrerexpress dies nicht freigibt.</li>
+                  <li>Der direkte Kontakt zum Auftraggeber ist nur im Rahmen des konkret freigegebenen Einsatzes und zur Durchführung des Auftrags zulässig.</li>
                   <li>Keine Preisabsprachen mit Auftraggebern.</li>
                   <li>Keine Folgeaufträge am Fahrerexpress vorbei.</li>
                   <li>Keine Weitergabe interner Einsatzdaten an Dritte.</li>
