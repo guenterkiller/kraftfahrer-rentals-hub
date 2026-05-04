@@ -71,11 +71,6 @@ const Footer = () => {
                   Als Fahrer registrieren
                 </Link>
               </li>
-              <li>
-                <Link to="/fahrer-vermittlungsbedingungen" className="text-foreground underline decoration-muted-foreground/50 hover:text-primary hover:decoration-primary transition-colors">
-                  Vermittlungsbedingungen
-                </Link>
-              </li>
             </ul>
             <p className="text-xs text-muted-foreground font-semibold">
               🇩🇪 Bundesweit verfügbar<br />

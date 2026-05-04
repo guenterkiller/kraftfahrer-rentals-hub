@@ -9,7 +9,8 @@ const FahrerVermittlungsbedingungen = () => {
   useSEO({
     title: "Vermittlungsbedingungen für Fahrer – Fahrerexpress",
     description: "Vermittlungsbedingungen für selbstständige Fahrer der Fahrerexpress-Agentur. Rechtssichere Zusammenarbeit als Subunternehmer.",
-    keywords: "Vermittlungsbedingungen, Fahrer, Fahrerexpress, Subunternehmer, LKW Fahrer"
+    keywords: "Vermittlungsbedingungen, Fahrer, Fahrerexpress, Subunternehmer, LKW Fahrer",
+    noindex: true
   });
 
   return (

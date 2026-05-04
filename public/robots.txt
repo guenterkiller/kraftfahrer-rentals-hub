@@ -9,6 +9,9 @@ Sitemap: https://www.kraftfahrer-mieten.com/sitemap.xml
 Disallow: /admin/
 Disallow: /admin-login/
 
+# Interne Fahrer-Vermittlungsbedingungen (nicht für Suchmaschinen)
+Disallow: /fahrer-vermittlungsbedingungen
+
 # Optimierung für Pre-Rendering Services (z.B. Prerender.io)
 # Diese User-Agents bekommen fertiges HTML für besseres Crawling
 User-agent: Prerender
