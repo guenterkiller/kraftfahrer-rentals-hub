@@ -108,7 +108,7 @@ const handler = async (req: Request): Promise<Response> => {
               <h2 style="color: #1f2937; margin-top: 0;">Auftrag 1: ${invites[0].job.customer_name}</h2>
               ${invites[0].job.company ? `<p><strong>Firma:</strong> ${invites[0].job.company}</p>` : ''}
               <p><strong>Einsatzort:</strong> ${invites[0].job.einsatzort}</p>
-              <p><strong>Zeitraum:</strong> ${invites[0].job.zeitraum}</p>
+              <p><strong>Zeitraum:</strong> ${(invites[0].job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
               <p><strong>Fahrzeugtyp:</strong> ${invites[0].job.fahrzeugtyp}</p>
               <p><strong>Führerschein:</strong> ${invites[0].job.fuehrerscheinklasse}</p>
               ${invites[0].job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${invites[0].job.besonderheiten}</p>` : ''}
@@ -129,7 +129,7 @@ const handler = async (req: Request): Promise<Response> => {
               <h2 style="color: #1f2937; margin-top: 0;">Auftrag 2: ${invites[1].job.customer_name}</h2>
               ${invites[1].job.company ? `<p><strong>Firma:</strong> ${invites[1].job.company}</p>` : ''}
               <p><strong>Einsatzort:</strong> ${invites[1].job.einsatzort}</p>
-              <p><strong>Zeitraum:</strong> ${invites[1].job.zeitraum}</p>
+              <p><strong>Zeitraum:</strong> ${(invites[1].job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
               <p><strong>Fahrzeugtyp:</strong> ${invites[1].job.fahrzeugtyp}</p>
               <p><strong>Führerschein:</strong> ${invites[1].job.fuehrerscheinklasse}</p>
               ${invites[1].job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${invites[1].job.besonderheiten}</p>` : ''}
