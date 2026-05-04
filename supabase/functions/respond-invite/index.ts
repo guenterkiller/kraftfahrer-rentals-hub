@@ -225,6 +225,7 @@ const handler = async (req: Request): Promise<Response> => {
         .maybeSingle();
 
       const driverName = driver ? `${driver.vorname ?? ""} ${driver.nachname ?? ""}`.trim() : "Unbekannt";
+      const zeitraumClean = (job?.zeitraum ?? "-").replace(/\s*Tag\(e\)\s*$/i, "").trim();
       const subject = newStatus === "accepted"
         ? "Fahrer möchte Auftrag übernehmen"
         : "Fahrer lehnt Auftrag ab";
@@ -256,7 +257,7 @@ const handler = async (req: Request): Promise<Response> => {
           <h3>Auftrag</h3>
           <p>
             <strong>Einsatzort:</strong> ${job?.einsatzort ?? "-"}<br/>
-            <strong>Zeitraum:</strong> ${job?.zeitraum ?? "-"}<br/>
+            <strong>Zeitraum:</strong> ${zeitraumClean}<br/>
             <strong>Tätigkeit:</strong> ${job?.nachricht ?? "-"}
           </p>
           ${noteHtml}
