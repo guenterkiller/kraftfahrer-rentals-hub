@@ -31,10 +31,34 @@ export const DriverRegistrationConfirmation = ({
     <Section {...getBoxProps(boxStyles.infoBox)}>
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📌 Vergütung & Vermittlungsanteil</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Die konkrete Vergütung und der Vermittlungsanteil ergeben sich aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.
+        Die konkrete Vergütung und der Vermittlungsanteil ergeben sich immer aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
-        Sie entscheiden als selbstständige/r Unternehmer/in eigenverantwortlich, ob Sie das Angebot zu den genannten Konditionen annehmen.
+        Bei regulären Standardaufträgen liegt der Fahreranteil in der Regel bei ca. 80 % und der Vermittlungsanteil von Fahrerexpress bei ca. 20 % der vereinbarten Arbeitsvergütung.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Die Arbeitsvergütung umfasst insbesondere Tagessätze, Überstunden und einsatzbezogene Zuschläge.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Bei kurzfristigen Einsätzen, Expressaufträgen, Eventeinsätzen, Wochenendaufträgen, Pauschalpreisen, Sonderfahrten, Überführungsaufträgen oder Einsätzen mit besonderen Bedingungen kann ein abweichendes Modell gelten, z. B. ca. 75 % Fahreranteil und ca. 25 % Fahrerexpress-Anteil.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Bei Pauschal- oder Sonderaufträgen kann sich diese Aufteilung auf den vereinbarten Gesamt-Einsatzwert oder die Gesamtpauschale beziehen, wenn dies im konkreten Auftragsangebot so mitgeteilt wird.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Fahrtkosten, Übernachtungskosten, Maut, Parkgebühren oder sonstige Auslagen werden gesondert behandelt und nur berücksichtigt, wenn sie vorab vereinbart oder freigegeben wurden.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Nachweisbare und freigegebene Auslagen können separat erstattet oder in das konkrete Auftragsangebot eingerechnet werden.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn. Ein Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises besteht nicht.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Sie entscheiden als selbstständige/r Unternehmer/in eigenverantwortlich, ob Sie das konkrete Angebot zu den genannten Konditionen annehmen.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0', fontStyle: 'italic' })}>
+        Diese Informationen sind ausschließlich für registrierte Fahrer bestimmt und nicht für Auftraggeber oder öffentliche Preisangaben vorgesehen.
       </Text>
     </Section>
 
