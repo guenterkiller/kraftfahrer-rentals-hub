@@ -81,7 +81,7 @@ const FlüssigbodenService = () => {
               Mischmeister für Flüssigboden – Subunternehmer mit CE, Radlader & Bagger
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
-              Wir vermitteln ausschließlich Mischmeister/Anlagenbediener – keine Maschinen oder Anlagen. Einsatz als selbstständiger Subunternehmer für fließfähige Verfüllmaterialien. Bedienung von bauseitig gestellter Mischanlage, Radlader, Bagger und CE-Fahrmischer. Bis zu zwei Arbeitskräfte können eingespart werden.
+              Wir vermitteln ausschließlich Mischmeister/Anlagenbediener – keine Maschinen oder Anlagen. Einsatz als selbstständiger Unternehmer für fließfähige Verfüllmaterialien. Bedienung von bauseitig gestellter Mischanlage, Radlader, Bagger und CE-Fahrmischer. Je nach Baustellenablauf kann zusätzlicher Personalaufwand reduziert werden.
             </p>
             
             {/* Key Benefits */}
@@ -96,7 +96,7 @@ const FlüssigbodenService = () => {
               </div>
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
-                <span className="text-sm font-medium">Bis zu 2 Personen einsparen</span>
+               <span className="text-sm font-medium">Personalaufwand reduzieren</span>
               </div>
               <div className="flex items-center justify-center gap-2 p-3 bg-background border rounded-lg">
                 <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
@@ -164,7 +164,7 @@ const FlüssigbodenService = () => {
                         Die Herstellung und Verarbeitung fließfähiger Verfüllmaterialien erfolgt auf Grundlage der vom Auftraggeber vorgegebenen Einsatz- und Projektdaten.
                       </p>
                       <p>
-                        Ich betreibe die Mischanlage, versorge diese per Radlader/Bagger und kann bei Bedarf den Fahrmischer selbst fahren (CE). Die Verantwortung für Technik, Material, Mischparameter und Gewährleistung liegt vollständig beim Auftraggeber.
+                       Der eingesetzte Mischmeister bedient die bauseits gestellte Mischanlage, unterstützt bei der Beschickung per Radlader/Bagger und kann bei Bedarf einen CE-Fahrmischer fahren, sofern dies im konkreten Auftrag vereinbart ist. Die Verantwortung für Technik, Material, Mischparameter und Gewährleistung liegt vollständig beim Auftraggeber.
                       </p>
                     </div>
                   </div>
@@ -213,7 +213,7 @@ const FlüssigbodenService = () => {
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Keine Gewährleistung / keine Systemfreigaben</span>
+                       <span className="text-sm">Keine Verantwortung für Rezeptur, Materialfreigabe oder Systemzulassung</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Shield className="h-5 w-5 text-amber-600 flex-shrink-0 mt-0.5" />
@@ -235,7 +235,7 @@ const FlüssigbodenService = () => {
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Subunternehmer-Einsatz (eigene Rechnung)</span>
+                       <span className="text-sm">Einsatz auf Basis eines Dienst-/Werkvertrags</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <CheckCircle className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -292,8 +292,8 @@ const FlüssigbodenService = () => {
                       Der Auftraggeber bleibt Betreiber der Anlage im Sinne der technischen und rechtlichen Verantwortung.
                     </p>
                     <p>
-                      Der Mischmeister führt die Arbeiten weisungsgebunden und ausschließlich nach Vorgaben aus.
-                      Er übernimmt keine Haftung, Gewährleistung oder Funktionsverantwortung für:
+                      Der Mischmeister arbeitet im Rahmen der vereinbarten Leistungsbeschreibung und auf Grundlage der vom Auftraggeber bereitgestellten Projekt-, Material- und Einsatzdaten.
+                      Eine Verantwortung für folgende Bereiche wird nicht übernommen, soweit diese außerhalb der vereinbarten Bedienleistung liegen:
                     </p>
                     <ul className="list-disc list-inside space-y-2 ml-4">
                       <li>Misch- oder Pumpanlage</li>
@@ -302,9 +302,10 @@ const FlüssigbodenService = () => {
                       <li>Technische Ausführung des Einbaus</li>
                       <li>Baustellenabläufe oder Ergebnisse</li>
                       <li>Bauphysikalische Eigenschaften oder spätere Belastbarkeit</li>
+                      <li>Systemfreigaben und Gewährleistung gegenüber Dritten</li>
                     </ul>
                     <p className="font-semibold text-foreground">
-                      Jegliche Verantwortung liegt ausschließlich beim Auftraggeber bzw. Betreiber der Anlage.
+                      Die Verantwortung für die genannten Bereiche liegt beim Auftraggeber bzw. Betreiber der Anlage.
                     </p>
                   </div>
                 </div>
