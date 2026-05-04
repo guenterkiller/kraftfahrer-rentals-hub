@@ -168,7 +168,7 @@ serve(async (req) => {
             driverId: driver.id,
             jobId: actualJobId,
             einsatzort: job.einsatzort || "Keine Angabe",
-            zeitraum: job.zeitraum || "Nach Absprache",
+            zeitraum: (job.zeitraum || "Nach Absprache").replace(/\s*Tag\(e\)\s*$/i, "").trim(),
             fahrzeugtyp: job.fahrzeugtyp || "LKW",
             fuehrerscheinklasse: job.fuehrerscheinklasse || "C+E",
             nachricht: job.nachricht || "Keine weiteren Informationen",
