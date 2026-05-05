@@ -118,6 +118,18 @@ const KraftfahrerMieten = () => {
       hero={heroData}
       faq={faqData}
       relatedServices={relatedServices}
+      extraSection={
+        <section className="py-12 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Berufskraftfahrer mieten – deutschlandweit nach Verfügbarkeit
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              Wenn Sie kurzfristig oder planbar Berufskraftfahrer mieten möchten, vermittelt die Fahrerexpress-Agentur selbstständige Kraftfahrer und CE-Fahrer mit passender Qualifikation – tageweise, wochenweise oder projektbezogen, ohne Arbeitnehmerüberlassung.
+            </p>
+          </div>
+        </section>
+      }
     />
   );
 };
