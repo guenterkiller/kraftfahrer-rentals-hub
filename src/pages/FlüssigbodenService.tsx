@@ -23,7 +23,7 @@ const FlüssigbodenService = () => {
   const seoData = {
     title: "Mischmeister Flüssigboden deutschlandweit – ab 489 €/Tag",
     description: "Mischmeister für Flüssigboden deutschlandweit – Subunternehmer mit CE, Radlader, Bagger. Bis zu 2 Mitarbeiter einsparen.",
-    keywords: "Flüssigboden deutschlandweit, Mischmeister bundesweit buchen, Subunternehmer Flüssigboden deutschlandweit, Verfüllmaterialien Deutschland, Mischanlagen Fahrer bundesweit, CE-Fahrmischer deutschlandweit, Mischmeister kurzfristig verfügbar, Radlader Bagger Flüssigboden",
+    keywords: "Flüssigboden deutschlandweit, Mischmeister bundesweit buchen, Subunternehmer Flüssigboden deutschlandweit, Verfüllmaterialien Deutschland, Mischanlagen Fahrer bundesweit, CE-Fahrmischer deutschlandweit, Mischmeister kurzfristig verfügbar, Radlader Bagger Flüssigboden, Anlagenbediener Flüssigboden",
     ogTitle: "Mischmeister für Flüssigboden deutschlandweit – Subunternehmer mit CE, Radlader & Bagger | Fahrerexpress",
     ogDescription: "Mischmeister für Flüssigboden deutschlandweit buchen – selbstständiger Subunternehmer mit CE, Radlader, Bagger. In ganz Deutschland kurzfristig verfügbar. Klare Tagessätze.",
     ogUrl: "https://www.kraftfahrer-mieten.com/fluessigboden-service",
@@ -327,6 +327,14 @@ const FlüssigbodenService = () => {
 
         {/* FAQ Section */}
         <section className="py-16 px-4 bg-muted/50">
+          <div className="max-w-4xl mx-auto mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Mischmeister & Anlagenbediener Flüssigboden deutschlandweit
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              Unsere selbstständigen Anlagenbediener für Flüssigboden unterstützen bei der Bedienung bauseits gestellter Mischanlagen sowie bei Radlader-, Bagger- und Fahrmischer-Aufgaben im Rahmen des vereinbarten Einsatzes.
+            </p>
+          </div>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
               Häufige Fragen zum Mischmeister für Flüssigboden
