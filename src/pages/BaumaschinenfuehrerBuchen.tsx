@@ -71,7 +71,7 @@ const BaumaschinenfuehrerBuchen = () => {
       },
       {
         question: "Vermitteln Sie Baggerfahrer und Radladerfahrer deutschlandweit?",
-        answer: "Ja. Wir vermitteln selbstständige <strong>Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit</strong> als Subunternehmer für einzelne Bauabschnitte, Tagesbaustellen oder komplette Projekte. Bundesweite Fahrer-Vermittlung ohne Maschinenvermietung."
+        answer: "Ja. Sie können bei uns <strong>Baggerfahrer mieten, Radladerfahrer mieten und Baumaschinenführer mieten</strong> – deutschlandweit als selbstständige Subunternehmer für einzelne Bauabschnitte, Tagesbaustellen oder komplette Projekte. Bundesweite Fahrer-Vermittlung ohne Maschinenvermietung."
       },
       {
         question: "Arbeiten Ihre Baumaschinenführer als Subunternehmer?",
@@ -111,18 +111,6 @@ const BaumaschinenfuehrerBuchen = () => {
       hero={heroData}
       faq={faqData}
       relatedServices={relatedServices}
-      extraSection={
-        <section className="py-12 px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Baggerfahrer mieten – Radlader- und Baumaschinenführer nach Verfügbarkeit
-            </h2>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Für Baustellen, Erdarbeiten und Materialumschlag vermitteln wir selbstständige Baggerfahrer, Radladerfahrer und Baumaschinenführer. Maschinen und Geräte werden weiterhin bauseits gestellt.
-            </p>
-          </div>
-        </section>
-      }
     />
   );
 };
