@@ -771,14 +771,11 @@ const FahrerRegistrierung = () => {
 
                   <div>
                     <Label htmlFor="erfahrung">Berufserfahrung (Jahre) *</Label>
-                    <p className="text-xs text-foreground bg-muted/60 border-l-2 border-primary px-2 py-1 mt-1 mb-2 rounded-sm">
-                      Bitte wählen Sie Ihre Berufserfahrung aus – dieses Feld ist erforderlich.
-                    </p>
                     <Select 
                       value={formData.erfahrung_jahre} 
                       onValueChange={(value) => handleInputChange('erfahrung_jahre', value)}
                     >
-                      <SelectTrigger className={validationErrors.erfahrung_jahre ? "border-destructive" : ""}>
+                      <SelectTrigger className={validationErrors.erfahrung_jahre ? "border-destructive" : "bg-yellow-50 border-yellow-400/70 dark:bg-yellow-950/30 dark:border-yellow-600/60"}>
                         <SelectValue placeholder="Wählen Sie Ihre Erfahrung" />
                       </SelectTrigger>
                       <SelectContent>
