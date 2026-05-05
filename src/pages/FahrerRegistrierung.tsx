@@ -887,11 +887,11 @@ const FahrerRegistrierung = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="stundensatz">Gewünschter Tagessatz / Hinweis zur Vergütung (optional)</Label>
+                      <Label htmlFor="stundensatz">Gewünschter Tagessatz / Honorarvorstellung netto (optional)</Label>
                       <Input
                         id="stundensatz"
                         type="text"
-                        placeholder="z. B. 350 € / Tag oder freier Hinweis"
+                        placeholder="z. B. 280 € pro Einsatztag, 350 € bei Fernverkehr oder nach Vereinbarung"
                         value={formData.stundensatz}
                         onChange={(e) => handleInputChange('stundensatz', e.target.value)}
                         className={validationErrors.stundensatz ? "border-destructive" : ""}
