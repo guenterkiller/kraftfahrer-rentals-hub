@@ -996,7 +996,7 @@ const FahrerRegistrierung = () => {
                                   height={512}
                                   className="w-32 h-auto rounded border border-muted-foreground/20 mx-auto"
                                 />
-                                <figcaption className="text-[11px] text-muted-foreground mt-1">Beispiel Fahrerkarte</figcaption>
+                                <figcaption className="text-[11px] text-muted-foreground mt-1">Beispiel Fahrerkarte / Qualifizierungsnachweis</figcaption>
                               </figure>
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihrer Fahrerkarte hoch (mehrere Dateien möglich)
