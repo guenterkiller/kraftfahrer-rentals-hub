@@ -67,8 +67,10 @@ const handler = async (req: Request): Promise<Response> => {
         const date = new Date(einsatzbeginn + "T08:00:00");
         if (!isNaN(date.getTime())) {
           const formattedDate = date.toLocaleDateString('de-DE');
-          zeitraumText = einsatzdauer 
-            ? `Ab ${formattedDate} für ${einsatzdauer}`
+          zeitraumText = einsatzdauer
+            ? (einsatzdauer.startsWith('vom ')
+                ? einsatzdauer
+                : `Ab ${formattedDate} für ${einsatzdauer}`)
             : `Ab ${formattedDate}`;
         }
       } catch (dateError) {
