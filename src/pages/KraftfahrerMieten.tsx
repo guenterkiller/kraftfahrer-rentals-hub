@@ -4,7 +4,7 @@ const KraftfahrerMieten = () => {
   const seoData = {
     title: "Kraftfahrer mieten – Fahrer leihen deutschlandweit",
     description: "Kraftfahrer mieten oder leihen – Aushilfsfahrer, Mietfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
-    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer",
+    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer, Berufskraftfahrer mieten",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -118,6 +118,18 @@ const KraftfahrerMieten = () => {
       hero={heroData}
       faq={faqData}
       relatedServices={relatedServices}
+      extraSection={
+        <section className="py-12 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Berufskraftfahrer mieten – deutschlandweit nach Verfügbarkeit
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              Wenn Sie kurzfristig oder planbar Berufskraftfahrer mieten möchten, vermittelt die Fahrerexpress-Agentur selbstständige Kraftfahrer und CE-Fahrer mit passender Qualifikation – tageweise, wochenweise oder projektbezogen, ohne Arbeitnehmerüberlassung.
+            </p>
+          </div>
+        </section>
+      }
     />
   );
 };

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Phone, Mail } from "lucide-react";
@@ -33,9 +34,10 @@ interface LandingPageLayoutProps {
     path: string;
     description: string;
   }>;
+  extraSection?: ReactNode;
 }
 
-const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageLayoutProps) => {
+const LandingPageLayout = ({ seoData, hero, faq, relatedServices, extraSection }: LandingPageLayoutProps) => {
   useSEO(seoData);
 
   const scrollToBooking = () => {
@@ -120,6 +122,8 @@ const LandingPageLayout = ({ seoData, hero, faq, relatedServices }: LandingPageL
             </div>
           </div>
         </section>
+
+        {extraSection}
 
         {/* FAQ Section */}
         <section className="py-16 px-4">
