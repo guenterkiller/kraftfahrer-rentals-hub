@@ -13,6 +13,8 @@ import { ArrowLeft, Upload, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 import { validateFiles, uploadViaEdge } from "@/utils/fileValidation";
+import beispielFuehrerschein from "@/assets/beispiel-fuehrerschein.png";
+import beispielFahrerkarte from "@/assets/beispiel-fahrerkarte.png";
 
 const FahrerRegistrierung = () => {
   // Scroll to top on page load
@@ -935,6 +937,17 @@ const FahrerRegistrierung = () => {
                          <div className="flex flex-col items-center space-y-2">
                            <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
                             <h4 className="font-medium">Führerschein</h4>
+                              <figure className="mt-1 mb-1">
+                                <img
+                                  src={beispielFuehrerschein}
+                                  alt="Beispielabbildung eines europäischen Führerscheins (Muster, keine echten Daten)"
+                                  loading="lazy"
+                                  width={800}
+                                  height={512}
+                                  className="w-32 h-auto rounded border border-muted-foreground/20 mx-auto"
+                                />
+                                <figcaption className="text-[11px] text-muted-foreground mt-1">Beispiel Führerschein</figcaption>
+                              </figure>
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihres Führerscheins hoch (mehrere Dateien möglich)
                              </p>
@@ -974,6 +987,17 @@ const FahrerRegistrierung = () => {
                          <div className="flex flex-col items-center space-y-2">
                            <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
                             <h4 className="font-medium">Fahrerkarte</h4>
+                              <figure className="mt-1 mb-1">
+                                <img
+                                  src={beispielFahrerkarte}
+                                  alt="Beispielabbildung einer Fahrerkarte für den digitalen Tachographen (Muster, keine echten Daten)"
+                                  loading="lazy"
+                                  width={800}
+                                  height={512}
+                                  className="w-32 h-auto rounded border border-muted-foreground/20 mx-auto"
+                                />
+                                <figcaption className="text-[11px] text-muted-foreground mt-1">Beispiel Fahrerkarte</figcaption>
+                              </figure>
                              <p className="text-sm text-muted-foreground mb-2">
                                Laden Sie eine Kopie Ihrer Fahrerkarte hoch (mehrere Dateien möglich)
                              </p>
