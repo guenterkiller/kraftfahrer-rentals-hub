@@ -39,7 +39,34 @@ const SimpleBookingForm = () => {
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
+  const [einsatzbeginn, setEinsatzbeginn] = useState('');
+  const [einsatzende, setEinsatzende] = useState('');
   const { toast } = useToast();
+
+  // Frühester Einsatz: nächster Werktag
+  const minEinsatzDatum = (() => {
+    const today = new Date();
+    const next = new Date(today);
+    next.setDate(today.getDate() + 1);
+    while (next.getDay() === 0 || next.getDay() === 6) {
+      next.setDate(next.getDate() + 1);
+    }
+    return next.toISOString().split('T')[0];
+  })();
+
+  const formatDE = (iso: string) => {
+    const [y, m, d] = iso.split('-');
+    return `${d}.${m}.${y}`;
+  };
+
+  const buildEinsatzdauer = (start: string, end: string): string => {
+    if (!start || !end) return '';
+    if (start === end) return '1 Einsatztag';
+    const sd = new Date(start);
+    const ed = new Date(end);
+    const days = Math.round((ed.getTime() - sd.getTime()) / 86400000) + 1;
+    return `vom ${formatDE(start)} bis ${formatDE(end)} (${days} Kalendertage)`;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -49,6 +76,19 @@ const SimpleBookingForm = () => {
     setSubmitted(true);
 
     const formData = new FormData(e.currentTarget);
+
+    // Validierung Einsatzzeitraum
+    if (!einsatzbeginn || !einsatzende) {
+      toast({ title: "Bitte Einsatzbeginn und Einsatzende angeben", variant: "destructive" });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+    if (einsatzende < einsatzbeginn) {
+      toast({ title: "Einsatzende darf nicht vor Einsatzbeginn liegen", variant: "destructive" });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+    const einsatzdauerString = buildEinsatzdauer(einsatzbeginn, einsatzende);
     
     // Debug form data
     console.log('Form data entries:');
@@ -74,8 +114,8 @@ const SimpleBookingForm = () => {
         customer_house_number: formData.get('hausnummer') as string,
         customer_postal_code: formData.get('plz') as string,
         customer_city: formData.get('ort') as string,
-        einsatzbeginn: formData.get('einsatzbeginn') as string,
-        einsatzdauer: formData.get('einsatzdauer') as string,
+        einsatzbeginn: einsatzbeginn,
+        einsatzdauer: einsatzdauerString,
         fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
           ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
           : fahrzeugtyp === 'LKW CE Wochenpreis'
@@ -161,6 +201,8 @@ const SimpleBookingForm = () => {
       if (e.currentTarget) {
         e.currentTarget.reset();
       }
+      setEinsatzbeginn('');
+      setEinsatzende('');
       setAgreedToData(false);
       setAgreedToBinding(false);
       setAgreedToBinding(false);
@@ -397,26 +439,33 @@ const SimpleBookingForm = () => {
                       name="einsatzbeginn" 
                       type="date" 
                       required
-                      min={(() => {
-                        const today = new Date();
-                        let nextWorkday = new Date(today);
-                        nextWorkday.setDate(today.getDate() + 1);
-                        
-                        // Skip weekend to Monday
-                        while (nextWorkday.getDay() === 0 || nextWorkday.getDay() === 6) {
-                          nextWorkday.setDate(nextWorkday.getDate() + 1);
-                        }
-                        
-                        return nextWorkday.toISOString().split('T')[0];
-                      })()}
+                      min={minEinsatzDatum}
+                      value={einsatzbeginn}
+                      onChange={(e) => {
+                        setEinsatzbeginn(e.target.value);
+                        if (einsatzende && einsatzende < e.target.value) setEinsatzende(e.target.value);
+                      }}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
                       Frühester Einsatz: nächster Werktag (ausreichend Vorlauf nötig); kein Same-Day
                     </p>
                   </div>
                   <div>
-                    <Label htmlFor="einsatzdauer">Einsatzdauer *</Label>
-                    <Input id="einsatzdauer" name="einsatzdauer" placeholder="z.B. 3 Tage, 2 Wochen" required />
+                    <Label htmlFor="einsatzende">Einsatzende *</Label>
+                    <Input
+                      id="einsatzende"
+                      name="einsatzende"
+                      type="date"
+                      required
+                      min={einsatzbeginn || minEinsatzDatum}
+                      value={einsatzende}
+                      onChange={(e) => setEinsatzende(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {einsatzbeginn && einsatzende
+                        ? buildEinsatzdauer(einsatzbeginn, einsatzende)
+                        : 'Bei eintägigem Einsatz: gleiches Datum wählen'}
+                    </p>
                   </div>
                 </div>
 
