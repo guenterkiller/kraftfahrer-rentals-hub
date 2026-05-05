@@ -439,26 +439,33 @@ const SimpleBookingForm = () => {
                       name="einsatzbeginn" 
                       type="date" 
                       required
-                      min={(() => {
-                        const today = new Date();
-                        let nextWorkday = new Date(today);
-                        nextWorkday.setDate(today.getDate() + 1);
-                        
-                        // Skip weekend to Monday
-                        while (nextWorkday.getDay() === 0 || nextWorkday.getDay() === 6) {
-                          nextWorkday.setDate(nextWorkday.getDate() + 1);
-                        }
-                        
-                        return nextWorkday.toISOString().split('T')[0];
-                      })()}
+                      min={minEinsatzDatum}
+                      value={einsatzbeginn}
+                      onChange={(e) => {
+                        setEinsatzbeginn(e.target.value);
+                        if (einsatzende && einsatzende < e.target.value) setEinsatzende(e.target.value);
+                      }}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
                       Frühester Einsatz: nächster Werktag (ausreichend Vorlauf nötig); kein Same-Day
                     </p>
                   </div>
                   <div>
-                    <Label htmlFor="einsatzdauer">Einsatzdauer *</Label>
-                    <Input id="einsatzdauer" name="einsatzdauer" placeholder="z.B. 3 Tage, 2 Wochen" required />
+                    <Label htmlFor="einsatzende">Einsatzende *</Label>
+                    <Input
+                      id="einsatzende"
+                      name="einsatzende"
+                      type="date"
+                      required
+                      min={einsatzbeginn || minEinsatzDatum}
+                      value={einsatzende}
+                      onChange={(e) => setEinsatzende(e.target.value)}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {einsatzbeginn && einsatzende
+                        ? buildEinsatzdauer(einsatzbeginn, einsatzende)
+                        : 'Bei eintägigem Einsatz: gleiches Datum wählen'}
+                    </p>
                   </div>
                 </div>
 
