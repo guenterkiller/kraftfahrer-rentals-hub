@@ -202,7 +202,7 @@ const FahrerRegistrierung = () => {
         break;
       case 'erfahrung_jahre':
         if (!value || value.trim() === '') {
-          errors.erfahrung_jahre = 'Bitte wählen Sie Ihre Berufserfahrung aus';
+          errors.erfahrung_jahre = 'Bitte wählen Sie Ihre Berufserfahrung aus.';
         }
         break;
       case 'vermittlungszustimmung':
@@ -769,6 +769,9 @@ const FahrerRegistrierung = () => {
 
                   <div>
                     <Label htmlFor="erfahrung">Berufserfahrung (Jahre) *</Label>
+                    <p className="text-xs text-foreground bg-muted/60 border-l-2 border-primary px-2 py-1 mt-1 mb-2 rounded-sm">
+                      Bitte wählen Sie Ihre Berufserfahrung aus – dieses Feld ist erforderlich.
+                    </p>
                     <Select 
                       value={formData.erfahrung_jahre} 
                       onValueChange={(value) => handleInputChange('erfahrung_jahre', value)}
