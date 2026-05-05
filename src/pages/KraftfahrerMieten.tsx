@@ -5,6 +5,7 @@ const KraftfahrerMieten = () => {
     title: "Kraftfahrer mieten – Fahrer leihen deutschlandweit",
     description: "Kraftfahrer mieten oder leihen – Aushilfsfahrer, Mietfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
     keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer",
+    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer, Berufskraftfahrer mieten",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
