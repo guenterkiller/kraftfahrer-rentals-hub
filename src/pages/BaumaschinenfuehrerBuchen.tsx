@@ -14,7 +14,7 @@ const BaumaschinenfuehrerBuchen = () => {
   const seoData = {
     title: "Baumaschinenführer buchen deutschlandweit – ab 489 €/Einsatztag",
     description: "Baumaschinenführer & Mischmeister mieten, leihen oder bestellen – Baggerfahrer, Radladerfahrer, Flüssigboden auf Abruf. Tageweise, ohne AÜG. 489 €/Einsatztag.",
-    keywords: "Baumaschinenführer buchen, Baumaschinenführer mieten, Baumaschinenführer leihen, Baggerfahrer bestellen, Radladerfahrer mieten, Baustellen Fahrer, Fahrer auf Abruf, Fahrer tageweise, Aushilfsfahrer Baustelle, Ersatzfahrer Baumaschine, Mietfahrer Bagger, externe Fahrer-Dienstleistungen, Fahrer Dienstleister Bau",
+    keywords: "Baumaschinenführer buchen, Baumaschinenführer mieten, Baumaschinenführer leihen, Baggerfahrer bestellen, Radladerfahrer mieten, Baustellen Fahrer, Fahrer auf Abruf, Fahrer tageweise, Aushilfsfahrer Baustelle, Ersatzfahrer Baumaschine, Mietfahrer Bagger, externe Fahrer-Dienstleistungen, Fahrer Dienstleister Bau, Baggerfahrer mieten",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
@@ -111,6 +111,18 @@ const BaumaschinenfuehrerBuchen = () => {
       hero={heroData}
       faq={faqData}
       relatedServices={relatedServices}
+      extraSection={
+        <section className="py-12 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Baggerfahrer mieten – Radlader- und Baumaschinenführer nach Verfügbarkeit
+            </h2>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+              Für Baustellen, Erdarbeiten und Materialumschlag vermitteln wir selbstständige Baggerfahrer, Radladerfahrer und Baumaschinenführer. Maschinen und Geräte werden weiterhin bauseits gestellt.
+            </p>
+          </div>
+        </section>
+      }
     />
   );
 };
