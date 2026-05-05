@@ -84,6 +84,10 @@ const KraftfahrerMieten = () => {
         answer: "Ja. Wir vermitteln <strong>Kipper-Fahrer, Baustellen-Fahrer, Fahrmischer-Fahrer und Sattelzug-Fahrer</strong> deutschlandweit. Externe Fahrer für Speditionen und Bauunternehmen – Fahrer vermitteln ohne Arbeitnehmerüberlassung."
       },
       {
+        question: "Kann ich auch Berufskraftfahrer mieten?",
+        answer: "Ja. Die Fahrerexpress-Agentur vermittelt selbstständige Kraftfahrer und <strong>Berufskraftfahrer</strong> mit passender Qualifikation, z. B. für C/CE-Einsätze, tageweise, wochenweise oder projektbezogen. Es erfolgt keine Arbeitnehmerüberlassung."
+      },
+      {
         question: "Vermitteln Sie auch Baggerfahrer und Radladerfahrer?",
         answer: "Ja. Neben LKW-Fahrern und Kraftfahrern vermitteln wir auch <strong>Baggerfahrer, Radladerfahrer und Baumaschinenführer deutschlandweit</strong>. Alle arbeiten als Subunternehmer für einzelne Bauabschnitte oder Tagesbaustellen – keine Maschinenvermietung, nur Bediener."
       },
@@ -118,18 +122,6 @@ const KraftfahrerMieten = () => {
       hero={heroData}
       faq={faqData}
       relatedServices={relatedServices}
-      extraSection={
-        <section className="py-12 px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Berufskraftfahrer mieten – deutschlandweit nach Verfügbarkeit
-            </h2>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Wenn Sie kurzfristig oder planbar Berufskraftfahrer mieten möchten, vermittelt die Fahrerexpress-Agentur selbstständige Kraftfahrer und CE-Fahrer mit passender Qualifikation – tageweise, wochenweise oder projektbezogen, ohne Arbeitnehmerüberlassung.
-            </p>
-          </div>
-        </section>
-      }
     />
   );
 };

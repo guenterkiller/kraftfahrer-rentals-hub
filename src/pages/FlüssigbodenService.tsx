@@ -185,7 +185,7 @@ const FlüssigbodenService = () => {
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Settings className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-sm">Mischmeister für Flüssigboden</span>
+                        <span className="text-sm">Mischmeister und Anlagenbediener für Flüssigboden</span>
                       </div>
                       <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
                         <Droplets className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
@@ -327,14 +327,6 @@ const FlüssigbodenService = () => {
 
         {/* FAQ Section */}
         <section className="py-16 px-4 bg-muted/50">
-          <div className="max-w-4xl mx-auto mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Mischmeister & Anlagenbediener Flüssigboden deutschlandweit
-            </h2>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              Unsere selbstständigen Anlagenbediener für Flüssigboden unterstützen bei der Bedienung bauseits gestellter Mischanlagen sowie bei Radlader-, Bagger- und Fahrmischer-Aufgaben im Rahmen des vereinbarten Einsatzes.
-            </p>
-          </div>
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
               Häufige Fragen zum Mischmeister für Flüssigboden
