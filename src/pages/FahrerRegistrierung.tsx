@@ -942,9 +942,9 @@ const FahrerRegistrierung = () => {
                                   src={beispielFuehrerschein}
                                   alt="Beispielabbildung eines europäischen Führerscheins (Muster, keine echten Daten)"
                                   loading="lazy"
-                                  width={800}
-                                  height={512}
-                                  className="w-32 h-auto rounded border border-muted-foreground/20 mx-auto"
+                                  width={160}
+                                  height={100}
+                                  className="w-40 h-24 object-contain rounded border border-muted-foreground/20 mx-auto bg-white"
                                 />
                                 <figcaption className="text-[11px] text-muted-foreground mt-1">Beispiel Führerschein</figcaption>
                               </figure>
@@ -992,9 +992,9 @@ const FahrerRegistrierung = () => {
                                   src={beispielFahrerkarte}
                                   alt="Beispielabbildung einer Fahrerkarte für den digitalen Tachographen (Muster, keine echten Daten)"
                                   loading="lazy"
-                                  width={800}
-                                  height={512}
-                                  className="w-32 h-auto rounded border border-muted-foreground/20 mx-auto"
+                                  width={160}
+                                  height={100}
+                                  className="w-40 h-24 object-contain rounded border border-muted-foreground/20 mx-auto bg-white"
                                 />
                                 <figcaption className="text-[11px] text-muted-foreground mt-1">Beispiel Fahrerkarte / Qualifizierungsnachweis</figcaption>
                               </figure>
