@@ -1836,6 +1836,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               >
                                 {rejectingJob === req.id ? '⏳...' : '❌ Ablehnen'}
                               </Button>
+                              <TestSendJobButton jobId={req.id} className="w-full h-11" />
                             </div>
                           ) : req.status === 'rejected' ? (
                             <div className="text-sm text-gray-500 italic text-center py-2">
