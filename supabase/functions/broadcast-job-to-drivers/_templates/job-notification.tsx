@@ -34,7 +34,11 @@ export const JobNotificationEmail = ({
   attachments,
 }: JobNotificationEmailProps) => {
   return (
-    <BaseEmail previewText={`Neuer Auftrag verfügbar: ${fahrzeugtyp} in ${einsatzort}`}>
+    <BaseEmail
+      previewText={`Neuer Auftrag verfügbar: ${fahrzeugtyp} in ${einsatzort}`}
+      plainHeader
+      headerSubtitleOverride="Vermittlung selbstständiger Kraftfahrer"
+    >
       <Heading style={textStyles.h1}>Neuer Auftrag verfügbar 🚛</Heading>
       
       <Text style={textStyles.paragraph}>
