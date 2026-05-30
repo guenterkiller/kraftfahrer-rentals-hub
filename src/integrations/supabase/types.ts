@@ -526,6 +526,39 @@ export type Database = {
           },
         ]
       }
+      job_attachments: {
+        Row: {
+          created_at: string
+          filename: string
+          filepath: string
+          id: string
+          job_id: string
+          mime_type: string | null
+          size_bytes: number | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          filepath: string
+          id?: string
+          job_id: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          filepath?: string
+          id?: string
+          job_id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       job_driver_acceptances: {
         Row: {
           accepted_at: string
@@ -608,6 +641,10 @@ export type Database = {
           subcontractor_invoice_status:
             | Database["public"]["Enums"]["invoice_status"]
             | null
+          tarif_label: string | null
+          tarif_netto: number | null
+          tarif_type: string | null
+          tarif_unit: string | null
           updated_at: string
           zeitraum: string
         }
@@ -644,6 +681,10 @@ export type Database = {
           subcontractor_invoice_status?:
             | Database["public"]["Enums"]["invoice_status"]
             | null
+          tarif_label?: string | null
+          tarif_netto?: number | null
+          tarif_type?: string | null
+          tarif_unit?: string | null
           updated_at?: string
           zeitraum: string
         }
@@ -680,6 +721,10 @@ export type Database = {
           subcontractor_invoice_status?:
             | Database["public"]["Enums"]["invoice_status"]
             | null
+          tarif_label?: string | null
+          tarif_netto?: number | null
+          tarif_type?: string | null
+          tarif_unit?: string | null
           updated_at?: string
           zeitraum?: string
         }
@@ -867,6 +912,10 @@ export type Database = {
           subcontractor_invoice_status:
             | Database["public"]["Enums"]["invoice_status"]
             | null
+          tarif_label: string | null
+          tarif_netto: number | null
+          tarif_type: string | null
+          tarif_unit: string | null
           updated_at: string
           zeitraum: string
         }
