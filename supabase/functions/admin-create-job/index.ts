@@ -21,6 +21,10 @@ interface CreateJobRequest {
   fuehrerscheinklasse: string;
   besonderheiten?: string;
   nachricht: string;
+  tarifType?: string;
+  tarifLabel?: string;
+  tarifNetto?: number | null;
+  tarifUnit?: string;
 }
 
 serve(async (req) => {
@@ -105,7 +109,11 @@ serve(async (req) => {
         fuehrerscheinklasse: body.fuehrerscheinklasse,
         besonderheiten: body.besonderheiten || null,
         nachricht: body.nachricht,
-        status: 'open'
+        status: 'pending',
+        tarif_type: body.tarifType || null,
+        tarif_label: body.tarifLabel || null,
+        tarif_netto: body.tarifNetto ?? null,
+        tarif_unit: body.tarifUnit || null,
       })
       .select()
       .single();
@@ -125,40 +133,18 @@ serve(async (req) => {
     await supabase
       .from('admin_actions')
       .insert({
-        action: 'create_job_jwt',
+        action: 'create_job_pending',
         job_id: job.id,
         admin_email: user.id,
-        note: `Job created via secure admin interface: ${body.customerName} - ${body.einsatzort}`
+        note: `Job (pending, kein Auto-Versand): ${body.customerName} - ${body.einsatzort} - Tarif: ${body.tarifLabel || 'n/a'}`
       });
 
     console.log('✅ Job created successfully:', job.id);
 
-    // Broadcast job to all approved drivers
-    try {
-      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/broadcast-job-to-drivers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-        },
-        body: JSON.stringify({
-          jobRequestId: job.id,
-          job: {
-            fahrzeugtyp: job.fahrzeugtyp,
-            fuehrerscheinklasse: job.fuehrerscheinklasse,
-          },
-          customer: {
-            name: job.customer_name,
-            email: job.customer_email,
-            phone: job.customer_phone,
-          },
-        }),
-      });
-      console.log("📧 Driver broadcast initiated for manually created job");
-    } catch (broadcastError) {
-      console.error("⚠️ Error broadcasting to drivers:", broadcastError);
-      // Don't fail the job creation if broadcast fails
-    }
+    // WICHTIG: KEIN automatischer Broadcast.
+    // Versand erfolgt bewusst über den Admin-Button "Freigeben & an Fahrer senden"
+    // (admin-approve-job), erst nachdem Anhänge geprüft wurden.
+    console.log("ℹ️ Job created as 'pending'. No auto-broadcast.");
 
     return new Response(
       JSON.stringify({ 

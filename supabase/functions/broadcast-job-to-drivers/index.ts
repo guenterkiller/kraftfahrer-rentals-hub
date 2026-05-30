@@ -125,6 +125,30 @@ serve(async (req) => {
 
     console.log(`Found ${drivers.length} approved drivers to notify`);
 
+    // Fetch attachments and create signed URLs (7 days)
+    const { data: attachmentRows } = await supabase
+      .from("job_attachments")
+      .select("filename, filepath")
+      .eq("job_id", actualJobId);
+
+    const attachments: Array<{ filename: string; url: string }> = [];
+    if (attachmentRows && attachmentRows.length > 0) {
+      for (const a of attachmentRows) {
+        const { data: signed, error: signErr } = await supabase
+          .storage
+          .from("job-attachments")
+          .createSignedUrl(a.filepath, 60 * 60 * 24 * 7); // 7 Tage
+        if (signErr) {
+          console.error("Signed URL Fehler:", a.filepath, signErr);
+          continue;
+        }
+        if (signed?.signedUrl) {
+          attachments.push({ filename: a.filename, url: signed.signedUrl });
+        }
+      }
+      console.log(`📎 ${attachments.length} Anhänge mit signed URLs vorbereitet.`);
+    }
+
     // Send email to each driver
     let successCount = 0;
     let errorCount = 0;
@@ -176,6 +200,7 @@ serve(async (req) => {
             acceptUrl,
             declineUrl,
             unsubscribeUrl,
+            attachments,
           })
         );
 

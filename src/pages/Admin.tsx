@@ -15,6 +15,7 @@ import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, User
 import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
+import { JobAttachmentsList } from "@/components/JobAttachmentsList";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
@@ -1772,6 +1773,17 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <p className="text-gray-900">{req.zeitraum || '-'}</p>
                             </div>
                           </div>
+
+                          {/* Tarif (falls vorhanden) */}
+                          {(req as any).tarif_label && (
+                            <div className="text-xs bg-emerald-50 border border-emerald-200 rounded p-2">
+                              <span className="font-medium text-emerald-800">Tarif:</span>{' '}
+                              <span className="text-emerald-900">{(req as any).tarif_label}</span>
+                            </div>
+                          )}
+
+                          {/* Anhänge */}
+                          <JobAttachmentsList jobId={req.id} />
 
                           {/* Zuweisung */}
                           {a ? (
