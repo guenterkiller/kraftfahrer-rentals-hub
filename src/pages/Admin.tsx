@@ -1541,6 +1541,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                     >
                                       {rejectingJob === req.id ? '⏳...' : '❌ Ablehnen'}
                                     </Button>
+                                    <TestSendJobButton jobId={req.id} />
                                   </div>
                                 );
                               }
