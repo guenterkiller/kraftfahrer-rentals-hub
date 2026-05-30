@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
 import React from "npm:react@18.3.1";
 import { renderAsync } from "npm:@react-email/components@0.0.22";
-import { JobNotificationEmail } from "../broadcast-job-to-drivers/_templates/job-notification.tsx";
+import { JobNotificationEmail } from "./_templates/job-notification.tsx";
 import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from "../_shared/driver-unsubscribe-token.ts";
 
 const corsHeaders = {
