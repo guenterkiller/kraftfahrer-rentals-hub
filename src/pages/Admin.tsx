@@ -16,6 +16,7 @@ import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { JobAttachmentsList } from "@/components/JobAttachmentsList";
+import { TestSendJobButton } from "@/components/TestSendJobButton";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
