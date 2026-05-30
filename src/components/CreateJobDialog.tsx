@@ -14,6 +14,38 @@ interface CreateJobDialogProps {
   onJobCreated: (jobId: string) => void;
 }
 
+// Fahrzeugtyp / Einsatzart – nur Beschreibung, KEINE Preise
+const FAHRZEUGTYP_OPTIONS = [
+  "LKW CE",
+  "7,5-t-Lkw",
+  "BE / Anhänger",
+  "Autotransporter geschlossen",
+  "Autotransporter offen",
+  "Eventcontainer / Spezialfahrzeug",
+  "Baumaschine",
+  "Fahrmischer",
+  "Sonstiger Fahrereinsatz",
+];
+
+// Tarife – exakt analog zur Seite „Preise & Ablauf"
+type TarifOption = {
+  type: string;
+  label: string;
+  netto: number | null;
+  unit: string;
+};
+
+const TARIF_OPTIONS: TarifOption[] = [
+  { type: "lkw_ce_tag",        label: "LKW-Fahrer CE – 349 € netto pro Einsatztag",            netto: 349,  unit: "tag" },
+  { type: "lkw_ce_woche",      label: "LKW-Fahrer CE – Wochenpreis – 1.645 € netto pro Woche", netto: 1645, unit: "woche" },
+  { type: "fernfahrer_tag",    label: "Fernfahrer-Pauschale – 450 € netto pro Einsatztag",     netto: 450,  unit: "tag" },
+  { type: "baumaschine_tag",   label: "Baumaschinenführer / Mischmeister – 489 € netto pro Einsatztag", netto: 489, unit: "tag" },
+  { type: "individuell",       label: "Individuell / nach Absprache",                          netto: null, unit: "individuell" },
+];
+
+const ALLOWED_MIME = ["image/jpeg", "image/png", "application/pdf"];
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
 export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialogProps) {
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
@@ -32,9 +64,11 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
   const [einsatzort, setEinsatzort] = useState("");
   const [zeitraum, setZeitraum] = useState("");
   const [fahrzeugtyp, setFahrzeugtyp] = useState("");
+  const [tarifType, setTarifType] = useState("");
   const [fuehrerscheinklasse, setFuehrerscheinklasse] = useState("C+E");
   const [besonderheiten, setBesonderheiten] = useState("");
   const [nachricht, setNachricht] = useState("");
+  const [attachments, setAttachments] = useState<File[]>([]);
 
   const resetForm = () => {
     setCustomerName("");
@@ -48,9 +82,11 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
     setEinsatzort("");
     setZeitraum("");
     setFahrzeugtyp("");
+    setTarifType("");
     setFuehrerscheinklasse("C+E");
     setBesonderheiten("");
     setNachricht("");
+    setAttachments([]);
   };
 
   const handleClose = () => {
@@ -58,13 +94,36 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
     onClose();
   };
 
+  const handleFilesSelected = (files: FileList | null) => {
+    if (!files) return;
+    const accepted: File[] = [];
+    const rejected: string[] = [];
+    Array.from(files).forEach((f) => {
+      if (!ALLOWED_MIME.includes(f.type)) {
+        rejected.push(`${f.name}: nur JPG/PNG/PDF`);
+      } else if (f.size > MAX_FILE_SIZE) {
+        rejected.push(`${f.name}: größer als 10 MB`);
+      } else {
+        accepted.push(f);
+      }
+    });
+    if (rejected.length > 0) {
+      toast({ title: "Einige Dateien abgelehnt", description: rejected.join("\n"), variant: "destructive" });
+    }
+    setAttachments((prev) => [...prev, ...accepted]);
+  };
+
+  const removeAttachment = (idx: number) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   const handleCreateJob = async () => {
     // Basic validation
     if (!customerName || !customerEmail || !customerPhone || !einsatzort || 
-        !zeitraum || !fahrzeugtyp || !nachricht) {
+        !zeitraum || !fahrzeugtyp || !tarifType || !nachricht) {
       toast({
         title: "Fehlende Angaben",
-        description: "Bitte füllen Sie alle Pflichtfelder aus.",
+        description: "Bitte füllen Sie alle Pflichtfelder aus (inkl. Fahrzeugtyp und Tarif).",
         variant: "destructive"
       });
       return;
@@ -94,18 +153,11 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
     setIsCreating(true);
 
     try {
-      // Get admin session
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('Keine Admin-Session gefunden');
-      }
+      const tarif = TARIF_OPTIONS.find((t) => t.type === tarifType);
 
-      const session = JSON.parse(adminSession);
-      
       // Create job via edge function
       const { data, error } = await supabase.functions.invoke('admin-create-job', {
         body: {
-          email: session.email,
           customerName,
           customerEmail,
           customerPhone,
@@ -119,7 +171,11 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
           fahrzeugtyp,
           fuehrerscheinklasse,
           besonderheiten: besonderheiten || undefined,
-          nachricht
+          nachricht,
+          tarifType: tarif?.type,
+          tarifLabel: tarif?.label,
+          tarifNetto: tarif?.netto,
+          tarifUnit: tarif?.unit,
         }
       });
 
@@ -131,13 +187,46 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
         throw new Error(data?.error || 'Fehler beim Erstellen des Auftrags');
       }
 
+      const newJobId: string = data.jobId;
+
+      // Upload attachments (if any)
+      let uploadedCount = 0;
+      let uploadErrors = 0;
+      for (const file of attachments) {
+        try {
+          const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+          const path = `${newJobId}/${Date.now()}_${safe}`;
+          const { error: upErr } = await supabase.storage
+            .from("job-attachments")
+            .upload(path, file, { contentType: file.type, upsert: false });
+          if (upErr) throw upErr;
+
+          const { error: insErr } = await supabase.from("job_attachments").insert({
+            job_id: newJobId,
+            filename: file.name,
+            filepath: path,
+            mime_type: file.type,
+            size_bytes: file.size,
+          });
+          if (insErr) throw insErr;
+          uploadedCount++;
+        } catch (e: any) {
+          console.error("Upload fehlgeschlagen:", file.name, e);
+          uploadErrors++;
+        }
+      }
+
       toast({
         title: "Auftrag erstellt",
-        description: `Auftrag für ${customerName} wurde erfolgreich angelegt.`
+        description:
+          `Auftrag für ${customerName} angelegt` +
+          (attachments.length > 0 ? ` • Anhänge: ${uploadedCount}/${attachments.length}` : "") +
+          (uploadErrors > 0 ? ` (${uploadErrors} Fehler)` : "") +
+          ` • Versand erfolgt erst nach Klick auf "Freigeben & an Fahrer senden".`,
       });
 
       resetForm();
-      onJobCreated(data.jobId);
+      onJobCreated(newJobId);
       onClose();
 
     } catch (error: any) {
@@ -293,11 +382,12 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
                 <Label htmlFor="fahrzeugtyp" className="text-sm">Fahrzeugtyp *</Label>
                 <Select value={fahrzeugtyp} onValueChange={setFahrzeugtyp}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Kategorie wählen" />
+                    <SelectValue placeholder="Fahrzeugtyp / Einsatzart" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Baumaschinenführer">Baumaschinenführer / Mischmeister (489 €/Einsatztag)</SelectItem>
-                    <SelectItem value="LKW CE Fahrer">LKW CE Fahrer (349 €/Tag)</SelectItem>
+                    {FAHRZEUGTYP_OPTIONS.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -318,6 +408,24 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
               </div>
             </div>
 
+            {/* Tarif */}
+            <div className="mb-3">
+              <Label htmlFor="tarif" className="text-sm">Tarif * (entspricht Seite „Preise &amp; Ablauf")</Label>
+              <Select value={tarifType} onValueChange={setTarifType}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Tarif / Preisgrundlage wählen" />
+                </SelectTrigger>
+                <SelectContent>
+                  {TARIF_OPTIONS.map((t) => (
+                    <SelectItem key={t.type} value={t.type}>{t.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-gray-500 mt-1">
+                Zusätzlich An- und Abfahrt. Für Sonderfälle „Individuell / nach Absprache" wählen.
+              </p>
+            </div>
+
             <div className="mb-3">
               <Label htmlFor="besonderheiten" className="text-sm">Besonderheiten</Label>
               <Textarea
@@ -330,7 +438,7 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
               />
             </div>
 
-            <div>
+            <div className="mb-3">
               <Label htmlFor="nachricht" className="text-sm">Detaillierte Beschreibung *</Label>
               <Textarea
                 id="nachricht"
@@ -341,6 +449,43 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
                 className="mt-1"
               />
             </div>
+
+            {/* Anhänge */}
+            <div>
+              <Label htmlFor="attachments" className="text-sm">Anhänge (JPG, PNG, PDF – max. 10 MB pro Datei)</Label>
+              <Input
+                id="attachments"
+                type="file"
+                accept="image/jpeg,image/png,application/pdf"
+                multiple
+                onChange={(e) => handleFilesSelected(e.target.files)}
+                className="mt-1"
+              />
+              {attachments.length > 0 && (
+                <ul className="mt-2 space-y-1 text-sm">
+                  {attachments.map((f, i) => (
+                    <li key={i} className="flex items-center justify-between bg-white border rounded px-2 py-1">
+                      <span className="truncate">{f.name} <span className="text-gray-500">({Math.round(f.size / 1024)} KB)</span></span>
+                      <button
+                        type="button"
+                        onClick={() => removeAttachment(i)}
+                        className="text-red-600 text-xs ml-2"
+                        aria-label={`Datei ${f.name} entfernen`}
+                      >
+                        Entfernen
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <p className="text-xs text-gray-500 mt-1">
+                Anhänge werden privat gespeichert. Versand an Fahrer erfolgt erst nach „Freigeben &amp; an Fahrer senden".
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3 border border-amber-200 bg-amber-50 rounded-lg text-sm text-amber-900">
+            ℹ️ Der Auftrag wird zunächst als <strong>Entwurf (pending)</strong> gespeichert. Es wird <strong>keine automatische E-Mail</strong> an Fahrer gesendet. Den Versand starten Sie bewusst über den Button <strong>„Freigeben &amp; an Fahrer senden"</strong> in der Auftragsliste.
           </div>
 
           <div className="flex gap-2 pt-4">
@@ -351,9 +496,9 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
               onClick={handleCreateJob} 
               disabled={isCreating}
               className="flex-1"
-              aria-label="Auftrag erstellen"
+              aria-label="Auftrag als Entwurf speichern"
             >
-              {isCreating ? "Erstelle..." : "Auftrag erstellen"}
+              {isCreating ? "Speichere..." : "Auftrag speichern (Entwurf)"}
             </Button>
           </div>
         </div>
