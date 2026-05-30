@@ -65,8 +65,8 @@ export const JobNotificationEmail = ({
           <strong>Führerscheinklasse:</strong> {fuehrerscheinklasse}
         </Text>
         {besonderheiten && (
-          <Text style={textStyles.paragraph}>
-            <strong>Besonderheiten:</strong> {besonderheiten}
+          <Text style={{ ...textStyles.paragraph, whiteSpace: 'pre-line' }}>
+            <strong>Besonderheiten:</strong>{'\n'}{besonderheiten}
           </Text>
         )}
       </Section>
@@ -77,7 +77,7 @@ export const JobNotificationEmail = ({
           <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
             💬 Zusätzliche Informationen
           </Heading>
-          <Text style={textStyles.paragraph}>{nachricht}</Text>
+          <Text style={{ ...textStyles.paragraph, whiteSpace: 'pre-line' }}>{nachricht}</Text>
         </Section>
       )}
 
@@ -87,13 +87,23 @@ export const JobNotificationEmail = ({
           <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
             📎 Anhänge zum Auftrag
           </Heading>
-          {attachments.map((a, i) => (
-            <Text key={i} style={textStyles.paragraph}>
-              <a href={a.url} style={{ color: '#2563eb', textDecoration: 'underline' }}>
-                {a.filename}
-              </a>
-            </Text>
-          ))}
+          {(() => {
+            let imgCount = 0;
+            let docCount = 0;
+            return attachments.map((a, i) => {
+              const isImage = /\.(png|jpe?g|gif|webp|heic|bmp|svg)$/i.test(a.filename);
+              const label = isImage
+                ? `Fahrzeugbild ${++imgCount} öffnen`
+                : `Anhang ${++docCount} öffnen`;
+              return (
+                <Text key={i} style={textStyles.paragraph}>
+                  <a href={a.url} style={{ color: '#2563eb', textDecoration: 'underline' }}>
+                    {label}
+                  </a>
+                </Text>
+              );
+            });
+          })()}
           <Text style={{ ...textStyles.muted, fontSize: '12px' }}>
             Die Links sind aus Sicherheitsgründen zeitlich begrenzt gültig.
           </Text>
