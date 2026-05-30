@@ -18,6 +18,16 @@ interface JobNotificationEmailProps {
   attachments?: Array<{ filename: string; url: string }>;
 }
 
+const renderMultilineText = (value: string) => {
+  const lines = value.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  return lines.map((line, index) => (
+    <React.Fragment key={`${index}-${line.slice(0, 12)}`}>
+      {line || '\u00A0'}
+      {index < lines.length - 1 && <br />}
+    </React.Fragment>
+  ));
+};
+
 export const JobNotificationEmail = ({
   driverName,
   driverId,
@@ -69,8 +79,9 @@ export const JobNotificationEmail = ({
           <strong>Führerscheinklasse:</strong> {fuehrerscheinklasse}
         </Text>
         {besonderheiten && (
-          <Text style={{ ...textStyles.paragraph, whiteSpace: 'pre-line' }}>
-            <strong>Besonderheiten:</strong>{'\n'}{besonderheiten}
+          <Text style={textStyles.paragraph}>
+            <strong>Besonderheiten:</strong><br />
+            {renderMultilineText(besonderheiten)}
           </Text>
         )}
       </Section>
@@ -81,7 +92,7 @@ export const JobNotificationEmail = ({
           <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
             💬 Zusätzliche Informationen
           </Heading>
-          <Text style={{ ...textStyles.paragraph, whiteSpace: 'pre-line' }}>{nachricht}</Text>
+          <Text style={textStyles.paragraph}>{renderMultilineText(nachricht)}</Text>
         </Section>
       )}
 
