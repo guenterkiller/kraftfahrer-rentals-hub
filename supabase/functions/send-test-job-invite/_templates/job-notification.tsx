@@ -89,11 +89,15 @@ export const JobNotificationEmail = ({
           </Heading>
           {(() => {
             let imgCount = 0;
+            let pdfCount = 0;
             let docCount = 0;
             return attachments.map((a, i) => {
               const isImage = /\.(png|jpe?g|gif|webp|heic|bmp|svg)$/i.test(a.filename);
+              const isPdf = /\.pdf$/i.test(a.filename);
               const label = isImage
                 ? `Fahrzeugbild ${++imgCount} öffnen`
+                : isPdf
+                ? `PDF-Anhang ${++pdfCount} öffnen`
                 : `Anhang ${++docCount} öffnen`;
               return (
                 <Text key={i} style={textStyles.paragraph}>
