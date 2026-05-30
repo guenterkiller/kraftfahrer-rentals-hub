@@ -15,6 +15,7 @@ import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, User
 import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
+import { JobAttachmentsList } from "@/components/JobAttachmentsList";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
