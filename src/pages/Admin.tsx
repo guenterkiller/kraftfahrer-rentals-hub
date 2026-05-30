@@ -16,6 +16,7 @@ import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { JobAttachmentsList } from "@/components/JobAttachmentsList";
+import { TestSendJobButton } from "@/components/TestSendJobButton";
 import { AdminAssignmentDialog } from "@/components/AdminAssignmentDialog";
 import { EmailLogView } from "@/components/EmailLogView";
 import { DriverNewsletterDialog } from "@/components/DriverNewsletterDialog";
@@ -1540,6 +1541,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                     >
                                       {rejectingJob === req.id ? '⏳...' : '❌ Ablehnen'}
                                     </Button>
+                                    <TestSendJobButton jobId={req.id} />
                                   </div>
                                 );
                               }
@@ -1834,6 +1836,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               >
                                 {rejectingJob === req.id ? '⏳...' : '❌ Ablehnen'}
                               </Button>
+                              <TestSendJobButton jobId={req.id} className="w-full h-11" />
                             </div>
                           ) : req.status === 'rejected' ? (
                             <div className="text-sm text-gray-500 italic text-center py-2">
