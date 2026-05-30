@@ -194,8 +194,12 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
       let uploadErrors = 0;
       for (const file of attachments) {
         try {
-          const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-          const path = `${newJobId}/${Date.now()}_${safe}`;
+          // Sicheren technischen Dateinamen erzeugen (keine personenbezogenen Daten im Pfad/URL)
+          const extMatch = file.name.match(/\.([a-zA-Z0-9]+)$/);
+          const ext = extMatch ? extMatch[1].toLowerCase() : "bin";
+          const uuid = crypto.randomUUID();
+          const path = `${newJobId}/${uuid}.${ext}`;
+          const technicalName = `${uuid}.${ext}`;
           const { error: upErr } = await supabase.storage
             .from("job-attachments")
             .upload(path, file, { contentType: file.type, upsert: false });
@@ -203,7 +207,8 @@ export function CreateJobDialog({ open, onClose, onJobCreated }: CreateJobDialog
 
           const { error: insErr } = await supabase.from("job_attachments").insert({
             job_id: newJobId,
-            filename: file.name,
+            filename: technicalName,
+            original_filename: file.name,
             filepath: path,
             mime_type: file.type,
             size_bytes: file.size,

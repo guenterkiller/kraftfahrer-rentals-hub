@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface Attachment {
   id: string;
   filename: string;
+  original_filename: string | null;
   filepath: string;
   mime_type: string | null;
   size_bytes: number | null;
@@ -22,7 +23,7 @@ export function JobAttachmentsList({ jobId }: Props) {
     (async () => {
       const { data } = await supabase
         .from("job_attachments")
-        .select("id, filename, filepath, mime_type, size_bytes")
+        .select("id, filename, original_filename, filepath, mime_type, size_bytes")
         .eq("job_id", jobId)
         .order("created_at", { ascending: true });
       if (!cancelled) {
@@ -55,7 +56,9 @@ export function JobAttachmentsList({ jobId }: Props) {
       <ul className="space-y-1">
         {items.map((a) => (
           <li key={a.id} className="flex items-center justify-between gap-2">
-            <span className="truncate">{a.filename}</span>
+            <span className="truncate" title={a.filename}>
+              {a.original_filename || a.filename}
+            </span>
             <button
               type="button"
               onClick={() => openSigned(a.filepath)}

@@ -1,0 +1,1 @@
+ALTER TABLE public.job_attachments ADD COLUMN IF NOT EXISTS original_filename text;

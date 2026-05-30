@@ -534,6 +534,7 @@ export type Database = {
           id: string
           job_id: string
           mime_type: string | null
+          original_filename: string | null
           size_bytes: number | null
           uploaded_by: string | null
         }
@@ -544,6 +545,7 @@ export type Database = {
           id?: string
           job_id: string
           mime_type?: string | null
+          original_filename?: string | null
           size_bytes?: number | null
           uploaded_by?: string | null
         }
@@ -554,6 +556,7 @@ export type Database = {
           id?: string
           job_id?: string
           mime_type?: string | null
+          original_filename?: string | null
           size_bytes?: number | null
           uploaded_by?: string | null
         }
