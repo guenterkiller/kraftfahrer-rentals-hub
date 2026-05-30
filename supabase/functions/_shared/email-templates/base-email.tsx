@@ -69,9 +69,11 @@ const mobileStyles = `
 interface BaseEmailProps {
   previewText: string;
   children?: React.ReactNode;
+  plainHeader?: boolean;
+  headerSubtitleOverride?: string;
 }
 
-export const BaseEmail = ({ previewText, children }: BaseEmailProps) => (
+export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOverride }: BaseEmailProps) => (
   <Html lang="de">
     <Head>
       <style>{mobileStyles}</style>
@@ -80,9 +82,13 @@ export const BaseEmail = ({ previewText, children }: BaseEmailProps) => (
     <Body style={main}>
       <Container style={container}>
         {/* Header */}
-        <Section style={header} className="mobile-header">
-          <Heading style={headerTitle} className="mobile-heading">Fahrerexpress-Agentur</Heading>
-          <Text style={headerSubtitle} className="mobile-text">LKW CE Fahrer, Baumaschinenführer & Mischmeister</Text>
+        <Section style={plainHeader ? headerPlain : header} className="mobile-header">
+          <Heading style={plainHeader ? headerTitlePlain : headerTitle} className="mobile-heading">
+            Fahrerexpress-Agentur
+          </Heading>
+          <Text style={plainHeader ? headerSubtitlePlain : headerSubtitle} className="mobile-text">
+            {headerSubtitleOverride || 'LKW CE Fahrer, Baumaschinenführer & Mischmeister'}
+          </Text>
         </Section>
 
         {/* Content */}
@@ -141,6 +147,28 @@ const headerSubtitle = {
   fontSize: '14px',
   margin: '5px 0 0 0',
   opacity: '0.95',
+};
+
+const headerPlain = {
+  backgroundColor: '#ffffff',
+  padding: '28px 40px 12px 40px',
+  textAlign: 'center' as const,
+  borderBottom: `1px solid ${colors.border}`,
+};
+
+const headerTitlePlain = {
+  color: '#111111',
+  fontSize: '22px',
+  fontWeight: 'bold',
+  margin: '0',
+  letterSpacing: '0.2px',
+};
+
+const headerSubtitlePlain = {
+  color: '#6b7280',
+  fontSize: '13px',
+  margin: '6px 0 0 0',
+  fontWeight: 'normal',
 };
 
 const content = {
