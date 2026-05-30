@@ -1774,6 +1774,17 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </div>
                           </div>
 
+                          {/* Tarif (falls vorhanden) */}
+                          {(req as any).tarif_label && (
+                            <div className="text-xs bg-emerald-50 border border-emerald-200 rounded p-2">
+                              <span className="font-medium text-emerald-800">Tarif:</span>{' '}
+                              <span className="text-emerald-900">{(req as any).tarif_label}</span>
+                            </div>
+                          )}
+
+                          {/* Anhänge */}
+                          <JobAttachmentsList jobId={req.id} />
+
                           {/* Zuweisung */}
                           {a ? (
                             <div className="bg-blue-50 p-3 rounded space-y-2">
