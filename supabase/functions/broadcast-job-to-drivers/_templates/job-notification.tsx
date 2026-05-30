@@ -15,6 +15,7 @@ interface JobNotificationEmailProps {
   acceptUrl?: string;
   declineUrl?: string;
   unsubscribeUrl?: string;
+  attachments?: Array<{ filename: string; url: string }>;
 }
 
 export const JobNotificationEmail = ({
@@ -30,6 +31,7 @@ export const JobNotificationEmail = ({
   acceptUrl,
   declineUrl,
   unsubscribeUrl,
+  attachments,
 }: JobNotificationEmailProps) => {
   return (
     <BaseEmail previewText={`Neuer Auftrag verfügbar: ${fahrzeugtyp} in ${einsatzort}`}>
@@ -76,6 +78,25 @@ export const JobNotificationEmail = ({
             💬 Zusätzliche Informationen
           </Heading>
           <Text style={textStyles.paragraph}>{nachricht}</Text>
+        </Section>
+      )}
+
+      {/* Anhänge */}
+      {attachments && attachments.length > 0 && (
+        <Section style={boxStyles.info}>
+          <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
+            📎 Anhänge zum Auftrag
+          </Heading>
+          {attachments.map((a, i) => (
+            <Text key={i} style={textStyles.paragraph}>
+              <a href={a.url} style={{ color: '#2563eb', textDecoration: 'underline' }}>
+                {a.filename}
+              </a>
+            </Text>
+          ))}
+          <Text style={{ ...textStyles.muted, fontSize: '12px' }}>
+            Die Links sind aus Sicherheitsgründen zeitlich begrenzt gültig.
+          </Text>
         </Section>
       )}
 
