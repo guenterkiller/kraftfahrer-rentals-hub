@@ -72,7 +72,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-red-700 text-xs mt-3 leading-snug">Gültig für: bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-3 leading-snug">Gültig für: bis 10 Stunden Einsatzzeit</p>
                       <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
@@ -91,7 +91,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">1.645 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Woche</p>
-                      <p className="text-red-700 text-xs mt-3 leading-snug">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+                      <p className="text-red-700 text-xs mt-3 leading-snug">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden Einsatzzeit</p>
                       <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
@@ -123,7 +123,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center">
                       <div className="text-4xl font-bold text-orange-700 mb-2">489 €</div>
                       <p className="text-orange-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-orange-700 text-xs mt-3 leading-snug">Gültig für: bis 8 Stunden</p>
+                      <p className="text-orange-700 text-xs mt-3 leading-snug">Gültig für: bis 8 Stunden Einsatzzeit</p>
                       <p className="text-orange-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
@@ -197,17 +197,105 @@ const PreiseUndAblauf = () => {
               </CardContent>
             </Card>
 
-            {/* Mehrzeiten & Sonderfälle */}
+            {/* Einsatzzeit-Definition */}
             <Card className="mb-12">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Clock className="h-6 w-6 text-primary" />
-                  Mehrzeiten & Sonderfälle
+                  Einsatzzeit – was ist enthalten?
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Die genannten Preise gelten für den vereinbarten Einsatztag bzw. Wochenpreis. Weitere Kosten entstehen nur, wenn sie vor Auftragserteilung ausdrücklich vereinbart wurden, zum Beispiel bei Nacht-, Wochenend-, Feiertagseinsätzen, besonderen Zusatzleistungen oder außergewöhnlichen Mehrzeiten.
+              <CardContent className="space-y-3 text-muted-foreground">
+                <p>
+                  Der Tagessatz gilt für die <strong className="text-foreground">gesamte Einsatzzeit</strong>,
+                  nicht ausschließlich für die reine Fahrzeit. Ein Einsatztag umfasst bis zu
+                  <strong className="text-foreground"> 10 Stunden Einsatzzeit</strong>
+                  {' '}(Baumaschinenführer / Mischmeister: bis zu 8 Stunden Einsatzzeit).
+                </p>
+                <div>
+                  <p className="font-semibold text-foreground mb-1">Zur Einsatzzeit zählen u. a.:</p>
+                  <ul className="ml-4 space-y-1">
+                    <li>• Fahrzeugübernahme</li>
+                    <li>• Abfahrtskontrolle</li>
+                    <li>• gesetzliche Pausen</li>
+                    <li>• Wartezeiten</li>
+                    <li>• Dokumentation</li>
+                    <li>• Be-/Entladeabstimmung</li>
+                    <li>• Übergaben</li>
+                    <li>• Fahrzeit</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground mb-1">Gesetzliche Lenkzeiten (Hinweis):</p>
+                  <ul className="ml-4 space-y-1">
+                    <li>• Die gesetzliche Tageslenkzeit beträgt in der Regel maximal 9 Stunden.</li>
+                    <li>• Eine Verlängerung auf 10 Stunden Lenkzeit ist nur im gesetzlich zulässigen Rahmen möglich.</li>
+                    <li>• Nach spätestens 4,5 Stunden Lenkzeit ist eine gesetzliche Pause erforderlich.</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Mehrstundenregelung */}
+            <Card className="mb-12">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Clock className="h-6 w-6 text-primary" />
+                  Mehrstundenregelung
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-muted-foreground">
+                <p>
+                  Mehrstunden über die vereinbarte Einsatzzeit hinaus werden zusätzlich berechnet,
+                  sofern sie erforderlich sind oder durch den Auftraggeber verursacht bzw.
+                  angeordnet werden.
+                </p>
+                <ul className="ml-4 space-y-1">
+                  <li>• <strong className="text-foreground">LKW-Fahrer CE:</strong> 45,00 € netto je angefangene Stunde</li>
+                  <li>• <strong className="text-foreground">Baumaschinenführer / Mischmeister:</strong> 60,00 € netto je angefangene Stunde</li>
+                </ul>
+                <div className="pt-3 border-t">
+                  <p className="font-semibold text-foreground mb-1">Mehrstunden über Mitternacht / Folgetag</p>
+                  <p>
+                    Mehrstunden, die zu erheblichen Einschränkungen der weiteren Einsatzplanung
+                    führen oder in den nächsten Kalendertag hineinreichen, können als
+                    <strong className="text-foreground"> zusätzlicher Einsatztag</strong> oder
+                    <strong className="text-foreground"> Fernverkehrseinsatz</strong> berechnet
+                    werden, weil
+                  </p>
+                  <ul className="ml-4 space-y-1 mt-2">
+                    <li>• der Unternehmer in dieser Zeit keine weiteren Aufträge annehmen kann,</li>
+                    <li>• gesetzliche Ruhezeiten eingehalten werden müssen,</li>
+                    <li>• Folgeeinsätze blockiert werden können.</li>
+                  </ul>
+                </div>
+                <p className="pt-3 border-t">
+                  Weitere Zuschläge (z. B. Nacht-, Wochenend- oder Feiertagseinsätze, besondere
+                  Zusatzleistungen) entstehen nur, wenn sie vor Auftragserteilung ausdrücklich
+                  vereinbart wurden.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Fernverkehr */}
+            <Card className="mb-12 border-green-200 bg-green-50/30">
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Truck className="h-6 w-6 text-green-700" />
+                  Fernverkehr – Definition
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-muted-foreground">
+                <p>Als Fernverkehrseinsatz gelten insbesondere:</p>
+                <ul className="ml-4 space-y-1">
+                  <li>• längere Überführungsfahrten</li>
+                  <li>• bundesweite Transporte</li>
+                  <li>• Einsätze mit auswärtiger Übernachtung</li>
+                  <li>• Einsätze mit längerer Tagesabwesenheit</li>
+                </ul>
+                <p>
+                  Die <strong className="text-foreground">Fernfahrer-Pauschale (450 € netto / Einsatztag)</strong>
+                  {' '}kann anstelle des normalen Tagessatzes verwendet werden.
                 </p>
               </CardContent>
             </Card>
