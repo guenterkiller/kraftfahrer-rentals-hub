@@ -101,10 +101,10 @@ export const CustomerBookingConfirmation = ({
         Preis gemäß Auswahl zzgl. An- und Abfahrt. Weitere Kosten nur nach vorheriger Vereinbarung.
       </Text>
       <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li><strong>LKW-Fahrer CE:</strong> 349 € pro Einsatztag (bis 10 Stunden)</li>
-        <li><strong>LKW-Fahrer CE – Wochenpreis:</strong> 1.645 € pro Woche (5 Einsatztage à bis 10 Stunden)</li>
+        <li><strong>LKW-Fahrer CE:</strong> 349 € pro Einsatztag (bis 10 Stunden Einsatzzeit)</li>
+        <li><strong>LKW-Fahrer CE – Wochenpreis:</strong> 1.645 € pro Woche (5 Einsatztage à bis 10 Stunden Einsatzzeit)</li>
         <li><strong>Fernfahrer-Pauschale:</strong> 450 € pro Fernverkehrs-Einsatztag</li>
-        <li><strong>Baumaschinenführer / Mischmeister:</strong> 489 € pro Einsatztag (bis 8 Stunden)</li>
+        <li><strong>Baumaschinenführer / Mischmeister:</strong> 489 € pro Einsatztag (bis 8 Stunden Einsatzzeit)</li>
         <li><strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer</li>
       </ul>
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
