@@ -70,7 +70,7 @@ const Index = () => {
       },
       {
         question: "Sind die Fahrer versichert?",
-        answer: "Ja, alle selbstständigen Unternehmer verfügen über entsprechende Berufshaftpflicht- und Gewerbeversicherungen."
+        answer: "Für die ordnungsgemäße Durchführung des Einsatzes ist der eingesetzte selbstständige Unternehmer im Rahmen der gesetzlichen Vorschriften eigenverantwortlich. Eine Prüfung des konkreten Versicherungsschutzes obliegt dem jeweiligen Einzelfall."
       }
     ],
     structuredData: {

@@ -65,7 +65,7 @@ const LegalSecuritySection = () => {
                 <div className="flex items-start gap-2 md:gap-3">
                   <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-green-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm md:text-base text-gray-700 leading-relaxed">
-                    Für Schäden im Zusammenhang mit der Durchführung des Einsatzes <strong>haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</strong>
+                    Für die ordnungsgemäße Durchführung des Einsatzes ist der eingesetzte Unternehmer <strong>im Rahmen der gesetzlichen Vorschriften eigenverantwortlich.</strong> Die Fahrerexpress-Agentur haftet nach den gesetzlichen Vorschriften für eigenes Verschulden.
                   </p>
                 </div>
                 
@@ -115,11 +115,11 @@ const LegalSecuritySection = () => {
                 </div>
                 <div>
                   <p className="font-semibold mb-1">Haftung</p>
-                  <p className="text-muted-foreground">Max. Auftragswert, keine Folgeschäden</p>
+                  <p className="text-muted-foreground">Nach den gesetzlichen Vorschriften</p>
                 </div>
                 <div>
                   <p className="font-semibold mb-1">Gerichtsstand</p>
-                  <p className="text-muted-foreground">Frankfurt am Main</p>
+                  <p className="text-muted-foreground">Frankfurt am Main (soweit gesetzlich zulässig)</p>
                 </div>
               </div>
             </CardContent>
