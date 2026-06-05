@@ -194,6 +194,13 @@ UPDATE public.feature_flags SET enabled = false WHERE flag_name = 'ORDER_CONFIRM
 2. **Feature Flag aus:** Annahme ohne Bestätigung
 3. **Storage-Fehler:** PDF-Upload fehlschlägt
 
+## Hinweis zu Einsatzzeit, Mehrstunden und Fernverkehr
+
+In der automatischen Kunden-Buchungsbestätigung (`customer-booking-confirmation.tsx`) ist seit Juni 2025 ein klarer Hinweis zur Einsatzzeit, Mehrstundenregelung und Fernverkehr enthalten.
+
+**Wichtig für zukünftige Templates:**
+Sobald Einsatzbestätigungen oder Angebotsmails als eigene E-Mail-Templates bzw. Edge Functions umgesetzt werden, muss derselbe Hinweis zur Einsatzzeit, Mehrstunden und Fernverkehr dort ebenfalls übernommen werden, um spätere Diskussionen mit Auftraggebern zu vermeiden.
+
 ---
 
 ## Support & Kontakt
