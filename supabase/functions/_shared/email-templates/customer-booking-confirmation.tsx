@@ -112,6 +112,29 @@ export const CustomerBookingConfirmation = ({
       </Text>
     </Section>
 
+    <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#f0f7ff', borderLeftColor: '#2563eb' })}>
+      <Heading {...getTextProps({ ...textStyles.heading3, color: '#1e40af' }, 'small-heading')}>⏱ Wichtiger Hinweis zur Einsatzzeit und Abrechnung</Heading>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+        Der vereinbarte Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+        Mehrstunden über die vereinbarte Einsatzzeit hinaus werden nur berechnet, sofern sie erforderlich sind oder durch den Auftraggeber verursacht bzw. angeordnet werden.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
+        <strong>Aktuelle Mehrstundensätze:</strong>
+      </Text>
+      <ul style={{ margin: '0 0 10px 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+        <li><strong>LKW-Fahrer CE:</strong> 45,00 € netto je angefangene Stunde</li>
+        <li><strong>Baumaschinenführer / Mischmeister:</strong> 60,00 € netto je angefangene Stunde</li>
+      </ul>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+        Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können gesondert als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+        Weitere Zuschläge entstehen ausschließlich nach vorheriger Vereinbarung.
+      </Text>
+    </Section>
+
     <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung (gilt ab Bestellung)</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
