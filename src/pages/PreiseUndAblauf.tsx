@@ -157,8 +157,8 @@ const PreiseUndAblauf = () => {
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">💰</div>
-                    <p className="font-semibold text-green-900 mb-1">Keine Personalnebenkosten</p>
-                    <p className="text-sm text-muted-foreground">Selbstständige Unternehmer – keine eigene Personalverwaltung</p>
+                    <p className="font-semibold text-green-900 mb-1">Transparente Abrechnung</p>
+                    <p className="text-sm text-muted-foreground">Abrechnung über klare Dienstleistungspreise – eine Rechnung von Fahrerexpress</p>
                   </div>
                   <div className="bg-white border border-green-200 rounded-lg p-4 text-center">
                     <div className="text-3xl mb-2">⚡</div>
@@ -257,17 +257,12 @@ const PreiseUndAblauf = () => {
                 <div className="pt-3 border-t">
                   <p className="font-semibold text-foreground mb-1">Mehrstunden über Mitternacht / Folgetag</p>
                   <p>
-                    Mehrstunden, die zu erheblichen Einschränkungen der weiteren Einsatzplanung
-                    führen oder in den nächsten Kalendertag hineinreichen, können als
+                    Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in
+                    den nächsten Kalendertag hineinreichen, können als
                     <strong className="text-foreground"> zusätzlicher Einsatztag</strong> oder
                     <strong className="text-foreground"> Fernverkehrseinsatz</strong> berechnet
-                    werden, weil
+                    werden.
                   </p>
-                  <ul className="ml-4 space-y-1 mt-2">
-                    <li>• der Unternehmer in dieser Zeit keine weiteren Aufträge annehmen kann,</li>
-                    <li>• gesetzliche Ruhezeiten eingehalten werden müssen,</li>
-                    <li>• Folgeeinsätze blockiert werden können.</li>
-                  </ul>
                 </div>
                 <p className="pt-3 border-t">
                   Weitere Zuschläge (z. B. Nacht-, Wochenend- oder Feiertagseinsätze, besondere
@@ -414,11 +409,9 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Haftung & Versicherung</h3>
-                  <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Der selbstständige Unternehmer verfügt über eigene Berufshaftpflicht- und Gewerbeversicherung.</li>
-                    <li>• Für Schäden im Zusammenhang mit der Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Versicherungen.</li>
-                    <li>• Die Fahrerexpress-Agentur haftet nur für eigenes Verschulden sowie für Auswahlverschulden bei der Vermittlung geeigneter Unternehmer.</li>
-                  </ul>
+                  <p className="text-muted-foreground">
+                    Die Fahrerexpress-Agentur haftet nach den gesetzlichen Vorschriften für eigenes Verschulden. Für die ordnungsgemäße Durchführung des Einsatzes ist der eingesetzte Unternehmer im Rahmen der gesetzlichen Vorschriften eigenverantwortlich.
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -468,7 +461,7 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">3. Haftung</h3>
-                  <p className="text-muted-foreground">Bei Nichterscheinen eines Subunternehmers haftet die Fahrerexpress-Agentur nur für eigenes Verschulden und maximal bis zur Höhe des vereinbarten Auftragswertes. Folgeschäden sind ausgeschlossen, soweit gesetzlich zulässig und kein vorsätzliches oder grob fahrlässiges Verhalten vorliegt.</p>
+                  <p className="text-muted-foreground">Die Fahrerexpress-Agentur haftet nach den gesetzlichen Vorschriften für eigenes Verschulden. Die eingesetzten Unternehmer handeln eigenverantwortlich.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">4. Abrechnung</h3>
@@ -476,11 +469,11 @@ const PreiseUndAblauf = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">5. Verbot der Direktbeauftragung</h3>
-                 <p className="text-muted-foreground">Die direkte oder umgehende Beauftragung eines durch Fahrerexpress vermittelten Unternehmers außerhalb der Fahrerexpress-Agentur ist ohne vorherige Zustimmung von Fahrerexpress unzulässig. Dies gilt für den konkreten Einsatz sowie für Folgeaufträge im sachlichen Zusammenhang für einen Zeitraum von 12 Monaten nach Einsatzende.</p>
+                  <p className="text-muted-foreground">Die direkte Beauftragung eines durch Fahrerexpress vermittelten Unternehmers außerhalb der Fahrerexpress-Agentur ist ohne vorherige Zustimmung nicht zulässig.</p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-lg mb-2">6. Gerichtsstand</h3>
-                  <p className="text-muted-foreground">Gerichtsstand ist Frankfurt am Main.</p>
+                  <p className="text-muted-foreground">Gerichtsstand ist – soweit gesetzlich zulässig – Frankfurt am Main.</p>
                 </div>
               </CardContent>
             </Card>
