@@ -89,6 +89,66 @@ const Vermittlungsbedingungen = () => {
 
               <Separator />
 
+              {/* 4a. Einsatzzeit */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">4a. Einsatzzeit</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Der Tagessatz gilt für die gesamte Einsatzzeit, nicht ausschließlich für die
+                  reine Fahrzeit. Ein Einsatztag umfasst bis zu 10 Stunden Einsatzzeit (für
+                  Baumaschinenführer / Mischmeister bis zu 8 Stunden Einsatzzeit).
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Zur Einsatzzeit zählen insbesondere: Fahrzeugübernahme, Abfahrtskontrolle,
+                  gesetzliche Pausen, Wartezeiten, Dokumentation, Be-/Entladeabstimmung,
+                  Übergaben und Fahrzeit.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Hinweis zu gesetzlichen Lenkzeiten: Die gesetzliche Tageslenkzeit beträgt in
+                  der Regel maximal 9 Stunden; eine Verlängerung auf 10 Stunden Lenkzeit ist nur
+                  im gesetzlich zulässigen Rahmen möglich. Nach spätestens 4,5 Stunden Lenkzeit
+                  ist eine gesetzliche Pause erforderlich.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 4b. Mehrstunden */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">4b. Mehrstundenregelung</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Mehrstunden über die vereinbarte Einsatzzeit hinaus werden zusätzlich berechnet,
+                  sofern sie erforderlich sind oder durch den Auftraggeber verursacht bzw.
+                  angeordnet werden.
+                </p>
+                <ul className="list-disc list-inside text-muted-foreground mt-3 space-y-2 ml-4">
+                  <li>LKW-Fahrer CE: 45,00 € netto je angefangene Stunde</li>
+                  <li>Baumaschinenführer / Mischmeister: 60,00 € netto je angefangene Stunde</li>
+                </ul>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Mehrstunden, die zu erheblichen Einschränkungen der weiteren Einsatzplanung
+                  führen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher
+                  Einsatztag oder als Fernverkehrseinsatz berechnet werden, da der Unternehmer in
+                  dieser Zeit keine weiteren Aufträge annehmen kann, gesetzliche Ruhezeiten
+                  einzuhalten sind und Folgeeinsätze blockiert werden können.
+                </p>
+              </section>
+
+              <Separator />
+
+              {/* 4c. Fernverkehr */}
+              <section>
+                <h2 className="text-xl font-semibold text-foreground mb-4">4c. Fernverkehr</h2>
+                <p className="text-muted-foreground leading-relaxed">
+                  Als Fernverkehrseinsatz gelten insbesondere längere Überführungsfahrten,
+                  bundesweite Transporte, Einsätze mit auswärtiger Übernachtung sowie Einsätze
+                  mit längerer Tagesabwesenheit. Für solche Einsätze kann anstelle des normalen
+                  Tagessatzes die Fernfahrer-Pauschale (450,00 € netto je Einsatztag) verwendet
+                  werden.
+                </p>
+              </section>
+
+              <Separator />
+
               {/* 5. Stornoregelung */}
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">5. Stornoregelung</h2>

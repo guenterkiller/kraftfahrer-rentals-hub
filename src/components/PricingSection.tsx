@@ -39,7 +39,7 @@ const PricingSection = () => {
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
               <div className="text-4xl font-bold text-foreground">349 €</div>
               <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden</p>
+              <p className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden Einsatzzeit</p>
               <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               <Button
                 className="w-full h-11 mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold"
@@ -61,7 +61,7 @@ const PricingSection = () => {
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
               <div className="text-4xl font-bold text-foreground">1.645 €</div>
               <p className="text-sm font-medium text-foreground">pro Woche</p>
-              <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+              <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden Einsatzzeit</p>
               <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               <Button
                 className="w-full h-11 mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold"
@@ -99,7 +99,7 @@ const PricingSection = () => {
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
               <div className="text-4xl font-bold text-foreground">489 €</div>
               <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden</p>
+              <p className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden Einsatzzeit</p>
               <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               <Button
                 className="w-full h-11 mt-auto bg-orange-600 hover:bg-orange-700 text-white text-xs sm:text-sm font-semibold whitespace-normal leading-tight px-2"
@@ -128,6 +128,91 @@ const PricingSection = () => {
         <Card className="bg-muted/40 max-w-5xl mx-auto mb-8">
           <CardContent className="text-sm pt-6">
             <p>Bei auswärtigen Einsätzen kann zusätzlich eine Übernachtung erforderlich sein. Diese wird vor Auftragserteilung abgestimmt.</p>
+          </CardContent>
+        </Card>
+
+        {/* Einsatzzeit & gesetzliche Lenkzeiten */}
+        <Card className="max-w-5xl mx-auto mb-8">
+          <CardHeader>
+            <CardTitle className="text-base">Einsatzzeit & gesetzliche Lenkzeiten</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-3">
+            <p>
+              Der Tagessatz gilt für die <strong>gesamte Einsatzzeit</strong>, nicht ausschließlich
+              für die reine Fahrzeit. Ein Einsatztag umfasst bis zu <strong>10 Stunden
+              Einsatzzeit</strong>.
+            </p>
+            <div>
+              <p className="font-semibold mb-1">Zur Einsatzzeit zählen u. a.:</p>
+              <ul className="ml-4 space-y-1 text-muted-foreground">
+                <li>• Fahrzeugübernahme</li>
+                <li>• Abfahrtskontrolle</li>
+                <li>• gesetzliche Pausen</li>
+                <li>• Wartezeiten</li>
+                <li>• Dokumentation</li>
+                <li>• Be-/Entladeabstimmung</li>
+                <li>• Übergaben</li>
+                <li>• Fahrzeit</li>
+              </ul>
+            </div>
+            <div>
+              <p className="font-semibold mb-1">Gesetzliche Lenkzeiten (Hinweis):</p>
+              <ul className="ml-4 space-y-1 text-muted-foreground">
+                <li>• Die gesetzliche Tageslenkzeit beträgt in der Regel maximal 9 Stunden.</li>
+                <li>• Eine Verlängerung auf 10 Stunden Lenkzeit ist nur im gesetzlich zulässigen Rahmen möglich.</li>
+                <li>• Nach spätestens 4,5 Stunden Lenkzeit ist eine gesetzliche Pause erforderlich.</li>
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Mehrstundenregelung */}
+        <Card className="max-w-5xl mx-auto mb-8">
+          <CardHeader>
+            <CardTitle className="text-base">Mehrstundenregelung</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-3">
+            <p>
+              Mehrstunden über die vereinbarte Einsatzzeit hinaus werden zusätzlich berechnet,
+              sofern sie erforderlich sind oder durch den Auftraggeber verursacht bzw. angeordnet
+              werden.
+            </p>
+            <ul className="ml-4 space-y-1 text-muted-foreground">
+              <li>• <strong>LKW-Fahrer CE:</strong> 45,00 € netto je angefangene Stunde</li>
+              <li>• <strong>Baumaschinenführer / Mischmeister:</strong> 60,00 € netto je angefangene Stunde</li>
+            </ul>
+            <p className="pt-2 border-t">
+              <strong>Mehrstunden über Mitternacht / Folgetag:</strong> Mehrstunden, die zu
+              erheblichen Einschränkungen der weiteren Einsatzplanung führen oder in den nächsten
+              Kalendertag hineinreichen, können als zusätzlicher Einsatztag oder
+              Fernverkehrseinsatz berechnet werden.
+            </p>
+            <p className="text-muted-foreground">Hintergrund:</p>
+            <ul className="ml-4 space-y-1 text-muted-foreground">
+              <li>• Der Unternehmer kann in dieser Zeit keine weiteren Aufträge annehmen.</li>
+              <li>• Gesetzliche Ruhezeiten müssen eingehalten werden.</li>
+              <li>• Folgeeinsätze können dadurch blockiert werden.</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        {/* Fernverkehr / Fernfahrer-Pauschale */}
+        <Card className="max-w-5xl mx-auto mb-8">
+          <CardHeader>
+            <CardTitle className="text-base">Fernverkehr – Definition</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-2">
+            <p>Als Fernverkehrseinsatz gelten insbesondere:</p>
+            <ul className="ml-4 space-y-1 text-muted-foreground">
+              <li>• längere Überführungsfahrten</li>
+              <li>• bundesweite Transporte</li>
+              <li>• Einsätze mit auswärtiger Übernachtung</li>
+              <li>• Einsätze mit längerer Tagesabwesenheit</li>
+            </ul>
+            <p>
+              Die <strong>Fernfahrer-Pauschale (450 € netto / Einsatztag)</strong> kann anstelle
+              des normalen Tagessatzes verwendet werden.
+            </p>
           </CardContent>
         </Card>
 
