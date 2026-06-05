@@ -125,11 +125,9 @@ const Vermittlungsbedingungen = () => {
                   <li>Baumaschinenführer / Mischmeister: 60,00 € netto je angefangene Stunde</li>
                 </ul>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  Mehrstunden, die zu erheblichen Einschränkungen der weiteren Einsatzplanung
-                  führen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher
-                  Einsatztag oder als Fernverkehrseinsatz berechnet werden, da der Unternehmer in
-                  dieser Zeit keine weiteren Aufträge annehmen kann, gesetzliche Ruhezeiten
-                  einzuhalten sind und Folgeeinsätze blockiert werden können.
+                  Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in
+                  den nächsten Kalendertag hineinreichen, können gesondert berechnet werden –
+                  etwa als zusätzlicher Einsatztag oder als Fernverkehrseinsatz.
                 </p>
               </section>
 
@@ -179,13 +177,7 @@ const Vermittlungsbedingungen = () => {
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">7. Haftung</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Fahrerexpress haftet nur für eigenes Verschulden sowie für Auswahlverschulden bei der Vermittlung geeigneter Unternehmer.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Für Schäden im Zusammenhang mit der konkreten Durchführung des Einsatzes haftet der ausführende Unternehmer im Rahmen seiner betrieblichen Verantwortung und Versicherung.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Eine Haftung für Folgeschäden ist ausgeschlossen, soweit gesetzlich zulässig und kein vorsätzliches oder grob fahrlässiges Verhalten vorliegt.
+                  Die Fahrerexpress-Agentur haftet nach den gesetzlichen Vorschriften für eigenes Verschulden. Die eingesetzten Unternehmer handeln eigenverantwortlich.
                 </p>
               </section>
 
