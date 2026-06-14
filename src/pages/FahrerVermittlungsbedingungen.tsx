@@ -72,13 +72,16 @@ const FahrerVermittlungsbedingungen = () => {
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-4">4. Vermittlungsanteil</h2>
                 <p className="text-muted-foreground leading-relaxed">
-                  Für Organisation, Vermittlung, Kundenabwicklung, Rechnungsstellung und Zahlungsüberwachung erhält die Fahrerexpress-Agentur einen Vermittlungsanteil. Dieser Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Der Fahrer stellt Fahrerexpress seine Rechnung bereits nach Abzug dieses Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten.
+                  Für die Kundengewinnung, Werbung, Pflege und Aktualisierung der Webseite, Bearbeitung von Anfragen, Preisgestaltung, Auftragsklärung, Organisation, Vermittlung, Einsatzkoordination, Kundenabwicklung, Rechnungsstellung und Zahlungsüberwachung erhält die Fahrerexpress-Agentur einen Vermittlungsanteil.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Dieser Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Der Fahrer stellt Fahrerexpress seine Rechnung bereits nach Abzug dieses Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Für Standardeinsätze beträgt der Vermittlungsanteil in der Regel <strong className="text-foreground">20 %</strong> der mit dem Auftraggeber vereinbarten Netto-Arbeitsvergütung. Die Arbeitsvergütung umfasst insbesondere Tagessätze, Überstunden und einsatzbezogene Zuschläge.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  An- und Abfahrt, Fahrtkosten, Übernachtungskosten, Maut, Parkgebühren, Bahnkosten oder sonstige Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Sie werden nur berücksichtigt, wenn sie vorab durch Fahrerexpress vereinbart oder freigegeben wurden. Nachweisbare und freigegebene Auslagen können separat erstattet oder in das konkrete Auftragsangebot eingerechnet werden.
+                  An- und Abfahrt, Fahrtkosten, Übernachtungskosten, Maut, Parkgebühren, Bahnkosten oder sonstige vorab freigegebene Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Sie werden nur berücksichtigt, wenn sie vorab durch Fahrerexpress vereinbart oder freigegeben wurden. Nachweisbare und freigegebene Auslagen können separat erstattet oder in das konkrete Auftragsangebot eingerechnet werden.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Für Sonder-, Projekt-, Pauschal-, kurzfristige oder besonders aufwendige Einsätze kann der Vermittlungsanteil <strong className="text-foreground">bis zu 25 %</strong> betragen.
