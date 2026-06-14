@@ -5,7 +5,26 @@ import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
 import { DriverRegistrationConfirmation } from '../_shared/email-templates/driver-registration-confirmation.tsx';
 import { AdminDriverNotification } from '../_shared/email-templates/admin-driver-notification.tsx';
-import { DRIVER_DOCS_BUCKET } from '../_shared/storage-config.ts';
+import { DRIVER_DOCS_BUCKET, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '../_shared/storage-config.ts';
+
+const MIME_TO_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'application/pdf': 'pdf',
+};
+
+function isValidUpload(file: File): boolean {
+  if (!file || file.size <= 0) return false;
+  if (file.size > MAX_FILE_SIZE) {
+    console.warn(`Rejected upload (size ${file.size} > ${MAX_FILE_SIZE}): ${file.name}`);
+    return false;
+  }
+  if (!ALLOWED_MIME_TYPES.has(file.type)) {
+    console.warn(`Rejected upload (invalid MIME ${file.type}): ${file.name}`);
+    return false;
+  }
+  return true;
+}
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -206,8 +225,8 @@ const handler = async (req: Request): Promise<Response> => {
       const fuehrerscheinPaths: string[] = [];
       for (let i = 0; i < fuehrerscheinFiles.length; i++) {
         const file = fuehrerscheinFiles[i];
-        if (file && file.size > 0) {
-          const fileExt = file.name.split('.').pop() || 'pdf';
+        if (isValidUpload(file)) {
+          const fileExt = MIME_TO_EXT[file.type] || 'pdf';
           const fileName = `uploads/${emailSafe}/fuehrerschein_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
@@ -233,8 +252,8 @@ const handler = async (req: Request): Promise<Response> => {
       const fahrerkartePaths: string[] = [];
       for (let i = 0; i < fahrerkarteFiles.length; i++) {
         const file = fahrerkarteFiles[i];
-        if (file && file.size > 0) {
-          const fileExt = file.name.split('.').pop() || 'pdf';
+        if (isValidUpload(file)) {
+          const fileExt = MIME_TO_EXT[file.type] || 'pdf';
           const fileName = `uploads/${emailSafe}/fahrerkarte_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage
@@ -260,8 +279,8 @@ const handler = async (req: Request): Promise<Response> => {
       const zertifikatPaths: string[] = [];
       for (let i = 0; i < zertifikatFiles.length; i++) {
         const file = zertifikatFiles[i];
-        if (file && file.size > 0) {
-          const fileExt = file.name.split('.').pop() || 'pdf';
+        if (isValidUpload(file)) {
+          const fileExt = MIME_TO_EXT[file.type] || 'pdf';
           const fileName = `uploads/${emailSafe}/zertifikat_${i + 1}.${fileExt}`;
           
           const { data: uploadData, error: uploadError } = await supabase.storage

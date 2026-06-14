@@ -2,6 +2,9 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 
+const escape = (s: unknown) =>
+  String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
 type ResponseStatus =
   | "accepted"
   | "declined"
@@ -223,8 +226,9 @@ const handler = async (req: Request): Promise<Response> => {
         .eq("id", invite.job_id)
         .maybeSingle();
 
-      const driverName = driver ? `${driver.vorname ?? ""} ${driver.nachname ?? ""}`.trim() : "Unbekannt";
-      const zeitraumClean = (job?.zeitraum ?? "-").replace(/\s*Tag\(e\)\s*$/i, "").trim();
+      const driverNameRaw = driver ? `${driver.vorname ?? ""} ${driver.nachname ?? ""}`.trim() : "Unbekannt";
+      const driverName = escape(driverNameRaw);
+      const zeitraumClean = escape((job?.zeitraum ?? "-").replace(/\s*Tag\(e\)\s*$/i, "").trim());
       const subject = newStatus === "accepted"
         ? "Fahrer möchte Auftrag übernehmen"
         : "Fahrer lehnt Auftrag ab";
@@ -243,8 +247,8 @@ const handler = async (req: Request): Promise<Response> => {
         ? `<h3>Fahrer</h3>
            <p>
              <strong>Name:</strong> ${driverName}<br/>
-             <strong>E-Mail:</strong> ${driver?.email ?? "-"}<br/>
-             <strong>Telefon:</strong> ${driver?.telefon ?? "-"}
+             <strong>E-Mail:</strong> ${escape(driver?.email ?? "-")}<br/>
+             <strong>Telefon:</strong> ${escape(driver?.telefon ?? "-")}
            </p>`
         : `<h3>Fahrer</h3>
            <p><strong>Name:</strong> ${driverName}</p>`;
@@ -255,9 +259,9 @@ const handler = async (req: Request): Promise<Response> => {
           ${driverContactHtml}
           <h3>Auftrag</h3>
           <p>
-            <strong>Einsatzort:</strong> ${job?.einsatzort ?? "-"}<br/>
+            <strong>Einsatzort:</strong> ${escape(job?.einsatzort ?? "-")}<br/>
             <strong>Zeitraum:</strong> ${zeitraumClean}<br/>
-            <strong>Tätigkeit:</strong> ${job?.nachricht ?? "-"}
+            <strong>Tätigkeit:</strong> ${escape(job?.nachricht ?? "-")}
           </p>
           ${noteHtml}
           <p style="color:#666;font-size:12px;">Zeitpunkt: ${respondedAt}<br/>Job-ID: ${invite.job_id}<br/>Fahrer-ID: ${invite.driver_id}</p>

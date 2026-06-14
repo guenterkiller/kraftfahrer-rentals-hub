@@ -97,21 +97,23 @@ const handler = async (req: Request): Promise<Response> => {
         const acceptLink2 = invites[1] ? `${supabaseUrl}/functions/v1/handle-driver-job-response?a=accept&t=${invites[1].invite.token}` : '';
         const declineLink2 = invites[1] ? `${supabaseUrl}/functions/v1/handle-driver-job-response?a=decline&t=${invites[1].invite.token}` : '';
 
+        const esc = (s: unknown) =>
+          String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         const html = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #1f2937;">Neue Aufträge verfügbar!</h1>
-            <p>Hallo ${driver.vorname || 'Fahrer'},</p>
+            <p>Hallo ${esc(driver.vorname || 'Fahrer')},</p>
             <p>Wir haben neue Aufträge für dich:</p>
 
             ${invites[0] ? `
             <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h2 style="color: #1f2937; margin-top: 0;">Auftrag 1: ${invites[0].job.customer_name}</h2>
-              ${invites[0].job.company ? `<p><strong>Firma:</strong> ${invites[0].job.company}</p>` : ''}
-              <p><strong>Einsatzort:</strong> ${invites[0].job.einsatzort}</p>
-              <p><strong>Zeitraum:</strong> ${(invites[0].job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
-              <p><strong>Fahrzeugtyp:</strong> ${invites[0].job.fahrzeugtyp}</p>
-              <p><strong>Führerschein:</strong> ${invites[0].job.fuehrerscheinklasse}</p>
-              ${invites[0].job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${invites[0].job.besonderheiten}</p>` : ''}
+              <h2 style="color: #1f2937; margin-top: 0;">Auftrag 1: ${esc(invites[0].job.customer_name)}</h2>
+              ${invites[0].job.company ? `<p><strong>Firma:</strong> ${esc(invites[0].job.company)}</p>` : ''}
+              <p><strong>Einsatzort:</strong> ${esc(invites[0].job.einsatzort)}</p>
+              <p><strong>Zeitraum:</strong> ${esc((invites[0].job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim())}</p>
+              <p><strong>Fahrzeugtyp:</strong> ${esc(invites[0].job.fahrzeugtyp)}</p>
+              <p><strong>Führerschein:</strong> ${esc(invites[0].job.fuehrerscheinklasse)}</p>
+              ${invites[0].job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${esc(invites[0].job.besonderheiten)}</p>` : ''}
               
               <div style="margin-top: 20px;">
                 <a href="${acceptLink1}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-right: 10px;">
@@ -126,13 +128,13 @@ const handler = async (req: Request): Promise<Response> => {
 
             ${invites[1] ? `
             <div style="background: #f9fafb; border: 1px solid #e5e7eb; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h2 style="color: #1f2937; margin-top: 0;">Auftrag 2: ${invites[1].job.customer_name}</h2>
-              ${invites[1].job.company ? `<p><strong>Firma:</strong> ${invites[1].job.company}</p>` : ''}
-              <p><strong>Einsatzort:</strong> ${invites[1].job.einsatzort}</p>
-              <p><strong>Zeitraum:</strong> ${(invites[1].job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
-              <p><strong>Fahrzeugtyp:</strong> ${invites[1].job.fahrzeugtyp}</p>
-              <p><strong>Führerschein:</strong> ${invites[1].job.fuehrerscheinklasse}</p>
-              ${invites[1].job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${invites[1].job.besonderheiten}</p>` : ''}
+              <h2 style="color: #1f2937; margin-top: 0;">Auftrag 2: ${esc(invites[1].job.customer_name)}</h2>
+              ${invites[1].job.company ? `<p><strong>Firma:</strong> ${esc(invites[1].job.company)}</p>` : ''}
+              <p><strong>Einsatzort:</strong> ${esc(invites[1].job.einsatzort)}</p>
+              <p><strong>Zeitraum:</strong> ${esc((invites[1].job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim())}</p>
+              <p><strong>Fahrzeugtyp:</strong> ${esc(invites[1].job.fahrzeugtyp)}</p>
+              <p><strong>Führerschein:</strong> ${esc(invites[1].job.fuehrerscheinklasse)}</p>
+              ${invites[1].job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${esc(invites[1].job.besonderheiten)}</p>` : ''}
               
               <div style="margin-top: 20px;">
                 <a href="${acceptLink2}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-right: 10px;">

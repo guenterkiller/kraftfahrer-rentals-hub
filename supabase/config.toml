@@ -105,8 +105,5 @@ verify_jwt = false
 [functions.upload-fahrer-dokumente]
 verify_jwt = true
 
-[functions.test-invite-killer]
-verify_jwt = false
-
 [functions.driver-info-newsletter]
 verify_jwt = false
