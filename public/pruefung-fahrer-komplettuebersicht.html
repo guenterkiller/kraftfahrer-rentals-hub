@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Interne Prüfansicht – Komplettübersicht Fahrer-Kommunikation</title>
+  <style>
+    body{margin:0;padding:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#111;line-height:1.6;}
+    .wrap{max-width:920px;margin:0 auto;padding:24px 18px 80px;}
+    .banner{background:#fee2e2;border-left:6px solid #dc2626;padding:14px 18px;border-radius:6px;margin-bottom:24px;}
+    .banner h1{margin:0 0 6px;font-size:20px;color:#7f1d1d;}
+    .banner p{margin:0;color:#7f1d1d;font-size:14px;}
+    .toc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px 22px;margin-bottom:22px;}
+    .toc h2{margin:0 0 8px;font-size:15px;}
+    .toc ol{margin:0;padding-left:20px;font-size:14px;}
+    .toc a{color:#1d4ed8;text-decoration:none;}
+    section.doc{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:22px 26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+    section.doc h2{margin:0 0 4px;font-size:20px;color:#0f172a;}
+    section.doc .meta{font-size:12px;color:#6b7280;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px;}
+    section.doc h3{margin:18px 0 6px;font-size:15px;color:#0f172a;}
+    section.doc h4{margin:14px 0 4px;font-size:14px;color:#374151;}
+    section.doc p{margin:6px 0;font-size:14px;}
+    section.doc ul{margin:6px 0 10px 22px;padding:0;font-size:14px;}
+    section.doc li{margin:3px 0;}
+    .callout{background:#eff6ff;border-left:4px solid #2563eb;padding:10px 14px;margin:12px 0;font-size:13px;}
+    .warn{background:#fff7ed;border-left:4px solid #ea580c;padding:10px 14px;margin:12px 0;font-size:13px;}
+    .ok{background:#f0fdf4;border-left:4px solid #16a34a;padding:10px 14px;margin:12px 0;font-size:13px;}
+    code.subj{display:inline-block;background:#f3f4f6;padding:3px 7px;border-radius:4px;font-size:12px;}
+    table.kv{border-collapse:collapse;width:100%;font-size:13px;}
+    table.kv td{padding:5px 8px;border-bottom:1px solid #f0f0f0;vertical-align:top;}
+    table.kv td:first-child{font-weight:600;color:#374151;width:38%;}
+    .pill{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600;margin-right:4px;}
+    .pill-req{background:#fee2e2;color:#7f1d1d;}
+    .pill-opt{background:#e5e7eb;color:#374151;}
+    .btn-demo{display:inline-block;padding:10px 16px;border-radius:6px;font-weight:bold;font-size:14px;color:#fff;text-decoration:none;margin:4px 6px;}
+    .btn-green{background:#16a34a;}
+    .btn-red{background:#dc2626;}
+    .btn-gray{background:#6b7280;}
+    .source{font-size:11px;color:#9ca3af;font-family:monospace;margin-top:8px;border-top:1px dashed #e5e7eb;padding-top:6px;}
+    hr.sep{border:none;border-top:1px solid #e5e7eb;margin:18px 0;}
+    .footer-note{margin-top:22px;font-size:12px;color:#6b7280;text-align:center;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="banner">
+      <h1>🔒 Nur interne Prüfansicht – nicht an Fahrer versenden</h1>
+      <p>Diese Seite zeigt vollständig, was ein Fahrer bei Registrierung, Freischaltung und späteren Auftragsangeboten <strong>aktuell</strong> sieht oder erhält. Es wurden keine Mails versendet, keine Fahrer angeschrieben, keine Daten verändert. Nach Freigabe sollte diese Datei aus dem <code>public/</code>-Ordner gelöscht werden.</p>
+    </div>
+
+    <div class="toc">
+      <h2>Inhalt</h2>
+      <ol>
+        <li><a href="#sec-registrierung">Fahrerregistrierung (Formular)</a></li>
+        <li><a href="#sec-bestaetigung">Registrierungsbestätigung (Web + E-Mail)</a></li>
+        <li><a href="#sec-onboarding">Freischaltung / Onboarding-Mail</a></li>
+        <li><a href="#sec-bedingungen">Fahrer-Vermittlungsbedingungen (Webseite)</a></li>
+        <li><a href="#sec-auftragsmail">Auftragsangebots-Mail an Fahrer</a></li>
+        <li><a href="#sec-antwort">Fahrer-Antwort / Bestätigungsseite</a></li>
+        <li><a href="#sec-abmeldung">Abmeldung / Opt-out</a></li>
+        <li><a href="#sec-konsistenz">Konsistenzprüfung &amp; alte Formulierungen</a></li>
+      </ol>
+    </div>
+
+    <!-- 1. Registrierung -->
+    <section class="doc" id="sec-registrierung">
+      <h2>1. Fahrerregistrierung – Formular</h2>
+      <div class="meta">Webseite: /fahrerregistrierung · Quelle: src/pages/FahrerRegistrierung.tsx</div>
+
+      <h3>Felder im Formular</h3>
+      <table class="kv">
+        <tr><td>Persönliche Angaben</td><td><span class="pill pill-req">Pflicht</span> Vorname, Nachname, E-Mail, Telefon</td></tr>
+        <tr><td>Adresse</td><td><span class="pill pill-opt">Optional</span> Adresse, PLZ, Ort</td></tr>
+        <tr><td>EU/EWR Firmensitz</td><td><span class="pill pill-opt">Optional</span> Auswahl Land</td></tr>
+        <tr><td>Führerscheinklassen</td><td><span class="pill pill-req">Pflicht</span> mind. eine aus: B, C1, C, CE, D1, D, DE</td></tr>
+        <tr><td>Berufserfahrung</td><td><span class="pill pill-req">Pflicht</span> Auswahl Jahre</td></tr>
+        <tr><td>Spezialisierungen</td><td><span class="pill pill-opt">Optional</span> Bagger, Radlader, Fahrmischer, Flüssigboden, Wechselbrücke, Fernverkehr, Baustelle, ADR, Containertransporte, Eventlogistik, u. v. m.</td></tr>
+        <tr><td>Spezialanforderungen</td><td><span class="pill pill-opt">Optional</span> ADR-Schein, Langstrecke, Wochenende, Mitnahmestapler, Auslandseinsätze, BF2/BF3, Ladekran, Nachtschicht, Sprachkenntnisse u. a.</td></tr>
+        <tr><td>BF2/BF3-Berechtigung</td><td><span class="pill pill-opt">Optional</span> Checkboxen BF2 (Rundumkennleuchte) / BF3-BF4 (WVZ-Anlage)</td></tr>
+        <tr><td>Verfügbare Bundesländer</td><td><span class="pill pill-opt">Optional</span> deutschlandweit, europaweit, alle 16 Bundesländer</td></tr>
+        <tr><td>Tagessatz / Honorarvorstellung</td><td><span class="pill pill-opt">Optional</span> Freitext, z. B. „280 € pro Einsatztag"</td></tr>
+        <tr><td>Grundsätzliche Verfügbarkeit</td><td><span class="pill pill-opt">Optional</span> kurzfristig / tageweise / wochenweise / nach Absprache / interessiert</td></tr>
+        <tr><td>Beschreibung / Zusatzinfos</td><td><span class="pill pill-opt">Optional</span> Freitext</td></tr>
+      </table>
+
+      <h3>Dokumenten-Upload</h3>
+      <ul>
+        <li><strong>Führerschein</strong> – <span class="pill pill-opt">Optional</span> JPG/JPEG, PNG, PDF · max. 10 MB</li>
+        <li><strong>Fahrerkarte</strong> – <span class="pill pill-opt">Optional</span> JPG/JPEG, PNG, PDF · max. 10 MB</li>
+        <li><strong>Weitere Zertifikate</strong> (ADR, Fahrmischer …) – <span class="pill pill-opt">Optional</span> mehrere Dateien möglich</li>
+      </ul>
+      <p class="callout">Hinweistext am Upload: „Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links". Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. ä.</p>
+
+      <h3>Pflicht-Einwilligungen (Checkboxen)</h3>
+      <ul>
+        <li>☑ <strong>Datenschutzerklärung</strong> – Link zu <code>/datenschutz</code></li>
+        <li>☑ <strong>Vermittlungszustimmung:</strong> „Ich bin selbstständig tätig und akzeptiere die Vermittlungsbedingungen, die mir nach Registrierung bereitgestellt werden." – Link zu <code>/vermittlung</code></li>
+      </ul>
+
+      <h3>Hinweistexte im Formular</h3>
+      <p>Direkt über dem Tagessatz-Feld: <em>„Die konkrete Vergütung und der Einsatzzeitraum werden Ihnen jeweils im einzelnen Auftragsangebot mitgeteilt. Sie entscheiden frei, ob Sie ein Angebot annehmen oder ablehnen."</em></p>
+
+      <div class="ok"><strong>Provisions-/Vermittlungsanteile im Formular:</strong> Werden <strong>nicht</strong> genannt. Verweis nur auf Vermittlungsbedingungen-Seite. ✅ konsistent mit Strategie „konkretes Angebot ist maßgeblich".</div>
+    </section>
+
+    <!-- 2. Bestätigung nach Registrierung -->
+    <section class="doc" id="sec-bestaetigung">
+      <h2>2. Registrierungsbestätigung</h2>
+
+      <h3>2a) Bestätigung auf der Webseite (Toast)</h3>
+      <p>Nach erfolgreichem Absenden:</p>
+      <div class="callout"><strong>„Registrierung erfolgreich!"</strong><br>„Vielen Dank für Ihre Registrierung! Wir werden Ihre Daten prüfen und uns bei Ihnen melden."</div>
+      <p>Anschließend automatische Weiterleitung zur Startseite nach 2 Sekunden.</p>
+
+      <h3>2b) Automatische Bestätigungsmail</h3>
+      <p><strong>Betreff:</strong> <code class="subj">Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt</code></p>
+      <p><strong>Quelle:</strong> <code>supabase/functions/_shared/email-templates/driver-registration-confirmation.tsx</code></p>
+
+      <hr class="sep">
+
+      <p>🚛 <strong>Willkommen bei der Fahrerexpress-Agentur</strong></p>
+      <p>Sehr geehrte/r <em>{Name}</em>,</p>
+      <p>vielen Dank für Ihre Registrierung als selbstständige/r Kraftfahrer/in bei der Fahrerexpress-Agentur. <strong>Ihre Registrierung war erfolgreich.</strong></p>
+
+      <div class="ok">
+        <strong>✅ So geht es weiter</strong><br>
+        Wir prüfen Ihr Profil. Sobald ein passender Einsatz verfügbar ist, erhalten Sie von uns ein konkretes Auftragsangebot mit allen wichtigen Informationen.
+      </div>
+
+      <div class="callout">
+        <strong>📌 Vergütung &amp; Vermittlungsanteil</strong><br>
+        Die konkrete Vergütung und der Vermittlungsanteil ergeben sich immer aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.<br><br>
+        Bei regulären Standardaufträgen liegt der Fahreranteil in der Regel bei ca. <strong>80 %</strong> und der Vermittlungsanteil von Fahrerexpress bei ca. <strong>20 %</strong> der vereinbarten Arbeitsvergütung (Tagessatz, Überstunden, einsatzbezogene Zuschläge).<br><br>
+        Bei kurzfristigen Einsätzen, Express-, Event-, Wochenend-, Pauschal- oder Sonderaufträgen kann ein abweichendes Modell gelten, z. B. ca. <strong>75 % / 25 %</strong>.<br><br>
+        Bei Pauschal-/Sonderaufträgen kann sich diese Aufteilung auf den vereinbarten Gesamt-Einsatzwert oder die Gesamtpauschale beziehen, wenn dies im Auftragsangebot so mitgeteilt wird.<br><br>
+        Fahrtkosten, Übernachtungskosten, Maut, Parkgebühren oder sonstige Auslagen werden gesondert behandelt und nur berücksichtigt, wenn sie vorab vereinbart oder freigegeben wurden. Nachweisbare und freigegebene Auslagen können separat erstattet oder in das Auftragsangebot eingerechnet werden.<br><br>
+        <strong>Der Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Sie stellen Fahrerexpress Ihre Rechnung bereits nach Abzug dieses Vermittlungsanteils – der Anteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten. Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt.</strong><br><br>
+        <em>Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn. Diese Informationen sind ausschließlich für registrierte Fahrer bestimmt und nicht für Auftraggeber oder öffentliche Preisangaben vorgesehen.</em>
+      </div>
+
+      <div class="ok">
+        <strong>📄 Rechtsgrundlage</strong><br>
+        Für die Zusammenarbeit gelten unsere Vermittlungsbedingungen für Fahrer. Bitte lesen Sie diese vor Annahme des ersten Einsatzes.<br>
+        👉 <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen">Vermittlungsbedingungen für Fahrer ansehen</a>
+      </div>
+
+      <p><strong>📞 Kontakt:</strong> info@kraftfahrer-mieten.com · Telefon: 01577 1442285</p>
+      <p>Mit freundlichen Grüßen,<br><strong>Ihr Fahrerexpress-Team</strong></p>
+    </section>
+
+    <!-- 3. Freischaltung / Onboarding -->
+    <section class="doc" id="sec-onboarding">
+      <h2>3. Freischaltungs- / Onboarding-Mail</h2>
+      <div class="meta">Auslöser: Admin schaltet Fahrer frei · Quelle: supabase/functions/approve-driver-and-send-jobs/_templates/driver-approval-email.tsx</div>
+
+      <p><strong>Betreff:</strong> <code class="subj">Sie sind jetzt bei Fahrerexpress freigeschaltet</code></p>
+
+      <hr class="sep">
+
+      <p><strong>Sie sind jetzt bei Fahrerexpress freigeschaltet</strong></p>
+      <p>Hallo <em>{Name}</em>,</p>
+      <p>Ihr Fahrerprofil wurde freigeschaltet.</p>
+
+      <div class="callout">
+        <em>Variante A (falls passende Aufträge vorhanden):</em><br>
+        Es wurden passende offene Fahrergesuche gefunden. Sie erhalten dazu separate Auftragsangebote per E-Mail mit direkter Antwortmöglichkeit.
+      </div>
+      <div class="callout">
+        <em>Variante B (falls keine passenden Aufträge):</em><br>
+        Derzeit sind keine passenden offenen Fahrergesuche verfügbar. Wir melden uns, sobald passende Anfragen eingehen.
+      </div>
+
+      <div class="warn">
+        <strong>📋 Wichtig: Vermittlungsbedingungen</strong><br>
+        Für die Zusammenarbeit gelten die Vermittlungsbedingungen für Fahrer.<br><br>
+        Jeder Einsatz wird Ihnen vorab einzeln angeboten. Dabei erhalten Sie alle wichtigen Informationen zum Einsatzort, Zeitraum, Fahrzeug, zur Tätigkeit, zu besonderen Anforderungen und zur vorgesehenen Vergütung.<br><br>
+        Sie entscheiden bei jedem Angebot frei, ob Sie den Einsatz übernehmen möchten oder nicht.<br><br>
+        Die konkrete Vergütung und der Vermittlungsanteil ergeben sich ausschließlich aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.<br><br>
+        <strong>Sie stellen Ihre Rechnung nach Einsatzabschluss direkt an Fahrerexpress – bereits nach Abzug des im Auftragsangebot vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen (An-/Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn, Hotel) werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt.</strong>
+      </div>
+
+      <p><strong>📞 Kontakt:</strong> +49-1577-1442285 · info@kraftfahrer-mieten.com</p>
+      <p>🔗 Unten in der Mail: <em>„Keine weiteren Auftragsangebote erhalten"</em> (Token-basierter Unsubscribe-Link).</p>
+    </section>
+
+    <!-- 4. Vermittlungsbedingungen -->
+    <section class="doc" id="sec-bedingungen">
+      <h2>4. Fahrer-Vermittlungsbedingungen (Webseite)</h2>
+      <div class="meta">URL: /fahrer-vermittlungsbedingungen · noindex · Quelle: src/pages/FahrerVermittlungsbedingungen.tsx</div>
+
+      <h3>§1 Geltungsbereich</h3>
+      <p>Gelten für alle Registrierungen, Auftragsangebote und Einsätze über die Fahrerexpress-Agentur (Günter Killer, Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main). Mit Registrierung als Fahrer anerkannt.</p>
+
+      <h3>§2 Rechtsstellung des Fahrers</h3>
+      <p>Selbstständiger Unternehmer. Eigene Verantwortung für Gewerbe, Steuern, Sozialabgaben, Versicherungen. <strong>Kein Arbeitsverhältnis.</strong> Kein Anspruch auf Einsätze oder Mindestvergütung.</p>
+
+      <h3>§3 Vermittlungsmodell</h3>
+      <p>Fahrerexpress vermittelt Einsätze zwischen Auftraggebern und selbstständigen Fahrern und übernimmt die Einsatzkoordination. Kein Anspruch auf Einsätze.</p>
+
+      <h3>§4 Vermittlungsanteil</h3>
+      <div class="ok">
+        <strong>Wichtigste Klausel:</strong> Für Organisation, Vermittlung, Kundenabwicklung, Rechnungsstellung und Zahlungsüberwachung erhält die Fahrerexpress-Agentur einen Vermittlungsanteil. Dieser Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Der Fahrer stellt Fahrerexpress seine Rechnung bereits nach Abzug dieses Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten.
+      </div>
+      <ul>
+        <li>Standardeinsätze: in der Regel <strong>20 %</strong> der Netto-Arbeitsvergütung (Tagessatz, Überstunden, einsatzbezogene Zuschläge)</li>
+        <li>Sonder-, Projekt-, Pauschal-, kurzfristige oder besonders aufwendige Einsätze: <strong>bis zu 25 %</strong></li>
+        <li>An-/Abfahrt, Fahrtkosten, Übernachtung, Maut, Parkgebühren, Bahnkosten, sonstige Auslagen: <strong>nicht vom Vermittlungsanteil gekürzt</strong>, nur wenn vorab vereinbart/freigegeben</li>
+        <li>Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn</li>
+        <li>Kein Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises</li>
+      </ul>
+
+      <h3>§5 Zahlung der vereinbarten Vergütung</h3>
+      <p>Zahlung auf Grundlage ordnungsgemäßer Rechnung des Fahrers nach vollständiger Durchführung des Einsatzes. Nach Zahlungseingang des Auftraggebers, spätestens innerhalb von 5 Werktagen. Kein Anspruch auf Vorschuss-/Abschlagszahlungen.</p>
+
+      <h3>§6 Keine Direktabsprachen</h3>
+      <ul>
+        <li>Direkter Kontakt zum Auftraggeber nur im Rahmen des freigegebenen Einsatzes</li>
+        <li>Keine Preisabsprachen mit Auftraggebern</li>
+        <li>Keine Folgeaufträge am Fahrerexpress vorbei</li>
+        <li>Keine Weitergabe interner Einsatzdaten an Dritte</li>
+      </ul>
+
+      <h3>§7 Pflichten bei angenommenem Einsatz</h3>
+      <p>pünktliches Erscheinen, ordnungsgemäße Durchführung, sofortige Meldung bei Problemen, richtige Qualifikationsangaben, sorgfältiger Umgang mit Fahrzeug/Material.</p>
+
+      <h3>§8 Nichterscheinen / Abbruch</h3>
+      <p>Bei schuldhafter Pflichtverletzung Haftung im gesetzlich zulässigen Umfang.</p>
+
+      <h3>§9 Sperrung</h3>
+      <p>Bei erheblichen Pflichtverletzungen vorübergehender/dauerhafter Ausschluss möglich.</p>
+
+      <h3>§10 Vertragsschluss</h3>
+      <p>Vertrag entsteht durch Registrierung + Annahme eines konkreten Auftragsangebots. Keine gesonderte Unterschrift nötig.</p>
+
+      <h3>§11 Gerichtsstand</h3>
+      <p>Frankfurt am Main (soweit gesetzlich zulässig).</p>
+    </section>
+
+    <!-- 5. Auftragsmail -->
+    <section class="doc" id="sec-auftragsmail">
+      <h2>5. Auftragsangebots-Mail an Fahrer</h2>
+      <div class="meta">Quelle: supabase/functions/broadcast-job-to-drivers/_templates/job-notification.tsx</div>
+
+      <p><strong>Betreff (Vorschau):</strong> <code class="subj">Neuer Auftrag verfügbar: {Fahrzeugtyp} in {Einsatzort}</code></p>
+
+      <hr class="sep">
+
+      <p><strong>🚛 Neuer Auftrag verfügbar</strong></p>
+      <p>Hallo <em>{Fahrername}</em>,<br>ein neuer Auftrag ist verfügbar, der zu Ihrem Profil passen könnte:</p>
+
+      <div class="callout">
+        <strong>🚛 Einsatzdetails</strong>
+        <table class="kv">
+          <tr><td>Datum/Zeitraum</td><td>{Zeitraum}</td></tr>
+          <tr><td>Einsatzort</td><td>{Einsatzort}</td></tr>
+          <tr><td>Fahrzeug/Typ</td><td>{Fahrzeugtyp}</td></tr>
+          <tr><td>Führerscheinklasse</td><td>{Klasse}</td></tr>
+          <tr><td>Besonderheiten</td><td>{Besonderheiten}</td></tr>
+        </table>
+      </div>
+
+      <div class="ok"><strong>Kundendaten in der Auftragsmail:</strong> ❌ <strong>NEIN</strong>. Es werden weder Kundenname, Firma, Telefon noch Adresse mitgeschickt (siehe Memory „Phone-based Response"). Fahrer melden sich bei Rückfragen ausschließlich bei Fahrerexpress.</div>
+
+      <p><strong>💬 Zusätzliche Informationen</strong> (nur wenn vorhanden): {Nachricht des Auftraggebers ohne Kontaktdaten}</p>
+      <p><strong>📎 Anhänge</strong> (z. B. Fahrzeugbilder, PDFs): über zeitlich begrenzte signierte Links.</p>
+
+      <hr class="sep">
+
+      <div style="background:#f0fdf4;border:2px solid #16a34a;border-radius:10px;padding:18px;text-align:center;">
+        <strong style="color:#166534;">Können Sie diesen Auftrag übernehmen?</strong><br>
+        <span style="font-size:13px;color:#166534;">Bitte um kurze Rückmeldung über die Buttons:</span><br><br>
+        <a class="btn-demo btn-green" href="#">Ich kann den Auftrag übernehmen</a>
+        <a class="btn-demo btn-red" href="#">Ich kann nicht übernehmen</a>
+        <p style="font-size:12px;color:#166534;margin-top:10px;"><strong>Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress.</strong></p>
+      </div>
+
+      <div class="warn">
+        <strong>⚠️ Wichtiger Hinweis</strong><br>
+        Bitte kontaktieren Sie den Auftraggeber nicht direkt. Die Vermittlung und Einsatzkoordination erfolgt ausschließlich über Fahrerexpress. Direkte Absprachen mit dem Auftraggeber sind nicht gestattet.
+      </div>
+
+      <div class="callout">
+        <strong>📋 Vergütung &amp; Vermittlungsanteil</strong><br>
+        Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot, das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Maßgeblich ist ausschließlich dieses Angebot.<br>
+        Details siehe <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen">Vermittlungsbedingungen für Fahrer</a>.
+      </div>
+
+      <p><strong>📞 Kontakt:</strong> +49 1577 1442285 (Telefon/WhatsApp) · info@kraftfahrer-mieten.com</p>
+      <p>🔗 Footer: <em>„Keine weiteren Auftragsangebote erhalten"</em></p>
+
+      <hr class="sep">
+      <h3>Bedeutung der Buttons – ist es klar?</h3>
+      <ul>
+        <li>✅ „Ich kann den Auftrag übernehmen" = <strong>Verfügbarkeitsmeldung</strong> (keine automatische Beauftragung)</li>
+        <li>✅ „Ich kann nicht übernehmen" = Absage, Auftrag bleibt offen für andere Fahrer</li>
+        <li>✅ Der Hinweis <em>„Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress."</em> steht unmittelbar unter den Buttons.</li>
+      </ul>
+    </section>
+
+    <!-- 6. Antwortseite -->
+    <section class="doc" id="sec-antwort">
+      <h2>6. Fahrer-Antwort / Bestätigungsseite</h2>
+      <div class="meta">URL: /fahrer-antwort-bestaetigen?action=...&amp;token=... · Quelle: src/pages/FahrerAntwortBestaetigen.tsx</div>
+
+      <h3>Schritt 1 – Klick auf Button in der Mail</h3>
+      <p>Der Fahrer landet auf einer Bestätigungsseite mit Frage und einem expliziten Bestätigungs-Button. Es passiert <strong>nichts automatisch</strong>.</p>
+
+      <h4>Bei „Ich kann übernehmen" sieht der Fahrer:</h4>
+      <div class="callout">
+        <strong>„Möchten Sie diesen Auftrag wirklich übernehmen?"</strong><br>
+        <em>„Bitte bestätigen Sie Ihre Rückmeldung mit einem Klick. Erst dann wird Ihre Antwort gespeichert."</em><br><br>
+        <a class="btn-demo btn-green" href="#">Ja, Auftrag übernehmen</a>
+      </div>
+
+      <h4>Bei „Ich kann nicht übernehmen" sieht der Fahrer:</h4>
+      <div class="callout">
+        <strong>„Möchten Sie diesen Auftrag wirklich ablehnen?"</strong><br><br>
+        <a class="btn-demo btn-gray" href="#">Ja, Auftrag ablehnen</a>
+      </div>
+
+      <h3>Schritt 2 – Nach Klick auf Bestätigungs-Button</h3>
+      <table class="kv">
+        <tr><td>accepted</td><td>„Vielen Dank. Ihre Rückmeldung wurde übermittelt. Fahrerexpress meldet sich zur weiteren Abstimmung."</td></tr>
+        <tr><td>declined</td><td>„Vielen Dank. Ihre Rückmeldung wurde übermittelt."</td></tr>
+        <tr><td>already_answered</td><td>„Ihre Rückmeldung wurde bereits erfasst."</td></tr>
+        <tr><td>expired</td><td>„Dieser Link ist abgelaufen."</td></tr>
+        <tr><td>invalid</td><td>„Dieser Link ist ungültig oder wurde nicht gefunden."</td></tr>
+        <tr><td>error</td><td>„Es ist ein Fehler aufgetreten. Bitte melden Sie sich direkt bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285."</td></tr>
+      </table>
+
+      <p>Footer auf jeder Antwortseite: Kontakt Fahrerexpress · Telefon/WhatsApp: 01577 1442285 · E-Mail: info@kraftfahrer-mieten.com</p>
+
+      <div class="ok">Die Bestätigung „Fahrerexpress meldet sich zur weiteren Abstimmung" macht klar, dass die Annahme noch keine verbindliche Einsatzzusage ist. ✅</div>
+    </section>
+
+    <!-- 7. Abmeldung -->
+    <section class="doc" id="sec-abmeldung">
+      <h2>7. Abmeldung / Opt-out von Auftragsangeboten</h2>
+      <div class="meta">Quelle: supabase/functions/driver-unsubscribe/index.ts · Token-basiert (HMAC-signiert)</div>
+
+      <h3>Wo ist der Abmeldelink?</h3>
+      <ul>
+        <li>Unten in jeder Auftragsangebots-Mail</li>
+        <li>Unten in der Freischaltungs-/Onboarding-Mail</li>
+        <li>Linktext: <strong>„Keine weiteren Auftragsangebote erhalten"</strong></li>
+      </ul>
+
+      <h3>Was sieht der Fahrer nach Klick?</h3>
+      <table class="kv">
+        <tr><td>Erfolg (erste Abmeldung)</td><td>„Abmeldung gespeichert. Sie erhalten keine weiteren Auftragsangebote von Fahrerexpress."</td></tr>
+        <tr><td>Bereits abgemeldet</td><td>„Sie sind bereits abgemeldet. Sie erhalten keine weiteren Auftragsangebote von Fahrerexpress."</td></tr>
+        <tr><td>Ungültiger Link</td><td>„Ungültiger Abmeldelink. Bitte kontaktieren Sie info@kraftfahrer-mieten.com."</td></tr>
+        <tr><td>Fehler</td><td>„Fehler bei der Abmeldung. Bitte kontaktieren Sie info@kraftfahrer-mieten.com."</td></tr>
+      </table>
+
+      <h3>Was passiert technisch?</h3>
+      <ul>
+        <li><code>fahrer_profile.email_opt_out</code> wird auf <code>true</code> gesetzt</li>
+        <li><code>unsubscribed_at</code> und <code>unsubscribed_reason = "self-service-unsubscribe"</code> gesetzt</li>
+        <li>Profil bleibt erhalten, wird nicht gelöscht</li>
+        <li>Admin-Mail an info@kraftfahrer-mieten.com und guenter.killer@t-online.de</li>
+        <li>Fahrer erscheint nicht mehr in Empfängerliste der Newsletter-/Auftragsmails (Filter: <code>email_opt_out=false AND is_blocked=false AND status=approved</code>)</li>
+      </ul>
+
+      <div class="ok"><strong>Unterschied Opt-out vs. Sperrung:</strong> Opt-out ist freiwillig durch den Fahrer. Sperrung (<code>is_blocked</code>) ist disziplinarische Maßnahme durch Admin (siehe Memory).</div>
+    </section>
+
+    <!-- 8. Konsistenz -->
+    <section class="doc" id="sec-konsistenz">
+      <h2>8. Konsistenzprüfung – einheitlich? alte Formulierungen?</h2>
+
+      <h3>Provisions- und Abrechnungsregeln</h3>
+      <table class="kv">
+        <tr><td>Registrierungsbestätigung</td><td>20 % / bis 25 % · Rechnung nach Abzug · Auslagen nicht gekürzt ✅</td></tr>
+        <tr><td>Onboarding/Freischaltung</td><td>20 % / bis 25 % · Rechnung nach Abzug · Auslagen nicht gekürzt ✅</td></tr>
+        <tr><td>Vermittlungsbedingungen (Web)</td><td>20 % / bis 25 % · Rechnung nach Abzug · Auslagen nicht gekürzt ✅</td></tr>
+        <tr><td>Auftragsangebots-Mail</td><td>nur Verweis aufs konkrete Angebot &amp; Bedingungen-Seite ✅</td></tr>
+        <tr><td>Einsatzbestätigung (driver-confirmation)</td><td>20 % / bis 25 % · Rechnung nach Abzug · Auslagen nicht gekürzt ✅</td></tr>
+        <tr><td>Auftragsannahme-Mail (driver-accept-job)</td><td>Rechnung nach Abzug · Auslagen nicht gekürzt ✅</td></tr>
+        <tr><td>Fahrer-Info-Newsletter</td><td>20 % / bis 25 % · Rechnung nach Abzug ✅</td></tr>
+      </table>
+
+      <h3>Suche nach alten/missverständlichen Formulierungen</h3>
+      <table class="kv">
+        <tr><td>"15 %" / "15%"</td><td>❌ nirgends in Fahrerkommunikation ✅</td></tr>
+        <tr><td>"voller Tagessatz" / "voller Kundenpreis"</td><td>❌ nirgends ✅</td></tr>
+        <tr><td>"1 zu 1"</td><td>Nur in Kontext „Auslagen 1:1 erstattet" (korrekt) ✅</td></tr>
+        <tr><td>"Provision einbehalten" / "Vermittlungsgebühr einbehalten"</td><td>❌ nirgends ✅ (nur „nicht nachträglich einbehalten" als Negativ-Klarstellung)</td></tr>
+        <tr><td>"Fahrer rechnet direkt mit Auftraggeber ab"</td><td>❌ nirgends ✅</td></tr>
+        <tr><td>"Rechnung direkt an Auftraggeber"</td><td>❌ nirgends ✅</td></tr>
+        <tr><td>"automatisch abgezogen" / "automatisch berücksichtigt"</td><td>❌ nirgends ✅</td></tr>
+        <tr><td>"nachträglich einbehalten"</td><td>Nur als ausdrückliche Negativ-Klarstellung („wird NICHT nachträglich einbehalten") ✅</td></tr>
+      </table>
+
+      <div class="ok"><strong>Ergebnis:</strong> Alle Fahrertexte (Registrierung, Bestätigung, Onboarding, Bedingungen, Auftragsmail, Antwortseite, Abmeldung) sind <strong>konsistent</strong> mit der Regel „Fahrer stellt Rechnung an Fahrerexpress bereits nach Abzug des Vermittlungsanteils, Auslagen werden gesondert behandelt und nicht gekürzt". <strong>Keine</strong> alten 15 %-Angaben und keine missverständlichen Einbehalts-Formulierungen mehr.</div>
+
+      <h3>Öffentliche Sichtbarkeit dieser Prüfansicht</h3>
+      <p><strong>Erreichbarkeit:</strong> <code>/pruefung-fahrer-komplettuebersicht.html</code> sowie <code>/pruefung-fahrer-bedingungen.html</code> liegen im <code>public/</code>-Ordner.<br>
+      <strong>Sicherheit:</strong> beide mit <code>noindex, nofollow</code>, nirgends verlinkt, nicht in Sitemap.<br>
+      <strong>Empfehlung:</strong> Nach deiner Freigabe der Inhalte beide Dateien aus dem <code>public/</code>-Ordner <strong>löschen</strong>. Verschiebung in den Adminbereich nicht nötig, da die finalen Texte bereits in der App leben (Bedingungen-Seite, Onboarding-Mail, Auftrags-Mail).</p>
+    </section>
+
+    <p class="footer-note">Interne Prüfansicht · noindex,nofollow · nicht öffentlich verlinkt · keine Mails versendet · keine Daten verändert</p>
+  </div>
+</body>
+</html>
