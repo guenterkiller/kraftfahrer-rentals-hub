@@ -57,7 +57,7 @@ export const NoShowDialog: React.FC<NoShowDialogProps> = ({
     
     setIsCalculating(true);
     try {
-      const { data, error } = await supabase.rpc('calc_no_show_fee_cents', {
+      const { data, error } = await supabase.rpc('admin_preview_no_show_fee', {
         _rate_type: assignment.rate_type,
         _rate_value: assignment.rate_value,
         _starts_at: assignment.start_date || new Date().toISOString()

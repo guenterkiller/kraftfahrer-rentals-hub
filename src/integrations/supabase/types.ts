@@ -946,6 +946,13 @@ export type Database = {
         Args: { _days_old?: number }
         Returns: Json
       }
+      admin_preview_no_show_fee: {
+        Args: { _rate_type: string; _rate_value: number; _starts_at: string }
+        Returns: {
+          fee_cents: number
+          tier: string
+        }[]
+      }
       admin_reset_jobs_by_email: { Args: { _email: string }; Returns: Json }
       admin_update_job_contact: {
         Args: {
