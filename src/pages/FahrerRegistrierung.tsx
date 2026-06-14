@@ -949,7 +949,7 @@ const FahrerRegistrierung = () => {
                                Laden Sie eine Kopie Ihres Führerscheins hoch (mehrere Dateien möglich)
                              </p>
                              <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
-                               <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
+                               <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
                                <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
                                <p>❌ Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. Ä.</p>
                                <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
@@ -999,7 +999,7 @@ const FahrerRegistrierung = () => {
                                Laden Sie eine Kopie Ihrer Fahrerkarte hoch (mehrere Dateien möglich)
                              </p>
                              <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
-                               <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
+                               <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
                                <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
                                <p>❌ Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. Ä.</p>
                                <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
@@ -1039,7 +1039,7 @@ const FahrerRegistrierung = () => {
                              ADR-Schein, Fahrmischer-Qualifikation, etc. (Mehrere Dateien möglich)
                            </p>
                           <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
-                            <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 10 MB pro Datei</p>
+                            <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
                             <p>📷 Fotos bitte gut lesbar, gerade, ohne Spiegelungen</p>
                             <p>❌ Nicht erlaubt: HEIC/HEIF, ZIP/RAR, DOC/DOCX, EXE u. Ä.</p>
                             <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
@@ -1119,8 +1119,8 @@ const FahrerRegistrierung = () => {
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
                           Ich bin selbstständig tätig und akzeptiere die Vermittlungsbedingungen, die mir nach Registrierung bereitgestellt werden. *{" "}
-                          <Link to="/vermittlung" className="text-primary underline decoration-primary/50 hover:decoration-primary">
-                            Mehr Informationen
+                          <Link to="/fahrer-vermittlungsbedingungen" className="text-primary underline decoration-primary/50 hover:decoration-primary">
+                            Fahrer-Vermittlungsbedingungen
                           </Link>
                         </Label>
                       </div>
