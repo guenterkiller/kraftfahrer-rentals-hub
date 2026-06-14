@@ -16,7 +16,7 @@ export const DriverRegistrationConfirmation = ({
 
     <Text {...getTextProps(textStyles.paragraph)}>
       willkommen bei der Fahrerexpress-Agentur – schön, dass Sie dabei sind!
-      Ihre Registrierung als selbstständige/r Kraftfahrer/in ist bei uns eingegangen.
+      Ihre Registrierung als selbstständige/r Fahrer/in ist bei uns eingegangen.
     </Text>
 
     <Section {...getBoxProps(boxStyles.successBox)}>
