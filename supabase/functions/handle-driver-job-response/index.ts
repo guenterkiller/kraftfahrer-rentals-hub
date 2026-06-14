@@ -180,6 +180,8 @@ const handler = async (req: Request): Promise<Response> => {
       
       const subject = `[Antwort] ${driver?.vorname || "Fahrer"} ${driver?.nachname || ""} – ${friendlyAction} – Job ${job?.customer_name || invite.job_id}`;
       
+      const esc = (s: unknown) =>
+        String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
       const html = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: ${action === 'accept' ? '#d4fdf7' : '#fef2f2'}; border: 2px solid ${action === 'accept' ? '#10b981' : '#ef4444'}; padding: 20px; border-radius: 8px; margin: 20px 0;">
@@ -187,26 +189,26 @@ const handler = async (req: Request): Promise<Response> => {
               ${friendlyAction} - Fahrerantwort eingegangen
             </h2>
             <p style="color: ${action === 'accept' ? '#065f46' : '#991b1b'}; margin: 0; font-size: 16px;">
-              <strong>${driver?.vorname || "Fahrer"} ${driver?.nachname || ""}</strong> hat den Auftrag <strong>${actionVerb}</strong>.
+              <strong>${esc(driver?.vorname || "Fahrer")} ${esc(driver?.nachname || "")}</strong> hat den Auftrag <strong>${actionVerb}</strong>.
             </p>
           </div>
           
           <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3 style="margin-top: 0; color: #1f2937;">Fahrerdetails:</h3>
-            <p><strong>Name:</strong> ${driver?.vorname || ""} ${driver?.nachname || ""}</p>
-            <p><strong>E-Mail:</strong> ${driver?.email || "Keine Angabe"}</p>
-            <p><strong>Telefon:</strong> ${driver?.telefon || "Keine Angabe"}</p>
-            <p><strong>Ort:</strong> ${driver?.plz || ""} ${driver?.ort || ""}</p>
+            <p><strong>Name:</strong> ${esc(driver?.vorname || "")} ${esc(driver?.nachname || "")}</p>
+            <p><strong>E-Mail:</strong> ${esc(driver?.email || "Keine Angabe")}</p>
+            <p><strong>Telefon:</strong> ${esc(driver?.telefon || "Keine Angabe")}</p>
+            <p><strong>Ort:</strong> ${esc(driver?.plz || "")} ${esc(driver?.ort || "")}</p>
             
             <h3 style="color: #1f2937;">Auftragsdetails:</h3>
-            <p><strong>Job-ID:</strong> ${invite.job_id}</p>
-            <p><strong>Kunde:</strong> ${job?.customer_name || "Unbekannt"}</p>
-            ${job?.company ? `<p><strong>Firma:</strong> ${job.company}</p>` : ""}
-            <p><strong>Einsatzort:</strong> ${job?.einsatzort || "Keine Angabe"}</p>
-            <p><strong>Zeitraum:</strong> ${job?.zeitraum || "Nach Absprache"}</p>
-            <p><strong>Fahrzeugtyp:</strong> ${job?.fahrzeugtyp || "LKW"}</p>
-            <p><strong>Führerscheinklasse:</strong> ${job?.fuehrerscheinklasse || "C+E"}</p>
-            <p><strong>Job-Status:</strong> ${job?.status || "open"}</p>
+            <p><strong>Job-ID:</strong> ${esc(invite.job_id)}</p>
+            <p><strong>Kunde:</strong> ${esc(job?.customer_name || "Unbekannt")}</p>
+            ${job?.company ? `<p><strong>Firma:</strong> ${esc(job.company)}</p>` : ""}
+            <p><strong>Einsatzort:</strong> ${esc(job?.einsatzort || "Keine Angabe")}</p>
+            <p><strong>Zeitraum:</strong> ${esc(job?.zeitraum || "Nach Absprache")}</p>
+            <p><strong>Fahrzeugtyp:</strong> ${esc(job?.fahrzeugtyp || "LKW")}</p>
+            <p><strong>Führerscheinklasse:</strong> ${esc(job?.fuehrerscheinklasse || "C+E")}</p>
+            <p><strong>Job-Status:</strong> ${esc(job?.status || "open")}</p>
             
             <h3 style="color: #1f2937;">Antwort-Details:</h3>
             <p><strong>Aktion:</strong> ${friendlyAction}</p>
