@@ -288,6 +288,9 @@ const handler = async (req: Request): Promise<Response> => {
     // Send customer notification email
     try {
       const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
+        headers: {
+          'x-internal-secret': Deno.env.get('INTERNAL_FN_SECRET') ?? '',
+        },
         body: {
           vorname: vorname,
           nachname: nachname,

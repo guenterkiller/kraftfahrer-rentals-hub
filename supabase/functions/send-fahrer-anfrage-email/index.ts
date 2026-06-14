@@ -36,6 +36,16 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    // Internal-only function: require x-internal-secret header
+    const providedSecret = req.headers.get("x-internal-secret");
+    const expectedSecret = Deno.env.get("INTERNAL_FN_SECRET");
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden" }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
     const requestData: FahrerAnfrageEmailRequest = await req.json();
     
     const {
