@@ -78,7 +78,7 @@ Der in E-Mail und PDF verwendete Rechtstext stammt aus der finalen Fassung vom 2
 
 ```
 Vermittlungs- und Provisionsbedingungen
-1. Provisionspflicht: 15% des Nettohonorars
+1. Provisionspflicht: 20 % des Nettohonorars für Standardeinsätze, bis zu 25 % für Sonder-/Projekt-/Pauschal- oder kurzfristige Einsätze; Bezugsgröße ausschließlich die reine Fahrerdienstleistung
 2. Folgeaufträge: Provisionspflicht gilt auch für direkte Aufträge
 3. Dauer: Bis zur Festanstellung
 4. Informationspflicht: Direktanfragen melden

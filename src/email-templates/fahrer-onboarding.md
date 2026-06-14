@@ -20,7 +20,7 @@ Wir melden uns telefonisch oder per E-Mail, sobald passende Fahraufträge verfü
 
 💰 **Vergütung & Vermittlungsanteil**
 
-Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot, das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Standardeinsätze in der Regel 20 %, Sonder-/Projekt-/Pauschal- oder kurzfristige Einsätze bis zu 25 % des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises ohne An- und Abfahrt. Maßgeblich ist immer das konkrete Auftragsangebot.
+Der Vermittlungsanteil beträgt für Standardeinsätze in der Regel **20 %**, für Sonder-, Projekt-, Pauschal- oder kurzfristige Einsätze **bis zu 25 %**. Bezugsgröße ist ausschließlich die reine Fahrerdienstleistung (Tagessatz, Überstunden, einsatzbezogene Zuschläge). Nicht Bestandteil der Bezugsgröße und damit nicht vom Vermittlungsanteil betroffen sind insbesondere: An- und Abfahrt, Kilometer-/Fahrtkosten, Diesel, Maut, Parkgebühren, Fährgebühren, Bahn- und ÖPNV-Kosten, Hotel- und Übernachtungskosten, Verpflegungsmehraufwand sowie sonstige vorab freigegebene Auslagen. Diese werden, sofern vorab vereinbart und nachgewiesen, 1:1 erstattet oder unverändert in das Auftragsangebot eingerechnet. Maßgeblich ist immer das konkrete Auftragsangebot.
 
 **Abrechnung:** Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Auszahlung nach Zahlungseingang des Auftraggebers, spätestens 5 Werktage danach.
 
