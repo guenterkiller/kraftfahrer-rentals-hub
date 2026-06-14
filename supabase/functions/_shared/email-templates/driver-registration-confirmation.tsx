@@ -52,6 +52,9 @@ export const DriverRegistrationConfirmation = ({
         Nachweisbare und freigegebene Auslagen können separat erstattet oder in das konkrete Auftragsangebot eingerechnet werden.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
+        Der Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Sie stellen Fahrerexpress Ihre Rechnung bereits nach Abzug dieses Vermittlungsanteils – der Anteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten. Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
         Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn. Ein Anspruch auf einen bestimmten Prozentsatz eines öffentlich sichtbaren Webseitenpreises besteht nicht.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>

@@ -64,7 +64,7 @@ export const DriverApprovalEmail = ({
           jeweiligen Auftragsangebot vor Einsatzbeginn.
         </Text>
         <Text style={textStyles.paragraph}>
-          Sie stellen Ihre Rechnung nach Einsatzabschluss direkt an Fahrerexpress.
+          Sie stellen Ihre Rechnung nach Einsatzabschluss direkt an Fahrerexpress – bereits nach Abzug des im Auftragsangebot vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen (An-/Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn, Hotel) werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt.
         </Text>
       </Section>
 

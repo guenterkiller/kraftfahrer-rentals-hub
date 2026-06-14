@@ -224,7 +224,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
             <h3 style="color: #1e40af;">Agenturabrechnung - Subunternehmer-Modell</h3>
             <p><strong>Sie haben den Einsatz als selbstständiger Subunternehmer angenommen.</strong></p>
-            <p>Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis.</p>
+            <p>Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress – bereits nach Abzug des im Auftragsangebot vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen (z. B. An-/Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn, Hotel) werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis.</p>
           </div>
         `;
 
@@ -316,7 +316,7 @@ const handler = async (req: Request): Promise<Response> => {
       // Return HTML response for GET requests (email links)
       if (req.method === 'GET') {
         const billingDisplay = 'Agenturabrechnung - Subunternehmer-Modell';
-        const billingDescription = 'Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.';
+        const billingDescription = 'Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress – bereits nach Abzug des im Auftragsangebot vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen (An-/Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn, Hotel) werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung.';
         
         const html = `
           <!DOCTYPE html>
