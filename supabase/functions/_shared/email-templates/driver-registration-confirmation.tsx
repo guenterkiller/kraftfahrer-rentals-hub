@@ -34,13 +34,13 @@ export const DriverRegistrationConfirmation = ({
         Die konkrete Vergütung und der Vermittlungsanteil ergeben sich immer aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
-        Bei regulären Standardaufträgen liegt der Fahreranteil in der Regel bei ca. 80 % und der Vermittlungsanteil von Fahrerexpress bei ca. 20 % der vereinbarten Arbeitsvergütung.
+        Bei regulären Standardaufträgen beträgt der Vermittlungsanteil in der Regel 20 % der vereinbarten Netto-Arbeitsvergütung. Der Fahreranteil beträgt entsprechend 80 %.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
         Die Arbeitsvergütung umfasst insbesondere Tagessätze, Überstunden und einsatzbezogene Zuschläge.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
-        Bei kurzfristigen Einsätzen, Expressaufträgen, Eventeinsätzen, Wochenendaufträgen, Pauschalpreisen, Sonderfahrten, Überführungsaufträgen oder Einsätzen mit besonderen Bedingungen kann ein abweichendes Modell gelten, z. B. ca. 75 % Fahreranteil und ca. 25 % Fahrerexpress-Anteil.
+        Bei Sonder-, Projekt-, Pauschal-, kurzfristigen oder besonders aufwendigen Einsätzen (z. B. Express-, Event-, Wochenend- oder Überführungsaufträgen) kann der Vermittlungsanteil bis zu 25 % betragen. Der Fahreranteil beträgt entsprechend mindestens 75 %.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '10px', marginBottom: '0' })}>
         Bei Pauschal- oder Sonderaufträgen kann sich diese Aufteilung auf den vereinbarten Gesamt-Einsatzwert oder die Gesamtpauschale beziehen, wenn dies im konkreten Auftragsangebot so mitgeteilt wird.
