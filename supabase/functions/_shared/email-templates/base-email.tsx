@@ -104,7 +104,9 @@ export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOv
             📱 01577 1442285
           </Text>
           <Text style={footerSubtext} className="mobile-text">
-            Günter Killer<br />
+            Inhaber: Günter Killer<br />
+            Walther-von-Cronberg-Platz 12<br />
+            60594 Frankfurt am Main<br />
             Vermittlung gewerblicher Fahrer
           </Text>
         </Section>
