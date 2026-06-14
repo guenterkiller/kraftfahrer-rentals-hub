@@ -87,7 +87,7 @@ export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOv
             Fahrerexpress-Agentur
           </Heading>
           <Text style={plainHeader ? headerSubtitlePlain : headerSubtitle} className="mobile-text">
-            {headerSubtitleOverride || 'LKW CE Fahrer, Baumaschinenführer & Mischmeister'}
+            {headerSubtitleOverride || 'Vermittlung selbstständiger Fahrer'}
           </Text>
         </Section>
 
