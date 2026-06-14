@@ -107,7 +107,7 @@ export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOv
             Inhaber: Günter Killer<br />
             Walther-von-Cronberg-Platz 12<br />
             60594 Frankfurt am Main<br />
-            Vermittlung gewerblicher Fahrer
+            Vermittlung selbstständiger Fahrer
           </Text>
         </Section>
       </Container>
