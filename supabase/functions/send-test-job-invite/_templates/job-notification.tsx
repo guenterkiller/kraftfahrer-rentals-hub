@@ -218,10 +218,8 @@ export const JobNotificationEmail = ({
           das Fahrerexpress Ihnen vor Einsatzbeginn mitteilt. Maßgeblich ist ausschließlich dieses Angebot.
         </Text>
         <Text style={textStyles.paragraph}>
-          Details siehe{' '}
-          <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen" style={{ color: '#2563eb' }}>
-            Vermittlungsbedingungen für Fahrer
-          </a>.
+          Die geltenden Fahrer-Vermittlungsbedingungen wurden Ihnen per E-Mail übermittelt.
+          Maßgeblich ist zusätzlich das konkrete Auftragsangebot vor Einsatzbeginn.
         </Text>
       </Section>
 
