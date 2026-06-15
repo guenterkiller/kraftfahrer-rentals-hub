@@ -86,9 +86,9 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
 
     <p style="margin-top:24px;"><strong>Keine weiteren Auftragsangebote gewünscht?</strong></p>
     <p>Wenn Sie künftig keine Auftragsangebote mehr von Fahrerexpress erhalten möchten, können Sie sich jederzeit über den Abmeldelink am Ende der E-Mail abmelden:</p>
-    <p style="text-align:center;margin:18px 0;">
+    <p class="btn" style="text-align:center;margin:18px 0;">
       <a href="${unsubscribeUrl}"
-         style="display:inline-block;background:#1d4ed8;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:bold;">
+         style="display:inline-block;background:#bb2c29;color:#ffffff;padding:14px 26px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;">
         Keine weiteren Auftragsangebote erhalten
       </a>
     </p>
@@ -100,19 +100,25 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
       <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.
     </p>
 
-    <p style="margin-top:22px;">Bei Fragen erreichen Sie uns jederzeit:</p>
-    <p>
-      Telefon: <a href="tel:+4915771442285">01577 1442285</a><br/>
-      E-Mail: <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>
-    </p>
-
-    <p style="margin-top:22px;">Mit freundlichen Grüßen</p>
-    <p>
-      Fahrerexpress-Agentur<br/>
-      Günter Killer<br/>
-      Vermittlung gewerblicher Fahrer
-    </p>
-  </div>`;
+    <p style="margin-top:22px;">Mit freundlichen Grüßen<br/>Fahrerexpress-Agentur – Günter Killer</p>
+        </td></tr>
+        <tr><td style="background-color:#0d2340;padding:24px 32px;border-top:4px solid #bb2c29;" class="px">
+          <p style="margin:0 0 8px 0;font-size:14px;color:#ffffff;font-weight:700;">Fahrerexpress-Agentur</p>
+          <p style="margin:0 0 10px 0;font-size:13px;line-height:1.6;color:#cbd5e1;">
+            Inhaber: Günter Killer<br/>
+            Walther-von-Cronberg-Platz 12<br/>
+            60594 Frankfurt am Main
+          </p>
+          <p style="margin:0;font-size:13px;line-height:1.6;color:#cbd5e1;">
+            Telefon: <a href="tel:+4915771442285" style="color:#ffffff;text-decoration:none;">01577 1442285</a><br/>
+            E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color:#ffffff;text-decoration:none;">info@kraftfahrer-mieten.com</a><br/>
+            Web: <a href="https://www.kraftfahrer-mieten.com" style="color:#ffffff;text-decoration:none;">www.kraftfahrer-mieten.com</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+  </body></html>`;
 }
 
 serve(async (req) => {
