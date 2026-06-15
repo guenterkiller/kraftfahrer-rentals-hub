@@ -20,15 +20,23 @@ declare global {
   }
 }
 
-// Brand colors from design system
+// Fahrerexpress Brand Colors (freigegebene Designrichtung)
 export const colors = {
-  primary: '#bb2c29',        // hsl(0 73% 41%)
-  primaryDark: '#8b2120',    // darker shade
-  primaryLight: '#e63946',   // lighter shade
-  background: '#f8f9fa',
-  foreground: '#1a1a1a',
+  // Akzent / CTA
+  primary: '#bb2c29',
+  primaryDark: '#8b2120',
+  primaryLight: '#e63946',
+  // Marken-Navy für Header/Footer
+  navy: '#0d2340',
+  navyDark: '#081a30',
+  navyLight: '#1e3a5f',
+  // Flächen
+  background: '#f8fafc',     // hellgraue Fläche
+  surface: '#ffffff',        // Karten
+  foreground: '#0d2340',     // Standardtext dunkelblau
   border: '#e5e7eb',
   muted: '#6b7280',
+  // Status (unverändert für bestehende Boxen)
   success: '#16a34a',
   warning: '#f59e0b',
   info: '#0891b2',
@@ -42,14 +50,15 @@ const mobileStyles = `
       padding-right: 20px !important;
     }
     .mobile-header {
-      padding: 20px !important;
+      padding: 24px 20px !important;
     }
     .mobile-text {
       font-size: 16px !important;
       line-height: 1.6 !important;
     }
     .mobile-heading {
-      font-size: 20px !important;
+      font-size: 22px !important;
+      line-height: 1.25 !important;
     }
     .mobile-small-heading {
       font-size: 16px !important;
@@ -81,33 +90,34 @@ export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOv
     <Preview>{previewText}</Preview>
     <Body style={main}>
       <Container style={container}>
-        {/* Header */}
+        {/* Header — Navy mit rotem Akzentbalken */}
         <Section style={plainHeader ? headerPlain : header} className="mobile-header">
           <Heading style={plainHeader ? headerTitlePlain : headerTitle} className="mobile-heading">
-            Fahrerexpress-Agentur
+            Fahrerexpress-Agentur – Günter Killer
           </Heading>
           <Text style={plainHeader ? headerSubtitlePlain : headerSubtitle} className="mobile-text">
             {headerSubtitleOverride || 'Vermittlung selbstständiger Fahrer'}
           </Text>
         </Section>
+        <Section style={accentBar}>{' '}</Section>
 
         {/* Content */}
         <Section style={content} className="mobile-padding">
           {children}
         </Section>
 
-        {/* Footer */}
+        {/* Footer — Navy, vollständige Anschrift */}
         <Section style={footer} className="mobile-padding">
           <Heading style={footerTitle} className="mobile-small-heading">Fahrerexpress-Agentur</Heading>
           <Text style={footerText} className="mobile-text">
-            📧 info@kraftfahrer-mieten.com<br />
-            📱 01577 1442285
-          </Text>
-          <Text style={footerSubtext} className="mobile-text">
             Inhaber: Günter Killer<br />
             Walther-von-Cronberg-Platz 12<br />
-            60594 Frankfurt am Main<br />
-            Vermittlung selbstständiger Fahrer
+            60594 Frankfurt am Main
+          </Text>
+          <Text style={footerText} className="mobile-text">
+            Telefon: 01577 1442285<br />
+            E-Mail: info@kraftfahrer-mieten.com<br />
+            Web: www.kraftfahrer-mieten.com
           </Text>
         </Section>
       </Container>
@@ -132,9 +142,17 @@ const container = {
 };
 
 const header = {
-  background: `linear-gradient(135deg, ${colors.primary}, ${colors.primaryDark})`,
+  backgroundColor: colors.navy,
   padding: '30px 40px',
-  textAlign: 'center' as const,
+  textAlign: 'left' as const,
+};
+
+const accentBar = {
+  backgroundColor: colors.primary,
+  height: '4px',
+  lineHeight: '4px',
+  fontSize: '0',
+  padding: '0',
 };
 
 const headerTitle = {
@@ -142,24 +160,24 @@ const headerTitle = {
   fontSize: '24px',
   fontWeight: 'bold',
   margin: '0',
+  lineHeight: '1.2',
 };
 
 const headerSubtitle = {
-  color: '#ffffff',
+  color: '#cbd5e1',
   fontSize: '14px',
-  margin: '5px 0 0 0',
-  opacity: '0.95',
+  margin: '6px 0 0 0',
 };
 
 const headerPlain = {
   backgroundColor: '#ffffff',
   padding: '28px 40px 12px 40px',
-  textAlign: 'center' as const,
+  textAlign: 'left' as const,
   borderBottom: `1px solid ${colors.border}`,
 };
 
 const headerTitlePlain = {
-  color: '#111111',
+  color: colors.navy,
   fontSize: '22px',
   fontWeight: 'bold',
   margin: '0',
@@ -178,28 +196,28 @@ const content = {
 };
 
 const footer = {
-  backgroundColor: colors.background,
-  padding: '30px 40px',
-  textAlign: 'center' as const,
-  borderTop: `1px solid ${colors.border}`,
+  backgroundColor: colors.navy,
+  padding: '28px 40px',
+  textAlign: 'left' as const,
+  borderTop: `4px solid ${colors.primary}`,
 };
 
 const footerTitle = {
-  color: colors.foreground,
+  color: '#ffffff',
   fontSize: '16px',
   fontWeight: 'bold',
   margin: '0 0 10px 0',
 };
 
 const footerText = {
-  color: colors.muted,
-  fontSize: '14px',
-  margin: '0 0 15px 0',
+  color: '#cbd5e1',
+  fontSize: '13px',
+  margin: '0 0 12px 0',
   lineHeight: '1.6',
 };
 
 const footerSubtext = {
-  color: colors.muted,
+  color: '#94a3b8',
   fontSize: '12px',
   margin: '0',
   lineHeight: '1.5',
