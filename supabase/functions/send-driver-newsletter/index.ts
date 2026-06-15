@@ -2,6 +2,11 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.4';
 import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from "../_shared/driver-unsubscribe-token.ts";
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
+import {
+  buildDriverNewsletterInnerHtml,
+  DRIVER_NEWSLETTER_TEMPLATES,
+  type DriverNewsletterTemplateId,
+} from "../_shared/driver-newsletter-templates.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -54,12 +59,59 @@ serve(async (req) => {
       );
     }
 
-    const { subject, message, testEmail } = await req.json();
+    const body = await req.json();
+    const {
+      subject: rawSubject,
+      message: rawMessage,
+      testEmail,
+      templateId: rawTemplateId,
+      dryRun,
+    } = body ?? {};
 
-    if (!subject || !message) {
+    // Template auswählen – Default: 'free' (Abwärtskompatibilität)
+    const templateId: DriverNewsletterTemplateId =
+      rawTemplateId === 'fahrerinformationen_v1' ? 'fahrerinformationen_v1' : 'free';
+
+    // Bei fester Vorlage: Subject IMMER aus Template, Message wird ignoriert.
+    let effectiveSubject: string;
+    let effectiveMessage: string | undefined;
+    if (templateId === 'free') {
+      if (!rawSubject || !rawMessage) {
+        return new Response(
+          JSON.stringify({ error: 'Subject and message are required for free template' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      effectiveSubject = String(rawSubject);
+      effectiveMessage = String(rawMessage);
+    } else {
+      const tpl = DRIVER_NEWSLETTER_TEMPLATES[templateId];
+      effectiveSubject = tpl.subject; // fest aus Code
+      effectiveMessage = undefined;   // freier Text wird IGNORIERT
+    }
+
+    // DRY-RUN: nur Vorschau-HTML zurückgeben, NICHTS senden.
+    if (dryRun === true) {
+      const { innerHtml } = buildDriverNewsletterInnerHtml({
+        templateId,
+        vorname: 'Vorname',
+        nachname: 'Nachname',
+        freeMessage: effectiveMessage,
+      });
+      const previewHtml = wrapDriverEmailHtml(innerHtml, {
+        subject: effectiveSubject,
+        previewText: effectiveSubject,
+        unsubscribeUrl: 'https://kraftfahrer-mieten.com/abmelden?token=PREVIEW',
+        showUnsubscribe: true,
+      });
       return new Response(
-        JSON.stringify({ error: 'Subject and message are required' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({
+          dryRun: true,
+          templateId,
+          subject: effectiveSubject,
+          html: previewHtml,
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
@@ -145,18 +197,15 @@ serve(async (req) => {
           }
         }
 
-        const innerHtml = `
-          <p class="body-text" style="margin:0 0 14px 0;font-size:16px;line-height:1.6;color:#0d2340;font-weight:600;">Hallo ${driver.vorname} ${driver.nachname},</p>
-          ${message.split('\n').map((line: string) => line.trim()
-            ? `<p class="body-text" style="margin:0 0 12px 0;font-size:15px;line-height:1.65;color:#374151;">${line}</p>`
-            : '<br />').join('')}
-          <p class="body-text" style="margin:24px 0 0 0;font-size:15px;line-height:1.6;color:#0d2340;font-weight:600;">
-            Mit freundlichen Grüßen<br/>Ihr Fahrerexpress-Team
-          </p>
-        `;
+        const { innerHtml } = buildDriverNewsletterInnerHtml({
+          templateId,
+          vorname: driver.vorname,
+          nachname: driver.nachname,
+          freeMessage: effectiveMessage,
+        });
         const emailHtml = wrapDriverEmailHtml(innerHtml, {
-          subject,
-          previewText: subject,
+          subject: effectiveSubject,
+          previewText: effectiveSubject,
           unsubscribeUrl,
           showUnsubscribe: true,
         });
@@ -165,7 +214,7 @@ serve(async (req) => {
           from: Deno.env.get('MAIL_FROM') || 'Fahrerexpress Fahrer-Team <info@kraftfahrer-mieten.com>',
           reply_to: 'info@kraftfahrer-mieten.com',
           to: [driver.email],
-          subject: subject,
+          subject: effectiveSubject,
           html: emailHtml,
         };
 
@@ -193,7 +242,7 @@ serve(async (req) => {
             .from('email_log')
             .insert({
               recipient: driver.email,
-              subject,
+              subject: effectiveSubject,
               template: 'newsletter',
               status: 'sent',
               sent_at: new Date().toISOString(),
@@ -208,7 +257,7 @@ serve(async (req) => {
             .from('email_log')
             .insert({
               recipient: driver.email,
-              subject,
+              subject: effectiveSubject,
               template: 'newsletter',
               status: 'failed',
               error_message: `HTTP ${response.status}: ${responseText}`,
@@ -223,7 +272,7 @@ serve(async (req) => {
           .from('email_log')
           .insert({
             recipient: driver.email,
-            subject,
+            subject: effectiveSubject,
             template: 'newsletter',
             status: 'failed',
             error_message: error.message,
