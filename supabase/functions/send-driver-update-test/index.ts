@@ -195,6 +195,7 @@ const buildBodyHtml = (name?: string | null) => {
 </body>
 </html>
 `;
+};
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -210,6 +211,14 @@ serve(async (req) => {
       });
     }
 
+    let name: string | null = null;
+    try {
+      if (req.headers.get("content-type")?.includes("application/json")) {
+        const body = await req.json().catch(() => ({}));
+        if (body && typeof body.name === "string") name = body.name;
+      }
+    } catch (_) { /* ignore */ }
+
     const from = Deno.env.get("MAIL_FROM") ||
       "Fahrerexpress Fahrer-Team <info@kraftfahrer-mieten.com>";
 
@@ -224,7 +233,7 @@ serve(async (req) => {
         reply_to: "info@kraftfahrer-mieten.com",
         to: [TEST_RECIPIENT],
         subject: SUBJECT,
-        html: BODY_HTML,
+        html: buildBodyHtml(name ?? "Günter Killer"),
       }),
     });
 
