@@ -12,7 +12,11 @@ const TEST_RECIPIENT = "info@kraftfahrer-mieten.com";
 const SUBJECT =
   "Wichtige Information für unsere Fahrer – aktuelle Regelungen & kurze Rückmeldung erbeten";
 
-const BODY_HTML = `
+const buildBodyHtml = (name?: string | null) => {
+  const greetingName = name && name.trim().length > 0
+    ? `Hallo ${name.trim()},`
+    : "Guten Tag,";
+  return `
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -59,7 +63,7 @@ const BODY_HTML = `
 
         <!-- GREETING -->
         <tr><td class="px" style="padding:28px 32px 8px 32px;">
-          <p class="body-text" style="margin:0 0 14px 0;font-size:17px;font-weight:600;color:#0d2340;">Hallo,</p>
+          <p class="body-text" style="margin:0 0 14px 0;font-size:17px;font-weight:600;color:#0d2340;">${greetingName}</p>
           <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">
             vielen Dank, dass Sie Teil unseres Fahrer-Netzwerks bei Fahrerexpress sind.
             Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur
@@ -78,7 +82,7 @@ const BODY_HTML = `
               <ul class="body-text" style="margin:0;padding-left:20px;font-size:15px;line-height:1.65;color:#374151;">
                 <li style="margin-bottom:8px;">Sie sind <strong>selbstständiger Fahrer / selbstständiger Unternehmer</strong>. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
                 <li style="margin-bottom:8px;"><strong>Vermittlungsanteil:</strong> 20 % Standard, in Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
-                <li style="margin-bottom:8px;">Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie Anfahrt, vorab vereinbarte Auslagen, Übernachtung oder Maut sind <strong>nicht provisionspflichtig</strong>.</li>
+                <li style="margin-bottom:8px;">Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie An- und Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten sowie sonstige vorab freigegebene Auslagen <strong>werden nicht vom Vermittlungsanteil gekürzt</strong>.</li>
                 <li style="margin-bottom:8px;">Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.</li>
                 <li style="margin-bottom:8px;">Keine Direktabrechnung mit Auftraggebern. Keine Preisabsprachen mit Auftraggebern.</li>
                 <li style="margin-bottom:8px;">Die Rückmeldung <strong>„Ich kann übernehmen"</strong> ist ausschließlich eine Verfügbarkeitsmeldung. Die finale, verbindliche Einsatzbestätigung erfolgt separat durch Fahrerexpress.</li>
