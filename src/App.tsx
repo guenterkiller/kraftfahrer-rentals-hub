@@ -46,7 +46,6 @@ const Wissenswertes = lazy(() => import("./pages/Wissenswertes"));
 const Projekte = lazy(() => import("./pages/Projekte"));
 const Vermittlung = lazy(() => import("./pages/Vermittlung"));
 const Vermittlungsbedingungen = lazy(() => import("./pages/Vermittlungsbedingungen"));
-const FahrerVermittlungsbedingungen = lazy(() => import("./pages/FahrerVermittlungsbedingungen"));
 const Versicherung = lazy(() => import("./pages/Versicherung"));
 
 // Legal (lazy)
@@ -158,7 +157,6 @@ const App = () => (
             {/* Info-Seiten */}
             <Route path="/vermittlung" element={<Vermittlung />} />
             <Route path="/vermittlungsbedingungen" element={<Vermittlungsbedingungen />} />
-            <Route path="/fahrer-vermittlungsbedingungen" element={<FahrerVermittlungsbedingungen />} />
             <Route path="/wissenswertes" element={<Wissenswertes />} />
             <Route path="/projekte" element={<Projekte />} />
             <Route path="/versicherung" element={<Versicherung />} />
