@@ -23,7 +23,7 @@ const SUBJECT =
 
 const BRAND = {
   navy: "#0d2340",
-  red: "#b81c1c",
+  red: "#bb2c29",
   lightGray: "#f8fafc",
   pageGray: "#f3f4f6",
   border: "#e5e7eb",
