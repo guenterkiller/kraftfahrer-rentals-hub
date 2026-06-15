@@ -29,8 +29,28 @@ function escape(s: string): string {
 function renderHtml(vorname: string, unsubscribeUrl: string): string {
   const name = escape(vorname || "Fahrer");
   return `
-  <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#1f2937;line-height:1.55;">
-    <p>Hallo ${name},</p>
+  <!DOCTYPE html><html lang="de"><head><meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <style>
+    @media only screen and (max-width: 600px){
+      .container{width:100% !important;}
+      .px{padding-left:20px !important;padding-right:20px !important;}
+      .h-title{font-size:22px !important;line-height:1.25 !important;}
+      .body-text{font-size:16px !important;line-height:1.6 !important;}
+      .btn a{display:block !important;width:100% !important;box-sizing:border-box !important;}
+    }
+  </style></head>
+  <body style="margin:0;padding:0;background-color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#0d2340;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc;">
+    <tr><td align="center" style="padding:20px 10px;">
+      <table role="presentation" class="container" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;max-width:640px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <tr><td style="background-color:#0d2340;padding:28px 32px;" class="px">
+          <div class="h-title" style="font-size:24px;font-weight:700;line-height:1.2;color:#ffffff;">Fahrerexpress-Agentur – Günter Killer</div>
+          <div style="font-size:14px;color:#cbd5e1;margin-top:6px;">Vermittlung selbstständiger Fahrer</div>
+        </td></tr>
+        <tr><td style="background-color:#bb2c29;height:4px;line-height:4px;font-size:0;">&nbsp;</td></tr>
+        <tr><td class="px" style="padding:28px 32px;color:#0d2340;line-height:1.55;font-size:15px;">
+    <p class="body-text" style="margin:0 0 14px 0;font-weight:600;color:#0d2340;">Hallo ${name},</p>
 
     <p>wir haben den Ablauf für Fahraufträge bei der Fahrerexpress-Agentur verbessert.</p>
 
@@ -66,9 +86,9 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
 
     <p style="margin-top:24px;"><strong>Keine weiteren Auftragsangebote gewünscht?</strong></p>
     <p>Wenn Sie künftig keine Auftragsangebote mehr von Fahrerexpress erhalten möchten, können Sie sich jederzeit über den Abmeldelink am Ende der E-Mail abmelden:</p>
-    <p style="text-align:center;margin:18px 0;">
+    <p class="btn" style="text-align:center;margin:18px 0;">
       <a href="${unsubscribeUrl}"
-         style="display:inline-block;background:#1d4ed8;color:#fff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:bold;">
+         style="display:inline-block;background:#bb2c29;color:#ffffff;padding:14px 26px;border-radius:6px;text-decoration:none;font-weight:bold;font-size:16px;">
         Keine weiteren Auftragsangebote erhalten
       </a>
     </p>
@@ -80,19 +100,25 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
       <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>.
     </p>
 
-    <p style="margin-top:22px;">Bei Fragen erreichen Sie uns jederzeit:</p>
-    <p>
-      Telefon: <a href="tel:+4915771442285">01577 1442285</a><br/>
-      E-Mail: <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a>
-    </p>
-
-    <p style="margin-top:22px;">Mit freundlichen Grüßen</p>
-    <p>
-      Fahrerexpress-Agentur<br/>
-      Günter Killer<br/>
-      Vermittlung gewerblicher Fahrer
-    </p>
-  </div>`;
+    <p style="margin-top:22px;">Mit freundlichen Grüßen<br/>Fahrerexpress-Agentur – Günter Killer</p>
+        </td></tr>
+        <tr><td style="background-color:#0d2340;padding:24px 32px;border-top:4px solid #bb2c29;" class="px">
+          <p style="margin:0 0 8px 0;font-size:14px;color:#ffffff;font-weight:700;">Fahrerexpress-Agentur</p>
+          <p style="margin:0 0 10px 0;font-size:13px;line-height:1.6;color:#cbd5e1;">
+            Inhaber: Günter Killer<br/>
+            Walther-von-Cronberg-Platz 12<br/>
+            60594 Frankfurt am Main
+          </p>
+          <p style="margin:0;font-size:13px;line-height:1.6;color:#cbd5e1;">
+            Telefon: <a href="tel:+4915771442285" style="color:#ffffff;text-decoration:none;">01577 1442285</a><br/>
+            E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color:#ffffff;text-decoration:none;">info@kraftfahrer-mieten.com</a><br/>
+            Web: <a href="https://www.kraftfahrer-mieten.com" style="color:#ffffff;text-decoration:none;">www.kraftfahrer-mieten.com</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+  </body></html>`;
 }
 
 serve(async (req) => {
