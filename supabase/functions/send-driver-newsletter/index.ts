@@ -121,7 +121,9 @@ serve(async (req) => {
     if (testEmail && typeof testEmail === 'string' && testEmail.includes('@')) {
       // TEST-MODUS: Nur an angegebene Adresse senden, kein Versand an alle
       console.log(`TEST MODE: sending only to ${testEmail}`);
-      // Versuche, einen passenden Fahrer zu finden (für korrekten Abmeldelink). Sonst Dummy-ID.
+      // Versuche, einen passenden Fahrer zu finden (für korrekten Abmeldelink).
+      // Falls kein Profil existiert: KEINE Null-UUID verwenden – stattdessen
+      // wird der Abmeldelink unten ausgeblendet.
       const { data: matched } = await supabase
         .from('fahrer_profile')
         .select('id, email, vorname, nachname, status, email_opt_out')
@@ -129,7 +131,7 @@ serve(async (req) => {
         .maybeSingle();
       drivers = [
         matched ?? {
-          id: '00000000-0000-0000-0000-000000000000',
+          id: null,
           email: testEmail,
           vorname: 'Test',
           nachname: 'Empfänger',
@@ -185,9 +187,13 @@ serve(async (req) => {
           continue;
         }
 
-        // Persönlichen Abmeldelink generieren (HMAC, gleiche Logik wie driver-unsubscribe)
+        // Persönlichen Abmeldelink generieren (HMAC, gleiche Logik wie driver-unsubscribe).
+        // Wenn kein echtes Fahrerprofil vorliegt (z. B. Testmail an eine Adresse
+        // ohne Profil), wird der Abmeldelink im Footer ausgeblendet – KEIN
+        // Dummy-Link, KEINE Null-UUID.
         const unsubSecret = Deno.env.get('INTERNAL_FN_SECRET') || '';
         let unsubscribeUrl = 'mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter';
+        let showUnsubscribe = true;
         if (unsubSecret && driver.id) {
           try {
             const token = await makeDriverUnsubscribeToken(driver.id, unsubSecret);
@@ -195,6 +201,8 @@ serve(async (req) => {
           } catch (e) {
             console.error('Could not build unsubscribe token:', e);
           }
+        } else if (!driver.id) {
+          showUnsubscribe = false;
         }
 
         const { innerHtml } = buildDriverNewsletterInnerHtml({
@@ -207,7 +215,7 @@ serve(async (req) => {
           subject: effectiveSubject,
           previewText: effectiveSubject,
           unsubscribeUrl,
-          showUnsubscribe: true,
+          showUnsubscribe,
         });
 
         const emailPayload = {
