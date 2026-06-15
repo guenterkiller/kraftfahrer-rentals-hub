@@ -22,7 +22,7 @@ const BODY_HTML = `
   <ul>
     <li>Sie sind selbstständiger Fahrer / selbstständiger Unternehmer. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
     <li><strong>Vermittlungsanteil:</strong> 20 % Standard, in Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
-    <li>Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrer-Dienstleistung. <strong>Auslagen</strong> wie Anfahrt, Spesen, Übernachtung oder Maut sind <strong>nicht provisionspflichtig</strong>.</li>
+    <li>Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie Anfahrt, vorab vereinbarte Auslagen, Übernachtung oder Maut sind <strong>nicht provisionspflichtig</strong>.</li>
     <li>Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.</li>
     <li>Keine Direktabrechnung mit Auftraggebern. Keine Preisabsprachen mit Auftraggebern.</li>
     <li>Die Rückmeldung <strong>„Ich kann übernehmen"</strong> ist ausschließlich eine Verfügbarkeitsmeldung. Die finale, verbindliche Einsatzbestätigung erfolgt separat durch Fahrerexpress.</li>
@@ -44,10 +44,9 @@ const BODY_HTML = `
   <p>Eine kurze E-Mail an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a> genügt.</p>
 
   <h3 style="color:#059669;margin-top:24px;">Was ist zu tun?</h3>
-  <ul>
-    <li>Wenn Sie <strong>weiterhin</strong> Auftragsangebote erhalten möchten, müssen Sie <strong>nichts</strong> weiter tun.</li>
-    <li>Wenn Sie künftig <strong>keine</strong> Auftragsangebote mehr erhalten möchten, nutzen Sie bitte den Abmeldelink am Ende dieser E-Mail („hier abmelden").</li>
-  </ul>
+  <p>Wenn Sie weiterhin grundsätzlich an Auftragsangeboten interessiert sind, freuen wir uns über eine kurze Rückmeldung – besonders dann, wenn Sie bisher noch keinen Auftrag über Fahrerexpress übernommen haben.</p>
+  <p>Wenn Sie weiterhin Angebote erhalten möchten und sich für Sie nichts geändert hat, müssen Sie nichts weiter tun.</p>
+  <p>Wenn Sie künftig keine Auftragsangebote mehr erhalten möchten, nutzen Sie bitte den Abmeldelink am Ende dieser E-Mail („hier abmelden").</p>
 
   <p style="margin-top:24px;">Vielen Dank für Ihre Unterstützung und gute Fahrt!</p>
 
