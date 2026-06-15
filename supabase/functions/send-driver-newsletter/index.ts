@@ -88,9 +88,10 @@ serve(async (req) => {
     } else {
       const result = await supabase
         .from('fahrer_profile')
-        .select('id, email, vorname, nachname, status, email_opt_out')
-        .in('status', ['active', 'approved', 'aktiv'])
-        .eq('email_opt_out', false);
+        .select('id, email, vorname, nachname, status, email_opt_out, is_blocked')
+        .eq('status', 'approved')
+        .eq('email_opt_out', false)
+        .or('is_blocked.is.null,is_blocked.eq.false');
       drivers = result.data;
       driversError = result.error;
     }
