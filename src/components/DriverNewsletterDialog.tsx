@@ -6,14 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, TestTube, Truck, AlertTriangle } from "lucide-react";
+import { TestTube, Truck, AlertTriangle, FileText } from "lucide-react";
 
 interface DriverNewsletterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+type TemplateMode = "free" | "fahrerinformationen_v1";
+
 export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterDialogProps) {
+  const [templateMode, setTemplateMode] = useState<TemplateMode>("free");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
