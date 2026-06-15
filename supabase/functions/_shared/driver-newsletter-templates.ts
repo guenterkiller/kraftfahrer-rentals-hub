@@ -17,7 +17,7 @@ export type DriverNewsletterTemplateId = 'free' | 'fahrerinformationen_v1';
 export type DriverNewsletterBlock =
   | { type: 'paragraph'; html: string }
   | { type: 'list'; items: string[] }
-  | { type: 'cta'; label: string; /** 'unsubscribe' = persönlicher Abmelde-/Rückmeldelink */ target: 'unsubscribe' }
+  | { type: 'cta'; label: string; /** 'mailto' = öffnet E-Mail-Programm an info@kraftfahrer-mieten.com */ target: 'mailto' }
   | { type: 'note'; html: string };
 
 export interface DriverNewsletterSection {
