@@ -35,41 +35,40 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
           <Link 
             to="/" 
-            className="group focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-lg flex-shrink min-w-0 flex items-center gap-2 sm:gap-2.5 px-2 sm:px-3 py-1.5 bg-[#0d2340] hover:bg-[#0f2950] transition-colors"
+            className="group focus:outline-none focus:ring-2 focus:ring-primary/40 rounded-md flex-shrink min-w-0 flex items-center gap-2 sm:gap-2.5 py-1 transition-opacity hover:opacity-85"
             aria-label="Fahrerexpress Startseite"
           >
             <svg
               viewBox="0 0 48 36"
               aria-hidden="true"
-              className="h-7 w-9 sm:h-8 sm:w-10 flex-shrink-0"
+              className="h-8 w-10 sm:h-9 sm:w-12 flex-shrink-0"
             >
-              {/* roter Bogen-Akzent */}
               <path
                 d="M44 18 A18 18 0 0 0 8 18"
                 fill="none"
                 stroke="#bb2c29"
-                strokeWidth="3"
+                strokeWidth="2.6"
                 strokeLinecap="round"
               />
-              {/* LKW-Signet weiß */}
-              <g fill="#ffffff">
+              <g fill="#0d2340">
                 <rect x="6" y="16" width="20" height="12" rx="1.5" />
                 <path d="M26 19 h7 l5 4 v5 h-12 z" />
-                <circle cx="14" cy="30" r="2.5" fill="#0d2340" stroke="#ffffff" strokeWidth="1.2" />
-                <circle cx="32" cy="30" r="2.5" fill="#0d2340" stroke="#ffffff" strokeWidth="1.2" />
-                {/* Speedlines */}
-                <rect x="1" y="19" width="4" height="1.4" rx="0.7" opacity="0.85" />
-                <rect x="2" y="22" width="3" height="1.4" rx="0.7" opacity="0.7" />
+                <circle cx="14" cy="30" r="2.6" fill="#0d2340" />
+                <circle cx="14" cy="30" r="1.1" fill="#ffffff" />
+                <circle cx="32" cy="30" r="2.6" fill="#0d2340" />
+                <circle cx="32" cy="30" r="1.1" fill="#ffffff" />
+                <rect x="1" y="19" width="4" height="1.4" rx="0.7" opacity="0.7" />
+                <rect x="2" y="22" width="3" height="1.4" rx="0.7" opacity="0.5" />
               </g>
             </svg>
-            <span className="h-7 sm:h-8 w-px bg-[#bb2c29]/70 flex-shrink-0" aria-hidden="true" />
+            <span className="h-8 sm:h-9 w-px bg-[#bb2c29] flex-shrink-0" aria-hidden="true" />
             <span className="flex flex-col leading-tight min-w-0">
-              <span className="text-white font-bold text-[13px] sm:text-base md:text-lg tracking-tight whitespace-nowrap">
-                <span className="hidden xs:inline sm:inline">Fahrerexpress-Agentur</span>
-                <span className="xs:hidden sm:hidden">Fahrerexpress</span>
-                <span className="hidden md:inline"> – Günter Killer</span>
+              <span className="text-[#0d2340] font-extrabold text-[13px] sm:text-[15px] md:text-lg tracking-tight whitespace-nowrap leading-none">
+                <span className="sm:hidden">Fahrerexpress</span>
+                <span className="hidden sm:inline">Fahrerexpress-Agentur</span>
+                <span className="hidden md:inline text-[#0d2340]/90 font-bold"> – Günter Killer</span>
               </span>
-              <span className="text-white/75 text-[10px] sm:text-[11px] md:text-xs font-medium whitespace-nowrap">
+              <span className="text-[#0d2340]/60 text-[10px] sm:text-[11px] md:text-xs font-medium whitespace-nowrap mt-0.5">
                 Vermittlung selbstständiger Fahrer
               </span>
             </span>
