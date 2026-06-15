@@ -333,6 +333,8 @@ serve(async (req) => {
 
     const token = await makeDriverUnsubscribeToken(driverId, internalSecret);
     const unsubscribeUrl = buildDriverUnsubscribeUrl(token);
+    const bodyHtml = buildBodyHtml(name ?? "Günter Killer", unsubscribeUrl, driverIdSource === "dummy");
+    const bodyText = buildBodyText(name ?? "Günter Killer", unsubscribeUrl);
 
     const from = Deno.env.get("MAIL_FROM") ||
       "Fahrerexpress Fahrer-Team <info@kraftfahrer-mieten.com>";
@@ -348,7 +350,8 @@ serve(async (req) => {
         reply_to: "info@kraftfahrer-mieten.com",
         to: [recipient],
         subject: SUBJECT,
-        html: buildBodyHtml(name ?? "Günter Killer", unsubscribeUrl),
+        html: bodyHtml,
+        text: bodyText,
       }),
     });
 
@@ -362,6 +365,8 @@ serve(async (req) => {
         subject: SUBJECT,
         unsubscribe_url: unsubscribeUrl,
         driver_id_source: driverIdSource,
+        html_mail_sent: true,
+        plain_text_fallback_sent: true,
       }),
       {
         status: res.ok ? 200 : 500,
