@@ -33,12 +33,16 @@ const Navigation = () => {
     <nav className="fixed top-0 w-full bg-white/98 backdrop-blur-md border-b z-50 shadow-sm" role="navigation" aria-label="Hauptnavigation">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
-          <Link
-            to="/"
-            className="text-lg font-bold text-white border border-white rounded px-2 py-0.5 hover:text-white/80 transition-colors"
+          <Link 
+            to="/" 
+            className="font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight flex-shrink min-w-0"
             aria-label="Fahrerexpress Startseite"
           >
-            Fahrerexpress-Agentur – Günter Killer
+            <div className="hidden sm:block text-base md:text-xl">Fahrerexpress-Agentur - Günter Killer</div>
+            <div className="sm:hidden leading-tight text-sm">
+              <div className="font-bold">Fahrerexpress</div>
+              <div className="font-semibold text-primary/90">G. Killer</div>
+            </div>
           </Link>
           
           {/* Desktop und Mobile Navigation nebeneinander */}
