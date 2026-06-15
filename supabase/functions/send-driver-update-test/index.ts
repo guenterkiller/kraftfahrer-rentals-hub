@@ -11,8 +11,12 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-// Hardcoded recipient — test endpoint only. Cannot be abused to send anywhere else.
-const TEST_RECIPIENT = "info@kraftfahrer-mieten.com";
+// Feste Allowlist — Test-Endpoint, kann nur an interne Adressen senden.
+const TEST_RECIPIENT_DEFAULT = "info@kraftfahrer-mieten.com";
+const TEST_RECIPIENT_ALLOWLIST = new Set<string>([
+  "info@kraftfahrer-mieten.com",
+  "guenter.killer@t-online.de",
+]);
 
 const SUBJECT =
   "Wichtige Information für unsere Fahrer – aktuelle Regelungen & kurze Rückmeldung erbeten";
@@ -230,12 +234,18 @@ serve(async (req) => {
     );
 
     let name: string | null = null;
+    let recipientOverride: string | null = null;
     try {
       if (req.headers.get("content-type")?.includes("application/json")) {
         const body = await req.json().catch(() => ({}));
         if (body && typeof body.name === "string") name = body.name;
+        if (body && typeof body.to === "string") recipientOverride = body.to.trim().toLowerCase();
       }
     } catch (_) { /* ignore */ }
+
+    const recipient = recipientOverride && TEST_RECIPIENT_ALLOWLIST.has(recipientOverride)
+      ? recipientOverride
+      : TEST_RECIPIENT_DEFAULT;
 
     // Tokenbasierten Abmeldelink erzeugen (zeigt auf driver-unsubscribe Edge Function).
     // Versucht Fahrer-Profil für die Testadresse zu finden; sonst Dummy-ID (Link zeigt dann
@@ -246,7 +256,7 @@ serve(async (req) => {
       const { data: driver } = await supabase
         .from("fahrer_profile")
         .select("id, vorname")
-        .ilike("email", TEST_RECIPIENT)
+        .ilike("email", recipient)
         .maybeSingle();
       if (driver?.id) {
         driverId = driver.id;
@@ -270,7 +280,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from,
         reply_to: "info@kraftfahrer-mieten.com",
-        to: [TEST_RECIPIENT],
+        to: [recipient],
         subject: SUBJECT,
         html: buildBodyHtml(name ?? "Günter Killer", unsubscribeUrl),
       }),
@@ -282,7 +292,7 @@ serve(async (req) => {
         ok: res.ok,
         status: res.status,
         body: text,
-        recipient: TEST_RECIPIENT,
+        recipient,
         subject: SUBJECT,
         unsubscribe_url: unsubscribeUrl,
         driver_id_source: driverIdSource,
