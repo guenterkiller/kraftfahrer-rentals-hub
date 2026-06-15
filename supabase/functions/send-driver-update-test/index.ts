@@ -20,7 +20,7 @@ const BODY_HTML = `
 
   <h3 style="color:#059669;margin-top:24px;">Aktuelle Regelungen zur Zusammenarbeit</h3>
   <ul>
-    <li>Sie sind selbstständiger Subunternehmer. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
+    <li>Sie sind selbstständiger Fahrer / selbstständiger Unternehmer. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
     <li><strong>Vermittlungsanteil:</strong> 20 % Standard, in Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
     <li>Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrer-Dienstleistung. <strong>Auslagen</strong> wie Anfahrt, Spesen, Übernachtung oder Maut sind <strong>nicht provisionspflichtig</strong>.</li>
     <li>Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.</li>
