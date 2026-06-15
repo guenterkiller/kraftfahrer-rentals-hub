@@ -13,52 +13,183 @@ const SUBJECT =
   "Wichtige Information für unsere Fahrer – aktuelle Regelungen & kurze Rückmeldung erbeten";
 
 const BODY_HTML = `
-<div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#1f2937;line-height:1.55;">
-  <p>Hallo,</p>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>${SUBJECT}</title>
+<style>
+  @media only screen and (max-width: 600px) {
+    .container { width: 100% !important; }
+    .px { padding-left: 20px !important; padding-right: 20px !important; }
+    .header-title { font-size: 22px !important; line-height: 1.25 !important; }
+    .header-sub { font-size: 14px !important; }
+    .h2 { font-size: 19px !important; }
+    .body-text { font-size: 16px !important; line-height: 1.6 !important; }
+    .btn a { display: block !important; width: 100% !important; box-sizing: border-box !important; }
+    .footer-text { font-size: 13px !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#1f2937;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Aktuelle Regelungen zur Zusammenarbeit & kurze Rückmeldung erbeten.</div>
 
-  <p>vielen Dank, dass Sie Teil unseres Fahrer-Netzwerks bei Fahrerexpress sind. Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur Zusammenarbeit und bitten gleichzeitig um eine kurze Rückmeldung zur Aktualisierung unserer Fahrerdatei.</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f3f4f6;">
+    <tr><td align="center" style="padding:20px 10px;">
+      <table role="presentation" class="container" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;max-width:640px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
 
-  <h3 style="color:#059669;margin-top:24px;">Aktuelle Regelungen zur Zusammenarbeit</h3>
-  <ul>
-    <li>Sie sind selbstständiger Fahrer / selbstständiger Unternehmer. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
-    <li><strong>Vermittlungsanteil:</strong> 20 % Standard, in Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
-    <li>Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie Anfahrt, vorab vereinbarte Auslagen, Übernachtung oder Maut sind <strong>nicht provisionspflichtig</strong>.</li>
-    <li>Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.</li>
-    <li>Keine Direktabrechnung mit Auftraggebern. Keine Preisabsprachen mit Auftraggebern.</li>
-    <li>Die Rückmeldung <strong>„Ich kann übernehmen"</strong> ist ausschließlich eine Verfügbarkeitsmeldung. Die finale, verbindliche Einsatzbestätigung erfolgt separat durch Fahrerexpress.</li>
-    <li><strong>Zahlung:</strong> Die Zahlung der vereinbarten Vergütung erfolgt nach vollständiger und ordnungsgemäßer Durchführung des Einsatzes auf Grundlage Ihrer Rechnung an Fahrerexpress. Soweit im konkreten Auftragsangebot nichts anderes vereinbart ist, erfolgt die Zahlung nach Zahlungseingang des Auftraggebers bei Fahrerexpress.</li>
-    <li>Sie entscheiden bei jedem Angebot frei, ob Sie es annehmen oder ablehnen.</li>
-  </ul>
+        <!-- HEADER -->
+        <tr><td style="background-color:#0d2340;padding:28px 32px;" class="px">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+                <div class="header-title" style="font-size:26px;font-weight:700;line-height:1.2;color:#ffffff;">
+                  Fahrerexpress-Agentur<br/>– Günter Killer
+                </div>
+                <div class="header-sub" style="font-size:15px;color:#cbd5e1;margin-top:6px;">
+                  Vermittlung selbstständiger Fahrer
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td></tr>
+        <!-- Red accent bar -->
+        <tr><td style="background-color:#bb2c29;height:4px;line-height:4px;font-size:0;">&nbsp;</td></tr>
 
-  <h3 style="color:#059669;margin-top:24px;">Hinweis zur Aktualisierung unserer Fahrerdatei</h3>
-  <p>Einige Fahrer haben bisher noch keinen Auftrag über Fahrerexpress übernommen. Damit wir unsere Fahrerdatei aktuell halten können, bitten wir Sie um eine kurze Rückmeldung, falls Sie weiterhin grundsätzlich an Einsätzen interessiert sind, bisher aber noch keinen Auftrag angenommen haben.</p>
-  <p>Teilen Sie uns gerne kurz mit, woran es bisher gelegen hat, zum Beispiel:</p>
-  <ul>
-    <li>Einsatzort hat nicht gepasst</li>
-    <li>Termin hat nicht gepasst</li>
-    <li>Vergütung hat nicht gepasst</li>
-    <li>Fahrzeugart / Tätigkeit hat nicht gepasst</li>
-    <li>derzeit keine Verfügbarkeit</li>
-    <li>grundsätzlich kein Interesse mehr</li>
-  </ul>
-  <p>Eine kurze E-Mail an <a href="mailto:info@kraftfahrer-mieten.com">info@kraftfahrer-mieten.com</a> genügt.</p>
+        <!-- GREETING -->
+        <tr><td class="px" style="padding:28px 32px 8px 32px;">
+          <p class="body-text" style="margin:0 0 14px 0;font-size:17px;font-weight:600;color:#0d2340;">Hallo,</p>
+          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">
+            vielen Dank, dass Sie Teil unseres Fahrer-Netzwerks bei Fahrerexpress sind.
+            Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur
+            Zusammenarbeit und bitten gleichzeitig um eine kurze Rückmeldung zur Aktualisierung
+            unserer Fahrerdatei.
+          </p>
+        </td></tr>
 
-  <h3 style="color:#059669;margin-top:24px;">Was ist zu tun?</h3>
-  <p>Wenn Sie weiterhin grundsätzlich an Auftragsangeboten interessiert sind, freuen wir uns über eine kurze Rückmeldung – besonders dann, wenn Sie bisher noch keinen Auftrag über Fahrerexpress übernommen haben.</p>
-  <p>Wenn Sie weiterhin Angebote erhalten möchten und sich für Sie nichts geändert hat, müssen Sie nichts weiter tun.</p>
-  <p>Wenn Sie künftig keine Auftragsangebote mehr erhalten möchten, nutzen Sie bitte den Abmeldelink am Ende dieser E-Mail („hier abmelden").</p>
+        <!-- CARD: Regelungen -->
+        <tr><td class="px" style="padding:20px 32px 8px 32px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-radius:6px;">
+            <tr><td style="padding:20px 22px;">
+              <h2 class="h2" style="margin:0 0 14px 0;font-size:18px;color:#0d2340;font-weight:700;">
+                Aktuelle Regelungen zur Zusammenarbeit
+              </h2>
+              <ul class="body-text" style="margin:0;padding-left:20px;font-size:15px;line-height:1.65;color:#374151;">
+                <li style="margin-bottom:8px;">Sie sind <strong>selbstständiger Fahrer / selbstständiger Unternehmer</strong>. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
+                <li style="margin-bottom:8px;"><strong>Vermittlungsanteil:</strong> 20 % Standard, in Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
+                <li style="margin-bottom:8px;">Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie Anfahrt, vorab vereinbarte Auslagen, Übernachtung oder Maut sind <strong>nicht provisionspflichtig</strong>.</li>
+                <li style="margin-bottom:8px;">Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.</li>
+                <li style="margin-bottom:8px;">Keine Direktabrechnung mit Auftraggebern. Keine Preisabsprachen mit Auftraggebern.</li>
+                <li style="margin-bottom:8px;">Die Rückmeldung <strong>„Ich kann übernehmen"</strong> ist ausschließlich eine Verfügbarkeitsmeldung. Die finale, verbindliche Einsatzbestätigung erfolgt separat durch Fahrerexpress.</li>
+                <li style="margin-bottom:8px;"><strong>Zahlung:</strong> Die Zahlung der vereinbarten Vergütung erfolgt nach vollständiger und ordnungsgemäßer Durchführung des Einsatzes auf Grundlage Ihrer Rechnung an Fahrerexpress. Soweit im konkreten Auftragsangebot nichts anderes vereinbart ist, erfolgt die Zahlung nach Zahlungseingang des Auftraggebers bei Fahrerexpress.</li>
+                <li style="margin-bottom:0;">Sie entscheiden bei jedem Angebot frei, ob Sie es annehmen oder ablehnen.</li>
+              </ul>
+            </td></tr>
+          </table>
+        </td></tr>
 
-  <p style="margin-top:24px;">Vielen Dank für Ihre Unterstützung und gute Fahrt!</p>
+        <!-- CARD: Fahrerdatei -->
+        <tr><td class="px" style="padding:14px 32px 8px 32px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc;border:1px solid #e5e7eb;border-radius:6px;">
+            <tr><td style="padding:20px 22px;">
+              <h2 class="h2" style="margin:0 0 12px 0;font-size:18px;color:#0d2340;font-weight:700;">
+                Aktualisierung unserer Fahrerdatei
+              </h2>
+              <p class="body-text" style="margin:0 0 12px 0;font-size:15px;line-height:1.6;color:#374151;">
+                Einige Fahrer haben bisher noch keinen Auftrag über Fahrerexpress übernommen.
+                Damit wir unsere Fahrerdatei aktuell halten können, bitten wir Sie um eine kurze
+                Rückmeldung, falls Sie weiterhin grundsätzlich an Einsätzen interessiert sind,
+                bisher aber noch keinen Auftrag angenommen haben.
+              </p>
+              <p class="body-text" style="margin:0 0 10px 0;font-size:15px;line-height:1.6;color:#374151;">
+                Teilen Sie uns gerne kurz mit, woran es bisher gelegen hat, zum Beispiel:
+              </p>
+              <ul class="body-text" style="margin:0 0 14px 0;padding-left:20px;font-size:15px;line-height:1.65;color:#374151;">
+                <li>Einsatzort hat nicht gepasst</li>
+                <li>Termin hat nicht gepasst</li>
+                <li>Vergütung hat nicht gepasst</li>
+                <li>Fahrzeugart / Tätigkeit hat nicht gepasst</li>
+                <li>derzeit keine Verfügbarkeit</li>
+                <li>grundsätzlich kein Interesse mehr</li>
+              </ul>
+              <!-- Button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin-top:6px;">
+                <tr><td align="center" style="background-color:#bb2c29;border-radius:6px;">
+                  <a href="mailto:info@kraftfahrer-mieten.com?subject=R%C3%BCckmeldung%20Fahrerdatei"
+                     style="display:inline-block;padding:14px 26px;font-size:16px;font-weight:600;color:#ffffff;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
+                    Jetzt Rückmeldung geben
+                  </a>
+                </td></tr>
+              </table>
+              <p class="body-text" style="margin:12px 0 0 0;font-size:13px;color:#6b7280;">
+                Oder einfach auf den Abmeldelink am Ende dieser E-Mail klicken.
+              </p>
+            </td></tr>
+          </table>
+        </td></tr>
 
-  <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;" />
-  <p style="font-size:12px;color:#6b7280;">
-    Fahrerexpress-Agentur | Tel: 01577 1442285 | <a href="https://www.kraftfahrer-mieten.com">www.kraftfahrer-mieten.com</a><br/>
-    Sie erhalten diese E-Mail, weil Sie sich als Fahrer bei Fahrerexpress registriert haben.
-    Wenn Sie künftig keine Fahrerinformationen oder Auftragsbenachrichtigungen mehr erhalten möchten, können Sie sich
-    <a href="mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter">hier abmelden</a>.
-  </p>
-  <p style="font-size:11px;color:#9ca3af;"><strong>TESTMAIL</strong> – Vorschau für info@kraftfahrer-mieten.com. Versand an Fahrer erfolgt erst nach ausdrücklicher Freigabe.</p>
-</div>
+        <!-- CARD: Was ist zu tun -->
+        <tr><td class="px" style="padding:14px 32px 8px 32px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border:1px solid #e5e7eb;border-radius:6px;">
+            <tr><td style="padding:20px 22px;">
+              <h2 class="h2" style="margin:0 0 12px 0;font-size:18px;color:#0d2340;font-weight:700;">
+                Was ist zu tun?
+              </h2>
+              <p class="body-text" style="margin:0 0 10px 0;font-size:15px;line-height:1.6;color:#374151;">
+                Wenn Sie weiterhin grundsätzlich an Auftragsangeboten interessiert sind, freuen
+                wir uns über eine kurze Rückmeldung – besonders dann, wenn Sie bisher noch
+                keinen Auftrag über Fahrerexpress übernommen haben.
+              </p>
+              <p class="body-text" style="margin:0 0 10px 0;font-size:15px;line-height:1.6;color:#374151;">
+                Wenn Sie weiterhin Angebote erhalten möchten und sich für Sie nichts geändert
+                hat, müssen Sie nichts weiter tun.
+              </p>
+              <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">
+                Wenn Sie künftig keine Auftragsangebote mehr erhalten möchten, nutzen Sie bitte
+                den Abmeldelink am Ende dieser E-Mail („hier abmelden").
+              </p>
+            </td></tr>
+          </table>
+        </td></tr>
+
+        <tr><td class="px" style="padding:18px 32px 28px 32px;">
+          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#0d2340;font-weight:600;">
+            Vielen Dank für Ihre Unterstützung und gute Fahrt!
+          </p>
+        </td></tr>
+
+        <!-- FOOTER -->
+        <tr><td style="background-color:#0d2340;padding:24px 32px;" class="px">
+          <p class="footer-text" style="margin:0 0 8px 0;font-size:14px;line-height:1.55;color:#ffffff;font-weight:700;">
+            Fahrerexpress-Agentur
+          </p>
+          <p class="footer-text" style="margin:0 0 10px 0;font-size:13px;line-height:1.6;color:#cbd5e1;">
+            Inhaber: Günter Killer<br/>
+            Walther-von-Cronberg-Platz 12<br/>
+            60594 Frankfurt am Main
+          </p>
+          <p class="footer-text" style="margin:0 0 10px 0;font-size:13px;line-height:1.6;color:#cbd5e1;">
+            📞 <a href="tel:+4915771442285" style="color:#ffffff;text-decoration:none;">01577 1442285</a><br/>
+            ✉ <a href="mailto:info@kraftfahrer-mieten.com" style="color:#ffffff;text-decoration:none;">info@kraftfahrer-mieten.com</a><br/>
+            🌐 <a href="https://www.kraftfahrer-mieten.com" style="color:#ffffff;text-decoration:none;">www.kraftfahrer-mieten.com</a>
+          </p>
+          <p class="footer-text" style="margin:14px 0 0 0;padding-top:12px;border-top:1px solid #1e3a5f;font-size:12px;line-height:1.55;color:#94a3b8;">
+            Sie erhalten diese E-Mail, weil Sie sich als Fahrer bei Fahrerexpress registriert haben.
+            Wenn Sie künftig keine Fahrerinformationen oder Auftragsbenachrichtigungen mehr erhalten möchten,
+            können Sie sich
+            <a href="mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter" style="color:#ffffff;text-decoration:underline;">hier abmelden</a>.
+          </p>
+        </td></tr>
+      </table>
+
+      <p style="margin:14px 0 0 0;font-size:11px;color:#9ca3af;font-family:Arial,sans-serif;">
+        <strong>TESTMAIL</strong> – Designvorschau für info@kraftfahrer-mieten.com. Versand an Fahrer erst nach ausdrücklicher Freigabe.
+      </p>
+    </td></tr>
+  </table>
+</body>
+</html>
 `;
 
 serve(async (req) => {
