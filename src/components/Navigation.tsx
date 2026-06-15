@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import logoUrl from "@/assets/fahrerexpress-logo.png.asset.json";
 
 
 const Navigation = () => {
@@ -35,14 +36,18 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
           <Link 
             to="/" 
-            className="font-bold text-primary focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md p-1 transition-all hover:text-primary/80 leading-tight flex-shrink min-w-0"
+            className="focus:outline-none focus:ring-2 focus:ring-primary/50 rounded-md transition-all hover:opacity-90 flex-shrink min-w-0 flex items-center"
             aria-label="Fahrerexpress Startseite"
           >
-            <div className="hidden sm:block text-base md:text-xl">Fahrerexpress-Agentur - Günter Killer</div>
-            <div className="sm:hidden leading-tight text-sm">
-              <div className="font-bold">Fahrerexpress</div>
-              <div className="font-semibold text-primary/90">G. Killer</div>
-            </div>
+            <img
+              src={logoUrl.url}
+              alt="Fahrerexpress-Agentur – Günter Killer · Vermittlung selbstständiger Fahrer"
+              width={1920}
+              height={384}
+              className="h-10 sm:h-12 w-auto max-w-[220px] sm:max-w-none object-contain"
+              loading="eager"
+              decoding="async"
+            />
           </Link>
           
           {/* Desktop und Mobile Navigation nebeneinander */}
