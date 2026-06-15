@@ -1118,10 +1118,7 @@ const FahrerRegistrierung = () => {
                           required 
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
-                          Ich bin selbstständig tätig und akzeptiere die Vermittlungsbedingungen, die mir nach Registrierung bereitgestellt werden. *{" "}
-                          <Link to="/fahrer-vermittlungsbedingungen" className="text-primary underline decoration-primary/50 hover:decoration-primary">
-                            Fahrer-Vermittlungsbedingungen
-                          </Link>
+                          Die vollständigen Bedingungen zur Zusammenarbeit erhalten Sie nach Ihrer Registrierung per E-Mail. Mit dem Absenden der Registrierung bestätigen Sie, dass Sie als selbstständiger Fahrer tätig sind und die später übermittelten Bedingungen vor Annahme eines Einsatzes prüfen. *
                         </Label>
                       </div>
                       {validationErrors.vermittlungszustimmung && (
