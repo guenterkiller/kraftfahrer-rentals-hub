@@ -272,8 +272,7 @@ const handler = async (req: Request): Promise<Response> => {
     if (jobError) {
       console.error("Error saving job request:", jobError);
       return new Response(JSON.stringify({ 
-        error: 'Failed to save job request', 
-        details: jobError.message || jobError 
+        error: 'Die Anfrage konnte nicht verarbeitet werden.'
       }), {
         status: 400,
         headers: jsonCors
@@ -403,8 +402,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error('Unexpected error:', error);
     return new Response(JSON.stringify({ 
-      error: 'Internal server error',
-      details: error.message || String(error)
+      error: 'Die Anfrage konnte nicht verarbeitet werden.'
     }), {
       status: 500,
       headers: jsonCors
