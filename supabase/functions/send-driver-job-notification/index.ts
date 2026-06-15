@@ -117,7 +117,7 @@ const handler = async (req: Request): Promise<Response> => {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
         <tr><td style="padding:16px 18px;">
           <h3 class="body-text" style="margin:0 0 8px 0;font-size:16px;color:#0d2340;font-weight:700;">Agenturabrechnung – Vertrag mit Fahrerexpress</h3>
-          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Fahrer im Vertragsverhältnis mit Fahrerexpress.</p>
+          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Fahrer im Auftragsverhältnis mit Fahrerexpress.</p>
         </td></tr>
       </table>
 
