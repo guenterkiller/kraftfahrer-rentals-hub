@@ -43,6 +43,12 @@ export const DriverRegistrationConfirmation = ({
         <strong>Ihre Rechnung an Fahrerexpress</strong> stellen Sie bereits nach Abzug des
         Vermittlungsanteils – nichts wird Ihnen nachträglich einbehalten.
       </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '12px', marginBottom: '0' })}>
+        Die Zahlung der vereinbarten Vergütung erfolgt nach vollständiger und ordnungsgemäßer
+        Durchführung des Einsatzes auf Grundlage Ihrer Rechnung an Fahrerexpress. Soweit im
+        konkreten Auftragsangebot nichts anderes vereinbart ist, erfolgt die Zahlung nach
+        Zahlungseingang des Auftraggebers bei Fahrerexpress.
+      </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
         <strong>Fahrtkosten, Übernachtung, Maut, Parkgebühren und freigegebene Auslagen</strong>
         {' '}werden <strong>nicht</strong> vom Vermittlungsanteil gekürzt und separat behandelt.
