@@ -68,7 +68,7 @@ const buildBodyHtml = (name: string | null | undefined, unsubscribeUrl: string) 
           </table>
         </td></tr>
         <!-- Red accent bar -->
-        <tr><td style="background-color:#bb2c29;height:4px;line-height:4px;font-size:0;">&nbsp;</td></tr>
+        <tr><td style="background-color:#b81c1c;height:4px;line-height:4px;font-size:0;">&nbsp;</td></tr>
 
         <!-- GREETING -->
         <tr><td class="px" style="padding:28px 32px 8px 32px;">
@@ -83,14 +83,14 @@ const buildBodyHtml = (name: string | null | undefined, unsubscribeUrl: string) 
 
         <!-- CARD: Regelungen -->
         <tr><td class="px" style="padding:20px 32px 8px 32px;">
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-radius:6px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border:1px solid #e5e7eb;border-left:4px solid #b81c1c;border-radius:6px;">
             <tr><td style="padding:20px 22px;">
               <h2 class="h2" style="margin:0 0 14px 0;font-size:18px;color:#0d2340;font-weight:700;">
                 Aktuelle Regelungen zur Zusammenarbeit
               </h2>
               <ul class="body-text" style="margin:0;padding-left:20px;font-size:15px;line-height:1.65;color:#374151;">
                 <li style="margin-bottom:8px;">Sie sind <strong>selbstständiger Fahrer / selbstständiger Unternehmer</strong>. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.</li>
-                <li style="margin-bottom:8px;"><strong>Vermittlungsanteil:</strong> 20 % Standard, in Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
+                <li style="margin-bottom:8px;"><strong>Vermittlungsanteil:</strong> Bei Standardaufträgen beträgt der Vermittlungsanteil in der Regel 20 % der vereinbarten Netto-Vergütung für die Fahrerdienstleistung. In Sonderfällen bis zu 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.</li>
                 <li style="margin-bottom:8px;">Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie An- und Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten sowie sonstige vorab freigegebene Auslagen <strong>werden nicht vom Vermittlungsanteil gekürzt</strong>.</li>
                 <li style="margin-bottom:8px;">Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.</li>
                 <li style="margin-bottom:8px;">Keine Direktabrechnung mit Auftraggebern. Keine Preisabsprachen mit Auftraggebern.</li>
@@ -128,7 +128,7 @@ const buildBodyHtml = (name: string | null | undefined, unsubscribeUrl: string) 
               </ul>
               <!-- Button -->
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" class="btn" style="margin-top:6px;">
-                <tr><td align="center" style="background-color:#bb2c29;border-radius:6px;">
+                <tr><td align="center" style="background-color:#b81c1c;border-radius:6px;">
                   <a href="mailto:info@kraftfahrer-mieten.com?subject=R%C3%BCckmeldung%20Fahrerdatei"
                      style="display:inline-block;padding:14px 26px;font-size:16px;font-weight:600;color:#ffffff;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;">
                     Jetzt Rückmeldung geben
@@ -159,8 +159,11 @@ const buildBodyHtml = (name: string | null | undefined, unsubscribeUrl: string) 
                 hat, müssen Sie nichts weiter tun.
               </p>
               <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">
-                Wenn Sie künftig keine Auftragsangebote mehr erhalten möchten, nutzen Sie bitte
-                den Abmeldelink am Ende dieser E-Mail („hier abmelden").
+                <strong>Abmeldung:</strong> Sie können sich jederzeit über den Abmeldelink am Ende dieser
+                E-Mail oder formlos per E-Mail an
+                <a href="mailto:info@kraftfahrer-mieten.com" style="color:#b81c1c;text-decoration:underline;">info@kraftfahrer-mieten.com</a>
+                vom Erhalt weiterer Auftragsangebote abmelden. Die Angabe eines Abmeldegrundes
+                ist freiwillig.
               </p>
             </td></tr>
           </table>
