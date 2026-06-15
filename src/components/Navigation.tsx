@@ -34,45 +34,22 @@ const Navigation = () => {
     <nav className="fixed top-0 w-full bg-white/98 backdrop-blur-md border-b z-50 shadow-sm" role="navigation" aria-label="Hauptnavigation">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
-          <Link 
-            to="/" 
-            className="group focus:outline-none focus:ring-2 focus:ring-primary/40 rounded-md flex-shrink min-w-0 flex items-center gap-2 sm:gap-2.5 py-1 transition-opacity hover:opacity-85"
+          <Link
+            to="/"
+            className="group focus:outline-none focus:ring-2 focus:ring-primary/40 rounded-md flex-shrink min-w-0 flex items-center py-1 transition-opacity hover:opacity-90"
             aria-label="Fahrerexpress Startseite"
           >
-            <svg
-              viewBox="0 0 48 36"
-              aria-hidden="true"
-              className="h-8 w-10 sm:h-9 sm:w-12 flex-shrink-0"
-            >
-              <path
-                d="M44 18 A18 18 0 0 0 8 18"
-                fill="none"
-                stroke="#bb2c29"
-                strokeWidth="2.6"
-                strokeLinecap="round"
-              />
-              <g fill="#0d2340">
-                <rect x="6" y="16" width="20" height="12" rx="1.5" />
-                <path d="M26 19 h7 l5 4 v5 h-12 z" />
-                <circle cx="14" cy="30" r="2.6" fill="#0d2340" />
-                <circle cx="14" cy="30" r="1.1" fill="#ffffff" />
-                <circle cx="32" cy="30" r="2.6" fill="#0d2340" />
-                <circle cx="32" cy="30" r="1.1" fill="#ffffff" />
-                <rect x="1" y="19" width="4" height="1.4" rx="0.7" opacity="0.7" />
-                <rect x="2" y="22" width="3" height="1.4" rx="0.7" opacity="0.5" />
-              </g>
-            </svg>
-            <span className="h-8 sm:h-9 w-px bg-[#bb2c29] flex-shrink-0" aria-hidden="true" />
-            <span className="flex flex-col leading-tight min-w-0">
-              <span className="text-[#0d2340] font-extrabold text-[13px] sm:text-[15px] md:text-lg tracking-tight whitespace-nowrap leading-none">
-                <span className="sm:hidden">Fahrerexpress</span>
-                <span className="hidden sm:inline">Fahrerexpress-Agentur</span>
-                <span className="hidden md:inline text-[#0d2340]/90 font-bold"> – Günter Killer</span>
-              </span>
-              <span className="text-[#0d2340]/60 text-[10px] sm:text-[11px] md:text-xs font-medium whitespace-nowrap mt-0.5">
-                Vermittlung selbstständiger Fahrer
-              </span>
-            </span>
+            <img
+              src={fahrerexpressLogo.url}
+              alt="Fahrerexpress-Agentur – Günter Killer"
+              width={480}
+              height={120}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="h-9 sm:h-11 md:h-12 w-auto object-contain select-none"
+              draggable={false}
+            />
           </Link>
           
           {/* Desktop und Mobile Navigation nebeneinander */}
