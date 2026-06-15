@@ -10,7 +10,7 @@ import { renderAsync } from "npm:@react-email/components@0.0.22";
 import React from "npm:react@18.3.1";
 
 import { DriverRegistrationConfirmation } from "../_shared/email-templates/driver-registration-confirmation.tsx";
-import { DriverApprovalEmail } from "../approve-driver-and-send-jobs/_templates/driver-approval-email.tsx";
+import { DriverApprovalEmail } from "./_templates/driver-approval-email.tsx";
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 import {
   makeDriverUnsubscribeToken,
