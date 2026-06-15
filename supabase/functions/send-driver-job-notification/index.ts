@@ -137,7 +137,7 @@ const handler = async (req: Request): Promise<Response> => {
           <p style="margin: 0; font-size: 14px;"><strong>📋 Vergütung & Vermittlungsanteil:</strong></p>
           <p style="margin: 5px 0 0 0; font-size: 14px;">
             Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot vor Einsatzbeginn.
-            Details: <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen">Vermittlungsbedingungen für Fahrer</a>.
+            Die geltenden Fahrer-Vermittlungsbedingungen wurden Ihnen per E-Mail übermittelt.
           </p>
         </div>
 
