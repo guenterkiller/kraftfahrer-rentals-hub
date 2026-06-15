@@ -17,7 +17,7 @@ export type DriverNewsletterTemplateId = 'free' | 'fahrerinformationen_v1';
 export type DriverNewsletterBlock =
   | { type: 'paragraph'; html: string }
   | { type: 'list'; items: string[] }
-  | { type: 'cta'; label: string; /** 'unsubscribe' = persönlicher Abmelde-/Rückmeldelink */ target: 'unsubscribe' }
+  | { type: 'cta'; label: string; /** 'mailto' = öffnet E-Mail-Programm an info@kraftfahrer-mieten.com */ target: 'mailto' }
   | { type: 'note'; html: string };
 
 export interface DriverNewsletterSection {
@@ -82,7 +82,7 @@ const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
             'grundsätzlich kein Interesse mehr',
           ],
         },
-        { type: 'cta', label: 'Jetzt Rückmeldung geben', target: 'unsubscribe' },
+        { type: 'cta', label: 'Jetzt Rückmeldung geben', target: 'mailto' },
         { type: 'note', html: 'Oder einfach auf den Abmeldelink am Ende dieser E-Mail klicken.' },
       ],
     },
@@ -133,10 +133,10 @@ function renderBlock(block: DriverNewsletterBlock, ctaUrl?: string): string {
       return `<ul style="margin:0 0 12px 0;padding:0 0 0 22px;color:${TEXT};">${items}</ul>`;
     }
     case 'cta': {
-      // Wenn kein Ziel-URL verfügbar ist (z. B. kein Fahrerprofil),
-      // wird der CTA-Button ausgeblendet – kein Dummy-Link.
-      if (!ctaUrl) return '';
-      return `<div style="margin:18px 0 8px 0;"><a href="${ctaUrl}" style="display:inline-block;background:${RED};color:#ffffff !important;text-decoration:none;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">${block.label}</a></div>`;
+      // Fester mailto-Link – öffnet das E-Mail-Programm des Empfängers.
+      // KEIN Supabase-Link, KEIN persönlicher Abmeldelink.
+      const mailtoUrl = 'mailto:info@kraftfahrer-mieten.com?subject=R%C3%BCckmeldung%20Fahrerdatei';
+      return `<div style="margin:18px 0 8px 0;"><a href="${mailtoUrl}" style="display:inline-block;background:${RED};color:#ffffff !important;text-decoration:none;font-weight:700;font-size:15px;padding:12px 22px;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">${block.label}</a></div>`;
     }
     case 'note':
       return `<p style="margin:4px 0 0 0;font-size:13px;line-height:1.55;color:#6b7280;">${block.html}</p>`;
