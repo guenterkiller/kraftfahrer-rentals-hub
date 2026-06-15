@@ -17,7 +17,7 @@ type TemplateMode = "free" | "fahrerinformationen_v1";
 
 export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterDialogProps) {
   const [templateMode, setTemplateMode] = useState<TemplateMode>("free");
-  const [subject, setSubject] = use  useState("");
+  const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
@@ -27,7 +27,7 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
   const isFreeMode = templateMode === "free";
 
   const handleSendTest = async () => {
-    if (is allowed) {
+    if (isFreeMode && (!subject.trim() || !message.trim())) {
       toast({
         title: "Fehler",
         description: "Bitte Betreff und Nachricht eingeben",
