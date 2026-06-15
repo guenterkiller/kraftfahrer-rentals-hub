@@ -7,6 +7,7 @@ import {
   createErrorResponse,
   logAdminAction 
 } from "../_shared/admin-auth.ts";
+import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -127,106 +128,73 @@ serve(async (req) => {
     
     const emailSubject = `Einsatzbestätigung – ${jobTitle} – ${location} am ${dateRange}`;
 
-    // Create email content
-    const emailContent = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Einsatzbestätigung</title>
-</head>
-<body style="font-family: Arial, sans-serif; line-height: 1.4; color: #000; margin: 0; padding: 20px; background-color: #ffffff;">
-    <div style="max-width: 700px; margin: 0 auto;">
-        
-        <!-- Blue Header -->
-        <div style="background-color: #4472c4; color: white; padding: 30px; text-align: center; margin-bottom: 20px;">
-            <h1 style="margin: 0; font-size: 36px; font-weight: bold; letter-spacing: 1px;">EINSATZBESTÄTIGUNG</h1>
-            <p style="margin: 10px 0 0 0; font-size: 16px;">Fahrerexpress | kraftfahrer-mieten.com</p>
-        </div>
-        
-        <!-- Content -->
-        <div style="padding: 0 20px;">
-            <p style="margin: 0 0 10px 0; font-size: 14px;">Hallo ${driver.vorname} ${driver.nachname},</p>
-            <p style="margin: 0 0 20px 0; font-size: 14px;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
-            
-            <!-- AUFTRAGGEBER Section -->
-            <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
-                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">AUFTRAGGEBER</h3>
-                <div style="color: #000; font-size: 14px;">
-                    <p style="margin: 3px 0;"><strong>• Unternehmen/Name:</strong> ${companyName}</p>
-                    <p style="margin: 3px 0;"><strong>• Ansprechpartner:</strong> ${contactPerson}</p>
-                    <p style="margin: 3px 0;"><strong>• Anschrift:</strong> ${job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ? 
-                        `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'wird ergänzt'}</p>
-                    <p style="margin: 3px 0;"><strong>• Telefon:</strong> ${contactPhone}</p>
-                    <p style="margin: 3px 0;"><strong>• E-Mail:</strong> ${contactEmail}</p>
-                </div>
-            </div>
-            
-            <!-- EINSATZ Section -->
-            <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
-                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">EINSATZ</h3>
-                <div style="color: #000; font-size: 14px;">
-                    <p style="margin: 3px 0;"><strong>• Datum/Zeitraum:</strong> ${dateRange}</p>
-                    <p style="margin: 3px 0;"><strong>• Einsatzort / Treffpunkt:</strong> ${location}</p>
-                    <p style="margin: 3px 0;"><strong>• Fahrzeug/Typ:</strong> ${vehicleType}</p>
-                    <p style="margin: 3px 0;"><strong>• Besonderheiten:</strong> ${job?.besonderheiten || '—'}</p>
-                </div>
-            </div>
-            
-            <!-- KONDITIONEN Section -->
-            <div style="background-color: #f2f2f2; border-left: 4px solid #4472c4; padding: 15px; margin-bottom: 20px;">
-                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">KONDITIONEN</h3>
-                <div style="color: #000; font-size: 14px;">
-                    <p style="margin: 3px 0;"><strong>• Tarif:</strong> ${isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung')}</p>
-                    ${isFernfahrerTarif 
-                      ? `<p style="margin: 3px 0;"><strong>• Abrechnung:</strong> Pauschale pro Einsatztag</p>
-                         <p style="margin: 8px 0; font-size: 13px; color: #555;">Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.</p>`
-                      : `<p style="margin: 3px 0;"><strong>• Satz:</strong> ${rateFormatted} zzgl. gesetzlicher USt</p>`
-                    }
-                </div>
-            </div>
-            
-            <!-- VEREINBARUNGEN Section -->
-            <div style="background-color: #fff2cc; border-left: 4px solid #d6b656; padding: 15px; margin-bottom: 20px;">
-                <h3 style="margin: 0 0 10px 0; color: #000; font-size: 16px; font-weight: bold;">VEREINBARUNGEN (Fahrerexpress)</h3>
-                <div style="color: #000; font-size: 13px;">
-                    <p style="margin: 8px 0;"><strong>1) Vermittlungsanteil:</strong> Der Vermittlungsanteil ergibt sich aus dem konkreten Auftragsangebot vor Einsatzbeginn. Standardeinsätze in der Regel 20 %, Sonder-/Projekt-/Pauschal- oder kurzfristige Einsätze bis zu 25 % des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises der reinen Fahrerdienstleistung (ohne An- und Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten). Die vollständigen Fahrer-Vermittlungsbedingungen wurden Ihnen mit der Registrierungsbestätigung per E-Mail übermittelt.</p>
-                    <p style="margin: 8px 0;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer stellt seine Rechnung nach Einsatzende an Fahrerexpress – bereits nach Abzug des vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung.</p>
-                    <p style="margin: 8px 0;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
-                    <p style="margin: 8px 0;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-                    <p style="margin: 8px 0;"><strong>5) Pauschalierter Schadensersatz:</strong> Bei Verstoß gegen die Ziffern 3 oder 4 schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 2.500 € je Verstoß, sofern kein geringerer Schaden nachgewiesen wird.</p>
-                    <p style="margin: 8px 0;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
-                </div>
-            </div>
-            
-            <!-- NO-SHOW Section -->
-            <div style="margin-bottom: 20px;">
-                <h3 style="margin: 0 0 10px 0; color: #cc0000; font-size: 16px; font-weight: bold;">Nichterscheinen / kurzfristige Absage (No-Show)</h3>
-                <div style="color: #000; font-size: 13px;">
-                    <p style="margin: 8px 0;">Bei Nichterscheinen oder Absage ≤ 24 Stunden vor Einsatzbeginn schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 150 €, es sei denn, höhere Gewalt liegt vor.</p>
-                    <p style="margin: 8px 0;">Etwaige Ansprüche des Auftraggebers bleiben hiervon unberührt.</p>
-                </div>
-                </div>
-            </div>
-            
-            <!-- Footer -->
-            <div style="margin-top: 30px; padding-top: 15px;">
-                <p style="margin: 0 0 15px 0; font-size: 14px;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
-                <p style="margin: 15px 0 5px 0; font-size: 14px;">Viele Grüße<br><strong>Fahrerexpress | kraftfahrer-mieten.com</strong></p>
-                <p style="margin: 15px 0 5px 0; font-size: 14px;">E-Mail: <a href="mailto:info@kraftfahrer-mieten.com" style="color: #4472c4;">info@kraftfahrer-mieten.com</a> | Tel: +49-1577-1442285</p>
-            </div>
-        </div>
-        
-        <!-- Bottom signature -->
-        <div style="text-align: center; margin-top: 30px; padding: 15px; font-size: 12px; color: #666; border-top: 1px solid #ccc;">
-            <p style="margin: 0;"><strong>Fahrerexpress-Agentur – Günter Killer</strong></p>
-            <p style="margin: 10px 0 0 0;">Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
-        </div>
-    </div>
-</body>
-</html>
+    const sectionStart = (bg: string) =>
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background-color:${bg};border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 16px 0;"><tr><td style="padding:16px 18px;">`;
+    const sectionEnd = `</td></tr></table>`;
+    const h3 = (txt: string, color = '#0d2340') =>
+      `<h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:${color};font-weight:700;">${txt}</h3>`;
+    const row = (label: string, value: string) =>
+      `<p class="body-text" style="margin:4px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>${label}:</strong> ${value}</p>`;
+
+    const innerHtml = `
+      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;letter-spacing:.3px;">EINSATZBESTÄTIGUNG</h2>
+      <p class="body-text" style="margin:0 0 18px 0;font-size:14px;color:#6b7280;">Fahrerexpress | kraftfahrer-mieten.com</p>
+
+      <p class="body-text" style="margin:0 0 8px 0;font-size:15px;color:#374151;">Hallo ${driver.vorname} ${driver.nachname},</p>
+      <p class="body-text" style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:#374151;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
+
+      ${sectionStart('#f8fafc')}
+        ${h3('AUFTRAGGEBER')}
+        ${row('Unternehmen/Name', companyName)}
+        ${row('Ansprechpartner', contactPerson)}
+        ${row('Anschrift', job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ?
+          `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'wird ergänzt')}
+        ${row('Telefon', contactPhone)}
+        ${row('E-Mail', contactEmail)}
+      ${sectionEnd}
+
+      ${sectionStart('#ffffff')}
+        ${h3('EINSATZ')}
+        ${row('Datum/Zeitraum', dateRange)}
+        ${row('Einsatzort / Treffpunkt', location)}
+        ${row('Fahrzeug/Typ', vehicleType)}
+        ${row('Besonderheiten', job?.besonderheiten || '—')}
+      ${sectionEnd}
+
+      ${sectionStart('#f8fafc')}
+        ${h3('KONDITIONEN')}
+        ${row('Tarif', isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'))}
+        ${isFernfahrerTarif
+          ? `${row('Abrechnung', 'Pauschale pro Einsatztag')}<p class="body-text" style="margin:8px 0 0 0;font-size:13px;color:#6b7280;">Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.</p>`
+          : row('Satz', `${rateFormatted} zzgl. gesetzlicher USt`)}
+      ${sectionEnd}
+
+      ${sectionStart('#ffffff')}
+        ${h3('VEREINBARUNGEN (Fahrerexpress)')}
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>1) Vermittlungsanteil:</strong> Der Vermittlungsanteil ergibt sich aus dem konkreten Auftragsangebot vor Einsatzbeginn. Standardeinsätze in der Regel 20 %, Sonder-/Projekt-/Pauschal- oder kurzfristige Einsätze bis zu 25 % des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises der reinen Fahrerdienstleistung (ohne An- und Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten). Die vollständigen Fahrer-Vermittlungsbedingungen wurden Ihnen mit der Registrierungsbestätigung per E-Mail übermittelt.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer stellt seine Rechnung nach Einsatzende an Fahrerexpress – bereits nach Abzug des vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>5) Pauschalierter Schadensersatz:</strong> Bei Verstoß gegen die Ziffern 3 oder 4 schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 2.500 € je Verstoß, sofern kein geringerer Schaden nachgewiesen wird.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
+      ${sectionEnd}
+
+      ${sectionStart('#f8fafc')}
+        ${h3('Nichterscheinen / kurzfristige Absage (No-Show)', '#bb2c29')}
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;">Bei Nichterscheinen oder Absage ≤ 24 Stunden vor Einsatzbeginn schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 150 €, es sei denn, höhere Gewalt liegt vor.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;">Etwaige Ansprüche des Auftraggebers bleiben hiervon unberührt.</p>
+      ${sectionEnd}
+
+      <p class="body-text" style="margin:18px 0 8px 0;font-size:14px;color:#374151;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
+      <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
+      <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
     `;
+
+    const emailContent = wrapDriverEmailHtml(innerHtml, {
+      subject: emailSubject,
+      previewText: `Einsatzbestätigung – ${jobTitle} – ${location}`,
+      showUnsubscribe: false,
+    });
 
     // Send email using Resend
     const emailResult = await resend.emails.send({
