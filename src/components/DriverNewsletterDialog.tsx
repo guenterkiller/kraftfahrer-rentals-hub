@@ -6,14 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, TestTube, Truck, AlertTriangle } from "lucide-react";
+import { TestTube, Truck, AlertTriangle, FileText } from "lucide-react";
 
 interface DriverNewsletterDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
+type TemplateMode = "free" | "fahrerinformationen_v1";
+
 export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterDialogProps) {
+  const [templateMode, setTemplateMode] = useState<TemplateMode>("free");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -21,8 +24,10 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
   const [testEmail, setTestEmail] = useState("");
   const { toast } = useToast();
 
+  const isFreeMode = templateMode === "free";
+
   const handleSendTest = async () => {
-    if (!subject.trim() || !message.trim()) {
+    if (isFreeMode && (!subject.trim() || !message.trim())) {
       toast({
         title: "Fehler",
         description: "Bitte Betreff und Nachricht eingeben",
@@ -42,8 +47,16 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
 
     setSendingTest(true);
     try {
+      const body: Record<string, string> = { testEmail: testEmail.trim() };
+      if (isFreeMode) {
+        body.subject = subject;
+        body.message = message;
+      } else {
+        body.templateId = "fahrerinformationen_v1";
+      }
+
       const { data, error } = await supabase.functions.invoke('send-driver-newsletter', {
-        body: { subject, message, testEmail: testEmail.trim() }
+        body
       });
       if (error) throw error;
       console.log('Test newsletter response:', data);
@@ -64,7 +77,7 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
   };
 
   const handleSend = async () => {
-    if (!subject.trim() || !message.trim()) {
+    if (isFreeMode && (!subject.trim() || !message.trim())) {
       toast({
         title: "Fehler",
         description: "Bitte Betreff und Nachricht eingeben",
@@ -75,15 +88,23 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
 
     setSending(true);
     try {
+      const body: Record<string, string> = {};
+      if (isFreeMode) {
+        body.subject = subject;
+        body.message = message;
+      } else {
+        body.templateId = "fahrerinformationen_v1";
+      }
+
       const { data, error } = await supabase.functions.invoke('send-driver-newsletter', {
-        body: { subject, message }
+        body
       });
 
       if (error) throw error;
 
       console.log('Newsletter response:', data);
 
-      const successMessage = data.errorCount > 0 
+      const successMessage = data.errorCount > 0
         ? `Rundschreiben an ${data.sentCount} von ${data.totalDrivers} Fahrern erfolgreich versendet (${data.errorCount} fehlgeschlagen)`
         : `Rundschreiben erfolgreich an alle ${data.sentCount} Fahrer versendet`;
 
@@ -120,29 +141,63 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
             Sendet an alle aktiven, registrierten Fahrer in der Datenbank
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-4">
+          {/* Template selection */}
           <div>
-            <Label htmlFor="driver-subject">Betreff</Label>
-            <Input
-              id="driver-subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              placeholder="Betreff der Nachricht"
-            />
+            <Label className="mb-2 block">Vorlage wählen</Label>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant={isFreeMode ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTemplateMode("free")}
+                className={isFreeMode ? "bg-emerald-600 hover:bg-emerald-700" : ""}
+              >
+                <FileText className="h-4 w-4 mr-1" />
+                Freier Text
+              </Button>
+              <Button
+                type="button"
+                variant={!isFreeMode ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTemplateMode("fahrerinformationen_v1")}
+                className={!isFreeMode ? "bg-emerald-600 hover:bg-emerald-700" : ""}
+              >
+                <FileText className="h-4 w-4 mr-1" />
+                Feste Vorlage: Fahrerinformationen v1
+              </Button>
+            </div>
           </div>
-          
-          <div>
-            <Label htmlFor="driver-message">Nachricht</Label>
-            <Textarea
-              id="driver-message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Ihre Nachricht an alle registrierten Fahrer..."
-              rows={8}
-            />
+
+          {/* Subject and Message - only active in free mode */}
+          <div className={!isFreeMode ? "opacity-50 pointer-events-none" : ""}>
+            <div>
+              <Label htmlFor="driver-subject">Betreff</Label>
+              <Input
+                id="driver-subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                placeholder="Betreff der Nachricht"
+                disabled={!isFreeMode}
+              />
+            </div>
           </div>
-          
+
+          <div className={!isFreeMode ? "opacity-50 pointer-events-none" : ""}>
+            <div>
+              <Label htmlFor="driver-message">Nachricht</Label>
+              <Textarea
+                id="driver-message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Ihre Nachricht an alle registrierten Fahrer..."
+                rows={8}
+                disabled={!isFreeMode}
+              />
+            </div>
+          </div>
+
           {/* Test Email Section */}
           <div className="space-y-2 border-t pt-4">
             <Label className="flex items-center gap-2 text-sm">
@@ -156,17 +211,17 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
                 onChange={(e) => setTestEmail(e.target.value)}
                 className="flex-1"
               />
-              <Button 
+              <Button
                 variant="outline"
                 onClick={handleSendTest}
-                disabled={sendingTest || !subject.trim() || !message.trim()}
+                disabled={sendingTest || (isFreeMode && (!subject.trim() || !message.trim()))}
                 size="sm"
               >
                 {sendingTest ? "..." : "Testen"}
               </Button>
             </div>
           </div>
-          
+
           {/* Info */}
           <div className="flex items-start gap-2 p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 rounded-md text-sm">
             <AlertTriangle className="h-4 w-4 text-emerald-600 mt-0.5 flex-shrink-0" />
@@ -174,12 +229,12 @@ export function DriverNewsletterDialog({ open, onOpenChange }: DriverNewsletterD
               <strong>Nur für Fahrer!</strong> Dieses Rundschreiben geht automatisch an alle aktiven Fahrer aus der Datenbank. Für Kunden-Mailings das CSV-Newsletter-Tool verwenden.
             </div>
           </div>
-          
+
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Abbrechen
             </Button>
-            <Button onClick={handleSend} disabled={sending} className="bg-emerald-600 hover:bg-emerald-700">
+            <Button onClick={handleSend} disabled={sending || (isFreeMode && (!subject.trim() || !message.trim()))} className="bg-emerald-600 hover:bg-emerald-700">
               {sending ? "Wird versendet..." : "An alle Fahrer senden"}
             </Button>
           </div>
