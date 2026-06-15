@@ -29,8 +29,28 @@ function escape(s: string): string {
 function renderHtml(vorname: string, unsubscribeUrl: string): string {
   const name = escape(vorname || "Fahrer");
   return `
-  <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#1f2937;line-height:1.55;">
-    <p>Hallo ${name},</p>
+  <!DOCTYPE html><html lang="de"><head><meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <style>
+    @media only screen and (max-width: 600px){
+      .container{width:100% !important;}
+      .px{padding-left:20px !important;padding-right:20px !important;}
+      .h-title{font-size:22px !important;line-height:1.25 !important;}
+      .body-text{font-size:16px !important;line-height:1.6 !important;}
+      .btn a{display:block !important;width:100% !important;box-sizing:border-box !important;}
+    }
+  </style></head>
+  <body style="margin:0;padding:0;background-color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;color:#0d2340;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc;">
+    <tr><td align="center" style="padding:20px 10px;">
+      <table role="presentation" class="container" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;max-width:640px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+        <tr><td style="background-color:#0d2340;padding:28px 32px;" class="px">
+          <div class="h-title" style="font-size:24px;font-weight:700;line-height:1.2;color:#ffffff;">Fahrerexpress-Agentur – Günter Killer</div>
+          <div style="font-size:14px;color:#cbd5e1;margin-top:6px;">Vermittlung selbstständiger Fahrer</div>
+        </td></tr>
+        <tr><td style="background-color:#bb2c29;height:4px;line-height:4px;font-size:0;">&nbsp;</td></tr>
+        <tr><td class="px" style="padding:28px 32px;color:#0d2340;line-height:1.55;font-size:15px;">
+    <p class="body-text" style="margin:0 0 14px 0;font-weight:600;color:#0d2340;">Hallo ${name},</p>
 
     <p>wir haben den Ablauf für Fahraufträge bei der Fahrerexpress-Agentur verbessert.</p>
 
