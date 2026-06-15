@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import fahrerexpressLogo from "@/assets/fahrerexpress-logo-weiss-transparent.png.asset.json";
 
 
 const Navigation = () => {
