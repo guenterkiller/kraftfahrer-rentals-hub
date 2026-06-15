@@ -23,7 +23,7 @@ const SUBJECT =
 
 const BRAND = {
   navy: "#0d2340",
-  red: "#b81c1c",
+  red: "#bb2c29",
   lightGray: "#f8fafc",
   pageGray: "#f3f4f6",
   border: "#e5e7eb",
@@ -83,7 +83,7 @@ const buildBodyHtml = (name: string | null | undefined, unsubscribeUrl: string, 
   body, table, td, p, a, li { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
   table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
   a[x-apple-data-detectors], .footer-link { color: #ffffff !important; text-decoration: none !important; }
-  .light-link { color: #b81c1c !important; text-decoration: underline !important; }
+  .light-link { color: #bb2c29 !important; text-decoration: underline !important; }
   @media only screen and (max-width: 600px) {
     .container { width: 100% !important; }
     .px { padding-left: 20px !important; padding-right: 20px !important; }
