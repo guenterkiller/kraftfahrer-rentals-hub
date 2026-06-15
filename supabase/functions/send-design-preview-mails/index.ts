@@ -118,8 +118,10 @@ async function sendOne(label: string, idx: number, subject: string, html: string
   };
 }
 
-serve(async (_req) => {
+serve(async (req) => {
   try {
+    const url = new URL(req.url);
+    const only = url.searchParams.get("only"); // z.B. "2"
     const unsubscribeUrl = await buildUnsubUrl();
 
     // 1) Registrierungsbestätigung
@@ -168,12 +170,18 @@ serve(async (_req) => {
       showUnsubscribe: true,
     });
 
+    const all: Array<[string, number, string, string]> = [
+      ["registrierungsbestaetigung", 1, "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt", html1],
+      ["freischaltung_onboarding", 2, "Sie sind jetzt bei Fahrerexpress freigeschaltet", html2],
+      ["auftragsangebot_broadcast", 3, "Neuer Auftrag: Sattelzug CE - Agenturabrechnung", html3],
+      ["einsatzbestaetigung", 4, "Einsatzbestätigung – Sattelzug CE – Frankfurt am Main", html4],
+      ["rundmail_fahrerinformationen", 5, "Aktuelle Fahrerinformationen von Fahrerexpress", html5],
+    ];
+    const selected = only ? all.filter((x) => String(x[1]) === only) : all;
     const results = [];
-    results.push(await sendOne("registrierungsbestaetigung", 1, "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt", html1));
-    results.push(await sendOne("freischaltung_onboarding", 2, "Sie sind jetzt bei Fahrerexpress freigeschaltet", html2));
-    results.push(await sendOne("auftragsangebot_broadcast", 3, "Neuer Auftrag: Sattelzug CE - Agenturabrechnung", html3));
-    results.push(await sendOne("einsatzbestaetigung", 4, "Einsatzbestätigung – Sattelzug CE – Frankfurt am Main", html4));
-    results.push(await sendOne("rundmail_fahrerinformationen", 5, "Aktuelle Fahrerinformationen von Fahrerexpress", html5));
+    for (const [label, idx, subject, html] of selected) {
+      results.push(await sendOne(label, idx, subject, html));
+    }
 
     return new Response(JSON.stringify({ ok: true, to: TO, results }, null, 2), {
       status: 200,

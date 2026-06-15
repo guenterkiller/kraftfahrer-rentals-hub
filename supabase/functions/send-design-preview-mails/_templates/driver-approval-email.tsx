@@ -46,7 +46,7 @@ export const DriverApprovalEmail = ({
       {/* Vermittlungsinformation */}
       <Section style={boxStyles.warning}>
         <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          📋 Wichtig: Vermittlungsbedingungen
+          Wichtig: Vermittlungsbedingungen
         </Heading>
         <Text style={textStyles.paragraph}>
           Für die Zusammenarbeit gelten die Vermittlungsbedingungen für Fahrer.
@@ -76,8 +76,8 @@ export const DriverApprovalEmail = ({
           <strong>Bei Fragen erreichen Sie uns unter:</strong>
         </Text>
         <Text style={textStyles.paragraph}>
-          📞 <strong>Telefon:</strong> +49-1577-1442285<br />
-          ✉️ <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
+          <strong>Telefon:</strong> +49-1577-1442285<br />
+          <strong>E-Mail:</strong> info@kraftfahrer-mieten.com
         </Text>
       </Section>
 
