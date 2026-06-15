@@ -1,4 +1,9 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
+import {
+  buildDriverUnsubscribeUrl,
+  makeDriverUnsubscribeToken,
+} from "../_shared/driver-unsubscribe-token.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,7 +17,7 @@ const TEST_RECIPIENT = "info@kraftfahrer-mieten.com";
 const SUBJECT =
   "Wichtige Information für unsere Fahrer – aktuelle Regelungen & kurze Rückmeldung erbeten";
 
-const buildBodyHtml = (name?: string | null) => {
+const buildBodyHtml = (name: string | null | undefined, unsubscribeUrl: string) => {
   const greetingName = name && name.trim().length > 0
     ? `Hallo ${name.trim()},`
     : "Guten Tag,";
@@ -182,7 +187,7 @@ const buildBodyHtml = (name?: string | null) => {
             Sie erhalten diese E-Mail, weil Sie sich als Fahrer bei Fahrerexpress registriert haben.
             Wenn Sie künftig keine Fahrerinformationen oder Auftragsbenachrichtigungen mehr erhalten möchten,
             können Sie sich
-            <a href="mailto:info@kraftfahrer-mieten.com?subject=Abmeldung%20Fahrer-Newsletter" style="color:#ffffff;text-decoration:underline;">hier abmelden</a>.
+            <a href="${unsubscribeUrl}" style="color:#ffffff;text-decoration:underline;">hier abmelden</a>.
           </p>
         </td></tr>
       </table>
@@ -211,6 +216,19 @@ serve(async (req) => {
       });
     }
 
+    const internalSecret = Deno.env.get("INTERNAL_FN_SECRET") || "";
+    if (!internalSecret) {
+      return new Response(JSON.stringify({ error: "INTERNAL_FN_SECRET missing" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
     let name: string | null = null;
     try {
       if (req.headers.get("content-type")?.includes("application/json")) {
@@ -218,6 +236,27 @@ serve(async (req) => {
         if (body && typeof body.name === "string") name = body.name;
       }
     } catch (_) { /* ignore */ }
+
+    // Tokenbasierten Abmeldelink erzeugen (zeigt auf driver-unsubscribe Edge Function).
+    // Versucht Fahrer-Profil für die Testadresse zu finden; sonst Dummy-ID (Link zeigt dann
+    // korrekt auf die Abmeldeseite, würde aber als "Ungültiger Abmeldelink" beantwortet).
+    let driverId = "00000000-0000-0000-0000-000000000000";
+    let driverIdSource: "profile" | "dummy" = "dummy";
+    try {
+      const { data: driver } = await supabase
+        .from("fahrer_profile")
+        .select("id, vorname")
+        .ilike("email", TEST_RECIPIENT)
+        .maybeSingle();
+      if (driver?.id) {
+        driverId = driver.id;
+        driverIdSource = "profile";
+        if (!name && driver.vorname) name = driver.vorname;
+      }
+    } catch (_) { /* ignore */ }
+
+    const token = await makeDriverUnsubscribeToken(driverId, internalSecret);
+    const unsubscribeUrl = buildDriverUnsubscribeUrl(token);
 
     const from = Deno.env.get("MAIL_FROM") ||
       "Fahrerexpress Fahrer-Team <info@kraftfahrer-mieten.com>";
@@ -233,13 +272,21 @@ serve(async (req) => {
         reply_to: "info@kraftfahrer-mieten.com",
         to: [TEST_RECIPIENT],
         subject: SUBJECT,
-        html: buildBodyHtml(name ?? "Günter Killer"),
+        html: buildBodyHtml(name ?? "Günter Killer", unsubscribeUrl),
       }),
     });
 
     const text = await res.text();
     return new Response(
-      JSON.stringify({ ok: res.ok, status: res.status, body: text, recipient: TEST_RECIPIENT, subject: SUBJECT }),
+      JSON.stringify({
+        ok: res.ok,
+        status: res.status,
+        body: text,
+        recipient: TEST_RECIPIENT,
+        subject: SUBJECT,
+        unsubscribe_url: unsubscribeUrl,
+        driver_id_source: driverIdSource,
+      }),
       {
         status: res.ok ? 200 : 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
