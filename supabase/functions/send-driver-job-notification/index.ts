@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
+import { wrapDriverEmailHtml } from '../_shared/email-templates/driver-html-shell.ts';
+import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from '../_shared/driver-unsubscribe-token.ts';
 
 const corsHeaders = createCorsHeaders();
 
@@ -99,53 +101,74 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2>🚛 Neuer Fahrerauftrag verfügbar</h2>
-        
-        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #2563eb; margin-top: 0;">Agenturabrechnung – Vertrag mit Fahrerexpress</h3>
-          <p style="margin: 10px 0;">Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress.</p>
-        </div>
+    // Persönlicher tokenbasierter Abmeldelink (HMAC, driver-unsubscribe Edge Function).
+    let unsubscribeUrl: string | undefined;
+    const unsubSecret = Deno.env.get('INTERNAL_FN_SECRET') || '';
+    if (unsubSecret && driverId) {
+      try {
+        const token = await makeDriverUnsubscribeToken(driverId, unsubSecret);
+        unsubscribeUrl = buildDriverUnsubscribeUrl(token);
+      } catch (e) { console.error('Could not build unsubscribe token:', e); }
+    }
 
-        <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px;">
-          <h3>Auftragsdetails:</h3>
-          <p><strong>Kunde:</strong> ${job.customer_name}</p>
-          <p><strong>Unternehmen:</strong> ${job.company || 'Nicht angegeben'}</p>
-          <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
-          <p><strong>Zeitraum:</strong> ${(job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
-          <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
-          <p><strong>Führerscheinklasse:</strong> ${job.fuehrerscheinklasse}</p>
-          ${job.besonderheiten ? `<p><strong>Besonderheiten:</strong> ${job.besonderheiten}</p>` : ''}
-          <p><strong>Nachricht:</strong> ${job.nachricht}</p>
-        </div>
+    const innerHtml = `
+      <h2 class="body-text" style="margin:0 0 14px 0;font-size:20px;line-height:1.25;color:#0d2340;font-weight:700;">Neuer Fahrerauftrag verfügbar</h2>
 
-        <div style="text-align: center; margin: 30px 0; padding: 24px; background: #f0fdf4; border: 2px solid #16a34a; border-radius: 12px;">
-          <h3 style="color: #166534; margin-top: 0;">📱 Interesse? Bitte melden Sie sich!</h3>
-          <p style="font-size: 16px; font-weight: bold; color: #166534;">
-            Rufen Sie uns an oder schreiben Sie per SMS/WhatsApp:
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
+        <tr><td style="padding:16px 18px;">
+          <h3 class="body-text" style="margin:0 0 8px 0;font-size:16px;color:#0d2340;font-weight:700;">Agenturabrechnung – Vertrag mit Fahrerexpress</h3>
+          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Subunternehmer von Fahrerexpress.</p>
+        </td></tr>
+      </table>
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e5e7eb;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
+        <tr><td style="padding:18px 20px;">
+          <h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:#0d2340;font-weight:700;">Auftragsdetails</h3>
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Kunde:</strong> ${job.customer_name}</p>
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Unternehmen:</strong> ${job.company || 'Nicht angegeben'}</p>
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Einsatzort:</strong> ${job.einsatzort}</p>
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Zeitraum:</strong> ${(job.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()}</p>
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Führerscheinklasse:</strong> ${job.fuehrerscheinklasse}</p>
+          ${job.besonderheiten ? `<p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Besonderheiten:</strong> ${job.besonderheiten}</p>` : ''}
+          <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Nachricht:</strong> ${job.nachricht}</p>
+        </td></tr>
+      </table>
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
+        <tr><td style="padding:18px 20px;text-align:center;">
+          <h3 class="body-text" style="margin:0 0 8px 0;font-size:17px;color:#0d2340;font-weight:700;">Interesse? Bitte melden Sie sich!</h3>
+          <p class="body-text" style="margin:0 0 8px 0;font-size:15px;line-height:1.55;color:#374151;">Rufen Sie uns an oder schreiben Sie per SMS/WhatsApp:</p>
+          <p class="body-text" style="margin:8px 0 8px 0;font-size:22px;line-height:1.2;color:#bb2c29;font-weight:700;">
+            <a href="tel:+4915771442285" style="color:#bb2c29;text-decoration:none;">+49-1577-1442285</a>
           </p>
-          <p style="font-size: 24px; font-weight: bold; color: #16a34a; margin: 16px 0;">
-            📞 +49-1577-1442285
-          </p>
-          <p style="font-size: 14px; color: #666;">
+          <p class="body-text" style="margin:0;font-size:14px;line-height:1.55;color:#374151;">
             Nennen Sie kurz Ihren Namen und dass Sie den Auftrag in <strong>${job.einsatzort}</strong> annehmen oder ablehnen möchten.
           </p>
-        </div>
+        </td></tr>
+      </table>
 
-        <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-          <p style="margin: 0; font-size: 14px;"><strong>📋 Vergütung & Vermittlungsanteil:</strong></p>
-          <p style="margin: 5px 0 0 0; font-size: 14px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e5e7eb;border-collapse:separate;border-radius:6px;margin:0 0 14px 0;">
+        <tr><td style="padding:16px 18px;">
+          <p class="body-text" style="margin:0 0 6px 0;font-size:15px;line-height:1.55;color:#0d2340;"><strong>Vergütung &amp; Vermittlungsanteil</strong></p>
+          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">
             Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot vor Einsatzbeginn.
             Die geltenden Fahrer-Vermittlungsbedingungen wurden Ihnen per E-Mail übermittelt.
           </p>
-        </div>
+        </td></tr>
+      </table>
 
-        <p style="font-size: 12px; color: #666;">
-          Diese E-Mail wurde automatisch generiert. Bei Fragen: info@kraftfahrer-mieten.com
-        </p>
-      </div>
+      <p class="body-text" style="margin:8px 0 0 0;font-size:12px;color:#6b7280;">
+        Diese E-Mail wurde automatisch generiert. Bei Fragen: info@kraftfahrer-mieten.com
+      </p>
     `;
+
+    const emailHtml = wrapDriverEmailHtml(innerHtml, {
+      subject: `Neuer Auftrag: ${job.fahrzeugtyp} - Agenturabrechnung`,
+      previewText: `Neuer Auftrag in ${job.einsatzort} – Agenturabrechnung über Fahrerexpress`,
+      unsubscribeUrl,
+      showUnsubscribe: !!unsubscribeUrl,
+    });
 
     // Send email
     const emailResult = await resend.emails.send({
