@@ -97,6 +97,7 @@ serve(async (req) => {
         vorname: 'Vorname',
         nachname: 'Nachname',
         freeMessage: effectiveMessage,
+        ctaUrl: 'https://kraftfahrer-mieten.com/abmelden?token=PREVIEW',
       });
       const previewHtml = wrapDriverEmailHtml(innerHtml, {
         subject: effectiveSubject,
@@ -202,6 +203,7 @@ serve(async (req) => {
           vorname: driver.vorname,
           nachname: driver.nachname,
           freeMessage: effectiveMessage,
+          ctaUrl: unsubscribeUrl,
         });
         const emailHtml = wrapDriverEmailHtml(innerHtml, {
           subject: effectiveSubject,
