@@ -82,7 +82,7 @@ const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
             'grundsätzlich kein Interesse mehr',
           ],
         },
-        { type: 'cta', label: 'Jetzt Rückmeldung geben', target: 'unsubscribe' },
+        { type: 'cta', label: 'Jetzt Rückmeldung geben', target: 'mailto' },
         { type: 'note', html: 'Oder einfach auf den Abmeldelink am Ende dieser E-Mail klicken.' },
       ],
     },
