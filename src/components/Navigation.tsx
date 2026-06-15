@@ -35,7 +35,7 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
           <Link
             to="/"
-            className="text-lg font-bold text-white hover:text-white/80 transition-colors"
+            className="text-lg font-bold text-white border border-white rounded px-2 py-0.5 hover:text-white/80 transition-colors"
             aria-label="Fahrerexpress Startseite"
           >
             Fahrerexpress-Agentur – Günter Killer
