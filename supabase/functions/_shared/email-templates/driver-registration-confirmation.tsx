@@ -54,11 +54,30 @@ export const DriverRegistrationConfirmation = ({
     </Section>
 
     <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderColor: '#16a34a' })}>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        📄 Die vollständigen Regelungen finden Sie in den{' '}
-        <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen" style={{ color: colors.primary, textDecoration: 'underline', fontWeight: 'bold' }}>
-          Fahrer-Vermittlungsbedingungen
-        </a>. Bitte vor dem ersten Einsatz einmal in Ruhe durchlesen.
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📄 Fahrer-Vermittlungsbedingungen</Heading>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Vermittlungsmodell:</strong> Die Fahrerexpress-Agentur vermittelt Einsätze zwischen Auftraggebern und selbstständigen Fahrern. Es entsteht <strong>kein Arbeitsverhältnis</strong> und keine Arbeitnehmerüberlassung.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Kein Anspruch auf Einsätze:</strong> Ein Anspruch auf Vermittlung oder eine bestimmte Anzahl Einsätze besteht nicht.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Auftragsangebot:</strong> Jedes Auftragsangebot ist nur ein Angebot. Ihre Rückmeldung „Ich kann übernehmen" ist nur eine <strong>Verfügbarkeitsmeldung</strong>. Die <strong>finale Einsatzbestätigung erfolgt separat durch Fahrerexpress</strong>.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Rechnungsstellung:</strong> Der Fahrer stellt seine Rechnung an Fahrerexpress – <strong>bereits nach Abzug des Vermittlungsanteils</strong>. Der Vermittlungsanteil beträgt <strong>standardmäßig 20 %</strong>, bei Sonder-, Projekt-, Pauschal- oder kurzfristigen Einsätzen <strong>bis zu 25 %</strong> des Netto-Auftragswerts der reinen Fahrerdienstleistung. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Auslagen:</strong> Fahrtkosten, An-/Abfahrt, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten sind <strong>nicht provisionspflichtig</strong> und werden separat behandelt.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Keine Direktabrechnung:</strong> Es darf <strong>nicht direkt mit dem Auftraggeber abgerechnet</strong> werden, und es dürfen keine eigenen Preisabsprachen mit Auftraggebern getroffen werden. Die gesamte Abrechnung läuft über Fahrerexpress.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
+        <strong>Abmeldung:</strong> Sie können sich jederzeit vom Erhalt von Auftragsangeboten abmelden – formlos per E-Mail an info@kraftfahrer-mieten.com.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '12px', marginBottom: '0', fontStyle: 'italic' })}>
+        Bitte vor dem ersten Einsatz einmal in Ruhe durchlesen. Änderungen dieser Bedingungen werden Ihnen rechtzeitig per E-Mail mitgeteilt.
       </Text>
     </Section>
 
