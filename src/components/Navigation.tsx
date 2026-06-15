@@ -35,49 +35,10 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16 gap-1 sm:gap-2">
           <Link
             to="/"
-            className="group focus:outline-none focus:ring-2 focus:ring-primary/40 rounded-md flex-shrink min-w-0 flex items-center gap-2 sm:gap-2.5 py-1 transition-opacity hover:opacity-90"
+            className="text-lg font-bold text-foreground hover:text-primary transition-colors"
             aria-label="Fahrerexpress Startseite"
           >
-            {/* Kompaktes LKW-Signet */}
-            <svg
-              viewBox="0 0 44 32"
-              xmlns="http://www.w3.org/2000/svg"
-              role="img"
-              aria-hidden="true"
-              className="h-8 w-11 sm:h-9 sm:w-[3.1rem] flex-shrink-0"
-            >
-              {/* Roter Geschwindigkeits-Akzentbogen */}
-              <path
-                d="M2 8 Q 10 2 22 4"
-                fill="none"
-                stroke="#bb2c29"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-              />
-              {/* LKW-Kabine */}
-              <path
-                d="M26 12 L34 12 L38 17 L38 24 L26 24 Z"
-                fill="#0d2340"
-              />
-              {/* LKW-Aufbau */}
-              <rect x="8" y="11" width="18" height="13" rx="1.2" fill="#0d2340" />
-              {/* Fensterhighlight */}
-              <path d="M28 14 L33.2 14 L35.6 17 L28 17 Z" fill="#ffffff" opacity="0.92" />
-              {/* Räder */}
-              <circle cx="14" cy="25.5" r="3.2" fill="#0d2340" />
-              <circle cx="14" cy="25.5" r="1.2" fill="#bb2c29" />
-              <circle cx="31" cy="25.5" r="3.2" fill="#0d2340" />
-              <circle cx="31" cy="25.5" r="1.2" fill="#bb2c29" />
-            </svg>
-            {/* Wordmark */}
-            <span className="flex flex-col leading-tight min-w-0">
-              <span className="text-[15px] sm:text-base md:text-lg font-extrabold tracking-tight text-[#0d2340] whitespace-nowrap">
-                Fahrerexpress<span className="hidden sm:inline">-Agentur</span>
-              </span>
-              <span className="hidden sm:block text-[11px] md:text-xs font-medium text-[#bb2c29] tracking-wide whitespace-nowrap">
-                Günter Killer
-              </span>
-            </span>
+            Fahrerexpress-Agentur – Günter Killer
           </Link>
           
           {/* Desktop und Mobile Navigation nebeneinander */}
