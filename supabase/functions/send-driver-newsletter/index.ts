@@ -121,7 +121,7 @@ serve(async (req) => {
       // Wenn kein Profil existiert: KEINE Null-/Dummy-UUID – Abmeldelink wird unten ausgeblendet.
       const { data: matched } = await supabase
         .from('fahrer_profile')
-        .select('id, email, vorname, nachname, status, email_opt_out')
+        .select('id, email, vorname, nachname, status, email_opt_out, is_blocked, unsubscribed_at')
         .eq('email', testEmail.toLowerCase().trim())
         .maybeSingle();
       drivers = [
@@ -137,9 +137,12 @@ serve(async (req) => {
     } else {
       const result = await supabase
         .from('fahrer_profile')
-        .select('id, email, vorname, nachname, status, email_opt_out')
+        .select('id, email, vorname, nachname, status, email_opt_out, is_blocked, unsubscribed_at')
         .in('status', ['active', 'approved', 'aktiv'])
-        .eq('email_opt_out', false);
+        .eq('email_opt_out', false)
+        .eq('is_blocked', false)
+        .is('unsubscribed_at', null)
+        .not('email', 'is', null);
       drivers = result.data;
       driversError = result.error;
     }
