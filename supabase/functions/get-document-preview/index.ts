@@ -38,10 +38,21 @@ serve(async (req) => {
     }
 
     // Validate filepath format to prevent directory traversal
-    // Expected format: {uuid}/{doctype}/{uuid}.{ext}
-    const validPathPattern = /^[a-f0-9-]+\/[a-z_-]+\/[a-f0-9-]+\.(jpg|jpeg|png|pdf|webp)$/i;
-    if (!validPathPattern.test(filepath)) {
-      console.error('Invalid filepath format:', filepath);
+    // Accepts both new format ({uuid}/{doctype}/{uuid}.{ext})
+    // and legacy format (uploads/{email}/{doctype}_{n}.{ext})
+    if (
+      !filepath ||
+      typeof filepath !== 'string' ||
+      filepath.includes('..') ||
+      filepath.startsWith('/') ||
+      filepath.length > 500
+    ) {
+      console.error('Invalid filepath (traversal/format):', filepath);
+      return createErrorResponse('Invalid filepath format', 400, corsHeaders);
+    }
+    const allowedExt = /\.(jpg|jpeg|png|pdf|webp)$/i;
+    if (!allowedExt.test(filepath)) {
+      console.error('Invalid file extension:', filepath);
       return createErrorResponse('Invalid filepath format', 400, corsHeaders);
     }
 
@@ -54,14 +65,24 @@ serve(async (req) => {
       .createSignedUrl(filepath, ttl);
 
     if (primary.error) {
-      console.log('Primary bucket not found, trying legacy bucket...');
+      console.log('Primary bucket failed:', {
+        bucket: DRIVER_DOCS_BUCKET,
+        storagePath: filepath,
+        error: primary.error.message,
+      });
       // Fallback to legacy 'driver-documents' bucket for old files
       const fallback = await supabase.storage
         .from(LEGACY_DRIVER_DOCS_BUCKET)
         .createSignedUrl(filepath, ttl);
       
       if (fallback.error) {
-        console.error('Both buckets failed:', fallback.error);
+        console.error('Both buckets failed:', {
+          primaryBucket: DRIVER_DOCS_BUCKET,
+          legacyBucket: LEGACY_DRIVER_DOCS_BUCKET,
+          storagePath: filepath,
+          primaryError: primary.error.message,
+          legacyError: fallback.error.message,
+        });
         return createErrorResponse('File not found', 404, corsHeaders);
       }
       signedData = fallback.data as { signedUrl: string };
