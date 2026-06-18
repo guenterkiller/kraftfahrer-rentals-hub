@@ -2228,7 +2228,21 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 📬 Mails reaktivieren
                               </Button>
                             )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-xs h-7 border-blue-600 text-blue-700 hover:bg-blue-50 flex-1"
+                              onClick={() => toggleRow(f.id, f.email)}
+                            >
+                              {expandedRows.has(f.id) ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
+                              📎 Dokumente{typeof documentCounts[f.id] === 'number' ? ` (${documentCounts[f.id]})` : ''}
+                            </Button>
                           </div>
+                          {expandedRows.has(f.id) && (
+                            <div className="mt-2 pt-2 border-t">
+                              {renderDriverDocuments(f.id)}
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
