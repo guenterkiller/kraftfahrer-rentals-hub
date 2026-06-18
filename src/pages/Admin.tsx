@@ -1988,8 +1988,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     </TableHeader>
                     <TableBody>
                       {sortedFahrer.map((f) => (
-                        <>
-                        <TableRow key={f.id}>
+                        <React.Fragment key={f.id}>
+                        <TableRow>
                           <TableCell className="font-medium">
                             {f.vorname} {f.nachname}
                           </TableCell>
@@ -2074,13 +2074,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           </TableCell>
                         </TableRow>
                         {expandedRows.has(f.id) && (
-                          <TableRow key={`${f.id}-docs`} className="bg-muted/30">
+                          <TableRow className="bg-muted/30">
                             <TableCell colSpan={5}>
                               {renderDriverDocuments(f.id)}
                             </TableCell>
                           </TableRow>
                         )}
-                        </>
+                        </React.Fragment>
                       ))}
                     </TableBody>
                   </Table>
