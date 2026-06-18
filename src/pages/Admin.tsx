@@ -1274,6 +1274,60 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
+  const DOC_TYPE_LABELS: Record<string, string> = {
+    fuehrerschein: "Führerschein",
+    fahrerkarte: "Fahrerkarte",
+    gewerbeanmeldung: "Gewerbeanmeldung",
+    zertifikate: "Zertifikat / Sonstiges",
+    zertifikat: "Zertifikat / Sonstiges",
+  };
+
+  const renderDriverDocuments = (fahrerId: string) => {
+    const docs = documents[fahrerId];
+    if (!docs) {
+      return <div className="text-sm text-muted-foreground py-2">Lade Dokumente…</div>;
+    }
+    if (docs.length === 0) {
+      return <div className="text-sm text-muted-foreground py-2">Keine Dokumente in der Datenbank hinterlegt.</div>;
+    }
+    return (
+      <div className="space-y-2 py-2">
+        <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          Hinterlegte Dokumente ({docs.length})
+        </div>
+        <div className="space-y-1.5">
+          {docs.map((doc) => {
+            const isImage = /\.(jpe?g|png|webp|gif)$/i.test(doc.filename);
+            const Icon = isImage ? Image : FileText;
+            const label = DOC_TYPE_LABELS[doc.type?.toLowerCase()] || doc.type || "Dokument";
+            return (
+              <div
+                key={doc.id}
+                className="flex flex-wrap items-center gap-2 p-2 bg-background border rounded-md"
+              >
+                <Icon className="h-4 w-4 text-blue-600 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-medium truncate">
+                    {label} <span className="text-muted-foreground font-normal">· {doc.filename}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate" title={doc.filepath}>
+                    {doc.filepath} · hochgeladen am {new Date(doc.uploaded_at).toLocaleString('de-DE')}
+                  </div>
+                </div>
+                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => handlePreview(doc)}>
+                  <Eye className="h-3 w-3 mr-1" /> Ansehen
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => handleDownload(doc)}>
+                  <Download className="h-3 w-3 mr-1" /> Herunterladen
+                </Button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   const getStatusBadge = (status: string, fahrerId?: string, onToggle?: () => void) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
       pending: "outline",
