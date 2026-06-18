@@ -2256,12 +2256,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       {/* Preview Dialog */}
       <Dialog open={!!previewDoc} onOpenChange={() => setPreviewDoc(null)}>
-        <DialogContent className="max-w-4xl h-[80vh]">
-          <DialogHeader>
-            <DialogTitle>{previewDoc?.filename}</DialogTitle>
+        <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] max-h-[90vh] flex flex-col p-0 overflow-hidden border-0 sm:rounded-lg">
+          <DialogHeader className="px-6 pt-6 pb-2 shrink-0">
+            <DialogTitle className="pr-8 break-all">{previewDoc?.filename}</DialogTitle>
           </DialogHeader>
           {previewDoc && (
-            <div className="flex-1 overflow-auto">
+            <div className="flex-1 overflow-hidden flex items-center justify-center min-h-0 px-6 pb-6">
               {previewDoc.type === 'pdf' ? (
                 <iframe
                   src={previewDoc.url}
@@ -2272,7 +2272,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                 <img
                   src={previewDoc.url}
                   alt={previewDoc.filename}
-                  className="max-w-full h-auto mx-auto"
+                  className="max-w-full max-h-[calc(90vh-120px)] object-contain"
                 />
               )}
             </div>
