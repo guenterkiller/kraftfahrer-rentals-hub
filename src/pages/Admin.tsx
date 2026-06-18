@@ -1988,6 +1988,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     </TableHeader>
                     <TableBody>
                       {sortedFahrer.map((f) => (
+                        <>
                         <TableRow key={f.id}>
                           <TableCell className="font-medium">
                             {f.vorname} {f.nachname}
@@ -2060,9 +2061,26 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                    📬 Auftragsmails wieder aktivieren
                                  </Button>
                                )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="text-xs h-7 border-blue-600 text-blue-700 hover:bg-blue-50"
+                                  onClick={() => toggleRow(f.id, f.email)}
+                                >
+                                  {expandedRows.has(f.id) ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
+                                  📎 Dokumente{typeof documentCounts[f.id] === 'number' ? ` (${documentCounts[f.id]})` : ''}
+                                </Button>
                              </div>
                           </TableCell>
                         </TableRow>
+                        {expandedRows.has(f.id) && (
+                          <TableRow key={`${f.id}-docs`} className="bg-muted/30">
+                            <TableCell colSpan={5}>
+                              {renderDriverDocuments(f.id)}
+                            </TableCell>
+                          </TableRow>
+                        )}
+                        </>
                       ))}
                     </TableBody>
                   </Table>
