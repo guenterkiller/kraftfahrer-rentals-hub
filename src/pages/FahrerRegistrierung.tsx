@@ -1234,13 +1234,16 @@ const FahrerRegistrierung = () => {
                            onCheckedChange={(checked) => handleInputChange('gewerbenachweis_bestaetigt', checked)}
                            required
                          />
-                         <Label htmlFor="gewerbenachweis_bestaetigt" className="text-sm leading-relaxed">
-                           Ich bestätige, dass ich selbstständig tätig bin bzw. eine Gewerbeanmeldung besitze und den Gewerbenachweis spätestens mit meiner ersten Rechnung an Fahrerexpress mitsende. *
-                         </Label>
-                       </div>
-                       {validationErrors.gewerbenachweis_bestaetigt && (
-                         <p id="gewerbenachweis-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.gewerbenachweis_bestaetigt}</p>
-                       )}
+                          <Label htmlFor="gewerbenachweis_bestaetigt" className="text-sm leading-relaxed">
+                            Ich bestätige, dass ich als selbstständiger Unternehmer tätig bin, über eine Gewerbeanmeldung verfüge und den Gewerbenachweis spätestens mit meiner ersten Rechnung an Fahrerexpress mitsende. *
+                          </Label>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1 ml-6">
+                          Mir ist bekannt, dass ohne vorliegenden Gewerbenachweis keine Auszahlung und keine weitere Zusammenarbeit erfolgen kann.
+                        </p>
+                        {validationErrors.gewerbenachweis_bestaetigt && (
+                          <p id="gewerbenachweis-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.gewerbenachweis_bestaetigt}</p>
+                        )}
                     </div>
 
                   <Button 
