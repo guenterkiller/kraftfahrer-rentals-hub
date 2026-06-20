@@ -68,6 +68,7 @@ const FahrerRegistrierung = () => {
     beschreibung: "",
     vermittlungszustimmung: false,
     einsatzbereitschaft_bestaetigt: false,
+    gewerbenachweis_bestaetigt: false,
     // Neue BF2/BF3 Erlaubnisse
     bf2_erlaubnis: false,
     bf3_erlaubnis: false,
@@ -220,6 +221,11 @@ const FahrerRegistrierung = () => {
           errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihre grundsätzliche Einsatzbereitschaft';
         }
         break;
+      case 'gewerbenachweis_bestaetigt':
+        if (!value) {
+          errors.gewerbenachweis_bestaetigt = 'Bitte bestätigen Sie, dass Sie selbstständig tätig sind und den Gewerbenachweis nachreichen';
+        }
+        break;
     }
     
     return errors;
@@ -286,8 +292,9 @@ const FahrerRegistrierung = () => {
     const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
     const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
     const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
+    const gewerbeErrors = validateField('gewerbenachweis_bestaetigt', formData.gewerbenachweis_bestaetigt);
     
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors);
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -431,6 +438,7 @@ const FahrerRegistrierung = () => {
         beschreibung: "",
         vermittlungszustimmung: false,
         einsatzbereitschaft_bestaetigt: false,
+        gewerbenachweis_bestaetigt: false,
         bf2_erlaubnis: false,
         bf3_erlaubnis: false,
         spezialanforderungen: [],
@@ -1214,10 +1222,25 @@ const FahrerRegistrierung = () => {
                         <Label htmlFor="einsatzbereitschaft_bestaetigt" className="text-sm leading-relaxed">
                           Ich bestätige, dass ich grundsätzlich einsatzbereit bin und passende Auftragsangebote ernsthaft prüfen möchte. *
                         </Label>
-                      </div>
-                      {validationErrors.einsatzbereitschaft_bestaetigt && (
-                        <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
-                      )}
+                       </div>
+                       {validationErrors.einsatzbereitschaft_bestaetigt && (
+                         <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
+                       )}
+
+                       <div className="flex items-start space-x-2">
+                         <Checkbox
+                           id="gewerbenachweis_bestaetigt"
+                           checked={formData.gewerbenachweis_bestaetigt}
+                           onCheckedChange={(checked) => handleInputChange('gewerbenachweis_bestaetigt', checked)}
+                           required
+                         />
+                         <Label htmlFor="gewerbenachweis_bestaetigt" className="text-sm leading-relaxed">
+                           Ich bestätige, dass ich selbstständig tätig bin bzw. eine Gewerbeanmeldung besitze und den Gewerbenachweis spätestens mit meiner ersten Rechnung an Fahrerexpress mitsende. *
+                         </Label>
+                       </div>
+                       {validationErrors.gewerbenachweis_bestaetigt && (
+                         <p id="gewerbenachweis-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.gewerbenachweis_bestaetigt}</p>
+                       )}
                     </div>
 
                   <Button 
