@@ -1069,6 +1069,44 @@ const FahrerRegistrierung = () => {
                        </div>
                      </div>
 
+                     <div className="border-2 border-dashed border-primary/40 rounded-lg p-6 text-center bg-primary/5">
+                       <div className="flex flex-col items-center space-y-2">
+                         <FileText className="h-8 w-8 text-primary" aria-hidden="true" />
+                         <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein <span className="text-destructive">*</span></h4>
+                         <p className="text-sm text-muted-foreground mb-2">
+                           Bitte laden Sie eine Kopie Ihrer Gewerbeanmeldung hoch (zwingend erforderlich)
+                         </p>
+                         <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
+                           <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
+                           <p>📷 Bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                           <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
+                         </div>
+                         {selectedFiles.gewerbeanmeldung && selectedFiles.gewerbeanmeldung.length > 0 && (
+                           <p className="text-xs text-primary font-medium">
+                             ✓ {selectedFiles.gewerbeanmeldung.length} Datei(en) ausgewählt
+                           </p>
+                         )}
+                         <Input
+                           type="file"
+                           accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
+                           multiple
+                           className="hidden"
+                           id="gewerbeanmeldung"
+                           onChange={(e) => handleFileChange('gewerbeanmeldung', e.target.files)}
+                         />
+                         <Button
+                           type="button"
+                           variant="outline"
+                           size="sm"
+                           onClick={() => document.getElementById('gewerbeanmeldung')?.click()}
+                           aria-label="Gewerbeanmeldung hochladen"
+                         >
+                           <Upload className="h-4 w-4 mr-2" aria-hidden="true" />
+                           Datei wählen
+                         </Button>
+                       </div>
+                     </div>
+
                      <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
