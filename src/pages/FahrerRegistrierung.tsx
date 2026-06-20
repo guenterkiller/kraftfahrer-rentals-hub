@@ -950,7 +950,6 @@ const FahrerRegistrierung = () => {
                           <SelectItem value="tageweise">tageweise verfügbar</SelectItem>
                           <SelectItem value="wochenweise">wochenweise verfügbar</SelectItem>
                           <SelectItem value="absprache">nur nach Absprache</SelectItem>
-                          <SelectItem value="interessiert">aktuell nicht verfügbar, aber interessiert</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
