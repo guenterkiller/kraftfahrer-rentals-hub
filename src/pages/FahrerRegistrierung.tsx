@@ -1200,6 +1200,21 @@ const FahrerRegistrierung = () => {
                       {validationErrors.vermittlungszustimmung && (
                         <p id="vermittlung-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.vermittlungszustimmung}</p>
                       )}
+
+                      <div className="flex items-start space-x-2">
+                        <Checkbox
+                          id="einsatzbereitschaft_bestaetigt"
+                          checked={formData.einsatzbereitschaft_bestaetigt}
+                          onCheckedChange={(checked) => handleInputChange('einsatzbereitschaft_bestaetigt', checked)}
+                          required
+                        />
+                        <Label htmlFor="einsatzbereitschaft_bestaetigt" className="text-sm leading-relaxed">
+                          Ich bestätige, dass ich grundsätzlich einsatzbereit bin und passende Auftragsangebote ernsthaft prüfen möchte. *
+                        </Label>
+                      </div>
+                      {validationErrors.einsatzbereitschaft_bestaetigt && (
+                        <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
+                      )}
                     </div>
 
                   <Button 
