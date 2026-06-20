@@ -822,7 +822,12 @@ const FahrerRegistrierung = () => {
 
                   {/* Spezialisierungen */}
                   <fieldset>
-                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Spezialisierungen</legend>
+                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Weitere Qualifikationen / zusätzliche Spezialisierungen
+                    </legend>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Unser Fokus liegt auf selbstständigen LKW-Fahrern und Berufskraftfahrern. Zusätzliche Qualifikationen (z.&nbsp;B. Baumaschinen) können hier optional angegeben werden.
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2" role="group" aria-label="Spezialisierungen auswählen">
                       {spezialisierungen.map((spez) => (
                         <div key={spez} className="flex items-center space-x-2">
