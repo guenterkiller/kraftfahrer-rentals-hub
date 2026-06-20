@@ -68,6 +68,7 @@ const FahrerRegistrierung = () => {
     beschreibung: "",
     vermittlungszustimmung: false,
     einsatzbereitschaft_bestaetigt: false,
+    gewerbenachweis_bestaetigt: false,
     // Neue BF2/BF3 Erlaubnisse
     bf2_erlaubnis: false,
     bf3_erlaubnis: false,
@@ -220,6 +221,11 @@ const FahrerRegistrierung = () => {
           errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihre grundsätzliche Einsatzbereitschaft';
         }
         break;
+      case 'gewerbenachweis_bestaetigt':
+        if (!value) {
+          errors.gewerbenachweis_bestaetigt = 'Bitte bestätigen Sie, dass Sie selbstständig tätig sind und den Gewerbenachweis nachreichen';
+        }
+        break;
     }
     
     return errors;
@@ -286,8 +292,9 @@ const FahrerRegistrierung = () => {
     const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
     const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
     const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
+    const gewerbeErrors = validateField('gewerbenachweis_bestaetigt', formData.gewerbenachweis_bestaetigt);
     
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors);
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -431,6 +438,7 @@ const FahrerRegistrierung = () => {
         beschreibung: "",
         vermittlungszustimmung: false,
         einsatzbereitschaft_bestaetigt: false,
+        gewerbenachweis_bestaetigt: false,
         bf2_erlaubnis: false,
         bf3_erlaubnis: false,
         spezialanforderungen: [],
@@ -602,7 +610,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist zwingend erforderlich.</span>
+                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist erforderlich. Falls der Nachweis bei der Registrierung nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress nachgereicht werden.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -963,9 +971,9 @@ const FahrerRegistrierung = () => {
                      <Label className="text-base font-semibold">
                        Dokumente hochladen – erforderlich für die Prüfung
                      </Label>
-                     <p className="text-sm text-muted-foreground -mt-2">
-                       Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch.
-                     </p>
+                      <p className="text-sm text-muted-foreground -mt-2">
+                        Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
+                      </p>
                      
                      <div className="grid md:grid-cols-2 gap-4">
                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
@@ -1072,10 +1080,13 @@ const FahrerRegistrierung = () => {
                      <div className="border-2 border-dashed border-primary/40 rounded-lg p-6 text-center bg-primary/5">
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-primary" aria-hidden="true" />
-                         <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein <span className="text-destructive">*</span></h4>
-                         <p className="text-sm text-muted-foreground mb-2">
-                           Bitte laden Sie eine Kopie Ihrer Gewerbeanmeldung hoch (zwingend erforderlich)
-                         </p>
+                          <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein</h4>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            Bitte laden Sie Ihre Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
+                          </p>
+                          <p className="text-xs text-destructive font-medium mb-2">
+                            Ohne nachgereichten Gewerbenachweis kann keine weitere Zusammenarbeit bzw. Auszahlung erfolgen.
+                          </p>
                          <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
                            <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
                            <p>📷 Bitte gut lesbar, gerade, ohne Spiegelungen</p>
@@ -1211,10 +1222,25 @@ const FahrerRegistrierung = () => {
                         <Label htmlFor="einsatzbereitschaft_bestaetigt" className="text-sm leading-relaxed">
                           Ich bestätige, dass ich grundsätzlich einsatzbereit bin und passende Auftragsangebote ernsthaft prüfen möchte. *
                         </Label>
-                      </div>
-                      {validationErrors.einsatzbereitschaft_bestaetigt && (
-                        <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
-                      )}
+                       </div>
+                       {validationErrors.einsatzbereitschaft_bestaetigt && (
+                         <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
+                       )}
+
+                       <div className="flex items-start space-x-2">
+                         <Checkbox
+                           id="gewerbenachweis_bestaetigt"
+                           checked={formData.gewerbenachweis_bestaetigt}
+                           onCheckedChange={(checked) => handleInputChange('gewerbenachweis_bestaetigt', checked)}
+                           required
+                         />
+                         <Label htmlFor="gewerbenachweis_bestaetigt" className="text-sm leading-relaxed">
+                           Ich bestätige, dass ich selbstständig tätig bin bzw. eine Gewerbeanmeldung besitze und den Gewerbenachweis spätestens mit meiner ersten Rechnung an Fahrerexpress mitsende. *
+                         </Label>
+                       </div>
+                       {validationErrors.gewerbenachweis_bestaetigt && (
+                         <p id="gewerbenachweis-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.gewerbenachweis_bestaetigt}</p>
+                       )}
                     </div>
 
                   <Button 
