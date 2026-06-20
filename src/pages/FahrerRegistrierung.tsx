@@ -67,6 +67,7 @@ const FahrerRegistrierung = () => {
     verfuegbarkeit: "",
     beschreibung: "",
     vermittlungszustimmung: false,
+    einsatzbereitschaft_bestaetigt: false,
     // Neue BF2/BF3 Erlaubnisse
     bf2_erlaubnis: false,
     bf3_erlaubnis: false,
@@ -80,10 +81,12 @@ const FahrerRegistrierung = () => {
   const [selectedFiles, setSelectedFiles] = useState<{
     fuehrerschein: FileList | null,
     fahrerkarte: FileList | null,
+    gewerbeanmeldung: FileList | null,
     zertifikate: FileList | null
   }>({
     fuehrerschein: null,
     fahrerkarte: null,
+    gewerbeanmeldung: null,
     zertifikate: null
   });
 
@@ -212,6 +215,11 @@ const FahrerRegistrierung = () => {
           errors.vermittlungszustimmung = 'Sie müssen den Vermittlungsbedingungen zustimmen';
         }
         break;
+      case 'einsatzbereitschaft_bestaetigt':
+        if (!value) {
+          errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihre grundsätzliche Einsatzbereitschaft';
+        }
+        break;
     }
     
     return errors;
@@ -243,7 +251,7 @@ const FahrerRegistrierung = () => {
     return !hasErrors; // Return true if no errors
   };
 
-  const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'zertifikate', files: FileList | null) => {
+  const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'gewerbeanmeldung' | 'zertifikate', files: FileList | null) => {
     if (!files || files.length === 0) {
       setFileErrors([]);
       return;
@@ -277,8 +285,9 @@ const FahrerRegistrierung = () => {
     const fuehrerscheinklassenErrors = validateField('fuehrerscheinklassen', formData.fuehrerscheinklassen);
     const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
     const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
+    const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
     
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors);
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -301,6 +310,7 @@ const FahrerRegistrierung = () => {
     const allFiles: File[] = [];
     if (selectedFiles.fuehrerschein) allFiles.push(...Array.from(selectedFiles.fuehrerschein));
     if (selectedFiles.fahrerkarte) allFiles.push(...Array.from(selectedFiles.fahrerkarte));
+    if (selectedFiles.gewerbeanmeldung) allFiles.push(...Array.from(selectedFiles.gewerbeanmeldung));
     if (selectedFiles.zertifikate) allFiles.push(...Array.from(selectedFiles.zertifikate));
 
     if (allFiles.length > 0) {
@@ -353,6 +363,12 @@ const FahrerRegistrierung = () => {
       if (selectedFiles.fahrerkarte) {
         Array.from(selectedFiles.fahrerkarte).forEach(file => {
           formDataToSend.append("fahrerkarte", file);
+        });
+      }
+
+      if (selectedFiles.gewerbeanmeldung) {
+        Array.from(selectedFiles.gewerbeanmeldung).forEach(file => {
+          formDataToSend.append("gewerbeanmeldung", file);
         });
       }
 
@@ -414,6 +430,7 @@ const FahrerRegistrierung = () => {
         verfuegbarkeit: "",
         beschreibung: "",
         vermittlungszustimmung: false,
+        einsatzbereitschaft_bestaetigt: false,
         bf2_erlaubnis: false,
         bf3_erlaubnis: false,
         spezialanforderungen: [],
@@ -422,6 +439,7 @@ const FahrerRegistrierung = () => {
       setSelectedFiles({
         fuehrerschein: null,
         fahrerkarte: null,
+        gewerbeanmeldung: null,
         zertifikate: null
       });
       setValidationErrors({});
