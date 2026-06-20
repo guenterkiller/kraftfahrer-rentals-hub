@@ -67,6 +67,7 @@ const FahrerRegistrierung = () => {
     verfuegbarkeit: "",
     beschreibung: "",
     vermittlungszustimmung: false,
+    einsatzbereitschaft_bestaetigt: false,
     // Neue BF2/BF3 Erlaubnisse
     bf2_erlaubnis: false,
     bf3_erlaubnis: false,
@@ -80,10 +81,12 @@ const FahrerRegistrierung = () => {
   const [selectedFiles, setSelectedFiles] = useState<{
     fuehrerschein: FileList | null,
     fahrerkarte: FileList | null,
+    gewerbeanmeldung: FileList | null,
     zertifikate: FileList | null
   }>({
     fuehrerschein: null,
     fahrerkarte: null,
+    gewerbeanmeldung: null,
     zertifikate: null
   });
 
@@ -212,6 +215,11 @@ const FahrerRegistrierung = () => {
           errors.vermittlungszustimmung = 'Sie müssen den Vermittlungsbedingungen zustimmen';
         }
         break;
+      case 'einsatzbereitschaft_bestaetigt':
+        if (!value) {
+          errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihre grundsätzliche Einsatzbereitschaft';
+        }
+        break;
     }
     
     return errors;
@@ -243,7 +251,7 @@ const FahrerRegistrierung = () => {
     return !hasErrors; // Return true if no errors
   };
 
-  const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'zertifikate', files: FileList | null) => {
+  const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'gewerbeanmeldung' | 'zertifikate', files: FileList | null) => {
     if (!files || files.length === 0) {
       setFileErrors([]);
       return;
@@ -277,8 +285,9 @@ const FahrerRegistrierung = () => {
     const fuehrerscheinklassenErrors = validateField('fuehrerscheinklassen', formData.fuehrerscheinklassen);
     const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
     const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
+    const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
     
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors);
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -301,6 +310,7 @@ const FahrerRegistrierung = () => {
     const allFiles: File[] = [];
     if (selectedFiles.fuehrerschein) allFiles.push(...Array.from(selectedFiles.fuehrerschein));
     if (selectedFiles.fahrerkarte) allFiles.push(...Array.from(selectedFiles.fahrerkarte));
+    if (selectedFiles.gewerbeanmeldung) allFiles.push(...Array.from(selectedFiles.gewerbeanmeldung));
     if (selectedFiles.zertifikate) allFiles.push(...Array.from(selectedFiles.zertifikate));
 
     if (allFiles.length > 0) {
@@ -353,6 +363,12 @@ const FahrerRegistrierung = () => {
       if (selectedFiles.fahrerkarte) {
         Array.from(selectedFiles.fahrerkarte).forEach(file => {
           formDataToSend.append("fahrerkarte", file);
+        });
+      }
+
+      if (selectedFiles.gewerbeanmeldung) {
+        Array.from(selectedFiles.gewerbeanmeldung).forEach(file => {
+          formDataToSend.append("gewerbeanmeldung", file);
         });
       }
 
@@ -414,6 +430,7 @@ const FahrerRegistrierung = () => {
         verfuegbarkeit: "",
         beschreibung: "",
         vermittlungszustimmung: false,
+        einsatzbereitschaft_bestaetigt: false,
         bf2_erlaubnis: false,
         bf3_erlaubnis: false,
         spezialanforderungen: [],
@@ -422,6 +439,7 @@ const FahrerRegistrierung = () => {
       setSelectedFiles({
         fuehrerschein: null,
         fahrerkarte: null,
+        gewerbeanmeldung: null,
         zertifikate: null
       });
       setValidationErrors({});
@@ -584,7 +602,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Selbstständige Gewerbeanmeldung oder Bereitschaft zur Anmeldung</span>
+                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist zwingend erforderlich.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -594,6 +612,17 @@ const FahrerRegistrierung = () => {
                     <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
                     <span className="font-medium">🇪🇺 Bei EU/EWR-Fahrern: anerkennungsfähige Fahrerlaubnis und erforderliche Berufskraftfahrerqualifikation</span>
                   </div>
+                </div>
+
+                <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/30">
+                  <p className="text-sm font-semibold mb-1">Aufnahmebedingungen für unser Fahrer-Netzwerk</p>
+                  <p className="text-sm">
+                    Für die Aufnahme in unser Fahrer-Netzwerk benötigen wir eine gültige Gewerbeanmeldung,
+                    einen gültigen Führerschein, eine Fahrerkarte und vollständige Kontaktdaten.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Hinweis: Fahrer, die dauerhaft nicht reagieren oder keine Aufträge annehmen, können aus dem aktiven Verteiler entfernt werden.
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -793,7 +822,12 @@ const FahrerRegistrierung = () => {
 
                   {/* Spezialisierungen */}
                   <fieldset>
-                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Spezialisierungen</legend>
+                    <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                      Weitere Qualifikationen / zusätzliche Spezialisierungen
+                    </legend>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Unser Fokus liegt auf selbstständigen LKW-Fahrern und Berufskraftfahrern. Zusätzliche Qualifikationen (z.&nbsp;B. Baumaschinen) können hier optional angegeben werden.
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2" role="group" aria-label="Spezialisierungen auswählen">
                       {spezialisierungen.map((spez) => (
                         <div key={spez} className="flex items-center space-x-2">
@@ -916,7 +950,6 @@ const FahrerRegistrierung = () => {
                           <SelectItem value="tageweise">tageweise verfügbar</SelectItem>
                           <SelectItem value="wochenweise">wochenweise verfügbar</SelectItem>
                           <SelectItem value="absprache">nur nach Absprache</SelectItem>
-                          <SelectItem value="interessiert">aktuell nicht verfügbar, aber interessiert</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -927,7 +960,12 @@ const FahrerRegistrierung = () => {
 
                     {/* Dokument-Uploads */}
                    <div className="space-y-4">
-                     <Label>Dokumente hochladen (optional)</Label>
+                     <Label className="text-base font-semibold">
+                       Dokumente hochladen – erforderlich für die Prüfung
+                     </Label>
+                     <p className="text-sm text-muted-foreground -mt-2">
+                       Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch.
+                     </p>
                      
                      <div className="grid md:grid-cols-2 gap-4">
                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
@@ -1031,6 +1069,44 @@ const FahrerRegistrierung = () => {
                        </div>
                      </div>
 
+                     <div className="border-2 border-dashed border-primary/40 rounded-lg p-6 text-center bg-primary/5">
+                       <div className="flex flex-col items-center space-y-2">
+                         <FileText className="h-8 w-8 text-primary" aria-hidden="true" />
+                         <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein <span className="text-destructive">*</span></h4>
+                         <p className="text-sm text-muted-foreground mb-2">
+                           Bitte laden Sie eine Kopie Ihrer Gewerbeanmeldung hoch (zwingend erforderlich)
+                         </p>
+                         <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
+                           <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
+                           <p>📷 Bitte gut lesbar, gerade, ohne Spiegelungen</p>
+                           <p>🔒 Sicherheit: Dateien werden nicht öffentlich gespeichert; Zugriff nur über kurzlebige, signierte Links</p>
+                         </div>
+                         {selectedFiles.gewerbeanmeldung && selectedFiles.gewerbeanmeldung.length > 0 && (
+                           <p className="text-xs text-primary font-medium">
+                             ✓ {selectedFiles.gewerbeanmeldung.length} Datei(en) ausgewählt
+                           </p>
+                         )}
+                         <Input
+                           type="file"
+                           accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
+                           multiple
+                           className="hidden"
+                           id="gewerbeanmeldung"
+                           onChange={(e) => handleFileChange('gewerbeanmeldung', e.target.files)}
+                         />
+                         <Button
+                           type="button"
+                           variant="outline"
+                           size="sm"
+                           onClick={() => document.getElementById('gewerbeanmeldung')?.click()}
+                           aria-label="Gewerbeanmeldung hochladen"
+                         >
+                           <Upload className="h-4 w-4 mr-2" aria-hidden="true" />
+                           Datei wählen
+                         </Button>
+                       </div>
+                     </div>
+
                      <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
@@ -1123,6 +1199,21 @@ const FahrerRegistrierung = () => {
                       </div>
                       {validationErrors.vermittlungszustimmung && (
                         <p id="vermittlung-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.vermittlungszustimmung}</p>
+                      )}
+
+                      <div className="flex items-start space-x-2">
+                        <Checkbox
+                          id="einsatzbereitschaft_bestaetigt"
+                          checked={formData.einsatzbereitschaft_bestaetigt}
+                          onCheckedChange={(checked) => handleInputChange('einsatzbereitschaft_bestaetigt', checked)}
+                          required
+                        />
+                        <Label htmlFor="einsatzbereitschaft_bestaetigt" className="text-sm leading-relaxed">
+                          Ich bestätige, dass ich grundsätzlich einsatzbereit bin und passende Auftragsangebote ernsthaft prüfen möchte. *
+                        </Label>
+                      </div>
+                      {validationErrors.einsatzbereitschaft_bestaetigt && (
+                        <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
                       )}
                     </div>
 
