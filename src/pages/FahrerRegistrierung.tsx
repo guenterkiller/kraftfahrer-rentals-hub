@@ -602,7 +602,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist zwingend erforderlich.</span>
+                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist erforderlich. Falls der Nachweis bei der Registrierung nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress nachgereicht werden.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -963,9 +963,9 @@ const FahrerRegistrierung = () => {
                      <Label className="text-base font-semibold">
                        Dokumente hochladen – erforderlich für die Prüfung
                      </Label>
-                     <p className="text-sm text-muted-foreground -mt-2">
-                       Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch.
-                     </p>
+                      <p className="text-sm text-muted-foreground -mt-2">
+                        Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
+                      </p>
                      
                      <div className="grid md:grid-cols-2 gap-4">
                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
@@ -1072,10 +1072,13 @@ const FahrerRegistrierung = () => {
                      <div className="border-2 border-dashed border-primary/40 rounded-lg p-6 text-center bg-primary/5">
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-primary" aria-hidden="true" />
-                         <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein <span className="text-destructive">*</span></h4>
-                         <p className="text-sm text-muted-foreground mb-2">
-                           Bitte laden Sie eine Kopie Ihrer Gewerbeanmeldung hoch (zwingend erforderlich)
-                         </p>
+                          <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein</h4>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            Bitte laden Sie Ihre Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
+                          </p>
+                          <p className="text-xs text-destructive font-medium mb-2">
+                            Ohne nachgereichten Gewerbenachweis kann keine weitere Zusammenarbeit bzw. Auszahlung erfolgen.
+                          </p>
                          <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded mb-3 space-y-1">
                            <p className="font-medium">📋 Erlaubte Formate: JPG/JPEG, PNG, PDF · Max. 5 MB pro Datei</p>
                            <p>📷 Bitte gut lesbar, gerade, ohne Spiegelungen</p>
