@@ -960,7 +960,12 @@ const FahrerRegistrierung = () => {
 
                     {/* Dokument-Uploads */}
                    <div className="space-y-4">
-                     <Label>Dokumente hochladen (optional)</Label>
+                     <Label className="text-base font-semibold">
+                       Dokumente hochladen – erforderlich für die Prüfung
+                     </Label>
+                     <p className="text-sm text-muted-foreground -mt-2">
+                       Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch.
+                     </p>
                      
                      <div className="grid md:grid-cols-2 gap-4">
                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
