@@ -602,7 +602,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Selbstständige Gewerbeanmeldung oder Bereitschaft zur Anmeldung</span>
+                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist zwingend erforderlich.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -612,6 +612,17 @@ const FahrerRegistrierung = () => {
                     <div className="w-2 h-2 rounded-full bg-primary mt-2"></div>
                     <span className="font-medium">🇪🇺 Bei EU/EWR-Fahrern: anerkennungsfähige Fahrerlaubnis und erforderliche Berufskraftfahrerqualifikation</span>
                   </div>
+                </div>
+
+                <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/30">
+                  <p className="text-sm font-semibold mb-1">Aufnahmebedingungen für unser Fahrer-Netzwerk</p>
+                  <p className="text-sm">
+                    Für die Aufnahme in unser Fahrer-Netzwerk benötigen wir eine gültige Gewerbeanmeldung,
+                    einen gültigen Führerschein, eine Fahrerkarte und vollständige Kontaktdaten.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Hinweis: Fahrer, die dauerhaft nicht reagieren oder keine Aufträge annehmen, können aus dem aktiven Verteiler entfernt werden.
+                  </p>
                 </div>
               </CardContent>
             </Card>
