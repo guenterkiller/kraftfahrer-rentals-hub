@@ -517,7 +517,7 @@ const FahrerRegistrierung = () => {
                       </div>
                       <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
                         <span className="text-2xl">💼</span>
-                        <span className="text-sm">Sie möchten Ihre unternehmerische Freiheit nutzen und eigene Konditionen vereinbaren?</span>
+                        <span className="text-sm">Sie prüfen jedes Auftragsangebot mit Einsatzort, Zeitraum, Fahrzeugart und Konditionen vorab.</span>
                       </div>
                     </div>
 
@@ -567,7 +567,7 @@ const FahrerRegistrierung = () => {
                       </p>
                       <div className="border-t border-primary/20 pt-4">
                         <p className="text-xl font-bold text-primary mb-2">
-                          📝 Tragen Sie sich jetzt ein – kostenlos & unverbindlich.
+                          📝 Registrieren Sie sich jetzt als selbstständiger Fahrer und reichen Sie Ihre Unterlagen zur Prüfung ein.
                         </p>
                         <p className="text-lg text-muted-foreground">
                           Vielleicht passt schon bald ein erstes Auftragsangebot zu Ihnen.
@@ -663,7 +663,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="mt-4 pt-4 border-t border-primary/20">
                     <p className="text-center text-sm font-medium">
-                      ✅ Faire Bezahlung • Fair payment • Uczciwe wynagrodzenie • Plată corectă
+                      ✅ Faire Honorare • Fair payment • Uczciwe wynagrodzenie • Plată corectă
                     </p>
                   </div>
                 </div>
@@ -1257,7 +1257,7 @@ const FahrerRegistrierung = () => {
                     <h4 className="font-semibold mb-2">Muss ich ein Gewerbe anmelden?</h4>
                     <p className="text-sm text-muted-foreground">
                       Ja, für die selbstständige Tätigkeit als Kraftfahrer ist eine Gewerbeanmeldung erforderlich. 
-                      Wir helfen gerne bei Fragen zur Anmeldung und den steuerlichen Aspekten.
+                      Für steuerliche Fragen wenden Sie sich bitte an einen Steuerberater. Allgemeine organisatorische Hinweise zur Registrierung können wir geben.
                     </p>
                   </div>
                 </div>
