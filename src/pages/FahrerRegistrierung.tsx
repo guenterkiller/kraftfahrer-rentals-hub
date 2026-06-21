@@ -495,7 +495,7 @@ const FahrerRegistrierung = () => {
                   <div className="space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
-                      💬 Warum selbstständige Fahrer bei uns mehr erreichen
+                      💬 Warum selbstständige Fahrer mit Fahrerexpress zusammenarbeiten
                     </h2>
                     <p className="text-lg text-muted-foreground">
                       Sie entscheiden eigenverantwortlich, welche Auftragsangebote Sie annehmen.
@@ -544,7 +544,7 @@ const FahrerRegistrierung = () => {
                       <div className="space-y-3">
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Planbare Auftragsangebote deutschlandweit – jeder Einsatz wird vorab einzeln abgestimmt</span>
+                          <span>Auftragsangebote deutschlandweit – jeder Einsatz wird vorab einzeln abgestimmt</span>
                         </div>
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -1277,8 +1277,8 @@ const FahrerRegistrierung = () => {
                   <div className="border-b pb-4">
                     <h4 className="font-semibold mb-2">Wie schnell kann ich nach der Registrierung Aufträge erhalten?</h4>
                     <p className="text-sm text-muted-foreground">
-                      Nach erfolgreicher Prüfung Ihrer Unterlagen können Sie Aufträge erhalten. 
-                      Wir garantieren keinen Same-Day-Service, sondern setzen auf planbare Qualität.
+                      Nach erfolgreicher Prüfung Ihrer Unterlagen können Sie für passende Auftragsangebote berücksichtigt werden.
+                      Eine bestimmte Bearbeitungs- oder Einsatzzeit wird nicht zugesagt.
                     </p>
                   </div>
                   <div>
