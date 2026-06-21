@@ -511,7 +511,7 @@ const FahrerRegistrierung = () => {
                   <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
                     <p className="text-lg mb-4">
                       Bei Fahrerexpress arbeiten Sie als selbstständiger Unternehmer auf Augenhöhe –
-                      mit klar abgestimmten Aufträgen, transparenten Honoraren und einem Ansprechpartner, der die Branche aus eigener Erfahrung kennt.
+                      mit klar abgestimmten Aufträgen, transparenter Vergütung und einem Ansprechpartner, der die Branche aus eigener Erfahrung kennt.
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-4 my-6">
@@ -548,7 +548,7 @@ const FahrerRegistrierung = () => {
                         </div>
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Transparente Honorare – klare Konditionen vor jedem Auftrag</span>
+                          <span>Transparente Vergütung – klare Konditionen vor jedem Auftrag</span>
                         </div>
                       </div>
                       <div className="space-y-3">
@@ -578,7 +578,6 @@ const FahrerRegistrierung = () => {
                           📝 Registrieren Sie sich jetzt als selbstständiger Fahrer und reichen Sie Ihre Unterlagen zur Prüfung ein.
                         </p>
                         <p className="text-lg text-muted-foreground">
-                          Vielleicht passt schon bald ein erstes Auftragsangebot zu Ihnen.
                         </p>
                       </div>
                     </div>
@@ -671,7 +670,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="mt-4 pt-4 border-t border-primary/20">
                     <p className="text-center text-sm font-medium">
-                      ✅ Faire Honorare • Fair payment • Uczciwe wynagrodzenie • Plată corectă
+                      ✅ Transparente Vergütung • Transparent payment • Uczciwe wynagrodzenie • Plată corectă
                     </p>
                   </div>
                 </div>
@@ -931,7 +930,7 @@ const FahrerRegistrierung = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="stundensatz">Gewünschter Tagessatz / Honorarvorstellung netto (optional)</Label>
+                      <Label htmlFor="stundensatz">Gewünschter Tagessatz / Vergütungsvorstellung netto (optional)</Label>
                       <Input
                         id="stundensatz"
                         type="text"
