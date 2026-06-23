@@ -2170,7 +2170,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                      🚫 Gesperrt
                                    </Badge>
                                  )}
-                                 {f.email_opt_out && (
+                                 {!f.is_blocked && f.is_inactive && (
+                                   <Badge
+                                     variant="outline"
+                                     className="border-amber-500 text-amber-800 bg-amber-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+                                     title={f.inactive_reason ? `Grund: ${f.inactive_reason}` : "Vorübergehend deaktiviert"}
+                                   >
+                                     ⏸ Vorübergehend deaktiviert
+                                   </Badge>
+                                 )}
+                                 {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                    <Badge
                                      variant="outline"
                                      className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
@@ -2179,7 +2188,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                      📭 Abgemeldet
                                    </Badge>
                                  )}
-                                 {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
+                                  {!f.is_blocked && !f.is_inactive && !f.email_opt_out && !f.unsubscribed_at &&
                                    getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                                </div>
 
