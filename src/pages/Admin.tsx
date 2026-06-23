@@ -2074,7 +2074,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   📭 Abgemeldet
                                 </Badge>
                               )}
-                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                              {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
+                                getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                                {f.status === 'pending' && (
                                  <Button
                                    size="sm"
@@ -2166,7 +2167,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   📭
                                 </Badge>
                               )}
-                              {getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                              {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
+                                getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                             </div>
                           </div>
                           
