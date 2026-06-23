@@ -1358,17 +1358,20 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       );
     }
 
-    // Grüne Badges für genehmigte Fahrer
+    // Grüne Badges für genehmigte Fahrer (Status, kein Button)
     if (status === 'approved' || status === 'active') {
       return (
-        <Badge className="bg-green-600 hover:bg-green-700 text-white">
+        <Badge className="bg-green-600 text-white text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none">
           {labels[status] || status}
         </Badge>
       );
     }
 
     return (
-      <Badge variant={variants[status] || "secondary"}>
+      <Badge
+        variant={variants[status] || "secondary"}
+        className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+      >
         {labels[status] || status}
       </Badge>
     );
