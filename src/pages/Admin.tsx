@@ -2061,25 +2061,36 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               {f.beschreibung || "Keine Nachricht"}
                             </div>
                           </TableCell>
-                          <TableCell>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              {f.is_blocked && (
-                                <Badge variant="destructive" className="bg-red-600">
-                                  🚫 GESPERRT
-                                </Badge>
-                              )}
-                              {f.email_opt_out && (
-                                <Badge
-                                  variant="outline"
-                                  className="border-orange-500 text-orange-700 bg-orange-50"
-                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
-                                >
-                                  📭 Abgemeldet
-                                </Badge>
-                              )}
-                              {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
-                                getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
-                               {f.status === 'pending' && (
+                           <TableCell>
+                             <div className="flex flex-col gap-2">
+                               {/* Status-Bereich: kleine, nicht-klickbare Labels */}
+                               <div className="flex items-center gap-1.5 flex-wrap">
+                                 <span className="text-[10px] uppercase tracking-wide text-muted-foreground mr-1">Status:</span>
+                                 {f.is_blocked && (
+                                   <Badge
+                                     variant="destructive"
+                                     className="bg-red-600 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+                                   >
+                                     🚫 Gesperrt
+                                   </Badge>
+                                 )}
+                                 {f.email_opt_out && (
+                                   <Badge
+                                     variant="outline"
+                                     className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+                                     title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                   >
+                                     📭 Abgemeldet
+                                   </Badge>
+                                 )}
+                                 {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
+                                   getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
+                               </div>
+
+                               {/* Aktionen-Bereich: deutlich abgesetzte Buttons */}
+                               <div className="flex items-center gap-2 flex-wrap pt-1.5 border-t border-dashed border-gray-200">
+                                 <span className="text-[10px] uppercase tracking-wide text-muted-foreground mr-1">Aktionen:</span>
+                                {f.status === 'pending' && (
                                  <Button
                                    size="sm"
                                    className="bg-green-600 hover:bg-green-700 text-white font-medium px-3 py-1 shadow-sm"
@@ -2102,9 +2113,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                <Button
                                  size="sm"
                                  variant={f.is_blocked ? "outline" : "outline"}
-                                 className={f.is_blocked 
-                                   ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700" 
-                                   : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700"}
+                                  className={f.is_blocked
+                                    ? "text-xs h-8 border-2 border-green-600 text-green-700 hover:bg-green-50 hover:text-green-700 font-medium shadow-sm"
+                                    : "text-xs h-8 border-2 border-red-600 text-red-700 hover:bg-red-50 hover:text-red-700 font-medium shadow-sm"}
                                  onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
@@ -2113,7 +2124,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                  <Button
                                    size="sm"
                                    variant="outline"
-                                   className="text-xs h-7 border-orange-500 text-orange-700 hover:bg-orange-50"
+                                    className="text-xs h-8 border-2 border-orange-500 text-orange-700 hover:bg-orange-50 font-medium shadow-sm"
                                    onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
                                  >
                                    📬 Auftragsmails wieder aktivieren
@@ -2122,12 +2133,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  className="text-xs h-7 border-blue-600 text-blue-700 hover:bg-blue-50"
+                                   className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-medium shadow-sm"
                                   onClick={() => toggleRow(f.id, f.email)}
                                 >
                                   {expandedRows.has(f.id) ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
                                   📎 Dokumente{typeof documentCounts[f.id] === 'number' ? ` (${documentCounts[f.id]})` : ''}
                                 </Button>
+                               </div>
                              </div>
                           </TableCell>
                         </TableRow>
