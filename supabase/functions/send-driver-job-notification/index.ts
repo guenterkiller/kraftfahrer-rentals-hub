@@ -72,9 +72,10 @@ const handler = async (req: Request): Promise<Response> => {
 
 
     // Generate unique token and store invitation
-    if (driver.email_opt_out || driver.is_blocked) {
-      console.log(`⛔ Skipping driver ${driverId} (email_opt_out=${driver.email_opt_out}, is_blocked=${driver.is_blocked})`);
-      return new Response(JSON.stringify({ skipped: true, reason: driver.email_opt_out ? 'email_opt_out' : 'blocked' }), {
+    if (driver.email_opt_out || driver.is_blocked || driver.is_inactive) {
+      console.log(`⛔ Skipping driver ${driverId} (email_opt_out=${driver.email_opt_out}, is_blocked=${driver.is_blocked}, is_inactive=${driver.is_inactive})`);
+      const reason = driver.is_blocked ? 'blocked' : driver.is_inactive ? 'inactive' : 'email_opt_out';
+      return new Response(JSON.stringify({ skipped: true, reason }), {
         status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
