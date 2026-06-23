@@ -2167,19 +2167,22 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <h3 className="font-semibold text-base truncate">{f.vorname} {f.nachname}</h3>
                               <a href={`tel:${f.telefon}`} className="text-sm text-blue-600 hover:underline">{f.telefon}</a>
                             </div>
-                            <div className="flex-shrink-0 flex gap-1">
+                            <div className="flex-shrink-0 flex gap-1 flex-wrap justify-end">
                               {f.is_blocked && (
-                                <Badge variant="destructive" className="bg-red-600 text-xs">
-                                  🚫
+                                <Badge
+                                  variant="destructive"
+                                  className="bg-red-600 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+                                >
+                                  🚫 Gesperrt
                                 </Badge>
                               )}
                               {f.email_opt_out && (
                                 <Badge
                                   variant="outline"
-                                  className="border-orange-500 text-orange-700 bg-orange-50 text-xs"
+                                  className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
                                   title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
                                 >
-                                  📭
+                                  📭 Abgemeldet
                                 </Badge>
                               )}
                               {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
@@ -2204,7 +2207,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             )}
                           </div>
 
-                          <div className="flex gap-2 pt-1 flex-wrap">
+                          <div className="flex gap-2 pt-2 mt-1 flex-wrap border-t border-dashed border-gray-200">
+                            <span className="w-full text-[10px] uppercase tracking-wide text-muted-foreground">Aktionen</span>
                             {f.status === 'pending' && (
                               <Button
                                 size="sm"
@@ -2228,9 +2232,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             <Button
                               size="sm"
                               variant={f.is_blocked ? "outline" : "outline"}
-                              className={f.is_blocked 
-                                ? "text-xs h-7 border-green-600 text-green-600 hover:bg-green-50 hover:text-green-700 flex-1" 
-                                : "text-xs h-7 border-red-600 text-red-600 hover:bg-red-50 hover:text-red-700 flex-1"}
+                              className={f.is_blocked
+                                ? "text-xs h-8 border-2 border-green-600 text-green-700 hover:bg-green-50 hover:text-green-700 font-medium shadow-sm flex-1"
+                                : "text-xs h-8 border-2 border-red-600 text-red-700 hover:bg-red-50 hover:text-red-700 font-medium shadow-sm flex-1"}
                               onClick={() => toggleBlockDriver(f.id, f.is_blocked || false, `${f.vorname} ${f.nachname}`)}
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
@@ -2239,7 +2243,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-xs h-7 border-orange-500 text-orange-700 hover:bg-orange-50 flex-1"
+                                className="text-xs h-8 border-2 border-orange-500 text-orange-700 hover:bg-orange-50 font-medium shadow-sm flex-1"
                                 onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
                               >
                                 📬 Mails reaktivieren
@@ -2248,7 +2252,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             <Button
                               size="sm"
                               variant="outline"
-                              className="text-xs h-7 border-blue-600 text-blue-700 hover:bg-blue-50 flex-1"
+                              className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-medium shadow-sm flex-1"
                               onClick={() => toggleRow(f.id, f.email)}
                             >
                               {expandedRows.has(f.id) ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
