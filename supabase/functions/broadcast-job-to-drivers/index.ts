@@ -101,10 +101,11 @@ serve(async (req) => {
     // Get all approved drivers with email addresses
     const { data: drivers, error: driversError } = await supabase
       .from("fahrer_profile")
-      .select("id, vorname, nachname, email, email_opt_out, is_blocked")
+      .select("id, vorname, nachname, email, email_opt_out, is_blocked, is_inactive")
       .eq("status", "approved")
       .eq("email_opt_out", false)
       .eq("is_blocked", false)
+      .eq("is_inactive", false)
       .not("email", "is", null);
 
     if (driversError) {
