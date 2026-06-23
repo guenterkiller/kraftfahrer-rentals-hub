@@ -1688,7 +1688,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      className="text-red-600 border-red-300 hover:bg-red-50"
+                                      className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
                                       onClick={() => handleRejectJob(req.id)}
                                       disabled={rejectingJob === req.id}
                                     >
@@ -1738,7 +1738,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                         size="sm"
                                         variant="outline"
                                         onClick={() => handleOpenContactDialog(req.id)}
-                                        className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                        className="text-orange-600 border-orange-300 hover:bg-orange-50 hover:text-orange-700"
                                       >
                                         <Edit className="h-3 w-3 mr-1" />
                                         Adresse ergänzen
@@ -1983,7 +1983,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="w-full h-11 text-red-600 border-red-300 hover:bg-red-50"
+                                className="w-full h-11 text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
                                 onClick={() => handleRejectJob(req.id)}
                                 disabled={rejectingJob === req.id}
                               >
@@ -2022,7 +2022,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                       size="sm"
                                       variant="outline"
                                       onClick={() => handleOpenContactDialog(req.id)}
-                                      className="flex-1 text-orange-600 border-orange-300 hover:bg-orange-50 h-11"
+                                      className="flex-1 text-orange-600 border-orange-300 hover:bg-orange-50 hover:text-orange-700 h-11"
                                     >
                                       <Edit className="h-4 w-4 mr-1" />
                                       Adresse
@@ -2209,7 +2209,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                  <Button
                                    size="sm"
                                    variant="outline"
-                                   className="text-orange-600 border-orange-300 hover:bg-orange-50"
+                                   className="text-orange-600 border-orange-300 hover:bg-orange-50 hover:text-orange-700"
                                    onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
                                  >
                                    ↻ Zurücksetzen
@@ -2229,7 +2229,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 font-medium shadow-sm"
+                                    className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 hover:text-amber-800 font-medium shadow-sm"
                                     onClick={() => reactivateDriver(f.id, `${f.vorname} ${f.nachname}`)}
                                     disabled={reactivatingDriver === f.id}
                                   >
@@ -2239,7 +2239,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 font-medium shadow-sm"
+                                    className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 hover:text-amber-800 font-medium shadow-sm"
                                     onClick={() => openInactiveDialog(f.id, `${f.vorname} ${f.nachname}`, f.email)}
                                     disabled={f.is_blocked}
                                     title={f.is_blocked ? "Fahrer ist gesperrt – Sperre zuerst aufheben" : "Vorübergehend deaktivieren"}
@@ -2251,7 +2251,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                  <Button
                                    size="sm"
                                    variant="outline"
-                                    className="text-xs h-8 border-2 border-orange-500 text-orange-700 hover:bg-orange-50 font-medium shadow-sm"
+                                    className="text-xs h-8 border-2 border-orange-500 text-orange-700 hover:bg-orange-50 hover:text-orange-700 font-medium shadow-sm"
                                    onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
                                  >
                                    📬 Auftragsmails wieder aktivieren
@@ -2260,7 +2260,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                   className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-medium shadow-sm"
+                                   className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 hover:text-blue-700 font-medium shadow-sm"
                                   onClick={() => toggleRow(f.id, f.email)}
                                 >
                                   {expandedRows.has(f.id) ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
@@ -2359,7 +2359,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-orange-600 border-orange-300 hover:bg-orange-50 flex-1"
+                                className="text-orange-600 border-orange-300 hover:bg-orange-50 hover:text-orange-700 flex-1"
                                 onClick={() => handleResetDriverStatus(f.id, `${f.vorname} ${f.nachname}`)}
                               >
                                 ↻ Zurücksetzen
@@ -2379,7 +2379,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 font-medium shadow-sm flex-1"
+                                className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 hover:text-amber-800 font-medium shadow-sm flex-1"
                                 onClick={() => reactivateDriver(f.id, `${f.vorname} ${f.nachname}`)}
                                 disabled={reactivatingDriver === f.id}
                               >
@@ -2389,7 +2389,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 font-medium shadow-sm flex-1"
+                                className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 hover:text-amber-800 font-medium shadow-sm flex-1"
                                 onClick={() => openInactiveDialog(f.id, `${f.vorname} ${f.nachname}`, f.email)}
                                 disabled={f.is_blocked}
                               >
@@ -2400,7 +2400,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="text-xs h-8 border-2 border-orange-500 text-orange-700 hover:bg-orange-50 font-medium shadow-sm flex-1"
+                                className="text-xs h-8 border-2 border-orange-500 text-orange-700 hover:bg-orange-50 hover:text-orange-700 font-medium shadow-sm flex-1"
                                 onClick={() => reactivateDriverEmails(f.id, `${f.vorname} ${f.nachname}`)}
                               >
                                 📬 Mails reaktivieren
@@ -2409,7 +2409,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             <Button
                               size="sm"
                               variant="outline"
-                              className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 font-medium shadow-sm flex-1"
+                              className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 hover:text-blue-700 font-medium shadow-sm flex-1"
                               onClick={() => toggleRow(f.id, f.email)}
                             >
                               {expandedRows.has(f.id) ? <ChevronUp className="h-3 w-3 mr-1" /> : <ChevronDown className="h-3 w-3 mr-1" />}
