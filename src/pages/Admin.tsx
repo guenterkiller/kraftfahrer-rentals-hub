@@ -103,9 +103,98 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
   const [approvingJob, setApprovingJob] = useState<string | null>(null);
   const [rejectingJob, setRejectingJob] = useState<string | null>(null);
-  
-  
-  
+
+  // Vorübergehend deaktivieren (nicht aktiv)
+  const [inactiveDialogOpen, setInactiveDialogOpen] = useState(false);
+  const [inactiveDriver, setInactiveDriver] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [inactiveReasonCode, setInactiveReasonCode] = useState<string>("docs_missing");
+  const [inactiveReasonText, setInactiveReasonText] = useState<string>("");
+  const [inactiveNotify, setInactiveNotify] = useState<boolean>(true);
+  const [inactiveSubmitting, setInactiveSubmitting] = useState<boolean>(false);
+  const [reactivatingDriver, setReactivatingDriver] = useState<string | null>(null);
+
+  const INACTIVE_REASONS: { code: string; label: string }[] = [
+    { code: "docs_missing", label: "Unterlagen fehlen" },
+    { code: "license_missing", label: "Führerschein / Fahrerkarte fehlt oder ungültig" },
+    { code: "trade_cert_missing", label: "Gewerbenachweis fehlt" },
+    { code: "no_response", label: "Fahrer reagiert nicht" },
+    { code: "declines_jobs", label: "Fahrer nimmt keine Aufträge an" },
+    { code: "other", label: "Sonstiger Grund" },
+  ];
+
+  const openInactiveDialog = (id: string, name: string, email: string) => {
+    setInactiveDriver({ id, name, email });
+    setInactiveReasonCode("docs_missing");
+    setInactiveReasonText("");
+    setInactiveNotify(true);
+    setInactiveDialogOpen(true);
+  };
+
+  const submitDeactivate = async () => {
+    if (!inactiveDriver) return;
+    setInactiveSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("set-driver-inactive", {
+        body: {
+          driverId: inactiveDriver.id,
+          action: "deactivate",
+          reasonCode: inactiveReasonCode,
+          reasonText: inactiveReasonText,
+          notify: inactiveNotify,
+        },
+      });
+      if (error) throw error;
+
+      const nowIso = new Date().toISOString();
+      const mailStatus = (data as any)?.mailStatus;
+      setFahrer(prev => prev.map(f => f.id === inactiveDriver.id ? {
+        ...f,
+        is_inactive: true,
+        inactive_since: nowIso,
+        inactive_reason: inactiveReasonText || INACTIVE_REASONS.find(r => r.code === inactiveReasonCode)?.label || null,
+        inactive_reason_code: inactiveReasonCode,
+        inactive_notified_at: mailStatus === "sent" ? nowIso : (f.inactive_notified_at ?? null),
+      } : f));
+
+      toast({
+        title: "Fahrer auf nicht aktiv gesetzt",
+        description: `${inactiveDriver.name} ist vorübergehend deaktiviert${
+          inactiveNotify ? (mailStatus === "sent" ? " · Mitteilung versendet" : " · Mitteilung NICHT versendet") : ""
+        }.`,
+      });
+      setInactiveDialogOpen(false);
+      setInactiveDriver(null);
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e?.message ?? "Deaktivierung fehlgeschlagen", variant: "destructive" });
+    } finally {
+      setInactiveSubmitting(false);
+    }
+  };
+
+  const reactivateDriver = async (id: string, driverName: string) => {
+    if (!confirm(`Fahrer „${driverName}" wieder aktivieren?\n\nDer Status „Vorübergehend deaktiviert" wird entfernt.\nSperre und Mail-Abmeldung bleiben unverändert.`)) return;
+    setReactivatingDriver(id);
+    try {
+      const { error } = await supabase.functions.invoke("set-driver-inactive", {
+        body: { driverId: id, action: "reactivate" },
+      });
+      if (error) throw error;
+      setFahrer(prev => prev.map(f => f.id === id ? {
+        ...f,
+        is_inactive: false,
+        inactive_since: null,
+        inactive_reason: null,
+        inactive_reason_code: null,
+        inactive_notified_at: null,
+      } : f));
+      toast({ title: "Fahrer wieder aktiv", description: `${driverName} wird wieder für Auftragsangebote berücksichtigt.` });
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e?.message ?? "Reaktivierung fehlgeschlagen", variant: "destructive" });
+    } finally {
+      setReactivatingDriver(null);
+    }
+  };
+
   const handleMarkJobOpen = async (jobId: string) => {
     setMarkingCompleted(jobId);
     
