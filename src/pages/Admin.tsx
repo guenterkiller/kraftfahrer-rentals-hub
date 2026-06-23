@@ -10,6 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit, ChevronUp } from "lucide-react";
 import { ContactDataDialog } from "@/components/ContactDataDialog";
@@ -40,6 +42,11 @@ interface FahrerProfile {
   email_opt_out?: boolean;
   unsubscribed_at?: string | null;
   unsubscribed_reason?: string | null;
+  is_inactive?: boolean;
+  inactive_since?: string | null;
+  inactive_reason?: string | null;
+  inactive_reason_code?: string | null;
+  inactive_notified_at?: string | null;
   created_at: string;
   dokumente: any;
   fuehrerscheinklassen: string[] | null;
@@ -96,9 +103,98 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
   const [approvingJob, setApprovingJob] = useState<string | null>(null);
   const [rejectingJob, setRejectingJob] = useState<string | null>(null);
-  
-  
-  
+
+  // Vorübergehend deaktivieren (nicht aktiv)
+  const [inactiveDialogOpen, setInactiveDialogOpen] = useState(false);
+  const [inactiveDriver, setInactiveDriver] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [inactiveReasonCode, setInactiveReasonCode] = useState<string>("docs_missing");
+  const [inactiveReasonText, setInactiveReasonText] = useState<string>("");
+  const [inactiveNotify, setInactiveNotify] = useState<boolean>(true);
+  const [inactiveSubmitting, setInactiveSubmitting] = useState<boolean>(false);
+  const [reactivatingDriver, setReactivatingDriver] = useState<string | null>(null);
+
+  const INACTIVE_REASONS: { code: string; label: string }[] = [
+    { code: "docs_missing", label: "Unterlagen fehlen" },
+    { code: "license_missing", label: "Führerschein / Fahrerkarte fehlt oder ungültig" },
+    { code: "trade_cert_missing", label: "Gewerbenachweis fehlt" },
+    { code: "no_response", label: "Fahrer reagiert nicht" },
+    { code: "declines_jobs", label: "Fahrer nimmt keine Aufträge an" },
+    { code: "other", label: "Sonstiger Grund" },
+  ];
+
+  const openInactiveDialog = (id: string, name: string, email: string) => {
+    setInactiveDriver({ id, name, email });
+    setInactiveReasonCode("docs_missing");
+    setInactiveReasonText("");
+    setInactiveNotify(true);
+    setInactiveDialogOpen(true);
+  };
+
+  const submitDeactivate = async () => {
+    if (!inactiveDriver) return;
+    setInactiveSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("set-driver-inactive", {
+        body: {
+          driverId: inactiveDriver.id,
+          action: "deactivate",
+          reasonCode: inactiveReasonCode,
+          reasonText: inactiveReasonText,
+          notify: inactiveNotify,
+        },
+      });
+      if (error) throw error;
+
+      const nowIso = new Date().toISOString();
+      const mailStatus = (data as any)?.mailStatus;
+      setFahrer(prev => prev.map(f => f.id === inactiveDriver.id ? {
+        ...f,
+        is_inactive: true,
+        inactive_since: nowIso,
+        inactive_reason: inactiveReasonText || INACTIVE_REASONS.find(r => r.code === inactiveReasonCode)?.label || null,
+        inactive_reason_code: inactiveReasonCode,
+        inactive_notified_at: mailStatus === "sent" ? nowIso : (f.inactive_notified_at ?? null),
+      } : f));
+
+      toast({
+        title: "Fahrer auf nicht aktiv gesetzt",
+        description: `${inactiveDriver.name} ist vorübergehend deaktiviert${
+          inactiveNotify ? (mailStatus === "sent" ? " · Mitteilung versendet" : " · Mitteilung NICHT versendet") : ""
+        }.`,
+      });
+      setInactiveDialogOpen(false);
+      setInactiveDriver(null);
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e?.message ?? "Deaktivierung fehlgeschlagen", variant: "destructive" });
+    } finally {
+      setInactiveSubmitting(false);
+    }
+  };
+
+  const reactivateDriver = async (id: string, driverName: string) => {
+    if (!confirm(`Fahrer „${driverName}" wieder aktivieren?\n\nDer Status „Vorübergehend deaktiviert" wird entfernt.\nSperre und Mail-Abmeldung bleiben unverändert.`)) return;
+    setReactivatingDriver(id);
+    try {
+      const { error } = await supabase.functions.invoke("set-driver-inactive", {
+        body: { driverId: id, action: "reactivate" },
+      });
+      if (error) throw error;
+      setFahrer(prev => prev.map(f => f.id === id ? {
+        ...f,
+        is_inactive: false,
+        inactive_since: null,
+        inactive_reason: null,
+        inactive_reason_code: null,
+        inactive_notified_at: null,
+      } : f));
+      toast({ title: "Fahrer wieder aktiv", description: `${driverName} wird wieder für Auftragsangebote berücksichtigt.` });
+    } catch (e: any) {
+      toast({ title: "Fehler", description: e?.message ?? "Reaktivierung fehlgeschlagen", variant: "destructive" });
+    } finally {
+      setReactivatingDriver(null);
+    }
+  };
+
   const handleMarkJobOpen = async (jobId: string) => {
     setMarkingCompleted(jobId);
     
@@ -2074,7 +2170,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                      🚫 Gesperrt
                                    </Badge>
                                  )}
-                                 {f.email_opt_out && (
+                                 {!f.is_blocked && f.is_inactive && (
+                                   <Badge
+                                     variant="outline"
+                                     className="border-amber-500 text-amber-800 bg-amber-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+                                     title={f.inactive_reason ? `Grund: ${f.inactive_reason}` : "Vorübergehend deaktiviert"}
+                                   >
+                                     ⏸ Vorübergehend deaktiviert
+                                   </Badge>
+                                 )}
+                                 {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                    <Badge
                                      variant="outline"
                                      className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
@@ -2083,7 +2188,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                      📭 Abgemeldet
                                    </Badge>
                                  )}
-                                 {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
+                                  {!f.is_blocked && !f.is_inactive && !f.email_opt_out && !f.unsubscribed_at &&
                                    getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                                </div>
 
@@ -2120,6 +2225,28 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                                </Button>
+                                {f.is_inactive ? (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 font-medium shadow-sm"
+                                    onClick={() => reactivateDriver(f.id, `${f.vorname} ${f.nachname}`)}
+                                    disabled={reactivatingDriver === f.id}
+                                  >
+                                    {reactivatingDriver === f.id ? "↻ Läuft..." : "▶ Wieder aktivieren"}
+                                  </Button>
+                                ) : (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 font-medium shadow-sm"
+                                    onClick={() => openInactiveDialog(f.id, `${f.vorname} ${f.nachname}`, f.email)}
+                                    disabled={f.is_blocked}
+                                    title={f.is_blocked ? "Fahrer ist gesperrt – Sperre zuerst aufheben" : "Vorübergehend deaktivieren"}
+                                  >
+                                    ⏸ Vorübergehend deaktivieren
+                                  </Button>
+                                )}
                                {f.email_opt_out && (
                                  <Button
                                    size="sm"
@@ -2176,7 +2303,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   🚫 Gesperrt
                                 </Badge>
                               )}
-                              {f.email_opt_out && (
+                              {!f.is_blocked && f.is_inactive && (
+                                <Badge
+                                  variant="outline"
+                                  className="border-amber-500 text-amber-800 bg-amber-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
+                                  title={f.inactive_reason ? `Grund: ${f.inactive_reason}` : "Vorübergehend deaktiviert"}
+                                >
+                                  ⏸ Vorübergehend deaktiviert
+                                </Badge>
+                              )}
+                              {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                 <Badge
                                   variant="outline"
                                   className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
@@ -2185,7 +2321,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   📭 Abgemeldet
                                 </Badge>
                               )}
-                              {!f.is_blocked && !f.email_opt_out && !f.unsubscribed_at &&
+                              {!f.is_blocked && !f.is_inactive && !f.email_opt_out && !f.unsubscribed_at &&
                                 getStatusBadge(f.status, f.id, f.status === 'pending' ? () => handleApproveDriver(f.id) : undefined)}
                             </div>
                           </div>
@@ -2239,6 +2375,27 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                             </Button>
+                            {f.is_inactive ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 font-medium shadow-sm flex-1"
+                                onClick={() => reactivateDriver(f.id, `${f.vorname} ${f.nachname}`)}
+                                disabled={reactivatingDriver === f.id}
+                              >
+                                {reactivatingDriver === f.id ? "↻ Läuft..." : "▶ Wieder aktivieren"}
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 font-medium shadow-sm flex-1"
+                                onClick={() => openInactiveDialog(f.id, `${f.vorname} ${f.nachname}`, f.email)}
+                                disabled={f.is_blocked}
+                              >
+                                ⏸ Deaktivieren
+                              </Button>
+                            )}
                             {f.email_opt_out && (
                               <Button
                                 size="sm"
@@ -2473,6 +2630,75 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       {/* Performance Monitor */}
       <PerformanceMonitor />
+
+      {/* Vorübergehend deaktivieren Dialog */}
+      <Dialog open={inactiveDialogOpen} onOpenChange={(o) => { if (!inactiveSubmitting) setInactiveDialogOpen(o); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Fahrer vorübergehend deaktivieren</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {inactiveDriver && (
+              <div className="text-sm bg-muted/40 rounded p-2">
+                <div className="font-semibold">{inactiveDriver.name}</div>
+                <div className="text-muted-foreground text-xs">{inactiveDriver.email}</div>
+              </div>
+            )}
+
+            <div className="text-xs bg-amber-50 border border-amber-200 text-amber-900 rounded p-2">
+              Der Fahrer wird vorübergehend auf nicht aktiv gesetzt. Das ist keine endgültige Sperre.
+            </div>
+
+            <div className="space-y-2">
+              <Label>Grund (Pflichtfeld)</Label>
+              <Select value={inactiveReasonCode} onValueChange={setInactiveReasonCode}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {INACTIVE_REASONS.map(r => (
+                    <SelectItem key={r.code} value={r.code}>{r.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Begründung (optional, erscheint in der Mail)</Label>
+              <Textarea
+                value={inactiveReasonText}
+                onChange={(e) => setInactiveReasonText(e.target.value)}
+                rows={3}
+                placeholder="Z. B. ‚Bitte aktualisierten Führerschein nachreichen.'"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="inactive-notify"
+                checked={inactiveNotify}
+                onCheckedChange={(v) => setInactiveNotify(v === true)}
+              />
+              <Label htmlFor="inactive-notify" className="text-sm font-normal cursor-pointer">
+                Fahrer per E-Mail informieren (sachliche Mitteilung)
+              </Label>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setInactiveDialogOpen(false)} disabled={inactiveSubmitting}>
+                Abbrechen
+              </Button>
+              <Button
+                className="bg-amber-600 hover:bg-amber-700 text-white"
+                onClick={submitDeactivate}
+                disabled={inactiveSubmitting}
+              >
+                {inactiveSubmitting ? "Wird gesetzt..." : "⏸ Vorübergehend deaktivieren"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
