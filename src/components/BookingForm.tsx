@@ -142,6 +142,13 @@ const BookingForm = () => {
         description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
       });
 
+      // Google Ads Conversion: Lead-Formular senden (nur nach erfolgreichem Submit, einmal pro Anfrage)
+      if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        (window as any).gtag('event', 'conversion', {
+          send_to: 'AW-1009180387/HIER_DAS_CONVERSION_LABEL_EINFÜGEN',
+        });
+      }
+
       // PWA Install-Hinweis nach erfolgreicher Absendung aktivieren
       setShowPWAPrompt(true);
 
