@@ -2630,6 +2630,75 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       {/* Performance Monitor */}
       <PerformanceMonitor />
+
+      {/* Vorübergehend deaktivieren Dialog */}
+      <Dialog open={inactiveDialogOpen} onOpenChange={(o) => { if (!inactiveSubmitting) setInactiveDialogOpen(o); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Fahrer vorübergehend deaktivieren</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {inactiveDriver && (
+              <div className="text-sm bg-muted/40 rounded p-2">
+                <div className="font-semibold">{inactiveDriver.name}</div>
+                <div className="text-muted-foreground text-xs">{inactiveDriver.email}</div>
+              </div>
+            )}
+
+            <div className="text-xs bg-amber-50 border border-amber-200 text-amber-900 rounded p-2">
+              Der Fahrer wird vorübergehend auf nicht aktiv gesetzt. Das ist keine endgültige Sperre.
+            </div>
+
+            <div className="space-y-2">
+              <Label>Grund (Pflichtfeld)</Label>
+              <Select value={inactiveReasonCode} onValueChange={setInactiveReasonCode}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {INACTIVE_REASONS.map(r => (
+                    <SelectItem key={r.code} value={r.code}>{r.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Begründung (optional, erscheint in der Mail)</Label>
+              <Textarea
+                value={inactiveReasonText}
+                onChange={(e) => setInactiveReasonText(e.target.value)}
+                rows={3}
+                placeholder="Z. B. ‚Bitte aktualisierten Führerschein nachreichen.'"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="inactive-notify"
+                checked={inactiveNotify}
+                onCheckedChange={(v) => setInactiveNotify(v === true)}
+              />
+              <Label htmlFor="inactive-notify" className="text-sm font-normal cursor-pointer">
+                Fahrer per E-Mail informieren (sachliche Mitteilung)
+              </Label>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="outline" onClick={() => setInactiveDialogOpen(false)} disabled={inactiveSubmitting}>
+                Abbrechen
+              </Button>
+              <Button
+                className="bg-amber-600 hover:bg-amber-700 text-white"
+                onClick={submitDeactivate}
+                disabled={inactiveSubmitting}
+              >
+                {inactiveSubmitting ? "Wird gesetzt..." : "⏸ Vorübergehend deaktivieren"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
