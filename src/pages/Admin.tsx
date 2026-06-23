@@ -2375,6 +2375,27 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             >
                               {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                             </Button>
+                            {f.is_inactive ? (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs h-8 border-2 border-amber-600 text-amber-800 hover:bg-amber-50 font-medium shadow-sm flex-1"
+                                onClick={() => reactivateDriver(f.id, `${f.vorname} ${f.nachname}`)}
+                                disabled={reactivatingDriver === f.id}
+                              >
+                                {reactivatingDriver === f.id ? "↻ Läuft..." : "▶ Wieder aktivieren"}
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-xs h-8 border-2 border-amber-500 text-amber-700 hover:bg-amber-50 font-medium shadow-sm flex-1"
+                                onClick={() => openInactiveDialog(f.id, `${f.vorname} ${f.nachname}`, f.email)}
+                                disabled={f.is_blocked}
+                              >
+                                ⏸ Deaktivieren
+                              </Button>
+                            )}
                             {f.email_opt_out && (
                               <Button
                                 size="sm"
