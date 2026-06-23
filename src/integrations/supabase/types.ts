@@ -319,7 +319,12 @@ export type Database = {
           erfahrung_jahre: number | null
           fuehrerscheinklassen: string[] | null
           id: string
+          inactive_notified_at: string | null
+          inactive_reason: string | null
+          inactive_reason_code: string | null
+          inactive_since: string | null
           is_blocked: boolean
+          is_inactive: boolean
           nachname: string
           no_show_count: number
           ort: string | null
@@ -350,7 +355,12 @@ export type Database = {
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string
+          inactive_notified_at?: string | null
+          inactive_reason?: string | null
+          inactive_reason_code?: string | null
+          inactive_since?: string | null
           is_blocked?: boolean
+          is_inactive?: boolean
           nachname: string
           no_show_count?: number
           ort?: string | null
@@ -381,7 +391,12 @@ export type Database = {
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
           id?: string
+          inactive_notified_at?: string | null
+          inactive_reason?: string | null
+          inactive_reason_code?: string | null
+          inactive_since?: string | null
           is_blocked?: boolean
+          is_inactive?: boolean
           nachname?: string
           no_show_count?: number
           ort?: string | null
