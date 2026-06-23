@@ -8,58 +8,17 @@
     
     <!-- Performance & Core Web Vitals - Resource Hints -->
     <!-- Google Fonts nicht verwendet - System-Fonts für schnelleres Rendering -->
-    <!-- GTM preconnect entfernt - wird verzögert geladen -->
-    
-    <!-- Google Tag Manager - Verzögert für bessere TBT -->
-    <!-- Lädt nach requestIdleCallback ODER erster User-Interaktion -->
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1009180387"></script>
     <script>
-    (function() {
-      var gtmLoaded = false;
-      var perfDebug = new URLSearchParams(window.location.search).get('perfdebug') === '1';
-      var triggerType = '';
-      
-      function loadGTM(trigger) {
-        if (gtmLoaded) return;
-        gtmLoaded = true;
-        triggerType = trigger || 'unknown';
-        
-        // Debug-Log bei perfdebug=1
-        if (perfDebug) {
-          var ts = performance.now();
-          console.log('%c[GTM TRIGGER EVENT]', 'color: #ff00ff; font-weight: bold;');
-          console.log('[GTM] Geladen nach ' + Math.round(ts) + 'ms (' + (ts/1000).toFixed(2) + 's)');
-          console.log('[GTM] Trigger: ' + triggerType);
-          if (window.__perfDebugGTMLoaded) {
-            window.__perfDebugGTMLoaded(triggerType, ts);
-          }
-        }
-        
-        var w = window, d = document, s = 'script', l = 'dataLayer', i = 'GTM-PVHZRCM';
-        w[l] = w[l] || [];
-        w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
-        var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s),
-            dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      }
-      
-      // Lade nach erster User-Interaktion
-      ['scroll', 'click', 'touchstart', 'keydown'].forEach(function(evt) {
-        document.addEventListener(evt, function() { loadGTM('interaction:' + evt); }, { once: true, passive: true });
-      });
-      // Oder nach requestIdleCallback / 3s Fallback
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(function() { loadGTM('idle-callback'); }, { timeout: 3000 });
-      } else {
-        setTimeout(function() { loadGTM('timeout-3s'); }, 3000);
-      }
-    })();
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-1009180387');
     </script>
-    <!-- End Google Tag Manager -->
-    
-    
+    <!-- End Google tag (gtag.js) -->
+
     <!-- Preload critical resources for better LCP (Largest Contentful Paint) -->
     <!-- Einziges Hero-Bild - identisch zu IONOS (~79 KB WebP) -->
     <link rel="preload" as="image" href="/uploads/lkw-autobahn-professionell.webp" type="image/webp" fetchpriority="high" />
@@ -226,11 +185,6 @@
   </head>
 
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PVHZRCM"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
