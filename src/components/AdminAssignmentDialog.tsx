@@ -27,6 +27,7 @@ export function AdminAssignmentDialog({
   const [selectedDriverId, setSelectedDriverId] = useState("");
   const [rateType, setRateType] = useState<"hourly" | "daily">("hourly");
   const [rateValue, setRateValue] = useState("");
+  const [dailyPreset, setDailyPreset] = useState<string>("custom");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [note, setNote] = useState("");
@@ -527,7 +528,12 @@ export function AdminAssignmentDialog({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Abrechnungsart</Label>
-              <Select value={rateType} onValueChange={(value: "hourly" | "daily") => setRateType(value)}>
+              <Select value={rateType} onValueChange={(value: "hourly" | "daily") => {
+                setRateType(value);
+                if (value === "hourly") {
+                  setDailyPreset("custom");
+                }
+              }}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -536,16 +542,41 @@ export function AdminAssignmentDialog({
                   <SelectItem value="daily">Tagessatz</SelectItem>
                 </SelectContent>
               </Select>
+              {rateType === "daily" && (
+                <div className="mt-2">
+                  <Label className="text-sm">Tagessatz-Vorlage</Label>
+                  <Select
+                    value={dailyPreset}
+                    onValueChange={(value) => {
+                      setDailyPreset(value);
+                      if (value === "349") setRateValue("349");
+                      else if (value === "450") setRateValue("450");
+                      else if (value === "489") setRateValue("489");
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tagessatz wählen..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="349">LKW-Fahrer CE – 349,00 €</SelectItem>
+                      <SelectItem value="450">Fernfahrer – 450,00 €</SelectItem>
+                      <SelectItem value="489">Baumaschinenführer / Fahrmischerfahrer – 489,00 €</SelectItem>
+                      <SelectItem value="custom">Individueller Tagessatz</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
             
             <div>
-              <Label>Satz (€)</Label>
+              <Label>{rateType === "daily" ? "Tagessatz netto (€)" : "Stundensatz netto (€)"}</Label>
               <Input
                 type="number"
                 value={rateValue}
                 onChange={(e) => setRateValue(e.target.value)}
-                placeholder="25.00"
+                placeholder={rateType === "daily" ? "349.00" : "25.00"}
                 step="0.50"
+                readOnly={rateType === "daily" && dailyPreset !== "custom"}
               />
             </div>
           </div>
