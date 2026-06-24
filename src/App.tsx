@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import PageLoader from "./components/PageLoader";
 import { usePrefetchRoutes } from "./hooks/usePrefetchRoutes";
+import AdminRoute from "./components/AdminRoute";
 
 // Critical path: Index page loaded synchronously for fast initial render
 import Index from "./pages/Index";
@@ -162,7 +163,7 @@ const App = () => (
             <Route path="/versicherung" element={<Versicherung />} />
             
             {/* Admin-Bereich - lazy loaded */}
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/driver/accept" element={<DriverJobResponse />} />
             <Route path="/fahrer-antwort-bestaetigen" element={<FahrerAntwortBestaetigen />} />

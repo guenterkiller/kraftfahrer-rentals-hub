@@ -15,15 +15,25 @@ const AdminLogin = () => {
   });
 
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { toast, dismiss } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    // Clear stale admin-page loading errors after redirects to login.
+    dismiss();
+
     // Check if already authenticated
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      let { data: { session } } = await supabase.auth.getSession();
+
+      const expSec = (session as any)?.expires_at as number | undefined;
+      if (session && (!expSec || expSec * 1000 < Date.now() + 60_000)) {
+        const { data } = await supabase.auth.refreshSession();
+        session = data.session;
+      }
+
       if (session) {
         // Verify admin role
         const { data: roles } = await supabase
@@ -40,7 +50,7 @@ const AdminLogin = () => {
     };
     
     checkAuth();
-  }, [navigate]);
+  }, [dismiss, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
