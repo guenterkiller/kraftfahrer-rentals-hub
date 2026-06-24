@@ -565,6 +565,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       if (error) {
         console.error("❌ Admin: Fehler beim Laden der Fahreranfragen:", error);
+        const msg = (error as any)?.message || '';
+        const ctxStatus = (error as any)?.context?.status;
+        if (ctxStatus === 401 || /Auth session missing|Invalid token|JWT/i.test(msg)) {
+          // Auth-Fehler – Redirect erfolgt bereits via loadFahrerData/checkAuth
+          return;
+        }
         toast({
           title: "Fehler beim Laden",
           description: `Jobanfragen konnten nicht geladen werden: ${error.message}`,
