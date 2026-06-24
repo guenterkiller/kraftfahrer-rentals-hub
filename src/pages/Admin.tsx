@@ -1206,6 +1206,18 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       if (error) {
         console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
+        const msg = (error as any)?.message || '';
+        const ctxStatus = (error as any)?.context?.status;
+        if (ctxStatus === 401 || /Auth session missing|Invalid token|JWT/i.test(msg)) {
+          await supabase.auth.signOut().catch(() => {});
+          toast({
+            title: "Sitzung abgelaufen",
+            description: "Bitte melden Sie sich erneut an.",
+            variant: "destructive",
+          });
+          navigate('/admin/login');
+          return;
+        }
         toast({
           title: "Fehler beim Laden",
           description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
