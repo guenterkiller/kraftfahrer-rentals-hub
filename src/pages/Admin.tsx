@@ -432,8 +432,29 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     setAuthChecking(true);
     
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
+      let { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      // Wenn Access-Token abgelaufen oder fehlt: aktiv refreshen
+      const expSec = (session as any)?.expires_at as number | undefined;
+      const expiredOrSoon = !expSec || expSec * 1000 < Date.now() + 60_000;
+      if (!session || expiredOrSoon) {
+        console.log("🔄 Admin: Session fehlt oder läuft ab – versuche Refresh…");
+        const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError || !refreshed?.session) {
+          console.log("❌ Admin: Refresh fehlgeschlagen", refreshError?.message);
+          await supabase.auth.signOut().catch(() => {});
+          setAuthChecking(false);
+          toast({
+            title: "Sitzung abgelaufen",
+            description: "Bitte melden Sie sich erneut an.",
+            variant: "destructive",
+          });
+          navigate('/admin/login');
+          return;
+        }
+        session = refreshed.session;
+      }
+
       if (sessionError || !session) {
         console.log("❌ Admin: Keine gültige Session");
         setAuthChecking(false);
@@ -1185,6 +1206,18 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       if (error) {
         console.error("❌ Admin: Fehler beim Laden der Fahrerdaten:", error);
+        const msg = (error as any)?.message || '';
+        const ctxStatus = (error as any)?.context?.status;
+        if (ctxStatus === 401 || /Auth session missing|Invalid token|JWT/i.test(msg)) {
+          await supabase.auth.signOut().catch(() => {});
+          toast({
+            title: "Sitzung abgelaufen",
+            description: "Bitte melden Sie sich erneut an.",
+            variant: "destructive",
+          });
+          navigate('/admin/login');
+          return;
+        }
         toast({
           title: "Fehler beim Laden",
           description: `Fahrerdaten konnten nicht geladen werden: ${error.message}`,
