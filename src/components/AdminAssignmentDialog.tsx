@@ -532,6 +532,9 @@ export function AdminAssignmentDialog({
                 setRateType(value);
                 if (value === "hourly") {
                   setDailyPreset("custom");
+                } else {
+                  setDailyPreset("349");
+                  setRateValue("349");
                 }
               }}>
                 <SelectTrigger>
