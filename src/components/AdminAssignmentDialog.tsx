@@ -25,9 +25,10 @@ export function AdminAssignmentDialog({
   const [drivers, setDrivers] = useState<Array<{ id: string; vorname: string; nachname: string; email: string; status: string }>>([]);
   const [showOnlyApproved, setShowOnlyApproved] = useState(true);
   const [selectedDriverId, setSelectedDriverId] = useState("");
-  const [rateType, setRateType] = useState<"hourly" | "daily">("hourly");
+  const [rateType, setRateType] = useState<"hourly" | "daily" | "weekly">("hourly");
   const [rateValue, setRateValue] = useState("");
   const [dailyPreset, setDailyPreset] = useState<string>("custom");
+  const [weeklyPreset, setWeeklyPreset] = useState<string>("1645");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [note, setNote] = useState("");
@@ -528,13 +529,17 @@ export function AdminAssignmentDialog({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Abrechnungsart</Label>
-              <Select value={rateType} onValueChange={(value: "hourly" | "daily") => {
+              <Select value={rateType} onValueChange={(value: "hourly" | "daily" | "weekly") => {
                 setRateType(value);
                 if (value === "hourly") {
                   setDailyPreset("custom");
-                } else {
+                  setRateValue("");
+                } else if (value === "daily") {
                   setDailyPreset("349");
                   setRateValue("349");
+                } else if (value === "weekly") {
+                  setWeeklyPreset("1645");
+                  setRateValue("1645");
                 }
               }}>
                 <SelectTrigger>
@@ -543,6 +548,7 @@ export function AdminAssignmentDialog({
                 <SelectContent>
                   <SelectItem value="hourly">Stundensatz</SelectItem>
                   <SelectItem value="daily">Tagessatz</SelectItem>
+                  <SelectItem value="weekly">Wochenpreis</SelectItem>
                 </SelectContent>
               </Select>
               {rateType === "daily" && (
@@ -562,9 +568,29 @@ export function AdminAssignmentDialog({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="349">LKW-Fahrer CE – 349,00 €</SelectItem>
-                      <SelectItem value="450">Fernfahrer – 450,00 €</SelectItem>
+                      <SelectItem value="450">Fernfahrer-Pauschale – 450,00 €</SelectItem>
                       <SelectItem value="489">Baumaschinenführer / Fahrmischerfahrer – 489,00 €</SelectItem>
                       <SelectItem value="custom">Individueller Tagessatz</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              {rateType === "weekly" && (
+                <div className="mt-2">
+                  <Label className="text-sm">Wochenpreis-Vorlage</Label>
+                  <Select
+                    value={weeklyPreset}
+                    onValueChange={(value) => {
+                      setWeeklyPreset(value);
+                      if (value !== "custom") setRateValue(value);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Wochenpreis wählen..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1645">LKW-Fahrer CE – Wochenpreis 1.645,00 € (5 Einsatztage à bis 10 Std.)</SelectItem>
+                      <SelectItem value="custom">Individueller Wochenpreis</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -572,14 +598,14 @@ export function AdminAssignmentDialog({
             </div>
             
             <div>
-              <Label>{rateType === "daily" ? "Tagessatz netto (€)" : "Stundensatz netto (€)"}</Label>
+              <Label>{rateType === "daily" ? "Tagessatz netto (€)" : rateType === "weekly" ? "Wochenpreis netto (€)" : "Stundensatz netto (€)"}</Label>
               <Input
                 type="number"
                 value={rateValue}
                 onChange={(e) => setRateValue(e.target.value)}
-                placeholder={rateType === "daily" ? "349.00" : "25.00"}
+                placeholder={rateType === "daily" ? "349.00" : rateType === "weekly" ? "1645.00" : "25.00"}
                 step="0.50"
-                readOnly={rateType === "daily" && dailyPreset !== "custom"}
+                readOnly={(rateType === "daily" && dailyPreset !== "custom") || (rateType === "weekly" && weeklyPreset !== "custom")}
               />
             </div>
           </div>
