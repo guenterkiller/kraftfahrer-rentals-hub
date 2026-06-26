@@ -27,8 +27,7 @@ export function AdminAssignmentDialog({
   const [selectedDriverId, setSelectedDriverId] = useState("");
   const [rateType, setRateType] = useState<"hourly" | "daily" | "weekly">("hourly");
   const [rateValue, setRateValue] = useState("");
-  const [dailyPreset, setDailyPreset] = useState<string>("custom");
-  const [weeklyPreset, setWeeklyPreset] = useState<string>("1645");
+  const [billingPreset, setBillingPreset] = useState<string>("hourly_custom");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [note, setNote] = useState("");
@@ -308,6 +307,7 @@ export function AdminAssignmentDialog({
       setSelectedDriverId("");
       setRateType("hourly");
       setRateValue("");
+      setBillingPreset("hourly_custom");
       setStartDate("");
       setEndDate("");
       setNote("");
