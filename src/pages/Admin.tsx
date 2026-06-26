@@ -2465,7 +2465,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     </Card>
                   ))}
                 </div>
-              </>
+              </div>
             )}
           </CardContent>
         </Card>
