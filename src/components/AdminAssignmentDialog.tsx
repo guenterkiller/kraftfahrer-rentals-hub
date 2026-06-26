@@ -529,74 +529,57 @@ export function AdminAssignmentDialog({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Abrechnungsart</Label>
-              <Select value={rateType} onValueChange={(value: "hourly" | "daily" | "weekly") => {
-                setRateType(value);
-                if (value === "hourly") {
-                  setDailyPreset("custom");
-                  setRateValue("");
-                } else if (value === "daily") {
-                  setDailyPreset("349");
-                  setRateValue("349");
-                } else if (value === "weekly") {
-                  setWeeklyPreset("1645");
-                  setRateValue("1645");
-                }
-              }}>
+              <Select
+                value={billingPreset}
+                onValueChange={(value) => {
+                  setBillingPreset(value);
+                  switch (value) {
+                    case "hourly_custom":
+                      setRateType("hourly");
+                      setRateValue("");
+                      break;
+                    case "daily_349":
+                      setRateType("daily");
+                      setRateValue("349");
+                      break;
+                    case "daily_450":
+                      setRateType("daily");
+                      setRateValue("450");
+                      break;
+                    case "daily_489":
+                      setRateType("daily");
+                      setRateValue("489");
+                      break;
+                    case "daily_custom":
+                      setRateType("daily");
+                      setRateValue("");
+                      break;
+                    case "weekly_1645":
+                      setRateType("weekly");
+                      setRateValue("1645");
+                      break;
+                    case "weekly_custom":
+                      setRateType("weekly");
+                      setRateValue("");
+                      break;
+                  }
+                }}
+              >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Abrechnungsart wählen..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="hourly">Stundensatz</SelectItem>
-                  <SelectItem value="daily">Tagessatz</SelectItem>
-                  <SelectItem value="weekly">Wochenpreis</SelectItem>
+                  <SelectItem value="hourly_custom">Stundensatz (individuell)</SelectItem>
+                  <SelectItem value="daily_349">Tagessatz – LKW-Fahrer CE – 349,00 €</SelectItem>
+                  <SelectItem value="daily_450">Tagessatz – Fernfahrer-Pauschale – 450,00 €</SelectItem>
+                  <SelectItem value="daily_489">Tagessatz – Baumaschinenführer / Fahrmischerfahrer – 489,00 €</SelectItem>
+                  <SelectItem value="daily_custom">Tagessatz (individuell)</SelectItem>
+                  <SelectItem value="weekly_1645">Wochenpreis – LKW-Fahrer CE – 1.645,00 € (5 Einsatztage à bis 10 Std.)</SelectItem>
+                  <SelectItem value="weekly_custom">Wochenpreis (individuell)</SelectItem>
                 </SelectContent>
               </Select>
-              {rateType === "daily" && (
-                <div className="mt-2">
-                  <Label className="text-sm">Tagessatz-Vorlage</Label>
-                  <Select
-                    value={dailyPreset}
-                    onValueChange={(value) => {
-                      setDailyPreset(value);
-                      if (value === "349") setRateValue("349");
-                      else if (value === "450") setRateValue("450");
-                      else if (value === "489") setRateValue("489");
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Tagessatz wählen..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="349">LKW-Fahrer CE – 349,00 €</SelectItem>
-                      <SelectItem value="450">Fernfahrer-Pauschale – 450,00 €</SelectItem>
-                      <SelectItem value="489">Baumaschinenführer / Fahrmischerfahrer – 489,00 €</SelectItem>
-                      <SelectItem value="custom">Individueller Tagessatz</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-              {rateType === "weekly" && (
-                <div className="mt-2">
-                  <Label className="text-sm">Wochenpreis-Vorlage</Label>
-                  <Select
-                    value={weeklyPreset}
-                    onValueChange={(value) => {
-                      setWeeklyPreset(value);
-                      if (value !== "custom") setRateValue(value);
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Wochenpreis wählen..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1645">LKW-Fahrer CE – Wochenpreis 1.645,00 € (5 Einsatztage à bis 10 Std.)</SelectItem>
-                      <SelectItem value="custom">Individueller Wochenpreis</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
             </div>
-            
+
             <div>
               <Label>{rateType === "daily" ? "Tagessatz netto (€)" : rateType === "weekly" ? "Wochenpreis netto (€)" : "Stundensatz netto (€)"}</Label>
               <Input
@@ -605,7 +588,7 @@ export function AdminAssignmentDialog({
                 onChange={(e) => setRateValue(e.target.value)}
                 placeholder={rateType === "daily" ? "349.00" : rateType === "weekly" ? "1645.00" : "25.00"}
                 step="0.50"
-                readOnly={(rateType === "daily" && dailyPreset !== "custom") || (rateType === "weekly" && weeklyPreset !== "custom")}
+                readOnly={!billingPreset.endsWith("_custom")}
               />
             </div>
           </div>
