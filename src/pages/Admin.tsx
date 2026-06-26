@@ -1821,10 +1821,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             );
                           })()}
                         </TableCell>
-                      </TableRow>
-                      {/* Erweiterte Details Row */}
-                      {expandedJobRows.has(req.id) && (
-                        <TableRow>
+                      </TableRow>,
+                      /* Erweiterte Details Row */
+                      expandedJobRows.has(req.id) ? (
+                        <TableRow key={`${req.id}-exp`}>
                           <TableCell colSpan={7} className="bg-muted/50 p-4 space-y-4">
                             {/* Nachricht und Besonderheiten */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1852,9 +1852,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             )}
                           </TableCell>
                         </TableRow>
-                      )}
-                    </React.Fragment>
-                  ))}
+                      ) : null,
+                  ])}
                 </TableBody>
                 </Table>
                 </div>
