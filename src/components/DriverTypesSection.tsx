@@ -9,7 +9,7 @@ const DriverTypesSection = () => {
     {
       title: "LKW-Fahrer CE",
       subtitle: "Vermittelte Fahrer",
-      description: "349 € pro Einsatztag (bis 10 Stunden) · zzgl. An- und Abfahrt",
+      description: "349 € pro Einsatztag · zzgl. An- und Abfahrt",
       image: lkwFahrerHero,
       features: ["Alle Logistikeinsätze", "Fahrmischer, ADR, Fernverkehr", "Wechselbrücke, Container, Hängerzug", "Entsorgung, Baustelle, Eventlogistik"],
       path: "/lkw-fahrer-buchen",
