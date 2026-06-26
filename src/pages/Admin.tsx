@@ -1598,9 +1598,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     </TableRow>
                   </TableHeader>
                 <TableBody>
-                  {sortedJobRequests.map((req) => (
-                    <React.Fragment key={req.id}>
-                      <TableRow>
+                  {sortedJobRequests.flatMap((req) => [
+                      <TableRow key={req.id}>
                         <TableCell className="text-center">
                           <div className="flex items-center justify-center">
                             {(() => {
