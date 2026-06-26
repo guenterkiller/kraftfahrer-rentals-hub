@@ -2165,7 +2165,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
             {fahrer.length === 0 ? (
               <p className="text-gray-500 italic text-center py-4">Keine Fahrer registriert.</p>
             ) : (
-              <>
+              <div>
                 {/* Desktop Table View - only show on very large screens */}
                 <div className="hidden xl:block overflow-x-auto">
                   <Table>
