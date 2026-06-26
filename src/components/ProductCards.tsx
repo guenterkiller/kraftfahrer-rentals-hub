@@ -36,7 +36,7 @@ const ProductCards = () => {
               <div className="mb-4 pb-4 border-b border-border space-y-2">
                 <div className="text-4xl font-bold text-foreground">349 €</div>
                 <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-                <p className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden</p>
+                <p className="text-xs text-muted-foreground">Einsatzdauer bis max. 9 Stunden je Einsatztag</p>
                 <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               </div>
               <Button
@@ -60,7 +60,7 @@ const ProductCards = () => {
               <div className="mb-4 pb-4 border-b border-border space-y-2">
                 <div className="text-4xl font-bold text-foreground">1.645 €</div>
                 <p className="text-sm font-medium text-foreground">pro Woche</p>
-                <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+                <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage</p>
                 <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               </div>
               <Button
