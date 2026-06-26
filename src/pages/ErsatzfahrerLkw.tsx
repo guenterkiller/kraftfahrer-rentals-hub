@@ -27,7 +27,7 @@ const ErsatzfahrerLkw = () => {
       },
       {
         question: "Was kostet ein Ersatzfahrer pro Tag?",
-        answer: "349 € pro Einsatztag für LKW-Fahrer CE (gültig für: bis 10 Stunden), zzgl. An- und Abfahrt. Keine versteckten Kosten, transparente Abrechnung."
+        answer: "349 € pro Einsatztag für LKW-Fahrer CE, zzgl. An- und Abfahrt. Einsatzdauer bis maximal 9 Stunden je Einsatztag. Keine versteckten Kosten, transparente Abrechnung."
       },
       {
         question: "Ist das Arbeitnehmerüberlassung?",
@@ -77,7 +77,7 @@ const ErsatzfahrerLkw = () => {
       },
       {
         question: "Sind Ersatzfahrer teurer als reguläre Fahrer?",
-        answer: "Die Tagespauschale von <strong>349 € pro Einsatztag (gültig für: bis 10 Stunden)</strong> ist fix – egal ob geplante Urlaubsvertretung oder spontaner Krankheitsfall. Zusätzlich: An- und Abfahrt. Keine Zuschläge für Kurzfristigkeit."
+        answer: "Die Tagespauschale von <strong>349 € pro Einsatztag</strong> ist fix – egal ob geplante Urlaubsvertretung oder spontaner Krankheitsfall. Zusätzlich: An- und Abfahrt. Keine Zuschläge für Kurzfristigkeit."
       },
       {
         question: "Wie läuft die Vertretung organisatorisch ab?",
