@@ -89,12 +89,22 @@ const AdminLogin = () => {
       console.log('Auth successful, verifying admin role...');
 
       // Verify admin role - with self-healing for the known admin
-      let { data: roleData, error: roleError } = await supabase
+      // Timeout-Schutz, damit der Button nicht dauerhaft auf "Anmelden..." hängt
+      const roleQuery = supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', authData.user.id)
         .eq('role', 'admin')
         .maybeSingle();
+
+      const timeoutPromise = new Promise<{ data: null; error: { message: string } }>((resolve) =>
+        setTimeout(
+          () => resolve({ data: null, error: { message: 'Zeitüberschreitung bei der Rollenprüfung' } }),
+          10000
+        )
+      );
+
+      let { data: roleData, error: roleError } = (await Promise.race([roleQuery, timeoutPromise])) as any;
 
       // Self-healing: If this is the known admin email but role is missing, create it
       const KNOWN_ADMIN_EMAIL = 'guenter.killer@t-online.de';
