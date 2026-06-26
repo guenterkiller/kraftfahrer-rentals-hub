@@ -72,7 +72,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-red-700 text-xs mt-3 leading-snug">Gültig für: bis 10 Stunden Einsatzzeit</p>
+                      <p className="text-red-700 text-xs mt-3 leading-snug">Einsatzdauer bis maximal 9 Stunden je Einsatztag</p>
                       <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
@@ -91,7 +91,7 @@ const PreiseUndAblauf = () => {
                     <div className="text-center">
                       <div className="text-4xl font-bold text-red-700 mb-2">1.645 €</div>
                       <p className="text-red-800 font-medium text-sm">pro Woche</p>
-                      <p className="text-red-700 text-xs mt-3 leading-snug">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden Einsatzzeit</p>
+                      <p className="text-red-700 text-xs mt-3 leading-snug">Nur für LKW-Fahrer CE: 5 Einsatztage · Einsatzdauer bis maximal 9 Stunden je Einsatztag</p>
                       <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
                     </div>
                   </CardContent>
@@ -208,8 +208,8 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-3 text-muted-foreground">
                 <p>
                   Der Tagessatz gilt für die <strong className="text-foreground">gesamte Einsatzzeit</strong>,
-                  nicht ausschließlich für die reine Fahrzeit. Ein Einsatztag umfasst bis zu
-                  <strong className="text-foreground"> 10 Stunden Einsatzzeit</strong>
+                  nicht ausschließlich für die reine Fahrzeit. Die Einsatzdauer beträgt
+                  <strong className="text-foreground"> maximal 9 Stunden je Einsatztag</strong>
                   {' '}(Baumaschinenführer / Mischmeister: bis zu 8 Stunden Einsatzzeit).
                 </p>
                 <div>
@@ -229,7 +229,7 @@ const PreiseUndAblauf = () => {
                   <p className="font-semibold text-foreground mb-1">Gesetzliche Lenkzeiten (Hinweis):</p>
                   <ul className="ml-4 space-y-1">
                     <li>• Die gesetzliche Tageslenkzeit beträgt in der Regel maximal 9 Stunden.</li>
-                    <li>• Eine Verlängerung auf 10 Stunden Lenkzeit ist nur im gesetzlich zulässigen Rahmen möglich.</li>
+                    <li>• Eine gesetzlich zulässige Verlängerung der täglichen Lenkzeit ist nur im engen Rahmen der geltenden Vorschriften möglich.</li>
                     <li>• Nach spätestens 4,5 Stunden Lenkzeit ist eine gesetzliche Pause erforderlich.</li>
                   </ul>
                 </div>
