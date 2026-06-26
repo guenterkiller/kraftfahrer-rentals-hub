@@ -39,7 +39,7 @@ const PricingSection = () => {
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
               <div className="text-4xl font-bold text-foreground">349 €</div>
               <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden Einsatzzeit</p>
+              <p className="text-xs text-muted-foreground">Einsatzdauer bis max. 9 Stunden je Einsatztag</p>
               <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               <Button
                 className="w-full h-11 mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold"
@@ -61,7 +61,7 @@ const PricingSection = () => {
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
               <div className="text-4xl font-bold text-foreground">1.645 €</div>
               <p className="text-sm font-medium text-foreground">pro Woche</p>
-              <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden Einsatzzeit</p>
+              <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage</p>
               <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
               <Button
                 className="w-full h-11 mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold"
@@ -139,8 +139,8 @@ const PricingSection = () => {
           <CardContent className="text-sm space-y-3">
             <p>
               Der Tagessatz gilt für die <strong>gesamte Einsatzzeit</strong>, nicht ausschließlich
-              für die reine Fahrzeit. Ein Einsatztag umfasst bis zu <strong>10 Stunden
-              Einsatzzeit</strong>.
+              für die reine Fahrzeit. Die Einsatzdauer beträgt <strong>maximal 9 Stunden je
+              Einsatztag</strong>.
             </p>
             <div>
               <p className="font-semibold mb-1">Zur Einsatzzeit zählen u. a.:</p>
@@ -159,7 +159,7 @@ const PricingSection = () => {
               <p className="font-semibold mb-1">Gesetzliche Lenkzeiten (Hinweis):</p>
               <ul className="ml-4 space-y-1 text-muted-foreground">
                 <li>• Die gesetzliche Tageslenkzeit beträgt in der Regel maximal 9 Stunden.</li>
-                <li>• Eine Verlängerung auf 10 Stunden Lenkzeit ist nur im gesetzlich zulässigen Rahmen möglich.</li>
+                <li>• Eine gesetzlich zulässige Verlängerung der täglichen Lenkzeit ist nur im engen Rahmen der geltenden Vorschriften möglich.</li>
                 <li>• Nach spätestens 4,5 Stunden Lenkzeit ist eine gesetzliche Pause erforderlich.</li>
               </ul>
             </div>
