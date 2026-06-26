@@ -83,7 +83,7 @@ export function TestSendJobButton({ jobId, size = "sm", className }: TestSendJob
   };
 
   return (
-    <>
+    <span className="inline-flex">
       <Button
         size={size}
         variant="outline"
@@ -132,6 +132,6 @@ export function TestSendJobButton({ jobId, size = "sm", className }: TestSendJob
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </span>
   );
 }

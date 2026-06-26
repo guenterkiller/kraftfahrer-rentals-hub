@@ -152,7 +152,7 @@ const PerformanceMonitor = () => {
   if (import.meta.env.MODE !== 'development') return null;
 
   return (
-    <>
+    <div className="contents">
       {/* Toggle Button (fixed bottom-right) */}
       <button
         onClick={() => setIsVisible(!isVisible)}
@@ -274,7 +274,7 @@ const PerformanceMonitor = () => {
           </Card>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

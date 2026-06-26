@@ -2313,7 +2313,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </TableCell>
                           </TableRow>
                         ) : null,
-                      ])}
+                      ].filter(Boolean))}
                     </TableBody>
                   </Table>
                 </div>
