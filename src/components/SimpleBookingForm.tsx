@@ -320,7 +320,7 @@ const SimpleBookingForm = () => {
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
                     <div className="text-2xl font-bold text-foreground">349 €</div>
                     <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">Gültig für: bis 10 Stunden Einsatzzeit</div>
+                    <div className="text-xs text-muted-foreground">Einsatzdauer bis maximal 9 Stunden je Einsatztag</div>
                     <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
@@ -335,7 +335,7 @@ const SimpleBookingForm = () => {
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
                     <div className="text-2xl font-bold text-foreground">1.645 €</div>
                     <div className="text-xs font-medium text-foreground">pro Woche</div>
-                    <div className="text-xs text-muted-foreground">5 Einsatztage à bis 10 Stunden Einsatzzeit</div>
+                    <div className="text-xs text-muted-foreground">5 Einsatztage · Einsatzdauer bis maximal 9 Stunden je Einsatztag</div>
                     <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
                   </CardContent>
                 </Card>
@@ -502,7 +502,7 @@ const SimpleBookingForm = () => {
                         />
                         <span className="font-semibold text-foreground">LKW-Fahrer CE</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">349 € pro Einsatztag · bis 10 Stunden Einsatzzeit · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">349 € pro Einsatztag · Einsatzdauer bis maximal 9 Stunden · zzgl. An- und Abfahrt</div>
                     </label>
 
                     {/* LKW-Fahrer CE – Wochenpreis */}
@@ -527,7 +527,7 @@ const SimpleBookingForm = () => {
                         />
                         <span className="font-semibold text-foreground">LKW-Fahrer CE – Wochenpreis</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">1.645 € pro Woche · 5 Einsatztage à bis 10 Stunden Einsatzzeit · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">1.645 € pro Woche · 5 Einsatztage · Einsatzdauer bis maximal 9 Stunden je Einsatztag · zzgl. An- und Abfahrt</div>
                     </label>
 
                     {/* Fernfahrer-Pauschale */}
