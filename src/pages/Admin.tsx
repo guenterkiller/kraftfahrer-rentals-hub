@@ -2120,7 +2120,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     );
                   })}
                 </div>
-              </>
+              </div>
             )}
           </CardContent>
         </Card>
