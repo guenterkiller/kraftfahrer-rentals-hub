@@ -89,7 +89,7 @@ const LkwFahrerKurzfristig = () => {
       },
       {
         question: "Was wenn mein Einsatz länger dauert als geplant?",
-        answer: "<strong>Kein Problem.</strong> Sie können den Fahrer tageweise verlängern – jeder weitere Einsatztag (bis 10 Stunden) zu 349 €. Flexible Anpassung möglich."
+        answer: "<strong>Kein Problem.</strong> Sie können den Fahrer tageweise verlängern – jeder weitere Einsatztag zu 349 €. Flexible Anpassung möglich."
       },
       {
         question: "Vermitteln Sie auch Fahrer für Nachtfahrten?",

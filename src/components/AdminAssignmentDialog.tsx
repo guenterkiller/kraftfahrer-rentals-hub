@@ -574,7 +574,7 @@ export function AdminAssignmentDialog({
                   <SelectItem value="daily_450">Tagessatz – Fernfahrer-Pauschale – 450,00 €</SelectItem>
                   <SelectItem value="daily_489">Tagessatz – Baumaschinenführer / Fahrmischerfahrer – 489,00 €</SelectItem>
                   <SelectItem value="daily_custom">Tagessatz (individuell)</SelectItem>
-                  <SelectItem value="weekly_1645">Wochenpreis – LKW-Fahrer CE – 1.645,00 € (5 Einsatztage à bis 10 Std.)</SelectItem>
+                  <SelectItem value="weekly_1645">Wochenpreis – LKW-Fahrer CE – 1.645,00 € (5 Einsatztage)</SelectItem>
                   <SelectItem value="weekly_custom">Wochenpreis (individuell)</SelectItem>
                 </SelectContent>
               </Select>

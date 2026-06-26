@@ -32,7 +32,7 @@ const PricingBanner = () => {
                 <h3 className="text-xl font-bold text-red-900 mb-2">LKW-Fahrer CE</h3>
                 <div className="text-4xl font-bold text-red-700 mb-1">349 €</div>
                 <p className="text-red-800 font-medium text-sm mb-3">pro Einsatztag</p>
-                <p className="text-red-700 text-xs">Gültig für: bis 10 Stunden</p>
+                <p className="text-red-700 text-xs">Einsatzdauer bis max. 9 Stunden je Einsatztag</p>
                 <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
               </div>
             </CardContent>
@@ -48,7 +48,7 @@ const PricingBanner = () => {
                 <h3 className="text-xl font-bold text-red-900 mb-2 pr-20">LKW-Fahrer CE – Wochenpreis</h3>
                 <div className="text-4xl font-bold text-red-700 mb-1">1.645 €</div>
                 <p className="text-red-800 font-medium text-sm mb-3">pro Woche</p>
-                <p className="text-red-700 text-xs">Nur für LKW-Fahrer CE: 5 Einsatztage à bis 10 Stunden</p>
+                <p className="text-red-700 text-xs">Nur für LKW-Fahrer CE: 5 Einsatztage</p>
                 <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
               </div>
             </CardContent>

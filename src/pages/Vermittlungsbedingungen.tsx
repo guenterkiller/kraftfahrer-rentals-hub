@@ -94,7 +94,7 @@ const Vermittlungsbedingungen = () => {
                 <h2 className="text-xl font-semibold text-foreground mb-4">4a. Einsatzzeit</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   Der Tagessatz gilt für die gesamte Einsatzzeit, nicht ausschließlich für die
-                  reine Fahrzeit. Ein Einsatztag umfasst bis zu 10 Stunden Einsatzzeit (für
+                  reine Fahrzeit. Die Einsatzdauer beträgt maximal 9 Stunden je Einsatztag (für
                   Baumaschinenführer / Mischmeister bis zu 8 Stunden Einsatzzeit).
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
@@ -104,9 +104,9 @@ const Vermittlungsbedingungen = () => {
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Hinweis zu gesetzlichen Lenkzeiten: Die gesetzliche Tageslenkzeit beträgt in
-                  der Regel maximal 9 Stunden; eine Verlängerung auf 10 Stunden Lenkzeit ist nur
-                  im gesetzlich zulässigen Rahmen möglich. Nach spätestens 4,5 Stunden Lenkzeit
-                  ist eine gesetzliche Pause erforderlich.
+                  der Regel maximal 9 Stunden; eine gesetzlich zulässige Verlängerung der
+                  täglichen Lenkzeit ist nur im engen Rahmen der geltenden Vorschriften möglich.
+                  Nach spätestens 4,5 Stunden Lenkzeit ist eine gesetzliche Pause erforderlich.
                 </p>
               </section>
 

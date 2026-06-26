@@ -36,7 +36,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "Transparente Preise: 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert."
+        answer: "Transparente Preise: 349 € pro Einsatztag zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
@@ -101,14 +101,14 @@ const LKWFahrerBuchen = () => {
         "@type": "Offer",
         "price": "349",
         "priceCurrency": "EUR",
-        "description": "LKW-Fahrer (C+E) Tagespreis pro Einsatztag (bis 10 Stunden)"
+        "description": "LKW-Fahrer (C+E) Tagespreis pro Einsatztag"
       }
     }
   };
 
   const heroData = {
     h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
-    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Selbstständige Fahrer für flexible Einsätze – tageweise buchbar. 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt.",
+    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Selbstständige Fahrer für flexible Einsätze – tageweise buchbar. 349 € pro Einsatztag zzgl. An- und Abfahrt.",
     bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig nach Verfügbarkeit", "Transparente Tagessätze"]
   };
 
@@ -129,7 +129,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "<strong>Transparente Preise:</strong> 349 € pro Einsatztag (bis 10 Stunden) zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten individuell."
+        answer: "<strong>Transparente Preise:</strong> 349 € pro Einsatztag zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten individuell."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
