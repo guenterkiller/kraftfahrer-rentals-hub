@@ -129,12 +129,19 @@ const AdminLogin = () => {
 
       console.log('Admin role verified, creating session log...');
 
-      // Log the admin session
-      await supabase.from('admin_sessions').insert({
-        user_id: authData.user.id,
-        ip_address: null, // Could be captured from a server-side function
-        user_agent: navigator.userAgent
-      });
+      // Log the admin session (fire-and-forget – darf Navigation nicht blockieren)
+      void supabase
+        .from('admin_sessions')
+        .insert({
+          user_id: authData.user.id,
+          ip_address: null, // Could be captured from a server-side function
+          user_agent: navigator.userAgent,
+        })
+        .then(({ error }) => {
+          if (error) {
+            console.warn('admin_sessions insert failed (non-blocking):', error.message);
+          }
+        });
 
       toast({
         title: "Erfolgreich angemeldet",
