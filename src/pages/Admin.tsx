@@ -2177,9 +2177,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {sortedFahrer.map((f) => (
-                        <React.Fragment key={f.id}>
-                        <TableRow>
+                      {sortedFahrer.flatMap((f) => [
+                        <TableRow key={f.id}>
                           <TableCell className="font-medium">
                             {f.vorname} {f.nachname}
                           </TableCell>
@@ -2306,16 +2305,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                </div>
                              </div>
                           </TableCell>
-                        </TableRow>
-                        {expandedRows.has(f.id) && (
-                          <TableRow className="bg-muted/30">
+                        </TableRow>,
+                        expandedRows.has(f.id) ? (
+                          <TableRow key={`${f.id}-docs`} className="bg-muted/30">
                             <TableCell colSpan={5}>
                               {renderDriverDocuments(f.id)}
                             </TableCell>
                           </TableRow>
-                        )}
-                        </React.Fragment>
-                      ))}
+                        ) : null,
+                      ])}
                     </TableBody>
                   </Table>
                 </div>
