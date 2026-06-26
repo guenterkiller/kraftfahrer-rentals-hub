@@ -1582,7 +1582,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
             {jobRequests.length === 0 ? (
               <p className="text-gray-500 italic text-center py-4">Keine Anfragen vorhanden.</p>
             ) : (
-              <>
+              <div>
                 {/* Desktop Table View */}
                 <div className="hidden lg:block overflow-x-auto">
                   <Table>
