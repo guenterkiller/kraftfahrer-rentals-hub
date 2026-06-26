@@ -1598,7 +1598,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     </TableRow>
                   </TableHeader>
                 <TableBody>
-                  {sortedJobRequests.flatMap((req) => [
+                      {sortedJobRequests.flatMap((req) => [
                       <TableRow key={req.id}>
                         <TableCell className="text-center">
                           <div className="flex items-center justify-center">
@@ -1852,8 +1852,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             )}
                           </TableCell>
                         </TableRow>
-                      ) : null,
-                  ])}
+                        ) : null,
+                      ].filter(Boolean))}
                 </TableBody>
                 </Table>
                 </div>
@@ -2313,7 +2313,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </TableCell>
                           </TableRow>
                         ) : null,
-                      ])}
+                      ].filter(Boolean))}
                     </TableBody>
                   </Table>
                 </div>

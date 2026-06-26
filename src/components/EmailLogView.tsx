@@ -151,7 +151,7 @@ export function EmailLogView() {
             Keine E-Mail-Logs gefunden.
           </div>
         ) : (
-          <>
+          <div>
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -229,7 +229,7 @@ export function EmailLogView() {
                 </div>
               </div>
             )}
-          </>
+          </div>
         )}
       </CardContent>
     </Card>

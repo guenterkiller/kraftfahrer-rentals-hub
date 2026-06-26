@@ -417,10 +417,10 @@ export function CustomerNewsletterDialog({ open, onOpenChange }: CustomerNewslet
               {sending ? (
                 "Wird gesendet..."
               ) : (
-                <>
+                <span className="inline-flex items-center">
                   <Send className="h-4 w-4 mr-2" />
                   An {customers.length} Kunden senden
-                </>
+                </span>
               )}
             </Button>
           </div>

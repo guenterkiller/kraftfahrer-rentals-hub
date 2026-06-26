@@ -51,7 +51,7 @@ export function CookieConsent() {
   }
 
   return (
-    <>
+    <div className="contents">
       {/* kleines Reopen-Widget, z. B. im Footer verlinken */}
       <style>{`.consent-banner{position:fixed;left:0;right:0;bottom:0;background:#0b1220;color:#fff;padding:16px;z-index:9999}
       .consent-box{max-width:960px;margin:0 auto;display:flex;gap:16px;align-items:flex-start}
@@ -83,7 +83,7 @@ export function CookieConsent() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
