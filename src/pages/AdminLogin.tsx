@@ -57,21 +57,29 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      console.log('Attempting secure admin login...');
-      
-      // Sign in with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email: email.trim().toLowerCase(),
-        password: password
-      });
+      console.log('[LOGIN 1] vor signInWithPassword');
+      let authData: any = null;
+      let authError: any = null;
+      try {
+        const res = await supabase.auth.signInWithPassword({
+          email: email.trim().toLowerCase(),
+          password: password,
+        });
+        authData = res.data;
+        authError = res.error;
+      } catch (err) {
+        console.error('[LOGIN 2-CATCH] signInWithPassword throw:', err);
+        authError = err;
+      }
+      console.log('[LOGIN 2] nach signInWithPassword', { hasUser: !!authData?.user, hasSession: !!authData?.session, authError });
 
       if (authError) {
         console.error('Auth error:', authError);
         toast({
           title: "Anmeldung fehlgeschlagen",
-          description: authError.message === "Invalid login credentials" 
+          description: authError?.message === "Invalid login credentials" 
             ? "Ungültige E-Mail oder Passwort" 
-            : authError.message,
+            : authError?.message ?? 'Unbekannter Fehler',
           variant: "destructive",
         });
         return;
@@ -86,7 +94,7 @@ const AdminLogin = () => {
         return;
       }
 
-      console.log('Auth successful, verifying admin role...');
+      console.log('[LOGIN 3] vor Rollenprüfung (user_roles select)');
 
       // Verify admin role - with self-healing for the known admin
       // Timeout-Schutz, damit der Button nicht dauerhaft auf "Anmelden..." hängt
@@ -104,17 +112,31 @@ const AdminLogin = () => {
         )
       );
 
-      let { data: roleData, error: roleError } = (await Promise.race([roleQuery, timeoutPromise])) as any;
+      let roleData: any = null;
+      let roleError: any = null;
+      try {
+        const raceRes = (await Promise.race([roleQuery, timeoutPromise])) as any;
+        roleData = raceRes?.data;
+        roleError = raceRes?.error;
+      } catch (err) {
+        console.error('[LOGIN 4-CATCH] Rollenprüfung throw:', err);
+        roleError = err;
+      }
+      console.log('[LOGIN 4] nach Rollenprüfung', { roleData, roleError });
 
       // Self-healing: If this is the known admin email but role is missing, create it
       const KNOWN_ADMIN_EMAIL = 'guenter.killer@t-online.de';
       if ((!roleData || roleError) && authData.user.email?.toLowerCase() === KNOWN_ADMIN_EMAIL) {
-        console.log('Admin role missing for known admin, attempting self-healing...');
-        
-        // Use the database function to assign admin role (bypasses RLS)
-        const { error: assignError } = await supabase.rpc('assign_admin_role', {
-          _user_id: authData.user.id
-        });
+        console.log('[LOGIN 5] vor assign_admin_role RPC (self-healing)');
+        let assignError: any = null;
+        try {
+          const res = await supabase.rpc('assign_admin_role', { _user_id: authData.user.id });
+          assignError = res.error;
+        } catch (err) {
+          console.error('[LOGIN 6-CATCH] assign_admin_role throw:', err);
+          assignError = err;
+        }
+        console.log('[LOGIN 6] nach assign_admin_role', { assignError });
 
         if (!assignError) {
           console.log('✅ Self-healing: Admin role assigned successfully');
@@ -128,7 +150,9 @@ const AdminLogin = () => {
       if (roleError || !roleData) {
         console.error('Role verification failed:', roleError);
         // User is authenticated but not an admin
-        await supabase.auth.signOut();
+        console.log('[LOGIN 7] vor signOut (kein Admin)');
+        try { await supabase.auth.signOut(); } catch (err) { console.error('[LOGIN 7-CATCH] signOut throw:', err); }
+        console.log('[LOGIN 8] nach signOut');
         toast({
           title: "Zugriff verweigert",
           description: "Sie haben keine Admin-Berechtigung",
@@ -137,7 +161,7 @@ const AdminLogin = () => {
         return;
       }
 
-      console.log('Admin role verified, creating session log...');
+      console.log('[LOGIN 9] Admin verifiziert, navigate → /admin');
 
       // Log the admin session (fire-and-forget – darf Navigation nicht blockieren)
       void supabase
@@ -158,16 +182,17 @@ const AdminLogin = () => {
         description: "Willkommen im Admin-Bereich",
       });
       
-      console.log('Login successful, navigating to admin...');
+      console.log('[LOGIN 10] navigate("/admin") aufgerufen');
       navigate("/admin");
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('[LOGIN OUTER-CATCH] Login error:', error);
       toast({
         title: "Fehler beim Anmelden",
         description: "Ein unerwarteter Fehler ist aufgetreten",
         variant: "destructive",
       });
     } finally {
+      console.log('[LOGIN FINALLY] setLoading(false)');
       setLoading(false);
     }
   };
