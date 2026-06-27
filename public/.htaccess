@@ -17,6 +17,15 @@ RewriteEngine On
   </FilesMatch>
 </IfModule>
 
+# Service Worker & Web App Manifest: KEIN Cache (überschreibt 1-Jahr-Regel oben)
+<IfModule mod_headers.c>
+  <FilesMatch "(sw\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/css "access plus 1 year"
