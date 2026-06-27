@@ -10,6 +10,10 @@ export function usePrefetchRoutes() {
   useEffect(() => {
     // Nur einmal ausführen
     if (hasPrefetched.current) return;
+    // Im Adminbereich keine fremden Landingpage-Chunks prefetchen
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+      return;
+    }
     hasPrefetched.current = true;
 
     const prefetchChunks = () => {

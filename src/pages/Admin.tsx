@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -84,7 +84,7 @@ const Admin = () => {
   const [jobRequests, setJobRequests] = useState<any[]>([]);
   const [jobAssignments, setJobAssignments] = useState<any[]>([]);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
-  const [inactivityTimer, setInactivityTimer] = useState<NodeJS.Timeout | null>(null);
+  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
@@ -356,15 +356,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   // Auto-Logout bei Inaktivität
   const setupInactivityTimer = () => {
     const resetTimer = () => {
-      if (inactivityTimer) {
-        clearTimeout(inactivityTimer);
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
       }
-      
-      const timer = setTimeout(() => {
+      inactivityTimerRef.current = setTimeout(() => {
         handleAutoLogout();
-      }, 60 * 60 * 1000); // 60 Minuten statt 15 Minuten
-      
-      setInactivityTimer(timer);
+      }, 60 * 60 * 1000); // 60 Minuten
     };
 
     // Activity Events
@@ -379,6 +376,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       events.forEach(event => {
         document.removeEventListener(event, resetTimer, true);
       });
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+        inactivityTimerRef.current = null;
+      }
     };
   };
 
@@ -498,8 +499,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     setFahrer([]);
     setDocuments({});
     
-    if (inactivityTimer) {
-      clearTimeout(inactivityTimer);
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+      inactivityTimerRef.current = null;
     }
     
     toast({
