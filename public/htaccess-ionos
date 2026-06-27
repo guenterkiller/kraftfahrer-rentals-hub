@@ -22,6 +22,17 @@ RewriteEngine On
   </FilesMatch>
 </IfModule>
 
+# 2b) Service Worker & Web App Manifest: KEIN Cache (überschreibt 1-Jahr-Regel oben)
+# Stellt sicher, dass Updates an sw.js / Manifest (Icons, theme_color, ...)
+# zuverlässig bei Clients ankommen und nicht 1 Jahr "immutable" hängenbleiben.
+<IfModule mod_headers.c>
+  <FilesMatch "(sw\.js|manifest\.webmanifest)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
 # AVIF MIME-Type (für moderne Browser)
 <IfModule mod_mime.c>
   AddType image/avif .avif
