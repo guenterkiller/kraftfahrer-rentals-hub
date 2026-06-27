@@ -131,7 +131,7 @@ const App = () => (
             
             {/* Landing Pages - lazy loaded */}
             <Route path="/lkw-fahrer-buchen" element={<LKWFahrerBuchen />} />
-            <Route path="/lkwfahrer-buchen" element={<LKWFahrerBuchen />} />
+            <Route path="/lkwfahrer-buchen" element={<Navigate to="/lkw-fahrer-buchen" replace />} />
             <Route path="/kraftfahrer-mieten" element={<KraftfahrerMieten />} />
             <Route path="/ersatzfahrer-lkw" element={<ErsatzfahrerLkw />} />
             <Route path="/mietfahrer" element={<Mietfahrer />} />
@@ -140,11 +140,11 @@ const App = () => (
             <Route path="/baumaschinenfuehrer-buchen" element={<BaumaschinenfuehrerBuchen />} />
             <Route path="/fluessigboden-service" element={<FlüssigbodenService />} />
             
-            {/* 301 Redirects for removed pages → LKW CE Fahrer category */}
-            <Route path="/tankwagenfahrer-buchen" element={<LKWFahrerBuchen />} />
-            <Route path="/adr-fahrer-buchen" element={<LKWFahrerBuchen />} />
-            <Route path="/fahrmischerfahrer-buchen" element={<LKWFahrerBuchen />} />
-            <Route path="/fahrmischerfahrer-gesucht" element={<LKWFahrerBuchen />} />
+            {/* 301-äquivalent: Aliasrouten via Navigate replace → keine Duplicate-Content-Canonicals */}
+            <Route path="/tankwagenfahrer-buchen" element={<Navigate to="/lkw-fahrer-buchen" replace />} />
+            <Route path="/adr-fahrer-buchen" element={<Navigate to="/lkw-fahrer-buchen" replace />} />
+            <Route path="/fahrmischerfahrer-buchen" element={<Navigate to="/lkw-fahrer-buchen" replace />} />
+            <Route path="/fahrmischerfahrer-gesucht" element={<Navigate to="/lkw-fahrer-buchen" replace />} />
             
             <Route path="/begleitfahrzeuge-bf3" element={<BegleitfahrzeugeBF3 />} />
             <Route path="/preise-und-ablauf" element={<PreiseUndAblauf />} />
