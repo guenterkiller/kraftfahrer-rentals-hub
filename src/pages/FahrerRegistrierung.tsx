@@ -501,26 +501,26 @@ const FahrerRegistrierung = () => {
               <CardContent className="p-8">
                   <div className="space-y-6">
                   <div className="text-center">
-                    <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
+                    <h1 className="text-2xl md:text-3xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
                       🚛 Selbstständige LKW-Fahrer mit CE-Führerschein gesucht
-                    </h2>
+                    </h1>
                     <p className="text-lg text-muted-foreground mb-3">
-                      Wir vermitteln in erster Linie selbstständige LKW-Berufskraftfahrer mit Führerscheinklasse CE. Bewerbungen von Fahrern mit den Klassen C1, C, CE, D1, D oder DE sind herzlich willkommen.
+                      Fahrerexpress vermittelt selbstständige LKW-Berufskraftfahrer für Einsätze in Deutschland und Europa. Gesucht werden Fahrer mit den Führerscheinklassen C1, C, CE, D1, D oder DE – Schwerpunkt LKW-Fahrer CE.
                     </p>
                     <p className="text-lg text-muted-foreground">
-                      Sie entscheiden eigenverantwortlich, welche Auftragsangebote Sie annehmen. Einsatzort, Zeitraum, Fahrzeugart und Konditionen werden vor jedem Auftrag transparent abgestimmt.
+                      Als selbstständiger Kraftfahrer bzw. Unternehmer im Güterverkehr entscheiden Sie eigenverantwortlich über jedes Auftragsangebot. Einsatzort, Zeitraum, Fahrzeugart und Vergütung werden vor jedem LKW-Fahrer-Auftrag transparent abgestimmt.
                     </p>
                     <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
                       <p className="text-sm font-medium text-primary">
-                        🇪🇺 Fahrer aus Deutschland sowie aus allen EU-/EWR-Staaten können sich registrieren, sofern eine anerkannte Fahrerlaubnis, Fahrerkarte, Berufskraftfahrerqualifikation und alle rechtlichen Voraussetzungen für einen Einsatz in Deutschland erfüllt sind.
+                        🇪🇺 Selbstständige Berufskraftfahrer aus Deutschland sowie aus allen EU-/EWR-Staaten können sich für europaweite Einsätze registrieren – Voraussetzung sind eine anerkannte Fahrerlaubnis (CE-Führerschein bzw. C1, C, D1, D oder DE), eine gültige Fahrerkarte, die Berufskraftfahrerqualifikation sowie alle rechtlichen Voraussetzungen für einen Einsatz in Deutschland.
                       </p>
                     </div>
                   </div>
 
                   <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
                     <p className="text-lg mb-4">
-                      Bei Fahrerexpress arbeiten Sie als selbstständiger Unternehmer auf Augenhöhe –
-                      mit klar abgestimmten Aufträgen, transparenter Vergütung und einem Ansprechpartner, der die Branche aus eigener Erfahrung kennt.
+                      Bei Fahrerexpress arbeiten Sie als selbstständiger LKW-Fahrer und Unternehmer im Güterverkehr auf Augenhöhe –
+                      mit klar abgestimmten LKW-Fahrer-Aufträgen, transparenter Vergütung und einem persönlichen Ansprechpartner, der die Fahrervermittlung und die Branche aus eigener Erfahrung kennt.
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-4 my-6">
