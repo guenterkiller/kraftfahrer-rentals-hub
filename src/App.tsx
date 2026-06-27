@@ -64,6 +64,11 @@ function DeferredAnalytics() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
+    // Im Adminbereich keine Analytics/WebVitals laden
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {
+      return;
+    }
+
     // Nur einmal laden - keine doppelten Events
     let mounted = true;
     
