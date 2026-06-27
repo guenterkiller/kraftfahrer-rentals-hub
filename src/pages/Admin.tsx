@@ -346,12 +346,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   useEffect(() => {
     checkAuth();
-    setupInactivityTimer();
-    
+    const cleanupInactivityTimer = setupInactivityTimer();
+
     return () => {
-      if (inactivityTimer) {
-        clearTimeout(inactivityTimer);
-      }
+      cleanupInactivityTimer?.();
     };
   }, []);
 
@@ -428,25 +426,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const checkAuth = async () => {
-    console.log("🔍 Admin: Prüfe Supabase Auth...");
+    console.log("🔍 Admin: Lese Session (Auth bereits durch AdminRoute geprüft)...");
     setAuthChecking(true);
-    
-    try {
-      let { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-      // Nur refreshen, wenn Session existiert UND Ablaufzeit bekannt UND bald abgelaufen.
-      // Fehlt expires_at, gilt die Session nicht automatisch als abgelaufen.
-      const expSec = (session as any)?.expires_at as number | undefined;
-      const expiringSoon = !!(session && expSec && expSec * 1000 < Date.now() + 60_000);
-      if (expiringSoon) {
-        console.log("🔄 Admin: Session läuft bald ab – versuche Refresh…");
-        const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
-        if (!refreshError && refreshed?.session) {
-          session = refreshed.session;
-        } else {
-          console.log("⚠️ Admin: Refresh nicht erfolgreich, nutze bestehende Session weiter");
-        }
-      }
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
       if (sessionError || !session) {
         // AdminRoute hat eigentlich bereits geprüft – sicherheitshalber zurück zum Login.
@@ -456,11 +440,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         return;
       }
 
-      console.log("🔐 Admin: Session gefunden für:", session.user.email);
-
-      // Hinweis: Die Admin-Rollenprüfung erfolgt ausschließlich in AdminRoute.
-      // Hier nur Session lesen und Daten laden, um doppelte Roundtrips zu vermeiden.
-      console.log("✅ Admin: Session ok – lade Daten (Rollencheck via AdminRoute)");
+      // Keine erneute Rollen-/Refresh-Prüfung: AdminRoute ist die Sicherheitsinstanz.
       setUser({ email: session.user.email } as User);
       
       // Persist simple admin session for edge function calls
