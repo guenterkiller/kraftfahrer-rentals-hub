@@ -204,6 +204,13 @@ const FahrerRegistrierung = () => {
       case 'fuehrerscheinklassen':
         if (!value || value.length === 0) {
           errors.fuehrerscheinklassen = 'Bitte wählen Sie mindestens eine Führerscheinklasse aus';
+        } else {
+          const QUALIFYING = ['C1', 'C', 'CE', 'D1', 'D', 'DE'];
+          const hasQualifying = (value as string[]).some((k) => QUALIFYING.includes(k));
+          if (!hasQualifying) {
+            errors.fuehrerscheinklassen =
+              'Für eine Registrierung bei Fahrerexpress ist mindestens eine Fahrerlaubnis der Klassen C1, C, CE, D1, D oder DE erforderlich.';
+          }
         }
         break;
       case 'erfahrung_jahre':
@@ -597,7 +604,7 @@ const FahrerRegistrierung = () => {
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span>Gültiger Führerschein der passenden Klasse, z.&nbsp;B. C, CE oder entsprechende Klassen</span>
+                    <span>Das Portal richtet sich ausschließlich an selbstständige Berufskraftfahrer mit Führerscheinklasse C1, C, CE, D1, D oder DE. Klasse B allein ist nicht ausreichend.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
