@@ -50,7 +50,9 @@ const AdminLogin = () => {
     };
     
     checkAuth();
-  }, [dismiss, navigate]);
+    // Nur einmal beim Mount ausführen – sonst Render-Loop wegen instabiler Deps.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
