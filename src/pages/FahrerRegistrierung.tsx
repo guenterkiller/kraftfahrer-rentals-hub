@@ -502,15 +502,17 @@ const FahrerRegistrierung = () => {
                   <div className="space-y-6">
                   <div className="text-center">
                     <h2 className="text-2xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
-                      💬 Warum selbstständige Fahrer mit Fahrerexpress zusammenarbeiten
+                      🚛 Selbstständige LKW-Fahrer mit CE-Führerschein gesucht
                     </h2>
+                    <p className="text-lg text-muted-foreground mb-3">
+                      Wir vermitteln in erster Linie selbstständige LKW-Berufskraftfahrer mit Führerscheinklasse CE. Bewerbungen von Fahrern mit den Klassen C1, C, CE, D1, D oder DE sind herzlich willkommen.
+                    </p>
                     <p className="text-lg text-muted-foreground">
-                      Sie entscheiden eigenverantwortlich, welche Auftragsangebote Sie annehmen.
-                      Einsatzort, Zeitraum, Fahrzeugart und Konditionen werden vor jedem Auftrag transparent abgestimmt.
+                      Sie entscheiden eigenverantwortlich, welche Auftragsangebote Sie annehmen. Einsatzort, Zeitraum, Fahrzeugart und Konditionen werden vor jedem Auftrag transparent abgestimmt.
                     </p>
                     <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
                       <p className="text-sm font-medium text-primary">
-                        🇪🇺 Fahrer aus Deutschland, allen EU-Staaten und dem Europäischen Wirtschaftsraum können sich registrieren – sofern Führerschein, Fahrerkarte, Qualifikation und rechtliche Einsatzvoraussetzungen passen.
+                        🇪🇺 Fahrer aus Deutschland sowie aus allen EU-/EWR-Staaten können sich registrieren, sofern eine anerkannte Fahrerlaubnis, Fahrerkarte, Berufskraftfahrerqualifikation und alle rechtlichen Voraussetzungen für einen Einsatz in Deutschland erfüllt sind.
                       </p>
                     </div>
                   </div>
