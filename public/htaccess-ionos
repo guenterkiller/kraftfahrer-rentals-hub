@@ -15,7 +15,14 @@ RewriteEngine On
   </FilesMatch>
 </IfModule>
 
-# 1b) Service Worker & Web App Manifest: KEIN Cache
+# 2) Statische Assets: 1 Jahr immutable Cache (inkl. AVIF)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+</IfModule>
+
+# 2b) Service Worker & Web App Manifest: KEIN Cache (überschreibt 1-Jahr-Regel oben)
 # Stellt sicher, dass Updates an sw.js / Manifest (Icons, theme_color, ...)
 # zuverlässig bei Clients ankommen und nicht 1 Jahr "immutable" hängenbleiben.
 <IfModule mod_headers.c>
@@ -23,13 +30,6 @@ RewriteEngine On
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
     Header set Expires "0"
-  </FilesMatch>
-</IfModule>
-
-# 2) Statische Assets: 1 Jahr immutable Cache (inkl. AVIF)
-<IfModule mod_headers.c>
-  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|woff2)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 </IfModule>
 
