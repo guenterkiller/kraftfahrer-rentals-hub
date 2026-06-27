@@ -23,15 +23,15 @@ const FahrerRegistrierung = () => {
   }, []);
 
   useSEO({
-    title: "Partner werden – Fahrer-Netzwerk deutschlandweit | Fahrerexpress",
-    description: "Partner werden bei Fahrerexpress – deutschlandweite Vermittlung für selbstständige LKW-Fahrer & Baumaschinenführer.",
-    keywords: "Fahrer-Netzwerk, selbstständiger Berufskraftfahrer, Fahrer-Partner werden, Kooperation LKW-Fahrer, Subunternehmer Kraftfahrer, EU-Fahrer Deutschland, Fahrerservice Partner, freiberuflicher Kraftfahrer, Werkvertrag Fahrer",
+    title: "Selbstständige LKW-Fahrer mit CE-Führerschein gesucht | Fahrerexpress",
+    description: "Fahrervermittlung für selbstständige LKW-Fahrer & Berufskraftfahrer mit CE, C1, C, D1, D oder DE. Jetzt für Aufträge in Deutschland und europaweit registrieren.",
+    keywords: "selbstständiger LKW-Fahrer, selbstständige LKW-Fahrer, LKW-Fahrer CE, Berufskraftfahrer, CE-Führerschein, Fahrerkarte, Fahrer gesucht, selbstständiger Kraftfahrer, Kraftfahrer CE, Unternehmer im Güterverkehr, Fahrervermittlung, LKW-Fahrer Aufträge, LKW-Fahrer Deutschland, europaweite Einsätze",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
-      "serviceType": "Fahrer-Netzwerk & Vermittlungsservice",
-      "name": "Partner-Netzwerk für selbstständige Kraftfahrer",
-      "description": "Werden Sie Partner in unserem bundesweiten Fahrer-Netzwerk. Wir vermitteln selbstständige Berufskraftfahrer und Baumaschinenführer an Unternehmen deutschlandweit.",
+      "serviceType": "Fahrervermittlung für selbstständige LKW-Fahrer",
+      "name": "Fahrervermittlung für selbstständige LKW-Fahrer mit CE-Führerschein",
+      "description": "Fahrerexpress vermittelt selbstständige LKW-Berufskraftfahrer mit den Führerscheinklassen C1, C, CE, D1, D oder DE für Aufträge in Deutschland und europaweit.",
       "provider": {
         "@type": "Organization",
         "name": "Fahrerexpress-Agentur - Günter Killer",
