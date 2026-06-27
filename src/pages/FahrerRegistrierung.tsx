@@ -599,7 +599,7 @@ const FahrerRegistrierung = () => {
             <Card className="mb-8">
               <CardHeader>
                 <CardTitle className="text-xl">
-                  <h2 className="text-xl font-bold">Voraussetzungen für selbstständige LKW-Fahrer und Berufskraftfahrer</h2>
+                  Voraussetzungen für selbstständige LKW-Fahrer und Berufskraftfahrer
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -646,7 +646,7 @@ const FahrerRegistrierung = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl text-center">
-                  <h2 className="text-2xl font-bold">Fahrer-Registrierung: Selbstständige LKW-Fahrer & Berufskraftfahrer</h2>
+                  Fahrer-Registrierung: Selbstständige LKW-Fahrer & Berufskraftfahrer
                 </CardTitle>
                 <p className="text-center text-muted-foreground mb-4">
                   Registrieren Sie sich als selbstständiger Kraftfahrer mit CE-Führerschein und werden Sie Teil unserer Fahrervermittlung für Aufträge deutschlandweit und europaweit.
