@@ -289,6 +289,121 @@ const Wissenswertes = () => {
             </Card>
           </section>
 
+          <Separator className="my-16" />
+
+          {/* Qualifikationen & Voraussetzungen für selbstständige LKW-Fahrer */}
+          <section className="mb-16">
+            <h2 className="text-3xl font-bold mb-8">🎓 Qualifikationen & Voraussetzungen für selbstständige LKW-Fahrer</h2>
+            <p className="text-muted-foreground mb-8 max-w-4xl">
+              Wer als selbstständiger LKW-Fahrer (Berufskraftfahrer) im gewerblichen Güterverkehr tätig wird, muss eine Reihe gesetzlicher Voraussetzungen erfüllen.
+              Die folgende Übersicht fasst die wichtigsten Punkte zusammen – von der Fahrerkarte über die Berufskraftfahrerqualifikation bis zum CE-Führerschein und den typischen Einsatzgebieten.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>CE-Führerschein</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-muted-foreground">
+                  <p>
+                    Die Fahrerlaubnisklasse <strong>CE</strong> berechtigt zum Führen von LKW über 3,5 t zulässiger Gesamtmasse mit Anhänger – inklusive Sattelzügen und Gliederzügen.
+                    Sie ist die wichtigste Voraussetzung für den Einsatz im Fernverkehr, im Baustellenverkehr, mit Fahrmischer, Silofahrzeug, Tankwagen oder Wechselbrücke.
+                  </p>
+                  <p>
+                    Ergänzende Klassen wie <strong>C1, C, D1, D oder DE</strong> erweitern das Einsatzspektrum (z. B. mittlere LKW, Busse, Reisebusse mit Anhänger).
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Fahrerkarte (Tachograph)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-muted-foreground">
+                  <p>
+                    Die <strong>Fahrerkarte</strong> ist die persönliche Chipkarte für den digitalen Tachographen und für jeden gewerblichen LKW-Fahrer ab 3,5 t Pflicht.
+                    Sie zeichnet Lenk- und Ruhezeiten gemäß EU-Verordnung 561/2006 fahrerbezogen auf.
+                  </p>
+                  <p>
+                    Beantragt wird die Fahrerkarte beim zuständigen Kraftfahrt-Bundesamt bzw. den Fahrerlaubnisbehörden der Länder. Sie ist 5 Jahre gültig und muss rechtzeitig verlängert werden.
+                    Selbstständige Berufskraftfahrer sind selbst für eine gültige Fahrerkarte verantwortlich.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Berufskraftfahrerqualifikation (BKrFQG)</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-muted-foreground">
+                  <p>
+                    Im gewerblichen Güter- und Personenverkehr ist neben dem Führerschein die <strong>Grundqualifikation</strong> oder eine Berufsausbildung zum Berufskraftfahrer (BKF) erforderlich (Berufskraftfahrer-Qualifikations-Gesetz – BKrFQG).
+                  </p>
+                  <p>
+                    Zusätzlich müssen Berufskraftfahrer alle 5 Jahre <strong>5 Module Weiterbildung</strong> (insgesamt 35 Stunden) absolvieren. Der Nachweis erfolgt über die <strong>Schlüsselzahl 95</strong> im Führerschein bzw. den Fahrerqualifizierungsnachweis.
+                  </p>
+                  <p>
+                    Selbstständige LKW-Fahrer, die wir vermitteln, sind selbst für die fristgerechte Weiterbildung und einen gültigen Qualifikationsnachweis verantwortlich.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Unternehmer im Güterverkehr</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-muted-foreground">
+                  <p>
+                    Selbstständige LKW-Fahrer, die ausschließlich vom Auftraggeber gestellte Fahrzeuge bewegen, erbringen eine reine <strong>Fahrer-Dienstleistung</strong> – keine eigene Transportleistung mit eigenem Fahrzeug.
+                    Eine Güterkraftverkehrserlaubnis (GüKG / EU-Lizenz) ist dafür in der Regel nicht erforderlich, weil das eigene Unternehmen keine Güter mit eigenen Fahrzeugen befördert.
+                  </p>
+                  <p>
+                    Voraussetzung für die Selbstständigkeit ist eine ordnungsgemäße <strong>Gewerbeanmeldung</strong>, eine steuerliche Erfassung beim Finanzamt sowie – empfohlen – eine Betriebshaftpflichtversicherung.
+                    Wer mit eigenem LKW gewerblich Güter befördert, benötigt zusätzlich die Güterkraftverkehrserlaubnis und einen Verkehrsleiter mit fachlicher Eignung.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Voraussetzungen für selbstständige LKW-Fahrer auf einen Blick</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>✓ Gültiger Führerschein CE (oder C1/C, D1/D, DE je nach Einsatz)</li>
+                    <li>✓ Gültige Fahrerkarte für den digitalen Tachographen</li>
+                    <li>✓ Berufskraftfahrerqualifikation mit Schlüsselzahl 95 (oder gleichwertiger Nachweis aus EU/EWR)</li>
+                    <li>✓ Eingetragenes Gewerbe und steuerliche Erfassung</li>
+                    <li>✓ Eigenverantwortliche Arbeitsweise, mehrere Auftraggeber, keine Eingliederung in den Betrieb des Auftraggebers</li>
+                    <li>✓ Empfehlenswert: Betriebshaftpflichtversicherung</li>
+                  </ul>
+                  <p className="text-sm text-muted-foreground mt-4">
+                    Sie erfüllen diese Voraussetzungen?{" "}
+                    <a href="/fahrer-registrierung" className="text-primary underline hover:no-underline">
+                      Als selbstständiger LKW-Fahrer registrieren
+                    </a>.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Typische Einsatzgebiete für CE-Fahrer</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>• <strong>Fernverkehr & Linienverkehr</strong> – nationale und europaweite Touren mit Sattelzug</li>
+                    <li>• <strong>Nahverkehr & Verteilerverkehr</strong> – regionale Auslieferung, Wechselbrücke, Containerverkehr</li>
+                    <li>• <strong>Baustellenverkehr</strong> – Kipper, Fahrmischer (Beton), Silofahrzeuge, Abrollkipper</li>
+                    <li>• <strong>Tank- und Gefahrgutverkehr</strong> – Tankzüge, ADR-Transporte (mit gültiger ADR-Bescheinigung)</li>
+                    <li>• <strong>Spezialverkehre</strong> – Schwertransport-Begleitung (BF3), Kranbetrieb, Eventlogistik</li>
+                    <li>• <strong>Kurzfristige Vertretung</strong> – Ersatzfahrer bei Krankheit, Urlaub oder Auftragsspitzen</li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+
           {/* Mini-AGB */}
           <section className="mb-16">
             <h2 className="text-3xl font-bold mb-8">📋 Allgemeine Vertragsbedingungen</h2>
