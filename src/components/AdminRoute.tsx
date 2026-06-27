@@ -39,7 +39,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
         if (!isMounted) return;
         
         const expSec = (session as any)?.expires_at as number | undefined;
-        if (session && (!expSec || expSec * 1000 < Date.now() + 60_000)) {
+        if (session && expSec && expSec * 1000 < Date.now() + 60_000) {
           const { data: refreshed, error: refreshError } = await withTimeout(
             supabase.auth.refreshSession(),
             10000,
