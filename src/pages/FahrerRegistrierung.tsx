@@ -580,11 +580,11 @@ const FahrerRegistrierung = () => {
                     <div className="space-y-4">
                       <p className="text-lg flex items-center justify-center gap-2">
                         <span className="text-2xl">🔧</span>
-                        Sie bringen Erfahrung, Führerschein und unternehmerische Motivation mit – wir vermitteln Ihnen passende Auftragsangebote.
+                        Sie bringen Berufserfahrung als Kraftfahrer, einen gültigen CE-Führerschein (oder C1, C, D1, D bzw. DE) und unternehmerische Motivation mit – wir vermitteln Ihnen passende LKW-Fahrer-Aufträge in Deutschland und Europa.
                       </p>
                       <div className="border-t border-primary/20 pt-4">
                         <p className="text-xl font-bold text-primary mb-2">
-                          📝 Registrieren Sie sich jetzt als selbstständiger Fahrer und reichen Sie Ihre Unterlagen zur Prüfung ein.
+                          📝 Jetzt als selbstständiger LKW-Fahrer registrieren und Unterlagen (Führerschein, Fahrerkarte, Gewerbeanmeldung) zur Prüfung einreichen.
                         </p>
                         <p className="text-lg text-muted-foreground">
                         </p>
@@ -599,7 +599,7 @@ const FahrerRegistrierung = () => {
             <Card className="mb-8">
               <CardHeader>
                 <CardTitle className="text-xl">
-                  Voraussetzungen für die Registrierung
+                  <h2 className="text-xl font-bold">Voraussetzungen für selbstständige LKW-Fahrer und Berufskraftfahrer</h2>
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -646,10 +646,10 @@ const FahrerRegistrierung = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl text-center">
-                  Fahrer-Registrierung bei Fahrerexpress
+                  <h2 className="text-2xl font-bold">Fahrer-Registrierung: Selbstständige LKW-Fahrer & Berufskraftfahrer</h2>
                 </CardTitle>
                 <p className="text-center text-muted-foreground mb-4">
-                  Registrieren Sie sich als selbständiger Kraftfahrer und werden Sie Teil unseres Netzwerks
+                  Registrieren Sie sich als selbstständiger Kraftfahrer mit CE-Führerschein und werden Sie Teil unserer Fahrervermittlung für Aufträge deutschlandweit und europaweit.
                 </p>
                 
                 {/* EU-Willkommens-Banner */}
