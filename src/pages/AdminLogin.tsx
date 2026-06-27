@@ -96,63 +96,27 @@ const AdminLogin = () => {
 
       console.log('[LOGIN 3] vor Rollenprüfung (user_roles select)');
 
-      // Verify admin role - with self-healing for the known admin
-      // Timeout-Schutz, damit der Button nicht dauerhaft auf "Anmelden..." hängt
-      const roleQuery = supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', authData.user.id)
-        .eq('role', 'admin')
-        .maybeSingle();
-
-      const timeoutPromise = new Promise<{ data: null; error: { message: string } }>((resolve) =>
-        setTimeout(
-          () => resolve({ data: null, error: { message: 'Zeitüberschreitung bei der Rollenprüfung' } }),
-          10000
-        )
-      );
-
+      // Einfache Rollenprüfung – kein Promise.race, kein Self-Healing aus dem Browser.
       let roleData: any = null;
       let roleError: any = null;
       try {
-        const raceRes = (await Promise.race([roleQuery, timeoutPromise])) as any;
-        roleData = raceRes?.data;
-        roleError = raceRes?.error;
+        const res = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', authData.user.id)
+          .eq('role', 'admin')
+          .maybeSingle();
+        roleData = res.data;
+        roleError = res.error;
       } catch (err) {
         console.error('[LOGIN 4-CATCH] Rollenprüfung throw:', err);
         roleError = err;
       }
       console.log('[LOGIN 4] nach Rollenprüfung', { roleData, roleError });
 
-      // Self-healing: If this is the known admin email but role is missing, create it
-      const KNOWN_ADMIN_EMAIL = 'guenter.killer@t-online.de';
-      if ((!roleData || roleError) && authData.user.email?.toLowerCase() === KNOWN_ADMIN_EMAIL) {
-        console.log('[LOGIN 5] vor assign_admin_role RPC (self-healing)');
-        let assignError: any = null;
-        try {
-          const res = await supabase.rpc('assign_admin_role', { _user_id: authData.user.id });
-          assignError = res.error;
-        } catch (err) {
-          console.error('[LOGIN 6-CATCH] assign_admin_role throw:', err);
-          assignError = err;
-        }
-        console.log('[LOGIN 6] nach assign_admin_role', { assignError });
-
-        if (!assignError) {
-          console.log('✅ Self-healing: Admin role assigned successfully');
-          roleData = { role: 'admin' };
-          roleError = null;
-        } else {
-          console.error('Self-healing failed:', assignError);
-        }
-      }
-
       if (roleError || !roleData) {
         console.error('Role verification failed:', roleError);
-        // User is authenticated but not an admin
-        console.log('[LOGIN 7] vor signOut (kein Admin)');
-        try { await supabase.auth.signOut(); } catch (err) { console.error('[LOGIN 7-CATCH] signOut throw:', err); }
-        console.log('[LOGIN 8] nach signOut');
+        try { await supabase.auth.signOut(); } catch (err) { console.error('[LOGIN signOut-CATCH]:', err); }
         toast({
           title: "Zugriff verweigert",
           description: "Sie haben keine Admin-Berechtigung",
