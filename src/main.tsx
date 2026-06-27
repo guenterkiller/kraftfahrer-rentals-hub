@@ -14,6 +14,8 @@ const isLovablePreview =
   hostname.includes('lovable.dev') ||
   search.includes('__lovable_token');
 
+const swKillSwitch = search.includes('sw=off');
+
 const isProductionSwDomain =
   hostname === 'kraftfahrer-mieten.com' ||
   hostname === 'www.kraftfahrer-mieten.com' ||
@@ -38,12 +40,19 @@ async function cleanupPreviewServiceWorkers() {
   console.log('[SW-Guard] Lovable Preview erkannt – Service Worker bereinigt');
 }
 
-if (isLovablePreview) {
+if (isLovablePreview || swKillSwitch) {
   void cleanupPreviewServiceWorkers();
+  if (swKillSwitch) {
+    try { sessionStorage.setItem('sw-off', '1'); } catch {}
+  }
 } else if (isProductionSwDomain && 'serviceWorker' in navigator) {
+  let disabled = false;
+  try { disabled = sessionStorage.getItem('sw-off') === '1'; } catch {}
+  if (!disabled) {
   window.addEventListener('load', () => {
     void navigator.serviceWorker.register('/sw.js', { scope: '/' });
   });
+  }
 }
 
 setupGTMDebugLogger();
