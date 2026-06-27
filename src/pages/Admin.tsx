@@ -434,54 +434,33 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     try {
       let { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-      // Wenn Access-Token abgelaufen oder fehlt: aktiv refreshen
+      // Nur refreshen, wenn Session existiert UND Ablaufzeit bekannt UND bald abgelaufen.
+      // Fehlt expires_at, gilt die Session nicht automatisch als abgelaufen.
       const expSec = (session as any)?.expires_at as number | undefined;
-      const expiredOrSoon = !expSec || expSec * 1000 < Date.now() + 60_000;
-      if (!session || expiredOrSoon) {
-        console.log("🔄 Admin: Session fehlt oder läuft ab – versuche Refresh…");
+      const expiringSoon = !!(session && expSec && expSec * 1000 < Date.now() + 60_000);
+      if (expiringSoon) {
+        console.log("🔄 Admin: Session läuft bald ab – versuche Refresh…");
         const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
-        if (refreshError || !refreshed?.session) {
-          console.log("❌ Admin: Refresh fehlgeschlagen", refreshError?.message);
-          await supabase.auth.signOut().catch(() => {});
-          setAuthChecking(false);
-          toast({
-            title: "Sitzung abgelaufen",
-            description: "Bitte melden Sie sich erneut an.",
-            variant: "destructive",
-          });
-          navigate('/admin/login');
-          return;
+        if (!refreshError && refreshed?.session) {
+          session = refreshed.session;
+        } else {
+          console.log("⚠️ Admin: Refresh nicht erfolgreich, nutze bestehende Session weiter");
         }
-        session = refreshed.session;
       }
 
       if (sessionError || !session) {
-        console.log("❌ Admin: Keine gültige Session");
+        // AdminRoute hat eigentlich bereits geprüft – sicherheitshalber zurück zum Login.
+        console.log("❌ Admin: Keine Session vorhanden – zurück zum Login");
         setAuthChecking(false);
         navigate('/admin/login');
         return;
       }
 
       console.log("🔐 Admin: Session gefunden für:", session.user.email);
-      console.log("🔐 Admin: Token vorhanden:", !!session.access_token);
 
-      // Verify admin role
-      const { data: roleData, error: roleError } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', session.user.id)
-        .eq('role', 'admin')
-        .single();
-
-      if (roleError || !roleData) {
-        console.error("❌ Admin: Keine Admin-Rolle gefunden");
-        await supabase.auth.signOut();
-        setAuthChecking(false);
-        navigate('/admin/login');
-        return;
-      }
-
-      console.log("✅ Admin: Authentifizierung erfolgreich");
+      // Hinweis: Die Admin-Rollenprüfung erfolgt ausschließlich in AdminRoute.
+      // Hier nur Session lesen und Daten laden, um doppelte Roundtrips zu vermeiden.
+      console.log("✅ Admin: Session ok – lade Daten (Rollencheck via AdminRoute)");
       setUser({ email: session.user.email } as User);
       
       // Persist simple admin session for edge function calls
@@ -501,12 +480,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         loadJobAssignments()
       ]);
       
-      // Update session activity
-      await supabase
+      // Update session activity (fire-and-forget)
+      supabase
         .from('admin_sessions')
         .update({ last_activity: new Date().toISOString() })
         .eq('user_id', session.user.id)
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .then(() => {});
       
       setAuthChecking(false);
     } catch (e) {
