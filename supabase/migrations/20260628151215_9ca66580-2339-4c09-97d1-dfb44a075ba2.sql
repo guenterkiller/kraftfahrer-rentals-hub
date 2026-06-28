@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.admin_cancel_assignment(_assignment_id uuid, _reason text) TO authenticated;
