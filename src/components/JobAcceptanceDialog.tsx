@@ -153,6 +153,16 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
         </div>
 
         {/* Action Buttons */}
+        <Alert className="bg-amber-50 border-amber-300">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <AlertDescription className="text-amber-900">
+            <div className="font-semibold mb-1">Hinweis:</div>
+            <div className="text-sm leading-relaxed">
+              Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Bewerbungen aus anderen Regionen berücksichtigt. Bitte bewerben Sie sich daher nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
+            </div>
+          </AlertDescription>
+        </Alert>
+
         <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Button
             onClick={handleAccept}
