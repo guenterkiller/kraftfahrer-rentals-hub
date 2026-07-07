@@ -300,7 +300,7 @@ serve(async (req) => {
   } catch (error: any) {
     console.error("Unexpected error in broadcast-job-to-drivers:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error", details: error.message }),
+      JSON.stringify({ error: "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

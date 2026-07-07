@@ -207,7 +207,7 @@ serve(async (req) => {
 
     if (emailResult.error) {
       console.error('📧 Email sending failed:', emailResult.error);
-      return createErrorResponse(`Mail error: ${emailResult.error.message}`, 500, corsHeaders);
+      return createErrorResponse("Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut.", 500, corsHeaders);
     }
 
     console.log('📧 Email sent successfully:', emailResult.data?.id);
