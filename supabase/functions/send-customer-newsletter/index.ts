@@ -350,7 +350,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Newsletter error:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
       { 
         status: 500, 
         headers: { ...corsHeaders, "Content-Type": "application/json" } 

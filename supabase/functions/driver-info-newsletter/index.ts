@@ -304,7 +304,8 @@ serve(async (req) => {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ ok: false, error: String(e) }), {
+    console.error("driver-info-newsletter internal error:", e);
+    return new Response(JSON.stringify({ ok: false, error: "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
