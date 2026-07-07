@@ -34,13 +34,13 @@ export const DriverRegistrationConfirmation = ({
         <strong>Vermittlungsmodell:</strong> Die Fahrerexpress-Agentur vermittelt Einsätze zwischen Auftraggebern und selbstständigen Fahrern. Es entsteht <strong>kein Arbeitsverhältnis</strong> und keine Arbeitnehmerüberlassung.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
-        <strong>Kein Anspruch auf Einsätze:</strong> Ein Anspruch auf Vermittlung oder eine bestimmte Anzahl Einsätze besteht nicht.
+        <strong>Auftragsangebot:</strong> Jedes Auftragsangebot ist lediglich ein Vermittlungsangebot. Ihre Rückmeldung „Ich kann übernehmen" gilt ausschließlich als Interessens- und Verfügbarkeitsmeldung. Ein Anspruch auf Erteilung oder Durchführung des Einsatzes entsteht dadurch nicht. Die endgültige Vergabe erfolgt ausschließlich durch Fahrerexpress.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
-        <strong>Auftragsangebot:</strong> Jedes Auftragsangebot ist nur ein Angebot. Ihre Rückmeldung „Ich kann übernehmen" ist nur eine <strong>Verfügbarkeitsmeldung</strong>. Die <strong>finale Einsatzbestätigung erfolgt separat durch Fahrerexpress</strong>.
+        <strong>Vergabe der Einsätze:</strong> Fahrerexpress berücksichtigt bei der Vergabe vorrangig Fahrer, die sich in räumlicher Nähe zum Einsatzort befinden, um Anfahrtszeiten und Kosten gering zu halten. Zusätzlich können Qualifikation, Verfügbarkeit, Zuverlässigkeit, bisherige Zusammenarbeit und konkrete Kundenanforderungen berücksichtigt werden. Ein Anspruch auf Zuteilung eines bestimmten Auftrags besteht nicht.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
-        <strong>Vermittlungsanteil:</strong> Bei Standardaufträgen beträgt der Vermittlungsanteil in der Regel <strong>20 %</strong> der vereinbarten Netto-Vergütung für die Fahrerdienstleistung. Bei Sonder-, Projekt-, Pauschal- oder kurzfristigen Einsätzen <strong>bis zu 25 %</strong>. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.
+        <strong>Vermittlungsanteil / Vergütung:</strong> Grundlage ist die zwischen Fahrerexpress und dem Auftraggeber vereinbarte Netto-Vergütung für die Fahrerdienstleistung. Der Fahrer erhält die vereinbarte Netto-Vergütung abzüglich des im jeweiligen Auftragsangebot ausgewiesenen Vermittlungsanteils. Maßgeblich sind ausschließlich die Angaben im konkreten Auftragsangebot vor Einsatzbeginn.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
         <strong>Rechnungsstellung &amp; Zahlung:</strong> Der Fahrer stellt seine Rechnung an Fahrerexpress – <strong>bereits nach Abzug des Vermittlungsanteils</strong>. Die Zahlung erfolgt nach vollständiger und ordnungsgemäßer Durchführung des Einsatzes; soweit im konkreten Auftragsangebot nichts anderes vereinbart ist, nach Zahlungseingang des Auftraggebers bei Fahrerexpress.

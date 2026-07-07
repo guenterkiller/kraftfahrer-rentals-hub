@@ -572,8 +572,33 @@ const FahrerRegistrierung = () => {
                       </div>
                     </div>
                     <p className="text-xs text-muted-foreground mt-4">
-                      Hinweis: Es handelt sich nicht um Zeitarbeit und nicht um eine Festanstellung. Es besteht kein Anspruch auf bestimmte Aufträge – jeder Fahrer entscheidet selbst, ob er ein konkretes Auftragsangebot annimmt.
+                      Hinweis: Es handelt sich nicht um Zeitarbeit und nicht um eine Festanstellung.
                     </p>
+                  </div>
+
+                  {/* Wichtige Hinweise: Auftragsangebot, Vergabe, Vergütung */}
+                  <div className="bg-card/50 rounded-lg p-6 border border-primary/20 space-y-4">
+                    <h3 className="text-xl font-bold flex items-center gap-2">
+                      ℹ️ Wichtige Hinweise vor der Registrierung
+                    </h3>
+                    <div>
+                      <h4 className="font-semibold mb-1">Auftragsangebot</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Jedes Auftragsangebot ist lediglich ein Vermittlungsangebot. Ihre Rückmeldung „Ich kann übernehmen" gilt ausschließlich als Interessens- und Verfügbarkeitsmeldung. Ein Anspruch auf Erteilung oder Durchführung des Einsatzes entsteht dadurch nicht. Die endgültige Vergabe erfolgt ausschließlich durch Fahrerexpress.
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-1">Vergabe der Einsätze</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Fahrerexpress berücksichtigt bei der Vergabe vorrangig Fahrer, die sich in räumlicher Nähe zum Einsatzort befinden, um Anfahrtszeiten und Kosten gering zu halten. Zusätzlich können Qualifikation, Verfügbarkeit, Zuverlässigkeit, bisherige Zusammenarbeit und konkrete Kundenanforderungen berücksichtigt werden. Ein Anspruch auf Zuteilung eines bestimmten Auftrags besteht nicht.
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold mb-1">Vermittlungsanteil / Vergütung</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Grundlage ist die zwischen Fahrerexpress und dem Auftraggeber vereinbarte Netto-Vergütung für die Fahrerdienstleistung. Der Fahrer erhält die vereinbarte Netto-Vergütung abzüglich des im jeweiligen Auftragsangebot ausgewiesenen Vermittlungsanteils. Maßgeblich sind ausschließlich die Angaben im konkreten Auftragsangebot vor Einsatzbeginn.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="bg-primary/10 rounded-lg p-6 text-center">
