@@ -540,7 +540,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in fahrerwerden function:", error);
     return new Response(
-      JSON.stringify({ error: error.message || "Fehler beim Senden der Anfrage" }),
+      JSON.stringify({ error: "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
