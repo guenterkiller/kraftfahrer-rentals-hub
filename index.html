@@ -81,8 +81,9 @@
     <meta name="DC.coverage" content="Deutschland, Österreich, Schweiz, EU" />
     <meta name="target-country" content="DE, AT, CH" />
     
-    <!-- Canonical URL - statischer Fallback, wird dynamisch per useSEO überschrieben -->
-    <link rel="canonical" href="https://www.kraftfahrer-mieten.com/" />
+    <!-- Kein statischer Canonical-Tag: useSEO setzt pro Route den korrekten Canonical.
+         Ohne Fallback verwendet Google beim Erst-Crawl (ohne JS) die Request-URL als
+         impliziten Canonical – korrekt pro Route, keine Duplikat-Signale. -->
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
