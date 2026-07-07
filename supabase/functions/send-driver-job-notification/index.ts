@@ -139,6 +139,13 @@ const handler = async (req: Request): Promise<Response> => {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
         <tr><td style="padding:18px 20px;text-align:center;">
           <h3 class="body-text" style="margin:0 0 8px 0;font-size:17px;color:#0d2340;font-weight:700;">Interesse? Bitte melden Sie sich!</h3>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fffbeb" style="background-color:#fffbeb;border:1px solid #f59e0b;border-collapse:separate;border-radius:6px;margin:0 0 14px 0;">
+            <tr><td style="padding:12px 14px;text-align:left;">
+              <p class="body-text" style="margin:0;font-size:14px;line-height:1.55;color:#78350f;">
+                <strong>Hinweis:</strong> Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Bewerbungen aus anderen Regionen berücksichtigt. Bitte bewerben Sie sich daher nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
+              </p>
+            </td></tr>
+          </table>
           <p class="body-text" style="margin:0 0 8px 0;font-size:15px;line-height:1.55;color:#374151;">Rufen Sie uns an oder schreiben Sie per SMS/WhatsApp:</p>
           <p class="body-text" style="margin:8px 0 8px 0;font-size:22px;line-height:1.2;color:#bb2c29;font-weight:700;">
             <a href="tel:+4915771442285" style="color:#bb2c29;text-decoration:none;">+49-1577-1442285</a>
