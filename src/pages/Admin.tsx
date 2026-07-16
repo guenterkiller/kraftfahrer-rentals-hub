@@ -606,28 +606,27 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  // Hilfsmap: aktives Assignment je Job (confirmed > assigned)
-  const activeByJob = React.useMemo(() => {
-    const map = new Map<string, any>();
-    console.log('🔍 Creating activeByJob map with assignments:', jobAssignments.length);
-    
+  // Hilfsmap: alle aktiven Assignments je Job (assigned + confirmed), mehrere Fahrer pro Auftrag möglich.
+  const activeAssignmentsByJob = React.useMemo(() => {
+    const map = new Map<string, any[]>();
     for (const a of jobAssignments) {
-      console.log(`🔍 Processing assignment: job_id=${a.job_id}, status=${a.status}, driver=${a.fahrer_profile?.vorname}`);
-      
-      if (a.status === "confirmed") {
-        map.set(a.job_id, a);
-        console.log(`✅ Set confirmed assignment for job ${a.job_id}`);
-        continue;
-      }
-      if (a.status === "assigned" && !map.has(a.job_id)) {
-        map.set(a.job_id, a);
-        console.log(`✅ Set assigned assignment for job ${a.job_id}`);
-      }
+      if (a.status !== 'assigned' && a.status !== 'confirmed') continue;
+      const list = map.get(a.job_id) ?? [];
+      list.push(a);
+      map.set(a.job_id, list);
     }
-    
-    console.log('🔍 Final activeByJob map:', Array.from(map.entries()));
     return map;
   }, [jobAssignments]);
+
+  // Rückwärtskompatibilität: „primäres" Assignment (confirmed bevorzugt) je Job.
+  const activeByJob = React.useMemo(() => {
+    const map = new Map<string, any>();
+    for (const [jobId, list] of activeAssignmentsByJob.entries()) {
+      const confirmed = list.find((a) => a.status === 'confirmed');
+      map.set(jobId, confirmed ?? list[0]);
+    }
+    return map;
+  }, [activeAssignmentsByJob]);
 
   // Hilfsfunktion: Extrahiere Startdatum aus zeitraum-Feld
   const parseStartDate = (zeitraum: string): Date => {
