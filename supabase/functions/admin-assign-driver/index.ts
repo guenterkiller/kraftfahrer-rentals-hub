@@ -102,21 +102,23 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Check for existing active assignment
-    const { data: existingAssignment } = await supabase
+    // Mehrere Fahrer pro Auftrag erlaubt.
+    // Nur denselben Fahrer am selben Auftrag blockieren (doppelte Zuweisung verhindern).
+    const { data: existingSameDriver } = await supabase
       .from('job_assignments')
       .select('id, status')
       .eq('job_id', jobId)
+      .eq('driver_id', driverId)
       .in('status', ['assigned', 'confirmed'])
       .maybeSingle();
 
-    if (existingAssignment) {
-      console.error('Job already has active assignment:', existingAssignment);
+    if (existingSameDriver) {
+      console.error('Same driver already assigned:', existingSameDriver);
       return new Response(
-        JSON.stringify({ error: 'Job bereits zugewiesen. Erst vorherige Zuweisung stornieren.' }),
-        { 
-          status: 409, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        JSON.stringify({ error: 'Dieser Fahrer ist diesem Auftrag bereits zugewiesen.' }),
+        {
+          status: 409,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
       );
     }

@@ -606,28 +606,27 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  // Hilfsmap: aktives Assignment je Job (confirmed > assigned)
-  const activeByJob = React.useMemo(() => {
-    const map = new Map<string, any>();
-    console.log('🔍 Creating activeByJob map with assignments:', jobAssignments.length);
-    
+  // Hilfsmap: alle aktiven Assignments je Job (assigned + confirmed), mehrere Fahrer pro Auftrag möglich.
+  const activeAssignmentsByJob = React.useMemo(() => {
+    const map = new Map<string, any[]>();
     for (const a of jobAssignments) {
-      console.log(`🔍 Processing assignment: job_id=${a.job_id}, status=${a.status}, driver=${a.fahrer_profile?.vorname}`);
-      
-      if (a.status === "confirmed") {
-        map.set(a.job_id, a);
-        console.log(`✅ Set confirmed assignment for job ${a.job_id}`);
-        continue;
-      }
-      if (a.status === "assigned" && !map.has(a.job_id)) {
-        map.set(a.job_id, a);
-        console.log(`✅ Set assigned assignment for job ${a.job_id}`);
-      }
+      if (a.status !== 'assigned' && a.status !== 'confirmed') continue;
+      const list = map.get(a.job_id) ?? [];
+      list.push(a);
+      map.set(a.job_id, list);
     }
-    
-    console.log('🔍 Final activeByJob map:', Array.from(map.entries()));
     return map;
   }, [jobAssignments]);
+
+  // Rückwärtskompatibilität: „primäres" Assignment (confirmed bevorzugt) je Job.
+  const activeByJob = React.useMemo(() => {
+    const map = new Map<string, any>();
+    for (const [jobId, list] of activeAssignmentsByJob.entries()) {
+      const confirmed = list.find((a) => a.status === 'confirmed');
+      map.set(jobId, confirmed ?? list[0]);
+    }
+    return map;
+  }, [activeAssignmentsByJob]);
 
   // Hilfsfunktion: Extrahiere Startdatum aus zeitraum-Feld
   const parseStartDate = (zeitraum: string): Date => {
@@ -1668,11 +1667,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             )}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          {(() => {
-                            const a = activeByJob.get(req.id);
-                            console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
-                            
+                         <TableCell>
+                           {(() => {
+                             const assignments = activeAssignmentsByJob.get(req.id) ?? [];
+                             const a = assignments[0];
+
                               // Pending-Status: Freigabe-Buttons anzeigen
                               if (req.status === 'pending') {
                                 return (
@@ -1708,7 +1707,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 );
                               }
 
-                              if (!a) {
+                              if (assignments.length === 0) {
                                 return (
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <Button 
@@ -1750,35 +1749,55 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
                             return (
                               <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-blue-800">
-                                    {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
-                                  </span>
-                                  <div className="text-xs text-blue-600">
-                                    {a.rate_value}€/{a.rate_type === 'hourly' ? 'Std' : 'Tag'}
+                                {assignments.map((asg) => (
+                                  <div key={asg.id} className="border border-blue-100 bg-blue-50/40 rounded p-2 space-y-1">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="font-medium text-blue-800">
+                                        {asg.fahrer_profile?.vorname} {asg.fahrer_profile?.nachname}
+                                      </span>
+                                      <span className="text-xs text-blue-700">
+                                        {asg.rate_value}€/{asg.rate_type === 'hourly' ? 'Std' : asg.rate_type === 'weekly' ? 'Woche' : 'Tag'}
+                                      </span>
+                                      {asg.status === 'confirmed' ? (
+                                        <Badge variant="default">Bestätigt</Badge>
+                                      ) : (
+                                        <Badge variant="secondary">Zugewiesen</Badge>
+                                      )}
+                                    </div>
+                                    {(asg.start_date || asg.end_date) && (
+                                      <div className="text-xs text-blue-700">
+                                        {asg.start_date ? new Date(asg.start_date).toLocaleDateString('de-DE') : '—'}
+                                        {' – '}
+                                        {asg.end_date ? new Date(asg.end_date).toLocaleDateString('de-DE') : 'offen'}
+                                      </div>
+                                    )}
+                                    {asg.admin_note && (
+                                      <div className="text-xs text-gray-700 italic">„{asg.admin_note}"</div>
+                                    )}
+                                    <div className="flex items-center gap-2 flex-wrap pt-1">
+                                      <Button size="sm" onClick={() => resendDriverConfirmationNew(asg.id)}>
+                                        E-Mail erneut senden
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+                                        onClick={() => cancelAssignment(asg.id)}
+                                      >
+                                        Zuweisung auflösen
+                                      </Button>
+                                    </div>
                                   </div>
-                                  {a.status === "confirmed" ? (
-                                    <Badge variant="default">Bestätigt</Badge>
-                                  ) : a.status === "completed" ? (
-                                    <Badge variant="outline">Erledigt</Badge>
-                                  ) : a.status === "no_show" ? (
-                                    <Badge variant="destructive">No-Show</Badge>
-                                  ) : a.status === "cancelled" ? (
-                                    <Badge variant="outline">Storniert</Badge>
-                                  ) : (
-                                    <Badge variant="secondary">Zugewiesen</Badge>
-                                  )}
-
-                                </div>
-
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <Button size="sm" onClick={() => resendDriverConfirmationNew(a.id)}>
-                                    E-Mail erneut senden
-                                  </Button>
-                                  <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
-                                    Ändern
-                                  </Button>
-                                </div>
+                                ))}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleAssignDriver(req.id)}
+                                  disabled={req.status === 'completed'}
+                                  title={req.status === 'completed' ? 'Erledigte Aufträge können nicht zugewiesen werden' : 'Weiteren Fahrer diesem Auftrag zuweisen'}
+                                >
+                                  + Weiteren Fahrer zuweisen
+                                </Button>
                               </div>
                             );
                           })()}
@@ -1823,7 +1842,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                 {/* Mobile Card View */}
                 <div className="lg:hidden space-y-4">
                   {sortedJobRequests.map((req) => {
-                    const a = activeByJob.get(req.id);
+                    const assignments = activeAssignmentsByJob.get(req.id) ?? [];
+                    const a = assignments[0];
                     const isBeingProcessed = markingCompleted === req.id;
                     const isExpanded = expandedJobRows.has(req.id);
                     
@@ -1940,33 +1960,55 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           <JobAttachmentsList jobId={req.id} />
 
                           {/* Zuweisung */}
-                          {a ? (
-                            <div className="bg-blue-50 p-3 rounded space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="font-medium text-blue-900">
-                                  {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
-                                </span>
-                                <span className="text-sm text-blue-700">
-                                  {a.rate_value}€/{a.rate_type === 'hourly' ? 'Std' : 'Tag'}
-                                </span>
-                              </div>
-                              <div className="flex gap-2 flex-wrap">
-                                <Button 
-                                  size="sm" 
-                                  onClick={() => resendDriverConfirmationNew(a.id)}
-                                  className="flex-1 min-w-[140px]"
-                                >
-                                  E-Mail erneut senden
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline" 
-                                  onClick={() => handleAssignDriver(req.id)}
-                                  className="flex-1 min-w-[100px]"
-                                >
-                                  Ändern
-                                </Button>
-                              </div>
+                          {assignments.length > 0 ? (
+                            <div className="space-y-2">
+                              {assignments.map((asg) => (
+                                <div key={asg.id} className="bg-blue-50 p-3 rounded space-y-2">
+                                  <div className="flex items-center justify-between flex-wrap gap-1">
+                                    <span className="font-medium text-blue-900">
+                                      {asg.fahrer_profile?.vorname} {asg.fahrer_profile?.nachname}
+                                    </span>
+                                    <span className="text-sm text-blue-700">
+                                      {asg.rate_value}€/{asg.rate_type === 'hourly' ? 'Std' : asg.rate_type === 'weekly' ? 'Woche' : 'Tag'}
+                                    </span>
+                                  </div>
+                                  {(asg.start_date || asg.end_date) && (
+                                    <div className="text-xs text-blue-700">
+                                      {asg.start_date ? new Date(asg.start_date).toLocaleDateString('de-DE') : '—'}
+                                      {' – '}
+                                      {asg.end_date ? new Date(asg.end_date).toLocaleDateString('de-DE') : 'offen'}
+                                      {' · '}
+                                      {asg.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
+                                    </div>
+                                  )}
+                                  <div className="flex gap-2 flex-wrap">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => resendDriverConfirmationNew(asg.id)}
+                                      className="flex-1 min-w-[140px]"
+                                    >
+                                      E-Mail erneut senden
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => cancelAssignment(asg.id)}
+                                      className="flex-1 min-w-[100px] text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+                                    >
+                                      Auflösen
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleAssignDriver(req.id)}
+                                disabled={req.status === 'completed'}
+                                className="w-full"
+                              >
+                                + Weiteren Fahrer zuweisen
+                              </Button>
                             </div>
                           ) : req.status === 'pending' ? (
                             /* Pending: Freigabe-Buttons für Mobile */

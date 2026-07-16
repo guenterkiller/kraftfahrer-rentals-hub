@@ -319,11 +319,16 @@ export function AdminAssignmentDialog({
     } catch (error) {
       console.error('Assignment error:', error);
       
-      // Handle unique constraint violation (double assignment)
-      if (error.code === '23505' && error.message?.includes('ux_job_assignments_job_active')) {
+      // Handle unique constraint violation: same driver already on this job
+      const msg = String(error?.message || '');
+      if (
+        (error.code === '23505' && msg.includes('job_assignments_job_id_driver_id_key')) ||
+        msg.includes('driver already assigned to this job') ||
+        msg.includes('Dieser Fahrer ist diesem Auftrag bereits zugewiesen')
+      ) {
         toast({
-          title: "Doppelzuweisung verhindert",
-          description: "Für diesen Auftrag ist bereits ein aktiver Fahrer zugewiesen. Erst stornieren oder ersetzen.",
+          title: "Fahrer bereits zugewiesen",
+          description: "Dieser Fahrer ist diesem Auftrag bereits zugewiesen. Bitte einen anderen Fahrer wählen.",
           variant: "destructive"
         });
       } else {
