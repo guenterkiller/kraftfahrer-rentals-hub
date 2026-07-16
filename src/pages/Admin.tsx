@@ -1842,7 +1842,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                 {/* Mobile Card View */}
                 <div className="lg:hidden space-y-4">
                   {sortedJobRequests.map((req) => {
-                    const a = activeByJob.get(req.id);
+                    const assignments = activeAssignmentsByJob.get(req.id) ?? [];
+                    const a = assignments[0];
                     const isBeingProcessed = markingCompleted === req.id;
                     const isExpanded = expandedJobRows.has(req.id);
                     
