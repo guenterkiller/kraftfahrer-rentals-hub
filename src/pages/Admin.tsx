@@ -1667,11 +1667,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             )}
                           </div>
                         </TableCell>
-                        <TableCell>
-                          {(() => {
-                            const a = activeByJob.get(req.id);
-                            console.log(`🔍 Job ${req.id}: Lookup result:`, a ? `Found assignment with driver ${a.fahrer_profile?.vorname}` : 'No assignment found');
-                            
+                         <TableCell>
+                           {(() => {
+                             const assignments = activeAssignmentsByJob.get(req.id) ?? [];
+                             const a = assignments[0];
+
                               // Pending-Status: Freigabe-Buttons anzeigen
                               if (req.status === 'pending') {
                                 return (
@@ -1707,7 +1707,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 );
                               }
 
-                              if (!a) {
+                              if (assignments.length === 0) {
                                 return (
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <Button 
@@ -1749,35 +1749,55 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
                             return (
                               <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-blue-800">
-                                    {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
-                                  </span>
-                                  <div className="text-xs text-blue-600">
-                                    {a.rate_value}€/{a.rate_type === 'hourly' ? 'Std' : 'Tag'}
+                                {assignments.map((asg) => (
+                                  <div key={asg.id} className="border border-blue-100 bg-blue-50/40 rounded p-2 space-y-1">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="font-medium text-blue-800">
+                                        {asg.fahrer_profile?.vorname} {asg.fahrer_profile?.nachname}
+                                      </span>
+                                      <span className="text-xs text-blue-700">
+                                        {asg.rate_value}€/{asg.rate_type === 'hourly' ? 'Std' : asg.rate_type === 'weekly' ? 'Woche' : 'Tag'}
+                                      </span>
+                                      {asg.status === 'confirmed' ? (
+                                        <Badge variant="default">Bestätigt</Badge>
+                                      ) : (
+                                        <Badge variant="secondary">Zugewiesen</Badge>
+                                      )}
+                                    </div>
+                                    {(asg.start_date || asg.end_date) && (
+                                      <div className="text-xs text-blue-700">
+                                        {asg.start_date ? new Date(asg.start_date).toLocaleDateString('de-DE') : '—'}
+                                        {' – '}
+                                        {asg.end_date ? new Date(asg.end_date).toLocaleDateString('de-DE') : 'offen'}
+                                      </div>
+                                    )}
+                                    {asg.admin_note && (
+                                      <div className="text-xs text-gray-700 italic">„{asg.admin_note}"</div>
+                                    )}
+                                    <div className="flex items-center gap-2 flex-wrap pt-1">
+                                      <Button size="sm" onClick={() => resendDriverConfirmationNew(asg.id)}>
+                                        E-Mail erneut senden
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+                                        onClick={() => cancelAssignment(asg.id)}
+                                      >
+                                        Zuweisung auflösen
+                                      </Button>
+                                    </div>
                                   </div>
-                                  {a.status === "confirmed" ? (
-                                    <Badge variant="default">Bestätigt</Badge>
-                                  ) : a.status === "completed" ? (
-                                    <Badge variant="outline">Erledigt</Badge>
-                                  ) : a.status === "no_show" ? (
-                                    <Badge variant="destructive">No-Show</Badge>
-                                  ) : a.status === "cancelled" ? (
-                                    <Badge variant="outline">Storniert</Badge>
-                                  ) : (
-                                    <Badge variant="secondary">Zugewiesen</Badge>
-                                  )}
-
-                                </div>
-
-                                <div className="flex items-center gap-2 flex-wrap">
-                                  <Button size="sm" onClick={() => resendDriverConfirmationNew(a.id)}>
-                                    E-Mail erneut senden
-                                  </Button>
-                                  <Button size="sm" variant="outline" onClick={() => handleAssignDriver(req.id)}>
-                                    Ändern
-                                  </Button>
-                                </div>
+                                ))}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => handleAssignDriver(req.id)}
+                                  disabled={req.status === 'completed'}
+                                  title={req.status === 'completed' ? 'Erledigte Aufträge können nicht zugewiesen werden' : 'Weiteren Fahrer diesem Auftrag zuweisen'}
+                                >
+                                  + Weiteren Fahrer zuweisen
+                                </Button>
                               </div>
                             );
                           })()}
