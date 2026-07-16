@@ -1960,33 +1960,55 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           <JobAttachmentsList jobId={req.id} />
 
                           {/* Zuweisung */}
-                          {a ? (
-                            <div className="bg-blue-50 p-3 rounded space-y-2">
-                              <div className="flex items-center justify-between">
-                                <span className="font-medium text-blue-900">
-                                  {a.fahrer_profile.vorname} {a.fahrer_profile.nachname}
-                                </span>
-                                <span className="text-sm text-blue-700">
-                                  {a.rate_value}€/{a.rate_type === 'hourly' ? 'Std' : 'Tag'}
-                                </span>
-                              </div>
-                              <div className="flex gap-2 flex-wrap">
-                                <Button 
-                                  size="sm" 
-                                  onClick={() => resendDriverConfirmationNew(a.id)}
-                                  className="flex-1 min-w-[140px]"
-                                >
-                                  E-Mail erneut senden
-                                </Button>
-                                <Button 
-                                  size="sm" 
-                                  variant="outline" 
-                                  onClick={() => handleAssignDriver(req.id)}
-                                  className="flex-1 min-w-[100px]"
-                                >
-                                  Ändern
-                                </Button>
-                              </div>
+                          {assignments.length > 0 ? (
+                            <div className="space-y-2">
+                              {assignments.map((asg) => (
+                                <div key={asg.id} className="bg-blue-50 p-3 rounded space-y-2">
+                                  <div className="flex items-center justify-between flex-wrap gap-1">
+                                    <span className="font-medium text-blue-900">
+                                      {asg.fahrer_profile?.vorname} {asg.fahrer_profile?.nachname}
+                                    </span>
+                                    <span className="text-sm text-blue-700">
+                                      {asg.rate_value}€/{asg.rate_type === 'hourly' ? 'Std' : asg.rate_type === 'weekly' ? 'Woche' : 'Tag'}
+                                    </span>
+                                  </div>
+                                  {(asg.start_date || asg.end_date) && (
+                                    <div className="text-xs text-blue-700">
+                                      {asg.start_date ? new Date(asg.start_date).toLocaleDateString('de-DE') : '—'}
+                                      {' – '}
+                                      {asg.end_date ? new Date(asg.end_date).toLocaleDateString('de-DE') : 'offen'}
+                                      {' · '}
+                                      {asg.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
+                                    </div>
+                                  )}
+                                  <div className="flex gap-2 flex-wrap">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => resendDriverConfirmationNew(asg.id)}
+                                      className="flex-1 min-w-[140px]"
+                                    >
+                                      E-Mail erneut senden
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => cancelAssignment(asg.id)}
+                                      className="flex-1 min-w-[100px] text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
+                                    >
+                                      Auflösen
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleAssignDriver(req.id)}
+                                disabled={req.status === 'completed'}
+                                className="w-full"
+                              >
+                                + Weiteren Fahrer zuweisen
+                              </Button>
                             </div>
                           ) : req.status === 'pending' ? (
                             /* Pending: Freigabe-Buttons für Mobile */
