@@ -15,7 +15,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabase = authResult.supabase;
 
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "guenter.killer@t-online.de";
+    const adminEmail = Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
 
     // Hole die 2 neuesten offenen Jobs
     const { data: jobs, error: jobsError } = await supabase

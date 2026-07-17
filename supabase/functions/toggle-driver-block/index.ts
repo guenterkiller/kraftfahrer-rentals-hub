@@ -163,7 +163,7 @@ async function sendBlockNotification(
     }
 
     const mailFrom = Deno.env.get('MAIL_FROM') || 'Fahrerexpress <info@kraftfahrer-mieten.com>';
-    const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
+    const adminRecipients = ["info@kraftfahrer-mieten.com"];
 
     // Send email to driver
     const driverEmailHtml = await renderAsync(

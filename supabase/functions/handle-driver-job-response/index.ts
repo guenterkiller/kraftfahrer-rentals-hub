@@ -99,7 +99,7 @@ const handler = async (req: Request): Promise<Response> => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     // Feste Admin-Empfänger (ADMIN_EMAIL bewusst ignoriert)
-    const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
+    const adminRecipients = ["info@kraftfahrer-mieten.com"];
     const adminRecipientLog = adminRecipients.join(", ");
 
     if (!supabaseUrl || !supabaseKey) {

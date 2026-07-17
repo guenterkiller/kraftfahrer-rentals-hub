@@ -211,7 +211,7 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const resendKey = Deno.env.get("RESEND_API_KEY");
       // Feste Admin-Empfänger – ADMIN_TO/ADMIN_EMAIL bewusst ignoriert
-      const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
+      const adminRecipients = ["info@kraftfahrer-mieten.com"];
       const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
 
       const { data: driver } = await supabase

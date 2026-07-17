@@ -200,7 +200,7 @@ serve(async (req) => {
     const emailResult = await resend.emails.send({
       from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [driver.email],
-      bcc: ['guenter.killer@t-online.de'],
+      bcc: ['info@kraftfahrer-mieten.com'],
       subject: emailSubject,
       html: emailContent,
     });

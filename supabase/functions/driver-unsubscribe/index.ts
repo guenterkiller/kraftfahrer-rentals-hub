@@ -104,7 +104,7 @@ serve(async (req: Request) => {
     const mailFrom = Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>";
     const adminSubject = "Fahrer hat sich von Auftragsangeboten abgemeldet";
     // Feste Empfängerliste für Abmelde-Benachrichtigungen
-    const adminRecipients = ["info@kraftfahrer-mieten.com", "guenter.killer@t-online.de"];
+    const adminRecipients = ["info@kraftfahrer-mieten.com"];
     const recipientLog = adminRecipients.join(", ");
     if (resendKey) {
       const resend = new Resend(resendKey);
@@ -144,7 +144,7 @@ serve(async (req: Request) => {
     console.error("Admin notification failed:", e);
     try {
       await supabase.from("email_log").insert({
-        recipient: "info@kraftfahrer-mieten.com, guenter.killer@t-online.de",
+        recipient: "info@kraftfahrer-mieten.com",
         subject: "Fahrer hat sich von Auftragsangeboten abgemeldet",
         template: "driver_unsubscribe_admin_notification",
         status: "failed",
