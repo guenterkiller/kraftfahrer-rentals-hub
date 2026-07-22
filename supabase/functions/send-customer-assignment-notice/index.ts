@@ -78,7 +78,7 @@ serve(async (req) => {
     const inner = `
       <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">Sehr geehrte Damen und Herren,</p>
       <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        für Ihren Auftrag wurde nach aktuellem Stand folgender selbstständiger Fahrer vorgesehen:
+        wir informieren Sie darüber, dass nach aktuellem Stand folgender selbstständiger Fahrer für den unten genannten Auftrag vorgesehen ist:
       </p>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f8fafc;border-left:4px solid #bb2c29;border-radius:4px;margin:0 0 18px 0;">
         <tr><td style="padding:14px 16px;font-size:15px;line-height:1.6;color:#0d2340;" class="body-text">
@@ -87,6 +87,7 @@ serve(async (req) => {
           ${fp.email ? `<br/><strong>E-Mail:</strong> ${fp.email}` : ""}
         </td></tr>
       </table>
+      <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Auftrag / Einsatz:</strong></p>
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f8fafc;border-left:4px solid #0d2340;border-radius:4px;margin:0 0 18px 0;">
         <tr><td style="padding:14px 16px;font-size:15px;line-height:1.6;color:#0d2340;" class="body-text">
           <strong>Einsatzzeitraum:</strong> ${zeitraum}<br/>
@@ -94,14 +95,17 @@ serve(async (req) => {
         </td></tr>
       </table>
       <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Bitte stimmen Sie die einsatzbezogenen Details direkt mit dem Fahrer ab.
+        Die Kontaktdaten werden Ihnen zur unmittelbaren einsatzbezogenen Abstimmung übermittelt.
       </p>
-      <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Hinweis:</strong></p>
+      <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Bitte beachten Sie:</strong></p>
       <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Die Information erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt oder eine störungsfreie Durchführung ist damit nicht verbunden.
+        Die Benennung des Fahrers erfolgt auf Grundlage der aktuellen Verfügbarkeit sowie der vom Fahrer mitgeteilten und bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung des Einsatzes ist damit nicht verbunden.
+      </p>
+      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
+        Sollte sich vor oder während des Einsatzes eine Änderung, Verzögerung oder ein Ausfall ergeben, bitten wir um unverzügliche Mitteilung, damit der Sachverhalt geprüft und das weitere Vorgehen abgestimmt werden kann.
       </p>
       <p style="margin:0 0 18px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, bitten wir um sofortige Rückmeldung, damit wir die Situation prüfen und das weitere Vorgehen abstimmen können.
+        Diese Information ändert nichts an den vereinbarten Konditionen und begründet keine über die bestehende Auftragsabstimmung hinausgehende Zusage.
       </p>
       <p style="margin:0;font-size:15px;line-height:1.6;" class="body-text">
         Mit freundlichen Grüßen<br/><br/>
@@ -118,21 +122,24 @@ serve(async (req) => {
     const text =
 `Sehr geehrte Damen und Herren,
 
-für Ihren Auftrag wurde nach aktuellem Stand folgender selbstständiger Fahrer vorgesehen:
+wir informieren Sie darüber, dass nach aktuellem Stand folgender selbstständiger Fahrer für den unten genannten Auftrag vorgesehen ist:
 
 Name: ${driverName}
 Telefon: ${driverPhone}
 ${driverEmailLine}
 
+Auftrag / Einsatz:
 Einsatzzeitraum: ${zeitraum}
 Einsatzort: ${einsatzort}
 
-Bitte stimmen Sie die einsatzbezogenen Details direkt mit dem Fahrer ab.
+Die Kontaktdaten werden Ihnen zur unmittelbaren einsatzbezogenen Abstimmung übermittelt.
 
-Hinweis:
-Die Information erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt oder eine störungsfreie Durchführung ist damit nicht verbunden.
+Bitte beachten Sie:
+Die Benennung des Fahrers erfolgt auf Grundlage der aktuellen Verfügbarkeit sowie der vom Fahrer mitgeteilten und bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung des Einsatzes ist damit nicht verbunden.
 
-Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, bitten wir um sofortige Rückmeldung, damit wir die Situation prüfen und das weitere Vorgehen abstimmen können.
+Sollte sich vor oder während des Einsatzes eine Änderung, Verzögerung oder ein Ausfall ergeben, bitten wir um unverzügliche Mitteilung, damit der Sachverhalt geprüft und das weitere Vorgehen abgestimmt werden kann.
+
+Diese Information ändert nichts an den vereinbarten Konditionen und begründet keine über die bestehende Auftragsabstimmung hinausgehende Zusage.
 
 Mit freundlichen Grüßen
 
