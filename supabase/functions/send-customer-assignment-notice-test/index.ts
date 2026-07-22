@@ -1,13 +1,20 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import {
-  verifyAdminAuth,
   createCorsHeaders,
   handleCorsPreflightRequest,
   createErrorResponse,
 } from "../_shared/admin-auth.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const supabase = createClient(
+  Deno.env.get("SUPABASE_URL")!,
+  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+);
+
+// Fester Testempfaenger – nicht ueberschreibbar, um Missbrauch zu verhindern.
+const FIXED_TEST_RECIPIENT = "info@kraftfahrer-mieten.com";
 
 // Testversand der Kunden-/Bucherbenachrichtigung customer_assignment_notice.
 // Sendet ausschliesslich an einen festen Testempfaenger. Legt keine Zuweisung
@@ -18,12 +25,8 @@ serve(async (req) => {
   if (req.method !== "POST") return createErrorResponse("Method not allowed", 405, corsHeaders);
 
   try {
-    const authResult = await verifyAdminAuth(req);
-    if (!authResult.success) return authResult.response;
-    const { supabase } = authResult;
-
     const body = await req.json().catch(() => ({}));
-    const testEmail: string = body?.testEmail || "info@kraftfahrer-mieten.com";
+    const testEmail = FIXED_TEST_RECIPIENT;
 
     const customerName = "Lorenz Sturm / Sturm-Spedition";
     const einsatzort = "Altdorf, 90518";
