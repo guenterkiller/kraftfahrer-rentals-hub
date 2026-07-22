@@ -704,6 +704,33 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   }
 
+  async function sendCustomerAssignmentNotice(assignmentId: string) {
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        "send-customer-assignment-notice",
+        { body: { assignment_id: assignmentId } }
+      );
+      if (error) throw error;
+      if ((data as any)?.skipped) {
+        toast({
+          title: "Bereits gesendet",
+          description: "Kundenmail wurde für diese Zuweisung bereits gesendet.",
+        });
+      } else {
+        toast({
+          title: "Kundenmail gesendet",
+          description: "Der Auftraggeber wurde über die Fahrerzuteilung informiert.",
+        });
+      }
+    } catch (e: any) {
+      toast({
+        title: "Versand fehlgeschlagen",
+        description: e?.message ?? String(e),
+        variant: "destructive",
+      });
+    }
+  }
+
   const handleAcceptJob = async (jobId: string) => {
     try {
       const { error } = await supabase
@@ -1780,6 +1807,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                       </Button>
                                       <Button
                                         size="sm"
+                                        variant="secondary"
+                                        onClick={() => sendCustomerAssignmentNotice(asg.id)}
+                                      >
+                                        Kundenmail senden
+                                      </Button>
+                                      <Button
+                                        size="sm"
                                         variant="outline"
                                         className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
                                         onClick={() => cancelAssignment(asg.id)}
@@ -1988,6 +2022,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                       className="flex-1 min-w-[140px]"
                                     >
                                       E-Mail erneut senden
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="secondary"
+                                      onClick={() => sendCustomerAssignmentNotice(asg.id)}
+                                      className="flex-1 min-w-[140px]"
+                                    >
+                                      Kundenmail senden
                                     </Button>
                                     <Button
                                       size="sm"
