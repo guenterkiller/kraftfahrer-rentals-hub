@@ -76,7 +76,7 @@ serve(async (req) => {
     const html = `
       <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#111;max-width:640px;">
         <p>Sehr geehrte Damen und Herren,</p>
-        <p>für Ihren Auftrag wurde folgender selbstständiger Fahrer zugeteilt:</p>
+        <p>für Ihren Auftrag wurde folgender selbstständiger Fahrer vorgesehen:</p>
         <p>
           <strong>Name:</strong> ${driverName}<br>
           <strong>Telefon:</strong> ${driverPhone}
@@ -86,7 +86,11 @@ serve(async (req) => {
           <strong>Einsatzzeitraum:</strong> ${zeitraum}<br>
           <strong>Einsatzort:</strong> ${einsatzort}
         </p>
-        <p>Bitte stimmen Sie die weiteren Einsatzdetails direkt mit dem Fahrer ab.</p>
+        <p>Bitte stimmen Sie die weiteren einsatzbezogenen Details direkt mit dem Fahrer ab.</p>
+        <p>
+          <strong>Hinweis:</strong><br>
+          Die Fahrerzuteilung erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, informieren Sie uns bitte umgehend, damit wir die Situation prüfen können.
+        </p>
         <p>Bei Rückfragen stehen wir Ihnen gerne zur Verfügung.</p>
         <p>Mit freundlichen Grüßen<br><br>
           Fahrerexpress-Agentur<br>
@@ -98,7 +102,7 @@ serve(async (req) => {
     const text =
 `Sehr geehrte Damen und Herren,
 
-für Ihren Auftrag wurde folgender selbstständiger Fahrer zugeteilt:
+für Ihren Auftrag wurde folgender selbstständiger Fahrer vorgesehen:
 
 Name: ${driverName}
 Telefon: ${driverPhone}
@@ -107,7 +111,10 @@ ${driverEmailLine}
 Einsatzzeitraum: ${zeitraum}
 Einsatzort: ${einsatzort}
 
-Bitte stimmen Sie die weiteren Einsatzdetails direkt mit dem Fahrer ab.
+Bitte stimmen Sie die weiteren einsatzbezogenen Details direkt mit dem Fahrer ab.
+
+Hinweis:
+Die Fahrerzuteilung erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, informieren Sie uns bitte umgehend, damit wir die Situation prüfen können.
 
 Bei Rückfragen stehen wir Ihnen gerne zur Verfügung.
 
