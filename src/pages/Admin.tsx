@@ -704,6 +704,33 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   }
 
+  async function sendCustomerAssignmentNotice(assignmentId: string) {
+    try {
+      const { data, error } = await supabase.functions.invoke(
+        "send-customer-assignment-notice",
+        { body: { assignment_id: assignmentId } }
+      );
+      if (error) throw error;
+      if ((data as any)?.skipped) {
+        toast({
+          title: "Bereits gesendet",
+          description: "Kundenmail wurde für diese Zuweisung bereits gesendet.",
+        });
+      } else {
+        toast({
+          title: "Kundenmail gesendet",
+          description: "Der Auftraggeber wurde über die Fahrerzuteilung informiert.",
+        });
+      }
+    } catch (e: any) {
+      toast({
+        title: "Versand fehlgeschlagen",
+        description: e?.message ?? String(e),
+        variant: "destructive",
+      });
+    }
+  }
+
   const handleAcceptJob = async (jobId: string) => {
     try {
       const { error } = await supabase
