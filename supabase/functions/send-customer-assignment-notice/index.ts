@@ -6,6 +6,7 @@ import {
   handleCorsPreflightRequest,
   createErrorResponse,
 } from "../_shared/admin-auth.ts";
+import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -73,36 +74,51 @@ serve(async (req) => {
     const zeitraum = `${fmt(assignment.start_date)} bis ${fmt(assignment.end_date)}`;
     const einsatzort = jr?.einsatzort || "—";
 
-    const html = `
-      <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#111;max-width:640px;">
-        <p>Sehr geehrte Damen und Herren,</p>
-        <p>für Ihren Auftrag wurde folgender selbstständiger Fahrer vorgesehen:</p>
-        <p>
-          <strong>Name:</strong> ${driverName}<br>
+    const subject = "Fahrerinformation zu Ihrem Auftrag";
+    const inner = `
+      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">Sehr geehrte Damen und Herren,</p>
+      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
+        für Ihren Auftrag wurde nach aktuellem Stand folgender selbstständiger Fahrer vorgesehen:
+      </p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f8fafc;border-left:4px solid #bb2c29;border-radius:4px;margin:0 0 18px 0;">
+        <tr><td style="padding:14px 16px;font-size:15px;line-height:1.6;color:#0d2340;" class="body-text">
+          <strong>Name:</strong> ${driverName}<br/>
           <strong>Telefon:</strong> ${driverPhone}
-          ${fp.email ? `<br><strong>E-Mail:</strong> ${fp.email}` : ""}
-        </p>
-        <p>
-          <strong>Einsatzzeitraum:</strong> ${zeitraum}<br>
+          ${fp.email ? `<br/><strong>E-Mail:</strong> ${fp.email}` : ""}
+        </td></tr>
+      </table>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f8fafc;border-left:4px solid #0d2340;border-radius:4px;margin:0 0 18px 0;">
+        <tr><td style="padding:14px 16px;font-size:15px;line-height:1.6;color:#0d2340;" class="body-text">
+          <strong>Einsatzzeitraum:</strong> ${zeitraum}<br/>
           <strong>Einsatzort:</strong> ${einsatzort}
-        </p>
-        <p>Bitte stimmen Sie die weiteren einsatzbezogenen Details direkt mit dem Fahrer ab.</p>
-        <p>
-          <strong>Hinweis:</strong><br>
-          Die Fahrerzuteilung erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, informieren Sie uns bitte umgehend, damit wir die Situation prüfen können.
-        </p>
-        <p>Bei Rückfragen stehen wir Ihnen gerne zur Verfügung.</p>
-        <p>Mit freundlichen Grüßen<br><br>
-          Fahrerexpress-Agentur<br>
-          Günter Killer
-        </p>
-      </div>
+        </td></tr>
+      </table>
+      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
+        Bitte stimmen Sie die einsatzbezogenen Details direkt mit dem Fahrer ab.
+      </p>
+      <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Hinweis:</strong></p>
+      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
+        Die Information erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt oder eine störungsfreie Durchführung ist damit nicht verbunden.
+      </p>
+      <p style="margin:0 0 18px 0;font-size:15px;line-height:1.6;" class="body-text">
+        Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, bitten wir um sofortige Rückmeldung, damit wir die Situation prüfen und das weitere Vorgehen abstimmen können.
+      </p>
+      <p style="margin:0;font-size:15px;line-height:1.6;" class="body-text">
+        Mit freundlichen Grüßen<br/><br/>
+        Fahrerexpress-Agentur<br/>
+        Günter Killer
+      </p>
     `;
+    const html = wrapDriverEmailHtml(inner, {
+      subject,
+      previewText: "Fahrerinformation zu Ihrem Auftrag",
+      showUnsubscribe: false,
+    });
 
     const text =
 `Sehr geehrte Damen und Herren,
 
-für Ihren Auftrag wurde folgender selbstständiger Fahrer vorgesehen:
+für Ihren Auftrag wurde nach aktuellem Stand folgender selbstständiger Fahrer vorgesehen:
 
 Name: ${driverName}
 Telefon: ${driverPhone}
@@ -111,12 +127,12 @@ ${driverEmailLine}
 Einsatzzeitraum: ${zeitraum}
 Einsatzort: ${einsatzort}
 
-Bitte stimmen Sie die weiteren einsatzbezogenen Details direkt mit dem Fahrer ab.
+Bitte stimmen Sie die einsatzbezogenen Details direkt mit dem Fahrer ab.
 
 Hinweis:
-Die Fahrerzuteilung erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, informieren Sie uns bitte umgehend, damit wir die Situation prüfen können.
+Die Information erfolgt auf Grundlage der aktuellen Verfügbarkeit und der vom Fahrer bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt oder eine störungsfreie Durchführung ist damit nicht verbunden.
 
-Bei Rückfragen stehen wir Ihnen gerne zur Verfügung.
+Sollte es kurzfristig zu einer Änderung oder einem Ausfall kommen, bitten wir um sofortige Rückmeldung, damit wir die Situation prüfen und das weitere Vorgehen abstimmen können.
 
 Mit freundlichen Grüßen
 
@@ -126,7 +142,7 @@ Günter Killer`;
     const result = await resend.emails.send({
       from: "Fahrerexpress <info@kraftfahrer-mieten.com>",
       to: [customerEmail],
-      subject: "Fahrerzuteilung zu Ihrem Auftrag",
+      subject,
       html,
       text,
     });
