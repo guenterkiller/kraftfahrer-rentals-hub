@@ -289,10 +289,25 @@ export function AdminAssignmentDialog({
         
         if (error) throw error;
 
-        toast({
-          title: "Erfolgreich zugewiesen",
-          description: "Fahrer zugewiesen und Einsatzbestätigung versendet.",
-        });
+        // 4) Kundenmail zur Fahrerzuteilung
+        try {
+          const { error: custErr } = await supabase.functions.invoke('send-customer-assignment-notice', {
+            body: { assignment_id: assignmentId }
+          });
+          if (custErr) throw custErr;
+
+          toast({
+            title: "Erfolgreich zugewiesen",
+            description: "Fahrer- und Kundenbenachrichtigung versendet.",
+          });
+        } catch (custMailErr: any) {
+          console.error('Customer notice error:', custMailErr);
+          toast({
+            title: "Kundenmail fehlgeschlagen",
+            description: "Fahrer wurde informiert, aber die Kundenbenachrichtigung konnte nicht versendet werden: " + (custMailErr?.message || 'Unbekannter Fehler'),
+            variant: "destructive",
+          });
+        }
         
       } catch (emailErr: any) {
         console.error('Email sending error:', emailErr);
