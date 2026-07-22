@@ -1807,6 +1807,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                       </Button>
                                       <Button
                                         size="sm"
+                                        variant="secondary"
+                                        onClick={() => sendCustomerAssignmentNotice(asg.id)}
+                                      >
+                                        Kundenmail senden
+                                      </Button>
+                                      <Button
+                                        size="sm"
                                         variant="outline"
                                         className="text-red-600 border-red-300 hover:bg-red-50 hover:text-red-700"
                                         onClick={() => cancelAssignment(asg.id)}
