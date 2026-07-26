@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { DRIVER_ACCEPT_CHECKBOX_TEXT, DRIVER_ACCEPT_LEGAL_HINT } from "@/lib/driverConsentText";
 
 interface JobOffer {
   id: string;
@@ -55,7 +56,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
     alertColor: "bg-yellow-50 border-yellow-200",
     iconColor: "text-yellow-600",
     consentRequired: true,
-    consentText: "Ich habe die Einsatztätigkeiten, Anforderungen, Einsatzdaten und Konditionen gelesen und bestätige ausdrücklich, dass ich den Auftrag zu diesen Bedingungen als selbstständiger Unternehmer annehme. Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
+    consentText: DRIVER_ACCEPT_CHECKBOX_TEXT,
   };
 
   return (
@@ -146,6 +147,9 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
               <label htmlFor="terms-consent" className="text-sm cursor-pointer">
                 <div className="font-semibold text-yellow-800 mb-2">
                   ⚠️ Rechtliche Zustimmung erforderlich:
+                </div>
+                <div className="text-yellow-700 leading-relaxed mb-3 text-xs italic">
+                  {DRIVER_ACCEPT_LEGAL_HINT}
                 </div>
                 <div className="text-yellow-700 leading-relaxed">
                   {billingInfo.consentText}
