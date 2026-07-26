@@ -264,11 +264,18 @@ const PreiseUndAblauf = () => {
                     werden.
                   </p>
                 </div>
-                <p className="pt-3 border-t">
-                  Weitere Zuschläge (z. B. Nacht-, Wochenend- oder Feiertagseinsätze, besondere
-                  Zusatzleistungen) entstehen nur, wenn sie vor Auftragserteilung ausdrücklich
-                  vereinbart wurden.
-                </p>
+                <div className="pt-3 border-t">
+                  <p className="font-semibold text-foreground mb-1">Wochenend- und Feiertagszuschläge</p>
+                  <p>
+                    Für Einsätze an Samstagen, Sonntagen und gesetzlichen Feiertagen gelten
+                    Zuschläge auf den jeweiligen Tagessatz. Nacht- und Sonderleistungen werden
+                    gesondert abgestimmt.
+                  </p>
+                  <ul className="ml-4 mt-2 space-y-1">
+                    <li>• Samstag: 25 % Zuschlag auf den jeweiligen Tagessatz</li>
+                    <li>• Sonntag und gesetzliche Feiertage: 50 % Zuschlag auf den jeweiligen Tagessatz</li>
+                  </ul>
+                </div>
               </CardContent>
             </Card>
 
