@@ -150,7 +150,7 @@ export const JobNotificationEmail = ({
             textAlign: 'left' as const,
           }}>
             <Text style={{ ...textStyles.paragraph, margin: 0, color: '#78350f', fontSize: '14px' }}>
-              <strong>Hinweis:</strong> Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Bewerbungen aus anderen Regionen berücksichtigt. Bitte bewerben Sie sich daher nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
+              <strong>Hinweis:</strong> Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Interessenbekundungen aus anderen Regionen berücksichtigt. Bitte bekunden Sie Ihr Interesse nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
             </Text>
           </Section>
           <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>

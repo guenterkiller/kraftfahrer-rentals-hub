@@ -142,7 +142,7 @@ const handler = async (req: Request): Promise<Response> => {
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fffbeb" style="background-color:#fffbeb;border:1px solid #f59e0b;border-collapse:separate;border-radius:6px;margin:0 0 14px 0;">
             <tr><td style="padding:12px 14px;text-align:left;">
               <p class="body-text" style="margin:0;font-size:14px;line-height:1.55;color:#78350f;">
-                <strong>Hinweis:</strong> Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Bewerbungen aus anderen Regionen berücksichtigt. Bitte bewerben Sie sich daher nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
+                <strong>Hinweis:</strong> Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Interessenbekundungen aus anderen Regionen berücksichtigt. Bitte bekunden Sie Ihr Interesse nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
               </p>
             </td></tr>
           </table>
