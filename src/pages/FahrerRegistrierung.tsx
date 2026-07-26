@@ -513,6 +513,9 @@ const FahrerRegistrierung = () => {
                       Bei Fahrerexpress sind keine Fahrer beschäftigt. Fahrerexpress ist eine Vermittlungsplattform und bringt Auftraggeber mit selbstständigen LKW-Fahrern und anderen selbstständigen Auftragnehmern zusammen.
                     </p>
                     <p className="text-lg text-muted-foreground mb-3">
+                      Fahrerexpress vermittelt selbstständige Unternehmer und wird nicht Arbeitgeber der registrierten Unternehmer.
+                    </p>
+                    <p className="text-lg text-muted-foreground mb-3">
                       Als selbstständiger Unternehmer mit eigener Gewerbeanmeldung finden Sie über Fahrerexpress passende Auftragsangebote von Auftraggebern. Sie entscheiden bei jedem einzelnen Auftragsangebot eigenverantwortlich, ob Sie dieses annehmen oder ablehnen. Es besteht weder eine Verpflichtung zur Annahme von Aufträgen noch ein Anspruch auf die Vermittlung oder Zuteilung eines bestimmten Auftrags.
                     </p>
                     <p className="text-lg text-muted-foreground mb-3">
@@ -595,7 +598,7 @@ const FahrerRegistrierung = () => {
                     <div>
                       <h4 className="font-semibold mb-1">Auftragsangebot</h4>
                       <p className="text-sm text-muted-foreground">
-                        Jedes Auftragsangebot ist lediglich ein Vermittlungsangebot. Ihre Rückmeldung „Ich kann übernehmen" gilt ausschließlich als Interessens- und Verfügbarkeitsmeldung. Ein Anspruch auf Erteilung oder Durchführung des Einsatzes entsteht dadurch nicht. Die endgültige Vergabe erfolgt ausschließlich durch Fahrerexpress. Die Rückmeldung „Ich kann übernehmen" stellt weder eine Vertragsannahme noch eine Zusage für einen Einsatz dar. Erst nach erfolgreicher Vermittlung und ausdrücklicher Bestätigung durch Fahrerexpress kommt ein konkreter Einsatz zustande.
+                        Jedes Auftragsangebot ist lediglich ein Vermittlungsangebot. Ihre Rückmeldung „Ich kann übernehmen" gilt ausschließlich als Interessens- und Verfügbarkeitsmeldung. Ein Anspruch auf Erteilung oder Durchführung des Einsatzes entsteht dadurch nicht. Nach Eingang der Interessenbekundungen erfolgt die weitere Vermittlung anhand der objektiven Anforderungen des jeweiligen Auftrags sowie der tatsächlichen Verfügbarkeit geeigneter selbstständiger Unternehmer. Ein Anspruch auf Vermittlung oder Durchführung eines bestimmten Auftrags besteht nicht. Die Rückmeldung „Ich kann übernehmen" stellt weder eine Vertragsannahme noch eine Zusage für einen Einsatz dar. Erst nach erfolgreicher Vermittlung und ausdrücklicher Bestätigung durch Fahrerexpress kommt ein konkreter Einsatz zustande.
                       </p>
                     </div>
                     <div>
@@ -671,6 +674,9 @@ const FahrerRegistrierung = () => {
                   <p className="text-sm">
                     Für die Vermittlung selbstständiger Auftragnehmer benötigen wir eine gültige Gewerbeanmeldung,
                     einen gültigen Führerschein, eine Fahrerkarte und vollständige Kontaktdaten.
+                  </p>
+                  <p className="text-sm mt-2">
+                    Die Registrierung setzt eine bereits bestehende selbstständige Tätigkeit mit eigener Gewerbeanmeldung voraus.
                   </p>
                   <p className="text-xs text-muted-foreground mt-2">
                     Hinweis: Selbstständige Auftragnehmer, die dauerhaft nicht reagieren oder keine Auftragsangebote annehmen, können aus dem aktiven Verteiler entfernt werden.
@@ -1330,7 +1336,7 @@ const FahrerRegistrierung = () => {
                       Fahrerexpress vermittelt Aufträge ausschließlich an registrierte selbstständige Unternehmer. Zunächst wird geprüft, welche Unternehmer die objektiven Anforderungen des jeweiligen Auftrags erfüllen (z. B. erforderliche Führerscheinklasse, gesetzliche Qualifikationen und regionaler Einsatzbereich).
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Geeignete Unternehmer erhalten anschließend das jeweilige Auftragsangebot und entscheiden eigenverantwortlich, ob sie Interesse an diesem Auftrag haben.
+                      Geeignete registrierte Unternehmer können entsprechend den objektiven Anforderungen des jeweiligen Auftrags ein Auftragsangebot erhalten.
                     </p>
                     <p className="text-sm text-muted-foreground mt-2">
                       Auch wenn ein Unternehmer Interesse an einem Auftragsangebot bekundet, besteht kein Anspruch auf die Vermittlung oder Erteilung des Auftrags. Je nach Auftrag können sich mehrere geeignete Unternehmer melden oder auch kein Unternehmer. Die weitere Vermittlung erfolgt anhand der objektiven Anforderungen des jeweiligen Auftrags sowie der tatsächlichen Verfügbarkeit der interessierten Unternehmer.
