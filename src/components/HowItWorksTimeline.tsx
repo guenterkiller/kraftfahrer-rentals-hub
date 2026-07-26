@@ -10,7 +10,7 @@ const HowItWorksTimeline = () => {
     },
     {
       icon: Settings,
-      title: "2. Disposition",
+      title: "2. Vermittlung",
       description: "Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung."
     },
     {
