@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, CheckCircle, XCircle } from 'lucide-react';
+import { DRIVER_ACCEPT_CHECKBOX_TEXT, DRIVER_ACCEPT_LEGAL_HINT } from "@/lib/driverConsentText";
 
 interface JobOffer {
   id: string;
