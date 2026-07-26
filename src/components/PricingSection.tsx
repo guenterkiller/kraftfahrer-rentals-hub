@@ -199,6 +199,23 @@ const PricingSection = () => {
         {/* Fernverkehr / Fernfahrer-Pauschale */}
         <Card className="max-w-5xl mx-auto mb-8">
           <CardHeader>
+            <CardTitle className="text-base">Wochenend- und Feiertagszuschläge</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-2">
+            <p>
+              Für Einsätze an Samstagen, Sonntagen und gesetzlichen Feiertagen gelten Zuschläge
+              auf den jeweiligen Tagessatz. Nacht- und Sonderleistungen werden gesondert
+              abgestimmt.
+            </p>
+            <ul className="ml-4 space-y-1 text-muted-foreground">
+              <li>• Samstag: 25 % Zuschlag auf den jeweiligen Tagessatz</li>
+              <li>• Sonntag und gesetzliche Feiertage: 50 % Zuschlag auf den jeweiligen Tagessatz</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card className="max-w-5xl mx-auto mb-8">
+          <CardHeader>
             <CardTitle className="text-base">Fernverkehr – Definition</CardTitle>
           </CardHeader>
           <CardContent className="text-sm space-y-2">
