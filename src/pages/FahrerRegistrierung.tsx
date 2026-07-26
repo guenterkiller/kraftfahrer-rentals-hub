@@ -981,23 +981,6 @@ const FahrerRegistrierung = () => {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="stundensatz">Gewünschter Tagessatz / Vergütungsvorstellung netto (optional)</Label>
-                      <Input
-                        id="stundensatz"
-                        type="text"
-                        placeholder="z. B. 280 € pro Einsatztag, 350 € bei Fernverkehr oder nach Vereinbarung"
-                        value={formData.stundensatz}
-                        onChange={(e) => handleInputChange('stundensatz', e.target.value)}
-                        className={validationErrors.stundensatz ? "border-destructive" : ""}
-                      />
-                      {validationErrors.stundensatz && (
-                        <p id="stundensatz-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.stundensatz}</p>
-                      )}
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Diese Angabe dient ausschließlich der Orientierung. Die endgültige Vergütung wird jeweils im konkreten Auftragsangebot mitgeteilt und kann von Ihrer Vergütungsvorstellung abweichen.
-                      </p>
-                    </div>
-                    <div>
                       <Label htmlFor="verfuegbarkeit">Grundsätzliche Verfügbarkeit (optional)</Label>
                       <Select
                         value={formData.verfuegbarkeit}
