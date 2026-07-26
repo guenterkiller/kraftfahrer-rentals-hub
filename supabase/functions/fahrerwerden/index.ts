@@ -6,6 +6,7 @@ import React from 'npm:react@18.3.1';
 import { DriverRegistrationConfirmation } from '../_shared/email-templates/driver-registration-confirmation.tsx';
 import { AdminDriverNotification } from '../_shared/email-templates/admin-driver-notification.tsx';
 import { DRIVER_DOCS_BUCKET, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '../_shared/storage-config.ts';
+import { TERMS_VERSION_DRIVER } from '../_shared/terms-version.ts';
 
 const MIME_TO_EXT: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -150,6 +151,7 @@ const handler = async (req: Request): Promise<Response> => {
             bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
             bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
             spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
+            terms_version: (formData.get("terms_version") as string) || "",
           };
         } catch (_e) {
           // ignore
@@ -345,6 +347,11 @@ const handler = async (req: Request): Promise<Response> => {
                return [];
              }
            })() : [])
+      ,
+      agb_version: (requestData as any).terms_version || TERMS_VERSION_DRIVER,
+      agb_accepted_at: new Date().toISOString(),
+      agb_ip: (ipAddress && ipAddress !== 'unknown') ? ipAddress.split(',')[0].trim() : null,
+      agb_user_agent: userAgent
     };
     
     console.log("Processing driver registration for:", insertData.email?.split('@')[0] + '@***');
