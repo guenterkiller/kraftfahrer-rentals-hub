@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
+import { TERMS_VERSION_DRIVER } from "../_shared/terms-version.ts";
 
 const escape = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -11,15 +12,18 @@ type ResponseStatus =
   | "already_answered"
   | "expired"
   | "invalid"
+  | "consent_required"
   | "error";
 
 const MESSAGES: Record<ResponseStatus, string> = {
   accepted:
-    "Vielen Dank. Ihre Rückmeldung wurde übermittelt. Fahrerexpress meldet sich zur weiteren Abstimmung.",
+    "Sie haben den Auftrag zu den dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen als selbstständiger Unternehmer angenommen. Fahrerexpress meldet sich zur organisatorischen Bestätigung.",
   declined: "Vielen Dank. Ihre Rückmeldung wurde übermittelt.",
   already_answered: "Ihre Rückmeldung wurde bereits erfasst.",
   expired: "Dieser Link ist abgelaufen.",
   invalid: "Dieser Link ist ungültig oder wurde nicht gefunden.",
+  consent_required:
+    "Bitte bestätigen Sie die Pflicht-Checkbox, um den Auftrag verbindlich anzunehmen.",
   error:
     "Es ist ein Fehler aufgetreten. Bitte melden Sie sich direkt bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285.",
 };
@@ -44,6 +48,18 @@ function reply(status: ResponseStatus, httpStatus = 200): Response {
       },
     },
   );
+}
+
+function jsonReply(payload: unknown, httpStatus = 200): Response {
+  return new Response(JSON.stringify(payload), {
+    status: httpStatus,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Content-Type-Options": "nosniff",
+    },
+  });
 }
 
 function safeGetReply(action: string | null, token: string | null): Response {
@@ -107,12 +123,18 @@ const handler = async (req: Request): Promise<Response> => {
     // POST: Body kann JSON oder FormData sein. Query-Params als Fallback.
     let action: string | null = null;
     let token: string | null = null;
+    let consentConfirmed = false;
+    let checkboxTextIn: string | null = null;
+    let intent: string | null = null;
     const ct = req.headers.get("content-type") || "";
     try {
       if (ct.includes("application/json")) {
         const body = await req.json();
         action = body?.action ?? body?.a ?? null;
         token = body?.token ?? body?.t ?? null;
+        consentConfirmed = body?.consent_confirmed === true;
+        checkboxTextIn = typeof body?.checkbox_text === "string" ? body.checkbox_text : null;
+        intent = typeof body?.intent === "string" ? body.intent : null;
       } else if (
         ct.includes("application/x-www-form-urlencoded") ||
         ct.includes("multipart/form-data")
@@ -120,6 +142,9 @@ const handler = async (req: Request): Promise<Response> => {
         const form = await req.formData();
         action = (form.get("action") ?? form.get("a")) as string | null;
         token = (form.get("token") ?? form.get("t")) as string | null;
+        consentConfirmed = form.get("consent_confirmed") === "true";
+        checkboxTextIn = (form.get("checkbox_text") as string | null) ?? null;
+        intent = (form.get("intent") as string | null) ?? null;
       }
     } catch (_e) {
       // ignore – fallback auf Query
@@ -131,9 +156,9 @@ const handler = async (req: Request): Promise<Response> => {
     if (action === "accepted") action = "accept";
     if (action === "declined") action = "decline";
 
-    console.log(`📩 POST respond-invite: action=${action}, token=${token?.substring(0, 8)}...`);
+    console.log(`📩 POST respond-invite: intent=${intent}, action=${action}, token=${token?.substring(0, 8)}...`);
 
-    if (!action || !token || !["accept", "decline"].includes(action)) {
+    if (!token) {
       return reply("invalid");
     }
 
@@ -147,10 +172,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Token validieren und Einladung laden
+    // Token validieren und Einladung laden (inkl. Auftrag für Snapshot/Vorschau)
     const { data: invite, error } = await supabase
       .from("assignment_invites")
-      .select("*")
+      .select("*, job:job_requests(*), driver:fahrer_profile(id, vorname, nachname, email, telefon, plz, ort)")
       .eq("token", token)
       .maybeSingle();
 
@@ -160,6 +185,40 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     if (!invite) {
+      return reply("invalid");
+    }
+
+    const jobRow: any = (invite as any).job || null;
+    const driverRow: any = (invite as any).driver || null;
+
+    // ===== Intent: load (Bestätigungsseite lädt Auftrag zur Anzeige, keine Writes) =====
+    if (intent === "load") {
+      // Nur wenn noch pending und nicht abgelaufen → sinnvolle Daten zurück
+      if (invite.status !== "pending") return jsonReply({ status: "already_answered" });
+      if (new Date(invite.token_expires_at) < new Date()) return jsonReply({ status: "expired" });
+      return jsonReply({
+        status: "ready",
+        terms_version: TERMS_VERSION_DRIVER,
+        job: jobRow
+          ? {
+              id: jobRow.id,
+              customer_name: jobRow.customer_name,
+              company: jobRow.company,
+              einsatzort: jobRow.einsatzort,
+              zeitraum: jobRow.zeitraum,
+              fahrzeugtyp: jobRow.fahrzeugtyp,
+              fuehrerscheinklasse: jobRow.fuehrerscheinklasse,
+              besonderheiten: jobRow.besonderheiten,
+              nachricht: jobRow.nachricht,
+            }
+          : null,
+        driver: driverRow
+          ? { vorname: driverRow.vorname, nachname: driverRow.nachname }
+          : null,
+      });
+    }
+
+    if (!action || !["accept", "decline"].includes(action)) {
       return reply("invalid");
     }
 
@@ -179,6 +238,11 @@ const handler = async (req: Request): Promise<Response> => {
         .eq("id", invite.id);
       
       return reply("expired");
+    }
+
+    // Pflicht-Checkbox bei Annahme erforderlich
+    if (action === "accept" && (!consentConfirmed || !checkboxTextIn || checkboxTextIn.length < 20)) {
+      return reply("consent_required", 400);
     }
 
     // Status aktualisieren
@@ -206,6 +270,54 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     console.log(`✅ Invite ${invite.id} updated to ${newStatus}`);
+
+    // Snapshot der angezeigten Auftragsbeschreibung schreiben (revisionssicher)
+    if (newStatus === "accepted" && jobRow) {
+      const snapshot = {
+        captured_at: new Date().toISOString(),
+        flow: "B",
+        invite_id: invite.id,
+        job: {
+          id: jobRow.id,
+          customer_name: jobRow.customer_name,
+          company: jobRow.company,
+          einsatzort: jobRow.einsatzort,
+          zeitraum: jobRow.zeitraum,
+          fahrzeugtyp: jobRow.fahrzeugtyp,
+          fuehrerscheinklasse: jobRow.fuehrerscheinklasse,
+          besonderheiten: jobRow.besonderheiten,
+          nachricht: jobRow.nachricht,
+        },
+        conditions: {
+          weekend_surcharge_pct: 25,
+          holiday_sunday_surcharge_pct: 50,
+          note:
+            "Wochenend- und Feiertagszuschläge gelten automatisch. Nacht- und Sonderleistungen werden gesondert abgestimmt.",
+        },
+        legal_note:
+          "Selbstständige Auftragsdurchführung. Keine Arbeitnehmerüberlassung, kein Arbeitsverhältnis.",
+      };
+
+      const { error: acceptErr } = await supabase
+        .from("job_driver_acceptances")
+        .insert({
+          job_id: invite.job_id,
+          driver_id: invite.driver_id,
+          invite_id: invite.id,
+          billing_model: "agency",
+          ip: ip || null,
+          user_agent: userAgent || null,
+          terms_version: TERMS_VERSION_DRIVER,
+          checkbox_text: checkboxTextIn,
+          consent_confirmed: true,
+          job_snapshot: snapshot,
+          flow: "B",
+        });
+
+      if (acceptErr && !String(acceptErr.message || "").includes("duplicate key")) {
+        console.error("job_driver_acceptances insert failed:", acceptErr);
+      }
+    }
 
     // Admin-Mail senden
     try {
