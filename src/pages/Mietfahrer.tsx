@@ -89,7 +89,7 @@ const Mietfahrer = () => {
       },
       {
         question: "Sind Mietfahrer auch am Wochenende verfügbar?",
-        answer: "Ja, nach Absprache. <strong>Wochenend-Zuschläge:</strong> Samstag +25%, Sonntag +50%. Feiertage +100%. Alle Konditionen transparent vorab."
+        answer: "Ja, nach Verfügbarkeit. <strong>Wochenend- und Feiertagszuschläge:</strong> Samstag +25 %, Sonntag und gesetzliche Feiertage +50 % auf den jeweiligen Tagessatz. Zuschläge gelten automatisch, wenn der Einsatz auf diese Tage fällt."
       },
       {
         question: "Wie buche ich einen Mietfahrer?",
