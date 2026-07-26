@@ -13,6 +13,7 @@ import { ArrowLeft, Upload, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 import { validateFiles, uploadViaEdge } from "@/utils/fileValidation";
+import { TERMS_VERSION_DRIVER } from "@/config/termsVersion";
 import beispielFuehrerschein from "@/assets/beispiel-fuehrerschein.png";
 import beispielFahrerkarte from "@/assets/beispiel-fahrerkarte.png";
 
@@ -225,7 +226,7 @@ const FahrerRegistrierung = () => {
         break;
       case 'einsatzbereitschaft_bestaetigt':
         if (!value) {
-          errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihre grundsätzliche Einsatzbereitschaft';
+          errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihr Interesse an Auftragsangeboten';
         }
         break;
       case 'gewerbenachweis_bestaetigt':
@@ -366,6 +367,7 @@ const FahrerRegistrierung = () => {
       formDataToSend.append("bf3_erlaubnis", formData.bf3_erlaubnis.toString());
       formDataToSend.append("spezialanforderungen", JSON.stringify(formData.spezialanforderungen));
       formDataToSend.append("firmensitz_land", formData.firmensitz_land || "");
+      formDataToSend.append("terms_version", TERMS_VERSION_DRIVER);
 
       // Add file uploads
       if (selectedFiles.fuehrerschein) {
