@@ -132,8 +132,8 @@ const handler = async (req: Request): Promise<Response> => {
           <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
           <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Führerscheinklasse:</strong> ${job.fuehrerscheinklasse}</p>
           ${job.besonderheiten ? `<p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Besonderheiten:</strong> ${job.besonderheiten}</p>` : ''}
-          <p class="body-text" style="margin:12px 0 4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Leistungsbeschreibung des Auftraggebers:</strong><br>${job.nachricht}</p>
-          <p class="body-text" style="margin:4px 0 0 0;font-size:13px;line-height:1.5;color:#6b7280;font-style:italic;">Die nachfolgende Leistungsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.</p>
+          <p class="body-text" style="margin:12px 0 4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Einsatztätigkeiten und Anforderungen:</strong><br>${job.nachricht}</p>
+          <p class="body-text" style="margin:4px 0 0 0;font-size:13px;line-height:1.5;color:#6b7280;font-style:italic;">Die nachfolgende Auftragsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.</p>
         </td></tr>
       </table>
 

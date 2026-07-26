@@ -92,10 +92,13 @@ export const AdminBookingNotification = ({
           </tr>
         )}
         <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Nachricht:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }}>{message}</td>
         </tr>
       </table>
+      <Text style={{ ...textStyles.paragraph, fontSize: '13px', fontStyle: 'italic', margin: '12px 0 0 0' }}>
+        Der Besteller hat bestätigt, dass die beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind. Diese Angaben bilden die Grundlage der Einsatzabstimmung und der Auftragsannahme durch den selbstständigen Fahrer.
+      </Text>
     </Section>
 
     {isFernfahrerTarif && (

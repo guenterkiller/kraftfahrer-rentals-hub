@@ -239,8 +239,8 @@ const handler = async (req: Request): Promise<Response> => {
               <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
               <p><strong>Zeitraum:</strong> ${job.zeitraum}</p>
               <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
-              <p><strong>Leistungsbeschreibung des Auftraggebers:</strong><br>${job.nachricht}</p>
-              <p style="font-size:13px;color:#6b7280;font-style:italic;margin-top:4px;">Die nachfolgende Leistungsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.</p>
+              <p><strong>Einsatztätigkeiten und Anforderungen:</strong><br>${job.nachricht}</p>
+              <p style="font-size:13px;color:#6b7280;font-style:italic;margin-top:4px;">Die nachfolgende Auftragsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.</p>
               <p style="margin-top:16px;font-weight:600;">Bestätigung Ihrer Auftragsannahme: „Ich nehme diesen Auftrag zu den in diesem Auftragsangebot beschriebenen Bedingungen an."</p>
             </div>
 

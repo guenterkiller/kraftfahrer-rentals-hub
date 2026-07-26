@@ -72,10 +72,13 @@ export const CustomerBookingConfirmation = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{location}</td>
         </tr>
         <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Leistungsbeschreibung des Auftraggebers:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{message}</td>
         </tr>
       </table>
+      <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', fontStyle: 'italic', margin: '12px 0 0 0' })}>
+        Der Besteller hat bestätigt, dass die beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind. Diese Angaben bilden die Grundlage der Einsatzabstimmung und der Auftragsannahme durch den selbstständigen Fahrer.
+      </Text>
     </Section>
 
     {isFernfahrerTarif && (
