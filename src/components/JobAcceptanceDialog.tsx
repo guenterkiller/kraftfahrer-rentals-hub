@@ -158,7 +158,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
           <AlertDescription className="text-amber-900">
             <div className="font-semibold mb-1">Hinweis:</div>
             <div className="text-sm leading-relaxed">
-              Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Bewerbungen aus anderen Regionen berücksichtigt. Bitte bewerben Sie sich daher nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
+              Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Interessenbekundungen aus anderen Regionen berücksichtigt. Bitte bekunden Sie Ihr Interesse nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
             </div>
           </AlertDescription>
         </Alert>

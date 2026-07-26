@@ -71,7 +71,7 @@ Günter Killer`
 falls Sie regelmäßig oder projektweise Fahrer benötigen, sind wir gerne Ihr fester Ansprechpartner.
 
 **Vorteile für Stammkunden:**
-- Bevorzugte Disposition bei kurzfristigen Anfragen
+- Bevorzugte Vermittlungskoordination bei kurzfristigen Anfragen
 - Feste Ansprechpartner für Ihre Projekte  
 - Optimierte Abläufe und bewährte Fahrer-Teams
 
@@ -123,7 +123,7 @@ Viele Grüße
 Günter Killer`
       },
       7: {
-        subject: "{{name}}, so optimieren Sie Ihre Einsatzplanung bei Fahrerexpress",
+        subject: "{{name}}, so optimieren Sie Ihre Auftragsvermittlung bei Fahrerexpress",
         content: `Hallo {{name}},
 
 nach einer Woche im Fahrerexpress-Netzwerk hier einige Tipps für mehr Einsätze:

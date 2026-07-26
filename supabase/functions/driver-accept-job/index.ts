@@ -4,6 +4,7 @@ import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import { AdminJobAcceptanceNotification } from '../_shared/email-templates/admin-job-acceptance-notification.tsx';
+import { TERMS_VERSION_DRIVER } from '../_shared/terms-version.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -171,7 +172,7 @@ const handler = async (req: Request): Promise<Response> => {
           billing_model: 'agency', // Immer agency
           ip: ip,
           user_agent: userAgent,
-          terms_version: 'v1'
+          terms_version: TERMS_VERSION_DRIVER
         });
 
       if (acceptanceError && !acceptanceError.message?.includes('duplicate key')) {
