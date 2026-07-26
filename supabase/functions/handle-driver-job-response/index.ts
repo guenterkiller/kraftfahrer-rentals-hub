@@ -287,8 +287,8 @@ const handler = async (req: Request): Promise<Response> => {
     // Erfolgsseite zurückgeben
     const successTitle = action === "accept" ? "Rückmeldung erfasst ✅" : "Rückmeldung erfasst ❌";
     const confirmMsg = action === "accept"
-      ? "Danke! Deine Zusage wurde an die Disposition weitergeleitet."
-      : "Danke für deine Rückmeldung. Wir informieren die Disposition.";
+      ? "Danke! Deine Zusage wurde an die Vermittlungskoordination weitergeleitet."
+      : "Danke für deine Rückmeldung. Wir informieren die Vermittlungskoordination.";
     
     console.log(`✅ Driver response processed: ${actionVerb} by ${driver?.vorname} ${driver?.nachname}`);
     
