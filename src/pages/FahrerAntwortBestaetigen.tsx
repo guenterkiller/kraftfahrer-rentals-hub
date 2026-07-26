@@ -2,9 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  DRIVER_ACCEPT_CHECKBOX_TEXT,
+  DRIVER_ACCEPT_LEGAL_HINT,
+} from "@/lib/driverConsentText";
 
-const CHECKBOX_TEXT =
-  "Ich habe die oben angezeigten Einsatztätigkeiten, Anforderungen, Einsatzdaten und Konditionen zur Kenntnis genommen und bestätige ausdrücklich, dass ich den Auftrag zu diesen Bedingungen als selbstständiger Unternehmer annehme. Mir ist bekannt, dass es sich um eine Vermittlung nach § 652 BGB handelt und weder eine Arbeitnehmerüberlassung noch ein Arbeitsverhältnis begründet wird.";
+const CHECKBOX_TEXT = DRIVER_ACCEPT_CHECKBOX_TEXT;
 
 type ServerStatus =
   | "accepted"
@@ -216,15 +219,20 @@ export default function FahrerAntwortBestaetigen() {
             )}
 
             {action === "accept" ? (
-              <label className="flex items-start gap-3 mb-4 text-sm text-foreground">
-                <input
-                  type="checkbox"
-                  className="mt-1"
-                  checked={consent}
-                  onChange={(e) => setConsent(e.target.checked)}
-                />
-                <span>{CHECKBOX_TEXT}</span>
-              </label>
+              <div className="mb-4">
+                <p className="mb-3 text-xs text-muted-foreground">
+                  {DRIVER_ACCEPT_LEGAL_HINT}
+                </p>
+                <label className="flex items-start gap-3 text-sm text-foreground">
+                  <input
+                    type="checkbox"
+                    className="mt-1"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                  />
+                  <span>{CHECKBOX_TEXT}</span>
+                </label>
+              </div>
             ) : (
               <p className="text-muted-foreground mb-6">
                 Bitte bestätigen Sie Ihre Rückmeldung mit einem Klick. Erst dann
