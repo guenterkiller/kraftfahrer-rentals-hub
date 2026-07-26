@@ -63,12 +63,12 @@ const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
       ],
     },
     {
-      heading: 'Aktualisierung unserer Fahrerdatei',
+      heading: 'Aktualisierung unserer Vermittlungsdatei',
       blocks: [
         {
           type: 'paragraph',
           html:
-            'Einige Fahrer haben bisher noch keinen Auftrag über Fahrerexpress übernommen. Damit wir unsere Fahrerdatei aktuell halten können, bitten wir Sie um eine kurze Rückmeldung, falls Sie weiterhin grundsätzlich an Einsätzen interessiert sind, bisher aber noch keinen Auftrag angenommen haben.',
+            'Einige registrierte Unternehmer haben bisher noch keinen Auftrag über Fahrerexpress übernommen. Damit wir unsere Vermittlungsdatei aktuell halten können, bitten wir Sie um eine kurze Rückmeldung, falls Sie weiterhin grundsätzlich an Auftragsangeboten interessiert sind, bisher aber noch keinen Auftrag angenommen haben.',
         },
         { type: 'paragraph', html: 'Teilen Sie uns gerne kurz mit, woran es bisher gelegen hat, zum Beispiel:' },
         {
