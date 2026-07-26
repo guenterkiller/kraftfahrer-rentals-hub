@@ -171,7 +171,7 @@ const handler = async (req: Request): Promise<Response> => {
           billing_model: 'agency', // Immer agency
           ip: ip,
           user_agent: userAgent,
-          terms_version: 'v1'
+          terms_version: (await import('../_shared/terms-version.ts')).TERMS_VERSION_DRIVER
         });
 
       if (acceptanceError && !acceptanceError.message?.includes('duplicate key')) {
