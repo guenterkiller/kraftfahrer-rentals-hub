@@ -19,6 +19,7 @@ const SimpleBookingForm = () => {
   const [submitted, setSubmitted] = useState(false); // prevents double-submit
   const [agreedToData, setAgreedToData] = useState(false);
   const [agreedToBinding, setAgreedToBinding] = useState(false);
+  const [agreedToTasks, setAgreedToTasks] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
   const [longDistance, setLongDistance] = useState(false);
@@ -212,7 +213,7 @@ const SimpleBookingForm = () => {
       setEinsatzende('');
       setAgreedToData(false);
       setAgreedToBinding(false);
-      setAgreedToBinding(false);
+      setAgreedToTasks(false);
       setAdrRequired(false);
       setCraneRequired(false);
       setLongDistance(false);
@@ -801,14 +802,38 @@ const SimpleBookingForm = () => {
                 </fieldset>
 
                 <div>
-                  <Label htmlFor="beschreibung">Beschreiben Sie Ihren Fahrbedarf *</Label>
-                  <Textarea 
-                    id="beschreibung" 
+                  <Label htmlFor="beschreibung">
+                    Beschreiben Sie den Fahrbedarf und die konkreten Einsatztätigkeiten des Fahrers *
+                  </Label>
+                  <p className="text-sm text-muted-foreground mt-1 mb-2">
+                    Bitte beschreiben Sie möglichst genau, welche Tätigkeiten der Fahrer im Einsatz erledigen soll.
+                    Diese Angaben sind Grundlage der Einsatzabstimmung und werden dem selbstständigen Fahrer zur
+                    Annahme des Auftrags übermittelt.
+                  </p>
+                  <Textarea
+                    id="beschreibung"
                     name="beschreibung"
-                    placeholder="z.B. Einsatzort, besondere Anforderungen, weitere Details..."
-                    className="min-h-[100px]"
+                    placeholder="z. B. Fahrzeugart, Tourenart, mit oder ohne Beifahrer, Beladen/Entladen, Sackkarre, E-Ameise, Leergut, Ladungssicherung, Lieferscheine, Kundenkontakt, Gefahrgut, Wechselbrücke, feste Tour, Nahverkehr/Fernverkehr, besondere Anforderungen ..."
+                    className="min-h-[140px]"
                     required
                   />
+                  <div className="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-900">
+                    <div className="font-semibold mb-1">Beispiele für wichtige Angaben:</div>
+                    <ul className="space-y-0.5">
+                      <li>• Fahrzeugart und Fahrzeuggröße</li>
+                      <li>• Einsatzort, Startzeit und voraussichtliche Einsatzdauer</li>
+                      <li>• Nahverkehr, Fernverkehr, Verteilerverkehr oder feste Tour</li>
+                      <li>• Einsatz mit oder ohne Beifahrer</li>
+                      <li>• Beladen / Entladen erforderlich: ja/nein</li>
+                      <li>• Hilfsmittel: Sackkarre, Hubwagen, E-Ameise, Ladebordwand</li>
+                      <li>• Leergut, Sortierarbeiten oder Rücknahme erforderlich: ja/nein</li>
+                      <li>• Ladungssicherung erforderlich</li>
+                      <li>• Lieferscheine, Scannung, Dokumentation oder Kundenkontakt</li>
+                      <li>• Gefahrgut / ADR, falls erforderlich</li>
+                      <li>• Wechselbrücke, Anhänger, Sattelzug, Hängerzug oder besondere Fahrzeugtechnik</li>
+                      <li>• besondere körperliche Anforderungen oder sonstige Zusatzleistungen</li>
+                    </ul>
+                  </div>
                 </div>
 
                 {/* Stornierungsregelung (statischer Hinweis) */}
@@ -852,12 +877,26 @@ const SimpleBookingForm = () => {
                       Mir ist bekannt, dass bei Rücktritt oder Absage Stornokosten gemäß Stornoregelung anfallen. *
                     </Label>
                   </div>
+
+                  <div className="flex items-start space-x-2 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                    <Checkbox
+                      id="tasks-confirmation"
+                      checked={agreedToTasks}
+                      onCheckedChange={(checked) => setAgreedToTasks(checked as boolean)}
+                      required
+                      className="mt-0.5"
+                    />
+                    <Label htmlFor="tasks-confirmation" className="text-sm leading-snug">
+                      Ich bestätige, dass die von mir beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind.
+                      Mir ist bekannt, dass diese Angaben Grundlage der Fahrerabstimmung und der Auftragsannahme durch den selbstständigen Fahrer sind. *
+                    </Label>
+                  </div>
                 </div>
 
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !fahrzeugtyp}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
