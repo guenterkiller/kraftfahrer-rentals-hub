@@ -592,40 +592,78 @@ export type Database = {
       job_driver_acceptances: {
         Row: {
           accepted_at: string
-          billing_model: Database["public"]["Enums"]["billing_model_enum"]
+          assignment_id: string | null
+          billing_model:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
+          checkbox_text: string | null
+          consent_confirmed: boolean
           driver_id: string
+          flow: string | null
           id: string
+          invite_id: string | null
           ip: unknown
           job_id: string
+          job_snapshot: Json | null
           terms_version: string | null
           user_agent: string | null
         }
         Insert: {
           accepted_at?: string
-          billing_model: Database["public"]["Enums"]["billing_model_enum"]
+          assignment_id?: string | null
+          billing_model?:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
+          checkbox_text?: string | null
+          consent_confirmed?: boolean
           driver_id: string
+          flow?: string | null
           id?: string
+          invite_id?: string | null
           ip?: unknown
           job_id: string
+          job_snapshot?: Json | null
           terms_version?: string | null
           user_agent?: string | null
         }
         Update: {
           accepted_at?: string
-          billing_model?: Database["public"]["Enums"]["billing_model_enum"]
+          assignment_id?: string | null
+          billing_model?:
+            | Database["public"]["Enums"]["billing_model_enum"]
+            | null
+          checkbox_text?: string | null
+          consent_confirmed?: boolean
           driver_id?: string
+          flow?: string | null
           id?: string
+          invite_id?: string | null
           ip?: unknown
           job_id?: string
+          job_snapshot?: Json | null
           terms_version?: string | null
           user_agent?: string | null
         }
         Relationships: [
           {
+            foreignKeyName: "job_driver_acceptances_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "job_assignments"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "job_driver_acceptances_driver_id_fkey"
             columns: ["driver_id"]
             isOneToOne: false
             referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_driver_acceptances_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "assignment_invites"
             referencedColumns: ["id"]
           },
           {

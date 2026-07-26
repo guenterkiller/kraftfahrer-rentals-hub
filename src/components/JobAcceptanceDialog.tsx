@@ -50,12 +50,12 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
   };
 
   const billingInfo = {
-    title: "Agenturabrechnung (Subunternehmer-Modell)",
-    description: "Du stellst deine Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt.",
+    title: "Agenturabrechnung – selbstständige Auftragsdurchführung",
+    description: "Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Der im Auftragsangebot vereinbarte Vermittlungsanteil wird automatisch berücksichtigt.",
     alertColor: "bg-yellow-50 border-yellow-200",
     iconColor: "text-yellow-600",
     consentRequired: true,
-    consentText: "Ich bestätige den Einsatz als selbstständiger Subunternehmer im Rahmen eines Werk-/Dienstvertrags gegenüber dem Auftraggeber. Ich stelle meine Rechnung an Fahrerexpress. Die vereinbarte Vermittlungsgebühr wird automatisch berücksichtigt. Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
+    consentText: "Ich habe die Einsatztätigkeiten, Anforderungen, Einsatzdaten und Konditionen gelesen und bestätige ausdrücklich, dass ich den Auftrag zu diesen Bedingungen als selbstständiger Unternehmer annehme. Vermittlung nach § 652 BGB (Maklervertrag) – keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis."
   };
 
   return (
@@ -151,7 +151,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
                   {billingInfo.consentText}
                 </div>
                 <div className="text-yellow-700 leading-relaxed mt-3 font-medium">
-                  Ich nehme diesen Auftrag zu den in diesem Auftragsangebot beschriebenen Bedingungen an.
+                  Mit dem Klick auf „Auftrag zu diesen Bedingungen annehmen" bestätigen Sie die Auftragsannahme verbindlich.
                 </div>
               </label>
             </div>
@@ -181,7 +181,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
             ) : (
               <>
                 <CheckCircle className="w-4 h-4 mr-2" />
-                Dienst-/Werkvertrag als Subunternehmer annehmen
+                Auftrag zu diesen Bedingungen annehmen
               </>
             )}
           </Button>
