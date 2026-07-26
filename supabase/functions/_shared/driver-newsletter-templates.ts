@@ -40,9 +40,9 @@ export interface DriverNewsletterTemplate {
 const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
   id: 'fahrerinformationen_v1',
   label: 'Freigegebene Fahrerinformationen (fest)',
-  subject: 'Wichtige Information für unsere Fahrer – aktuelle Regelungen & kurze Rückmeldung erbeten',
+  subject: 'Wichtige Information für registrierte Unternehmer – aktuelle Regelungen & kurze Rückmeldung erbeten',
   intro:
-    'vielen Dank, dass Sie Teil unseres Fahrer-Netzwerks bei Fahrerexpress sind. Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur Zusammenarbeit und bitten gleichzeitig um eine kurze Rückmeldung zur Aktualisierung unserer Fahrerdatei.',
+    'vielen Dank, dass Sie als selbstständiger Unternehmer bei Fahrerexpress registriert sind. Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur Vermittlung und bitten gleichzeitig um eine kurze Rückmeldung zur Aktualisierung unserer Vermittlungsdatei.',
   sections: [
     {
       heading: 'Aktuelle Regelungen zur Zusammenarbeit',
@@ -63,12 +63,12 @@ const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
       ],
     },
     {
-      heading: 'Aktualisierung unserer Fahrerdatei',
+      heading: 'Aktualisierung unserer Vermittlungsdatei',
       blocks: [
         {
           type: 'paragraph',
           html:
-            'Einige Fahrer haben bisher noch keinen Auftrag über Fahrerexpress übernommen. Damit wir unsere Fahrerdatei aktuell halten können, bitten wir Sie um eine kurze Rückmeldung, falls Sie weiterhin grundsätzlich an Einsätzen interessiert sind, bisher aber noch keinen Auftrag angenommen haben.',
+            'Einige registrierte Unternehmer haben bisher noch keinen Auftrag über Fahrerexpress übernommen. Damit wir unsere Vermittlungsdatei aktuell halten können, bitten wir Sie um eine kurze Rückmeldung, falls Sie weiterhin grundsätzlich an Auftragsangeboten interessiert sind, bisher aber noch keinen Auftrag angenommen haben.',
         },
         { type: 'paragraph', html: 'Teilen Sie uns gerne kurz mit, woran es bisher gelegen hat, zum Beispiel:' },
         {

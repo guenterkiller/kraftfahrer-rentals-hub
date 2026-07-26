@@ -172,8 +172,9 @@ const GermanyMap = () => {
                   <div>
                     <h3 className="font-bold text-lg mb-2">Alle Regionen abgedeckt</h3>
                     <p className="text-muted-foreground">
-                      Nord, Süd, Ost und West – unsere Fahrer sind in allen Regionen 
-                      Deutschlands einsatzbereit und kennen sich lokal aus.
+                      Nord, Süd, Ost und West – bei Fahrerexpress registrierte selbstständige
+                      Unternehmer sind in allen Regionen Deutschlands verfügbar und kennen sich
+                      lokal aus.
                     </p>
                   </div>
                 </div>

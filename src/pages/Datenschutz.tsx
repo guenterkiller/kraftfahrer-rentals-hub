@@ -52,7 +52,7 @@ const Datenschutz = () => {
               <li>Telefonnummer</li>
               <li>E-Mail-Adresse</li>
               <li>Region</li>
-              <li>Angaben zum Fahrzeugtyp oder Einsatzwunsch (bei Fahreranfrage / Bewerbung)</li>
+              <li>Angaben zum Fahrzeugtyp oder Einsatzwunsch (bei Fahreranfrage / Registrierung)</li>
             </ul>
             <p className="mt-4 text-muted-foreground">
               Diese Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage gespeichert und verwendet.

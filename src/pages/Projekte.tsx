@@ -46,7 +46,7 @@ const Projekte = () => {
         "Wechselnde Einsatzorte",
         "Hohe Qualitätsanforderungen"
       ],
-      losung: "Pool erfahrener Wochenend-Fahrer aufgebaut. Flexible Einsatzplanung.",
+      losung: "Pool erfahrener Wochenend-Fahrer aufgebaut. Flexible Vermittlung nach Verfügbarkeit.",
       ergebnis: "Zuverlässige Abdeckung aller Wochenend-Transporte. Dauerhaft zufriedener Kunde.",
       bewertung: 5,
       bild: "/lovable-uploads/20627488-c22f-4d48-a48c-a32273f9a5dc.png"
