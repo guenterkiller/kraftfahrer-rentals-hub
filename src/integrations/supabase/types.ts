@@ -307,6 +307,10 @@ export type Database = {
       fahrer_profile: {
         Row: {
           adresse: string | null
+          agb_accepted_at: string | null
+          agb_ip: unknown
+          agb_user_agent: string | null
+          agb_version: string | null
           beschreibung: string | null
           bf2_erlaubnis: boolean | null
           bf3_erlaubnis: boolean | null
@@ -343,6 +347,10 @@ export type Database = {
         }
         Insert: {
           adresse?: string | null
+          agb_accepted_at?: string | null
+          agb_ip?: unknown
+          agb_user_agent?: string | null
+          agb_version?: string | null
           beschreibung?: string | null
           bf2_erlaubnis?: boolean | null
           bf3_erlaubnis?: boolean | null
@@ -379,6 +387,10 @@ export type Database = {
         }
         Update: {
           adresse?: string | null
+          agb_accepted_at?: string | null
+          agb_ip?: unknown
+          agb_user_agent?: string | null
+          agb_version?: string | null
           beschreibung?: string | null
           bf2_erlaubnis?: boolean | null
           bf3_erlaubnis?: boolean | null
