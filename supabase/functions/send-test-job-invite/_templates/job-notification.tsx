@@ -159,8 +159,8 @@ export const JobNotificationEmail = ({
           <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>
             Können Sie diesen Auftrag übernehmen?
           </Heading>
-          <Text style={{ ...textStyles.paragraph, fontSize: '15px', color: '#166534', textAlign: 'center' as const }}>
-            Bitte um kurze Rückmeldung über die Buttons:
+          <Text style={{ ...textStyles.paragraph, fontSize: '14px', color: '#0f172a', textAlign: 'left' as const, marginTop: 8 }}>
+            Bitte prüfen Sie die oben genannten Einsatztätigkeiten und Anforderungen sorgfältig. Mit Annahme des Auftrags bestätigen Sie, dass Sie den Auftrag zu den dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen als selbstständiger Unternehmer übernehmen. Sie werden auf der Bestätigungsseite gebeten, die Auftragsbeschreibung erneut zu bestätigen, bevor die Annahme wirksam wird.
           </Text>
           <table role="presentation" cellPadding={0} cellSpacing={0} style={{ margin: '16px auto' }}>
             <tr>
@@ -179,7 +179,7 @@ export const JobNotificationEmail = ({
                       display: 'inline-block',
                     }}
                   >
-                    Auftrag annehmen
+                    Auftrag zu diesen Bedingungen annehmen
                   </Button>
                 )}
               </td>
@@ -205,7 +205,7 @@ export const JobNotificationEmail = ({
             </tr>
           </table>
           <Text style={{ ...textStyles.paragraph, fontSize: '13px', color: '#166534', marginTop: '12px' }}>
-            Ihre Rückmeldung dient der Verfügbarkeitsprüfung. Die endgültige Einsatzbestätigung erfolgt separat durch Fahrerexpress.
+            Die Annahme wird von Fahrerexpress geprüft und organisatorisch bestätigt. Maßgeblich bleiben die im Auftragsangebot dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen.
           </Text>
         </Section>
       )}

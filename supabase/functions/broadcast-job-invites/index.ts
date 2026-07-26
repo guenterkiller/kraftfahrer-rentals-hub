@@ -92,11 +92,13 @@ const handler = async (req: Request): Promise<Response> => {
 
       // Sende Mail mit beiden Jobs
       if (resend && invites.length > 0) {
-        const acceptLink1 = invites[0] ? `${supabaseUrl}/functions/v1/handle-driver-job-response?a=accept&t=${invites[0].invite.token}` : '';
-        const declineLink1 = invites[0] ? `${supabaseUrl}/functions/v1/handle-driver-job-response?a=decline&t=${invites[0].invite.token}` : '';
-        
-        const acceptLink2 = invites[1] ? `${supabaseUrl}/functions/v1/handle-driver-job-response?a=accept&t=${invites[1].invite.token}` : '';
-        const declineLink2 = invites[1] ? `${supabaseUrl}/functions/v1/handle-driver-job-response?a=decline&t=${invites[1].invite.token}` : '';
+        // Frontend-Bestätigungsseite mit Pflicht-Checkbox (Flow B). Kein Ein-Klick mehr.
+        const CONFIRM_BASE = 'https://www.kraftfahrer-mieten.com/fahrer-antwort-bestaetigen';
+        const acceptLink1 = invites[0] ? `${CONFIRM_BASE}?action=accept&token=${encodeURIComponent(invites[0].invite.token)}` : '';
+        const declineLink1 = invites[0] ? `${CONFIRM_BASE}?action=decline&token=${encodeURIComponent(invites[0].invite.token)}` : '';
+
+        const acceptLink2 = invites[1] ? `${CONFIRM_BASE}?action=accept&token=${encodeURIComponent(invites[1].invite.token)}` : '';
+        const declineLink2 = invites[1] ? `${CONFIRM_BASE}?action=decline&token=${encodeURIComponent(invites[1].invite.token)}` : '';
 
         const esc = (s: unknown) =>
           String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -118,7 +120,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div style="margin-top: 20px;">
                 <a href="${acceptLink1}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-right: 10px;">
-                  ✅ Annehmen
+                  ✅ Auftrag zu diesen Bedingungen annehmen
                 </a>
                 <a href="${declineLink1}" style="background: #ef4444; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                   ❌ Ablehnen
@@ -139,7 +141,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div style="margin-top: 20px;">
                 <a href="${acceptLink2}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-right: 10px;">
-                  ✅ Annehmen
+                  ✅ Auftrag zu diesen Bedingungen annehmen
                 </a>
                 <a href="${declineLink2}" style="background: #ef4444; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                   ❌ Ablehnen
@@ -148,7 +150,10 @@ const handler = async (req: Request): Promise<Response> => {
             </div>
             ` : ''}
 
-            <p style="color: #666; font-size: 14px; margin-top: 30px;">
+            <p style="background:#fffbeb;border:1px solid #f59e0b;padding:12px;border-radius:8px;color:#78350f;font-size:14px;line-height:1.55;">
+              <strong>Hinweis:</strong> Bitte prüfen Sie die oben genannten Einsatztätigkeiten und Anforderungen sorgfältig. Mit Annahme des Auftrags bestätigen Sie, dass Sie den Auftrag zu den dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen als selbstständiger Unternehmer übernehmen. Auf der Bestätigungsseite werden die Auftragsdaten erneut angezeigt und müssen aktiv bestätigt werden, bevor die Annahme wirksam wird.
+            </p>
+            <p style="color: #666; font-size: 14px; margin-top: 20px;">
               Diese Links sind 48 Stunden gültig.<br>
               Bei Fragen: +49-1577-1442285 oder info@kraftfahrer-mieten.com
             </p>
