@@ -131,7 +131,21 @@ export const CustomerBookingConfirmation = ({
         Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können gesondert als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Weitere Zuschläge entstehen ausschließlich nach vorheriger Vereinbarung.
+        Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
+      </Text>
+    </Section>
+
+    <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
+      <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+        Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird automatisch ein Zuschlag auf den jeweiligen Tagessatz berechnet. Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
+      </Text>
+      <ul style={{ margin: '0 0 10px 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+        <li><strong>Samstag:</strong> 25 % Zuschlag auf den jeweiligen Tagessatz</li>
+        <li><strong>Sonntag und gesetzliche Feiertage:</strong> 50 % Zuschlag auf den jeweiligen Tagessatz</li>
+      </ul>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+        Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
       </Text>
     </Section>
 
