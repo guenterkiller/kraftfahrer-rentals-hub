@@ -507,7 +507,7 @@ const FahrerRegistrierung = () => {
                       🚛 Selbstständige LKW-Fahrer mit CE-Führerschein gesucht
                     </h1>
                     <p className="text-lg text-muted-foreground mb-3">
-                      Fahrerexpress ist eine Vermittlungsplattform für selbstständige Unternehmer im Güterverkehr. Wir bringen Auftraggeber und selbstständige Auftragnehmer zusammen.
+                      Bei Fahrerexpress finden selbstständige Unternehmer passende Auftragsangebote von Auftraggebern in Deutschland und Europa. Die Plattform stellt transparente Auftragsinformationen sowie eine vereinfachte Vermittlungs- und Abwicklungsstruktur zur Verfügung.
                     </p>
                     <p className="text-lg text-muted-foreground mb-3">
                       Bei Fahrerexpress sind keine Fahrer beschäftigt. Fahrerexpress ist eine Vermittlungsplattform und bringt Auftraggeber mit selbstständigen LKW-Fahrern und anderen selbstständigen Auftragnehmern zusammen.
