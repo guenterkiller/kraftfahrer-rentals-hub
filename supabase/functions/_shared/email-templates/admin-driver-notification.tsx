@@ -83,9 +83,9 @@ export const AdminDriverNotification = ({
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>✅ Nächste Schritte</Heading>
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li>Fahrerunterlagen im Admin-Panel prüfen</li>
-        <li>Dokumente (Führerschein, Fahrerkarte, Zertifikate) kontrollieren</li>
-        <li>Bei vollständigen und korrekten Unterlagen: Fahrer freischalten</li>
+        <li>Unterlagen prüfen (Führerschein, Fahrerkarte, Zertifikate, Gewerbeanmeldung)</li>
+        <li>Fahrer freischalten</li>
+        <li>Aufnahme in den Verteiler für passende Auftragsangebote</li>
         <li>Fahrer erhält automatisch Benachrichtigung über Freischaltung</li>
       </ul>
     </Section>
