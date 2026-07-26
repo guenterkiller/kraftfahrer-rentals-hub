@@ -601,7 +601,7 @@ const FahrerRegistrierung = () => {
                     <div>
                       <h4 className="font-semibold mb-1">Vergabe der Einsätze</h4>
                       <p className="text-sm text-muted-foreground">
-                        Fahrerexpress berücksichtigt bei der Vergabe vorrangig Fahrer, die sich in räumlicher Nähe zum Einsatzort befinden, um Anfahrtszeiten und Kosten gering zu halten. Zusätzlich können Qualifikation, Verfügbarkeit, Zuverlässigkeit, bisherige Zusammenarbeit und konkrete Kundenanforderungen berücksichtigt werden. Ein Anspruch auf Zuteilung eines bestimmten Auftrags besteht nicht.
+                        Fahrerexpress prüft für jeden Auftrag, welche selbstständigen Unternehmer die objektiven Anforderungen erfüllen (z. B. erforderliche Führerscheinklasse, gesetzliche Qualifikationen und regionaler Einsatzbereich). Die weitere Vermittlung erfolgt anhand dieser objektiven Kriterien sowie der tatsächlichen Verfügbarkeit der interessierten Unternehmer. Weder der Auftraggeber noch ein einzelner Unternehmer entscheidet automatisch über die Vergabe. Ein Anspruch auf Zuteilung eines bestimmten Auftrags besteht nicht.
                       </p>
                     </div>
                     <div>
@@ -1324,6 +1324,18 @@ const FahrerRegistrierung = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
+                  <div className="border-b pb-4">
+                    <h4 className="font-semibold mb-2">Wie werden Aufträge vermittelt?</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Fahrerexpress vermittelt Aufträge ausschließlich an registrierte selbstständige Unternehmer. Zunächst wird geprüft, welche Unternehmer die objektiven Anforderungen des jeweiligen Auftrags erfüllen (z. B. erforderliche Führerscheinklasse, gesetzliche Qualifikationen und regionaler Einsatzbereich).
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Geeignete Unternehmer erhalten anschließend das jeweilige Auftragsangebot und entscheiden eigenverantwortlich, ob sie Interesse an diesem Auftrag haben.
+                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      Auch wenn ein Unternehmer Interesse an einem Auftragsangebot bekundet, besteht kein Anspruch auf die Vermittlung oder Erteilung des Auftrags. Je nach Auftrag können sich mehrere geeignete Unternehmer melden oder auch kein Unternehmer. Die weitere Vermittlung erfolgt anhand der objektiven Anforderungen des jeweiligen Auftrags sowie der tatsächlichen Verfügbarkeit der interessierten Unternehmer.
+                    </p>
+                  </div>
                   <div className="border-b pb-4">
                     <h4 className="font-semibold mb-2">Können sich Fahrer aus EU-Ländern registrieren?</h4>
                     <p className="text-sm text-muted-foreground">
