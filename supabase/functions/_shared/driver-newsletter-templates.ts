@@ -40,9 +40,9 @@ export interface DriverNewsletterTemplate {
 const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
   id: 'fahrerinformationen_v1',
   label: 'Freigegebene Fahrerinformationen (fest)',
-  subject: 'Wichtige Information für unsere Fahrer – aktuelle Regelungen & kurze Rückmeldung erbeten',
+  subject: 'Wichtige Information für registrierte Unternehmer – aktuelle Regelungen & kurze Rückmeldung erbeten',
   intro:
-    'vielen Dank, dass Sie Teil unseres Fahrer-Netzwerks bei Fahrerexpress sind. Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur Zusammenarbeit und bitten gleichzeitig um eine kurze Rückmeldung zur Aktualisierung unserer Fahrerdatei.',
+    'vielen Dank, dass Sie als selbstständiger Unternehmer bei Fahrerexpress registriert sind. Mit dieser E-Mail informieren wir Sie über die aktuell gültigen Regelungen zur Vermittlung und bitten gleichzeitig um eine kurze Rückmeldung zur Aktualisierung unserer Vermittlungsdatei.',
   sections: [
     {
       heading: 'Aktuelle Regelungen zur Zusammenarbeit',
