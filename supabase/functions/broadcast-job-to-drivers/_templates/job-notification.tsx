@@ -94,7 +94,7 @@ export const JobNotificationEmail = ({
           </Heading>
           <Text style={textStyles.paragraph}>{renderMultilineText(nachricht)}</Text>
           <Text style={{ ...textStyles.paragraph, fontSize: '13px', color: '#6b7280', fontStyle: 'italic' }}>
-            Diese Beschreibung stammt vom Auftraggeber und wird nicht von Fahrerexpress vorgegeben.
+            Die nachfolgende Leistungsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.
           </Text>
         </Section>
       )}
