@@ -1249,7 +1249,7 @@ const FahrerRegistrierung = () => {
                           >
                             Vermittlungsbedingungen
                           </Link>{" "}
-                          gelesen und stimme diesen zu. Mit dem Absenden der Registrierung bestätige ich, dass ich als selbstständiger Unternehmer tätig bin und die Bedingungen vor Annahme eines Auftrags erneut prüfe. *
+                          gelesen und stimme diesen zu. Mit dem Absenden der Registrierung bestätige ich, dass ich als selbstständiger Unternehmer tätig bin. *
                         </Label>
                       </div>
                       {validationErrors.vermittlungszustimmung && (

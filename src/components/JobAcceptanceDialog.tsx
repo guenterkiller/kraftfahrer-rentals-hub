@@ -121,11 +121,14 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
           </div>
         </div>
 
-        {/* Message */}
+        {/* Leistungsbeschreibung des Auftraggebers */}
         <div>
-          <label className="text-sm font-semibold text-gray-600">Nachricht</label>
+          <label className="text-sm font-semibold text-gray-600">Leistungsbeschreibung des Auftraggebers</label>
           <div className="bg-gray-50 p-3 rounded-md mt-1">
             <p className="text-base">{job.nachricht}</p>
+            <p className="text-xs text-gray-500 mt-2 italic">
+              Diese Beschreibung stammt vom Auftraggeber und wird nicht von Fahrerexpress vorgegeben.
+            </p>
           </div>
         </div>
 
@@ -146,6 +149,9 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
                 </div>
                 <div className="text-yellow-700 leading-relaxed">
                   {billingInfo.consentText}
+                </div>
+                <div className="text-yellow-700 leading-relaxed mt-3 font-medium">
+                  Ich nehme diesen Auftrag zu den in diesem Auftragsangebot beschriebenen Bedingungen an.
                 </div>
               </label>
             </div>

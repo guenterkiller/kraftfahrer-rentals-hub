@@ -61,10 +61,10 @@ export const JobNotificationEmail = ({
 
       <Hr style={{ margin: '24px 0', borderTop: '1px solid #e5e7eb' }} />
       
-      {/* EINSATZ Section */}
+      {/* AUFTRAG Section */}
       <Section style={boxStyles.info}>
         <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-          🚛 Einsatzdetails
+          🚛 Auftragsdetails
         </Heading>
         <Text style={textStyles.paragraph}>
           <strong>Datum/Zeitraum:</strong> {zeitraum}
@@ -86,13 +86,16 @@ export const JobNotificationEmail = ({
         )}
       </Section>
       
-      {/* NACHRICHT Section */}
+      {/* Leistungsbeschreibung des Auftraggebers */}
       {nachricht && (
         <Section style={boxStyles.info}>
           <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-            💬 Zusätzliche Informationen
+            💬 Leistungsbeschreibung des Auftraggebers
           </Heading>
           <Text style={textStyles.paragraph}>{renderMultilineText(nachricht)}</Text>
+          <Text style={{ ...textStyles.paragraph, fontSize: '13px', color: '#6b7280', fontStyle: 'italic' }}>
+            Diese Beschreibung stammt vom Auftraggeber und wird nicht von Fahrerexpress vorgegeben.
+          </Text>
         </Section>
       )}
 
@@ -176,7 +179,7 @@ export const JobNotificationEmail = ({
                       display: 'inline-block',
                     }}
                   >
-                    Ich kann den Auftrag übernehmen
+                    Auftrag annehmen
                   </Button>
                 )}
               </td>
