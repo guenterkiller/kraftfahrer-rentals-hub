@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import JobAcceptanceDialog from '@/components/JobAcceptanceDialog';
 import { useSEO } from '@/hooks/useSEO';
+import { DRIVER_ACCEPT_CHECKBOX_TEXT } from '@/lib/driverConsentText';
 
 const DriverJobResponse = () => {
   useSEO({
@@ -142,6 +143,7 @@ const DriverJobResponse = () => {
           driverId: driver.id,
           action: 'accept',
           termsAccepted,
+          checkboxText: DRIVER_ACCEPT_CHECKBOX_TEXT,
           ip: 'manual',
           userAgent: navigator.userAgent
         })
