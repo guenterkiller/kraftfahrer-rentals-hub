@@ -127,7 +127,7 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
           <div className="bg-gray-50 p-3 rounded-md mt-1">
             <p className="text-base">{job.nachricht}</p>
             <p className="text-xs text-gray-500 mt-2 italic">
-              Diese Beschreibung stammt vom Auftraggeber und wird nicht von Fahrerexpress vorgegeben.
+              Die nachfolgende Leistungsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.
             </p>
           </div>
         </div>
