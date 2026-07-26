@@ -56,6 +56,7 @@ interface FahrerAnfrageRequest {
   bf2_erlaubnis?: string;
   bf3_erlaubnis?: string;
   spezialanforderungen?: string[] | string;
+  terms_version?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
