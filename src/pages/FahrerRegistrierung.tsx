@@ -1240,7 +1240,16 @@ const FahrerRegistrierung = () => {
                           required 
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
-                          Die vollständigen Bedingungen zur Zusammenarbeit erhalten Sie nach Ihrer Registrierung per E-Mail. Mit dem Absenden der Registrierung bestätigen Sie, dass Sie als selbstständiger Fahrer tätig sind und die später übermittelten Bedingungen vor Annahme eines Einsatzes prüfen. *
+                          Ich habe die{" "}
+                          <Link
+                            to="/vermittlungsbedingungen"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary underline decoration-primary/50 hover:decoration-primary"
+                          >
+                            Vermittlungsbedingungen
+                          </Link>{" "}
+                          gelesen und stimme diesen zu. Mit dem Absenden der Registrierung bestätige ich, dass ich als selbstständiger Unternehmer tätig bin und die Bedingungen vor Annahme eines Auftrags erneut prüfe. *
                         </Label>
                       </div>
                       {validationErrors.vermittlungszustimmung && (
@@ -1255,7 +1264,7 @@ const FahrerRegistrierung = () => {
                           required
                         />
                         <Label htmlFor="einsatzbereitschaft_bestaetigt" className="text-sm leading-relaxed">
-                          Ich bestätige, dass ich grundsätzlich einsatzbereit bin und passende Auftragsangebote ernsthaft prüfen möchte. *
+                          Ich bestätige, dass ich als selbstständiger Unternehmer an zukünftigen Auftragsangeboten interessiert bin und passende Angebote eigenverantwortlich prüfen möchte. *
                         </Label>
                        </div>
                        {validationErrors.einsatzbereitschaft_bestaetigt && (
