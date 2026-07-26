@@ -121,13 +121,13 @@ const JobAcceptanceDialog: React.FC<JobAcceptanceDialogProps> = ({
           </div>
         </div>
 
-        {/* Leistungsbeschreibung des Auftraggebers */}
+        {/* Einsatztätigkeiten und Anforderungen */}
         <div>
-          <label className="text-sm font-semibold text-gray-600">Leistungsbeschreibung des Auftraggebers</label>
+          <label className="text-sm font-semibold text-gray-600">Einsatztätigkeiten und Anforderungen</label>
           <div className="bg-gray-50 p-3 rounded-md mt-1">
             <p className="text-base">{job.nachricht}</p>
             <p className="text-xs text-gray-500 mt-2 italic">
-              Die nachfolgende Leistungsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.
+              Die nachfolgende Auftragsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.
             </p>
           </div>
         </div>

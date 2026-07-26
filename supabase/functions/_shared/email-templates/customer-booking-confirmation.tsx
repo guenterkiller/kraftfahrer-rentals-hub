@@ -72,7 +72,7 @@ export const CustomerBookingConfirmation = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{location}</td>
         </tr>
         <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Leistungsbeschreibung des Auftraggebers:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{message}</td>
         </tr>
       </table>

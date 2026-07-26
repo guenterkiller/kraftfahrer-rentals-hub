@@ -86,15 +86,15 @@ export const JobNotificationEmail = ({
         )}
       </Section>
       
-      {/* Leistungsbeschreibung des Auftraggebers */}
+      {/* Einsatztätigkeiten und Anforderungen */}
       {nachricht && (
         <Section style={boxStyles.info}>
           <Heading style={{ ...textStyles.h3, marginTop: 0 }}>
-            💬 Leistungsbeschreibung des Auftraggebers
+            💬 Einsatztätigkeiten und Anforderungen
           </Heading>
           <Text style={textStyles.paragraph}>{renderMultilineText(nachricht)}</Text>
           <Text style={{ ...textStyles.paragraph, fontSize: '13px', color: '#6b7280', fontStyle: 'italic' }}>
-            Die nachfolgende Leistungsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.
+            Die nachfolgende Auftragsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.
           </Text>
         </Section>
       )}
