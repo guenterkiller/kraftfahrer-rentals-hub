@@ -510,13 +510,16 @@ const FahrerRegistrierung = () => {
                       Fahrerexpress ist eine Vermittlungsplattform für selbstständige Unternehmer im Güterverkehr. Wir bringen Auftraggeber und selbstständige Auftragnehmer zusammen.
                     </p>
                     <p className="text-lg text-muted-foreground mb-3">
-                      Als selbstständiger Unternehmer mit eigener Gewerbeanmeldung entscheiden Sie bei jedem einzelnen Auftragsangebot eigenverantwortlich, ob Sie dieses annehmen oder ablehnen möchten. Eine Registrierung verpflichtet Sie nicht zur Annahme von Aufträgen. Ebenso besteht kein Anspruch auf die Vermittlung oder Zuteilung eines bestimmten Auftrags.
+                      Bei Fahrerexpress sind keine Fahrer beschäftigt. Fahrerexpress ist eine Vermittlungsplattform und bringt Auftraggeber mit selbstständigen LKW-Fahrern und anderen selbstständigen Auftragnehmern zusammen.
                     </p>
                     <p className="text-lg text-muted-foreground mb-3">
-                      Die Ausführung des Auftrags, die Einsatzplanung sowie die Kommunikation während des Einsatzes erfolgen eigenverantwortlich durch den selbstständigen Unternehmer.
+                      Als selbstständiger Unternehmer mit eigener Gewerbeanmeldung finden Sie über Fahrerexpress passende Auftragsangebote von Auftraggebern. Sie entscheiden bei jedem einzelnen Auftragsangebot eigenverantwortlich, ob Sie dieses annehmen oder ablehnen. Es besteht weder eine Verpflichtung zur Annahme von Aufträgen noch ein Anspruch auf die Vermittlung oder Zuteilung eines bestimmten Auftrags.
+                    </p>
+                    <p className="text-lg text-muted-foreground mb-3">
+                      Die Planung, Organisation und Durchführung eines angenommenen Auftrags erfolgt eigenverantwortlich durch den selbstständigen Auftragnehmer. Fahrerexpress übernimmt keine persönliche Betreuung, keine Einsatzleitung und keine laufende Weisung während der Auftragsausführung.
                     </p>
                     <p className="text-lg text-muted-foreground">
-                      Zur Vereinfachung der Abwicklung übernimmt Fahrerexpress die Rechnungsstellung gegenüber dem Auftraggeber. Dadurch können Sie sich auf die ordnungsgemäße Durchführung Ihrer Aufträge konzentrieren.
+                      Zur Vereinfachung der Abwicklung übernimmt Fahrerexpress die Rechnungsstellung gegenüber dem Auftraggeber. Dadurch kann sich der selbstständige Auftragnehmer auf die ordnungsgemäße Ausführung seiner angenommenen Aufträge konzentrieren.
                     </p>
                     <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
                       <p className="text-sm font-medium text-primary">
@@ -527,14 +530,14 @@ const FahrerRegistrierung = () => {
 
                   <div className="bg-card/50 rounded-lg p-6 border border-primary/10">
                     <p className="text-lg mb-4">
-                      Bei Fahrerexpress arbeiten Sie als selbstständiger LKW-Fahrer und Unternehmer im Güterverkehr auf Augenhöhe –
-                      mit klar abgestimmten LKW-Fahrer-Aufträgen, transparenter Vergütung und einem persönlichen Ansprechpartner, der die Fahrervermittlung und die Branche aus eigener Erfahrung kennt.
+                      Fahrerexpress ist eine digitale Vermittlungsplattform für selbstständige Auftragnehmer im Güterverkehr –
+                      mit transparenten Auftragsangeboten, klarer Vergütung und vereinfachter Rechnungsabwicklung.
                     </p>
 
                     <div className="grid md:grid-cols-3 gap-4 my-6">
                       <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
                         <span className="text-2xl">🚛</span>
-                        <span className="text-sm">Sie möchten als selbstständiger Unternehmer eigenverantwortlich arbeiten?</span>
+                        <span className="text-sm">Sie möchten als selbstständiger Unternehmer eigenverantwortlich Aufträge ausführen?</span>
                       </div>
                       <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
                         <span className="text-2xl">🧭</span>
@@ -664,13 +667,13 @@ const FahrerRegistrierung = () => {
                 </div>
 
                 <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/30">
-                  <p className="text-sm font-semibold mb-1">Aufnahmebedingungen für unser Fahrer-Netzwerk</p>
+                  <p className="text-sm font-semibold mb-1">Voraussetzungen für die Vermittlung über Fahrerexpress</p>
                   <p className="text-sm">
-                    Für die Aufnahme in unser Fahrer-Netzwerk benötigen wir eine gültige Gewerbeanmeldung,
+                    Für die Vermittlung selbstständiger Auftragnehmer benötigen wir eine gültige Gewerbeanmeldung,
                     einen gültigen Führerschein, eine Fahrerkarte und vollständige Kontaktdaten.
                   </p>
                   <p className="text-xs text-muted-foreground mt-2">
-                    Hinweis: Fahrer, die dauerhaft nicht reagieren oder keine Aufträge annehmen, können aus dem aktiven Verteiler entfernt werden.
+                    Hinweis: Selbstständige Auftragnehmer, die dauerhaft nicht reagieren oder keine Auftragsangebote annehmen, können aus dem aktiven Verteiler entfernt werden.
                   </p>
                 </div>
               </CardContent>
@@ -682,7 +685,7 @@ const FahrerRegistrierung = () => {
                   Fahrer-Registrierung: Selbstständige LKW-Fahrer & Berufskraftfahrer
                 </CardTitle>
                 <p className="text-center text-muted-foreground mb-4">
-                  Registrieren Sie sich als selbstständiger Kraftfahrer mit CE-Führerschein und werden Sie Teil unserer Fahrervermittlung für Aufträge deutschlandweit und europaweit.
+                  Registrieren Sie sich als selbstständiger Kraftfahrer mit CE-Führerschein für die Vermittlung von Aufträgen deutschlandweit und europaweit.
                 </p>
                 
                 {/* EU-Willkommens-Banner */}
