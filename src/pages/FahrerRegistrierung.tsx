@@ -561,21 +561,21 @@ const FahrerRegistrierung = () => {
                       <div className="space-y-3">
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Auftragsangebote deutschlandweit – jeder Einsatz wird vorab einzeln abgestimmt</span>
+                          <span>Digitale Vermittlungsplattform – passende Auftragsangebote an einem Ort</span>
                         </div>
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Transparente Vergütung – klare Konditionen vor jedem Auftrag</span>
+                          <span>Freie Entscheidung über jedes einzelne Auftragsangebot</span>
                         </div>
                       </div>
                       <div className="space-y-3">
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Keine klassische Lohnabrechnung wie bei Arbeitnehmern – Sie rechnen Ihre vereinbarte Leistung als selbstständiger Unternehmer ab</span>
+                          <span>Transparente Konditionen vor jeder Auftragsannahme</span>
                         </div>
                         <div className="flex items-start gap-3">
                           <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                          <span>Persönliche Betreuung – direkter Ansprechpartner statt Callcenter</span>
+                          <span>Vereinfachte Abwicklung durch zentrale Rechnungsstellung über Fahrerexpress</span>
                         </div>
                       </div>
                     </div>
