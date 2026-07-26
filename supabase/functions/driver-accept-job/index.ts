@@ -17,6 +17,7 @@ interface DriverAcceptJobRequest {
   driverId: string;
   action: 'accept' | 'decline';
   termsAccepted?: boolean;
+  checkboxText?: string;
   ip?: string;
   userAgent?: string;
 }
@@ -101,7 +102,7 @@ const handler = async (req: Request): Promise<Response> => {
       requestData = await req.json();
     }
 
-    const { jobId, driverId, action, termsAccepted, ip, userAgent } = requestData;
+    const { jobId, driverId, action, termsAccepted, checkboxText, ip, userAgent } = requestData;
 
     // Validate required fields
     if (!jobId || !driverId || !action) {
@@ -163,16 +164,41 @@ const handler = async (req: Request): Promise<Response> => {
         });
       }
 
-      // Record acceptance in audit table
+      // Record acceptance in audit table (mit Snapshot der Auftragsbeschreibung)
+      const jobSnapshot = {
+        captured_at: new Date().toISOString(),
+        flow: 'A',
+        job: {
+          id: job.id,
+          customer_name: job.customer_name,
+          company: job.company,
+          einsatzort: job.einsatzort,
+          zeitraum: job.zeitraum,
+          fahrzeugtyp: job.fahrzeugtyp,
+          fuehrerscheinklasse: job.fuehrerscheinklasse,
+          besonderheiten: job.besonderheiten,
+          nachricht: job.nachricht,
+        },
+        conditions: {
+          weekend_surcharge_pct: 25,
+          holiday_sunday_surcharge_pct: 50,
+        },
+        legal_note:
+          'Selbstständige Auftragsdurchführung. Keine Arbeitnehmerüberlassung, kein Arbeitsverhältnis.',
+      };
       const { error: acceptanceError } = await supabase
         .from('job_driver_acceptances')
         .insert({
           job_id: jobId,
           driver_id: driverId,
-          billing_model: 'agency', // Immer agency
+          billing_model: 'agency',
           ip: ip,
           user_agent: userAgent,
-          terms_version: TERMS_VERSION_DRIVER
+          terms_version: TERMS_VERSION_DRIVER,
+          checkbox_text: checkboxText || null,
+          consent_confirmed: termsAccepted === true,
+          job_snapshot: jobSnapshot,
+          flow: 'A',
         });
 
       if (acceptanceError && !acceptanceError.message?.includes('duplicate key')) {
