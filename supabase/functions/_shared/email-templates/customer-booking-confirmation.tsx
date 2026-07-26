@@ -32,12 +32,12 @@ export const CustomerBookingConfirmation = ({
       Vielen Dank für Ihre Anfrage über unser Buchungsformular.
     </Text>
     <Text {...getTextProps(textStyles.paragraph)}>
-      Mit dem Absenden des Formulars haben Sie eine verbindliche Anfrage zur Fahrerdisposition gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
+      Mit dem Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage zur Vermittlung eines selbstständigen Unternehmers gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
     </Text>
 
     <Section {...getBoxProps(boxStyles.warningBox)}>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-        <strong>Wichtiger Hinweis:</strong> Die Durchführung des Einsatzes erfolgt ausschließlich unter dem Vorbehalt der tatsächlichen Verfügbarkeit eines geeigneten Fahrers.
+        <strong>Wichtiger Hinweis:</strong> Die tatsächliche Durchführung des Einsatzes steht unter dem Vorbehalt, dass ein geeigneter selbstständiger Unternehmer verfügbar ist und den Auftrag annimmt.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
         Sollte kein passender Fahrer verfügbar sein, kommt kein Einsatz zustande und es entstehen Ihnen keinerlei Kosten.
@@ -72,7 +72,7 @@ export const CustomerBookingConfirmation = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{location}</td>
         </tr>
         <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Ihre Nachricht:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Leistungsbeschreibung des Auftraggebers:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{message}</td>
         </tr>
       </table>
@@ -157,7 +157,7 @@ export const CustomerBookingConfirmation = ({
         <li>Wir prüfen verfügbare selbstständige Unternehmer in Ihrer Region</li>
         <li>Sie erhalten eine Rückmeldung zur Verfügbarkeit</li>
         <li>Bei Verfügbarkeit vermitteln wir einen passenden selbstständigen Fahrer</li>
-        <li>Nach erfolgreicher Disposition erhalten Sie eine Einsatzbestätigung mit den organisatorischen Details (Fahrer, Zeiten, Ablauf)</li>
+        <li>Nach erfolgreicher Vermittlung und Annahme des Auftrags erhalten Sie eine Einsatzbestätigung mit den organisatorischen Details (Fahrer, Zeiten, Ablauf)</li>
       </ol>
     </Section>
 
@@ -166,7 +166,7 @@ export const CustomerBookingConfirmation = ({
       <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li>Keine Kosten, falls kein Fahrer verfügbar ist</li>
         <li>Transparente Preise ohne versteckte Vermittlungsgebühren</li>
-        <li>Selbstständige Fahrer auf Basis eines Dienst-/Werkvertrags</li>
+        <li>Vermittlung qualifizierter selbstständiger Unternehmer</li>
         <li>Qualifizierte und erfahrene Fahrer</li>
         <li>Eine Rechnung über die Fahrerexpress-Agentur</li>
       </ul>

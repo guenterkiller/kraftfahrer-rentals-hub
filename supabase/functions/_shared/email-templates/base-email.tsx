@@ -85,6 +85,8 @@ interface BaseEmailProps {
 export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOverride }: BaseEmailProps) => (
   <Html lang="de">
     <Head>
+      <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta charSet="UTF-8" />
       <style>{mobileStyles}</style>
     </Head>
     <Preview>{previewText}</Preview>
