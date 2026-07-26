@@ -507,10 +507,16 @@ const FahrerRegistrierung = () => {
                       🚛 Selbstständige LKW-Fahrer mit CE-Führerschein gesucht
                     </h1>
                     <p className="text-lg text-muted-foreground mb-3">
-                      Fahrerexpress vermittelt selbstständige LKW-Berufskraftfahrer für Einsätze in Deutschland und Europa. Gesucht werden Fahrer mit den Führerscheinklassen C1, C, CE, D1, D oder DE – Schwerpunkt LKW-Fahrer CE.
+                      Fahrerexpress ist eine Vermittlungsplattform für selbstständige Unternehmer im Güterverkehr. Wir bringen Auftraggeber und selbstständige Auftragnehmer zusammen.
+                    </p>
+                    <p className="text-lg text-muted-foreground mb-3">
+                      Als selbstständiger Unternehmer mit eigener Gewerbeanmeldung entscheiden Sie bei jedem einzelnen Auftragsangebot eigenverantwortlich, ob Sie dieses annehmen oder ablehnen möchten. Eine Registrierung verpflichtet Sie nicht zur Annahme von Aufträgen. Ebenso besteht kein Anspruch auf die Vermittlung oder Zuteilung eines bestimmten Auftrags.
+                    </p>
+                    <p className="text-lg text-muted-foreground mb-3">
+                      Die Ausführung des Auftrags, die Einsatzplanung sowie die Kommunikation während des Einsatzes erfolgen eigenverantwortlich durch den selbstständigen Unternehmer.
                     </p>
                     <p className="text-lg text-muted-foreground">
-                      Als selbstständiger Kraftfahrer bzw. Unternehmer im Güterverkehr entscheiden Sie eigenverantwortlich über jedes Auftragsangebot. Einsatzort, Zeitraum, Fahrzeugart und Vergütung werden vor jedem LKW-Fahrer-Auftrag transparent abgestimmt.
+                      Zur Vereinfachung der Abwicklung übernimmt Fahrerexpress die Rechnungsstellung gegenüber dem Auftraggeber. Dadurch können Sie sich auf die ordnungsgemäße Durchführung Ihrer Aufträge konzentrieren.
                     </p>
                     <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
                       <p className="text-sm font-medium text-primary">
