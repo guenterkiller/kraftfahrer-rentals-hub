@@ -586,7 +586,7 @@ const FahrerRegistrierung = () => {
                     <div>
                       <h4 className="font-semibold mb-1">Auftragsangebot</h4>
                       <p className="text-sm text-muted-foreground">
-                        Jedes Auftragsangebot ist lediglich ein Vermittlungsangebot. Ihre Rückmeldung „Ich kann übernehmen" gilt ausschließlich als Interessens- und Verfügbarkeitsmeldung. Ein Anspruch auf Erteilung oder Durchführung des Einsatzes entsteht dadurch nicht. Die endgültige Vergabe erfolgt ausschließlich durch Fahrerexpress.
+                        Jedes Auftragsangebot ist lediglich ein Vermittlungsangebot. Ihre Rückmeldung „Ich kann übernehmen" gilt ausschließlich als Interessens- und Verfügbarkeitsmeldung. Ein Anspruch auf Erteilung oder Durchführung des Einsatzes entsteht dadurch nicht. Die endgültige Vergabe erfolgt ausschließlich durch Fahrerexpress. Die Rückmeldung „Ich kann übernehmen" stellt weder eine Vertragsannahme noch eine Zusage für einen Einsatz dar. Erst nach erfolgreicher Vermittlung und ausdrücklicher Bestätigung durch Fahrerexpress kommt ein konkreter Einsatz zustande.
                       </p>
                     </div>
                     <div>
@@ -598,7 +598,7 @@ const FahrerRegistrierung = () => {
                     <div>
                       <h4 className="font-semibold mb-1">Vermittlungsanteil / Vergütung</h4>
                       <p className="text-sm text-muted-foreground">
-                        Grundlage ist die zwischen Fahrerexpress und dem Auftraggeber vereinbarte Netto-Vergütung für die Fahrerdienstleistung. Der Fahrer erhält die vereinbarte Netto-Vergütung abzüglich des im jeweiligen Auftragsangebot ausgewiesenen Vermittlungsanteils. Maßgeblich sind ausschließlich die Angaben im konkreten Auftragsangebot vor Einsatzbeginn.
+                        Maßgeblich für jedes Auftragsangebot sind ausschließlich die im jeweiligen Auftragsangebot ausgewiesene Netto-Vergütung sowie der dort ausgewiesene Vermittlungsanteil. Erst mit der Annahme eines konkreten Auftragsangebots gelten diese Konditionen für den jeweiligen Einsatz.
                       </p>
                     </div>
                   </div>
@@ -645,7 +645,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span className="font-semibold">Gewerbeschein / Gewerbeanmeldung ist erforderlich. Falls der Nachweis bei der Registrierung nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress nachgereicht werden.</span>
+                    <span className="font-semibold">Gewerbeanmeldung ist erforderlich. Falls der Nachweis bei der Registrierung nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress nachgereicht werden.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -978,6 +978,9 @@ const FahrerRegistrierung = () => {
                       {validationErrors.stundensatz && (
                         <p id="stundensatz-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.stundensatz}</p>
                       )}
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Diese Angabe dient ausschließlich der Orientierung. Die endgültige Vergütung wird jeweils im konkreten Auftragsangebot mitgeteilt und kann von Ihrer Vergütungsvorstellung abweichen.
+                      </p>
                     </div>
                     <div>
                       <Label htmlFor="verfuegbarkeit">Grundsätzliche Verfügbarkeit (optional)</Label>
@@ -1115,7 +1118,7 @@ const FahrerRegistrierung = () => {
                      <div className="border-2 border-dashed border-primary/40 rounded-lg p-6 text-center bg-primary/5">
                        <div className="flex flex-col items-center space-y-2">
                          <FileText className="h-8 w-8 text-primary" aria-hidden="true" />
-                          <h4 className="font-medium">Gewerbeanmeldung / Gewerbeschein</h4>
+                          <h4 className="font-medium">Gewerbeanmeldung</h4>
                           <p className="text-sm text-muted-foreground mb-2">
                             Bitte laden Sie Ihre Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
                           </p>
@@ -1324,6 +1327,12 @@ const FahrerRegistrierung = () => {
                     <p className="text-sm text-muted-foreground">
                       Nach erfolgreicher Prüfung Ihrer Unterlagen können Sie für passende Auftragsangebote berücksichtigt werden.
                       Eine bestimmte Bearbeitungs- oder Einsatzzeit wird nicht zugesagt.
+                    </p>
+                  </div>
+                  <div className="border-b pb-4">
+                    <h4 className="font-semibold mb-2">Kann ich Auftragsangebote ablehnen?</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Ja. Sie entscheiden bei jedem einzelnen Auftragsangebot selbst, ob Sie dieses annehmen oder ablehnen möchten. Die Registrierung verpflichtet Sie nicht zur Annahme zukünftiger Aufträge.
                     </p>
                   </div>
                   <div>
