@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit, ChevronUp } from "lucide-react";
 import { ContactDataDialog } from "@/components/ContactDataDialog";
+import { BillingDataBlock } from "@/components/BillingDataBlock";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { JobAttachmentsList } from "@/components/JobAttachmentsList";
@@ -1841,6 +1842,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                       expandedJobRows.has(req.id) ? (
                         <TableRow key={`${req.id}-exp`}>
                           <TableCell colSpan={7} className="bg-muted/50 p-4 space-y-4">
+                            {/* Rechnungsdaten */}
+                            <BillingDataBlock job={req} />
                             {/* Nachricht und Besonderheiten */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {req.nachricht && (
@@ -2138,6 +2141,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           {/* Erweiterte Details */}
                           {isExpanded && (
                             <div className="space-y-3">
+                              {/* Rechnungsdaten */}
+                              <BillingDataBlock job={req} />
                               {/* Nachricht und Besonderheiten */}
                               {req.nachricht && (
                                 <div className="bg-white p-3 rounded border">
