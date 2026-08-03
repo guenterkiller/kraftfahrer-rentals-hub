@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit, ChevronUp } from "lucide-react";
 import { ContactDataDialog } from "@/components/ContactDataDialog";
+import { BillingDataBlock } from "@/components/BillingDataBlock";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { JobAttachmentsList } from "@/components/JobAttachmentsList";
