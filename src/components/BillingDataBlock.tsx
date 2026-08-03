@@ -10,28 +10,75 @@ interface BillingJob {
   einsatzort?: string | null;
 }
 
-const LEGAL_FORM_PATTERN = /\b(gmbh|ug|ag|kg|ohg|gbr|e\.?\s?k\.?|e\.?\s?v\.?|mbh|se|ltd|co\.?\s?kg|inh\.?|spedition|logistik|transporte?|bau|gesellschaft)\b/i;
+const LEGAL_FORM_PATTERN =
+  /(\beG\b|\bgmbh\b|\bug\b|\bag\b|\bkg\b|\bohg\b|\bgbr\b|\bmbh\b|\bse\b|\bltd\b|\bkgaa\b|\be\.?\s?k\.?(\s|$)|\be\.?\s?v\.?(\s|$)|\bstiftung\b|\bgenossenschaft\b|\bgesellschaft\b|\bco\.?\s?kg\b|\binh\.?\b|\bspedition\b|\blogistik\b|\btransporte?\b)/i;
 const FREEMAIL_PATTERN = /@(gmail|googlemail|web|gmx|t-online|hotmail|outlook|yahoo|icloud|freenet|aol|mail)\./i;
 
 function norm(v?: string | null) {
   return (v || "").toLowerCase().replace(/[^a-z0-9äöüß]/g, "");
 }
 
+function splitStreet(street: string): { street: string; house: string } | null {
+  const m = street.trim().match(/^(.*?[^\d\s].*?)\s+(\d+\s*[a-zA-Z]?(?:\s*[-/]\s*\d+\s*[a-zA-Z]?)?)$/);
+  if (!m) return null;
+  return { street: m[1].trim(), house: m[2].replace(/\s+/g, "") };
+}
+
+function Field({
+  label,
+  value,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
+  const missing = !value;
+  return (
+    <div className={className}>
+      <dt className="text-xs font-semibold uppercase tracking-wide text-gray-600">{label}</dt>
+      <dd
+        className={
+          missing
+            ? "text-base font-semibold text-orange-700"
+            : "text-base sm:text-lg font-semibold text-black break-words"
+        }
+      >
+        {missing ? "Fehlt" : value}
+      </dd>
+    </div>
+  );
+}
+
 export function BillingDataBlock({ job }: { job: BillingJob }) {
   const company = job.company?.trim() || "";
   const contact = job.customer_name?.trim() || "";
-  const street = job.customer_street?.trim() || "";
-  const house = job.customer_house_number?.trim() || "";
+  const rawStreet = job.customer_street?.trim() || "";
+  const rawHouse = job.customer_house_number?.trim() || "";
   const postal = job.customer_postal_code?.trim() || "";
   const city = job.customer_city?.trim() || "";
   const email = job.customer_email?.trim() || "";
   const phone = job.customer_phone?.trim() || "";
   const einsatzort = job.einsatzort?.trim() || "";
 
+  // Straße/Hausnummer trennen, wenn nur gemeinsam gespeichert
+  let street = rawStreet;
+  let house = rawHouse;
+  let combinedOnly = false;
+  if (!house && rawStreet) {
+    const parts = splitStreet(rawStreet);
+    if (parts) {
+      street = parts.street;
+      house = parts.house;
+    } else {
+      combinedOnly = true;
+    }
+  }
+
   const hasAddress = !!(street && house && postal && city);
   const recipient = company || contact;
   const companyIsOnlyPersonName = !company || norm(company) === norm(contact);
-  const hasLegalForm = LEGAL_FORM_PATTERN.test(company);
+  const hasLegalForm = LEGAL_FORM_PATTERN.test(recipient);
   const emailLooksBusiness = !!email && !FREEMAIL_PATTERN.test(email);
 
   // Abweichung Rechnungsanschrift vs. Einsatzort
@@ -42,94 +89,58 @@ export function BillingDataBlock({ job }: { job: BillingJob }) {
   }
 
   const missing: string[] = [];
-  if (!company && !contact) missing.push("Rechnungsempfänger");
-  if (!contact) missing.push("Ansprechpartner");
-  if (!street) missing.push("Straße");
-  if (!house) missing.push("Hausnummer");
+  if (!recipient) missing.push("Rechnungsempfänger");
+  if (!street && !combinedOnly) missing.push("Straße");
+  if (!house && !combinedOnly) missing.push("Hausnummer");
   if (!postal || !/^\d{5}$/.test(postal)) missing.push("PLZ (5-stellig)");
   if (!city) missing.push("Ort");
-  if (!email) missing.push("E-Mail für Rechnung");
-  if (!phone) missing.push("Telefon");
 
-  const showLegalFormWarning = companyIsOnlyPersonName || !hasLegalForm;
+  // Warnung nur, wenn nur Personenname hinterlegt ist UND die E-Mail-Domain auf eine Firma deutet
+  const showLegalFormWarning = !hasLegalForm && companyIsOnlyPersonName && emailLooksBusiness;
 
   return (
     <div className="bg-white p-3 rounded border border-amber-200">
-      <span className="text-sm font-semibold text-gray-700 block mb-2">🧾 Rechnungsdaten</span>
+      <span className="text-base font-bold text-black block mb-3">🧾 Rechnungsdaten</span>
 
-      <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-gray-500">Rechnungsempfänger</dt>
-          <dd className="text-black">
-            {recipient
-              ? companyIsOnlyPersonName
-                ? `Rechnungsempfänger laut Datensatz: ${recipient}`
-                : recipient
-              : "Nicht hinterlegt"}
-          </dd>
-          {companyIsOnlyPersonName && (
-            <dd className="text-xs text-amber-700">Firma/Rechtsform nicht hinterlegt</dd>
-          )}
-        </div>
+      <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+        <Field label="Rechnungsempfänger" value={recipient} className="sm:col-span-2" />
 
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-gray-500">Besteller / Ansprechpartner</dt>
-          <dd className="text-black">{contact || "Nicht hinterlegt"}</dd>
-        </div>
+        {combinedOnly ? (
+          <Field label="Straße / Hausnummer" value={rawStreet} className="sm:col-span-2" />
+        ) : (
+          <>
+            <Field label="Straße" value={street} />
+            <Field label="Hausnummer" value={house} />
+          </>
+        )}
 
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-gray-500">Rechnungsanschrift</dt>
-          <dd className="text-black">
-            {street || house ? (
-              <>
-                <span className="block">{[street, house].filter(Boolean).join(" ")}</span>
-                <span className="block">{[postal, city].filter(Boolean).join(" ") || "PLZ/Ort fehlt"}</span>
-              </>
-            ) : (
-              "Nicht hinterlegt"
-            )}
-          </dd>
-        </div>
+        <Field label="Postleitzahl" value={postal} />
+        <Field label="Ort" value={city} />
 
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-gray-500">Einsatzort</dt>
-          <dd className="text-black">{einsatzort || "Nicht hinterlegt"}</dd>
-        </div>
-
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-gray-500">E-Mail für Rechnung</dt>
-          <dd className="text-black break-all">{email || "Nicht hinterlegt"}</dd>
-        </div>
-
-        <div>
-          <dt className="text-xs uppercase tracking-wide text-gray-500">Telefon</dt>
-          <dd className="text-black">{phone || "Nicht hinterlegt"}</dd>
-        </div>
+        <Field label="E-Mail für Rechnung" value={email} className="break-all" />
+        <Field label="Besteller / Ansprechpartner" value={contact} />
+        <Field label="Telefon" value={phone} />
+        <Field label="Einsatzort" value={einsatzort} />
 
         <div className="sm:col-span-2">
-          <dt className="text-xs uppercase tracking-wide text-gray-500">
+          <dt className="text-xs font-semibold uppercase tracking-wide text-gray-600">
             Rechnungsanschrift abweichend vom Einsatzort
           </dt>
-          <dd className="text-black font-medium">{deviation}</dd>
+          <dd className="text-base font-semibold text-black">{deviation}</dd>
         </div>
       </dl>
 
       {showLegalFormWarning && (
         <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded p-2">
-          Rechnungsdaten prüfen: Firmenname/Rechtsform fehlt oder ist unklar.
-          {emailLooksBusiness && (
-            <>
-              {" "}
-              Hinweis: E-Mail-Domain deutet auf Unternehmen hin. Offizieller Firmenname/Rechtsform ist
-              nicht hinterlegt. Vor Rechnungsstellung prüfen.
-            </>
-          )}
+          Rechnungsdaten prüfen: Es ist nur ein Personenname hinterlegt, die E-Mail-Domain deutet
+          jedoch auf ein Unternehmen hin. Offizieller Firmenname/Rechtsform vor Rechnungsstellung
+          prüfen.
         </p>
       )}
 
       {missing.length > 0 && (
-        <p className="mt-2 text-sm text-orange-700">
-          Fehlende oder unklare Angaben: {missing.join(", ")}
+        <p className="mt-2 text-sm font-semibold text-orange-700">
+          Rechnungsdaten unvollständig – vor Rechnungsstellung prüfen: {missing.join(", ")}
         </p>
       )}
     </div>
