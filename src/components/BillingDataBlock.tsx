@@ -60,7 +60,7 @@ export function BillingDataBlock({ job }: { job: BillingJob }) {
       <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
         <div>
           <dt className="text-xs uppercase tracking-wide text-gray-500">Rechnungsempfänger</dt>
-          <dd className="text-gray-900">
+          <dd className="text-black">
             {recipient
               ? companyIsOnlyPersonName
                 ? `Rechnungsempfänger laut Datensatz: ${recipient}`
@@ -74,12 +74,12 @@ export function BillingDataBlock({ job }: { job: BillingJob }) {
 
         <div>
           <dt className="text-xs uppercase tracking-wide text-gray-500">Besteller / Ansprechpartner</dt>
-          <dd className="text-gray-900">{contact || "Nicht hinterlegt"}</dd>
+          <dd className="text-black">{contact || "Nicht hinterlegt"}</dd>
         </div>
 
         <div>
           <dt className="text-xs uppercase tracking-wide text-gray-500">Rechnungsanschrift</dt>
-          <dd className="text-gray-900">
+          <dd className="text-black">
             {street || house ? (
               <>
                 <span className="block">{[street, house].filter(Boolean).join(" ")}</span>
@@ -93,24 +93,24 @@ export function BillingDataBlock({ job }: { job: BillingJob }) {
 
         <div>
           <dt className="text-xs uppercase tracking-wide text-gray-500">Einsatzort</dt>
-          <dd className="text-gray-900">{einsatzort || "Nicht hinterlegt"}</dd>
+          <dd className="text-black">{einsatzort || "Nicht hinterlegt"}</dd>
         </div>
 
         <div>
           <dt className="text-xs uppercase tracking-wide text-gray-500">E-Mail für Rechnung</dt>
-          <dd className="text-gray-900 break-all">{email || "Nicht hinterlegt"}</dd>
+          <dd className="text-black break-all">{email || "Nicht hinterlegt"}</dd>
         </div>
 
         <div>
           <dt className="text-xs uppercase tracking-wide text-gray-500">Telefon</dt>
-          <dd className="text-gray-900">{phone || "Nicht hinterlegt"}</dd>
+          <dd className="text-black">{phone || "Nicht hinterlegt"}</dd>
         </div>
 
         <div className="sm:col-span-2">
           <dt className="text-xs uppercase tracking-wide text-gray-500">
             Rechnungsanschrift abweichend vom Einsatzort
           </dt>
-          <dd className="text-gray-900 font-medium">{deviation}</dd>
+          <dd className="text-black font-medium">{deviation}</dd>
         </div>
       </dl>
 
