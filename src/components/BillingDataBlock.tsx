@@ -80,6 +80,7 @@ export function BillingDataBlock({ job }: { job: BillingJob }) {
   const companyIsOnlyPersonName = !company || norm(company) === norm(contact);
   const hasLegalForm = LEGAL_FORM_PATTERN.test(recipient);
   const emailLooksBusiness = !!email && !FREEMAIL_PATTERN.test(email);
+  const emailDomain = email.includes("@") ? email.split("@")[1]?.trim().toLowerCase() || "" : "";
 
   // Abweichung Rechnungsanschrift vs. Einsatzort
   let deviation: "Ja" | "Nein" | "Unklar" = "Unklar";
@@ -131,11 +132,18 @@ export function BillingDataBlock({ job }: { job: BillingJob }) {
       </dl>
 
       {showLegalFormWarning && (
-        <p className="mt-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded p-2">
-          Rechnungsdaten prüfen: Es ist nur ein Personenname hinterlegt, die E-Mail-Domain deutet
-          jedoch auf ein Unternehmen hin. Offizieller Firmenname/Rechtsform vor Rechnungsstellung
-          prüfen.
-        </p>
+        <div className="mt-3 text-sm text-amber-900 bg-amber-50 border border-amber-300 rounded p-2">
+          <p className="font-bold text-orange-800">
+            Firma fehlt – vor Rechnungserstellung beim Kunden bestätigen.
+          </p>
+          <p className="mt-1">
+            Es ist nur ein Personenname hinterlegt, die E-Mail-Domain deutet jedoch auf ein
+            Unternehmen hin. Offizieller Firmenname/Rechtsform vor Rechnungsstellung prüfen.
+          </p>
+          {emailDomain && (
+            <p className="mt-1 font-semibold text-black">E-Mail-Domain: {emailDomain}</p>
+          )}
+        </div>
       )}
 
       {missing.length > 0 && (
