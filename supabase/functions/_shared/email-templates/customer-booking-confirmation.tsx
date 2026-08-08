@@ -11,6 +11,8 @@ interface CustomerBookingConfirmationProps {
   location: string;
   message: string;
   isFernfahrerTarif?: boolean;
+  weekendHolidayAffected?: boolean;
+  weekendHolidayAcknowledged?: boolean;
 }
 
 export const CustomerBookingConfirmation = ({
@@ -22,6 +24,8 @@ export const CustomerBookingConfirmation = ({
   location,
   message,
   isFernfahrerTarif = false,
+  weekendHolidayAffected = false,
+  weekendHolidayAcknowledged = false,
 }: CustomerBookingConfirmationProps) => (
   <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
     <Heading {...getTextProps(textStyles.heading2, 'heading')}>
@@ -147,6 +151,16 @@ export const CustomerBookingConfirmation = ({
         <li><strong>Samstag:</strong> 25 % Zuschlag auf den jeweiligen Tagessatz</li>
         <li><strong>Sonntag und gesetzliche Feiertage:</strong> 50 % Zuschlag auf den jeweiligen Tagessatz</li>
       </ul>
+      {weekendHolidayAffected && (
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+          <strong>Ihr angefragter Einsatzzeitraum enthält einen Samstag, Sonntag oder gesetzlichen Feiertag.</strong>
+        </Text>
+      )}
+      {weekendHolidayAcknowledged && (
+        <Text {...getTextProps({ ...textStyles.paragraph, fontStyle: 'italic', margin: '0 0 10px 0' })}>
+          Der Besteller hat diesen Hinweis vor Absenden der Anfrage bestätigt.
+        </Text>
+      )}
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
         Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
       </Text>
