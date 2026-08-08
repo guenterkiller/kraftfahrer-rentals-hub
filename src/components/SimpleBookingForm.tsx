@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PWAInstallButton } from "@/components/PWAInstallButton";
 import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
+import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -42,7 +43,23 @@ const SimpleBookingForm = () => {
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
   const [einsatzbeginn, setEinsatzbeginn] = useState('');
   const [einsatzende, setEinsatzende] = useState('');
+  const [vorname, setVorname] = useState('');
+  const [nachname, setNachname] = useState('');
+  const [unternehmen, setUnternehmen] = useState('');
+  const [agreedToSurcharge, setAgreedToSurcharge] = useState(false);
   const { toast } = useToast();
+
+  // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
+  const weekendHoliday = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+
+  // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
+  const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+  const ansprechpartnerName = norm(`${vorname} ${nachname}`);
+  const recipientLooksLikePerson =
+    unternehmen.trim().length > 0 &&
+    ansprechpartnerName.length > 1 &&
+    (norm(unternehmen) === ansprechpartnerName ||
+      norm(unternehmen) === norm(`${nachname} ${vorname}`));
 
   // Frühester Einsatz: nächster Werktag
   const minEinsatzDatum = (() => {
@@ -90,6 +107,17 @@ const SimpleBookingForm = () => {
       return;
     }
     const einsatzdauerString = buildEinsatzdauer(einsatzbeginn, einsatzende);
+
+    // Pflicht-Bestätigung bei Wochenend-/Feiertagseinsatz
+    if (weekendHoliday.affected && !agreedToSurcharge) {
+      toast({
+        title: "Bitte Wochenend-/Feiertagszuschläge bestätigen",
+        description: "Der Einsatzzeitraum enthält Samstag, Sonntag oder einen gesetzlichen Feiertag.",
+        variant: "destructive",
+      });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
     
     // Debug form data
     console.log('Form data entries:');
@@ -126,6 +154,8 @@ const SimpleBookingForm = () => {
         datenschutz: agreedToData,
         newsletter: false,
         billing_model: 'agency',
+        weekend_holiday_affected: weekendHoliday.affected,
+        weekend_holiday_acknowledged: weekendHoliday.affected ? agreedToSurcharge : false,
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Ladekran-Erfahrung',
@@ -214,6 +244,10 @@ const SimpleBookingForm = () => {
       setAgreedToData(false);
       setAgreedToBinding(false);
       setAgreedToTasks(false);
+      setAgreedToSurcharge(false);
+      setVorname('');
+      setNachname('');
+      setUnternehmen('');
       setAdrRequired(false);
       setCraneRequired(false);
       setLongDistance(false);
