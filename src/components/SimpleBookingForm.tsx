@@ -905,6 +905,40 @@ const SimpleBookingForm = () => {
 
                 {/* Consents */}
                 <div className="space-y-3">
+                  {weekendHoliday.affected && (
+                    <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4" role="alert">
+                      <h4 className="font-semibold text-amber-900 mb-2">Hinweis zu Wochenend- und Feiertagseinsätzen:</h4>
+                      <p className="text-sm text-amber-900">
+                        Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird automatisch ein Zuschlag auf den jeweiligen Tagessatz berechnet.
+                      </p>
+                      <ul className="text-sm text-amber-900 mt-2 space-y-1">
+                        <li>• Samstag: 25 %</li>
+                        <li>• Sonntag / gesetzlicher Feiertag: 50 %</li>
+                      </ul>
+                      <p className="text-sm text-amber-900 mt-2">
+                        Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
+                      </p>
+                      <p className="text-xs text-amber-800 mt-2">
+                        Betroffen in Ihrem Einsatzzeitraum: {[
+                          weekendHoliday.hasSaturday && 'Samstag',
+                          weekendHoliday.hasSunday && 'Sonntag',
+                          ...weekendHoliday.holidays
+                        ].filter(Boolean).join(', ')}
+                      </p>
+                      <div className="flex items-start space-x-2 mt-3">
+                        <Checkbox
+                          id="surcharge-ack"
+                          checked={agreedToSurcharge}
+                          onCheckedChange={(checked) => setAgreedToSurcharge(checked as boolean)}
+                          required
+                          className="mt-0.5"
+                        />
+                        <Label htmlFor="surcharge-ack" className="text-sm leading-snug">
+                          Ich habe zur Kenntnis genommen, dass für Einsätze an Samstagen, Sonntagen und gesetzlichen Feiertagen automatisch Zuschläge auf den jeweiligen Tagessatz berechnet werden. *
+                        </Label>
+                      </div>
+                    </div>
+                  )}
                   
                   <div className="flex items-center space-x-2">
                     <Checkbox 
@@ -953,7 +987,7 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
