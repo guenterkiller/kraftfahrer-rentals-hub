@@ -64,6 +64,8 @@ interface FahrerAnfrageRequest {
   price_ack_time?: string;
   price_plan?: string;
   billing_model?: string;
+  weekend_holiday_affected?: boolean;
+  weekend_holiday_acknowledged?: boolean;
   
   // Meta
   meta?: {
@@ -132,6 +134,8 @@ const handler = async (req: Request): Promise<Response> => {
     const datenschutz = Boolean(requestData.datenschutz);
     const newsletter = Boolean(requestData.newsletter);
     const billing_model = String(requestData.billing_model || 'agency');
+    const weekend_holiday_affected = Boolean(requestData.weekend_holiday_affected);
+    const weekend_holiday_acknowledged = Boolean(requestData.weekend_holiday_acknowledged);
     
     // Validate required fields
     const required = [
@@ -306,7 +310,9 @@ const handler = async (req: Request): Promise<Response> => {
           customer_postal_code: customer_postal_code,
           customer_city: customer_city,
           einsatzort: einsatzort,
-          isFernfahrerTarif: isFernfahrerTarif
+          isFernfahrerTarif: isFernfahrerTarif,
+          weekend_holiday_affected: weekend_holiday_affected,
+          weekend_holiday_acknowledged: weekend_holiday_acknowledged
         }
       });
 

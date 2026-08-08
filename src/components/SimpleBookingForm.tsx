@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PWAInstallButton } from "@/components/PWAInstallButton";
 import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
+import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -42,7 +43,23 @@ const SimpleBookingForm = () => {
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
   const [einsatzbeginn, setEinsatzbeginn] = useState('');
   const [einsatzende, setEinsatzende] = useState('');
+  const [vorname, setVorname] = useState('');
+  const [nachname, setNachname] = useState('');
+  const [unternehmen, setUnternehmen] = useState('');
+  const [agreedToSurcharge, setAgreedToSurcharge] = useState(false);
   const { toast } = useToast();
+
+  // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
+  const weekendHoliday = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+
+  // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
+  const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+  const ansprechpartnerName = norm(`${vorname} ${nachname}`);
+  const recipientLooksLikePerson =
+    unternehmen.trim().length > 0 &&
+    ansprechpartnerName.length > 1 &&
+    (norm(unternehmen) === ansprechpartnerName ||
+      norm(unternehmen) === norm(`${nachname} ${vorname}`));
 
   // Frühester Einsatz: nächster Werktag
   const minEinsatzDatum = (() => {
@@ -90,6 +107,17 @@ const SimpleBookingForm = () => {
       return;
     }
     const einsatzdauerString = buildEinsatzdauer(einsatzbeginn, einsatzende);
+
+    // Pflicht-Bestätigung bei Wochenend-/Feiertagseinsatz
+    if (weekendHoliday.affected && !agreedToSurcharge) {
+      toast({
+        title: "Bitte Wochenend-/Feiertagszuschläge bestätigen",
+        description: "Der Einsatzzeitraum enthält Samstag, Sonntag oder einen gesetzlichen Feiertag.",
+        variant: "destructive",
+      });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
     
     // Debug form data
     console.log('Form data entries:');
@@ -126,6 +154,8 @@ const SimpleBookingForm = () => {
         datenschutz: agreedToData,
         newsletter: false,
         billing_model: 'agency',
+        weekend_holiday_affected: weekendHoliday.affected,
+        weekend_holiday_acknowledged: weekendHoliday.affected ? agreedToSurcharge : false,
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Ladekran-Erfahrung',
@@ -214,6 +244,10 @@ const SimpleBookingForm = () => {
       setAgreedToData(false);
       setAgreedToBinding(false);
       setAgreedToTasks(false);
+      setAgreedToSurcharge(false);
+      setVorname('');
+      setNachname('');
+      setUnternehmen('');
       setAdrRequired(false);
       setCraneRequired(false);
       setLongDistance(false);
@@ -387,36 +421,58 @@ const SimpleBookingForm = () => {
                   </p>
                 </div>
 
-                {/* Personal Data */}
-                <div id="booking-form" className="grid md:grid-cols-2 gap-4 scroll-mt-20">
+                {/* Rechnungsanschrift */}
+                <div id="booking-form" className="scroll-mt-20 border border-border rounded-lg p-4 bg-muted/30 space-y-4">
                   <div>
-                    <Label htmlFor="vorname">Vorname *</Label>
-                    <Input id="vorname" name="vorname" required />
+                    <h3 className="text-lg font-semibold">Rechnungsanschrift</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Bitte geben Sie hier die vollständigen Rechnungsdaten ein. Diese Angaben werden für die Rechnungsstellung verwendet.
+                    </p>
                   </div>
-                  <div>
-                    <Label htmlFor="nachname">Nachname *</Label>
-                    <Input id="nachname" name="nachname" required />
-                  </div>
-                </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="email">E-Mail-Adresse *</Label>
-                    <Input id="email" name="email" type="email" required />
+                    <Label htmlFor="unternehmen">Firma / Rechnungsempfänger *</Label>
+                    <Input
+                      id="unternehmen"
+                      name="unternehmen"
+                      required
+                      value={unternehmen}
+                      onChange={(e) => setUnternehmen(e.target.value)}
+                      placeholder="Vollständiger Firmenname inkl. Rechtsform"
+                    />
+                    {recipientLooksLikePerson && (
+                      <p className="mt-2 text-sm text-amber-900 bg-amber-50 border border-amber-200 rounded-md p-2" role="alert">
+                        Bitte prüfen Sie den Rechnungsempfänger. Wenn die Rechnung an eine Firma gehen soll, tragen Sie bitte den vollständigen Firmennamen ein.
+                      </p>
+                    )}
                   </div>
+
                   <div>
-                    <Label htmlFor="telefon">Telefonnummer *</Label>
-                    <Input id="telefon" name="telefon" type="tel" required />
+                    <p className="text-sm font-medium">Ansprechpartner / Besteller *</p>
+                    <div className="grid md:grid-cols-2 gap-4 mt-1">
+                      <div>
+                        <Label htmlFor="vorname">Vorname *</Label>
+                        <Input id="vorname" name="vorname" required value={vorname} onChange={(e) => setVorname(e.target.value)} />
+                      </div>
+                      <div>
+                        <Label htmlFor="nachname">Nachname *</Label>
+                        <Input id="nachname" name="nachname" required value={nachname} onChange={(e) => setNachname(e.target.value)} />
+                      </div>
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <Label htmlFor="unternehmen">Unternehmen</Label>
-                  <Input id="unternehmen" name="unternehmen" />
-                </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="email">E-Mail für Rechnung *</Label>
+                      <Input id="email" name="email" type="email" required />
+                    </div>
+                    <div>
+                      <Label htmlFor="telefon">Telefon *</Label>
+                      <Input id="telefon" name="telefon" type="tel" required />
+                    </div>
+                  </div>
 
-                {/* Address */}
-                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="grid md:grid-cols-3 gap-4">
                   <div className="md:col-span-2">
                     <Label htmlFor="strasse">Straße *</Label>
                     <Input id="strasse" name="strasse" placeholder="Musterstraße" required />
@@ -425,9 +481,9 @@ const SimpleBookingForm = () => {
                     <Label htmlFor="hausnummer">Hausnummer *</Label>
                     <Input id="hausnummer" name="hausnummer" placeholder="123" required />
                   </div>
-                </div>
+                  </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="plz">Postleitzahl *</Label>
                     <Input id="plz" name="plz" placeholder="12345" pattern="[0-9]{5}" required />
@@ -435,6 +491,7 @@ const SimpleBookingForm = () => {
                   <div>
                     <Label htmlFor="ort">Ort *</Label>
                     <Input id="ort" name="ort" placeholder="Musterstadt" required />
+                  </div>
                   </div>
                 </div>
 
@@ -848,6 +905,40 @@ const SimpleBookingForm = () => {
 
                 {/* Consents */}
                 <div className="space-y-3">
+                  {weekendHoliday.affected && (
+                    <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4" role="alert">
+                      <h4 className="font-semibold text-amber-900 mb-2">Hinweis zu Wochenend- und Feiertagseinsätzen:</h4>
+                      <p className="text-sm text-amber-900">
+                        Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird automatisch ein Zuschlag auf den jeweiligen Tagessatz berechnet.
+                      </p>
+                      <ul className="text-sm text-amber-900 mt-2 space-y-1">
+                        <li>• Samstag: 25 %</li>
+                        <li>• Sonntag / gesetzlicher Feiertag: 50 %</li>
+                      </ul>
+                      <p className="text-sm text-amber-900 mt-2">
+                        Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
+                      </p>
+                      <p className="text-xs text-amber-800 mt-2">
+                        Betroffen in Ihrem Einsatzzeitraum: {[
+                          weekendHoliday.hasSaturday && 'Samstag',
+                          weekendHoliday.hasSunday && 'Sonntag',
+                          ...weekendHoliday.holidays
+                        ].filter(Boolean).join(', ')}
+                      </p>
+                      <div className="flex items-start space-x-2 mt-3">
+                        <Checkbox
+                          id="surcharge-ack"
+                          checked={agreedToSurcharge}
+                          onCheckedChange={(checked) => setAgreedToSurcharge(checked as boolean)}
+                          required
+                          className="mt-0.5"
+                        />
+                        <Label htmlFor="surcharge-ack" className="text-sm leading-snug">
+                          Ich habe zur Kenntnis genommen, dass für Einsätze an Samstagen, Sonntagen und gesetzlichen Feiertagen automatisch Zuschläge auf den jeweiligen Tagessatz berechnet werden. *
+                        </Label>
+                      </div>
+                    </div>
+                  )}
                   
                   <div className="flex items-center space-x-2">
                     <Checkbox 
@@ -896,7 +987,7 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (

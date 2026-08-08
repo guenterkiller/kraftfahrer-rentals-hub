@@ -28,6 +28,8 @@ interface FahrerAnfrageEmailRequest {
   customer_city?: string;
   einsatzort?: string;
   isFernfahrerTarif?: boolean;
+  weekend_holiday_affected?: boolean;
+  weekend_holiday_acknowledged?: boolean;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -64,7 +66,9 @@ const handler = async (req: Request): Promise<Response> => {
       customer_postal_code,
       customer_city,
       einsatzort,
-      isFernfahrerTarif = false
+      isFernfahrerTarif = false,
+      weekend_holiday_affected = false,
+      weekend_holiday_acknowledged = false
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();
@@ -118,6 +122,8 @@ const handler = async (req: Request): Promise<Response> => {
         location: adresseText || einsatzort || 'Nicht angegeben',
         message: message,
         isFernfahrerTarif: isFernfahrerTarif,
+        weekendHolidayAffected: Boolean(weekend_holiday_affected),
+        weekendHolidayAcknowledged: Boolean(weekend_holiday_acknowledged),
       })
     );
 
