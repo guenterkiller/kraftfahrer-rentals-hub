@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
 
 /**
  * LCP-optimierte Hero Section mit:

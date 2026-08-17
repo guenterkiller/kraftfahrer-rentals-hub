@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Lock } from "lucide-react";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
