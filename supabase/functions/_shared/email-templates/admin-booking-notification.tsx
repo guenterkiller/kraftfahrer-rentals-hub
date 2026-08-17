@@ -109,10 +109,12 @@ export const AdminBookingNotification = ({
             <td style={{ padding: '5px 0', fontSize: '14px' }}>{requirements.join(', ')}</td>
           </tr>
         )}
-        <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
-          <td style={{ padding: '5px 0', fontSize: '14px' }}>{message}</td>
-        </tr>
+        {message && (
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{message}</td>
+          </tr>
+        )}
       </table>
       <Text style={{ ...textStyles.paragraph, fontSize: '13px', fontStyle: 'italic', margin: '12px 0 0 0' }}>
         Der Besteller hat bestätigt, dass die beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind. Diese Angaben bilden die Grundlage der Einsatzabstimmung und der Auftragsannahme durch den selbstständigen Fahrer.
@@ -124,31 +126,33 @@ export const AdminBookingNotification = ({
         <Heading style={textStyles.heading3}>🧮 Tarifzuordnung</Heading>
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Maschinen-/Anlagenbedienung:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}>{maschinenbedienungLabel || 'Keine Angabe'}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Maßgeblicher Tarif:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Maßgeblicher Tarif:</strong></td>
             <td style={{ padding: '5px 0', fontSize: '14px' }}>
               {tarif.needsReview ? 'Zuordnung zu einem veröffentlichten Tarif erforderlich' : `${tarif.label}`}
             </td>
           </tr>
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tagessatz:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}>
-              {tarif.netto ? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : 'Der zutreffende veröffentlichte Tagessatz wird nach Prüfung der Tätigkeit zugeordnet'}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}>
-              {tarif.mehrstunde ? `${tarif.mehrstunde.toLocaleString('de-DE')} € netto je angefangene Stunde` : 'Der veröffentlichte Mehrstundensatz des zugeordneten Tarifs gilt'}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Begründung:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}>{tarif.reason}</td>
-          </tr>
+          {tarif.netto !== null && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tagessatz:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>
+                {`${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}`}
+              </td>
+            </tr>
+          )}
+          {tarif.mehrstunde !== null && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>
+                {`${tarif.mehrstunde.toLocaleString('de-DE')} € netto je angefangene Stunde`}
+              </td>
+            </tr>
+          )}
+          {tarif.reason && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Begründung:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>{tarif.reason}</td>
+            </tr>
+          )}
         </table>
         {surchargeDays.length > 0 && (
           <>
@@ -180,8 +184,10 @@ export const AdminBookingNotification = ({
       <Heading style={textStyles.heading3}>💼 Abrechnungsdetails</Heading>
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Billing Model:</strong></td>
-          <td style={{ padding: '5px 0', fontSize: '14px' }}>{billingModel}</td>
+          <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Abrechnungsmodell:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>
+            {billingModel === 'agency' ? 'Vermittlung' : billingModel === 'direct' ? 'Direktabrechnung' : billingModel}
+          </td>
         </tr>
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Job ID:</strong></td>
