@@ -172,6 +172,7 @@ const SimpleBookingForm = () => {
         customer_postal_code: formData.get('plz') as string,
         customer_city: formData.get('ort') as string,
         einsatzbeginn: einsatzbeginn,
+        einsatzende: einsatzende,
         einsatzdauer: einsatzdauerString,
         fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
           ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
