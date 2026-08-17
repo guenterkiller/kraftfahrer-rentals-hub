@@ -982,6 +982,8 @@ const SimpleBookingForm = () => {
                   <Textarea
                     id="beschreibung"
                     name="beschreibung"
+                    value={beschreibung}
+                    onChange={(e) => setBeschreibung(e.target.value)}
                     placeholder="z. B. Fahrzeugart, Tourenart, mit oder ohne Beifahrer, Beladen/Entladen, Sackkarre, E-Ameise, Leergut, Ladungssicherung, Lieferscheine, Kundenkontakt, Gefahrgut, Wechselbrücke, feste Tour, Nahverkehr/Fernverkehr, besondere Anforderungen ..."
                     className="min-h-[140px]"
                     required
@@ -1099,20 +1101,18 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || !maschinenbedienung || (weekendHoliday.affected && !agreedToSurcharge)}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
                       <div className="text-sm opacity-90">{
-                        longDistance && fahrzeugtyp === 'LKW CE'
-                          ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag'
-                          : fahrzeugtyp === 'LKW CE Wochenpreis'
-                            ? 'Wochenpreis 1.645 € netto / Woche'
-                            : fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
-                              ? '489 € netto / Einsatztag'
-                              : 'Preis gemäß Auswahl'
+                        !maschinenbedienung
+                          ? 'Preis gemäß Auswahl'
+                          : tarif.needsReview
+                            ? 'Tarif wird vor Bestätigung geprüft'
+                            : `${tarif.label}: ${tarif.netto?.toLocaleString('de-DE')} € netto ${tarif.einheit}`
                       }</div>
                     </div>
                   )}
