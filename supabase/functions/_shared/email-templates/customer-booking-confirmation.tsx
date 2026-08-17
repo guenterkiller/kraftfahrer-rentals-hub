@@ -13,6 +13,16 @@ interface CustomerBookingConfirmationProps {
   isFernfahrerTarif?: boolean;
   weekendHolidayAffected?: boolean;
   weekendHolidayAcknowledged?: boolean;
+  tarif?: {
+    tarif: string;
+    label: string;
+    netto: number | null;
+    einheit: string;
+    mehrstunde: number | null;
+    needsReview: boolean;
+    reason: string;
+  };
+  surchargeDays?: Array<{ label: string; percent: number }>;
 }
 
 export const CustomerBookingConfirmation = ({
@@ -26,6 +36,8 @@ export const CustomerBookingConfirmation = ({
   isFernfahrerTarif = false,
   weekendHolidayAffected = false,
   weekendHolidayAcknowledged = false,
+  tarif,
+  surchargeDays = [],
 }: CustomerBookingConfirmationProps) => (
   <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
     <Heading {...getTextProps(textStyles.heading2, 'heading')}>
