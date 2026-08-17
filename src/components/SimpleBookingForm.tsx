@@ -675,17 +675,73 @@ const SimpleBookingForm = () => {
                           onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                           className="w-5 h-5 accent-orange-600"
                         />
-                        <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister</span>
+                        <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister / Spezialfahrzeuge (Maschinenbedienung)</span>
                       </div>
                       <div className="text-xs text-muted-foreground pl-8">489 € pro Einsatztag · bis 8 Stunden Einsatzzeit · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">
+                        z. B. {SPEZIALFAHRZEUG_BEISPIELE.join(' · ')}
+                      </div>
                     </label>
                   </div>
 
+                  {/* Pflichtabfrage: Maschinen-/Anlagenbedienung (entscheidet die Tarifzuordnung) */}
+                  <div className="mt-4 p-4 rounded-lg border bg-muted/40">
+                    <fieldset>
+                      <legend className="text-sm font-medium">
+                        Muss der Fahrer am Einsatzort eine fest aufgebaute Maschine oder Anlage bedienen? *
+                      </legend>
+                      <p className="text-xs text-muted-foreground mt-1 mb-3">
+                        Zum Beispiel Pumpe, Saug-, Misch-, Förder- oder Arbeitsanlage. Entscheidend ist die Tätigkeit:
+                        Wird die aufgebaute Maschine auf der Baustelle bedient, gilt der Tarif Baumaschinenführer / Mischmeister
+                        (489 € netto je Einsatztag bis 8 Stunden, 60 € netto je angefangene Mehrstunde). Reiner Transport ohne
+                        maßgebliche Maschinenbedienung bleibt beim LKW-CE-Tarif.
+                      </p>
+                      <div className="space-y-2" role="radiogroup" aria-required="true">
+                        {(['ja', 'nein', 'unklar'] as const).map((opt) => (
+                          <label key={opt} className="flex items-start gap-3 text-sm cursor-pointer">
+                            <input
+                              type="radio"
+                              name="maschinenbedienung"
+                              value={opt}
+                              checked={maschinenbedienung === opt}
+                              onChange={() => setMaschinenbedienung(opt)}
+                              className="mt-0.5 w-4 h-4"
+                              required
+                            />
+                            <span>{MASCHINENBEDIENUNG_LABELS[opt]}</span>
+                          </label>
+                        ))}
+                      </div>
+
+                      {maschinenbedienung && (
+                        <div
+                          className={`mt-3 rounded-lg border p-3 text-sm ${
+                            tarif.needsReview
+                              ? 'border-amber-300 bg-amber-50 text-amber-900'
+                              : 'border-orange-200 bg-orange-50/60 text-orange-900'
+                          }`}
+                          aria-live="polite"
+                        >
+                          <div className="font-semibold">
+                            {tarif.needsReview ? 'Tarifzuordnung wird manuell geprüft' : `Es gilt: ${tarif.label}`}
+                          </div>
+                          {!tarif.needsReview && tarif.netto && (
+                            <div>
+                              {tarif.netto.toLocaleString('de-DE')} € netto {tarif.einheit}
+                              {tarif.mehrstunde ? ` · ${tarif.mehrstunde} € netto je angefangene Mehrstunde` : ''}
+                            </div>
+                          )}
+                          <div className="text-xs mt-1">{tarif.reason}</div>
+                        </div>
+                      )}
+                    </fieldset>
+                  </div>
+
                   {/* Optionales Tätigkeits-Dropdown bei Baumaschinen/Mischmeister */}
-                  {fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && (
+                  {(fahrzeugtyp === 'Baumaschinenführer / Mischmeister' || maschinenbedienung === 'ja') && (
                     <div className="mt-4 p-4 rounded-lg border border-orange-200 bg-orange-50/50">
                       <Label htmlFor="bauTaetigkeit" className="text-sm font-medium">
-                        Welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
+                        Welches Spezialfahrzeug bzw. welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
                       </Label>
                       <select
                         id="bauTaetigkeit"
@@ -696,12 +752,20 @@ const SimpleBookingForm = () => {
                         <option value="">Bitte auswählen …</option>
                         <option value="Baumaschinenführer">Baumaschinenführer</option>
                         <option value="Mischmeister / Anlagenbediener">Mischmeister / Anlagenbediener</option>
+                        <option value="Saugwagen / Saugbagger">Saugwagen / Saugbagger</option>
+                        <option value="Pumptruck / Estrich-Pumptruck">Pumptruck / Estrich-Pumptruck</option>
+                        <option value="Betonpumpe">Betonpumpe</option>
+                        <option value="Mischfahrzeug">Mischfahrzeug</option>
+                        <option value="Spül- / Reinigungsfahrzeug">Spül- / Reinigungsfahrzeug</option>
+                        <option value="Kanal- / Entsorgungsfahrzeug">Kanal- / Entsorgungsfahrzeug</option>
+                        <option value="Arbeitsmaschine / Spezialfahrzeug">Arbeitsmaschine / Spezialfahrzeug</option>
                         <option value="Flüssigboden">Flüssigboden</option>
                         <option value="Sonstiges">Sonstiges</option>
                       </select>
                       <div className="mt-3 text-xs text-orange-900">
                         <div className="font-semibold">489 € pro Einsatztag</div>
                         <div>Gültig für: bis 8 Stunden Einsatzzeit</div>
+                        <div>60 € netto je angefangene Mehrstunde</div>
                         <div>Zusätzlich: An- und Abfahrt</div>
                       </div>
                     </div>
