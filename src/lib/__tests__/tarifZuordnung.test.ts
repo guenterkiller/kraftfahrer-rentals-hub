@@ -11,14 +11,16 @@ describe('resolveTarif', () => {
     expect(r.needsReview).toBe(false);
   });
 
-  it('markiert Estrichpumpe/Pumptruck im Freitext trotz "nein" zur Prüfung', () => {
+  it('ordnet Estrichpumpe/Pumptruck im Freitext dem Baumaschinentarif zu', () => {
     const r = resolveTarif({
       kategorie: 'LKW CE',
       maschinenbedienung: 'nein',
       beschreibung: 'Fahren eines Estrich-Pumptrucks, Estrichpumpe vor Ort',
     });
-    expect(r.tarif).toBe('pruefung');
-    expect(r.needsReview).toBe(true);
+    expect(r.tarif).toBe('baumaschine');
+    expect(r.netto).toBe(489);
+    expect(r.mehrstunde).toBe(60);
+    expect(r.needsReview).toBe(false);
   });
 
   it('markiert unklare Angabe zur Prüfung und nennt keinen Fahrertyp', () => {
@@ -28,7 +30,7 @@ describe('resolveTarif', () => {
     expect(r.label).not.toMatch(/LKW|Baumaschinenführer \/ Mischmeister \(/);
   });
 
-  it('markiert Kategorie Baumaschinenführer ohne Maschinenbedienung zur Prüfung', () => {
+  it('verlangt Tarifzuordnung, wenn Kategorie Baumaschinenführer ohne beschriebene Anlagenbedienung gewählt wird', () => {
     const r = resolveTarif({ kategorie: 'Baumaschinenführer / Mischmeister', maschinenbedienung: 'nein' });
     expect(r.tarif).toBe('pruefung');
   });

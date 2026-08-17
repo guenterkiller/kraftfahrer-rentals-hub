@@ -98,7 +98,7 @@ export const AdminBookingNotification = ({
           <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold', color: isFernfahrerTarif ? '#3b82f6' : undefined }}>
             {tarif
               ? (tarif.needsReview
-                  ? 'Manuelle Prüfung erforderlich'
+                  ? 'Tarifzuordnung erforderlich'
                   : `${tarif.label}${tarif.netto ? ` – ${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : ''}`)
               : (isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz')}
           </td>
@@ -130,19 +130,19 @@ export const AdminBookingNotification = ({
           <tr>
             <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Maßgeblicher Tarif:</strong></td>
             <td style={{ padding: '5px 0', fontSize: '14px' }}>
-              {tarif.needsReview ? 'Noch offen – manuell prüfen' : `${tarif.label}`}
+              {tarif.needsReview ? 'Zuordnung zu einem veröffentlichten Tarif erforderlich' : `${tarif.label}`}
             </td>
           </tr>
           <tr>
             <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tagessatz:</strong></td>
             <td style={{ padding: '5px 0', fontSize: '14px' }}>
-              {tarif.netto ? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : 'wird nach Prüfung festgelegt'}
+              {tarif.netto ? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : 'Der zutreffende veröffentlichte Tagessatz wird nach Prüfung der Tätigkeit zugeordnet'}
             </td>
           </tr>
           <tr>
             <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
             <td style={{ padding: '5px 0', fontSize: '14px' }}>
-              {tarif.mehrstunde ? `${tarif.mehrstunde.toLocaleString('de-DE')} € netto je angefangene Stunde` : 'gemäß Preisliste'}
+              {tarif.mehrstunde ? `${tarif.mehrstunde.toLocaleString('de-DE')} € netto je angefangene Stunde` : 'Der veröffentlichte Mehrstundensatz des zugeordneten Tarifs gilt'}
             </td>
           </tr>
           <tr>
@@ -162,7 +162,7 @@ export const AdminBookingNotification = ({
         )}
         {tarif.needsReview && (
           <Text style={{ ...textStyles.paragraph, margin: '12px 0 0 0', fontWeight: 'bold' }}>
-            ⚠️ Dem Besteller wurde KEIN Fahrertyp und kein Tagessatz bestätigt. Bitte Tarif manuell festlegen.
+            ⚠️ Dem Besteller wurde noch kein Fahrertyp bestätigt. Bitte den passenden veröffentlichten Tarif manuell zuordnen – die Preise selbst stehen fest.
           </Text>
         )}
       </Section>
