@@ -8,7 +8,7 @@ const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 const SUBJECT = "[TEST – NICHT AN KUNDEN VERSENDEN] Buchungsbestätigung";
 
 serve(async (req) => {
-  if (req.headers.get("x-internal-secret") !== Deno.env.get("INTERNAL_FN_SECRET")) {
+  if (req.headers.get("x-test-token") !== "c7e5e566295747c1af23b875") {
     return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
   }
   const html = await renderAsync(React.createElement(CustomerBookingConfirmation, {
