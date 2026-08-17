@@ -122,6 +122,11 @@ const PricingSection = () => {
               <li>• erste 25 km der Gesamtstrecke frei</li>
               <li>• ab dem 26. km: 0,40 € je gefahrenem Kilometer</li>
             </ul>
+            <p className="text-muted-foreground">
+              Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und
+              Feiertagszuschläge gelten automatisch; eine zusätzliche Vereinbarung ist hierfür
+              nicht erforderlich.
+            </p>
           </CardContent>
         </Card>
 
@@ -211,6 +216,7 @@ const PricingSection = () => {
               <li>• Samstag: 25 % Zuschlag auf den jeweiligen Tagessatz</li>
               <li>• Sonntag und gesetzliche Feiertage: 50 % Zuschlag auf den jeweiligen Tagessatz</li>
             </ul>
+            <p>Diese Zuschläge gelten automatisch nach der veröffentlichten Preisregel.</p>
           </CardContent>
         </Card>
 
@@ -238,7 +244,7 @@ const PricingSection = () => {
             <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Abrechnung erfolgt über Fahrerexpress.</p>
+            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Fahrzeuge werden nicht gestellt. Abrechnung erfolgt über Fahrerexpress nach Abschluss des Einsatzes; Zahlungsziel 7 Tage netto.</p>
           </CardContent>
         </Card>
       </div>
