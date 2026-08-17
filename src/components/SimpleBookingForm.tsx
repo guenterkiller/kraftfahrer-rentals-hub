@@ -169,12 +169,12 @@ const SimpleBookingForm = () => {
         nachricht: [
           formData.get('beschreibung') as string,
           '',
-          `Maschinen-/Anlagenbedienung: ${MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']}`,
           bauTaetigkeit ? `Spezialfahrzeug / Tätigkeit: ${bauTaetigkeit}` : '',
           `Tarifzuordnung: ${tarif.label}${tarif.netto ? ` – ${tarif.netto} € netto ${tarif.einheit}` : ''}`,
           tarif.needsReview ? 'Hinweis: Der passende veröffentlichte Tarif wird vor der verbindlichen Einsatzbestätigung zugeordnet.' : '',
+          tarif.internalConflict ? 'Interner Kontrollhinweis: Tätigkeitsbeschreibung und gewählter Tarif prüfen (Auswahl des Bestellers unverändert gespeichert).' : '',
         ].filter(Boolean).join('\n'),
-        maschinenbedienung: maschinenbedienung,
+        maschinenbedienung: tarif.tarif === 'baumaschine' ? 'ja' : 'nein',
         tarif_key: tarif.tarif,
         tarif_label: tarif.label,
         tarif_netto: tarif.netto,
@@ -206,8 +206,9 @@ const SimpleBookingForm = () => {
           escortExperience && 'Begleitung',
           requiresBf2 && 'BF2 erforderlich',
           requiresBf3 && 'BF3 erforderlich',
-          maschinenbedienung === 'ja' && 'Bedienung fest aufgebauter Maschine/Anlage',
-          tarif.needsReview && 'Passenden Tarif manuell zuordnen'
+          tarif.tarif === 'baumaschine' && 'Bedienung fest aufgebauter Maschine/Anlage',
+          tarif.needsReview && 'Passenden Tarif manuell zuordnen',
+          tarif.internalConflict && 'Interner Kontrollhinweis: Tarifauswahl prüfen'
         ].filter(Boolean)
       };
 
@@ -278,7 +279,6 @@ const SimpleBookingForm = () => {
       setAgreedToBinding(false);
       setAgreedToTasks(false);
       setAgreedToSurcharge(false);
-      setMaschinenbedienung('');
       setBeschreibung('');
       setBauTaetigkeit('');
       setVorname('');
