@@ -109,7 +109,7 @@ export const CustomerBookingConfirmation = ({
             <tr>
               <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Tagessatz:</strong></td>
               <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">
-                {tarif.netto.toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto {tarif.einheit}
+                {tarif.netto.toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto je tatsächlichem Einsatztag {tarif.einheit}
               </td>
             </tr>
           )}
@@ -147,6 +147,9 @@ export const CustomerBookingConfirmation = ({
         )}
         <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', marginTop: '12px' })}>
           Alle Preise netto zzgl. gesetzlicher MwSt.
+        </Text>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
+          Der angegebene Zeitraum dient der Einsatzplanung. Es erfolgt keine Hochrechnung und keine vorläufige Gesamtsumme. Die endgültige Abrechnung erfolgt nach Abschluss des Einsatzes auf Grundlage der tatsächlich geleisteten Einsatztage, angefangenen Mehrstunden, gefahrenen Kilometer und gegebenenfalls angefallenen Zuschläge. Verlängerungen oder Änderungen des Einsatzes werden entsprechend berücksichtigt.
         </Text>
       </Section>
     )}
