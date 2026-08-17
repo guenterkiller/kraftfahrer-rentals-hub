@@ -40,6 +40,22 @@ interface CustomerBookingConfirmationProps {
 
 const listStyle = { margin: '6px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' };
 
+const formatEuro = (v: number) =>
+  `${v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+
+/** Neutrale Anrede – es wird kein Geschlecht anhand des Vornamens erraten. */
+const buildSalutation = (customerName?: string, companyName?: string) => {
+  const name = (customerName || '').trim();
+  const company = (companyName || '').trim();
+  if (name) return `Guten Tag ${name},`;
+  if (company) return `Guten Tag ${company},`;
+  return 'Guten Tag,';
+};
+
+/** Wiederholende Sammelhinweise werden im Tarifblock nicht erneut ausgegeben. */
+const withoutRedundantDetails = (details: string[]) =>
+  details.filter((d) => !d.trim().toLowerCase().startsWith('zuzüglich'));
+
 export const CustomerBookingConfirmation = ({
   customerName,
   companyName,
@@ -55,11 +71,16 @@ export const CustomerBookingConfirmation = ({
 }: CustomerBookingConfirmationProps) => {
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
+  const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
+  const mehrstundenSatz =
+    tarif && !tarif.needsReview && typeof tarif.mehrstunde === 'number'
+      ? `${tarif.label}: ${formatEuro(tarif.mehrstunde)} netto je angefangene Stunde`
+      : undefined;
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
       <Heading {...getTextProps(textStyles.heading2, 'heading')}>
-        Sehr geehrte/r {companyName ? `${companyName} (${customerName})` : customerName},
+        {buildSalutation(customerName, companyName)}
       </Heading>
 
       <Text {...getTextProps(textStyles.paragraph)}>
