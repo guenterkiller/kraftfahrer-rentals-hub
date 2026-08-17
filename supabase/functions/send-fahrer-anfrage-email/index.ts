@@ -30,6 +30,16 @@ interface FahrerAnfrageEmailRequest {
   isFernfahrerTarif?: boolean;
   weekend_holiday_affected?: boolean;
   weekend_holiday_acknowledged?: boolean;
+  tarif?: {
+    tarif: string;
+    label: string;
+    netto: number | null;
+    einheit: string;
+    mehrstunde: number | null;
+    needsReview: boolean;
+    reason: string;
+  };
+  surcharge_days?: Array<{ label: string; percent: number }>;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -68,7 +78,9 @@ const handler = async (req: Request): Promise<Response> => {
       einsatzort,
       isFernfahrerTarif = false,
       weekend_holiday_affected = false,
-      weekend_holiday_acknowledged = false
+      weekend_holiday_acknowledged = false,
+      tarif,
+      surcharge_days = []
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();
@@ -103,13 +115,11 @@ const handler = async (req: Request): Promise<Response> => {
       adresseText = `${customer_postal_code} ${customer_city}`;
     }
 
-    // Determine driver type
-    let fahrerTyp = "LKW CE Fahrer";
-    if (fahrzeugtyp.toLowerCase().includes('baumaschine') || 
-        fahrzeugtyp.toLowerCase().includes('bagger') ||
-        fahrzeugtyp.toLowerCase().includes('radlader')) {
-      fahrerTyp = "Baumaschinenführer";
-    }
+    // Fahrertyp ausschließlich aus der übergebenen Tarifzuordnung.
+    // Ohne eindeutige Zuordnung wird KEIN Fahrertyp genannt.
+    const fahrerTyp = tarif
+      ? (tarif.needsReview ? 'wird geprüft' : tarif.label)
+      : 'wird geprüft';
 
     // Render React Email template
     const emailHtml = await renderAsync(
@@ -124,6 +134,8 @@ const handler = async (req: Request): Promise<Response> => {
         isFernfahrerTarif: isFernfahrerTarif,
         weekendHolidayAffected: Boolean(weekend_holiday_affected),
         weekendHolidayAcknowledged: Boolean(weekend_holiday_acknowledged),
+        tarif: tarif,
+        surchargeDays: surcharge_days,
       })
     );
 

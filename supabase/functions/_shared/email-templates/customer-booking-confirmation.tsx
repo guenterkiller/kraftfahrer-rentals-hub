@@ -13,6 +13,16 @@ interface CustomerBookingConfirmationProps {
   isFernfahrerTarif?: boolean;
   weekendHolidayAffected?: boolean;
   weekendHolidayAcknowledged?: boolean;
+  tarif?: {
+    tarif: string;
+    label: string;
+    netto: number | null;
+    einheit: string;
+    mehrstunde: number | null;
+    needsReview: boolean;
+    reason: string;
+  };
+  surchargeDays?: Array<{ label: string; percent: number }>;
 }
 
 export const CustomerBookingConfirmation = ({
@@ -26,6 +36,8 @@ export const CustomerBookingConfirmation = ({
   isFernfahrerTarif = false,
   weekendHolidayAffected = false,
   weekendHolidayAcknowledged = false,
+  tarif,
+  surchargeDays = [],
 }: CustomerBookingConfirmationProps) => (
   <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
     <Heading {...getTextProps(textStyles.heading2, 'heading')}>
@@ -53,12 +65,10 @@ export const CustomerBookingConfirmation = ({
       <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
-          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{driverType}</td>
-        </tr>
-        <tr>
-          <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Tarif:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
-            {isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
+            {tarif
+              ? (tarif.needsReview ? 'wird geprüft' : tarif.label)
+              : driverType}
           </td>
         </tr>
         {requirements.length > 0 && (
@@ -85,7 +95,77 @@ export const CustomerBookingConfirmation = ({
       </Text>
     </Section>
 
-    {isFernfahrerTarif && (
+    {tarif && !tarif.needsReview && (
+      <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderLeftColor: '#16a34a' })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: '#15803d' }, 'small-heading')}>
+          Für Ihren Einsatz maßgeblicher Tarif
+        </Heading>
+        <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px', width: '45%' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">{tarif.label}</td>
+          </tr>
+          {tarif.netto !== null && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Tagessatz:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">
+                {tarif.netto.toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto {tarif.einheit}
+              </td>
+            </tr>
+          )}
+          {tarif.mehrstunde !== null && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Mehrarbeit:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
+                {tarif.mehrstunde.toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto je angefangene Stunde
+              </td>
+            </tr>
+          )}
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>An- und Abfahrt:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
+              erste 25 km frei, danach 0,40 € netto je gefahrenem Kilometer
+            </td>
+          </tr>
+        </table>
+        {surchargeDays.length > 0 && (
+          <>
+            <Text {...getTextProps({ ...textStyles.paragraph, margin: '14px 0 6px 0' })}>
+              <strong>Zuschläge in Ihrem Einsatzzeitraum (automatisch erkannt):</strong>
+            </Text>
+            <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
+              {surchargeDays.map((d) => (
+                <li key={d.label}>
+                  {d.label}: {d.percent} % Zuschlag auf den Tagessatz
+                  {tarif.netto !== null
+                    ? ` (${(Math.round(tarif.netto * (1 + d.percent / 100) * 100) / 100).toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto)`
+                    : ''}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', marginTop: '12px' })}>
+          Alle Preise netto zzgl. gesetzlicher MwSt.
+        </Text>
+      </Section>
+    )}
+
+    {tarif && tarif.needsReview && (
+      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>
+          Tarifzuordnung wird geprüft
+        </Heading>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
+          Ihre Einsatzbeschreibung wird vor der verbindlichen Bestätigung geprüft. Den maßgeblichen Fahrertyp und Tagessatz teilen wir Ihnen mit der Bestätigung mit.
+        </Text>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+          Wochenend- und Feiertagszuschläge: Samstag 25 %, Sonntag und gesetzliche Feiertage 50 % auf den jeweiligen Tagessatz.
+        </Text>
+      </Section>
+    )}
+
+    {isFernfahrerTarif && !tarif && (
       <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeftColor: '#3b82f6' })}>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
           Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
@@ -94,7 +174,9 @@ export const CustomerBookingConfirmation = ({
     )}
 
     <Section {...getBoxProps(boxStyles.highlightBox)}>
-      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>💰 Preisübersicht gemäß Bestellung</Heading>
+      <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>
+        💰 {tarif && !tarif.needsReview ? 'Weitere Tarife zur Information' : 'Preisübersicht gemäß Bestellung'}
+      </Heading>
       <Text {...getTextProps({ ...textStyles.paragraph })}>
         Die Abrechnung erfolgt auf Basis der bei Bestellung veröffentlichten Preise. Die finale Abrechnung richtet sich nach dem tatsächlichen Einsatzumfang.
       </Text>

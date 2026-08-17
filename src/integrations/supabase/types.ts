@@ -700,7 +700,9 @@ export type Database = {
           einsatzort: string
           fahrzeugtyp: string
           fuehrerscheinklasse: string
+          holiday_days: string[] | null
           id: string
+          maschinenbedienung: string | null
           nachricht: string
           payout_status: string | null
           sent_at: string | null
@@ -710,10 +712,14 @@ export type Database = {
             | Database["public"]["Enums"]["invoice_status"]
             | null
           tarif_label: string | null
+          tarif_mehrstunde_netto: number | null
+          tarif_needs_review: boolean
           tarif_netto: number | null
+          tarif_reason: string | null
           tarif_type: string | null
           tarif_unit: string | null
           updated_at: string
+          weekend_days: string[] | null
           zeitraum: string
         }
         Insert: {
@@ -740,7 +746,9 @@ export type Database = {
           einsatzort: string
           fahrzeugtyp: string
           fuehrerscheinklasse?: string
+          holiday_days?: string[] | null
           id?: string
+          maschinenbedienung?: string | null
           nachricht: string
           payout_status?: string | null
           sent_at?: string | null
@@ -750,10 +758,14 @@ export type Database = {
             | Database["public"]["Enums"]["invoice_status"]
             | null
           tarif_label?: string | null
+          tarif_mehrstunde_netto?: number | null
+          tarif_needs_review?: boolean
           tarif_netto?: number | null
+          tarif_reason?: string | null
           tarif_type?: string | null
           tarif_unit?: string | null
           updated_at?: string
+          weekend_days?: string[] | null
           zeitraum: string
         }
         Update: {
@@ -780,7 +792,9 @@ export type Database = {
           einsatzort?: string
           fahrzeugtyp?: string
           fuehrerscheinklasse?: string
+          holiday_days?: string[] | null
           id?: string
+          maschinenbedienung?: string | null
           nachricht?: string
           payout_status?: string | null
           sent_at?: string | null
@@ -790,10 +804,14 @@ export type Database = {
             | Database["public"]["Enums"]["invoice_status"]
             | null
           tarif_label?: string | null
+          tarif_mehrstunde_netto?: number | null
+          tarif_needs_review?: boolean
           tarif_netto?: number | null
+          tarif_reason?: string | null
           tarif_type?: string | null
           tarif_unit?: string | null
           updated_at?: string
+          weekend_days?: string[] | null
           zeitraum?: string
         }
         Relationships: []
@@ -971,7 +989,9 @@ export type Database = {
           einsatzort: string
           fahrzeugtyp: string
           fuehrerscheinklasse: string
+          holiday_days: string[] | null
           id: string
+          maschinenbedienung: string | null
           nachricht: string
           payout_status: string | null
           sent_at: string | null
@@ -981,10 +1001,14 @@ export type Database = {
             | Database["public"]["Enums"]["invoice_status"]
             | null
           tarif_label: string | null
+          tarif_mehrstunde_netto: number | null
+          tarif_needs_review: boolean
           tarif_netto: number | null
+          tarif_reason: string | null
           tarif_type: string | null
           tarif_unit: string | null
           updated_at: string
+          weekend_days: string[] | null
           zeitraum: string
         }
         SetofOptions: {
