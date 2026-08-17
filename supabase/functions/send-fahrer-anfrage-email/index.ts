@@ -118,8 +118,8 @@ const handler = async (req: Request): Promise<Response> => {
     // Fahrertyp ausschließlich aus der übergebenen Tarifzuordnung.
     // Ohne eindeutige Zuordnung wird KEIN Fahrertyp genannt.
     const fahrerTyp = tarif
-      ? (tarif.needsReview ? 'wird geprüft' : tarif.label)
-      : 'wird geprüft';
+      ? (tarif.needsReview ? 'wird dem passenden veröffentlichten Tarif zugeordnet' : tarif.label)
+      : 'wird dem passenden veröffentlichten Tarif zugeordnet';
 
     // Render React Email template
     const emailHtml = await renderAsync(

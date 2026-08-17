@@ -375,10 +375,10 @@ const handler = async (req: Request): Promise<Response> => {
       if (adminSettings?.admin_email) {
         // Fahrertyp aus der regelbasierten Tarifzuordnung (kein Stichwort-Raten)
         const driverTypeDisplay = tarif.needsReview
-          ? 'Fahrertyp unklar – manuelle Prüfung'
+          ? 'Tarifzuordnung erforderlich'
           : tarif.label;
         const adminSubject = tarif.needsReview
-          ? `Neue Buchungsanfrage: Tarif manuell prüfen – ${customer_city}`
+          ? `Neue Buchungsanfrage: Passenden Tarif manuell zuordnen – ${customer_city}`
           : `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`;
 
         const adminEmailHtml = await renderAsync(

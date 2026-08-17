@@ -185,7 +185,7 @@ const SimpleBookingForm = () => {
           `Maschinen-/Anlagenbedienung: ${MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']}`,
           bauTaetigkeit ? `Spezialfahrzeug / Tätigkeit: ${bauTaetigkeit}` : '',
           `Tarifzuordnung: ${tarif.label}${tarif.netto ? ` – ${tarif.netto} € netto ${tarif.einheit}` : ''}`,
-          tarif.needsReview ? 'Hinweis: Tarifzuordnung wird manuell geprüft.' : '',
+          tarif.needsReview ? 'Hinweis: Der passende veröffentlichte Tarif wird vor der verbindlichen Einsatzbestätigung zugeordnet.' : '',
         ].filter(Boolean).join('\n'),
         maschinenbedienung: maschinenbedienung,
         tarif_key: tarif.tarif,
@@ -220,7 +220,7 @@ const SimpleBookingForm = () => {
           requiresBf2 && 'BF2 erforderlich',
           requiresBf3 && 'BF3 erforderlich',
           maschinenbedienung === 'ja' && 'Bedienung fest aufgebauter Maschine/Anlage',
-          tarif.needsReview && 'Tarif manuell prüfen'
+          tarif.needsReview && 'Passenden Tarif manuell zuordnen'
         ].filter(Boolean)
       };
 
@@ -724,7 +724,7 @@ const SimpleBookingForm = () => {
                           aria-live="polite"
                         >
                           <div className="font-semibold">
-                            {tarif.needsReview ? 'Tarifzuordnung wird manuell geprüft' : `Es gilt: ${tarif.label}`}
+                            {tarif.needsReview ? 'Passenden Tarif manuell zuordnen' : `Es gilt: ${tarif.label}`}
                           </div>
                           {!tarif.needsReview && tarif.netto && (
                             <div>
@@ -1112,7 +1112,7 @@ const SimpleBookingForm = () => {
                         !maschinenbedienung
                           ? 'Preis gemäß Auswahl'
                           : tarif.needsReview
-                            ? 'Tarif wird vor Bestätigung geprüft'
+                            ? 'Passender veröffentlichter Tarif wird zugeordnet'
                             : `${tarif.label}: ${tarif.netto?.toLocaleString('de-DE')} € netto ${tarif.einheit}`
                       }</div>
                     </div>

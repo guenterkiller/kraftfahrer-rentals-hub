@@ -67,7 +67,7 @@ export const CustomerBookingConfirmation = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
             {tarif
-              ? (tarif.needsReview ? 'wird geprüft' : tarif.label)
+              ? (tarif.needsReview ? 'wird dem passenden veröffentlichten Tarif zugeordnet' : tarif.label)
               : driverType}
           </td>
         </tr>
