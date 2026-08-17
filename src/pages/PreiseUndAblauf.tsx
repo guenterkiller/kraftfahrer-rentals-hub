@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, Clock, Euro, FileText, Shield, Truck, AlertCircle } from "lucide-react";
 import { useSEO } from "@/hooks/useSEO";
 import { Link } from "react-router-dom";
+import TarifCardText from "@/components/TarifCardText";
+import { TARIF_TEXTE } from "@/lib/tarifTexte";
 const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
@@ -70,10 +72,12 @@ const PreiseUndAblauf = () => {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-red-700 mb-2">349 €</div>
-                      <p className="text-red-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-red-700 text-xs mt-3 leading-snug">Einsatzdauer bis maximal 9 Stunden je Einsatztag</p>
-                      <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
+                      <TarifCardText
+                              tarif={TARIF_TEXTE.lkw_ce}
+                              amountClassName="text-4xl font-bold text-red-700 mb-2"
+                              unitClassName="text-red-800 font-medium text-sm"
+                              detailClassName="text-red-700 text-xs mt-2 leading-snug"
+                            />
                     </div>
                   </CardContent>
                 </Card>
@@ -89,10 +93,12 @@ const PreiseUndAblauf = () => {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-red-700 mb-2">1.645 €</div>
-                      <p className="text-red-800 font-medium text-sm">pro Woche</p>
-                      <p className="text-red-700 text-xs mt-3 leading-snug">Nur für LKW-Fahrer CE: 5 Einsatztage · Einsatzdauer bis maximal 9 Stunden je Einsatztag</p>
-                      <p className="text-red-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
+                      <TarifCardText
+                              tarif={TARIF_TEXTE.lkw_ce_woche}
+                              amountClassName="text-4xl font-bold text-red-700 mb-2"
+                              unitClassName="text-red-800 font-medium text-sm"
+                              detailClassName="text-red-700 text-xs mt-2 leading-snug"
+                            />
                     </div>
                   </CardContent>
                 </Card>
@@ -105,10 +111,12 @@ const PreiseUndAblauf = () => {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-green-700 mb-2">450 €</div>
-                      <p className="text-green-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-green-700 text-xs mt-3 leading-snug">Gültig für: 1 Fernverkehrs-Einsatztag</p>
-                      <p className="text-green-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
+                      <TarifCardText
+                              tarif={TARIF_TEXTE.fernfahrer}
+                              amountClassName="text-4xl font-bold text-green-700 mb-2"
+                              unitClassName="text-green-800 font-medium text-sm"
+                              detailClassName="text-green-700 text-xs mt-2 leading-snug"
+                            />
                     </div>
                   </CardContent>
                 </Card>
@@ -116,18 +124,27 @@ const PreiseUndAblauf = () => {
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base sm:text-lg text-orange-900 leading-snug">
-                      Baumaschinenführer / Mischmeister
+                      {TARIF_TEXTE.baumaschine.name}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-orange-700 mb-2">489 €</div>
-                      <p className="text-orange-800 font-medium text-sm">pro Einsatztag</p>
-                      <p className="text-orange-700 text-xs mt-3 leading-snug">Gültig für: bis 8 Stunden Einsatzzeit</p>
-                      <p className="text-orange-700 text-xs mt-1 leading-snug">Zusätzlich: An- und Abfahrt</p>
+                      <TarifCardText
+                              tarif={TARIF_TEXTE.baumaschine}
+                              amountClassName="text-4xl font-bold text-orange-700 mb-2"
+                              unitClassName="text-orange-800 font-medium text-sm"
+                              detailClassName="text-orange-700 text-xs mt-2 leading-snug"
+                            />
                     </div>
                   </CardContent>
                 </Card>
+              </div>
+
+              <div className="bg-muted/50 border border-border rounded-lg p-4 max-w-4xl mx-auto mb-4">
+                <p className="text-sm font-semibold text-foreground mb-2">{TARIF_TEXTE.lkw_ce_woche.name}</p>
+                {TARIF_TEXTE.lkw_ce_woche.notes?.map((n) => (
+                  <p key={n} className="text-sm text-foreground mt-2">{n}</p>
+                ))}
               </div>
 
               <div className="bg-muted/50 border border-border rounded-lg p-4 max-w-4xl mx-auto">
