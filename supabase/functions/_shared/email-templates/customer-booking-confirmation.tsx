@@ -72,10 +72,6 @@ export const CustomerBookingConfirmation = ({
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
-  const mehrstundenSatz =
-    tarif && !tarif.needsReview && typeof tarif.mehrstunde === 'number'
-      ? `${tarif.label}: ${formatEuro(tarif.mehrstunde)} netto je angefangene Stunde`
-      : undefined;
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
@@ -87,7 +83,7 @@ export const CustomerBookingConfirmation = ({
         Vielen Dank für Ihre Anfrage über unser Buchungsformular.
       </Text>
       <Text {...getTextProps(textStyles.paragraph)}>
-        Mit dem Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage zur Vermittlung eines selbstständigen Unternehmers gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
+        Mit dem Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
       </Text>
 
       <Section {...getBoxProps(boxStyles.warningBox)}>
@@ -224,16 +220,6 @@ export const CustomerBookingConfirmation = ({
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>{MEHRSTUNDENREGEL}</Text>
-        {mehrstundenSatz && (
-          <>
-            <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-              <strong>Veröffentlichter Mehrstundensatz für Ihren Tarif:</strong>
-            </Text>
-            <ul style={listStyle} className="mobile-text">
-              <li>{mehrstundenSatz}</li>
-            </ul>
-          </>
-        )}
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
           Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
         </Text>
@@ -295,15 +281,6 @@ export const CustomerBookingConfirmation = ({
         </ol>
       </Section>
 
-      <Section {...getBoxProps({ ...boxStyles.successBox, backgroundColor: '#fef3f2', borderLeftColor: colors.primary })}>
-        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Warum Fahrerexpress?</Heading>
-        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-          <li>Keine Kosten, falls kein Fahrer verfügbar ist</li>
-          <li>Transparente, veröffentlichte Preise ohne zusätzliche Vermittlungsgebühren</li>
-          <li>Vermittlung qualifizierter selbstständiger Unternehmer</li>
-          <li>Eine Rechnung über die Fahrerexpress-Agentur</li>
-        </ul>
-      </Section>
     </BaseEmail>
   );
 };
