@@ -101,7 +101,7 @@ export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOv
             {headerSubtitleOverride || 'Vermittlung selbstständiger Fahrer'}
           </Text>
         </Section>
-        <Section style={accentBar}>{' '}</Section>
+        <div style={accentBar} />
 
         {/* Content */}
         <Section style={content} className="mobile-padding">
