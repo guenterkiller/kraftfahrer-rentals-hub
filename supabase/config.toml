@@ -107,3 +107,6 @@ verify_jwt = true
 
 [functions.driver-info-newsletter]
 verify_jwt = false
+
+[functions.send-test-booking-preview-v2]
+verify_jwt = false
