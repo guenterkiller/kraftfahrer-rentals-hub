@@ -46,6 +46,19 @@ export interface WeekendHolidayInfo {
   affected: boolean;
 }
 
+const DE_DATE = (d: Date) => `${pad(d.getUTCDate())}.${pad(d.getUTCMonth() + 1)}.${d.getUTCFullYear()}`;
+
+/** Wochenend-/Feiertagstage eines Zeitraums mit Datum und Zuschlagssatz. */
+export interface SurchargeDay {
+  /** ISO-Datum */
+  date: string;
+  /** z. B. "Sa, 29.08.2026" oder "Fr, 01.05.2026 (Tag der Arbeit)" */
+  label: string;
+  /** Zuschlag in Prozent (25 oder 50) */
+  percent: 25 | 50;
+  kind: 'samstag' | 'sonntag' | 'feiertag';
+}
+
 /** Prüft, ob ein Einsatzzeitraum (ISO-Daten) Samstag, Sonntag oder Feiertag enthält. */
 export const analyzeWeekendHoliday = (startISO: string, endISO: string): WeekendHolidayInfo => {
   const empty: WeekendHolidayInfo = { hasSaturday: false, hasSunday: false, holidays: [], affected: false };
