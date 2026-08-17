@@ -15,6 +15,17 @@ interface AdminBookingNotificationProps {
   billingModel: string;
   jobId: string;
   isFernfahrerTarif?: boolean;
+  tarif?: {
+    tarif: string;
+    label: string;
+    netto: number | null;
+    einheit: string;
+    mehrstunde: number | null;
+    needsReview: boolean;
+    reason: string;
+  };
+  maschinenbedienungLabel?: string;
+  surchargeDays?: string[];
 }
 
 export const AdminBookingNotification = ({
@@ -30,6 +41,9 @@ export const AdminBookingNotification = ({
   billingModel,
   jobId,
   isFernfahrerTarif = false,
+  tarif,
+  maschinenbedienungLabel,
+  surchargeDays = [],
 }: AdminBookingNotificationProps) => (
   <BaseEmail previewText={`Neue Buchungsanfrage: ${driverType} in ${address}`}>
     <Heading style={{ ...textStyles.heading2, color: colors.primary }}>
