@@ -1,6 +1,7 @@
 import { Heading, Text, Section, Hr } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles } from './base-email.tsx';
+import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
 
 interface AdminBookingNotificationProps {
   customerName: string;
@@ -99,8 +100,8 @@ export const AdminBookingNotification = ({
             {tarif
               ? (tarif.needsReview
                   ? 'Tarifzuordnung erforderlich'
-                  : `${tarif.label}${tarif.netto ? ` – ${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : ''}`)
-              : (isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz')}
+                  : `${tarif.label}${tarifTextByKey(tarif.tarif) ? ` – ${tarifTextByKey(tarif.tarif)!.priceLine}` : ''}`)
+              : (isFernfahrerTarif ? `${TARIF_TEXTE.fernfahrer.name} (${TARIF_TEXTE.fernfahrer.priceLine})` : 'Standard-Tagessatz')}
           </td>
         </tr>
         {requirements.length > 0 && (
@@ -135,7 +136,7 @@ export const AdminBookingNotification = ({
             <tr>
               <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tagessatz:</strong></td>
               <td style={{ padding: '5px 0', fontSize: '14px' }}>
-                {`${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}`}
+                {tarifTextByKey(tarif.tarif)?.priceLine ?? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}`}
               </td>
             </tr>
           )}
@@ -175,7 +176,7 @@ export const AdminBookingNotification = ({
     {isFernfahrerTarif && (
       <Section style={{ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6' }}>
         <Text style={{ ...textStyles.paragraph, margin: '0' }}>
-          <strong>Fernfahrer-Pauschale aktiv:</strong> 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
+          <strong>{TARIF_TEXTE.fernfahrer.name} aktiv:</strong> {TARIF_TEXTE.fernfahrer.priceLine}. {TARIF_TEXTE.fernfahrer.details.join(' ')}
         </Text>
       </Section>
     )}
