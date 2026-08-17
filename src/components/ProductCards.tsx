@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
+import TarifCardText from "@/components/TarifCardText";
+import { TARIF_TEXTE } from "@/lib/tarifTexte";
 
 const ProductCards = () => {
   const scrollToForm = () => {
@@ -34,10 +36,12 @@ const ProductCards = () => {
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center">
               <div className="mb-4 pb-4 border-b border-border space-y-2">
-                <div className="text-4xl font-bold text-foreground">349 €</div>
-                <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-                <p className="text-xs text-muted-foreground">Einsatzdauer bis max. 9 Stunden je Einsatztag</p>
-                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.lkw_ce}
+                      amountClassName="text-4xl font-bold text-foreground"
+                      unitClassName="text-sm font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
               </div>
               <Button
                 onClick={scrollToForm}
@@ -58,10 +62,12 @@ const ProductCards = () => {
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center">
               <div className="mb-4 pb-4 border-b border-border space-y-2">
-                <div className="text-4xl font-bold text-foreground">1.645 €</div>
-                <p className="text-sm font-medium text-foreground">pro Woche</p>
-                <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage</p>
-                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.lkw_ce_woche}
+                      amountClassName="text-4xl font-bold text-foreground"
+                      unitClassName="text-sm font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
               </div>
               <Button
                 onClick={scrollToForm}
@@ -79,10 +85,12 @@ const ProductCards = () => {
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center">
               <div className="mb-4 pb-4 border-b border-border space-y-2">
-                <div className="text-4xl font-bold text-foreground">450 €</div>
-                <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-                <p className="text-xs text-muted-foreground">Gültig für: 1 Fernverkehrs-Einsatztag</p>
-                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.fernfahrer}
+                      amountClassName="text-4xl font-bold text-foreground"
+                      unitClassName="text-sm font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
               </div>
               <Button
                 onClick={scrollToForm}
@@ -96,14 +104,16 @@ const ProductCards = () => {
           {/* Baumaschinenführer / Mischmeister */}
           <Card className="bg-card border border-border border-t-4 border-t-orange-500 hover:shadow-lg transition-shadow flex flex-col h-full">
             <CardHeader className="pb-2 min-h-[64px]">
-              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">Baumaschinenführer / Mischmeister</h3>
+              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">{TARIF_TEXTE.baumaschine.name}</h3>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center">
               <div className="mb-4 pb-4 border-b border-border space-y-2">
-                <div className="text-4xl font-bold text-foreground">489 €</div>
-                <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-                <p className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden</p>
-                <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.baumaschine}
+                      amountClassName="text-4xl font-bold text-foreground"
+                      unitClassName="text-sm font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
               </div>
               <Button
                 onClick={scrollToForm}
