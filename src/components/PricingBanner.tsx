@@ -2,8 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import TarifCardText from "@/components/TarifCardText";
-import { TARIF_TEXTE } from "@/lib/tarifTexte";
+import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
+import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 
 const PricingBanner = () => {
   const scrollToForm = (e: React.MouseEvent) => {
@@ -24,6 +24,7 @@ const PricingBanner = () => {
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Faire Konditionen für LKW CE Fahrer und Baumaschinenführer
           </p>
+          <PreiskartenHinweis className="mt-3 max-w-3xl mx-auto" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl mx-auto mb-8">
@@ -79,7 +80,7 @@ const PricingBanner = () => {
           <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-xl transition-all duration-300">
             <CardContent className="p-5">
               <div className="text-center">
-                <h3 className="text-xl font-bold text-orange-900 mb-2">{TARIF_TEXTE.baumaschine.name}</h3>
+                <h3 className="text-base font-bold text-orange-900 mb-2 leading-snug break-words hyphens-none">{tarifTitel(TARIF_TEXTE.baumaschine.name)}</h3>
                 <TarifCardText
                       tarif={TARIF_TEXTE.baumaschine}
                       amountClassName="text-4xl font-bold text-orange-700 mb-1"
@@ -108,7 +109,7 @@ const PricingBanner = () => {
               className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
             >
               <Link to="/preise-und-ablauf">
-                Alle Details & Konditionen
+                Details: Preise & Konditionen
               </Link>
             </Button>
           </div>

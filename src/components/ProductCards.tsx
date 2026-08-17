@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
-import TarifCardText from "@/components/TarifCardText";
-import { TARIF_TEXTE } from "@/lib/tarifTexte";
+import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
+import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 
 const ProductCards = () => {
   const scrollToForm = () => {
@@ -22,9 +22,7 @@ const ProductCards = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             Unsere Dienstleistungen & Preise
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto px-4">
-            Preise verstehen sich netto zzgl. MwSt. – zusätzlich An- und Abfahrt.
-          </p>
+          <PreiskartenHinweis className="max-w-3xl mx-auto px-4 text-base" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto items-stretch">
@@ -104,7 +102,7 @@ const ProductCards = () => {
           {/* Baumaschinenführer / Mischmeister */}
           <Card className="bg-card border border-border border-t-4 border-t-orange-500 hover:shadow-lg transition-shadow flex flex-col h-full">
             <CardHeader className="pb-2 min-h-[64px]">
-              <h3 className="text-base font-semibold leading-tight break-words hyphens-auto text-foreground">{TARIF_TEXTE.baumaschine.name}</h3>
+              <h3 className="text-sm font-semibold leading-tight break-words hyphens-none text-foreground">{tarifTitel(TARIF_TEXTE.baumaschine.name)}</h3>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center">
               <div className="mb-4 pb-4 border-b border-border space-y-2">
@@ -126,8 +124,10 @@ const ProductCards = () => {
 
         </div>
 
+        <PreiskartenDetailsLink className="mt-8" />
+
         {/* Mischmeister Flüssigboden Link */}
-        <div className="text-center mt-8 mb-8">
+        <div className="text-center mt-6 mb-8">
           <Link
             to="/fluessigboden-service"
             className="text-primary underline decoration-primary/50 hover:decoration-primary transition-colors inline-flex items-center gap-2"

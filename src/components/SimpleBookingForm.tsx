@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import TarifCardText from "@/components/TarifCardText";
-import { TARIF_TEXTE, tarifKurz } from "@/lib/tarifTexte";
+import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
+import { TARIF_TEXTE, tarifKurz, tarifTitel } from "@/lib/tarifTexte";
 import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -379,13 +379,11 @@ const SimpleBookingForm = () => {
                 <h3 className="text-lg font-semibold text-center mb-2">
                   Ihre Fahrerpreise
                 </h3>
-                <p className="text-sm text-muted-foreground text-center">
-                  Preise verstehen sich <strong>netto</strong> zzgl. MwSt. – zusätzlich An- und Abfahrt.
-                </p>
+                <PreiskartenHinweis />
               </div>
 
               {/* Pricing Cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6 items-stretch">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-3 items-stretch">
                 <Card className="bg-card border border-border border-t-4 border-t-red-600 flex flex-col h-full">
                   <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
                     <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE</CardTitle>
@@ -433,7 +431,7 @@ const SimpleBookingForm = () => {
 
                 <Card className="bg-card border border-border border-t-4 border-t-orange-500 flex flex-col h-full">
                   <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
-                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">{TARIF_TEXTE.baumaschine.name}</CardTitle>
+                    <CardTitle className="text-xs lg:text-sm font-semibold leading-tight break-words hyphens-none">{tarifTitel(TARIF_TEXTE.baumaschine.name)}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
                     <TarifCardText

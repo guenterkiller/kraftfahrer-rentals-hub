@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import TarifCardText from "@/components/TarifCardText";
-import { TARIF_TEXTE } from "@/lib/tarifTexte";
+import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
+import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 
 const PricingSection = () => {
   const scrollToBooking = () => {
@@ -32,7 +32,9 @@ const PricingSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 max-w-7xl mx-auto items-stretch">
+        <PreiskartenHinweis className="mb-6" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 max-w-7xl mx-auto items-stretch">
           {/* LKW-Fahrer CE */}
           <Card className="bg-card border border-border border-t-4 border-t-red-600 hover:shadow-lg transition-shadow flex flex-col h-full">
             <CardHeader className="pb-2 min-h-[64px]">
@@ -102,7 +104,7 @@ const PricingSection = () => {
           {/* Baumaschinenführer / Mischmeister */}
           <Card className="bg-card border border-border border-t-4 border-t-orange-500 hover:shadow-lg transition-shadow flex flex-col h-full">
             <CardHeader className="pb-2 min-h-[64px]">
-              <CardTitle className="text-base font-semibold leading-tight break-words hyphens-auto">{TARIF_TEXTE.baumaschine.name}</CardTitle>
+              <CardTitle className="text-sm font-semibold leading-tight break-words hyphens-none">{tarifTitel(TARIF_TEXTE.baumaschine.name)}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
               <TarifCardText
@@ -121,17 +123,7 @@ const PricingSection = () => {
           </Card>
         </div>
 
-        {/* Wochenpreis – verbindliche Abgrenzung */}
-        <Card className="max-w-5xl mx-auto mb-8">
-          <CardHeader>
-            <CardTitle className="text-base">{TARIF_TEXTE.lkw_ce_woche.name}</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm space-y-2">
-            {TARIF_TEXTE.lkw_ce_woche.notes?.map((n) => (
-              <p key={n}>{n}</p>
-            ))}
-          </CardContent>
-        </Card>
+        <PreiskartenDetailsLink className="mb-12" />
 
         {/* An- und Abfahrt */}
         <Card className="max-w-5xl mx-auto mb-8">
