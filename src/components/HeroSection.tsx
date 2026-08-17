@@ -11,6 +11,8 @@ import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
  * - fetchpriority="high" für priorisiertes Laden
  */
 const HeroSection = () => {
+  const goToBooking = useGoToBooking();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32 sm:pb-40 md:pb-48">
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}

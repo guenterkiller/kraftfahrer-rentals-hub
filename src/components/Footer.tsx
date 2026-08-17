@@ -4,6 +4,7 @@ import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const goToBooking = useGoToBooking();
 
   return (
     <footer className="bg-muted border-t mt-auto">
