@@ -104,7 +104,8 @@ export function resolveTarif(input: TarifInput): TarifResult {
   const kategorie = (input.kategorie || '').trim();
   const mb = input.maschinenbedienung || '';
   const freitext = `${input.taetigkeit || ''} ${input.beschreibung || ''}`;
-  const keywordHit = containsKeyword(freitext) || containsKeyword(kategorie);
+  // Nur die beschriebene Tätigkeit entscheidet – die reine Kategoriewahl genügt nicht.
+  const keywordHit = containsKeyword(freitext);
 
   const isBaumaschinenKategorie = /baumaschin|mischmeister|spezialfahrzeug/i.test(kategorie);
   const isWoche = /wochenpreis/i.test(kategorie);
