@@ -15,9 +15,7 @@ import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 import {
   resolveTarif,
-  MASCHINENBEDIENUNG_LABELS,
   SPEZIALFAHRZEUG_BEISPIELE,
-  type Maschinenbedienung,
 } from "@/lib/tarifZuordnung";
 
 const SimpleBookingForm = () => {
@@ -47,7 +45,6 @@ const SimpleBookingForm = () => {
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
-  const [maschinenbedienung, setMaschinenbedienung] = useState<Maschinenbedienung>('');
   const [beschreibung, setBeschreibung] = useState('');
   const [einsatzbeginn, setEinsatzbeginn] = useState('');
   const [einsatzende, setEinsatzende] = useState('');
