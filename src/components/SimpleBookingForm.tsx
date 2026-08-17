@@ -13,6 +13,12 @@ import { useToast } from "@/hooks/use-toast";
 import { PWAInstallButton } from "@/components/PWAInstallButton";
 import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
+import {
+  resolveTarif,
+  MASCHINENBEDIENUNG_LABELS,
+  SPEZIALFAHRZEUG_BEISPIELE,
+  type Maschinenbedienung,
+} from "@/lib/tarifZuordnung";
 
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -41,6 +47,8 @@ const SimpleBookingForm = () => {
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
+  const [maschinenbedienung, setMaschinenbedienung] = useState<Maschinenbedienung>('');
+  const [beschreibung, setBeschreibung] = useState('');
   const [einsatzbeginn, setEinsatzbeginn] = useState('');
   const [einsatzende, setEinsatzende] = useState('');
   const [vorname, setVorname] = useState('');
@@ -51,6 +59,15 @@ const SimpleBookingForm = () => {
 
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
   const weekendHoliday = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+
+  // Tarifzuordnung (regelbasiert, keine reine Stichworterkennung)
+  const tarif = resolveTarif({
+    kategorie: fahrzeugtyp,
+    maschinenbedienung,
+    longDistance,
+    taetigkeit: bauTaetigkeit,
+    beschreibung,
+  });
 
   // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -98,6 +115,17 @@ const SimpleBookingForm = () => {
     // Validierung Einsatzzeitraum
     if (!einsatzbeginn || !einsatzende) {
       toast({ title: "Bitte Einsatzbeginn und Einsatzende angeben", variant: "destructive" });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+
+    // Pflichtangabe: Maschinen-/Anlagenbedienung
+    if (!maschinenbedienung) {
+      toast({
+        title: "Bitte Angabe zur Maschinen- oder Anlagenbedienung auswählen",
+        description: "Diese Angabe ist für die richtige Tarifzuordnung erforderlich.",
+        variant: "destructive",
+      });
       setLoading(false); setSubmitted(false);
       return;
     }
@@ -150,7 +178,22 @@ const SimpleBookingForm = () => {
           : fahrzeugtyp === 'LKW CE Wochenpreis'
             ? 'LKW-Fahrer CE – Wochenpreis'
             : (fahrzeugtyp || 'lkw'),
-        nachricht: formData.get('beschreibung') as string,
+        nachricht: [
+          formData.get('beschreibung') as string,
+          '',
+          `Maschinen-/Anlagenbedienung: ${MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']}`,
+          bauTaetigkeit ? `Spezialfahrzeug / Tätigkeit: ${bauTaetigkeit}` : '',
+          `Tarifzuordnung: ${tarif.label}${tarif.netto ? ` – ${tarif.netto} € netto ${tarif.einheit}` : ''}`,
+          tarif.needsReview ? 'Hinweis: Tarifzuordnung wird manuell geprüft.' : '',
+        ].filter(Boolean).join('\n'),
+        maschinenbedienung: maschinenbedienung,
+        tarif_key: tarif.tarif,
+        tarif_label: tarif.label,
+        tarif_netto: tarif.netto,
+        tarif_einheit: tarif.einheit,
+        tarif_mehrstunde: tarif.mehrstunde,
+        tarif_needs_review: tarif.needsReview,
+        tarif_reason: tarif.reason,
         datenschutz: agreedToData,
         newsletter: false,
         billing_model: 'agency',
@@ -174,7 +217,9 @@ const SimpleBookingForm = () => {
           bf3Certified && 'BF3-zertifiziert',
           escortExperience && 'Begleitung',
           requiresBf2 && 'BF2 erforderlich',
-          requiresBf3 && 'BF3 erforderlich'
+          requiresBf3 && 'BF3 erforderlich',
+          maschinenbedienung === 'ja' && 'Bedienung fest aufgebauter Maschine/Anlage',
+          tarif.needsReview && 'Tarif manuell prüfen'
         ].filter(Boolean)
       };
 
@@ -245,6 +290,9 @@ const SimpleBookingForm = () => {
       setAgreedToBinding(false);
       setAgreedToTasks(false);
       setAgreedToSurcharge(false);
+      setMaschinenbedienung('');
+      setBeschreibung('');
+      setBauTaetigkeit('');
       setVorname('');
       setNachname('');
       setUnternehmen('');
@@ -627,17 +675,73 @@ const SimpleBookingForm = () => {
                           onChange={(e) => { setFahrzeugtyp(e.target.value); setLongDistance(false); }}
                           className="w-5 h-5 accent-orange-600"
                         />
-                        <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister</span>
+                        <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister / Spezialfahrzeuge (Maschinenbedienung)</span>
                       </div>
                       <div className="text-xs text-muted-foreground pl-8">489 € pro Einsatztag · bis 8 Stunden Einsatzzeit · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">
+                        z. B. {SPEZIALFAHRZEUG_BEISPIELE.join(' · ')}
+                      </div>
                     </label>
                   </div>
 
+                  {/* Pflichtabfrage: Maschinen-/Anlagenbedienung (entscheidet die Tarifzuordnung) */}
+                  <div className="mt-4 p-4 rounded-lg border bg-muted/40">
+                    <fieldset>
+                      <legend className="text-sm font-medium">
+                        Muss der Fahrer am Einsatzort eine fest aufgebaute Maschine oder Anlage bedienen? *
+                      </legend>
+                      <p className="text-xs text-muted-foreground mt-1 mb-3">
+                        Zum Beispiel Pumpe, Saug-, Misch-, Förder- oder Arbeitsanlage. Entscheidend ist die Tätigkeit:
+                        Wird die aufgebaute Maschine auf der Baustelle bedient, gilt der Tarif Baumaschinenführer / Mischmeister
+                        (489 € netto je Einsatztag bis 8 Stunden, 60 € netto je angefangene Mehrstunde). Reiner Transport ohne
+                        maßgebliche Maschinenbedienung bleibt beim LKW-CE-Tarif.
+                      </p>
+                      <div className="space-y-2" role="radiogroup" aria-required="true">
+                        {(['ja', 'nein', 'unklar'] as const).map((opt) => (
+                          <label key={opt} className="flex items-start gap-3 text-sm cursor-pointer">
+                            <input
+                              type="radio"
+                              name="maschinenbedienung"
+                              value={opt}
+                              checked={maschinenbedienung === opt}
+                              onChange={() => setMaschinenbedienung(opt)}
+                              className="mt-0.5 w-4 h-4"
+                              required
+                            />
+                            <span>{MASCHINENBEDIENUNG_LABELS[opt]}</span>
+                          </label>
+                        ))}
+                      </div>
+
+                      {maschinenbedienung && (
+                        <div
+                          className={`mt-3 rounded-lg border p-3 text-sm ${
+                            tarif.needsReview
+                              ? 'border-amber-300 bg-amber-50 text-amber-900'
+                              : 'border-orange-200 bg-orange-50/60 text-orange-900'
+                          }`}
+                          aria-live="polite"
+                        >
+                          <div className="font-semibold">
+                            {tarif.needsReview ? 'Tarifzuordnung wird manuell geprüft' : `Es gilt: ${tarif.label}`}
+                          </div>
+                          {!tarif.needsReview && tarif.netto && (
+                            <div>
+                              {tarif.netto.toLocaleString('de-DE')} € netto {tarif.einheit}
+                              {tarif.mehrstunde ? ` · ${tarif.mehrstunde} € netto je angefangene Mehrstunde` : ''}
+                            </div>
+                          )}
+                          <div className="text-xs mt-1">{tarif.reason}</div>
+                        </div>
+                      )}
+                    </fieldset>
+                  </div>
+
                   {/* Optionales Tätigkeits-Dropdown bei Baumaschinen/Mischmeister */}
-                  {fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && (
+                  {(fahrzeugtyp === 'Baumaschinenführer / Mischmeister' || maschinenbedienung === 'ja') && (
                     <div className="mt-4 p-4 rounded-lg border border-orange-200 bg-orange-50/50">
                       <Label htmlFor="bauTaetigkeit" className="text-sm font-medium">
-                        Welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
+                        Welches Spezialfahrzeug bzw. welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
                       </Label>
                       <select
                         id="bauTaetigkeit"
@@ -648,12 +752,20 @@ const SimpleBookingForm = () => {
                         <option value="">Bitte auswählen …</option>
                         <option value="Baumaschinenführer">Baumaschinenführer</option>
                         <option value="Mischmeister / Anlagenbediener">Mischmeister / Anlagenbediener</option>
+                        <option value="Saugwagen / Saugbagger">Saugwagen / Saugbagger</option>
+                        <option value="Pumptruck / Estrich-Pumptruck">Pumptruck / Estrich-Pumptruck</option>
+                        <option value="Betonpumpe">Betonpumpe</option>
+                        <option value="Mischfahrzeug">Mischfahrzeug</option>
+                        <option value="Spül- / Reinigungsfahrzeug">Spül- / Reinigungsfahrzeug</option>
+                        <option value="Kanal- / Entsorgungsfahrzeug">Kanal- / Entsorgungsfahrzeug</option>
+                        <option value="Arbeitsmaschine / Spezialfahrzeug">Arbeitsmaschine / Spezialfahrzeug</option>
                         <option value="Flüssigboden">Flüssigboden</option>
                         <option value="Sonstiges">Sonstiges</option>
                       </select>
                       <div className="mt-3 text-xs text-orange-900">
                         <div className="font-semibold">489 € pro Einsatztag</div>
                         <div>Gültig für: bis 8 Stunden Einsatzzeit</div>
+                        <div>60 € netto je angefangene Mehrstunde</div>
                         <div>Zusätzlich: An- und Abfahrt</div>
                       </div>
                     </div>
@@ -870,6 +982,8 @@ const SimpleBookingForm = () => {
                   <Textarea
                     id="beschreibung"
                     name="beschreibung"
+                    value={beschreibung}
+                    onChange={(e) => setBeschreibung(e.target.value)}
                     placeholder="z. B. Fahrzeugart, Tourenart, mit oder ohne Beifahrer, Beladen/Entladen, Sackkarre, E-Ameise, Leergut, Ladungssicherung, Lieferscheine, Kundenkontakt, Gefahrgut, Wechselbrücke, feste Tour, Nahverkehr/Fernverkehr, besondere Anforderungen ..."
                     className="min-h-[140px]"
                     required
@@ -987,20 +1101,18 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || !maschinenbedienung || (weekendHoliday.affected && !agreedToSurcharge)}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
                       <div className="text-sm opacity-90">{
-                        longDistance && fahrzeugtyp === 'LKW CE'
-                          ? 'Fernfahrer-Pauschale 450 € netto / Einsatztag'
-                          : fahrzeugtyp === 'LKW CE Wochenpreis'
-                            ? 'Wochenpreis 1.645 € netto / Woche'
-                            : fahrzeugtyp === 'Baumaschinenführer / Mischmeister'
-                              ? '489 € netto / Einsatztag'
-                              : 'Preis gemäß Auswahl'
+                        !maschinenbedienung
+                          ? 'Preis gemäß Auswahl'
+                          : tarif.needsReview
+                            ? 'Tarif wird vor Bestätigung geprüft'
+                            : `${tarif.label}: ${tarif.netto?.toLocaleString('de-DE')} € netto ${tarif.einheit}`
                       }</div>
                     </div>
                   )}
