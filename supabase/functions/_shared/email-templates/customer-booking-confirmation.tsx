@@ -281,15 +281,6 @@ export const CustomerBookingConfirmation = ({
         </ol>
       </Section>
 
-      <Section {...getBoxProps({ ...boxStyles.successBox, backgroundColor: '#fef3f2', borderLeftColor: colors.primary })}>
-        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Warum Fahrerexpress?</Heading>
-        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-          <li>Keine Kosten, falls kein Fahrer verfügbar ist</li>
-          <li>Transparente, veröffentlichte Preise ohne zusätzliche Vermittlungsgebühren</li>
-          <li>Vermittlung qualifizierter selbstständiger Unternehmer</li>
-          <li>Eine Rechnung über die Fahrerexpress-Agentur</li>
-        </ul>
-      </Section>
     </BaseEmail>
   );
 };
