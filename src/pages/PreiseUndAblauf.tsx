@@ -317,7 +317,7 @@ const PreiseUndAblauf = () => {
                   <li>• Einsätze mit längerer Tagesabwesenheit</li>
                 </ul>
                 <p>
-                  Die <strong className="text-foreground">Fernfahrer-Pauschale (450 € netto / Einsatztag)</strong>
+                  Die <strong className="text-foreground">Fernfahrer-Pauschale (450,00 € netto je tatsächlichem Fernverkehrs-Einsatztag)</strong>
                   {' '}kann anstelle des normalen Tagessatzes verwendet werden.
                 </p>
               </CardContent>
