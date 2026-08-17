@@ -118,6 +118,17 @@ const SimpleBookingForm = () => {
       setLoading(false); setSubmitted(false);
       return;
     }
+
+    // Pflichtangabe: Maschinen-/Anlagenbedienung
+    if (!maschinenbedienung) {
+      toast({
+        title: "Bitte Angabe zur Maschinen- oder Anlagenbedienung auswählen",
+        description: "Diese Angabe ist für die richtige Tarifzuordnung erforderlich.",
+        variant: "destructive",
+      });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
     if (einsatzende < einsatzbeginn) {
       toast({ title: "Einsatzende darf nicht vor Einsatzbeginn liegen", variant: "destructive" });
       setLoading(false); setSubmitted(false);
@@ -167,7 +178,22 @@ const SimpleBookingForm = () => {
           : fahrzeugtyp === 'LKW CE Wochenpreis'
             ? 'LKW-Fahrer CE – Wochenpreis'
             : (fahrzeugtyp || 'lkw'),
-        nachricht: formData.get('beschreibung') as string,
+        nachricht: [
+          formData.get('beschreibung') as string,
+          '',
+          `Maschinen-/Anlagenbedienung: ${MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']}`,
+          bauTaetigkeit ? `Spezialfahrzeug / Tätigkeit: ${bauTaetigkeit}` : '',
+          `Tarifzuordnung: ${tarif.label}${tarif.netto ? ` – ${tarif.netto} € netto ${tarif.einheit}` : ''}`,
+          tarif.needsReview ? 'Hinweis: Tarifzuordnung wird manuell geprüft.' : '',
+        ].filter(Boolean).join('\n'),
+        maschinenbedienung: maschinenbedienung,
+        tarif_key: tarif.tarif,
+        tarif_label: tarif.label,
+        tarif_netto: tarif.netto,
+        tarif_einheit: tarif.einheit,
+        tarif_mehrstunde: tarif.mehrstunde,
+        tarif_needs_review: tarif.needsReview,
+        tarif_reason: tarif.reason,
         datenschutz: agreedToData,
         newsletter: false,
         billing_model: 'agency',
@@ -191,7 +217,9 @@ const SimpleBookingForm = () => {
           bf3Certified && 'BF3-zertifiziert',
           escortExperience && 'Begleitung',
           requiresBf2 && 'BF2 erforderlich',
-          requiresBf3 && 'BF3 erforderlich'
+          requiresBf3 && 'BF3 erforderlich',
+          maschinenbedienung === 'ja' && 'Bedienung fest aufgebauter Maschine/Anlage',
+          tarif.needsReview && 'Tarif manuell prüfen'
         ].filter(Boolean)
       };
 
@@ -262,6 +290,9 @@ const SimpleBookingForm = () => {
       setAgreedToBinding(false);
       setAgreedToTasks(false);
       setAgreedToSurcharge(false);
+      setMaschinenbedienung('');
+      setBeschreibung('');
+      setBauTaetigkeit('');
       setVorname('');
       setNachname('');
       setUnternehmen('');
