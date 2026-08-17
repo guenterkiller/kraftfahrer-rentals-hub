@@ -110,5 +110,5 @@ export type TarifTextKey = keyof typeof TARIF_TEXTE;
 /** Kompakte Einzeiler für Auswahllisten (Preis + enthaltene Einsatzzeit). */
 export const tarifKurz = (key: TarifTextKey): string => {
   const t = TARIF_TEXTE[key];
-  return [t.priceLine, ...t.details].join(' · ');
+  return [`${t.amount} ${t.cardUnit}`, ...t.cardLines].join(' · ');
 };
