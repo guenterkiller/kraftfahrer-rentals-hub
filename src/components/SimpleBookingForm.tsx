@@ -1053,14 +1053,14 @@ const SimpleBookingForm = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || !maschinenbedienung || (weekendHoliday.affected && !agreedToSurcharge)}
+                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
                       <div className="text-sm opacity-90">{
-                        !maschinenbedienung
+                        !fahrzeugtyp
                           ? 'Preis gemäß Auswahl'
                           : tarif.needsReview
                             ? 'Passender veröffentlichter Tarif wird zugeordnet'
