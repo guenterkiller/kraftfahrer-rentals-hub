@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
+import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifKurz, tarifTitel } from "@/lib/tarifTexte";
 import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
