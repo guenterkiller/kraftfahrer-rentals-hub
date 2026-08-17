@@ -87,7 +87,7 @@ export const CustomerBookingConfirmation = ({
         Vielen Dank für Ihre Anfrage über unser Buchungsformular.
       </Text>
       <Text {...getTextProps(textStyles.paragraph)}>
-        Mit dem Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage zur Vermittlung eines selbstständigen Unternehmers gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
+        Mit dem Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
       </Text>
 
       <Section {...getBoxProps(boxStyles.warningBox)}>
