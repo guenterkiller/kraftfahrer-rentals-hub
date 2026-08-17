@@ -318,14 +318,13 @@ const SimpleBookingForm = () => {
   };
 
   const scrollToForm = () => {
-    const element = document.querySelector('#booking-form');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToBookingForm();
   };
 
   return (
     <section className="py-16 bg-background" id="fahreranfrage">
+      {/* Anker für /fahrer-buchen#buchungsformular (fester Header berücksichtigt) */}
+      <div id="buchungsformular" className="scroll-mt-24" aria-hidden="true" />
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <Card>
