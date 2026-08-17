@@ -42,7 +42,17 @@ serve(async (req) => {
       html,
     });
   }
-  return new Response(JSON.stringify({ detection: { info, days }, send: res, html }), {
+  const text = html
+    .replace(/<style[\s\S]*?<\/style>/g, '')
+    .replace(/<\/(p|div|td|tr|li|h1|h2|h3|section|table)>/g, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&#x27;|&#39;/g, "'")
+    .replace(/[ \t]+/g, ' ')
+    .split('\n').map((l) => l.trim()).filter(Boolean).join('\n');
+  const emptyCells = (html.match(/<td[^>]*>\s*<\/td>/g) || []).length;
+  return new Response(JSON.stringify({ detection: { info, days }, send: res, emptyCells, text }), {
     headers: { "Content-Type": "application/json", ...cors },
   });
 });
