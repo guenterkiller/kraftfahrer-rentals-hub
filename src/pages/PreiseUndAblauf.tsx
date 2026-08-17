@@ -33,9 +33,7 @@ const PreiseUndAblauf = () => {
     }
   });
 
-  const scrollToBooking = () => {
-    window.location.href = '/#fahreranfrage';
-  };
+  const scrollToBooking = useGoToBooking();
 
   return (
     <div>

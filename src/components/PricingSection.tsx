@@ -2,14 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 
 const PricingSection = () => {
-  const scrollToBooking = () => {
-    const bookingSection = document.getElementById('fahreranfrage');
-    if (bookingSection) {
-      bookingSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const scrollToBooking = useGoToBooking();
 
   const trackClick = (event: string, label: string, value: number) => {
     if (typeof window !== 'undefined' && (window as any).gtag) {

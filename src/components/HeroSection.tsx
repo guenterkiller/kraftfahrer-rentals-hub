@@ -84,14 +84,8 @@ const HeroSection = () => {
             asChild
           >
             <a className="text-primary-foreground" 
-              href="#fahreranfrage"
-              onClick={(e) => {
-                e.preventDefault();
-                const element = document.querySelector('#fahreranfrage');
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
+              href={BOOKING_LINK}
+              onClick={goToBooking}
               aria-label="Direkt zum Fahreranfrage-Formular springen"
             >
               Jetzt Fahrer anfragen
