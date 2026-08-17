@@ -220,16 +220,6 @@ export const CustomerBookingConfirmation = ({
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>{MEHRSTUNDENREGEL}</Text>
-        {mehrstundenSatz && (
-          <>
-            <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-              <strong>Veröffentlichter Mehrstundensatz für Ihren Tarif:</strong>
-            </Text>
-            <ul style={listStyle} className="mobile-text">
-              <li>{mehrstundenSatz}</li>
-            </ul>
-          </>
-        )}
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
           Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
         </Text>
