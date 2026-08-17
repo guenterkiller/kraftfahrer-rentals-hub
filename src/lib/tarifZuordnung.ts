@@ -162,7 +162,7 @@ export function resolveTarif(input: TarifInput): TarifResult {
     label: 'LKW-Fahrer CE',
     netto: 349,
     einheit: 'je Einsatztag bis 9 Stunden',
-    mehrstunde: null,
+    mehrstunde: 45,
     needsReview: false,
     internalConflict: keywordHit,
     reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE (reines Fahren und Transportieren).' + conflictNote,
