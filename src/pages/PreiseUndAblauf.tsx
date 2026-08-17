@@ -132,7 +132,7 @@ const PreiseUndAblauf = () => {
 
               <div className="bg-muted/50 border border-border rounded-lg p-4 max-w-4xl mx-auto">
                 <p className="text-sm text-foreground">
-                  Weitere Kosten entstehen nur, wenn sie vorher ausdrücklich vereinbart wurden.
+                  Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und Feiertagszuschläge gelten automatisch; eine zusätzliche Vereinbarung ist hierfür nicht erforderlich. Weitere, nicht veröffentlichte Kosten entstehen nur nach vorheriger ausdrücklicher Vereinbarung.
                 </p>
                 <p className="text-sm text-foreground mt-2">
                   Bei auswärtigen Einsätzen kann zusätzlich eine Übernachtung erforderlich sein. Diese wird vor Auftragserteilung abgestimmt.
@@ -275,6 +275,10 @@ const PreiseUndAblauf = () => {
                     <li>• Samstag: 25 % Zuschlag auf den jeweiligen Tagessatz</li>
                     <li>• Sonntag und gesetzliche Feiertage: 50 % Zuschlag auf den jeweiligen Tagessatz</li>
                   </ul>
+                  <p className="mt-2">
+                    Diese Zuschläge gelten automatisch nach der veröffentlichten Preisregel. Eine
+                    zusätzliche Vereinbarung ist hierfür nicht erforderlich.
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -407,18 +411,8 @@ const PreiseUndAblauf = () => {
                   <p className="text-muted-foreground">Es erfolgt ausdrücklich keine Überlassung von Arbeitnehmern, sondern die Vermittlung selbstständiger Unternehmer auf Basis eines Dienst-/Werkvertrags. Der Subunternehmer ist in der Ausführung seiner Tätigkeit fachlich eigenverantwortlich und nicht in die Arbeitsorganisation des Auftraggebers eingegliedert.</p>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-lg mb-2">Weisungsrecht</h3>
-                  <p className="text-muted-foreground">Die Fahrer arbeiten eigenverantwortlich auf Basis eines Dienst- oder Werkvertrags. Es erfolgt keine Eingliederung in den Betrieb des Auftraggebers (keine Arbeitnehmerüberlassung).</p>
-                </div>
-                <div>
                   <h3 className="font-semibold text-lg mb-2">Sozialversicherung</h3>
                   <p className="text-muted-foreground">Die eingesetzten Unternehmer sind eigenständig tätig. Eine sozialversicherungsrechtliche Bewertung erfolgt im Einzelfall durch die zuständigen Behörden.</p>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-lg mb-2">Haftung & Versicherung</h3>
-                  <p className="text-muted-foreground">
-                    Die Fahrerexpress-Agentur haftet nach den gesetzlichen Vorschriften für eigenes Verschulden. Für die ordnungsgemäße Durchführung des Einsatzes ist der eingesetzte Unternehmer im Rahmen der gesetzlichen Vorschriften eigenverantwortlich.
-                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -435,7 +429,7 @@ const PreiseUndAblauf = () => {
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Rechnungsstellung nach Einsatzende</span>
+                    <span>Rechnungsstellung nach Einsatzende auf Grundlage der tatsächlich geleisteten Einsatztage, angefangenen Mehrstunden, gefahrenen Kilometer und gegebenenfalls angefallenen Zuschläge (Verlängerungen und Änderungen werden entsprechend berücksichtigt)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />

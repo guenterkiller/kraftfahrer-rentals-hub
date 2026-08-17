@@ -53,6 +53,9 @@ const Vermittlungsbedingungen = () => {
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Eine Eingliederung des eingesetzten Unternehmers in die Arbeitsorganisation des Auftraggebers sowie eine fachliche Weisungsgebundenheit sind nicht vorgesehen. Der Auftraggeber beschreibt den gewünschten Leistungsumfang, Einsatzort, Zeitraum und die erforderlichen Rahmenbedingungen.
                 </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Fahrzeuge und Arbeitsmittel werden vom Auftraggeber gestellt. Fahrerexpress stellt keine Fahrzeuge.
+                </p>
               </section>
 
               <Separator />
@@ -84,6 +87,9 @@ const Vermittlungsbedingungen = () => {
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   Der Auftraggeber erhält eine Rechnung über die vereinbarten Leistungen.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Die Abrechnung erfolgt nach Abschluss des Einsatzes auf Grundlage der tatsächlich geleisteten Einsatztage, angefangenen Mehrstunden, gefahrenen Kilometer und gegebenenfalls angefallenen Zuschläge. Verlängerungen oder Änderungen des Einsatzes werden entsprechend berücksichtigt.
                 </p>
               </section>
 
@@ -128,6 +134,16 @@ const Vermittlungsbedingungen = () => {
                   Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in
                   den nächsten Kalendertag hineinreichen, können gesondert berechnet werden –
                   etwa als zusätzlicher Einsatztag oder als Fernverkehrseinsatz.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  An- und Abfahrt: Die ersten 25 km der Gesamtstrecke sind frei, ab dem 26. km
+                  werden 0,40 € netto je gefahrenem Kilometer berechnet.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mt-3">
+                  Wochenend- und Feiertagszuschläge: Samstag 25 %, Sonntag und gesetzliche
+                  Feiertage 50 % auf den jeweiligen Tagessatz. Die veröffentlichten
+                  Mehrstundensätze, die An- und Abfahrt sowie diese Zuschläge gelten automatisch;
+                  eine zusätzliche Vereinbarung ist hierfür nicht erforderlich.
                 </p>
               </section>
 

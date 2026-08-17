@@ -190,7 +190,7 @@ export const CustomerBookingConfirmation = ({
       <Hr style={{ borderTop: `1px solid ${colors.border}`, margin: '20px 0' }} />
 
       <Text {...getTextProps({ ...textStyles.paragraph })}>
-        Preis gemäß Auswahl zzgl. An- und Abfahrt. Weitere Kosten nur nach vorheriger Vereinbarung.
+        Preis gemäß Auswahl zzgl. An- und Abfahrt. Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und Feiertagszuschläge gelten automatisch; eine zusätzliche Vereinbarung ist hierfür nicht erforderlich. Weitere, nicht veröffentlichte Kosten entstehen nur nach vorheriger ausdrücklicher Vereinbarung.
       </Text>
       <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
         <li><strong>LKW-Fahrer CE:</strong> 349 € pro Einsatztag (Einsatzdauer bis max. 9 Stunden je Einsatztag)</li>
@@ -200,7 +200,7 @@ export const CustomerBookingConfirmation = ({
         <li><strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer</li>
       </ul>
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
-        Alle Preise netto zzgl. gesetzlicher MwSt.
+        Alle Preise netto zzgl. gesetzlicher MwSt. Fahrzeuge werden nicht gestellt. Zahlungsziel: 7 Tage netto ab Rechnungsdatum.
       </Text>
     </Section>
 
@@ -221,9 +221,6 @@ export const CustomerBookingConfirmation = ({
       </ul>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
         Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können gesondert als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
-      </Text>
-      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
       </Text>
     </Section>
 
@@ -258,6 +255,9 @@ export const CustomerBookingConfirmation = ({
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
         Bei einer Stornierung unter 24 Stunden vor Einsatzbeginn werden 80 % des vereinbarten Tagessatzes berechnet.
+      </Text>
+      <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
+        Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers werden 100 % des vereinbarten Tagessatzes berechnet.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
         Same-Day-Buchungen sind ausgeschlossen (Mindestvorlauf: 24 Stunden an Werktagen).
