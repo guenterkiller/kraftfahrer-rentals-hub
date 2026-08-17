@@ -96,7 +96,11 @@ export const AdminBookingNotification = ({
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tarif:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold', color: isFernfahrerTarif ? '#3b82f6' : undefined }}>
-            {isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz'}
+            {tarif
+              ? (tarif.needsReview
+                  ? 'Manuelle Prüfung erforderlich'
+                  : `${tarif.label}${tarif.netto ? ` – ${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : ''}`)
+              : (isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : 'Standard-Tagessatz')}
           </td>
         </tr>
         {requirements.length > 0 && (
@@ -114,6 +118,55 @@ export const AdminBookingNotification = ({
         Der Besteller hat bestätigt, dass die beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind. Diese Angaben bilden die Grundlage der Einsatzabstimmung und der Auftragsannahme durch den selbstständigen Fahrer.
       </Text>
     </Section>
+
+    {tarif && (
+      <Section style={{ ...boxStyles.infoBox, backgroundColor: tarif.needsReview ? '#fef3c7' : '#f0fdf4', borderLeft: `4px solid ${tarif.needsReview ? '#d97706' : '#16a34a'}` }}>
+        <Heading style={textStyles.heading3}>🧮 Tarifzuordnung</Heading>
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Maschinen-/Anlagenbedienung:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{maschinenbedienungLabel || 'Keine Angabe'}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Maßgeblicher Tarif:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>
+              {tarif.needsReview ? 'Noch offen – manuell prüfen' : `${tarif.label}`}
+            </td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tagessatz:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>
+              {tarif.netto ? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}` : 'wird nach Prüfung festgelegt'}
+            </td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>
+              {tarif.mehrstunde ? `${tarif.mehrstunde.toLocaleString('de-DE')} € netto je angefangene Stunde` : 'gemäß Preisliste'}
+            </td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Begründung:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{tarif.reason}</td>
+          </tr>
+        </table>
+        {surchargeDays.length > 0 && (
+          <>
+            <Text style={{ ...textStyles.paragraph, margin: '12px 0 4px 0' }}>
+              <strong>Wochenend-/Feiertage im Einsatzzeitraum:</strong>
+            </Text>
+            <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }}>
+              {surchargeDays.map((d) => (<li key={d}>{d}</li>))}
+            </ul>
+          </>
+        )}
+        {tarif.needsReview && (
+          <Text style={{ ...textStyles.paragraph, margin: '12px 0 0 0', fontWeight: 'bold' }}>
+            ⚠️ Dem Besteller wurde KEIN Fahrertyp und kein Tagessatz bestätigt. Bitte Tarif manuell festlegen.
+          </Text>
+        )}
+      </Section>
+    )}
 
     {isFernfahrerTarif && (
       <Section style={{ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6' }}>
