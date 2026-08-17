@@ -14,11 +14,6 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
-  const providedSecret = req.headers.get("x-internal-secret");
-  const expectedSecret = Deno.env.get("INTERNAL_FN_SECRET");
-  if (!expectedSecret || providedSecret !== expectedSecret) {
-    return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } });
-  }
   const body = await req.json();
   const computed = analyzeWeekendHoliday(body.einsatzbeginn, body.einsatzende || body.einsatzbeginn);
   const html = await renderAsync(React.createElement(CustomerBookingConfirmation, {
