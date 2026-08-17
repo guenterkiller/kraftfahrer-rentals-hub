@@ -3,42 +3,37 @@ import { resolveTarif } from '../tarifZuordnung';
 import { listSurchargeDays, analyzeWeekendHoliday } from '../germanHolidays';
 
 describe('resolveTarif', () => {
-  it('setzt Baumaschinentarif bei bestätigter Maschinenbedienung, auch wenn LKW CE gewählt wurde', () => {
-    const r = resolveTarif({ kategorie: 'LKW CE', maschinenbedienung: 'ja' });
+  it('setzt Baumaschinentarif, wenn der Besteller die Spezialfahrzeug-Tarifkarte wählt', () => {
+    const r = resolveTarif({ kategorie: 'Baumaschinenführer / Mischmeister', maschinenbedienung: '' });
     expect(r.tarif).toBe('baumaschine');
     expect(r.netto).toBe(489);
     expect(r.mehrstunde).toBe(60);
     expect(r.needsReview).toBe(false);
   });
 
-  it('ordnet Estrichpumpe/Pumptruck im Freitext dem Baumaschinentarif zu', () => {
+  it('überschreibt die Tarifauswahl nicht durch Freitext, markiert aber intern', () => {
     const r = resolveTarif({
       kategorie: 'LKW CE',
-      maschinenbedienung: 'nein',
+      maschinenbedienung: '',
       beschreibung: 'Fahren eines Estrich-Pumptrucks, Estrichpumpe vor Ort',
     });
-    expect(r.tarif).toBe('baumaschine');
-    expect(r.netto).toBe(489);
-    expect(r.mehrstunde).toBe(60);
+    expect(r.tarif).toBe('lkw_ce');
+    expect(r.netto).toBe(349);
+    expect(r.internalConflict).toBe(true);
     expect(r.needsReview).toBe(false);
   });
 
-  it('markiert unklare Angabe zur Prüfung und nennt keinen Fahrertyp', () => {
-    const r = resolveTarif({ kategorie: 'LKW CE', maschinenbedienung: 'unklar' });
+  it('verlangt Zuordnung, wenn keine Tarifkarte gewählt wurde', () => {
+    const r = resolveTarif({ kategorie: '', maschinenbedienung: '' });
     expect(r.tarif).toBe('pruefung');
     expect(r.netto).toBeNull();
     expect(r.label).not.toMatch(/LKW|Baumaschinenführer \/ Mischmeister \(/);
   });
 
-  it('verlangt Tarifzuordnung, wenn Kategorie Baumaschinenführer ohne beschriebene Anlagenbedienung gewählt wird', () => {
-    const r = resolveTarif({ kategorie: 'Baumaschinenführer / Mischmeister', maschinenbedienung: 'nein' });
-    expect(r.tarif).toBe('pruefung');
-  });
-
   it('behält LKW-CE-, Wochen- und Fernfahrertarif bei reinem Transport', () => {
-    expect(resolveTarif({ kategorie: 'LKW CE', maschinenbedienung: 'nein' })).toMatchObject({ tarif: 'lkw_ce', netto: 349 });
-    expect(resolveTarif({ kategorie: 'LKW CE Wochenpreis', maschinenbedienung: 'nein' })).toMatchObject({ tarif: 'lkw_ce_woche', netto: 1645 });
-    expect(resolveTarif({ kategorie: 'LKW CE', maschinenbedienung: 'nein', longDistance: true })).toMatchObject({ tarif: 'fernfahrer', netto: 450 });
+    expect(resolveTarif({ kategorie: 'LKW CE', maschinenbedienung: '' })).toMatchObject({ tarif: 'lkw_ce', netto: 349 });
+    expect(resolveTarif({ kategorie: 'LKW CE Wochenpreis', maschinenbedienung: '' })).toMatchObject({ tarif: 'lkw_ce_woche', netto: 1645 });
+    expect(resolveTarif({ kategorie: 'LKW CE', maschinenbedienung: '', longDistance: true })).toMatchObject({ tarif: 'fernfahrer', netto: 450 });
   });
 });
 

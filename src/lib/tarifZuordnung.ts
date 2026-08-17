@@ -9,9 +9,10 @@
  * Reiner LKW-CE-Transport ohne maßgebliche Maschinenbedienung bleibt beim
  * LKW-CE-Tarif.
  *
- * Wichtig: Freitext-Stichwörter lösen NIE allein einen Tarif aus. Sie führen
- * zu einer manuellen Zuordnung der Tarifkategorie, wenn die Tätigkeit nicht
- * eindeutig beschrieben ist. Preise werden nie individuell festgelegt.
+ * Wichtig: Maßgeblich ist ausschließlich die vom Besteller gewählte Tarifkarte.
+ * Freitext-Stichwörter überschreiben diese Auswahl NIE. Sie können lediglich
+ * einen internen Kontrollhinweis auslösen. Preise werden nie individuell
+ * festgelegt.
  */
 
 export type Maschinenbedienung = 'ja' | 'nein' | 'unklar' | '';
@@ -34,6 +35,8 @@ export interface TarifResult {
   mehrstunde: number | null;
   needsReview: boolean;
   reason: string;
+  /** Interner Kontrollhinweis bei möglichem Widerspruch (nicht für Besteller-Rückfragen) */
+  internalConflict?: boolean;
 }
 
 /** Stichwörter für Spezialfahrzeuge mit typischer Maschinenbedienung. */
@@ -102,45 +105,31 @@ const BAUMASCHINE_TARIF: Omit<TarifResult, 'reason'> = {
 
 export function resolveTarif(input: TarifInput): TarifResult {
   const kategorie = (input.kategorie || '').trim();
-  const mb = input.maschinenbedienung || '';
   const freitext = `${input.taetigkeit || ''} ${input.beschreibung || ''}`;
-  // Nur die beschriebene Tätigkeit entscheidet – die reine Kategoriewahl genügt nicht.
   const keywordHit = containsKeyword(freitext);
 
   const isBaumaschinenKategorie = /baumaschin|mischmeister|spezialfahrzeug/i.test(kategorie);
   const isWoche = /wochenpreis/i.test(kategorie);
   const isFern = !!input.longDistance && !isBaumaschinenKategorie && !isWoche;
 
-  // 1. Tätigkeit beschreibt eindeutig die Bedienung einer Pumpe, Saug-, Misch-,
-  //    Förder- oder anderen technischen Anlage -> veröffentlichter Tarif
-  //    Baumaschinenführer / Mischmeister gilt automatisch.
-  if (keywordHit) {
+  // 1. Der Besteller hat den Tarif Baumaschinenführer / Mischmeister / Spezialfahrzeuge gewählt.
+  if (isBaumaschinenKategorie) {
     return {
       ...BAUMASCHINE_TARIF,
       reason:
-        'Die beschriebene Tätigkeit umfasst die Bedienung einer Pumpe, Saug-, Misch-, Förder- oder anderen technischen Anlage. Damit gilt der veröffentlichte Tarif Baumaschinenführer / Mischmeister.',
+        'Vom Besteller gewählter veröffentlichter Tarif: Baumaschinenführer / Mischmeister / Spezialfahrzeuge (zusätzliche Bedienung einer technischen Fahrzeuganlage).',
     };
   }
 
-  // 2. Maschinen-/Anlagenbedienung ausdrücklich bestätigt -> gleicher Tarif
-  if (mb === 'ja') {
-    return {
-      ...BAUMASCHINE_TARIF,
-      reason: isBaumaschinenKategorie
-        ? 'Bedienung einer fest aufgebauten Maschine oder Anlage ist wesentlicher Bestandteil des Einsatzes. Es gilt der veröffentlichte Tarif Baumaschinenführer / Mischmeister.'
-        : 'Bedienung einer fest aufgebauten Maschine oder Anlage wurde bestätigt; damit gilt der veröffentlichte Tarif Baumaschinenführer / Mischmeister unabhängig von der zunächst gewählten Kategorie.',
-    };
-  }
-
-  // 3. Tätigkeit nicht eindeutig beschrieben -> Tarifkategorie wird manuell zugeordnet
-  if (mb === '' || mb === 'unklar') {
+  // 2. Keine Tarifkarte gewählt -> Zuordnung zu einem veröffentlichten Tarif erforderlich
+  if (!kategorie) {
     return { ...PRUEFUNG, reason: ZUORDNUNG_HINWEIS };
   }
 
-  // 4. Kategorie Spezialfahrzeug gewählt, Tätigkeit dazu aber nicht eindeutig
-  if (isBaumaschinenKategorie) {
-    return { ...PRUEFUNG, reason: ZUORDNUNG_HINWEIS };
-  }
+  // Möglicher Widerspruch: Beschreibung deutet auf Anlagenbedienung, gewählt wurde CE.
+  const conflictNote = keywordHit
+    ? ' Interner Kontrollhinweis: Die Tätigkeitsbeschreibung nennt ein Spezialfahrzeug bzw. eine technische Anlage – Tarifauswahl des Bestellers bleibt unverändert gespeichert.'
+    : '';
 
   if (isWoche) {
     return {
@@ -150,7 +139,8 @@ export function resolveTarif(input: TarifInput): TarifResult {
       einheit: 'je Woche (5 Einsatztage, bis 9 Stunden je Einsatztag)',
       mehrstunde: null,
       needsReview: false,
-      reason: 'Reiner CE-Transport ohne maßgebliche Maschinenbedienung.',
+      internalConflict: keywordHit,
+      reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE – Wochenpreis (reines Fahren und Transportieren).' + conflictNote,
     };
   }
 
@@ -162,7 +152,8 @@ export function resolveTarif(input: TarifInput): TarifResult {
       einheit: 'je Fernverkehrs-Einsatztag',
       mehrstunde: null,
       needsReview: false,
-      reason: 'Reiner CE-Fernverkehr ohne maßgebliche Maschinenbedienung.',
+      internalConflict: keywordHit,
+      reason: 'Vom Besteller gewählter veröffentlichter Tarif: Fernfahrer-Pauschale (reines Fahren und Transportieren).' + conflictNote,
     };
   }
 
@@ -173,7 +164,8 @@ export function resolveTarif(input: TarifInput): TarifResult {
     einheit: 'je Einsatztag bis 9 Stunden',
     mehrstunde: null,
     needsReview: false,
-    reason: 'Reiner CE-Transport ohne maßgebliche Maschinenbedienung.',
+    internalConflict: keywordHit,
+    reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE (reines Fahren und Transportieren).' + conflictNote,
   };
 }
 
