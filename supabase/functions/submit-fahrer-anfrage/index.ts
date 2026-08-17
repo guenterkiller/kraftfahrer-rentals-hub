@@ -3,6 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
 import { AdminBookingNotification } from '../_shared/email-templates/admin-booking-notification.tsx';
+import { resolveTarif, MASCHINENBEDIENUNG_LABELS, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
+import { listSurchargeDays } from '../_shared/german-holidays.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -47,9 +49,14 @@ interface FahrerAnfrageRequest {
   };
   einsatzbeginn?: string;
   einsatzdauer?: string;
+  einsatzende?: string;
   fahrzeugtyp?: string;
   anforderungen?: string[];
   nachricht?: string;
+
+  // Tarifzuordnung (Formular)
+  maschinenbedienung?: string;
+  tarif_key?: string;
   
   // Consents
   consents?: {
@@ -129,6 +136,27 @@ const handler = async (req: Request): Promise<Response> => {
     const isFernfahrerTarif = anforderungen.some((a: string) => 
       a.toLowerCase().includes('fernverkehr') || a.toLowerCase().includes('fernfahrer')
     );
+
+    // Tarifzuordnung serverseitig (regelbasiert, nie reine Stichworterkennung)
+    const maschinenbedienungRaw = String(requestData.maschinenbedienung || '').trim().toLowerCase();
+    const maschinenbedienung: Maschinenbedienung =
+      maschinenbedienungRaw === 'ja' || maschinenbedienungRaw === 'nein' || maschinenbedienungRaw === 'unklar'
+        ? (maschinenbedienungRaw as Maschinenbedienung)
+        : '';
+    const tarif = resolveTarif({
+      kategorie: fahrzeugtyp,
+      maschinenbedienung,
+      longDistance: isFernfahrerTarif,
+      beschreibung: nachricht,
+    });
+
+    // Wochenend-/Feiertage im Einsatzzeitraum
+    const surchargeDays = listSurchargeDays(
+      String(requestData.einsatzbeginn || ''),
+      String(requestData.einsatzende || requestData.einsatzbeginn || '')
+    );
+    const weekendDays = surchargeDays.filter((d) => d.kind !== 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
+    const holidayDays = surchargeDays.filter((d) => d.kind === 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
     
     // Consent data
     const datenschutz = Boolean(requestData.datenschutz);
@@ -237,7 +265,18 @@ const handler = async (req: Request): Promise<Response> => {
       besonderheiten: anforderungen.length > 0 ? anforderungen.join(", ") : null,
       nachricht: nachricht,
       status: 'open', // Anfragen starten als 'open' (erlaubte Werte: open, assigned, completed, cancelled)
-      billing_model: billing_model
+      billing_model: billing_model,
+      // Tarifzuordnung dauerhaft am Auftrag speichern
+      tarif_type: tarif.tarif,
+      tarif_label: tarif.needsReview ? null : tarif.label,
+      tarif_netto: tarif.netto,
+      tarif_unit: tarif.needsReview ? null : tarif.einheit,
+      tarif_mehrstunde_netto: tarif.mehrstunde,
+      tarif_needs_review: tarif.needsReview,
+      tarif_reason: tarif.reason,
+      maschinenbedienung: maschinenbedienung || null,
+      weekend_days: weekendDays.length ? weekendDays : null,
+      holiday_days: holidayDays.length ? holidayDays : null
     };
 
     console.log('Checking for duplicates before inserting...');
@@ -303,6 +342,7 @@ const handler = async (req: Request): Promise<Response> => {
           message: nachricht,
           einsatzbeginn: einsatzbeginn || '',
           einsatzdauer: einsatzdauer || '',
+          einsatzende: requestData.einsatzende || '',
           fahrzeugtyp: fahrzeugtyp,
           anforderungen: anforderungen,
           customer_street: customer_street,
@@ -312,7 +352,9 @@ const handler = async (req: Request): Promise<Response> => {
           einsatzort: einsatzort,
           isFernfahrerTarif: isFernfahrerTarif,
           weekend_holiday_affected: weekend_holiday_affected,
-          weekend_holiday_acknowledged: weekend_holiday_acknowledged
+          weekend_holiday_acknowledged: weekend_holiday_acknowledged,
+          tarif: tarif,
+          surcharge_days: surchargeDays
         }
       });
 
@@ -331,13 +373,13 @@ const handler = async (req: Request): Promise<Response> => {
         .single();
 
       if (adminSettings?.admin_email) {
-        // Determine driver type for display
-        let driverTypeDisplay = "LKW CE Fahrer";
-        if (fahrzeugtyp.toLowerCase().includes('baumaschine') || 
-            fahrzeugtyp.toLowerCase().includes('bagger') ||
-            fahrzeugtyp.toLowerCase().includes('radlader')) {
-          driverTypeDisplay = "Baumaschinenführer";
-        }
+        // Fahrertyp aus der regelbasierten Tarifzuordnung (kein Stichwort-Raten)
+        const driverTypeDisplay = tarif.needsReview
+          ? 'Fahrertyp unklar – manuelle Prüfung'
+          : tarif.label;
+        const adminSubject = tarif.needsReview
+          ? `Neue Buchungsanfrage: Tarif manuell prüfen – ${customer_city}`
+          : `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`;
 
         const adminEmailHtml = await renderAsync(
           React.createElement(AdminBookingNotification, {
@@ -353,6 +395,11 @@ const handler = async (req: Request): Promise<Response> => {
             billingModel: billing_model,
             jobId: jobRequest.id,
             isFernfahrerTarif: isFernfahrerTarif,
+            tarif: tarif,
+            maschinenbedienungLabel: maschinenbedienung
+              ? MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']
+              : 'Keine Angabe',
+            surchargeDays: surchargeDays.map((d) => `${d.label} – ${d.percent} % Zuschlag`),
           })
         );
 
@@ -362,7 +409,7 @@ const handler = async (req: Request): Promise<Response> => {
         const adminEmailResponse = await resend.emails.send({
           from: "Fahrerexpress System <info@kraftfahrer-mieten.com>",
           to: [adminSettings.admin_email],
-          subject: `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`,
+          subject: adminSubject,
           html: adminEmailHtml,
         });
 
@@ -372,7 +419,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           await supabase.from('email_log').insert({
             recipient: adminSettings.admin_email,
-            subject: `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`,
+            subject: adminSubject,
             template: 'admin_booking_notification',
             status: 'failed',
             job_id: jobRequest.id,
@@ -383,7 +430,7 @@ const handler = async (req: Request): Promise<Response> => {
           
           await supabase.from('email_log').insert({
             recipient: adminSettings.admin_email,
-            subject: `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`,
+            subject: adminSubject,
             template: 'admin_booking_notification',
             status: 'sent',
             job_id: jobRequest.id,
