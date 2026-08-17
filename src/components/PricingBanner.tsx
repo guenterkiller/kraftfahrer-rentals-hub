@@ -2,6 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import TarifCardText from "@/components/TarifCardText";
+import { TARIF_TEXTE } from "@/lib/tarifTexte";
 
 const PricingBanner = () => {
   const scrollToForm = (e: React.MouseEvent) => {
@@ -30,10 +32,12 @@ const PricingBanner = () => {
             <CardContent className="p-5">
               <div className="text-center">
                 <h3 className="text-xl font-bold text-red-900 mb-2">LKW-Fahrer CE</h3>
-                <div className="text-4xl font-bold text-red-700 mb-1">349 €</div>
-                <p className="text-red-800 font-medium text-sm mb-3">pro Einsatztag</p>
-                <p className="text-red-700 text-xs">Einsatzdauer bis max. 9 Stunden je Einsatztag</p>
-                <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.lkw_ce}
+                      amountClassName="text-4xl font-bold text-red-700 mb-1"
+                      unitClassName="text-red-800 font-medium text-sm mb-2"
+                      detailClassName="text-red-700 text-xs mt-1"
+                    />
               </div>
             </CardContent>
           </Card>
@@ -46,10 +50,12 @@ const PricingBanner = () => {
             <CardContent className="p-5">
               <div className="text-center">
                 <h3 className="text-xl font-bold text-red-900 mb-2 pr-20">LKW-Fahrer CE – Wochenpreis</h3>
-                <div className="text-4xl font-bold text-red-700 mb-1">1.645 €</div>
-                <p className="text-red-800 font-medium text-sm mb-3">pro Woche</p>
-                <p className="text-red-700 text-xs">Nur für LKW-Fahrer CE: 5 Einsatztage</p>
-                <p className="text-red-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.lkw_ce_woche}
+                      amountClassName="text-4xl font-bold text-red-700 mb-1"
+                      unitClassName="text-red-800 font-medium text-sm mb-2"
+                      detailClassName="text-red-700 text-xs mt-1"
+                    />
               </div>
             </CardContent>
           </Card>
@@ -59,10 +65,12 @@ const PricingBanner = () => {
             <CardContent className="p-5">
               <div className="text-center">
                 <h3 className="text-xl font-bold text-green-900 mb-2">Fernfahrer-Pauschale</h3>
-                <div className="text-4xl font-bold text-green-700 mb-1">450 €</div>
-                <p className="text-green-800 font-medium text-sm mb-3">pro Einsatztag</p>
-                <p className="text-green-700 text-xs">Gültig für: 1 Fernverkehrs-Einsatztag</p>
-                <p className="text-green-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.fernfahrer}
+                      amountClassName="text-4xl font-bold text-green-700 mb-1"
+                      unitClassName="text-green-800 font-medium text-sm mb-2"
+                      detailClassName="text-green-700 text-xs mt-1"
+                    />
               </div>
             </CardContent>
           </Card>
@@ -71,11 +79,13 @@ const PricingBanner = () => {
           <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-xl transition-all duration-300">
             <CardContent className="p-5">
               <div className="text-center">
-                <h3 className="text-xl font-bold text-orange-900 mb-2">Baumaschinenführer / Mischmeister</h3>
-                <div className="text-4xl font-bold text-orange-700 mb-1">489 €</div>
-                <p className="text-orange-800 font-medium text-sm mb-3">pro Einsatztag</p>
-                <p className="text-orange-700 text-xs">Gültig für: bis 8 Stunden</p>
-                <p className="text-orange-700 text-xs mt-1">Zusätzlich: An- und Abfahrt</p>
+                <h3 className="text-xl font-bold text-orange-900 mb-2">{TARIF_TEXTE.baumaschine.name}</h3>
+                <TarifCardText
+                      tarif={TARIF_TEXTE.baumaschine}
+                      amountClassName="text-4xl font-bold text-orange-700 mb-1"
+                      unitClassName="text-orange-800 font-medium text-sm mb-2"
+                      detailClassName="text-orange-700 text-xs mt-1"
+                    />
               </div>
             </CardContent>
           </Card>

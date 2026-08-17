@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import TarifCardText from "@/components/TarifCardText";
+import { TARIF_TEXTE, tarifKurz } from "@/lib/tarifTexte";
 import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -389,10 +391,12 @@ const SimpleBookingForm = () => {
                     <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
-                    <div className="text-2xl font-bold text-foreground">349 €</div>
-                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">Einsatzdauer bis maximal 9 Stunden je Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
+                    <TarifCardText
+                      tarif={TARIF_TEXTE.lkw_ce}
+                      amountClassName="text-2xl font-bold text-foreground"
+                      unitClassName="text-xs font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
                   </CardContent>
                 </Card>
 
@@ -404,10 +408,12 @@ const SimpleBookingForm = () => {
                     <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE – Wochenpreis</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
-                    <div className="text-2xl font-bold text-foreground">1.645 €</div>
-                    <div className="text-xs font-medium text-foreground">pro Woche</div>
-                    <div className="text-xs text-muted-foreground">5 Einsatztage · Einsatzdauer bis maximal 9 Stunden je Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
+                    <TarifCardText
+                      tarif={TARIF_TEXTE.lkw_ce_woche}
+                      amountClassName="text-2xl font-bold text-foreground"
+                      unitClassName="text-xs font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
                   </CardContent>
                 </Card>
 
@@ -416,22 +422,26 @@ const SimpleBookingForm = () => {
                     <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">Fernfahrer-Pauschale</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
-                    <div className="text-2xl font-bold text-foreground">450 €</div>
-                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">1 Fernverkehrs-Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
+                    <TarifCardText
+                      tarif={TARIF_TEXTE.fernfahrer}
+                      amountClassName="text-2xl font-bold text-foreground"
+                      unitClassName="text-xs font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
                   </CardContent>
                 </Card>
 
                 <Card className="bg-card border border-border border-t-4 border-t-orange-500 flex flex-col h-full">
                   <CardHeader className="pb-2 px-3 pt-3 min-h-[52px]">
-                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">Baumaschinenführer / Mischmeister</CardTitle>
+                    <CardTitle className="text-sm lg:text-base font-semibold leading-tight break-words hyphens-auto">{TARIF_TEXTE.baumaschine.name}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-1 px-3 pb-3 text-center flex-1">
-                    <div className="text-2xl font-bold text-foreground">489 €</div>
-                    <div className="text-xs font-medium text-foreground">pro Einsatztag</div>
-                    <div className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden Einsatzzeit</div>
-                    <div className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</div>
+                    <TarifCardText
+                      tarif={TARIF_TEXTE.baumaschine}
+                      amountClassName="text-2xl font-bold text-foreground"
+                      unitClassName="text-xs font-medium text-foreground"
+                      detailClassName="text-xs text-muted-foreground"
+                    />
                   </CardContent>
                 </Card>
               </div>
@@ -596,7 +606,7 @@ const SimpleBookingForm = () => {
                         />
                         <span className="font-semibold text-foreground">LKW-Fahrer CE</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">349 € pro Einsatztag · Einsatzdauer bis maximal 9 Stunden · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">{tarifKurz('lkw_ce')}</div>
                     </label>
 
                     {/* LKW-Fahrer CE – Wochenpreis */}
@@ -621,7 +631,7 @@ const SimpleBookingForm = () => {
                         />
                         <span className="font-semibold text-foreground">LKW-Fahrer CE – Wochenpreis</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">1.645 € pro Woche · 5 Einsatztage · Einsatzdauer bis maximal 9 Stunden je Einsatztag · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">{tarifKurz('lkw_ce_woche')}</div>
                     </label>
 
                     {/* Fernfahrer-Pauschale */}
@@ -643,7 +653,7 @@ const SimpleBookingForm = () => {
                         />
                         <span className="font-semibold text-foreground">Fernfahrer-Pauschale</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">450 € pro Einsatztag · 1 Fernverkehrs-Einsatztag · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">{tarifKurz('fernfahrer')}</div>
                     </label>
 
                     {/* Baumaschinenführer / Mischmeister */}
@@ -665,7 +675,7 @@ const SimpleBookingForm = () => {
                         />
                         <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister / Spezialfahrzeuge (Maschinenbedienung)</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">489 € pro Einsatztag · bis 8 Stunden Einsatzzeit · zzgl. An- und Abfahrt</div>
+                      <div className="text-xs text-muted-foreground pl-8">{tarifKurz('baumaschine')}</div>
                       <div className="text-xs text-muted-foreground pl-8">
                         z. B. {SPEZIALFAHRZEUG_BEISPIELE.join(' · ')}
                       </div>
@@ -715,10 +725,10 @@ const SimpleBookingForm = () => {
                         <option value="Sonstiges">Sonstiges</option>
                       </select>
                       <div className="mt-3 text-xs text-orange-900">
-                        <div className="font-semibold">489 € pro Einsatztag</div>
-                        <div>Gültig für: bis 8 Stunden Einsatzzeit</div>
-                        <div>60 € netto je angefangene Mehrstunde</div>
-                        <div>Zusätzlich: An- und Abfahrt</div>
+                        <div className="font-semibold">{TARIF_TEXTE.baumaschine.priceLine}</div>
+                        {TARIF_TEXTE.baumaschine.details.map((d) => (
+                          <div key={d}>{d}</div>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -875,7 +885,7 @@ const SimpleBookingForm = () => {
                             Fernfahrer-Pauschale (1 Fernverkehrs-Einsatztag)
                           </Label>
                           <p className="text-xs text-green-800 mt-1">
-                            450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
+                            {TARIF_TEXTE.fernfahrer.priceLine} – {TARIF_TEXTE.fernfahrer.details[0]}
                           </p>
                         </div>
                       </div>

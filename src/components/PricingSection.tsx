@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import TarifCardText from "@/components/TarifCardText";
+import { TARIF_TEXTE } from "@/lib/tarifTexte";
 
 const PricingSection = () => {
   const scrollToBooking = () => {
@@ -37,10 +39,12 @@ const PricingSection = () => {
               <CardTitle className="text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
-              <div className="text-4xl font-bold text-foreground">349 €</div>
-              <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Einsatzdauer bis max. 9 Stunden je Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+              <TarifCardText
+                    tarif={TARIF_TEXTE.lkw_ce}
+                    amountClassName="text-4xl font-bold text-foreground"
+                    unitClassName="text-sm font-medium text-foreground"
+                    detailClassName="text-xs text-muted-foreground"
+                  />
               <Button
                 className="w-full h-11 mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold"
                 onClick={() => trackClick('category_click_lkw', 'LKW-Fahrer CE', 349)}
@@ -59,10 +63,12 @@ const PricingSection = () => {
               <CardTitle className="text-base font-semibold leading-tight break-words hyphens-auto">LKW-Fahrer CE – Wochenpreis</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
-              <div className="text-4xl font-bold text-foreground">1.645 €</div>
-              <p className="text-sm font-medium text-foreground">pro Woche</p>
-              <p className="text-xs text-muted-foreground">Nur für LKW-Fahrer CE: 5 Einsatztage</p>
-              <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+              <TarifCardText
+                    tarif={TARIF_TEXTE.lkw_ce_woche}
+                    amountClassName="text-4xl font-bold text-foreground"
+                    unitClassName="text-sm font-medium text-foreground"
+                    detailClassName="text-xs text-muted-foreground"
+                  />
               <Button
                 className="w-full h-11 mt-auto bg-red-700 hover:bg-red-800 text-white text-sm font-semibold"
                 onClick={() => trackClick('category_click_lkw_woche', 'LKW-Fahrer CE Wochenpreis', 1645)}
@@ -78,10 +84,12 @@ const PricingSection = () => {
               <CardTitle className="text-base font-semibold leading-tight break-words hyphens-auto">Fernfahrer-Pauschale</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
-              <div className="text-4xl font-bold text-foreground">450 €</div>
-              <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Gültig für: 1 Fernverkehrs-Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+              <TarifCardText
+                    tarif={TARIF_TEXTE.fernfahrer}
+                    amountClassName="text-4xl font-bold text-foreground"
+                    unitClassName="text-sm font-medium text-foreground"
+                    detailClassName="text-xs text-muted-foreground"
+                  />
               <Button
                 className="w-full h-11 mt-auto bg-green-700 hover:bg-green-800 text-white text-sm font-semibold"
                 onClick={() => trackClick('category_click_fernfahrer', 'Fernfahrer-Pauschale', 450)}
@@ -94,13 +102,15 @@ const PricingSection = () => {
           {/* Baumaschinenführer / Mischmeister */}
           <Card className="bg-card border border-border border-t-4 border-t-orange-500 hover:shadow-lg transition-shadow flex flex-col h-full">
             <CardHeader className="pb-2 min-h-[64px]">
-              <CardTitle className="text-base font-semibold leading-tight break-words hyphens-auto">Baumaschinenführer / Mischmeister</CardTitle>
+              <CardTitle className="text-base font-semibold leading-tight break-words hyphens-auto">{TARIF_TEXTE.baumaschine.name}</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col flex-1 pt-0 text-center space-y-2">
-              <div className="text-4xl font-bold text-foreground">489 €</div>
-              <p className="text-sm font-medium text-foreground">pro Einsatztag</p>
-              <p className="text-xs text-muted-foreground">Gültig für: bis 8 Stunden Einsatzzeit</p>
-              <p className="text-xs text-muted-foreground">Zusätzlich: An- und Abfahrt</p>
+              <TarifCardText
+                    tarif={TARIF_TEXTE.baumaschine}
+                    amountClassName="text-4xl font-bold text-foreground"
+                    unitClassName="text-sm font-medium text-foreground"
+                    detailClassName="text-xs text-muted-foreground"
+                  />
               <Button
                 className="w-full h-11 mt-auto bg-orange-600 hover:bg-orange-700 text-white text-xs sm:text-sm font-semibold whitespace-normal leading-tight px-2"
                 onClick={() => trackClick('category_click_baumaschinen', 'Baumaschinenführer / Mischmeister', 489)}
@@ -110,6 +120,18 @@ const PricingSection = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Wochenpreis – verbindliche Abgrenzung */}
+        <Card className="max-w-5xl mx-auto mb-8">
+          <CardHeader>
+            <CardTitle className="text-base">{TARIF_TEXTE.lkw_ce_woche.name}</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm space-y-2">
+            {TARIF_TEXTE.lkw_ce_woche.notes?.map((n) => (
+              <p key={n}>{n}</p>
+            ))}
+          </CardContent>
+        </Card>
 
         {/* An- und Abfahrt */}
         <Card className="max-w-5xl mx-auto mb-8">
@@ -233,7 +255,7 @@ const PricingSection = () => {
               <li>• Einsätze mit längerer Tagesabwesenheit</li>
             </ul>
             <p>
-              Die <strong>Fernfahrer-Pauschale (450 € netto / Einsatztag)</strong> kann anstelle
+              Die <strong>Fernfahrer-Pauschale (450,00 € netto je tatsächlichem Fernverkehrs-Einsatztag)</strong> kann anstelle
               des normalen Tagessatzes verwendet werden.
             </p>
           </CardContent>

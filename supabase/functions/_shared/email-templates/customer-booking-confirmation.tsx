@@ -1,6 +1,7 @@
 import { Heading, Text, Section, Hr } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } from './base-email.tsx';
+import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
 
 interface CustomerBookingConfirmationProps {
   customerName: string;
@@ -105,22 +106,20 @@ export const CustomerBookingConfirmation = ({
             <td style={{ padding: '5px 0', fontSize: '14px', width: '45%' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
             <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">{tarif.label}</td>
           </tr>
-          {tarif.netto !== null && (
+          {tarifTextByKey(tarif.tarif) && (
             <tr>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Tagessatz:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Preis:</strong></td>
               <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">
-                {tarif.netto.toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto je tatsächlichem Einsatztag {tarif.einheit}
+                {tarifTextByKey(tarif.tarif)!.priceLine}
               </td>
             </tr>
           )}
-          {tarif.mehrstunde !== null && (
-            <tr>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Mehrarbeit:</strong></td>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
-                {tarif.mehrstunde.toLocaleString('de-DE', { minimumFractionDigits: 2 })} € netto je angefangene Stunde
-              </td>
+          {tarifTextByKey(tarif.tarif)?.details.map((d) => (
+            <tr key={d}>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{d}</td>
             </tr>
-          )}
+          ))}
           <tr>
             <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>An- und Abfahrt:</strong></td>
             <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
@@ -171,7 +170,7 @@ export const CustomerBookingConfirmation = ({
     {isFernfahrerTarif && !tarif && (
       <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeftColor: '#3b82f6' })}>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.
+          {TARIF_TEXTE.fernfahrer.name}: {TARIF_TEXTE.fernfahrer.priceLine}. {TARIF_TEXTE.fernfahrer.details.join(' ')}
         </Text>
       </Section>
     )}
@@ -193,12 +192,21 @@ export const CustomerBookingConfirmation = ({
         Preis gemäß Auswahl zzgl. An- und Abfahrt. Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und Feiertagszuschläge gelten automatisch; eine zusätzliche Vereinbarung ist hierfür nicht erforderlich. Weitere, nicht veröffentlichte Kosten entstehen nur nach vorheriger ausdrücklicher Vereinbarung.
       </Text>
       <ul style={{ margin: '10px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-        <li><strong>LKW-Fahrer CE:</strong> 349 € pro Einsatztag (Einsatzdauer bis max. 9 Stunden je Einsatztag)</li>
-        <li><strong>LKW-Fahrer CE – Wochenpreis:</strong> 1.645 € pro Woche (5 Einsatztage · Einsatzdauer bis max. 9 Stunden je Einsatztag)</li>
-        <li><strong>Fernfahrer-Pauschale:</strong> 450 € pro Fernverkehrs-Einsatztag</li>
-        <li><strong>Baumaschinenführer / Mischmeister:</strong> 489 € pro Einsatztag (bis 8 Stunden Einsatzzeit)</li>
+        {[TARIF_TEXTE.lkw_ce, TARIF_TEXTE.lkw_ce_woche, TARIF_TEXTE.fernfahrer, TARIF_TEXTE.baumaschine].map((t) => (
+          <li key={t.name}>
+            <strong>{t.name}:</strong> {t.priceLine}
+            <ul style={{ margin: '4px 0 8px 0', paddingLeft: '18px' }}>
+              {t.details.map((d) => (
+                <li key={d}>{d}</li>
+              ))}
+            </ul>
+          </li>
+        ))}
         <li><strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer</li>
       </ul>
+      {TARIF_TEXTE.lkw_ce_woche.notes?.map((n) => (
+        <Text key={n} {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>{n}</Text>
+      ))}
       <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', fontStyle: 'italic', marginTop: '15px' })}>
         Alle Preise netto zzgl. gesetzlicher MwSt. Fahrzeuge werden nicht gestellt. Zahlungsziel: 7 Tage netto ab Rechnungsdatum.
       </Text>
