@@ -13,6 +13,12 @@ import { useToast } from "@/hooks/use-toast";
 import { PWAInstallButton } from "@/components/PWAInstallButton";
 import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
+import {
+  resolveTarif,
+  MASCHINENBEDIENUNG_LABELS,
+  SPEZIALFAHRZEUG_BEISPIELE,
+  type Maschinenbedienung,
+} from "@/lib/tarifZuordnung";
 
 const SimpleBookingForm = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -41,6 +47,8 @@ const SimpleBookingForm = () => {
   const [requiresBf3, setRequiresBf3] = useState(false);
   const [fahrzeugtyp, setFahrzeugtyp] = useState('');
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
+  const [maschinenbedienung, setMaschinenbedienung] = useState<Maschinenbedienung>('');
+  const [beschreibung, setBeschreibung] = useState('');
   const [einsatzbeginn, setEinsatzbeginn] = useState('');
   const [einsatzende, setEinsatzende] = useState('');
   const [vorname, setVorname] = useState('');
@@ -51,6 +59,15 @@ const SimpleBookingForm = () => {
 
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
   const weekendHoliday = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+
+  // Tarifzuordnung (regelbasiert, keine reine Stichworterkennung)
+  const tarif = resolveTarif({
+    kategorie: fahrzeugtyp,
+    maschinenbedienung,
+    longDistance,
+    taetigkeit: bauTaetigkeit,
+    beschreibung,
+  });
 
   // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
