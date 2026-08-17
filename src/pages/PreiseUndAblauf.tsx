@@ -6,7 +6,7 @@ import { CheckCircle, Clock, Euro, FileText, Shield, Truck, AlertCircle } from "
 import { useSEO } from "@/hooks/useSEO";
 import { Link } from "react-router-dom";
 import TarifCardText from "@/components/TarifCardText";
-import { TARIF_TEXTE } from "@/lib/tarifTexte";
+import { TARIF_TEXTE, tarifTitel, PREISKARTEN_HINWEIS } from "@/lib/tarifTexte";
 const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
@@ -61,7 +61,7 @@ const PreiseUndAblauf = () => {
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-center mb-4">Mietfahrer & selbstständige Fahrer – Preise</h2>
               <p className="text-center text-sm text-muted-foreground max-w-3xl mx-auto mb-8">
-                Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen. Fahrzeuge werden nicht gestellt. Alle Preise verstehen sich netto zzgl. gesetzlicher MwSt.
+                Die Fahrerexpress-Agentur vermittelt selbstständige Unternehmer für Fahrerdienstleistungen. Fahrzeuge werden nicht gestellt. {PREISKARTEN_HINWEIS}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto mb-6">
                 <Card className="border-2 border-red-200 bg-gradient-to-br from-red-50 to-red-100 hover:shadow-lg transition-shadow">
@@ -123,8 +123,8 @@ const PreiseUndAblauf = () => {
 
                 <Card className="border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 hover:shadow-lg transition-shadow">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base sm:text-lg text-orange-900 leading-snug">
-                      {TARIF_TEXTE.baumaschine.name}
+                    <CardTitle className="text-sm sm:text-base text-orange-900 leading-snug break-words hyphens-none">
+                      {tarifTitel(TARIF_TEXTE.baumaschine.name)}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="pt-0">
