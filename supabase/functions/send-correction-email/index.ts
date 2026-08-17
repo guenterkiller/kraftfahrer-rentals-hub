@@ -9,9 +9,12 @@ const corsHeaders = {
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  const auth = (req.headers.get("authorization") || "").replace("Bearer ", "");
   const provided = req.headers.get("x-internal-secret");
   const expected = Deno.env.get("INTERNAL_FN_SECRET");
-  if (!expected || provided !== expected) {
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  const ok = (expected && provided === expected) || (serviceKey && auth === serviceKey);
+  if (!ok) {
     return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } });
   }
   const { to, subject, html } = await req.json();
