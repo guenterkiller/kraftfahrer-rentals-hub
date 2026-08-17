@@ -57,10 +57,10 @@ const SimpleBookingForm = () => {
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
   const weekendHoliday = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
 
-  // Tarifzuordnung (regelbasiert, keine reine Stichworterkennung)
+  // Tarifzuordnung ausschließlich anhand der vom Besteller gewählten Tarifkarte
   const tarif = resolveTarif({
     kategorie: fahrzeugtyp,
-    maschinenbedienung,
+    maschinenbedienung: '',
     longDistance,
     taetigkeit: bauTaetigkeit,
     beschreibung,
@@ -116,16 +116,6 @@ const SimpleBookingForm = () => {
       return;
     }
 
-    // Pflichtangabe: Maschinen-/Anlagenbedienung
-    if (!maschinenbedienung) {
-      toast({
-        title: "Bitte Angabe zur Maschinen- oder Anlagenbedienung auswählen",
-        description: "Diese Angabe ist für die richtige Tarifzuordnung erforderlich.",
-        variant: "destructive",
-      });
-      setLoading(false); setSubmitted(false);
-      return;
-    }
     if (einsatzende < einsatzbeginn) {
       toast({ title: "Einsatzende darf nicht vor Einsatzbeginn liegen", variant: "destructive" });
       setLoading(false); setSubmitted(false);
