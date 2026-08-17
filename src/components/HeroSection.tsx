@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Truck, Clock, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
 
 /**
  * LCP-optimierte Hero Section mit:
@@ -10,6 +11,8 @@ import { Link } from "react-router-dom";
  * - fetchpriority="high" für priorisiertes Laden
  */
 const HeroSection = () => {
+  const goToBooking = useGoToBooking();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-32 sm:pb-40 md:pb-48">
       {/* Hero image optimiert für Core Web Vitals - LCP Element */}
@@ -84,14 +87,8 @@ const HeroSection = () => {
             asChild
           >
             <a className="text-primary-foreground" 
-              href="#fahreranfrage"
-              onClick={(e) => {
-                e.preventDefault();
-                const element = document.querySelector('#fahreranfrage');
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
+              href={BOOKING_LINK}
+              onClick={goToBooking}
               aria-label="Direkt zum Fahreranfrage-Formular springen"
             >
               Jetzt Fahrer anfragen

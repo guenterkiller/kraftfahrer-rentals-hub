@@ -133,6 +133,8 @@ const App = () => (
           <Routes>
             {/* Critical path: Index synchron geladen */}
             <Route path="/" element={<Index />} />
+            {/* Buchungsseite (gleiche Seite wie Start, Ziel für /fahrer-buchen#buchungsformular) */}
+            <Route path="/fahrer-buchen" element={<Index />} />
             
             {/* Landing Pages - lazy loaded */}
             <Route path="/lkw-fahrer-buchen" element={<LKWFahrerBuchen />} />

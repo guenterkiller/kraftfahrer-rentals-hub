@@ -1,15 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 
 const BookingPriorityBanner = () => {
-  const scrollToBooking = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const element = document.querySelector('#fahreranfrage');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const goToBooking = useGoToBooking();
 
   return (
     <section className="py-8 bg-background">
@@ -32,7 +28,7 @@ const BookingPriorityBanner = () => {
               
               <div className="flex-shrink-0">
                 <Button 
-                  onClick={scrollToBooking}
+                  onClick={goToBooking}
                   size="lg"
                   className="text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all group"
                   aria-label="Zum Buchungsformular springen"

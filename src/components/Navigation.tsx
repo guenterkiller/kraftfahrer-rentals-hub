@@ -2,10 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const goToBooking = useGoToBooking();
 
   // Close mobile menu on escape key press
   useEffect(() => {
@@ -105,14 +108,8 @@ const Navigation = () => {
               asChild
             >
               <Link 
-                to="/#fahreranfrage"
-                onClick={(e) => {
-                  const form = document.querySelector('#booking-form');
-                  if (form) {
-                    e.preventDefault();
-                    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                }}
+                to={BOOKING_LINK}
+                onClick={goToBooking}
                 aria-label="Fahrer buchen - Zum Formular"
               >
                 <span className="inline-block animate-drive">🚚</span> Fahrer buchen
@@ -146,14 +143,10 @@ const Navigation = () => {
                 asChild
               >
                 <Link 
-                  to="/#fahreranfrage"
+                  to={BOOKING_LINK}
                   onClick={(e) => {
                     setIsMenuOpen(false);
-                    const form = document.querySelector('#booking-form');
-                    if (form) {
-                      e.preventDefault();
-                      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+                    goToBooking(e);
                   }}
                   role="menuitem"
                   aria-label="Fahrer buchen - Zum Formular"

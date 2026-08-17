@@ -1,13 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 
 const ContactSection = () => {
-  const scrollToForm = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const form = document.querySelector('#booking-form');
-    if (form) {
-      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const goToBooking = useGoToBooking();
 
   return (
     <section className="py-16 bg-background">
@@ -20,7 +16,7 @@ const ContactSection = () => {
             Nutzen Sie unser Buchungsformular für eine schnelle und unkomplizierte Anfrage.
           </p>
           <Button 
-            onClick={scrollToForm}
+            onClick={goToBooking}
             size="lg"
             className="text-lg px-12 py-6 min-h-[56px]"
             aria-label="Zum Buchungsformular springen"

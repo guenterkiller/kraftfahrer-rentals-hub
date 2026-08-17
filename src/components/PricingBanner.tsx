@@ -2,17 +2,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 
 const PricingBanner = () => {
-  const scrollToForm = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const element = document.querySelector('#fahreranfrage');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const goToBooking = useGoToBooking();
 
   return (
     <section className="py-12 bg-gradient-to-br from-gray-50 to-gray-100">
@@ -95,7 +91,7 @@ const PricingBanner = () => {
         <div className="text-center space-y-4">
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button 
-              onClick={scrollToForm}
+              onClick={goToBooking}
               size="lg" 
               className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all"
             >

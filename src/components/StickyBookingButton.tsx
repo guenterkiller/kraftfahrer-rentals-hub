@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 
 const StickyBookingButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,12 +21,7 @@ const StickyBookingButton = () => {
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
-  const scrollToForm = () => {
-    const element = document.querySelector('#fahreranfrage');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const goToBooking = useGoToBooking();
 
   if (!isVisible) return null;
 
@@ -33,7 +30,7 @@ const StickyBookingButton = () => {
       {/* Desktop: Bottom right */}
       <div className="hidden md:block fixed bottom-6 right-6 z-50 animate-fade-in">
         <Button
-          onClick={scrollToForm}
+          onClick={goToBooking}
           size="lg"
           className="shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 text-base px-6 py-6 bg-primary hover:bg-primary/90"
         >
@@ -45,7 +42,7 @@ const StickyBookingButton = () => {
       <div className="md:hidden fixed bottom-4 left-4 right-4 z-50 animate-fade-in">
         <div className="flex gap-2">
           <Button
-            onClick={scrollToForm}
+            onClick={goToBooking}
             size="lg"
             className="flex-1 shadow-2xl text-sm py-6 bg-primary hover:bg-primary/90"
           >

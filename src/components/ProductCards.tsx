@@ -3,16 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, Droplets } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+
 import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 
 const ProductCards = () => {
-  const scrollToForm = () => {
-    const element = document.querySelector('#fahreranfrage');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
+  const scrollToForm = useGoToBooking();
 
   return (
     <section className="py-20 bg-gradient-to-b from-background to-muted/20">
