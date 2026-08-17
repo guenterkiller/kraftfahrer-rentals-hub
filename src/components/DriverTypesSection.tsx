@@ -121,7 +121,7 @@ const DriverTypesSection = () => {
         {/* Pricing summary */}
         <div className="mt-12 p-6 bg-muted rounded-lg max-w-3xl mx-auto text-center">
           <p className="text-sm text-muted-foreground mb-2">
-            <strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer • <strong>Wochenpreis LKW-Fahrer CE:</strong> 1.645 € (5 Einsatztage)
+            <strong>An- und Abfahrt:</strong> erste 25 km frei, danach 0,40 € je gefahrenem Kilometer • <strong>Wochenpreis LKW-Fahrer CE:</strong> 1.645,00 € netto für 5 Einsatztage von Montag bis Freitag – bis zu 9 Stunden Einsatzzeit je Einsatztag
           </p>
           <p className="text-xs text-muted-foreground">
             Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB. Keine Arbeitnehmerüberlassung.
