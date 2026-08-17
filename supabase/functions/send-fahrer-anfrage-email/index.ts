@@ -3,6 +3,7 @@ import { Resend } from "npm:resend@2.0.0";
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
 import { CustomerBookingConfirmation } from '../_shared/email-templates/customer-booking-confirmation.tsx';
+import { analyzeWeekendHoliday } from '../_shared/german-holidays.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -20,6 +21,7 @@ interface FahrerAnfrageEmailRequest {
   message: string;
   einsatzbeginn?: string;
   einsatzdauer?: string;
+  einsatzende?: string;
   fahrzeugtyp: string;
   anforderungen?: string[];
   customer_street?: string;
@@ -69,6 +71,7 @@ const handler = async (req: Request): Promise<Response> => {
       message,
       einsatzbeginn,
       einsatzdauer,
+      einsatzende,
       fahrzeugtyp,
       anforderungen = [],
       customer_street,
@@ -84,7 +87,12 @@ const handler = async (req: Request): Promise<Response> => {
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();
-    const firmaOderName = company ? `${company} (${kundenname})` : kundenname;
+
+    // Maßgeblich ist der tatsächliche Einsatzzeitraum: wenn ISO-Daten vorliegen,
+    // wird die Wochenend-/Feiertagserkennung serverseitig neu berechnet.
+    const computed = einsatzbeginn ? analyzeWeekendHoliday(einsatzbeginn, einsatzende || einsatzbeginn) : undefined;
+    const affected = computed ? computed.affected : Boolean(weekend_holiday_affected);
+    const acknowledged = affected && Boolean(weekend_holiday_acknowledged);
     
     // Format date range
     let zeitraumText = "Nach Absprache";
@@ -132,8 +140,8 @@ const handler = async (req: Request): Promise<Response> => {
         location: adresseText || einsatzort || 'Nicht angegeben',
         message: message,
         isFernfahrerTarif: isFernfahrerTarif,
-        weekendHolidayAffected: Boolean(weekend_holiday_affected),
-        weekendHolidayAcknowledged: Boolean(weekend_holiday_acknowledged),
+        weekendHolidayAffected: affected,
+        weekendHolidayAcknowledged: acknowledged,
         tarif: tarif,
         surchargeDays: surcharge_days,
       })

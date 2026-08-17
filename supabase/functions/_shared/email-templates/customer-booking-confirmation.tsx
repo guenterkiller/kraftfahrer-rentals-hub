@@ -40,6 +40,22 @@ interface CustomerBookingConfirmationProps {
 
 const listStyle = { margin: '6px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' };
 
+const formatEuro = (v: number) =>
+  `${v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+
+/** Neutrale Anrede – es wird kein Geschlecht anhand des Vornamens erraten. */
+const buildSalutation = (customerName?: string, companyName?: string) => {
+  const name = (customerName || '').trim();
+  const company = (companyName || '').trim();
+  if (name) return `Guten Tag ${name},`;
+  if (company) return `Guten Tag ${company},`;
+  return 'Guten Tag,';
+};
+
+/** Wiederholende Sammelhinweise werden im Tarifblock nicht erneut ausgegeben. */
+const withoutRedundantDetails = (details: string[]) =>
+  details.filter((d) => !d.trim().toLowerCase().startsWith('zuzüglich'));
+
 export const CustomerBookingConfirmation = ({
   customerName,
   companyName,
@@ -55,11 +71,16 @@ export const CustomerBookingConfirmation = ({
 }: CustomerBookingConfirmationProps) => {
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
+  const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
+  const mehrstundenSatz =
+    tarif && !tarif.needsReview && typeof tarif.mehrstunde === 'number'
+      ? `${tarif.label}: ${formatEuro(tarif.mehrstunde)} netto je angefangene Stunde`
+      : undefined;
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
       <Heading {...getTextProps(textStyles.heading2, 'heading')}>
-        Sehr geehrte/r {companyName ? `${companyName} (${customerName})` : customerName},
+        {buildSalutation(customerName, companyName)}
       </Heading>
 
       <Text {...getTextProps(textStyles.paragraph)}>
@@ -133,7 +154,15 @@ export const CustomerBookingConfirmation = ({
                 <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Preis:</strong></td>
                 <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">
                   {tarifText.priceLine}
-                  {tarifText.details[0] ? ` – ${tarifText.details[0].charAt(0).toLowerCase()}${tarifText.details[0].slice(1)}` : ''}
+                  {tarifDetails[0] ? ` – ${tarifDetails[0].charAt(0).toLowerCase()}${tarifDetails[0].slice(1)}` : ''}
+                </td>
+              </tr>
+            )}
+            {typeof tarif.mehrstunde === 'number' && (
+              <tr>
+                <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Mehrarbeit:</strong></td>
+                <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
+                  {formatEuro(tarif.mehrstunde)} netto je angefangene Stunde
                 </td>
               </tr>
             )}
@@ -144,9 +173,9 @@ export const CustomerBookingConfirmation = ({
               </td>
             </tr>
           </table>
-          {tarifText && tarifText.details.length > 1 && (
+          {tarifDetails.length > 1 && (
             <ul style={listStyle} className="mobile-text">
-              {tarifText.details.slice(1).map((d) => (
+              {tarifDetails.slice(1).map((d) => (
                 <li key={d}>{d}</li>
               ))}
             </ul>
@@ -195,15 +224,18 @@ export const CustomerBookingConfirmation = ({
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>{MEHRSTUNDENREGEL}</Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          <strong>Veröffentlichte Mehrstundensätze:</strong>
-        </Text>
-        <ul style={listStyle} className="mobile-text">
-          <li>LKW-Fahrer CE: 45,00 € netto je angefangene Stunde</li>
-          <li>Baumaschinenführer / Mischmeister / Spezialfahrzeuge: 60,00 € netto je angefangene Stunde</li>
-        </ul>
+        {mehrstundenSatz && (
+          <>
+            <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+              <strong>Veröffentlichter Mehrstundensatz für Ihren Tarif:</strong>
+            </Text>
+            <ul style={listStyle} className="mobile-text">
+              <li>{mehrstundenSatz}</li>
+            </ul>
+          </>
+        )}
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-          Einsätze, die erheblich über die enthaltene Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, werden gesondert als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet.
+          Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
         </Text>
       </Section>
 
