@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { scrollToBookingForm } from "@/lib/bookingNavigation";
 import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifKurz, tarifTitel } from "@/lib/tarifTexte";
 import { Car, ShieldAlert, Construction } from "lucide-react";
