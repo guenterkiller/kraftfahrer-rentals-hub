@@ -72,10 +72,6 @@ export const CustomerBookingConfirmation = ({
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
-  const mehrstundenSatz =
-    tarif && !tarif.needsReview && typeof tarif.mehrstunde === 'number'
-      ? `${tarif.label}: ${formatEuro(tarif.mehrstunde)} netto je angefangene Stunde`
-      : undefined;
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
