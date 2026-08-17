@@ -17,6 +17,10 @@ export interface TarifText {
   details: string[];
   /** Ergänzende verbindliche Absätze (z. B. Wochenpreis-Abgrenzung) */
   notes?: string[];
+  /** Kompakte Einheit für Preiskarten */
+  cardUnit: string;
+  /** Kompakte Zusatzzeilen für Preiskarten (keine Wiederholungen, keine Ausschlüsse) */
+  cardLines: string[];
 }
 
 const build = (
@@ -24,8 +28,29 @@ const build = (
   amount: string,
   unit: string,
   details: string[],
-  notes?: string[],
-): TarifText => ({ name, amount, unit, priceLine: `${amount} ${unit}`, details, notes });
+  notes: string[] | undefined,
+  cardUnit: string,
+  cardLines: string[],
+): TarifText => ({
+  name,
+  amount,
+  unit,
+  priceLine: `${amount} ${unit}`,
+  details,
+  notes,
+  cardUnit,
+  cardLines,
+});
+
+/** Gemeinsamer Hinweis oberhalb aller Preiskarten (einmalig anzeigen). */
+export const PREISKARTEN_HINWEIS =
+  'Alle Preise netto zzgl. gesetzlicher MwSt. Es gelten die veröffentlichten Preise und Konditionen.';
+
+/** Gemeinsamer Link unterhalb der Preiskarten. */
+export const PREISKARTEN_LINK_TEXT = 'Details: Preise & Konditionen';
+
+/** Titel für Preiskarten mit sauberen Umbruchstellen an Schrägstrichen. */
+export const tarifTitel = (name: string): string => name.replace(/\//g, '/\u200B');
 
 export const TARIF_TEXTE = {
   lkw_ce: build(
@@ -36,6 +61,9 @@ export const TARIF_TEXTE = {
       'Bis zu 9 Stunden Einsatzzeit',
       'Zuzüglich An- und Abfahrt, Mehrstunden sowie gegebenenfalls Wochenend- und Feiertagszuschläge gemäß Preisliste',
     ],
+    undefined,
+    'netto je tatsächlichem Einsatztag',
+    ['Bis zu 9 Stunden Einsatzzeit'],
   ),
   lkw_ce_woche: build(
     'LKW-Fahrer CE – Wochenpreis',
@@ -50,12 +78,17 @@ export const TARIF_TEXTE = {
     [
       'Fällt ein gesetzlicher Feiertag auf einen Montag bis Freitag, ist dieser Feiertagseinsatz ebenfalls nicht im Wochenpreis enthalten und wird separat nach dem geltenden Tagessatz zuzüglich 50 % Feiertagszuschlag berechnet.',
     ],
+    'netto für 5 Einsatztage',
+    ['Montag bis Freitag', 'Bis zu 9 Stunden Einsatzzeit je Einsatztag'],
   ),
   fernfahrer: build(
     'Fernfahrer-Pauschale',
     '450,00 €',
     'netto je tatsächlichem Fernverkehrs-Einsatztag',
     ['Zuzüglich An- und Abfahrt sowie gegebenenfalls veröffentlichter Zuschläge'],
+    undefined,
+    'netto je tatsächlichem Fernverkehrs-Einsatztag',
+    [],
   ),
   baumaschine: build(
     'Baumaschinenführer/Mischmeister/Spezialfahrzeuge',
@@ -66,6 +99,9 @@ export const TARIF_TEXTE = {
       'Mehrarbeit: 60,00 € netto je angefangene Stunde',
       'Zuzüglich An- und Abfahrt sowie gegebenenfalls Wochenend- und Feiertagszuschläge gemäß Preisliste',
     ],
+    undefined,
+    'netto je tatsächlichem Einsatztag',
+    ['Bis zu 8 Stunden Einsatzzeit'],
   ),
 } as const;
 
