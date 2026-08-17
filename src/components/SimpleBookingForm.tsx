@@ -673,60 +673,24 @@ const SimpleBookingForm = () => {
                   </div>
 
                   {/* Pflichtabfrage: Maschinen-/Anlagenbedienung (entscheidet die Tarifzuordnung) */}
-                  <div className="mt-4 p-4 rounded-lg border bg-muted/40">
-                    <fieldset>
-                      <legend className="text-sm font-medium">
-                        Muss der Fahrer am Einsatzort eine fest aufgebaute Maschine oder Anlage bedienen? *
-                      </legend>
-                      <p className="text-xs text-muted-foreground mt-1 mb-3">
-                        Zum Beispiel Pumpe, Saug-, Misch-, Förder- oder Arbeitsanlage. Entscheidend ist die Tätigkeit:
-                        Wird die aufgebaute Maschine auf der Baustelle bedient, gilt der Tarif Baumaschinenführer / Mischmeister
-                        (489 € netto je Einsatztag bis 8 Stunden, 60 € netto je angefangene Mehrstunde). Reiner Transport ohne
-                        maßgebliche Maschinenbedienung bleibt beim LKW-CE-Tarif.
-                      </p>
-                      <div className="space-y-2" role="radiogroup" aria-required="true">
-                        {(['ja', 'nein', 'unklar'] as const).map((opt) => (
-                          <label key={opt} className="flex items-start gap-3 text-sm cursor-pointer">
-                            <input
-                              type="radio"
-                              name="maschinenbedienung"
-                              value={opt}
-                              checked={maschinenbedienung === opt}
-                              onChange={() => setMaschinenbedienung(opt)}
-                              className="mt-0.5 w-4 h-4"
-                              required
-                            />
-                            <span>{MASCHINENBEDIENUNG_LABELS[opt]}</span>
-                          </label>
-                        ))}
-                      </div>
-
-                      {maschinenbedienung && (
-                        <div
-                          className={`mt-3 rounded-lg border p-3 text-sm ${
-                            tarif.needsReview
-                              ? 'border-amber-300 bg-amber-50 text-amber-900'
-                              : 'border-orange-200 bg-orange-50/60 text-orange-900'
-                          }`}
-                          aria-live="polite"
-                        >
-                          <div className="font-semibold">
-                            {tarif.needsReview ? 'Passenden Tarif manuell zuordnen' : `Es gilt: ${tarif.label}`}
-                          </div>
-                          {!tarif.needsReview && tarif.netto && (
-                            <div>
-                              {tarif.netto.toLocaleString('de-DE')} € netto {tarif.einheit}
-                              {tarif.mehrstunde ? ` · ${tarif.mehrstunde} € netto je angefangene Mehrstunde` : ''}
-                            </div>
-                          )}
-                          <div className="text-xs mt-1">{tarif.reason}</div>
+                  {/* Kompakte Tarifvorschau zur gewählten Tarifkarte */}
+                  {fahrzeugtyp && !tarif.needsReview && (
+                    <div
+                      className="mt-4 rounded-lg border border-orange-200 bg-orange-50/60 p-3 text-sm text-orange-900"
+                      aria-live="polite"
+                    >
+                      <div className="font-semibold">Es gilt: {tarif.label}</div>
+                      {tarif.netto && (
+                        <div>
+                          {tarif.netto.toLocaleString('de-DE')} € netto {tarif.einheit}
+                          {tarif.mehrstunde ? ` · ${tarif.mehrstunde} € netto je angefangene Mehrstunde` : ''}
                         </div>
                       )}
-                    </fieldset>
-                  </div>
+                    </div>
+                  )}
 
                   {/* Optionales Tätigkeits-Dropdown bei Baumaschinen/Mischmeister */}
-                  {(fahrzeugtyp === 'Baumaschinenführer / Mischmeister' || maschinenbedienung === 'ja') && (
+                  {fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && (
                     <div className="mt-4 p-4 rounded-lg border border-orange-200 bg-orange-50/50">
                       <Label htmlFor="bauTaetigkeit" className="text-sm font-medium">
                         Welches Spezialfahrzeug bzw. welche Tätigkeit wird benötigt? <span className="text-muted-foreground font-normal">(optional)</span>
