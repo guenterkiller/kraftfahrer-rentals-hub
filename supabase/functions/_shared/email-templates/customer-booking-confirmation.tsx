@@ -56,6 +56,29 @@ const buildSalutation = (customerName?: string, companyName?: string) => {
 const withoutRedundantDetails = (details: string[]) =>
   details.filter((d) => !d.trim().toLowerCase().startsWith('zuzüglich'));
 
+const normalizeText = (v: string) =>
+  v.toLowerCase().replace(/[\s,;/|-]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+/**
+ * "Spezialanforderungen" nur anzeigen, wenn eigenständige Angaben vorliegen.
+ * Einträge, die bereits in der Tätigkeitsbeschreibung enthalten sind, werden verworfen.
+ */
+const eigenstaendigeAnforderungen = (requirements: string[], message: string) => {
+  const msg = normalizeText(message || '');
+  const seen = new Set<string>();
+  const result: string[] = [];
+  for (const raw of requirements || []) {
+    const value = (raw || '').trim();
+    if (!value) continue;
+    const norm = normalizeText(value);
+    if (!norm || seen.has(norm)) continue;
+    if (msg && msg.includes(norm)) continue;
+    seen.add(norm);
+    result.push(value);
+  }
+  return result;
+};
+
 export const CustomerBookingConfirmation = ({
   customerName,
   companyName,
@@ -72,6 +95,7 @@ export const CustomerBookingConfirmation = ({
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
+  const spezialanforderungen = eigenstaendigeAnforderungen(requirements, message);
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
@@ -106,10 +130,10 @@ export const CustomerBookingConfirmation = ({
                 : driverType}
             </td>
           </tr>
-          {requirements.length > 0 && (
+          {spezialanforderungen.length > 0 && (
             <tr>
               <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Spezialanforderungen:</strong></td>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{requirements.join(', ')}</td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{spezialanforderungen.join(', ')}</td>
             </tr>
           )}
           <tr>
