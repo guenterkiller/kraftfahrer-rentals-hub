@@ -154,10 +154,10 @@ export const CustomerBookingConfirmation = ({
     {tarif && tarif.needsReview && (
       <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>
-          Tarifzuordnung wird geprüft
+          Zuordnung zum passenden veröffentlichten Tarif
         </Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-          Ihre Einsatzbeschreibung wird vor der verbindlichen Bestätigung geprüft. Den maßgeblichen Fahrertyp und Tagessatz teilen wir Ihnen mit der Bestätigung mit.
+          Die veröffentlichten Preise und Konditionen sind eindeutig. Aufgrund unvollständiger Angaben zur konkreten Tätigkeit konnte der passende Tarif noch nicht automatisch zugeordnet werden. Die Zuordnung erfolgt vor der verbindlichen Einsatzbestätigung.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
           Wochenend- und Feiertagszuschläge: Samstag 25 %, Sonntag und gesetzliche Feiertage 50 % auf den jeweiligen Tagessatz.
