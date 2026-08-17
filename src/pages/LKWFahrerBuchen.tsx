@@ -36,7 +36,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "Transparente Preise: 349 € pro Einsatztag zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert."
+        answer: "Transparente Preise: 349 € pro Einsatztag zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis LKW-Fahrer CE: 1.645,00 € netto für 5 Einsatztage von Montag bis Freitag – bis zu 9 Stunden Einsatzzeit je Einsatztag. Langzeiteinsätze ab 3 Monaten werden individuell kalkuliert."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",
@@ -129,7 +129,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie sehen die Konditionen aus?",
-        answer: "<strong>Transparente Preise:</strong> 349 € pro Einsatztag zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis 1.645 € (5 Einsatztage). Langzeiteinsätze ab 3 Monaten individuell."
+        answer: "<strong>Transparente Preise:</strong> 349 € pro Einsatztag zzgl. An- und Abfahrt (erste 25 km frei, danach 0,40 € je gefahrenem Kilometer). Wochenpreis LKW-Fahrer CE: 1.645,00 € netto für 5 Einsatztage von Montag bis Freitag – bis zu 9 Stunden Einsatzzeit je Einsatztag. Langzeiteinsätze ab 3 Monaten individuell."
       },
       {
         question: "Bieten Sie LKW-Fahrer wirklich deutschlandweit an?",

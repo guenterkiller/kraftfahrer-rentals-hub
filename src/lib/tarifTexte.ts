@@ -44,11 +44,10 @@ export const TARIF_TEXTE = {
     [
       'Bis zu 9 Stunden Einsatzzeit je Einsatztag',
       'Der Wochenpreis gilt ausschließlich für Montag bis Freitag',
-      'Samstage, Sonntage und gesetzliche Feiertage sind nicht im Wochenpreis enthalten',
+      'Samstage, Sonntage und gesetzliche Feiertage sind nicht im Wochenpreis enthalten und werden bei einem Einsatz separat nach dem geltenden Tagessatz zuzüglich des zutreffenden Zuschlags berechnet.',
       'Zuzüglich An- und Abfahrt sowie tatsächlich angefallener Mehrstunden gemäß Preisliste',
     ],
     [
-      'Einsätze an Samstagen, Sonntagen oder gesetzlichen Feiertagen werden außerhalb des Wochenpreises separat nach dem jeweils geltenden Tagessatz einschließlich des veröffentlichten Zuschlags berechnet.',
       'Fällt ein gesetzlicher Feiertag auf einen Montag bis Freitag, ist dieser Feiertagseinsatz ebenfalls nicht im Wochenpreis enthalten und wird separat nach dem geltenden Tagessatz zuzüglich 50 % Feiertagszuschlag berechnet.',
     ],
   ),

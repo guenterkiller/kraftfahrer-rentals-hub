@@ -140,12 +140,11 @@ const Vermittlungsbedingungen = () => {
                   werden 0,40 € netto je gefahrenem Kilometer berechnet.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  LKW-Fahrer CE – Wochenpreis: 1.645,00 € netto für 5 Einsatztage von Montag bis
-                  Freitag, bis zu 9 Stunden Einsatzzeit je Einsatztag. Der Wochenpreis gilt
-                  ausschließlich für Montag bis Freitag; Samstage, Sonntage und gesetzliche
-                  Feiertage sind nicht im Wochenpreis enthalten. Solche Einsätze werden außerhalb
-                  des Wochenpreises separat nach dem jeweils geltenden Tagessatz einschließlich des
-                  veröffentlichten Zuschlags berechnet. Fällt ein gesetzlicher Feiertag auf einen
+                  LKW-Fahrer CE – Wochenpreis: 1.645,00 € netto für 5 Einsatztage von Montag bis Freitag – bis zu 9 Stunden Einsatzzeit je Einsatztag. Der Wochenpreis gilt
+                  ausschließlich für Montag bis Freitag. Samstage, Sonntage und gesetzliche
+                  Feiertage sind nicht im Wochenpreis enthalten und werden bei einem Einsatz
+                  separat nach dem geltenden Tagessatz zuzüglich des zutreffenden Zuschlags
+                  berechnet. Fällt ein gesetzlicher Feiertag auf einen
                   Montag bis Freitag, wird dieser Feiertagseinsatz ebenfalls separat nach dem
                   geltenden Tagessatz zuzüglich 50 % Feiertagszuschlag berechnet.
                 </p>
