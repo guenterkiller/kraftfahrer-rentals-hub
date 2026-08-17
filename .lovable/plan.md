@@ -1,75 +1,45 @@
-## Ziel
-Umsetzung der freigegebenen juristischen Optimierungen 1–7. Keine SEO-, Design-, Marketing- oder Modelländerungen. Nur Zustimmungsprotokollierung, Verlinkung, Versionierung und interne Wording-Anpassungen im Unternehmerbereich.
+# Tarifabgrenzung Spezialfahrzeuge: Baumaschinenführer/Mischmeister vs. LKW CE
 
----
+Ziel: Der Tarif „Baumaschinenführer/Mischmeister“ (489 € netto/Einsatztag bis 8 Std., 60 € netto je angefangene Mehrstunde) gilt auch für Spezialfahrzeuge, wenn die Bedienung einer fest aufgebauten Maschine/Anlage wesentlicher Bestandteil des Einsatzes ist. Reiner Transport ohne maßgebliche Maschinenbedienung bleibt LKW CE.
 
-## 1. Vermittlungsbedingungen vor Registrierung einsehbar (Datei: `src/pages/FahrerRegistrierung.tsx`)
+## 1. Buchungsformular (`src/components/SimpleBookingForm.tsx`)
 
-Die drei Zustimmungs-Checkboxen (Vermittlungszustimmung, Einsatzbereitschaft, Gewerbenachweis) erhalten einen sichtbaren Link auf die bestehende Seite `/fahrer-vermittlungsbedingungen` (öffnet in neuem Tab). Kein Textinhalt der Seite wird verändert.
+- Kategoriekarte umbenennen/erweitern: „Baumaschinenführer / Mischmeister / Spezialfahrzeuge (Maschinenbedienung)“ mit Beispielhinweis: Saugwagen, Saugbagger, Pumptruck / Estrich-Pumptruck, Betonpumpe, Mischfahrzeug, Spül- und Reinigungsfahrzeug, Kanal- und Entsorgungsfahrzeug, Arbeitsmaschine.
+- Neue Pflichtabfrage (Radiogruppe), sichtbar für alle Kategorien, direkt unter der Fahrertyp-Auswahl:
+  „Muss der Fahrer am Einsatzort eine fest aufgebaute Maschine oder Anlage bedienen (z. B. Pumpe, Saug-, Misch-, Förder- oder Arbeitsanlage)?“
+  Antworten: „Ja, Maschinen-/Anlagenbedienung ist wesentlicher Teil des Einsatzes“ · „Nein, reiner Transport / Fahren“ · „Unklar / muss geprüft werden“.
+- Tätigkeitsauswahl erweitern um: Saugwagen / Saugbagger, Pumptruck / Estrich-Pumptruck, Betonpumpe, Mischfahrzeug, Spül-/Reinigungsfahrzeug, Kanal-/Entsorgungsfahrzeug, Arbeitsmaschine / Spezialfahrzeug (bestehende Optionen bleiben).
+- Anzeige-Logik statt Stichwortraten:
+  - „Ja“ → Tarifhinweis 489 € / 60 € Mehrstunde wird eingeblendet, auch wenn LKW CE gewählt wurde (Hinweis: „Für diesen Einsatz gilt der Tarif Baumaschinenführer/Mischmeister“).
+  - „Nein“ + LKW CE → LKW-CE-Tarif unverändert.
+  - „Unklar“ oder Widerspruch (LKW CE + Ja, oder Spezialfahrzeug + Nein) → kein automatischer Tarif, stattdessen Hinweisbox: „Tarifzuordnung wird vor Bestätigung manuell geprüft.“ Der Auftrag wird als prüfbedürftig markiert.
+- Die Angaben fließen zusätzlich in Klartext in die Auftragsbeschreibung/Anforderungen ein (keine DB-Migration nötig).
 
-- Alt: `Ich stimme den Vermittlungsbedingungen zu ...`
-- Neu: `Ich stimme den` + Link (`/fahrer-vermittlungsbedingungen`, `target=_blank`) `Vermittlungsbedingungen` + `zu ...`
+## 2. Zentrale Tariflogik (neu: `src/lib/tarifZuordnung.ts`)
 
-## 2. Registrierungs-Zustimmung revisionssicher speichern
+Eine einzige Funktion `resolveTarif({ kategorie, maschinenbedienung, taetigkeit, beschreibung })` liefert:
+- `tarif: 'lkw_ce' | 'lkw_ce_woche' | 'fernfahrer' | 'baumaschine' | 'pruefung'`
+- `label`, `netto`, `mehrstunde`, `needsReview`, `reason`.
 
-**DB-Migration** – neue Spalten in `public.fahrer_profile`:
-- `agb_version text` (z. B. `2026-07-26`)
-- `agb_accepted_at timestamptz`
-- `agb_ip inet`
-- `agb_user_agent text`
+Regeln (Priorität): explizite Maschinenbedienung „Ja“ → `baumaschine`; „Unklar“ oder widersprüchliche Angaben → `pruefung`; Stichwörter aus dem Freitext (Saugwagen, Pumptruck, Betonpumpe, Mischer, Spülwagen, Kanal, Estrich-Pumpe …) lösen **nie allein** einen Tarif aus, sondern nur `pruefung`, wenn die Abfrage nicht dazu passt.
 
-**Edge Function `fahrerwerden`**: Beim Insert werden diese vier Werte gespeichert. IP aus Request-Header (`x-forwarded-for`), UA aus `user-agent`. Version aus neuer Konstante `TERMS_VERSION_DRIVER`.
+## 3. Edge Functions / E-Mails
 
-**Frontend**: Übergibt `terms_version` mit dem FormData (aus zentraler Konstante `src/config/termsVersion.ts`).
+- `supabase/functions/submit-fahrer-anfrage/index.ts`: die Stichwortprüfung (`baumaschine|bagger|radlader`) durch die gleiche Regel-Logik ersetzen (portierte Kopie unter `supabase/functions/_shared/tarif-zuordnung.ts`). Bei `pruefung` wird im Admin-Betreff und in der Admin-Mail „Tarif manuell prüfen“ ausgegeben.
+- `send-fahrer-anfrage-email` + `_shared/email-templates/customer-booking-confirmation.tsx`:
+  - Fahrertyp korrekt benennen (inkl. Spezialfahrzeug-Tätigkeit).
+  - Neuer Abschnitt in den Konditionen: Abgrenzung „Maschinenbedienung → 489 € / 60 € Mehrstunde; reiner Transport → LKW-CE-Tarif“.
+  - Bei `pruefung`: statt Preisangabe der Satz „Die endgültige Tarifzuordnung wird vor der verbindlichen Bestätigung geprüft und Ihnen mitgeteilt.“
+- `_shared/email-templates/admin-booking-notification.tsx`: Block „Tarifzuordnung“ mit Antwort auf die Maschinenbedienungs-Frage und Prüfmarkierung.
 
-## 3. Auftragsannahme vollständig dokumentieren
+## 4. Preis-/Infoseiten (redaktionell)
 
-Bestehende Tabelle `public.job_driver_acceptances` (Spalten: `job_id, driver_id, billing_model, accepted_at, ip, user_agent, terms_version`) wird konsequent befüllt.
+`src/pages/PreiseUndAblauf.tsx` und `src/pages/BaumaschinenfuehrerBuchen.tsx`: Klarstellung ergänzen, dass der Tarif auch für Spezialfahrzeuge mit Maschinenbedienung gilt (Aufzählung wie oben) und reiner CE-Transport beim LKW-CE-Tarif bleibt. Grundpreise unverändert.
 
-- **Edge Function `driver-accept-job`** (Token-Link-Flow): schreibt Eintrag mit IP/UA/`terms_version` bei jeder Annahme.
-- **Edge Function `respond-invite`** (falls Annahmepfad): gleiches Verhalten.
-- Kein neuer Vertragsinhalt, nur Persistierung der bereits vorhandenen Zustimmung.
+## 5. Bestehender Auftrag Blaukat Estrich GmbH
 
-## 4. DRV-kritische Begriffe (nur interner Unternehmerbereich + Unternehmer-E-Mails)
+Keine automatische Änderung, kein Mailversand. Vorschlag zur Freigabe: Tarif im Datensatz auf „Baumaschinenführer/Mischmeister – Estrich-Pumptruck, 489 € netto/Tag, 60 €/Mehrstunde“ setzen (Estrich-Pumptruck-Bedienung). Erst nach Deiner Freigabe.
 
-Betroffene Dateien (öffentliche Marketing-/SEO-Seiten wie `KraftfahrerMieten.tsx`, `FahrerFuerSpeditionen.tsx`, `Projekte.tsx`, `GermanyMap.tsx`, `HowItWorksTimeline.tsx`, `SimpleBookingForm.tsx`, `ProcessSteps.tsx`, `LkwFahrerKurzfristig.tsx` **bleiben unverändert**).
+## Nicht geändert
 
-| Datei | Alt | Neu |
-|---|---|---|
-| `src/pages/FahrerRegistrierung.tsx` Z. 1256 | „Ich bestätige, dass ich grundsätzlich einsatzbereit bin ..." | „Ich bestätige, dass ich als selbstständiger Unternehmer an zukünftigen Auftragsangeboten interessiert bin und passende Angebote eigenverantwortlich prüfen möchte." |
-| `src/pages/FahrerRegistrierung.tsx` Z. 228 (Fehlertext) | „grundsätzliche Einsatzbereitschaft" | „Interesse an Auftragsangeboten" |
-| `supabase/functions/broadcast-job-to-drivers/_templates/job-notification.tsx` Z. 153 | „... werden Bewerbungen ... berücksichtigt. Bitte bewerben Sie sich ..." | „... werden Interessenbekundungen ... berücksichtigt. Bitte bekunden Sie Ihr Interesse nur, wenn ..." |
-| `supabase/functions/send-driver-job-notification/index.ts` Z. 145 | dito | dito |
-| `supabase/functions/send-test-job-invite/_templates/job-notification.tsx` Z. 153 | dito | dito |
-| `src/components/JobAcceptanceDialog.tsx` Z. 161 | dito | dito |
-| `supabase/functions/send-nurture-email/index.ts` Z. 74 | „Bevorzugte Disposition bei kurzfristigen Anfragen" | „Bevorzugte Vermittlungskoordination bei kurzfristigen Anfragen" |
-| `supabase/functions/send-nurture-email/index.ts` Z. 126 (Subject) | „so optimieren Sie Ihre Einsatzplanung" | „so optimieren Sie Ihre Auftragsvermittlung" |
-| `supabase/functions/handle-driver-job-response/index.ts` Z. 290–291 | „... an die Disposition weitergeleitet / Wir informieren die Disposition." | „... an die Vermittlungskoordination weitergeleitet / Wir informieren die Vermittlungskoordination." |
-
-Nicht angefasst werden Fahrer-E-Mails, die den Begriff „Einsatzbereitschaft" ausschließlich zur Beschreibung der eigenen freien Entscheidung nutzen (`send-customer-assignment-notice`, `driver-inactive-notice`) — dort ist der Begriff bereits unternehmerkonform (Fahrer teilt Einsatzbereitschaft selbst mit).
-
-## 5. Versionierung
-
-Neue Datei `src/config/termsVersion.ts` und `supabase/functions/_shared/terms-version.ts` mit Konstante `TERMS_VERSION_DRIVER = '2026-07-26'`. Statisches `'v1'` wird ersetzt. Bei künftigen Änderungen der Vermittlungsbedingungen wird ausschließlich diese Konstante hochgezogen — akzeptierte Fassung bleibt in DB nachvollziehbar.
-
-## 6. Keine Provisions-Offenlegung
-Keine Änderung notwendig — aktueller Zustand entspricht bereits der Vorgabe. Kein Auftrags-Template listet interne Marge auf.
-
-## 7. Geschäftsmodell
-Bleibt unverändert. Keine Datei angefasst, die Ablauflogik/Preise/Provisionen betrifft.
-
----
-
-## Technische Umsetzungsschritte
-
-```
-1. Migration: ALTER TABLE fahrer_profile ADD agb_version/accepted_at/ip/user_agent
-2. src/config/termsVersion.ts + supabase/functions/_shared/terms-version.ts anlegen
-3. FahrerRegistrierung.tsx: Link + Wording + terms_version im POST
-4. fahrerwerden/index.ts: terms_version, IP, UA in fahrer_profile speichern
-5. driver-accept-job/index.ts (+ respond-invite falls vorhanden): Eintrag in job_driver_acceptances
-6. Wording-Ersetzungen laut Tabelle Punkt 4
-7. Build & manuelle Verifikation (Registrierungsformular sichtbar, DB-Feldbefüllung)
-```
-
-Nach Umsetzung: vollständiger Änderungsbericht (Datei / Alt / Neu / Begründung / Auswirkung) folgt als Chatantwort.
+Grundpreise, Zuschlagsregeln, DB-Schema/RLS, Vermittlungslogik, Provisionsangaben. Kein Deploy und kein Mailversand ohne Freigabe.
