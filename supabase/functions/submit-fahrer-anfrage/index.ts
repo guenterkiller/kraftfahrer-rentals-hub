@@ -132,8 +132,9 @@ const handler = async (req: Request): Promise<Response> => {
     const nachricht = String(requestData.nachricht || '').trim();
     const anforderungen = Array.isArray(requestData.anforderungen) ? requestData.anforderungen : [];
     
-    // Detect Fernfahrer-Tarif from anforderungen
-    const isFernfahrerTarif = anforderungen.some((a: string) => 
+    // Hinweis "Fernverkehr / Übernachtung" aus den Anforderungen (nur Eingangssignal,
+    // überschreibt niemals die vom Besteller gewählte Tarifkarte)
+    const fernverkehrAngefordert = anforderungen.some((a: string) =>
       a.toLowerCase().includes('fernverkehr') || a.toLowerCase().includes('fernfahrer')
     );
 
@@ -146,9 +147,12 @@ const handler = async (req: Request): Promise<Response> => {
     const tarif = resolveTarif({
       kategorie: fahrzeugtyp,
       maschinenbedienung,
-      longDistance: isFernfahrerTarif,
+      longDistance: fernverkehrAngefordert,
       beschreibung: nachricht,
     });
+
+    // Maßgeblich ist ausschließlich der zugeordnete Tarif – kein zweiter Tarif in den E-Mails.
+    const isFernfahrerTarif = tarif.tarif === 'fernfahrer';
 
     // Wochenend-/Feiertage im Einsatzzeitraum
     const surchargeDays = listSurchargeDays(

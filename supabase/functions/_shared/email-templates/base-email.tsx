@@ -89,7 +89,10 @@ export const BaseEmail = ({ previewText, children, plainHeader, headerSubtitleOv
       <meta charSet="UTF-8" />
       <style>{mobileStyles}</style>
     </Head>
-    <Preview>{previewText}</Preview>
+    {/* Vorschautext ohne Auffüll-/Platzhalterzeichen (keine unsichtbaren Füllblöcke im Client) */}
+    <div style={{ display: 'none', overflow: 'hidden', lineHeight: '1px', opacity: 0, maxHeight: 0, maxWidth: 0 }}>
+      {previewText}
+    </div>
     <Body style={main}>
       <Container style={container}>
         {/* Header — Navy mit rotem Akzentbalken */}

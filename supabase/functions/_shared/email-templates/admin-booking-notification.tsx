@@ -96,7 +96,7 @@ export const AdminBookingNotification = ({
         </tr>
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tarif:</strong></td>
-          <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold', color: isFernfahrerTarif ? '#3b82f6' : undefined }}>
+          <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }}>
             {tarif
               ? (tarif.needsReview
                   ? 'Tarifzuordnung erforderlich'
@@ -144,7 +144,7 @@ export const AdminBookingNotification = ({
             <tr>
               <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
               <td style={{ padding: '5px 0', fontSize: '14px' }}>
-                {`${tarif.mehrstunde.toLocaleString('de-DE')} € netto je angefangene Stunde`}
+              {`${tarif.mehrstunde.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} € netto je angefangene Stunde`}
               </td>
             </tr>
           )}
@@ -173,7 +173,7 @@ export const AdminBookingNotification = ({
       </Section>
     )}
 
-    {isFernfahrerTarif && (
+    {isFernfahrerTarif && tarif?.tarif === 'fernfahrer' && (
       <Section style={{ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6' }}>
         <Text style={{ ...textStyles.paragraph, margin: '0' }}>
           <strong>{TARIF_TEXTE.fernfahrer.name} aktiv:</strong> {TARIF_TEXTE.fernfahrer.priceLine}. {TARIF_TEXTE.fernfahrer.details.join(' ')}

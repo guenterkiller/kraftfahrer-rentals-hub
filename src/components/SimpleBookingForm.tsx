@@ -168,14 +168,8 @@ const SimpleBookingForm = () => {
           : fahrzeugtyp === 'LKW CE Wochenpreis'
             ? 'LKW-Fahrer CE – Wochenpreis'
             : (fahrzeugtyp || 'lkw'),
-        nachricht: [
-          formData.get('beschreibung') as string,
-          '',
-          bauTaetigkeit ? `Spezialfahrzeug / Tätigkeit: ${bauTaetigkeit}` : '',
-          `Tarifzuordnung: ${tarif.label}${tarif.netto ? ` – ${tarif.netto} € netto ${tarif.einheit}` : ''}`,
-          tarif.needsReview ? 'Hinweis: Der passende veröffentlichte Tarif wird vor der verbindlichen Einsatzbestätigung zugeordnet.' : '',
-          tarif.internalConflict ? 'Interner Kontrollhinweis: Tätigkeitsbeschreibung und gewählter Tarif prüfen (Auswahl des Bestellers unverändert gespeichert).' : '',
-        ].filter(Boolean).join('\n'),
+        // Ausschließlich der vom Besteller eingegebene Text – keine automatischen Zusätze
+        nachricht: ((formData.get('beschreibung') as string) || '').trim(),
         maschinenbedienung: tarif.tarif === 'baumaschine' ? 'ja' : 'nein',
         tarif_key: tarif.tarif,
         tarif_label: tarif.label,
@@ -208,7 +202,6 @@ const SimpleBookingForm = () => {
           escortExperience && 'Begleitung',
           requiresBf2 && 'BF2 erforderlich',
           requiresBf3 && 'BF3 erforderlich',
-          tarif.tarif === 'baumaschine' && 'Bedienung fest aufgebauter Maschine/Anlage',
           tarif.needsReview && 'Passenden Tarif manuell zuordnen',
           tarif.internalConflict && 'Interner Kontrollhinweis: Tarifauswahl prüfen'
         ].filter(Boolean)
