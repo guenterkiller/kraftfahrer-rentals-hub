@@ -60,7 +60,7 @@ export const SPEZIALFAHRZEUG_BEISPIELE = [
   'Arbeitsmaschine / vergleichbares Spezialfahrzeug',
 ];
 
-export const BAUMASCHINE_LABEL = 'Baumaschinenführer / Mischmeister (Maschinen- und Anlagenbedienung)';
+export const BAUMASCHINE_LABEL = 'Baumaschinenführer/Mischmeister/Spezialfahrzeuge';
 
 const containsKeyword = (text: string): boolean => {
   const t = (text || '').toLowerCase();
@@ -117,7 +117,7 @@ export function resolveTarif(input: TarifInput): TarifResult {
     return {
       ...BAUMASCHINE_TARIF,
       reason:
-        'Vom Besteller gewählter veröffentlichter Tarif: Baumaschinenführer / Mischmeister / Spezialfahrzeuge (zusätzliche Bedienung einer technischen Fahrzeuganlage).',
+        'Vom Besteller gewählter veröffentlichter Tarif: Baumaschinenführer/Mischmeister/Spezialfahrzeuge.',
     };
   }
 

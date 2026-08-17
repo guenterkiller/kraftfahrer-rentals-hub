@@ -54,7 +54,11 @@ const buildSalutation = (customerName?: string, companyName?: string) => {
 
 /** Wiederholende Sammelhinweise werden im Tarifblock nicht erneut ausgegeben. */
 const withoutRedundantDetails = (details: string[]) =>
-  details.filter((d) => !d.trim().toLowerCase().startsWith('zuzüglich'));
+  details.filter((d) => {
+    const t = d.trim().toLowerCase();
+    // "Zuzüglich …" und der Mehrstundensatz stehen bereits im Tarifblock (eigene Zeilen)
+    return !t.startsWith('zuzüglich') && !t.startsWith('mehrarbeit');
+  });
 
 const normalizeText = (v: string) =>
   v.toLowerCase().replace(/[\s,;/|-]+/g, ' ').replace(/\s+/g, ' ').trim();
