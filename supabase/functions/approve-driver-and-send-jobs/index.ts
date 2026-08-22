@@ -183,15 +183,30 @@ serve(async (req) => {
 
     console.log('📋 Found jobs:', jobs?.length || 0);
 
-    // 3b. Filter: license match AND zeitraum still current
+    // 3b. Step 1: remove expired / undecidable jobs BEFORE matching and BEFORE MAX_INVITES.
     let skippedExpired = 0;
     let skippedNoMatch = 0;
-    const matchingJobs = (jobs || []).filter((job) => {
-      if (!driverMatchesJob(driver, job)) { skippedNoMatch++; return false; }
-      if (!zeitraumIsCurrent(job.zeitraum)) { skippedExpired++; return false; }
+    const unclearJobs: Array<{ id: string; zeitraum: string; reason: string }> = [];
+    const validJobs = (jobs || []).filter((job) => {
+      const { valid, reason } = jobPeriodIsValid(job);
+      if (!valid) {
+        skippedExpired++;
+        if (reason === 'no_parseable_date' || reason === 'start_only_far_past') {
+          unclearJobs.push({ id: job.id, zeitraum: job.zeitraum || '', reason });
+        }
+        console.log(`⏭️  Job ${job.id} skipped (period invalid: ${reason}, zeitraum="${job.zeitraum || ''}")`);
+        return false;
+      }
       return true;
     });
-    console.log(`🎯 Matching jobs: ${matchingJobs.length}/${jobs?.length || 0} (skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch})`);
+
+    // 3b. Step 2: license matching on the remaining valid jobs only.
+    const matchingJobs = validJobs.filter((job) => {
+      if (!driverMatchesJob(driver, job)) { skippedNoMatch++; return false; }
+      return true;
+    });
+    console.log(`🎯 Valid jobs: ${validJobs.length}/${jobs?.length || 0} – matching: ${matchingJobs.length} (skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch})`);
+
 
     // 3c. Create assignment_invites for each matching job (skip if invite already exists)
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
