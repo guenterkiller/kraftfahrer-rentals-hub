@@ -441,7 +441,7 @@ serve(async (req) => {
 
     // 10. Log admin action
     await logAdminAction(supabase, 'approve_driver', user.email, {
-      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); openJobs=${jobs?.length || 0}, matchingJobs=${matchingJobs.length}, invitesSent=${invitesToSend.length}, skippedDuplicate=${skippedDuplicate}, skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch}`
+      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); openJobs=${jobs?.length || 0}, validJobs=${validJobs.length}, matchingJobs=${matchingJobs.length}, invitesSent=${invitesToSend.length}, skippedDuplicate=${skippedDuplicate}, skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch}, unclearPeriod=${unclearJobs.length}`
     });
 
     console.log('✅ Process completed successfully');
@@ -449,11 +449,14 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       ok: true,
       openJobs: jobs?.length || 0,
+      validJobs: validJobs.length,
       matchingJobs: matchingJobs.length,
       invitesSent: invitesToSend.length,
       skippedDuplicate,
       skippedExpired,
       skippedNoMatch,
+      unclearJobs,
+
       driverEmailSent: driverEmailStatus === 'sent',
       adminEmailSent: adminEmailStatus === 'sent',
       driverMessageId: driverMessageId,
