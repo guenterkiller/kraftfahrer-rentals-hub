@@ -43,19 +43,13 @@ function driverMatchesJob(driver: any, job: any): boolean {
   return false;
 }
 
-// Defensive freetext date parser for `zeitraum`. Returns true if it's plausibly still active
-// (any extracted D.M.YYYY date is today or in the future). Returns false if clearly past or
-// undecidable (defensive: skip in doubt).
-function zeitraumIsCurrent(zeitraum: string): boolean {
-  if (!zeitraum) return false;
-  const text = String(zeitraum);
-  // Match D.M.YYYY or DD.MM.YYYY (also YY)
+// Parse all D.M.YYYY dates out of a freetext `zeitraum`.
+function parseZeitraumDates(zeitraum: string): Date[] {
+  if (!zeitraum) return [];
   const re = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
   const dates: Date[] = [];
   let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
+  while ((m = re.exec(String(zeitraum))) !== null) {
     const d = parseInt(m[1], 10);
     const mo = parseInt(m[2], 10);
     let y = parseInt(m[3], 10);
@@ -63,13 +57,48 @@ function zeitraumIsCurrent(zeitraum: string): boolean {
     if (y < 2020 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > 31) continue;
     dates.push(new Date(y, mo - 1, d));
   }
-  if (dates.length === 0) return false; // defensive: no parseable date → skip
-  // If any date is today or later, treat as active. Add a safety window of +30 days
-  // beyond the latest extracted date to cover "ab X für Y Wochen".
-  const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
-  const cutoff = new Date(maxDate.getTime() + 30 * 24 * 60 * 60 * 1000);
-  return cutoff >= today;
+  return dates;
 }
+
+// Strict validity check: a job may only be offered if its Einsatzende is NOT in the past.
+// No grace window. Undecidable cases are skipped (defensive) and reported.
+// Returns { valid, reason }.
+function jobPeriodIsValid(job: any): { valid: boolean; reason: string } {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // 1) Explicit end date columns win, if present.
+  const explicitEnd = job?.end_date ?? job?.einsatz_ende ?? null;
+  if (explicitEnd) {
+    const end = new Date(explicitEnd);
+    if (!isNaN(end.getTime())) {
+      end.setHours(0, 0, 0, 0);
+      return end >= today
+        ? { valid: true, reason: 'end_date_future' }
+        : { valid: false, reason: 'end_date_past' };
+    }
+  }
+
+  // 2) Fall back to freetext `zeitraum`.
+  const dates = parseZeitraumDates(job?.zeitraum || '');
+  if (dates.length === 0) return { valid: false, reason: 'no_parseable_date' };
+
+  const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
+  maxDate.setHours(0, 0, 0, 0);
+
+  if (dates.length === 1) {
+    // Only a start date known, no end date: skip if the start lies clearly in the past.
+    const graceDays = 7;
+    const limit = new Date(today.getTime() - graceDays * 24 * 60 * 60 * 1000);
+    if (maxDate < limit) return { valid: false, reason: 'start_only_far_past' };
+    return { valid: true, reason: 'start_only_recent' };
+  }
+
+  return maxDate >= today
+    ? { valid: true, reason: 'zeitraum_end_future' }
+    : { valid: false, reason: 'zeitraum_end_past' };
+}
+
 
 serve(async (req) => {
   const corsHeaders = createCorsHeaders();
@@ -154,15 +183,30 @@ serve(async (req) => {
 
     console.log('📋 Found jobs:', jobs?.length || 0);
 
-    // 3b. Filter: license match AND zeitraum still current
+    // 3b. Step 1: remove expired / undecidable jobs BEFORE matching and BEFORE MAX_INVITES.
     let skippedExpired = 0;
     let skippedNoMatch = 0;
-    const matchingJobs = (jobs || []).filter((job) => {
-      if (!driverMatchesJob(driver, job)) { skippedNoMatch++; return false; }
-      if (!zeitraumIsCurrent(job.zeitraum)) { skippedExpired++; return false; }
+    const unclearJobs: Array<{ id: string; zeitraum: string; reason: string }> = [];
+    const validJobs = (jobs || []).filter((job) => {
+      const { valid, reason } = jobPeriodIsValid(job);
+      if (!valid) {
+        skippedExpired++;
+        if (reason === 'no_parseable_date' || reason === 'start_only_far_past') {
+          unclearJobs.push({ id: job.id, zeitraum: job.zeitraum || '', reason });
+        }
+        console.log(`⏭️  Job ${job.id} skipped (period invalid: ${reason}, zeitraum="${job.zeitraum || ''}")`);
+        return false;
+      }
       return true;
     });
-    console.log(`🎯 Matching jobs: ${matchingJobs.length}/${jobs?.length || 0} (skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch})`);
+
+    // 3b. Step 2: license matching on the remaining valid jobs only.
+    const matchingJobs = validJobs.filter((job) => {
+      if (!driverMatchesJob(driver, job)) { skippedNoMatch++; return false; }
+      return true;
+    });
+    console.log(`🎯 Valid jobs: ${validJobs.length}/${jobs?.length || 0} – matching: ${matchingJobs.length} (skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch})`);
+
 
     // 3c. Create assignment_invites for each matching job (skip if invite already exists)
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
@@ -397,7 +441,7 @@ serve(async (req) => {
 
     // 10. Log admin action
     await logAdminAction(supabase, 'approve_driver', user.email, {
-      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); openJobs=${jobs?.length || 0}, matchingJobs=${matchingJobs.length}, invitesSent=${invitesToSend.length}, skippedDuplicate=${skippedDuplicate}, skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch}`
+      note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); openJobs=${jobs?.length || 0}, validJobs=${validJobs.length}, matchingJobs=${matchingJobs.length}, invitesSent=${invitesToSend.length}, skippedDuplicate=${skippedDuplicate}, skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch}, unclearPeriod=${unclearJobs.length}`
     });
 
     console.log('✅ Process completed successfully');
@@ -405,11 +449,14 @@ serve(async (req) => {
     return new Response(JSON.stringify({
       ok: true,
       openJobs: jobs?.length || 0,
+      validJobs: validJobs.length,
       matchingJobs: matchingJobs.length,
       invitesSent: invitesToSend.length,
       skippedDuplicate,
       skippedExpired,
       skippedNoMatch,
+      unclearJobs,
+
       driverEmailSent: driverEmailStatus === 'sent',
       adminEmailSent: adminEmailStatus === 'sent',
       driverMessageId: driverMessageId,
