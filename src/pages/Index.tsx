@@ -149,7 +149,7 @@ const Index = () => {
               <Link to="/lkw-fahrer-buchen" className="text-primary hover:underline font-medium">
                 → LKW Fahrer buchen
               </Link>
-              <Link to="/baumaschinenführer-buchen" className="text-primary hover:underline font-medium">
+              <Link to="/fahrer-buchen#buchungsformular" className="text-primary hover:underline font-medium">
                 → Baumaschinenführer buchen
               </Link>
               <Link to="/fluessigboden-service" className="text-primary hover:underline font-medium">
