@@ -43,19 +43,13 @@ function driverMatchesJob(driver: any, job: any): boolean {
   return false;
 }
 
-// Defensive freetext date parser for `zeitraum`. Returns true if it's plausibly still active
-// (any extracted D.M.YYYY date is today or in the future). Returns false if clearly past or
-// undecidable (defensive: skip in doubt).
-function zeitraumIsCurrent(zeitraum: string): boolean {
-  if (!zeitraum) return false;
-  const text = String(zeitraum);
-  // Match D.M.YYYY or DD.MM.YYYY (also YY)
+// Parse all D.M.YYYY dates out of a freetext `zeitraum`.
+function parseZeitraumDates(zeitraum: string): Date[] {
+  if (!zeitraum) return [];
   const re = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
   const dates: Date[] = [];
   let m: RegExpExecArray | null;
-  while ((m = re.exec(text)) !== null) {
+  while ((m = re.exec(String(zeitraum))) !== null) {
     const d = parseInt(m[1], 10);
     const mo = parseInt(m[2], 10);
     let y = parseInt(m[3], 10);
@@ -63,13 +57,48 @@ function zeitraumIsCurrent(zeitraum: string): boolean {
     if (y < 2020 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > 31) continue;
     dates.push(new Date(y, mo - 1, d));
   }
-  if (dates.length === 0) return false; // defensive: no parseable date → skip
-  // If any date is today or later, treat as active. Add a safety window of +30 days
-  // beyond the latest extracted date to cover "ab X für Y Wochen".
-  const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
-  const cutoff = new Date(maxDate.getTime() + 30 * 24 * 60 * 60 * 1000);
-  return cutoff >= today;
+  return dates;
 }
+
+// Strict validity check: a job may only be offered if its Einsatzende is NOT in the past.
+// No grace window. Undecidable cases are skipped (defensive) and reported.
+// Returns { valid, reason }.
+function jobPeriodIsValid(job: any): { valid: boolean; reason: string } {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // 1) Explicit end date columns win, if present.
+  const explicitEnd = job?.end_date ?? job?.einsatz_ende ?? null;
+  if (explicitEnd) {
+    const end = new Date(explicitEnd);
+    if (!isNaN(end.getTime())) {
+      end.setHours(0, 0, 0, 0);
+      return end >= today
+        ? { valid: true, reason: 'end_date_future' }
+        : { valid: false, reason: 'end_date_past' };
+    }
+  }
+
+  // 2) Fall back to freetext `zeitraum`.
+  const dates = parseZeitraumDates(job?.zeitraum || '');
+  if (dates.length === 0) return { valid: false, reason: 'no_parseable_date' };
+
+  const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
+  maxDate.setHours(0, 0, 0, 0);
+
+  if (dates.length === 1) {
+    // Only a start date known, no end date: skip if the start lies clearly in the past.
+    const graceDays = 7;
+    const limit = new Date(today.getTime() - graceDays * 24 * 60 * 60 * 1000);
+    if (maxDate < limit) return { valid: false, reason: 'start_only_far_past' };
+    return { valid: true, reason: 'start_only_recent' };
+  }
+
+  return maxDate >= today
+    ? { valid: true, reason: 'zeitraum_end_future' }
+    : { valid: false, reason: 'zeitraum_end_past' };
+}
+
 
 serve(async (req) => {
   const corsHeaders = createCorsHeaders();
