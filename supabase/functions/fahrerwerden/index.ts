@@ -14,18 +14,26 @@ const MIME_TO_EXT: Record<string, string> = {
   'application/pdf': 'pdf',
 };
 
-function isValidUpload(file: File): boolean {
-  if (!file || file.size <= 0) return false;
+function checkUpload(file: File): { ok: true } | { ok: false; reason: string } {
+  if (!file || file.size <= 0) {
+    return { ok: false, reason: 'Die Datei ist leer oder konnte nicht gelesen werden.' };
+  }
   if (file.size > MAX_FILE_SIZE) {
     console.warn(`Rejected upload (size ${file.size} > ${MAX_FILE_SIZE}): ${file.name}`);
-    return false;
+    return { ok: false, reason: 'Die Datei ist größer als 5 MB. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.' };
+  }
+  const isHeic = /heic|heif/i.test(file.type) || /\.(heic|heif)$/i.test(file.name || '');
+  if (isHeic) {
+    console.warn(`Rejected upload (HEIC): ${file.name}`);
+    return { ok: false, reason: 'HEIC-Dateien werden nicht unterstützt. Bitte als PDF, JPG oder PNG hochladen.' };
   }
   if (!ALLOWED_MIME_TYPES.has(file.type)) {
     console.warn(`Rejected upload (invalid MIME ${file.type}): ${file.name}`);
-    return false;
+    return { ok: false, reason: 'Dieser Dateityp wird nicht unterstützt. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.' };
   }
-  return true;
+  return { ok: true };
 }
+
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
