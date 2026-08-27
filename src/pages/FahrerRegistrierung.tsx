@@ -262,30 +262,41 @@ const FahrerRegistrierung = () => {
     // Check if there are any actual errors (not just "OK" messages)
     const hasErrors = validationResults.some(msg => !msg.includes('✓ OK'));
     
-    return !hasErrors; // Return true if no errors
+    return { ok: !hasErrors, errors: validationResults };
   };
 
   const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'gewerbeanmeldung' | 'zertifikate', files: FileList | null) => {
     if (!files || files.length === 0) {
       setFileErrors([]);
+      setSelectedFiles(prev => ({ ...prev, [field]: null }));
       return;
     }
     
     // Validate files and update state
-    const isValid = validateFilesAndShow(files);
-    
+    const { ok, errors } = validateFilesAndShow(files);
+
+    if (!ok) {
+      // Abgelehnte Dateien werden NICHT übernommen – sichtbare Rückmeldung
+      setSelectedFiles(prev => ({ ...prev, [field]: null }));
+      toast({
+        title: "Datei nicht akzeptiert",
+        description: errors.join(' '),
+        variant: "destructive"
+      });
+      return;
+    }
+
     setSelectedFiles(prev => ({
       ...prev,
       [field]: files
     }));
 
-    // Show validation results in toast
     toast({
-      title: isValid ? "Datei(en) ausgewählt" : "Datei-Validierung",
-      description: `${files.length} Datei(en) für ${field} ${isValid ? 'ausgewählt' : 'validiert'}`,
-      variant: isValid ? "default" : "destructive"
+      title: "Datei(en) ausgewählt",
+      description: `${files.length} Datei(en) übernommen.`,
     });
   };
+
 
   const validateForm = () => {
     const errors: {[key: string]: string} = {};
