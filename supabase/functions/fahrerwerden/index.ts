@@ -492,7 +492,13 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({
+        success: true,
+        rejectedFiles,
+        uploadWarning: rejectedFiles.length > 0
+          ? 'Einige Dateien konnten nicht hochgeladen werden. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.'
+          : null,
+      }),
       {
         status: 200,
         headers: {
