@@ -6,27 +6,34 @@ export function validateFiles(files: File[]): string[] {
   const errors: string[] = [];
   
   for (const file of files) {
+    // HEIC (iPhone) explizit ablehnen
+    if (/heic|heif/i.test(file.type) || /\.(heic|heif)$/i.test(file.name)) {
+      errors.push(`„${file.name}": HEIC-Dateien werden nicht unterstützt. Bitte als PDF, JPG oder PNG hochladen.`);
+      continue;
+    }
+
     // Check MIME type
     if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-      errors.push(`„${file.name}": nur JPG/PNG/PDF erlaubt.`);
+      errors.push(`„${file.name}": Dieser Dateityp wird nicht unterstützt. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.`);
       continue;
     }
     
     // Check file size
     if (file.size > MAX_FILE_SIZE) {
-      errors.push(`„${file.name}": größer als 5 MB.`);
+      errors.push(`„${file.name}": Die Datei ist größer als 5 MB. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.`);
       continue;
     }
     
     // Check file extension
     if (!/\.(jpe?g|png|pdf)$/i.test(file.name)) {
-      errors.push(`„${file.name}": unzulässige Dateiendung.`);
+      errors.push(`„${file.name}": unzulässige Dateiendung. Erlaubt sind PDF, JPG und PNG.`);
       continue;
     }
   }
   
   return errors;
 }
+
 
 export function safeName(name: string): string {
   const parts = name.toLowerCase().split(/\.(?=[^.]+$)/);

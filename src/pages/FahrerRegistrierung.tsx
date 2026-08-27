@@ -262,30 +262,41 @@ const FahrerRegistrierung = () => {
     // Check if there are any actual errors (not just "OK" messages)
     const hasErrors = validationResults.some(msg => !msg.includes('✓ OK'));
     
-    return !hasErrors; // Return true if no errors
+    return { ok: !hasErrors, errors: validationResults };
   };
 
   const handleFileChange = (field: 'fuehrerschein' | 'fahrerkarte' | 'gewerbeanmeldung' | 'zertifikate', files: FileList | null) => {
     if (!files || files.length === 0) {
       setFileErrors([]);
+      setSelectedFiles(prev => ({ ...prev, [field]: null }));
       return;
     }
     
     // Validate files and update state
-    const isValid = validateFilesAndShow(files);
-    
+    const { ok, errors } = validateFilesAndShow(files);
+
+    if (!ok) {
+      // Abgelehnte Dateien werden NICHT übernommen – sichtbare Rückmeldung
+      setSelectedFiles(prev => ({ ...prev, [field]: null }));
+      toast({
+        title: "Datei nicht akzeptiert",
+        description: errors.join(' '),
+        variant: "destructive"
+      });
+      return;
+    }
+
     setSelectedFiles(prev => ({
       ...prev,
       [field]: files
     }));
 
-    // Show validation results in toast
     toast({
-      title: isValid ? "Datei(en) ausgewählt" : "Datei-Validierung",
-      description: `${files.length} Datei(en) für ${field} ${isValid ? 'ausgewählt' : 'validiert'}`,
-      variant: isValid ? "default" : "destructive"
+      title: "Datei(en) ausgewählt",
+      description: `${files.length} Datei(en) übernommen.`,
     });
   };
+
 
   const validateForm = () => {
     const errors: {[key: string]: string} = {};
@@ -333,9 +344,10 @@ const FahrerRegistrierung = () => {
       const hasFileErrors = fileValidation.some(msg => !msg.includes('✓ OK'));
       
       if (hasFileErrors) {
+        setFileErrors(fileValidation);
         toast({
           title: "Datei-Validierungsfehler",
-          description: "Bitte korrigieren Sie die Dateien bevor Sie fortfahren.",
+          description: fileValidation.join(' '),
           variant: "destructive",
         });
         return;
@@ -419,15 +431,31 @@ const FahrerRegistrierung = () => {
 
       console.log("Registration completed successfully with emails sent");
 
-      toast({
-        title: "Registrierung erfolgreich!",
-        description: "Vielen Dank für Ihre Registrierung! Wir werden Ihre Daten prüfen und uns bei Ihnen melden.",
-      });
+      const rejected: { filename?: string; reason?: string }[] = Array.isArray(result?.rejectedFiles)
+        ? result.rejectedFiles
+        : [];
+
+      if (rejected.length > 0) {
+        const details = rejected
+          .map(r => `„${r.filename ?? 'Datei'}": ${r.reason ?? 'Die Datei konnte nicht hochgeladen werden.'}`)
+          .join(' ');
+        setFileErrors(rejected.map(r => `„${r.filename ?? 'Datei'}": ${r.reason ?? ''}`.trim()));
+        toast({
+          title: "Registrierung erfolgreich – Dokument nicht hochgeladen",
+          description: `${details} Bitte senden Sie das Dokument per E-Mail an info@kraftfahrer-mieten.com nach.`,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Registrierung erfolgreich!",
+          description: "Vielen Dank für Ihre Registrierung! Wir werden Ihre Daten prüfen und uns bei Ihnen melden.",
+        });
+      }
 
       // Nach erfolgreichem Submit zur Startseite weiterleiten
       setTimeout(() => {
         window.location.href = '/';
-      }, 2000);
+      }, rejected.length > 0 ? 8000 : 2000);
 
       // Form NUR nach erfolgreichem Submit zurücksetzen
       setFormData({

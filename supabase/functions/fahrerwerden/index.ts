@@ -14,18 +14,26 @@ const MIME_TO_EXT: Record<string, string> = {
   'application/pdf': 'pdf',
 };
 
-function isValidUpload(file: File): boolean {
-  if (!file || file.size <= 0) return false;
+function checkUpload(file: File): { ok: true } | { ok: false; reason: string } {
+  if (!file || file.size <= 0) {
+    return { ok: false, reason: 'Die Datei ist leer oder konnte nicht gelesen werden.' };
+  }
   if (file.size > MAX_FILE_SIZE) {
     console.warn(`Rejected upload (size ${file.size} > ${MAX_FILE_SIZE}): ${file.name}`);
-    return false;
+    return { ok: false, reason: 'Die Datei ist größer als 5 MB. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.' };
+  }
+  const isHeic = /heic|heif/i.test(file.type) || /\.(heic|heif)$/i.test(file.name || '');
+  if (isHeic) {
+    console.warn(`Rejected upload (HEIC): ${file.name}`);
+    return { ok: false, reason: 'HEIC-Dateien werden nicht unterstützt. Bitte als PDF, JPG oder PNG hochladen.' };
   }
   if (!ALLOWED_MIME_TYPES.has(file.type)) {
     console.warn(`Rejected upload (invalid MIME ${file.type}): ${file.name}`);
-    return false;
+    return { ok: false, reason: 'Dieser Dateityp wird nicht unterstützt. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.' };
   }
-  return true;
+  return { ok: true };
 }
+
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -220,88 +228,60 @@ const handler = async (req: Request): Promise<Response> => {
     // Upload files to storage first
     console.log("Uploading files to storage...");
     const uploadedFiles: { [key: string]: string } = {};
+    const rejectedFiles: { field: string; filename: string; reason: string }[] = [];
     const emailSafe = requestData.email.replace(/[^a-zA-Z0-9@.-]/g, '_');
-    
-    // Upload Führerschein files
-    const fuehrerscheinFiles = formData ? (formData.getAll("fuehrerschein") as File[]) : [];
-    if (fuehrerscheinFiles.length > 0) {
-      const fuehrerscheinPaths: string[] = [];
-      for (let i = 0; i < fuehrerscheinFiles.length; i++) {
-        const file = fuehrerscheinFiles[i];
-        if (isValidUpload(file)) {
-          const fileExt = MIME_TO_EXT[file.type] || 'pdf';
-          const fileName = `uploads/${emailSafe}/fuehrerschein_${i + 1}.${fileExt}`;
-          
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from(DRIVER_DOCS_BUCKET)
-            .upload(fileName, file, { upsert: true });
-          
-          if (uploadError) {
-            console.error(`Upload error for Führerschein ${i + 1}:`, uploadError);
-          } else {
-            fuehrerscheinPaths.push(fileName);
-            console.log(`Führerschein ${i + 1} uploaded successfully: ${fileName}`);
-          }
+
+    // field name in FormData -> { docType, filePrefix }
+    const DOC_FIELDS: { field: string; docType: string; prefix: string; label: string }[] = [
+      { field: 'fuehrerschein', docType: 'fuehrerschein', prefix: 'fuehrerschein', label: 'Führerschein' },
+      { field: 'fahrerkarte', docType: 'fahrerkarte', prefix: 'fahrerkarte', label: 'Fahrerkarte' },
+      { field: 'gewerbeanmeldung', docType: 'gewerbeanmeldung', prefix: 'gewerbeanmeldung', label: 'Gewerbeanmeldung' },
+      { field: 'zertifikate', docType: 'zertifikate', prefix: 'zertifikat', label: 'Zertifikat' },
+    ];
+
+    // filepath -> original filename (for fahrer_dokumente entries)
+    const originalNames: Record<string, string> = {};
+
+    for (const { field, prefix, label } of DOC_FIELDS) {
+      const files = formData ? (formData.getAll(field) as File[]) : [];
+      if (files.length === 0) continue;
+
+      const paths: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const check = checkUpload(file);
+        if (!check.ok) {
+          rejectedFiles.push({ field, filename: file?.name || label, reason: check.reason });
+          continue;
         }
+
+        const fileExt = MIME_TO_EXT[file.type] || 'pdf';
+        const fileName = `uploads/${emailSafe}/${prefix}_${i + 1}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from(DRIVER_DOCS_BUCKET)
+          .upload(fileName, file, { upsert: true });
+
+        if (uploadError) {
+          console.error(`Upload error for ${label} ${i + 1}:`, uploadError);
+          rejectedFiles.push({
+            field,
+            filename: file.name,
+            reason: 'Die Datei konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut oder senden Sie das Dokument per E-Mail.',
+          });
+          continue;
+        }
+
+        paths.push(fileName);
+        originalNames[fileName] = file.name;
+        console.log(`${label} ${i + 1} uploaded successfully: ${fileName}`);
       }
-      if (fuehrerscheinPaths.length > 0) {
-        uploadedFiles.fuehrerschein = fuehrerscheinPaths.join(',');
+
+      if (paths.length > 0) {
+        uploadedFiles[field] = paths.join(',');
       }
     }
-    
-    // Upload Fahrerkarte files
-    const fahrerkarteFiles = formData ? (formData.getAll("fahrerkarte") as File[]) : [];
-    if (fahrerkarteFiles.length > 0) {
-      const fahrerkartePaths: string[] = [];
-      for (let i = 0; i < fahrerkarteFiles.length; i++) {
-        const file = fahrerkarteFiles[i];
-        if (isValidUpload(file)) {
-          const fileExt = MIME_TO_EXT[file.type] || 'pdf';
-          const fileName = `uploads/${emailSafe}/fahrerkarte_${i + 1}.${fileExt}`;
-          
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from(DRIVER_DOCS_BUCKET)
-            .upload(fileName, file, { upsert: true });
-          
-          if (uploadError) {
-            console.error(`Upload error for Fahrerkarte ${i + 1}:`, uploadError);
-          } else {
-            fahrerkartePaths.push(fileName);
-            console.log(`Fahrerkarte ${i + 1} uploaded successfully: ${fileName}`);
-          }
-        }
-      }
-      if (fahrerkartePaths.length > 0) {
-        uploadedFiles.fahrerkarte = fahrerkartePaths.join(',');
-      }
-    }
-    
-    // Upload Zertifikat files
-    const zertifikatFiles = formData ? (formData.getAll("zertifikate") as File[]) : [];
-    if (zertifikatFiles.length > 0) {
-      const zertifikatPaths: string[] = [];
-      for (let i = 0; i < zertifikatFiles.length; i++) {
-        const file = zertifikatFiles[i];
-        if (isValidUpload(file)) {
-          const fileExt = MIME_TO_EXT[file.type] || 'pdf';
-          const fileName = `uploads/${emailSafe}/zertifikat_${i + 1}.${fileExt}`;
-          
-          const { data: uploadData, error: uploadError } = await supabase.storage
-            .from(DRIVER_DOCS_BUCKET)
-            .upload(fileName, file, { upsert: true });
-          
-          if (uploadError) {
-            console.error(`Upload error for Zertifikat ${i + 1}:`, uploadError);
-          } else {
-            zertifikatPaths.push(fileName);
-            console.log(`Zertifikat ${i + 1} uploaded successfully: ${fileName}`);
-          }
-        }
-      }
-      if (zertifikatPaths.length > 0) {
-        uploadedFiles.zertifikate = zertifikatPaths.join(',');
-      }
-    }
+
     
     console.log("File uploads completed. Uploaded files:", uploadedFiles);
 
@@ -392,45 +372,21 @@ const handler = async (req: Request): Promise<Response> => {
       const fahrerId = dbData.id;
       const documentInserts: any[] = [];
       
-      // Create entries for each uploaded file
-      if (uploadedFiles.fuehrerschein) {
-        const paths = uploadedFiles.fuehrerschein.split(',');
-        paths.forEach((path, index) => {
+      // Create entries for each uploaded file (all document fields)
+      for (const { field, docType, prefix } of DOC_FIELDS) {
+        const value = uploadedFiles[field];
+        if (!value) continue;
+        value.split(',').forEach((path, index) => {
           documentInserts.push({
             fahrer_id: fahrerId,
             filepath: path,
-            filename: `fuehrerschein_${index + 1}`,
-            type: 'fuehrerschein',
+            filename: originalNames[path] || `${prefix}_${index + 1}`,
+            type: docType,
             url: path
           });
         });
       }
-      
-      if (uploadedFiles.fahrerkarte) {
-        const paths = uploadedFiles.fahrerkarte.split(',');
-        paths.forEach((path, index) => {
-          documentInserts.push({
-            fahrer_id: fahrerId,
-            filepath: path,
-            filename: `fahrerkarte_${index + 1}`,
-            type: 'fahrerkarte',
-            url: path
-          });
-        });
-      }
-      
-      if (uploadedFiles.zertifikate) {
-        const paths = uploadedFiles.zertifikate.split(',');
-        paths.forEach((path, index) => {
-          documentInserts.push({
-            fahrer_id: fahrerId,
-            filepath: path,
-            filename: `zertifikat_${index + 1}`,
-            type: 'zertifikate',
-            url: path
-          });
-        });
-      }
+
       
       if (documentInserts.length > 0) {
         console.log("Creating document entries for admin access...");
@@ -536,7 +492,13 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     return new Response(
-      JSON.stringify({ success: true }),
+      JSON.stringify({
+        success: true,
+        rejectedFiles,
+        uploadWarning: rejectedFiles.length > 0
+          ? 'Einige Dateien konnten nicht hochgeladen werden. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.'
+          : null,
+      }),
       {
         status: 200,
         headers: {
