@@ -372,45 +372,21 @@ const handler = async (req: Request): Promise<Response> => {
       const fahrerId = dbData.id;
       const documentInserts: any[] = [];
       
-      // Create entries for each uploaded file
-      if (uploadedFiles.fuehrerschein) {
-        const paths = uploadedFiles.fuehrerschein.split(',');
-        paths.forEach((path, index) => {
+      // Create entries for each uploaded file (all document fields)
+      for (const { field, docType, prefix } of DOC_FIELDS) {
+        const value = uploadedFiles[field];
+        if (!value) continue;
+        value.split(',').forEach((path, index) => {
           documentInserts.push({
             fahrer_id: fahrerId,
             filepath: path,
-            filename: `fuehrerschein_${index + 1}`,
-            type: 'fuehrerschein',
+            filename: originalNames[path] || `${prefix}_${index + 1}`,
+            type: docType,
             url: path
           });
         });
       }
-      
-      if (uploadedFiles.fahrerkarte) {
-        const paths = uploadedFiles.fahrerkarte.split(',');
-        paths.forEach((path, index) => {
-          documentInserts.push({
-            fahrer_id: fahrerId,
-            filepath: path,
-            filename: `fahrerkarte_${index + 1}`,
-            type: 'fahrerkarte',
-            url: path
-          });
-        });
-      }
-      
-      if (uploadedFiles.zertifikate) {
-        const paths = uploadedFiles.zertifikate.split(',');
-        paths.forEach((path, index) => {
-          documentInserts.push({
-            fahrer_id: fahrerId,
-            filepath: path,
-            filename: `zertifikat_${index + 1}`,
-            type: 'zertifikate',
-            url: path
-          });
-        });
-      }
+
       
       if (documentInserts.length > 0) {
         console.log("Creating document entries for admin access...");
