@@ -490,9 +490,11 @@ const FahrerRegistrierung = () => {
         nachname: "",
         email: "",
         telefon: "",
-        adresse: "",
+        strasse: "",
+        hausnummer: "",
         plz: "",
         ort: "",
+        land: "Deutschland",
         fuehrerscheinklassen: [],
         erfahrung_jahre: "",
         spezialisierungen: [],
@@ -860,34 +862,84 @@ const FahrerRegistrierung = () => {
                     </Select>
                   </div>
 
-                  {/* Adresse */}
-                  <div>
-                      <Label htmlFor="adresse">Adresse</Label>
-                      <Input
-                        id="adresse"
-                        value={formData.adresse}
-                        onChange={(e) => handleInputChange('adresse', e.target.value)}
-                      />
-                  </div>
+                  {/* Standort Fahrer (An-/Abfahrt) */}
+                  <fieldset className="space-y-4">
+                    <legend className="text-sm font-medium">Standort für An-/Abfahrt *</legend>
+                    <p className="text-xs text-muted-foreground">
+                      Diese Angaben werden für die Berechnung der An- und Abfahrt zu Einsatzorten benötigt.
+                    </p>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="plz">PLZ</Label>
-                      <Input
-                        id="plz"
-                        value={formData.plz}
-                        onChange={(e) => handleInputChange('plz', e.target.value)}
-                      />
+                    <div className="grid md:grid-cols-[3fr_1fr] gap-4">
+                      <div>
+                        <Label htmlFor="strasse">Straße *</Label>
+                        <Input
+                          id="strasse"
+                          value={formData.strasse}
+                          onChange={(e) => handleInputChange('strasse', e.target.value)}
+                          className={validationErrors.strasse ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.strasse && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.strasse}</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="hausnummer">Hausnummer *</Label>
+                        <Input
+                          id="hausnummer"
+                          value={formData.hausnummer}
+                          onChange={(e) => handleInputChange('hausnummer', e.target.value)}
+                          className={validationErrors.hausnummer ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.hausnummer && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.hausnummer}</p>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="ort">Ort</Label>
-                      <Input
-                        id="ort"
-                        value={formData.ort}
-                        onChange={(e) => handleInputChange('ort', e.target.value)}
-                      />
+
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="plz">PLZ *</Label>
+                        <Input
+                          id="plz"
+                          value={formData.plz}
+                          onChange={(e) => handleInputChange('plz', e.target.value)}
+                          className={validationErrors.plz ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.plz && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.plz}</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="ort">Ort *</Label>
+                        <Input
+                          id="ort"
+                          value={formData.ort}
+                          onChange={(e) => handleInputChange('ort', e.target.value)}
+                          className={validationErrors.ort ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.ort && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.ort}</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="land">Land *</Label>
+                        <Input
+                          id="land"
+                          value={formData.land}
+                          onChange={(e) => handleInputChange('land', e.target.value)}
+                          className={validationErrors.land ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.land && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.land}</p>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Qualifikationen */}
                   <fieldset>
