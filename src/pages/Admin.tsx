@@ -17,6 +17,7 @@ import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, User
 import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { BillingDataBlock } from "@/components/BillingDataBlock";
 import { DriverLocationBlock } from "@/components/DriverLocationBlock";
+import { DriverAddressDialog, type DriverAddressDriver } from "@/components/DriverAddressDialog";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { JobAttachmentsList } from "@/components/JobAttachmentsList";
@@ -144,6 +145,8 @@ const Admin = () => {
   const [noShowDialogOpen, setNoShowDialogOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
   const [contactDataDialogOpen, setContactDataDialogOpen] = useState(false);
+  const [addressDialogOpen, setAddressDialogOpen] = useState(false);
+  const [addressDialogDriver, setAddressDialogDriver] = useState<DriverAddressDriver | null>(null);
   const [selectedContactJobId, setSelectedContactJobId] = useState<string>("");
   const [createJobDialogOpen, setCreateJobDialogOpen] = useState(false);
   const [completingOldJobs, setCompletingOldJobs] = useState(false);
@@ -2414,6 +2417,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 <Button
                                   size="sm"
                                   variant="outline"
+                                  className="text-xs h-8 border-2 border-slate-500 text-slate-700 hover:bg-slate-50 hover:text-slate-800 font-medium shadow-sm"
+                                  onClick={() => { setAddressDialogDriver(f); setAddressDialogOpen(true); }}
+                                >
+                                  📍 Adresse bearbeiten
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
                                    className="text-xs h-8 border-2 border-blue-600 text-blue-700 hover:bg-blue-50 hover:text-blue-700 font-medium shadow-sm"
                                   onClick={() => toggleRow(f.id, f.email)}
                                 >
@@ -2586,6 +2597,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 📬 Mails reaktivieren
                               </Button>
                             )}
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="text-xs h-8 border-2 border-slate-500 text-slate-700 hover:bg-slate-50 hover:text-slate-800 font-medium shadow-sm flex-1"
+                              onClick={() => { setAddressDialogDriver(f); setAddressDialogOpen(true); }}
+                            >
+                              📍 Adresse
+                            </Button>
                             <Button
                               size="sm"
                               variant="outline"
@@ -2789,6 +2808,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         open={createJobDialogOpen}
         onClose={() => setCreateJobDialogOpen(false)}
         onJobCreated={handleJobCreated}
+      />
+
+      {/* Driver Address Dialog */}
+      <DriverAddressDialog
+        open={addressDialogOpen}
+        onClose={() => setAddressDialogOpen(false)}
+        driver={addressDialogDriver}
+        onSaved={() => loadFahrerData()}
       />
 
       {/* Contact Data Dialog */}
