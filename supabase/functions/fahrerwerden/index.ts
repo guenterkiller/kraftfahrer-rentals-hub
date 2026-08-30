@@ -460,8 +460,18 @@ const handler = async (req: Request): Promise<Response> => {
         regions: insertData.verfuegbare_regionen || [],
         licenseClasses: insertData.fuehrerscheinklassen || [],
         specializations: insertData.spezialisierungen || [],
+        specialRequirements: (insertData as any).spezialanforderungen || [],
+        experienceYears: insertData.erfahrung_jahre ?? null,
+        strasse: insertData.strasse,
+        hausnummer: insertData.hausnummer,
+        plz: insertData.plz,
+        ort: insertData.ort,
+        land: insertData.land,
+        uploadedDocs: uploadedFiles,
+        rejectedFiles,
       })
     );
+
 
     const adminEmailResponse = await resend.emails.send({
       from: MAIL_FROM,
