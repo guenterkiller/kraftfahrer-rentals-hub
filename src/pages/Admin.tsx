@@ -56,6 +56,9 @@ interface FahrerProfile {
   verfuegbare_regionen: string[] | null;
   ort: string | null;
   adresse: string | null;
+  strasse: string | null;
+  hausnummer: string | null;
+  land: string | null;
   plz: string | null;
   beschreibung: string | null;
 }
@@ -2248,9 +2251,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           </TableCell>
                           <TableCell className="align-top">
                             <DriverLocationBlock
+                              strasse={f.strasse}
+                              hausnummer={f.hausnummer}
                               adresse={f.adresse}
                               plz={f.plz}
                               ort={f.ort}
+                              land={f.land}
                               compact
                             />
                           </TableCell>
@@ -2437,9 +2443,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           )}
                           
                           <DriverLocationBlock
+                            strasse={f.strasse}
+                            hausnummer={f.hausnummer}
                             adresse={f.adresse}
                             plz={f.plz}
                             ort={f.ort}
+                            land={f.land}
                             email={f.email}
                             telefon={f.telefon}
                             fuehrerscheinklassen={f.fuehrerscheinklassen}

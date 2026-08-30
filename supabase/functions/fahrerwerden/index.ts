@@ -65,6 +65,11 @@ interface FahrerAnfrageRequest {
   bf3_erlaubnis?: string;
   spezialanforderungen?: string[] | string;
   terms_version?: string;
+  strasse?: string;
+  hausnummer?: string;
+  plz?: string;
+  ort?: string;
+  land?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -125,6 +130,11 @@ const handler = async (req: Request): Promise<Response> => {
           bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
           bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
           spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
+          strasse: (formData.get("strasse") as string) || "",
+          hausnummer: (formData.get("hausnummer") as string) || "",
+          plz: (formData.get("plz") as string) || "",
+          ort: (formData.get("ort") as string) || "",
+          land: (formData.get("land") as string) || "",
         };
       } else if (contentType.includes("application/json")) {
         const body = await req.json();
@@ -140,6 +150,11 @@ const handler = async (req: Request): Promise<Response> => {
           specializations: Array.isArray(body.specializations) ? body.specializations : [],
           regions: Array.isArray(body.regions) ? body.regions : [],
           hourly_rate: body.hourly_rate ?? "",
+          strasse: body.strasse ?? "",
+          hausnummer: body.hausnummer ?? "",
+          plz: body.plz ?? "",
+          ort: body.ort ?? "",
+          land: body.land ?? "",
         };
       } else {
         // Fallback: try to parse as FormData
@@ -161,6 +176,11 @@ const handler = async (req: Request): Promise<Response> => {
             bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
             spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
             terms_version: (formData.get("terms_version") as string) || "",
+            strasse: (formData.get("strasse") as string) || "",
+            hausnummer: (formData.get("hausnummer") as string) || "",
+            plz: (formData.get("plz") as string) || "",
+            ort: (formData.get("ort") as string) || "",
+            land: (formData.get("land") as string) || "",
           };
         } catch (_e) {
           // ignore
@@ -190,6 +210,24 @@ const handler = async (req: Request): Promise<Response> => {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
         }
+      );
+    }
+
+    // Standort Fahrer (An-/Abfahrt) ist Pflicht – ohne vollständige Adresse
+    // können keine Anfahrtskosten berechnet werden.
+    const missingAddress: string[] = [];
+    if (!requestData.strasse?.trim()) missingAddress.push("Straße");
+    if (!requestData.hausnummer?.trim()) missingAddress.push("Hausnummer");
+    if (!requestData.plz?.trim()) missingAddress.push("PLZ");
+    if (!requestData.ort?.trim()) missingAddress.push("Ort");
+    if (!requestData.land?.trim()) missingAddress.push("Land");
+    if (missingAddress.length > 0) {
+      console.error("Missing address fields:", missingAddress.join(", "));
+      return new Response(
+        JSON.stringify({
+          error: `Bitte geben Sie Ihren vollständigen Standort für An-/Abfahrt an. Fehlende Angaben: ${missingAddress.join(", ")}.`,
+        }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -313,6 +351,12 @@ const handler = async (req: Request): Promise<Response> => {
       spezialisierungen: Array.isArray(requestData.specializations) ? requestData.specializations : [],
       verfuegbare_regionen: Array.isArray(requestData.regions) ? requestData.regions : [],
       stundensatz: parsedRate,
+      strasse: requestData.strasse!.trim(),
+      hausnummer: requestData.hausnummer!.trim(),
+      plz: requestData.plz!.trim(),
+      ort: requestData.ort!.trim(),
+      land: requestData.land!.trim(),
+      adresse: `${requestData.strasse!.trim()} ${requestData.hausnummer!.trim()}`.trim(),
       status: 'pending',
       dokumente: uploadedFiles,
       bf2_erlaubnis: (requestData.bf2_erlaubnis as any) === 'true' || (requestData.bf2_erlaubnis as any) === true,

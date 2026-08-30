@@ -57,9 +57,11 @@ const FahrerRegistrierung = () => {
     nachname: "",
     email: "",
     telefon: "",
-    adresse: "",
+    strasse: "",
+    hausnummer: "",
     plz: "",
     ort: "",
+    land: "Deutschland",
     fuehrerscheinklassen: [] as string[],
     erfahrung_jahre: "",
     spezialisierungen: [] as string[],
@@ -196,6 +198,31 @@ const FahrerRegistrierung = () => {
           errors.telefon = 'Bitte geben Sie Ihre Telefonnummer ein';
         }
         break;
+      case 'strasse':
+        if (!value || value.trim() === '') {
+          errors.strasse = 'Bitte geben Sie Ihre Straße ein';
+        }
+        break;
+      case 'hausnummer':
+        if (!value || value.trim() === '') {
+          errors.hausnummer = 'Bitte geben Sie Ihre Hausnummer ein';
+        }
+        break;
+      case 'plz':
+        if (!value || value.trim() === '') {
+          errors.plz = 'Bitte geben Sie Ihre Postleitzahl ein';
+        }
+        break;
+      case 'ort':
+        if (!value || value.trim() === '') {
+          errors.ort = 'Bitte geben Sie Ihren Ort ein';
+        }
+        break;
+      case 'land':
+        if (!value || value.trim() === '') {
+          errors.land = 'Bitte geben Sie Ihr Land ein';
+        }
+        break;
       case 'stundensatz':
         // Optionales Feld – nur Zahlenformat prüfen, falls etwas eingegeben wurde
         if (value && value.trim() !== '' && (isNaN(Number(value)) || Number(value) <= 0)) {
@@ -312,8 +339,14 @@ const FahrerRegistrierung = () => {
     const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
     const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
     const gewerbeErrors = validateField('gewerbenachweis_bestaetigt', formData.gewerbenachweis_bestaetigt);
-    
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors);
+    // Standort Fahrer (An-/Abfahrt) – Pflichtfelder
+    const strasseErrors = validateField('strasse', formData.strasse);
+    const hausnummerErrors = validateField('hausnummer', formData.hausnummer);
+    const plzErrors = validateField('plz', formData.plz);
+    const ortErrors = validateField('ort', formData.ort);
+    const landErrors = validateField('land', formData.land);
+
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors, strasseErrors, hausnummerErrors, plzErrors, ortErrors, landErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -379,6 +412,12 @@ const FahrerRegistrierung = () => {
       formDataToSend.append("bf3_erlaubnis", formData.bf3_erlaubnis.toString());
       formDataToSend.append("spezialanforderungen", JSON.stringify(formData.spezialanforderungen));
       formDataToSend.append("firmensitz_land", formData.firmensitz_land || "");
+      // Standort Fahrer (An-/Abfahrt)
+      formDataToSend.append("strasse", formData.strasse.trim());
+      formDataToSend.append("hausnummer", formData.hausnummer.trim());
+      formDataToSend.append("plz", formData.plz.trim());
+      formDataToSend.append("ort", formData.ort.trim());
+      formDataToSend.append("land", formData.land.trim());
       formDataToSend.append("terms_version", TERMS_VERSION_DRIVER);
 
       // Add file uploads
@@ -463,9 +502,11 @@ const FahrerRegistrierung = () => {
         nachname: "",
         email: "",
         telefon: "",
-        adresse: "",
+        strasse: "",
+        hausnummer: "",
         plz: "",
         ort: "",
+        land: "Deutschland",
         fuehrerscheinklassen: [],
         erfahrung_jahre: "",
         spezialisierungen: [],
@@ -833,34 +874,84 @@ const FahrerRegistrierung = () => {
                     </Select>
                   </div>
 
-                  {/* Adresse */}
-                  <div>
-                      <Label htmlFor="adresse">Adresse</Label>
-                      <Input
-                        id="adresse"
-                        value={formData.adresse}
-                        onChange={(e) => handleInputChange('adresse', e.target.value)}
-                      />
-                  </div>
+                  {/* Standort Fahrer (An-/Abfahrt) */}
+                  <fieldset className="space-y-4">
+                    <legend className="text-sm font-medium">Standort für An-/Abfahrt *</legend>
+                    <p className="text-xs text-muted-foreground">
+                      Diese Angaben werden für die Berechnung der An- und Abfahrt zu Einsatzorten benötigt.
+                    </p>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="plz">PLZ</Label>
-                      <Input
-                        id="plz"
-                        value={formData.plz}
-                        onChange={(e) => handleInputChange('plz', e.target.value)}
-                      />
+                    <div className="grid md:grid-cols-[3fr_1fr] gap-4">
+                      <div>
+                        <Label htmlFor="strasse">Straße *</Label>
+                        <Input
+                          id="strasse"
+                          value={formData.strasse}
+                          onChange={(e) => handleInputChange('strasse', e.target.value)}
+                          className={validationErrors.strasse ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.strasse && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.strasse}</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="hausnummer">Hausnummer *</Label>
+                        <Input
+                          id="hausnummer"
+                          value={formData.hausnummer}
+                          onChange={(e) => handleInputChange('hausnummer', e.target.value)}
+                          className={validationErrors.hausnummer ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.hausnummer && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.hausnummer}</p>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="ort">Ort</Label>
-                      <Input
-                        id="ort"
-                        value={formData.ort}
-                        onChange={(e) => handleInputChange('ort', e.target.value)}
-                      />
+
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div>
+                        <Label htmlFor="plz">PLZ *</Label>
+                        <Input
+                          id="plz"
+                          value={formData.plz}
+                          onChange={(e) => handleInputChange('plz', e.target.value)}
+                          className={validationErrors.plz ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.plz && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.plz}</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="ort">Ort *</Label>
+                        <Input
+                          id="ort"
+                          value={formData.ort}
+                          onChange={(e) => handleInputChange('ort', e.target.value)}
+                          className={validationErrors.ort ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.ort && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.ort}</p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="land">Land *</Label>
+                        <Input
+                          id="land"
+                          value={formData.land}
+                          onChange={(e) => handleInputChange('land', e.target.value)}
+                          className={validationErrors.land ? "border-destructive" : ""}
+                          required
+                        />
+                        {validationErrors.land && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{validationErrors.land}</p>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </fieldset>
 
                   {/* Qualifikationen */}
                   <fieldset>

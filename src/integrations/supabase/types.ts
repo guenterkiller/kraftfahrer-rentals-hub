@@ -322,6 +322,7 @@ export type Database = {
           email_opt_out: boolean
           erfahrung_jahre: number | null
           fuehrerscheinklassen: string[] | null
+          hausnummer: string | null
           id: string
           inactive_notified_at: string | null
           inactive_reason: string | null
@@ -329,6 +330,7 @@ export type Database = {
           inactive_since: string | null
           is_blocked: boolean
           is_inactive: boolean
+          land: string | null
           nachname: string
           no_show_count: number
           ort: string | null
@@ -336,6 +338,7 @@ export type Database = {
           spezialanforderungen: string[] | null
           spezialisierungen: string[] | null
           status: string | null
+          strasse: string | null
           stundensatz: number | null
           telefon: string
           unsubscribed_at: string | null
@@ -362,6 +365,7 @@ export type Database = {
           email_opt_out?: boolean
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
+          hausnummer?: string | null
           id?: string
           inactive_notified_at?: string | null
           inactive_reason?: string | null
@@ -369,6 +373,7 @@ export type Database = {
           inactive_since?: string | null
           is_blocked?: boolean
           is_inactive?: boolean
+          land?: string | null
           nachname: string
           no_show_count?: number
           ort?: string | null
@@ -376,6 +381,7 @@ export type Database = {
           spezialanforderungen?: string[] | null
           spezialisierungen?: string[] | null
           status?: string | null
+          strasse?: string | null
           stundensatz?: number | null
           telefon: string
           unsubscribed_at?: string | null
@@ -402,6 +408,7 @@ export type Database = {
           email_opt_out?: boolean
           erfahrung_jahre?: number | null
           fuehrerscheinklassen?: string[] | null
+          hausnummer?: string | null
           id?: string
           inactive_notified_at?: string | null
           inactive_reason?: string | null
@@ -409,6 +416,7 @@ export type Database = {
           inactive_since?: string | null
           is_blocked?: boolean
           is_inactive?: boolean
+          land?: string | null
           nachname?: string
           no_show_count?: number
           ort?: string | null
@@ -416,6 +424,7 @@ export type Database = {
           spezialanforderungen?: string[] | null
           spezialisierungen?: string[] | null
           status?: string | null
+          strasse?: string | null
           stundensatz?: number | null
           telefon?: string
           unsubscribed_at?: string | null
