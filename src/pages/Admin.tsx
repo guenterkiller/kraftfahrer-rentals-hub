@@ -73,6 +73,50 @@ interface DocumentFile {
   fahrer_id: string;
 }
 
+/**
+ * Kompakte Standortanzeige für die Fahrerübersicht.
+ * Zeigt PLZ Ort, Land sowie optional Straße Hausnummer als zweite Zeile.
+ * Bei fehlendem PLZ/Ort wird deutlich „Standort fehlt" in Rot angezeigt.
+ * Keine Ableitung aus Telefon, E-Mail oder Namen – nur gespeicherte Felder.
+ */
+const DriverLocationCell: React.FC<{
+  strasse?: string | null;
+  hausnummer?: string | null;
+  adresse?: string | null;
+  plz?: string | null;
+  ort?: string | null;
+  land?: string | null;
+  mobile?: boolean;
+}> = ({ strasse, hausnummer, adresse, plz, ort, land, mobile = false }) => {
+  const plzOrt = [plz?.trim(), ort?.trim()].filter(Boolean).join(" ");
+  const street = [strasse?.trim(), hausnummer?.trim()].filter(Boolean).join(" ");
+  const hasPlzOrt = Boolean(plzOrt);
+
+  if (!hasPlzOrt) {
+    return (
+      <span className="text-destructive font-medium text-xs">
+        {mobile ? "Adresse nicht erfasst – Anfahrtskosten nicht berechenbar" : "Standort fehlt"}
+      </span>
+    );
+  }
+
+  return (
+    <div className="text-xs leading-tight">
+      <div className="font-medium">
+        {plzOrt}
+        {land?.trim() ? `, ${land.trim()}` : ""}
+      </div>
+      {street && (
+        <div className="text-muted-foreground text-[11px]">{street}</div>
+      )}
+      {!street && adresse?.trim() && (
+        <div className="text-muted-foreground text-[11px]">{adresse.trim()}</div>
+      )}
+    </div>
+  );
+};
+
+
 const Admin = () => {
   useSEO({
     title: "Admin Bereich | Fahrerexpress",
