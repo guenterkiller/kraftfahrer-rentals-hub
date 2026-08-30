@@ -2498,17 +2498,19 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </div>
                           )}
                           
-                          <DriverLocationBlock
-                            strasse={f.strasse}
-                            hausnummer={f.hausnummer}
-                            adresse={f.adresse}
-                            plz={f.plz}
-                            ort={f.ort}
-                            land={f.land}
-                            email={f.email}
-                            telefon={f.telefon}
-                            fuehrerscheinklassen={f.fuehrerscheinklassen}
-                          />
+                          <div className="text-sm">
+                            <span className="text-muted-foreground font-medium">Standort / Anfahrt: </span>
+                            <DriverLocationCell
+                              strasse={f.strasse}
+                              hausnummer={f.hausnummer}
+                              adresse={f.adresse}
+                              plz={f.plz}
+                              ort={f.ort}
+                              land={f.land}
+                              mobile
+                            />
+                          </div>
+
 
                           <div className="text-sm space-y-1">
                             <p className="text-gray-700">
