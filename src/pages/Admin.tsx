@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Eye, Download, ChevronDown, ChevronRight, LogOut, FileText, Image, Users, Check, X, Mail, Edit, ChevronUp } from "lucide-react";
 import { ContactDataDialog } from "@/components/ContactDataDialog";
 import { BillingDataBlock } from "@/components/BillingDataBlock";
+import { DriverLocationBlock } from "@/components/DriverLocationBlock";
 import { NoShowDialog } from "@/components/NoShowDialog";
 import { CreateJobDialog } from "@/components/CreateJobDialog";
 import { JobAttachmentsList } from "@/components/JobAttachmentsList";
@@ -2229,6 +2230,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                       <TableRow>
                         <TableHead className="min-w-[150px]">Name</TableHead>
                         <TableHead className="min-w-[130px]">Telefon</TableHead>
+                        <TableHead className="min-w-[200px]">Standort / Anfahrt</TableHead>
                         <TableHead className="min-w-[120px]">Führerschein</TableHead>
                         <TableHead className="min-w-[300px]">Nachricht</TableHead>
                         <TableHead className="min-w-[150px]">Aktionen</TableHead>
@@ -2242,6 +2244,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           </TableCell>
                           <TableCell>
                             {f.telefon}
+                          </TableCell>
+                          <TableCell className="align-top">
+                            <DriverLocationBlock
+                              adresse={f.adresse}
+                              plz={f.plz}
+                              ort={f.ort}
+                              compact
+                            />
                           </TableCell>
                           <TableCell>
                             {f.fuehrerscheinklassen?.join(", ") || "-"}
@@ -2425,6 +2435,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </div>
                           )}
                           
+                          <DriverLocationBlock
+                            adresse={f.adresse}
+                            plz={f.plz}
+                            ort={f.ort}
+                            email={f.email}
+                            telefon={f.telefon}
+                            fuehrerscheinklassen={f.fuehrerscheinklassen}
+                          />
+
                           <div className="text-sm space-y-1">
                             <p className="text-gray-700">
                               <span className="font-medium">Führerschein:</span> {f.fuehrerscheinklassen?.join(", ") || "-"}
