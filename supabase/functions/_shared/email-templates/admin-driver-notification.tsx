@@ -29,20 +29,16 @@ interface AdminDriverNotificationProps {
 
 const NOT_SET = 'nicht erfasst';
 
-const cellLabel = { padding: '5px 0', fontSize: '14px', width: '45%' } as const;
-const cellValue = { padding: '5px 0', fontSize: '14px' } as const;
-
-const Row = ({ label, value }: { label: string; value?: React.ReactNode }) => (
-  <tr>
-    <td style={cellLabel} className="mobile-text"><strong>{label}:</strong></td>
-    <td style={cellValue} className="mobile-text">
-      {value ?? <span style={{ color: colors.muted ?? '#888888' }}>{NOT_SET}</span>}
-    </td>
-  </tr>
-);
-
 const val = (v?: string | null) => (v && String(v).trim() ? String(v).trim() : undefined);
 const list = (v?: string[]) => (v && v.length > 0 ? v.join(', ') : undefined);
+
+// Flache, client-robuste Datenzeile (keine verschachtelten Tabellen -> keine leeren Tabellenblöcke)
+const Line = ({ label, value }: { label: string; value?: React.ReactNode; key?: string }) => (
+  <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 6px 0' })}>
+    <strong>{label}:</strong>{' '}
+    {value ?? <span style={{ color: colors.muted ?? '#888888' }}>{NOT_SET}</span>}
+  </Text>
+);
 
 const DOC_LABELS: { field: string; label: string }[] = [
   { field: 'fuehrerschein', label: 'Führerschein' },
@@ -75,7 +71,7 @@ export const AdminDriverNotification = ({
   };
   const rejectedFor = (field: string) => rejectedFiles.filter((r) => r.field === field);
 
-  const docStatus = (field: string) => {
+  const docStatus = (field: string): React.ReactNode => {
     const count = docCount(field);
     const rejected = rejectedFor(field);
     if (count > 0) {
@@ -113,57 +109,46 @@ export const AdminDriverNotification = ({
 
       <Section {...getBoxProps(boxStyles.highlightBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>🧾 Persönliche Daten</Heading>
-        <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-          <Row label="Vorname" value={val(firstName)} />
-          <Row label="Nachname" value={val(lastName)} />
-          <Row
-            label="E-Mail"
-            value={val(email) ? <a href={`mailto:${email}`} style={{ color: colors.primary }}>{email}</a> : undefined}
-          />
-          <Row
-            label="Telefon"
-            value={val(phone) ? <a href={`tel:${phone}`} style={{ color: colors.primary }}>{phone}</a> : undefined}
-          />
-        </table>
+        <Line label="Vorname" value={val(firstName)} />
+        <Line label="Nachname" value={val(lastName)} />
+        <Line
+          label="E-Mail"
+          value={val(email) ? <a href={`mailto:${email}`} style={{ color: colors.primary }}>{email}</a> : undefined}
+        />
+        <Line
+          label="Telefon"
+          value={val(phone) ? <a href={`tel:${phone}`} style={{ color: colors.primary }}>{phone}</a> : undefined}
+        />
       </Section>
 
       <Section {...getBoxProps(boxStyles.infoBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📍 Standort Fahrer / An- und Abfahrt</Heading>
-        <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-          <Row label="Straße" value={val(strasse)} />
-          <Row label="Hausnummer" value={val(hausnummer)} />
-          <Row label="Postleitzahl" value={val(plz)} />
-          <Row label="Ort" value={val(ort)} />
-          <Row label="Land" value={val(land)} />
-        </table>
+        <Line label="Straße" value={val(strasse)} />
+        <Line label="Hausnummer" value={val(hausnummer)} />
+        <Line label="Postleitzahl" value={val(plz)} />
+        <Line label="Ort" value={val(ort)} />
+        <Line label="Land" value={val(land)} />
       </Section>
 
       <Section {...getBoxProps(boxStyles.infoBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>🚛 Fahrerdetails</Heading>
-        <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-          <Row label="Führerscheinklassen" value={list(licenseClasses)} />
-          <Row
-            label="Berufserfahrung"
-            value={experienceYears || experienceYears === 0 ? `${experienceYears} Jahre` : undefined}
-          />
-          <Row label="Einsatzbereiche / Spezialisierungen" value={list(specializations)} />
-          <Row label="Regionen / Einsatzgebiet" value={list(regions)} />
-          <Row label="Spezialanforderungen" value={list(specialRequirements)} />
-          <Row label="Gewerbeanmeldung eingereicht" value={docCount('gewerbeanmeldung') > 0 ? 'Ja' : 'Nein'} />
-          <Row label="Fahrerkarte eingereicht" value={docCount('fahrerkarte') > 0 ? 'Ja' : 'Nein'} />
-        </table>
+        <Line label="Führerscheinklassen" value={list(licenseClasses)} />
+        <Line
+          label="Berufserfahrung"
+          value={experienceYears || experienceYears === 0 ? `${experienceYears} Jahre` : undefined}
+        />
+        <Line label="Einsatzbereiche / Spezialisierungen" value={list(specializations)} />
+        <Line label="Regionen / Einsatzgebiet" value={list(regions)} />
+        <Line label="Spezialanforderungen" value={list(specialRequirements)} />
+        <Line label="Gewerbeanmeldung eingereicht" value={docCount('gewerbeanmeldung') > 0 ? 'Ja' : 'Nein'} />
+        <Line label="Fahrerkarte eingereicht" value={docCount('fahrerkarte') > 0 ? 'Ja' : 'Nein'} />
       </Section>
 
       <Section {...getBoxProps(boxStyles.infoBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>📎 Hochgeladene Dokumente</Heading>
-        <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-          {DOC_LABELS.map(({ field, label }) => (
-            <tr key={field}>
-              <td style={cellLabel} className="mobile-text"><strong>{label}:</strong></td>
-              <td style={cellValue} className="mobile-text">{docStatus(field)}</td>
-            </tr>
-          ))}
-        </table>
+        {DOC_LABELS.map(({ field, label }) => (
+          <Line key={field} label={label} value={docStatus(field)} />
+        ))}
       </Section>
 
       <Section {...getBoxProps(boxStyles.successBox)}>

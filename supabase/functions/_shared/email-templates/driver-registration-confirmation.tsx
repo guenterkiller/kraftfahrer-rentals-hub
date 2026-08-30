@@ -22,9 +22,10 @@ export const DriverRegistrationConfirmation = ({
     <Section {...getBoxProps(boxStyles.successBox)}>
       <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>So geht es weiter</Heading>
       <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-        Wir prüfen Ihr Profil zeitnah. Sobald ein passender Einsatz vorliegt, erhalten Sie von uns
-        ein konkretes Auftragsangebot mit allen wichtigen Informationen (Einsatzort, Zeitraum,
-        Vergütung). Sie entscheiden frei, ob Sie das Angebot annehmen.
+        Nach Prüfung und Freischaltung Ihres Profils können Sie passende Auftragsangebote per
+        E-Mail erhalten. In diesen E-Mails finden Sie die wichtigsten Einsatzdaten wie Einsatzort,
+        Zeitraum und Vergütung. Sie entscheiden dann frei, ob Sie ein Angebot annehmen oder
+        ablehnen möchten.
       </Text>
     </Section>
 
