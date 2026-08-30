@@ -55,6 +55,7 @@ interface FahrerProfile {
   spezialisierungen: string[] | null;
   verfuegbare_regionen: string[] | null;
   ort: string | null;
+  adresse: string | null;
   plz: string | null;
   beschreibung: string | null;
 }
