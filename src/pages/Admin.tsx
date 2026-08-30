@@ -2597,7 +2597,18 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </Button>
                           </div>
                           {expandedRows.has(f.id) && (
-                            <div className="mt-2 pt-2 border-t">
+                            <div className="mt-2 pt-2 border-t space-y-4">
+                              <DriverLocationBlock
+                                strasse={f.strasse}
+                                hausnummer={f.hausnummer}
+                                adresse={f.adresse}
+                                plz={f.plz}
+                                ort={f.ort}
+                                land={f.land}
+                                email={f.email}
+                                telefon={f.telefon}
+                                fuehrerscheinklassen={f.fuehrerscheinklassen}
+                              />
                               {renderDriverDocuments(f.id)}
                             </div>
                           )}
