@@ -339,8 +339,14 @@ const FahrerRegistrierung = () => {
     const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
     const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
     const gewerbeErrors = validateField('gewerbenachweis_bestaetigt', formData.gewerbenachweis_bestaetigt);
-    
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors);
+    // Standort Fahrer (An-/Abfahrt) – Pflichtfelder
+    const strasseErrors = validateField('strasse', formData.strasse);
+    const hausnummerErrors = validateField('hausnummer', formData.hausnummer);
+    const plzErrors = validateField('plz', formData.plz);
+    const ortErrors = validateField('ort', formData.ort);
+    const landErrors = validateField('land', formData.land);
+
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors, strasseErrors, hausnummerErrors, plzErrors, ortErrors, landErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
