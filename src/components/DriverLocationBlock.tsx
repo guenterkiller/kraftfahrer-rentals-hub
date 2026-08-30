@@ -1,14 +1,19 @@
 import React from "react";
 
 interface DriverLocationBlockProps {
+  strasse?: string | null;
+  hausnummer?: string | null;
   adresse?: string | null;
   plz?: string | null;
   ort?: string | null;
+  land?: string | null;
   email?: string | null;
   telefon?: string | null;
   fuehrerscheinklassen?: string[] | null;
   compact?: boolean;
 }
+
+const NOT_SET = "nicht erfasst";
 
 /**
  * Zeigt den gespeicherten Fahrerstandort eindeutig an.
@@ -17,22 +22,35 @@ interface DriverLocationBlockProps {
  * nicht berechenbar sind.
  */
 export const isDriverLocationComplete = (
-  adresse?: string | null,
+  strasse?: string | null,
+  hausnummer?: string | null,
   plz?: string | null,
-  ort?: string | null
-) => Boolean(adresse?.trim() && plz?.trim() && ort?.trim());
+  ort?: string | null,
+  land?: string | null
+) =>
+  Boolean(
+    strasse?.trim() && hausnummer?.trim() && plz?.trim() && ort?.trim() && land?.trim()
+  );
 
 export const DriverLocationBlock: React.FC<DriverLocationBlockProps> = ({
+  strasse,
+  hausnummer,
   adresse,
   plz,
   ort,
+  land,
   email,
   telefon,
   fuehrerscheinklassen,
   compact = false,
 }) => {
-  const complete = isDriverLocationComplete(adresse, plz, ort);
-  const hasAny = Boolean(adresse?.trim() || plz?.trim() || ort?.trim());
+  const complete = isDriverLocationComplete(strasse, hausnummer, plz, ort, land);
+  const hasAny = Boolean(
+    strasse?.trim() || hausnummer?.trim() || adresse?.trim() || plz?.trim() || ort?.trim() || land?.trim()
+  );
+
+  const Value = ({ value }: { value?: string | null }) =>
+    value?.trim() ? <>{value}</> : <span className="text-destructive">{NOT_SET}</span>;
 
   return (
     <div
@@ -44,51 +62,61 @@ export const DriverLocationBlock: React.FC<DriverLocationBlockProps> = ({
         Standort Fahrer (An-/Abfahrt)
       </div>
 
-      {hasAny ? (
-        <div className="space-y-0.5">
-          <div>
-            <span className="text-muted-foreground">Straße/Hausnr.: </span>
-            {adresse?.trim() ? adresse : <span className="text-destructive">fehlt</span>}
-          </div>
-          <div>
-            <span className="text-muted-foreground">PLZ / Ort: </span>
-            {plz?.trim() || ort?.trim() ? (
-              `${plz ?? ""} ${ort ?? ""}`.trim()
-            ) : (
-              <span className="text-destructive">fehlt</span>
-            )}
-          </div>
-          <div>
-            <span className="text-muted-foreground">Land: </span>
-            <span className="text-muted-foreground">nicht erfasst</span>
-          </div>
+      <div className="space-y-0.5">
+        <div>
+          <span className="text-muted-foreground">Straße: </span>
+          <Value value={strasse} />
         </div>
-      ) : (
-        <div className="text-destructive font-medium">
-          Keine Adresse gespeichert – Anfahrtskosten noch nicht berechenbar – Fahrerstandort fehlt.
+        <div>
+          <span className="text-muted-foreground">Hausnummer: </span>
+          <Value value={hausnummer} />
         </div>
-      )}
+        <div>
+          <span className="text-muted-foreground">PLZ: </span>
+          <Value value={plz} />
+        </div>
+        <div>
+          <span className="text-muted-foreground">Ort: </span>
+          <Value value={ort} />
+        </div>
+        <div>
+          <span className="text-muted-foreground">Land: </span>
+          <Value value={land} />
+        </div>
+        {adresse?.trim() && !strasse?.trim() && (
+          <div>
+            <span className="text-muted-foreground">Altdaten-Adresse: </span>
+            {adresse}
+          </div>
+        )}
+      </div>
 
       {!compact && (
         <div className="pt-1 space-y-0.5 border-t border-dashed border-border/60">
           <div>
             <span className="text-muted-foreground">E-Mail: </span>
-            {email || "-"}
+            <Value value={email} />
           </div>
           <div>
             <span className="text-muted-foreground">Telefon: </span>
-            {telefon || "-"}
+            <Value value={telefon} />
           </div>
           <div>
             <span className="text-muted-foreground">Führerscheinklassen: </span>
-            {fuehrerscheinklassen?.join(", ") || "-"}
+            {fuehrerscheinklassen?.length ? (
+              fuehrerscheinklassen.join(", ")
+            ) : (
+              <span className="text-destructive">{NOT_SET}</span>
+            )}
           </div>
         </div>
       )}
 
-      {hasAny && !complete && (
+      {!complete && (
         <div className="text-destructive font-medium">
-          Anfahrtskosten noch nicht berechenbar – Fahrerstandort fehlt.
+          {hasAny
+            ? "Keine vollständige Fahreradresse gespeichert – Anfahrtskosten noch nicht berechenbar."
+            : "Keine Fahreradresse gespeichert – Anfahrtskosten noch nicht berechenbar."}
         </div>
       )}
     </div>
