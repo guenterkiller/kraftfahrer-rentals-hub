@@ -2426,8 +2426,21 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                         </TableRow>,
                         expandedRows.has(f.id) ? (
                           <TableRow key={`${f.id}-docs`} className="bg-muted/30">
-                            <TableCell colSpan={5}>
-                              {renderDriverDocuments(f.id)}
+                            <TableCell colSpan={6}>
+                              <div className="space-y-4">
+                                <DriverLocationBlock
+                                  strasse={f.strasse}
+                                  hausnummer={f.hausnummer}
+                                  adresse={f.adresse}
+                                  plz={f.plz}
+                                  ort={f.ort}
+                                  land={f.land}
+                                  email={f.email}
+                                  telefon={f.telefon}
+                                  fuehrerscheinklassen={f.fuehrerscheinklassen}
+                                />
+                                {renderDriverDocuments(f.id)}
+                              </div>
                             </TableCell>
                           </TableRow>
                         ) : null,
