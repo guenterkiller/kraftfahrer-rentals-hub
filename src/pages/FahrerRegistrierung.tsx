@@ -412,6 +412,12 @@ const FahrerRegistrierung = () => {
       formDataToSend.append("bf3_erlaubnis", formData.bf3_erlaubnis.toString());
       formDataToSend.append("spezialanforderungen", JSON.stringify(formData.spezialanforderungen));
       formDataToSend.append("firmensitz_land", formData.firmensitz_land || "");
+      // Standort Fahrer (An-/Abfahrt)
+      formDataToSend.append("strasse", formData.strasse.trim());
+      formDataToSend.append("hausnummer", formData.hausnummer.trim());
+      formDataToSend.append("plz", formData.plz.trim());
+      formDataToSend.append("ort", formData.ort.trim());
+      formDataToSend.append("land", formData.land.trim());
       formDataToSend.append("terms_version", TERMS_VERSION_DRIVER);
 
       // Add file uploads
