@@ -223,12 +223,61 @@ export const AdminAnalyticsDashboard = () => {
     return <Badge variant="secondary">{rating}</Badge>;
   };
 
-  const getAverageVital = (metricName: string) => {
-    const metrics = webVitals.filter(v => v.metric_name === metricName);
-    if (metrics.length === 0) return 0;
-    const sum = metrics.reduce((acc, m) => acc + Number(m.metric_value), 0);
-    return (sum / metrics.length).toFixed(2);
+  const percentile = (sorted: number[], p: number) => {
+    if (sorted.length === 0) return 0;
+    const idx = Math.min(sorted.length - 1, Math.ceil((p / 100) * sorted.length) - 1);
+    return sorted[Math.max(0, idx)];
   };
+
+  const getVitalStats = (metricName: string) => {
+    const values = webVitals
+      .filter(v => v.metric_name === metricName)
+      .map(v => Number(v.metric_value))
+      .filter(v => Number.isFinite(v))
+      .sort((a, b) => a - b);
+
+    if (values.length === 0) {
+      return { count: 0, p75: 0, p50: 0, avg: 0, hasOutliers: false };
+    }
+
+    const p75 = percentile(values, 75);
+    const p50 = percentile(values, 50);
+    const avg = values.reduce((acc, v) => acc + v, 0) / values.length;
+    const max = values[values.length - 1];
+    const hasOutliers = values.length >= 4 && p75 > 0 && (max > p75 * 5 || avg > p75 * 2);
+
+    return { count: values.length, p75, p50, avg, hasOutliers };
+  };
+
+  const formatVital = (value: number, metricName: string) =>
+    metricName === 'CLS' ? value.toFixed(3) : `${value.toFixed(0)} ms`;
+
+  const VitalCard = ({ metricName, label }: { metricName: string; label: string }) => {
+    const stats = getVitalStats(metricName);
+    return (
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm font-medium">{metricName} p75</CardTitle>
+          <p className="text-xs text-muted-foreground">{label}</p>
+        </CardHeader>
+        <CardContent className="space-y-1">
+          <div className="text-2xl font-bold">{formatVital(stats.p75, metricName)}</div>
+          <div className="text-xs text-muted-foreground">
+            Median (p50): {formatVital(stats.p50, metricName)}
+          </div>
+          <div className="text-[11px] text-muted-foreground">
+            Ø Durchschnitt: {formatVital(stats.avg, metricName)} · {stats.count} Messungen
+          </div>
+          {stats.hasOutliers && (
+            <div className="text-[11px] text-amber-600 dark:text-amber-500">
+              Einzelne Ausreißer vorhanden – p75 ist maßgeblich (Durchschnitt verfälscht).
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    );
+  };
+
 
   if (loading) {
     return (
@@ -513,58 +562,21 @@ export const AdminAnalyticsDashboard = () => {
         </TabsContent>
 
         <TabsContent value="webvitals" className="space-y-6">
+          {/* Hinweis Messwerte */}
+          <div className="rounded-md border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+            Hauptwert ist p75 (maßgeblich für Core Web Vitals). Development- und Preview-Messwerte
+            können von echten Produktionswerten abweichen.
+          </div>
+
           {/* Core Web Vitals Overview */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">LCP</CardTitle>
-                <p className="text-xs text-muted-foreground">Largest Contentful Paint</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('LCP')} ms</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">FID</CardTitle>
-                <p className="text-xs text-muted-foreground">First Input Delay</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('FID')} ms</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">CLS</CardTitle>
-                <p className="text-xs text-muted-foreground">Cumulative Layout Shift</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('CLS')}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">FCP</CardTitle>
-                <p className="text-xs text-muted-foreground">First Contentful Paint</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('FCP')} ms</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">TTFB</CardTitle>
-                <p className="text-xs text-muted-foreground">Time to First Byte</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('TTFB')} ms</div>
-              </CardContent>
-            </Card>
+            <VitalCard metricName="LCP" label="Largest Contentful Paint" />
+            <VitalCard metricName="FID" label="First Input Delay" />
+            <VitalCard metricName="CLS" label="Cumulative Layout Shift" />
+            <VitalCard metricName="FCP" label="First Contentful Paint" />
+            <VitalCard metricName="TTFB" label="Time to First Byte" />
           </div>
+
 
           {/* Web Vitals Details */}
           <Card>
