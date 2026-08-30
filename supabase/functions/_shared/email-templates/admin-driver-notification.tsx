@@ -33,7 +33,7 @@ const val = (v?: string | null) => (v && String(v).trim() ? String(v).trim() : u
 const list = (v?: string[]) => (v && v.length > 0 ? v.join(', ') : undefined);
 
 // Flache, client-robuste Datenzeile (keine verschachtelten Tabellen -> keine leeren Tabellenblöcke)
-const Line = ({ label, value }: { label: string; value?: React.ReactNode }) => (
+const Line = ({ label, value }: { label: string; value?: React.ReactNode; key?: string }) => (
   <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 6px 0' })}>
     <strong>{label}:</strong>{' '}
     {value ?? <span style={{ color: colors.muted ?? '#888888' }}>{NOT_SET}</span>}
