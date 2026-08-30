@@ -57,9 +57,11 @@ const FahrerRegistrierung = () => {
     nachname: "",
     email: "",
     telefon: "",
-    adresse: "",
+    strasse: "",
+    hausnummer: "",
     plz: "",
     ort: "",
+    land: "Deutschland",
     fuehrerscheinklassen: [] as string[],
     erfahrung_jahre: "",
     spezialisierungen: [] as string[],
@@ -194,6 +196,31 @@ const FahrerRegistrierung = () => {
       case 'telefon':
         if (!value || value.trim() === '') {
           errors.telefon = 'Bitte geben Sie Ihre Telefonnummer ein';
+        }
+        break;
+      case 'strasse':
+        if (!value || value.trim() === '') {
+          errors.strasse = 'Bitte geben Sie Ihre Straße ein';
+        }
+        break;
+      case 'hausnummer':
+        if (!value || value.trim() === '') {
+          errors.hausnummer = 'Bitte geben Sie Ihre Hausnummer ein';
+        }
+        break;
+      case 'plz':
+        if (!value || value.trim() === '') {
+          errors.plz = 'Bitte geben Sie Ihre Postleitzahl ein';
+        }
+        break;
+      case 'ort':
+        if (!value || value.trim() === '') {
+          errors.ort = 'Bitte geben Sie Ihren Ort ein';
+        }
+        break;
+      case 'land':
+        if (!value || value.trim() === '') {
+          errors.land = 'Bitte geben Sie Ihr Land ein';
         }
         break;
       case 'stundensatz':
