@@ -562,58 +562,21 @@ export const AdminAnalyticsDashboard = () => {
         </TabsContent>
 
         <TabsContent value="webvitals" className="space-y-6">
+          {/* Hinweis Messwerte */}
+          <div className="rounded-md border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+            Hauptwert ist p75 (maßgeblich für Core Web Vitals). Development- und Preview-Messwerte
+            können von echten Produktionswerten abweichen.
+          </div>
+
           {/* Core Web Vitals Overview */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">LCP</CardTitle>
-                <p className="text-xs text-muted-foreground">Largest Contentful Paint</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('LCP')} ms</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">FID</CardTitle>
-                <p className="text-xs text-muted-foreground">First Input Delay</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('FID')} ms</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">CLS</CardTitle>
-                <p className="text-xs text-muted-foreground">Cumulative Layout Shift</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('CLS')}</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">FCP</CardTitle>
-                <p className="text-xs text-muted-foreground">First Contentful Paint</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('FCP')} ms</div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">TTFB</CardTitle>
-                <p className="text-xs text-muted-foreground">Time to First Byte</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{getAverageVital('TTFB')} ms</div>
-              </CardContent>
-            </Card>
+            <VitalCard metricName="LCP" label="Largest Contentful Paint" />
+            <VitalCard metricName="FID" label="First Input Delay" />
+            <VitalCard metricName="CLS" label="Cumulative Layout Shift" />
+            <VitalCard metricName="FCP" label="First Contentful Paint" />
+            <VitalCard metricName="TTFB" label="Time to First Byte" />
           </div>
+
 
           {/* Web Vitals Details */}
           <Card>
