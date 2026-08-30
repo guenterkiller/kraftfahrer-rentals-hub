@@ -2294,14 +2294,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             {f.telefon}
                           </TableCell>
                           <TableCell className="align-top">
-                            <DriverLocationBlock
+                            <DriverLocationCell
                               strasse={f.strasse}
                               hausnummer={f.hausnummer}
                               adresse={f.adresse}
                               plz={f.plz}
                               ort={f.ort}
                               land={f.land}
-                              compact
                             />
                           </TableCell>
                           <TableCell>
