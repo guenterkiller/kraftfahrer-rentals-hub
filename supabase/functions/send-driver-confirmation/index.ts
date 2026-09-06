@@ -177,13 +177,15 @@ serve(async (req) => {
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>5) Pauschalierter Schadensersatz:</strong> Bei Verstoß gegen die Ziffern 3 oder 4 schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 2.500 € je Verstoß, sofern kein geringerer Schaden nachgewiesen wird.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>7) Verbindliche Annahme:</strong> Der Fahrer nimmt den Einsatz zu den genannten Bedingungen als selbstständiger Unternehmer verbindlich an.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>8) Mitteilungspflicht:</strong> Der Fahrer verpflichtet sich, Fahrerexpress unverzüglich zu informieren, wenn absehbar ist, dass er den Einsatz nicht, nicht rechtzeitig oder nicht vollständig durchführen kann.</p>
       ${sectionEnd}
 
       ${sectionStart('#f8fafc')}
         ${h3('Nichterscheinen / kurzfristige Absage (No-Show)', '#bb2c29')}
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;">Bei Nichterscheinen oder Absage ≤ 24 Stunden vor Einsatzbeginn schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 150 €, es sei denn, höhere Gewalt liegt vor.</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;">Etwaige Ansprüche des Auftraggebers bleiben hiervon unberührt.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;">Bei Nichterscheinen oder Absage weniger als 24 Stunden vor Einsatzbeginn schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 150,00 €, sofern kein Fall höherer Gewalt vorliegt und sofern der Fahrer nicht nachweist, dass kein oder ein wesentlich geringerer Schaden entstanden ist. Etwaige weitergehende Schäden bleiben vorbehalten. Etwaige Ansprüche des Auftraggebers bleiben hiervon unberührt.</p>
       ${sectionEnd}
+
 
       <p class="body-text" style="margin:18px 0 8px 0;font-size:14px;color:#374151;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
       <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
