@@ -99,7 +99,7 @@ serve(async (req) => {
       </p>
       <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Bitte beachten Sie:</strong></p>
       <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Die Benennung des Fahrers erfolgt auf Grundlage der aktuellen Verfügbarkeit sowie der vom Fahrer mitgeteilten und bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung des Einsatzes ist damit nicht verbunden.
+        Fahrerexpress vermittelt den benannten selbstständigen Fahrer für den angefragten Einsatz. Die Durchführung erfolgt eigenverantwortlich durch den selbstständigen Fahrer. Fahrerexpress erbringt keine Arbeitnehmerüberlassung und stellt keine eigenen Arbeitnehmer zur Verfügung. Die Benennung erfolgt nach aktueller Rückmeldung des Fahrers zu seiner Verfügbarkeit und Einsatzbereitschaft; eine Zusage für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung ist damit nicht verbunden. Sollte der Fahrer aus Krankheit, höherer Gewalt oder sonstigen unvorhersehbaren Gründen ausfallen, bemüht sich Fahrerexpress nach Möglichkeit um eine Ersatzlösung. Eine jederzeitige Ersatzgestellung wird nicht zugesagt. Fahrerexpress haftet nicht für mittelbare Schäden, entgangenen Gewinn, Produktionsausfall, Vertragsstrafen oder Folgeschäden des Auftraggebers, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit von Fahrerexpress beruhen.
       </p>
       <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
         Sollte sich vor oder während des Einsatzes eine Änderung, Verzögerung oder ein Ausfall ergeben, bitten wir um unverzügliche Mitteilung, damit der Sachverhalt geprüft und das weitere Vorgehen abgestimmt werden kann.
@@ -135,7 +135,7 @@ Einsatzort: ${einsatzort}
 Die Kontaktdaten werden Ihnen zur unmittelbaren einsatzbezogenen Abstimmung übermittelt.
 
 Bitte beachten Sie:
-Die Benennung des Fahrers erfolgt auf Grundlage der aktuellen Verfügbarkeit sowie der vom Fahrer mitgeteilten und bestätigten Einsatzbereitschaft. Eine Garantie für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung des Einsatzes ist damit nicht verbunden.
+Fahrerexpress vermittelt den benannten selbstständigen Fahrer für den angefragten Einsatz. Die Durchführung erfolgt eigenverantwortlich durch den selbstständigen Fahrer. Fahrerexpress erbringt keine Arbeitnehmerüberlassung und stellt keine eigenen Arbeitnehmer zur Verfügung. Die Benennung erfolgt nach aktueller Rückmeldung des Fahrers zu seiner Verfügbarkeit und Einsatzbereitschaft; eine Zusage für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung ist damit nicht verbunden. Sollte der Fahrer aus Krankheit, höherer Gewalt oder sonstigen unvorhersehbaren Gründen ausfallen, bemüht sich Fahrerexpress nach Möglichkeit um eine Ersatzlösung. Eine jederzeitige Ersatzgestellung wird nicht zugesagt. Fahrerexpress haftet nicht für mittelbare Schäden, entgangenen Gewinn, Produktionsausfall, Vertragsstrafen oder Folgeschäden des Auftraggebers, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit von Fahrerexpress beruhen.
 
 Sollte sich vor oder während des Einsatzes eine Änderung, Verzögerung oder ein Ausfall ergeben, bitten wir um unverzügliche Mitteilung, damit der Sachverhalt geprüft und das weitere Vorgehen abgestimmt werden kann.
 

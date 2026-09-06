@@ -161,7 +161,17 @@ export const CustomerBookingConfirmation = ({
       <Section {...getBoxProps(boxStyles.infoBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihr Vertragspartner</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>{ROLLENBESCHREIBUNG}</Text>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
+          Fahrerexpress vermittelt den benannten selbstständigen Fahrer für den angefragten Einsatz. Die Durchführung erfolgt eigenverantwortlich durch den selbstständigen Fahrer. Fahrerexpress erbringt keine Arbeitnehmerüberlassung und stellt keine eigenen Arbeitnehmer zur Verfügung.
+        </Text>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
+          Sollte der Fahrer aus Krankheit, höherer Gewalt oder sonstigen unvorhersehbaren Gründen ausfallen, bemüht sich Fahrerexpress nach Möglichkeit um eine Ersatzlösung. Eine jederzeitige Ersatzgestellung wird nicht zugesagt.
+        </Text>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
+          Fahrerexpress haftet nicht für mittelbare Schäden, entgangenen Gewinn, Produktionsausfall, Vertragsstrafen oder Folgeschäden des Auftraggebers, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit von Fahrerexpress beruhen. Die Haftung für Vorsatz sowie für Schäden aus der Verletzung von Leben, Körper oder Gesundheit bleibt unberührt.
+        </Text>
       </Section>
+
 
       {tarif && !tarif.needsReview && (
         <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderLeftColor: '#16a34a' })}>
