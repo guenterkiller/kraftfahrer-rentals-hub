@@ -964,6 +964,7 @@ const SimpleBookingForm = () => {
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                   <h4 className="font-semibold text-amber-800 mb-2">Stornierungsregelung</h4>
                   <ul className="text-sm text-amber-900 space-y-1">
+                    <li>• Die Stornoregelung gilt nach bestätigter Fahrerzuteilung und Auftragsbestätigung.</li>
                     <li>• Storno bis 24 Std. vorher → kostenlos</li>
                     <li>• Storno unter 24 Std. → 80 % des Tagessatzes, sofern kein geringerer Schaden nachgewiesen wird.</li>
                     <li>• Same-Day-Buchungen ausgeschlossen (Mindestvorlauf 24h werktags)</li>
@@ -1031,8 +1032,9 @@ const SimpleBookingForm = () => {
                       className="mt-0.5"
                     />
                     <Label htmlFor="binding" className="text-sm leading-snug">
-                      Ich bestätige, dass diese Buchung eine verbindliche Bestellung darstellt.
-                      Mir ist bekannt, dass bei Rücktritt oder Absage Stornokosten gemäß Stornoregelung anfallen. *
+                      Ich bestätige, dass ich mit Absenden des Formulars eine verbindliche Anfrage zur Fahrerdisposition stelle.
+                      Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht.
+                      Nach Mitteilung der Fahrerzuteilung habe ich die Möglichkeit, der Zuteilung unverzüglich zu widersprechen, sofern die mitgeteilten Daten nicht passen. *
                     </Label>
                   </div>
 
@@ -1072,7 +1074,7 @@ const SimpleBookingForm = () => {
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-3">
-                  Hinweis: Mit Absenden stellen Sie eine verbindliche Anfrage. Es gelten die veröffentlichten Storno- und Zahlungsbedingungen.
+                  Hinweis: Mit Absenden stellen Sie eine verbindliche Anfrage zur Fahrerdisposition. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Nach Mitteilung der Fahrerzuteilung können Sie der Zuteilung unverzüglich widersprechen, wenn die Angaben nicht passen.
                 </p>
               </form>
 
