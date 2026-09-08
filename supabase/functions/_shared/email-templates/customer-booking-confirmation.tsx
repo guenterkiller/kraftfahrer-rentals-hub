@@ -111,7 +111,7 @@ export const CustomerBookingConfirmation = ({
         Vielen Dank für Ihre Anfrage über unser Buchungsformular.
       </Text>
       <Text {...getTextProps(textStyles.paragraph)}>
-        Mit dem Absenden des Formulars haben Sie eine verbindliche Buchungsanfrage gestellt. Die Beauftragung erfolgt gemäß unseren veröffentlichten Vermittlungs- und Stornierungsbedingungen.
+        Ihre Anfrage ist bei uns eingegangen. Fahrerexpress prüft nun die Verfügbarkeit passender selbstständiger Fahrer. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Nach Mitteilung der Fahrerzuteilung haben Sie die Möglichkeit, der Zuteilung unverzüglich zu widersprechen, sofern die mitgeteilten Daten nicht passen.
       </Text>
 
       <Section {...getBoxProps(boxStyles.warningBox)}>
