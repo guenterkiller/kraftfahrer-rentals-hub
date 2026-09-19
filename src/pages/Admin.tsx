@@ -458,30 +458,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const handleAutoLogout = async () => {
-    if (user) {
-      await logAdminEvent('auto_logout', user.email);
-      
-      // Mark sessions as inactive
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        await supabase
-          .from('admin_sessions')
-          .update({ is_active: false })
-          .eq('user_id', session.user.id);
-      }
-      
-      await supabase.auth.signOut();
-      setUser(null);
-      setFahrer([]);
-      setDocuments({});
-      
-      toast({
-        title: "Automatisch abgemeldet",
-        description: "Sie wurden wegen Inaktivität abgemeldet",
-        variant: "destructive"
-      });
-      
-      navigate('/admin/login');
+    if (user && !signedOutRef.current) {
+      await performLogout('auto');
     }
   };
 
