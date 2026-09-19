@@ -15,22 +15,12 @@ export default function AdminRoute({ children }: AdminRouteProps) {
 
     const checkAdminAccess = async () => {
       if (!isMounted) return;
-      
+
       try {
-        let { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
+        // Kein eigener refreshSession() – der Supabase-Client erneuert das Token selbst.
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
         if (!isMounted) return;
-        
-        const expSec = (session as any)?.expires_at as number | undefined;
-        if (session && expSec && expSec * 1000 < Date.now() + 60_000) {
-          const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession();
-          if (refreshError || !refreshed?.session) {
-            await supabase.auth.signOut().catch(() => {});
-            session = null;
-          } else {
-            session = refreshed.session;
-          }
-        }
 
         if (sessionError || !session) {
           setIsAdmin(false);
@@ -53,7 +43,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
           return;
         }
 
-        // Update session activity (fire and forget)
+        // Update session activity (fire and forget, darf nie blockieren)
         supabase
           .from('admin_sessions')
           .update({ last_activity: new Date().toISOString() })
@@ -73,7 +63,7 @@ export default function AdminRoute({ children }: AdminRouteProps) {
     };
 
     checkAdminAccess();
-    
+
     return () => {
       isMounted = false;
     };

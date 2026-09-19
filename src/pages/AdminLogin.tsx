@@ -118,7 +118,7 @@ const AdminLogin = () => {
 
       if (roleError || !roleData) {
         console.error('Role verification failed:', roleError);
-        try { await supabase.auth.signOut(); } catch (err) { console.error('[LOGIN signOut-CATCH]:', err); }
+        try { await supabase.auth.signOut({ scope: 'local' }); } catch (err) { console.error('[LOGIN signOut-CATCH]:', err); }
         toast({
           title: "Zugriff verweigert",
           description: "Sie haben keine Admin-Berechtigung",
