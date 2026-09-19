@@ -1348,6 +1348,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const loadDocumentCounts = async (fahrerData: FahrerProfile[]) => {
+    if (signedOutRef.current) return;
     try {
       const fahrerIds = fahrerData.map(f => f.id);
 
