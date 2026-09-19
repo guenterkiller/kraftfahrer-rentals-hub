@@ -136,6 +136,7 @@ const Admin = () => {
   const [jobAssignments, setJobAssignments] = useState<any[]>([]);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const authCheckStartedRef = useRef(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
@@ -398,7 +399,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 
   useEffect(() => {
-    checkAuth();
+    // StrictMode montiert doppelt – Auth-/Ladelauf nur einmal starten.
+    if (!authCheckStartedRef.current) {
+      authCheckStartedRef.current = true;
+      checkAuth();
+    }
     const cleanupInactivityTimer = setupInactivityTimer();
 
     return () => {
