@@ -481,7 +481,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   const checkAuth = async () => {
     console.log("🔍 Admin: Lese Session (Auth bereits durch AdminRoute geprüft)...");
-    setAuthChecking(true);
 
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -496,24 +495,25 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       // Keine erneute Rollen-/Refresh-Prüfung: AdminRoute ist die Sicherheitsinstanz.
       setUser({ email: session.user.email } as User);
-      
+
       // Persist simple admin session for edge function calls
       localStorage.setItem('adminSession', JSON.stringify({
         email: session.user.email,
         isAdmin: true,
         lastLogin: new Date().toISOString(),
       }));
-      
-      // Wait a tick to ensure the session is fully available to the Supabase client
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+
+      // Auth ist bestätigt – Oberfläche sofort freigeben.
+      setAuthChecking(false);
+
+      // Daten erst NACH bestätigter Auth laden; Fehler dürfen die Auth nicht beeinflussen.
       console.log("🔄 Admin: Lade Daten...");
-      await Promise.all([
+      void Promise.allSettled([
         loadFahrerData(),
         loadJobRequests(),
         loadJobAssignments()
       ]);
-      
+
       // Update session activity (fire-and-forget)
       supabase
         .from('admin_sessions')
@@ -521,8 +521,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         .eq('user_id', session.user.id)
         .eq('is_active', true)
         .then(() => {});
-      
-      setAuthChecking(false);
     } catch (e) {
       console.error("❌ Admin: Auth-Fehler:", e);
       setAuthChecking(false);
