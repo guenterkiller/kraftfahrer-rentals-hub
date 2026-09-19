@@ -137,6 +137,7 @@ const Admin = () => {
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const authCheckStartedRef = useRef(false);
+  const signedOutRef = useRef(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
