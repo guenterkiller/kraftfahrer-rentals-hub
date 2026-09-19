@@ -593,6 +593,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [isLoadingJobs, setIsLoadingJobs] = useState(false);
 
   const loadJobRequests = async () => {
+    if (signedOutRef.current) return;
     setIsLoadingJobs(true);
     try {
       console.log("📋 Admin: Lade Jobanfragen...");
