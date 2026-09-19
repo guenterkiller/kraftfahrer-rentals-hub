@@ -1254,7 +1254,19 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         const msg = (error as any)?.message || '';
         const ctxStatus = (error as any)?.context?.status;
         if (ctxStatus === 401 || /Auth session missing|Invalid token|JWT/i.test(msg)) {
-          await supabase.auth.signOut().catch(() => {});
+          // Ein einzelner 401 darf nicht global abmelden: Session einmal sauber nachprüfen.
+          const { data: { session: stillValid } } = await supabase.auth.getSession();
+          if (stillValid) {
+            console.warn("⚠️ Admin: 401 trotz gültiger Session – kein Logout, nur Hinweis.");
+            toast({
+              title: "Daten konnten nicht geladen werden",
+              description: "Bitte erneut aktualisieren.",
+              variant: "destructive",
+            });
+            return;
+          }
+          // Wirklich keine Session mehr: nur lokal abmelden, nie global.
+          await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
           toast({
             title: "Sitzung abgelaufen",
             description: "Bitte melden Sie sich erneut an.",
