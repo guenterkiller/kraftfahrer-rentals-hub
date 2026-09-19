@@ -2420,7 +2420,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   className="text-xs h-8 border-2 border-slate-500 text-slate-700 hover:bg-slate-50 hover:text-slate-800 font-medium shadow-sm"
                                   onClick={() => { setAddressDialogDriver(f); setAddressDialogOpen(true); }}
                                 >
-                                  📍 Adresse bearbeiten
+                                  📝 Fahrerdaten bearbeiten
                                 </Button>
                                 <Button
                                   size="sm"

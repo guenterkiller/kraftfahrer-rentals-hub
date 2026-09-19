@@ -10,11 +10,14 @@ export interface DriverAddressDriver {
   id: string;
   vorname?: string | null;
   nachname?: string | null;
+  email?: string | null;
+  telefon?: string | null;
   strasse?: string | null;
   hausnummer?: string | null;
   plz?: string | null;
   ort?: string | null;
   land?: string | null;
+  fuehrerscheinklassen?: string[] | null;
 }
 
 interface DriverAddressDialogProps {
@@ -25,42 +28,80 @@ interface DriverAddressDialogProps {
 }
 
 /**
- * Admin-Dialog zum Nachtragen/Korrigieren der Fahreradresse.
+ * Admin-Dialog zum Bearbeiten der Fahrerstammdaten
+ * (Persönliche Daten, Kontaktdaten, Adresse, Fahrerdaten).
  * Schreibt ausschließlich in public.fahrer_profile für den aktiv gewählten Fahrer.
+ * Status, Sperrung, Deaktivierung, Dokumente und Zuweisungen bleiben unberührt.
  * Die Adminprüfung erfolgt serverseitig über die RLS-Policy
  * `fahrer_profile_admin_update` (is_admin_user(auth.uid())).
  */
 export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAddressDialogProps) {
+  const [vorname, setVorname] = useState("");
+  const [nachname, setNachname] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefon, setTelefon] = useState("");
   const [strasse, setStrasse] = useState("");
   const [hausnummer, setHausnummer] = useState("");
   const [plz, setPlz] = useState("");
   const [ort, setOrt] = useState("");
   const [land, setLand] = useState("");
+  const [klassen, setKlassen] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     if (open && driver) {
+      setVorname(driver.vorname ?? "");
+      setNachname(driver.nachname ?? "");
+      setEmail(driver.email ?? "");
+      setTelefon(driver.telefon ?? "");
       setStrasse(driver.strasse ?? "");
       setHausnummer(driver.hausnummer ?? "");
       setPlz(driver.plz ?? "");
       setOrt(driver.ort ?? "");
       setLand(driver.land ?? "");
+      setKlassen((driver.fuehrerscheinklassen ?? []).join(", "));
     }
   }, [open, driver]);
 
   const handleSave = async () => {
     if (!driver) return;
 
+    const v = vorname.trim();
+    const n = nachname.trim();
+    const e = email.trim();
+    const t = telefon.trim();
     const s = strasse.trim();
     const h = hausnummer.trim();
     const p = plz.trim();
     const o = ort.trim();
     const l = land.trim();
+    const kl = klassen
+      .split(",")
+      .map((k) => k.trim())
+      .filter(Boolean);
+
+    if (!v || !n || !e || !t) {
+      toast({
+        title: "Angaben unvollständig",
+        description: "Vorname, Nachname, E-Mail und Telefon sind Pflichtfelder.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
+      toast({
+        title: "E-Mail ungültig",
+        description: "Bitte eine gültige E-Mail-Adresse eingeben.",
+        variant: "destructive",
+      });
+      return;
+    }
 
     if (!s || !h || !p || !o || !l) {
       toast({
-        title: "Angaben unvollständig",
+        title: "Adresse unvollständig",
         description: "Bitte Straße, Hausnummer, PLZ, Ort und Land ausfüllen.",
         variant: "destructive",
       });
@@ -72,11 +113,16 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
       const { error } = await supabase
         .from("fahrer_profile")
         .update({
+          vorname: v,
+          nachname: n,
+          email: e,
+          telefon: t,
           strasse: s,
           hausnummer: h,
           plz: p,
           ort: o,
           land: l,
+          fuehrerscheinklassen: kl,
           // Legacy-Feld: automatisch aus Straße + Hausnummer gebildet
           adresse: `${s} ${h}`,
         })
@@ -85,13 +131,13 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
       if (error) throw error;
 
       toast({
-        title: "Adresse gespeichert",
-        description: `${s} ${h}, ${p} ${o}, ${l}`,
+        title: "Fahrerdaten gespeichert",
+        description: `${v} ${n} – ${s} ${h}, ${p} ${o}, ${l}`,
       });
       onSaved();
       onClose();
     } catch (err) {
-      console.error("Fehler beim Speichern der Fahreradresse:", err);
+      console.error("Fehler beim Speichern der Fahrerdaten:", err);
       toast({
         title: "Speichern fehlgeschlagen",
         description: err instanceof Error ? err.message : "Unbekannter Fehler",
@@ -103,15 +149,52 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
   };
 
   const driverName = driver ? `${driver.vorname ?? ""} ${driver.nachname ?? ""}`.trim() : "";
+  const emailChanged = Boolean(driver && email.trim() && email.trim() !== (driver.email ?? ""));
+
+  const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+    <div className="font-semibold uppercase tracking-wide text-[10px] text-muted-foreground pt-1">
+      {children}
+    </div>
+  );
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Adresse bearbeiten{driverName ? ` – ${driverName}` : ""}</DialogTitle>
+          <DialogTitle>Fahrerdaten bearbeiten{driverName ? ` – ${driverName}` : ""}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-3">
+          <SectionTitle>Persönliche Daten</SectionTitle>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label htmlFor="driver-vorname">Vorname</Label>
+              <Input id="driver-vorname" value={vorname} onChange={(e) => setVorname(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="driver-nachname">Nachname</Label>
+              <Input id="driver-nachname" value={nachname} onChange={(e) => setNachname(e.target.value)} />
+            </div>
+          </div>
+
+          <SectionTitle>Kontaktdaten</SectionTitle>
+          <div className="space-y-1">
+            <Label htmlFor="driver-email">E-Mail-Adresse</Label>
+            <Input id="driver-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="driver-telefon">Telefonnummer</Label>
+            <Input id="driver-telefon" value={telefon} onChange={(e) => setTelefon(e.target.value)} />
+          </div>
+          {emailChanged && (
+            <p className="text-xs text-amber-700">
+              Hinweis: Die E-Mail wird nur im Fahrerprofil geändert. Bereits hochgeladene Dokumente und
+              Zuweisungen bleiben unverändert erreichbar. Newsletter-/Abmelde-Einträge zur alten Adresse
+              bleiben bestehen.
+            </p>
+          )}
+
+          <SectionTitle>Adresse</SectionTitle>
           <div className="grid grid-cols-3 gap-2">
             <div className="col-span-2 space-y-1">
               <Label htmlFor="driver-strasse">Straße</Label>
@@ -136,8 +219,22 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
             <Label htmlFor="driver-land">Land</Label>
             <Input id="driver-land" value={land} onChange={(e) => setLand(e.target.value)} placeholder="Deutschland" />
           </div>
+
+          <SectionTitle>Fahrerdaten</SectionTitle>
+          <div className="space-y-1">
+            <Label htmlFor="driver-klassen">Führerscheinklassen</Label>
+            <Input
+              id="driver-klassen"
+              value={klassen}
+              onChange={(e) => setKlassen(e.target.value)}
+              placeholder="z. B. C, CE, C1E"
+            />
+            <p className="text-xs text-muted-foreground">Mehrere Klassen mit Komma trennen.</p>
+          </div>
+
           <p className="text-xs text-muted-foreground">
-            Das Legacy-Feld „adresse“ wird automatisch aus Straße und Hausnummer gebildet.
+            Das Legacy-Feld „adresse“ wird automatisch aus Straße und Hausnummer gebildet. Status, Sperrung
+            und Deaktivierung werden hier nicht verändert; es werden keine E-Mails versendet.
           </p>
         </div>
 
@@ -146,7 +243,7 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
             Abbrechen
           </Button>
           <Button onClick={handleSave} disabled={isSaving}>
-            {isSaving ? "Speichern…" : "Adresse speichern"}
+            {isSaving ? "Speichern…" : "Fahrerdaten speichern"}
           </Button>
         </DialogFooter>
       </DialogContent>
