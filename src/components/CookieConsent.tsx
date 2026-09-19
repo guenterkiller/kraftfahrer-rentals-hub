@@ -69,7 +69,7 @@ export function CookieConsent() {
               <strong>Cookies & Datenschutz</strong>
               <p style={{margin:'6px 0 8px'}}>
                 Wir verwenden notwendige Cookies für den Betrieb. Analyse/Marketing setzen wir nur mit Ihrer Einwilligung.
-                Sie können Ihre Auswahl jederzeit ändern: <a className="link" href="/cookies.html">Cookie-Einstellungen</a> · <a className="link" href="/datenschutz.html">Datenschutz</a>
+                Sie können Ihre Auswahl jederzeit hier in den Cookie-Einstellungen ändern. <a className="link" href="/datenschutz.html">Datenschutz</a>
               </p>
               <div className="switch"><input type="checkbox" checked disabled /> <span>Essentiell (immer aktiv)</span></div>
               <div className="switch"><input id="ana" type="checkbox" checked={analytics} onChange={e=>setAnalytics(e.target.checked)} /> <label htmlFor="ana">Analyse</label></div>

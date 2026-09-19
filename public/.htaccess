@@ -96,16 +96,16 @@ RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=30
 RewriteCond %{THE_REQUEST} \s/datenschutzerklaerung\.html\s [NC]
 RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
 RewriteCond %{THE_REQUEST} \s/allgemeine-geschaeftsbedingungen\.html\s [NC]
-RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/agb [R=301,L]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/vermittlungsbedingungen [R=301,L]
 # Legacy mobile/smartphone/printable/vgapda URLs → Homepage
 RewriteRule ^mobile/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
 RewriteRule ^smartphone/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
 RewriteRule ^printable/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
 RewriteRule ^vgapda/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
 
-# Referenzen variants (mobile/smartphone/printable .../default.html)
-RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
-RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/referenzen [R=301,L]
+# Referenzen variants (mobile/smartphone/printable .../default.html) → Projekte
+RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/projekte [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/projekte [R=301,L]
 
 # Any PHP files → Homepage
 RewriteCond %{REQUEST_URI} \.php$ [NC]
