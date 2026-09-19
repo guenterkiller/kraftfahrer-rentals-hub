@@ -648,6 +648,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const loadJobAssignments = async () => {
+    if (signedOutRef.current) return;
     try {
       console.log('🔄 Loading job assignments...');
       const { data: assignmentsData, error: assignmentsError } = await supabase
