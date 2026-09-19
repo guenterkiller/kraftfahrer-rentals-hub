@@ -78,7 +78,8 @@ export const useSEO = (seoData: SEOData) => {
   const location = useLocation();
   const baseUrl = 'https://www.kraftfahrer-mieten.com';
   // Für die Startseite explizit mit trailing slash
-  const canonicalUrl = location.pathname === '/' 
+  // /fahrer-buchen rendert dieselbe Index-Komponente wie / → Canonical auf Homepage
+  const canonicalUrl = location.pathname === '/' || location.pathname === '/fahrer-buchen'
     ? 'https://www.kraftfahrer-mieten.com/' 
     : `${baseUrl}${location.pathname}`;
 
