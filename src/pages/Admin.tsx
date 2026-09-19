@@ -534,39 +534,81 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  const handleLogout = async () => {
-    console.log("📤 Admin: Abmeldung...");
-    
-    if (user) {
-      await logAdminEvent('manual_logout', user.email);
-    }
-    
-    // Mark sessions as inactive
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      await supabase
-        .from('admin_sessions')
-        .update({ is_active: false })
-        .eq('user_id', session.user.id);
-    }
-    
-    // Sign out from Supabase
-    await supabase.auth.signOut();
-    setUser(null);
-    setFahrer([]);
-    setDocuments({});
-    
+  // Bewusster Logout (manuell oder Inaktivität): lokale Session sicher entfernen,
+  // Admin-State zurücksetzen, Timer stoppen und zuverlässig zum Login navigieren.
+  const performLogout = async (reason: 'manual' | 'auto') => {
+    // Ab hier dürfen keine Admin-Datenabfragen mehr starten.
+    signedOutRef.current = true;
+
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
       inactivityTimerRef.current = null;
     }
-    
-    toast({
-      title: "Abgemeldet",
-      description: "Sie wurden erfolgreich abgemeldet"
-    });
 
-    navigate('/admin/login');
+    try {
+      if (user) {
+        await logAdminEvent(reason === 'manual' ? 'manual_logout' : 'auto_logout', user.email);
+      }
+    } catch (e) {
+      console.warn('Logout-Logging fehlgeschlagen (nicht blockierend):', e);
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await supabase
+          .from('admin_sessions')
+          .update({ is_active: false })
+          .eq('user_id', session.user.id);
+      }
+    } catch (e) {
+      console.warn('admin_sessions-Update fehlgeschlagen (nicht blockierend):', e);
+    }
+
+    // Serverseitige Session widerrufen – Fehler (z. B. session_not_found) dürfen
+    // die Abmeldung nicht verhindern.
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) console.warn('signOut (global) Hinweis:', error.message);
+    } catch (e) {
+      console.warn('signOut (global) Fehler:', e);
+    }
+
+    // Lokale Auth-Daten in jedem Fall entfernen.
+    try {
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch {
+      /* ignorieren */
+    }
+    try {
+      localStorage.removeItem('adminSession');
+    } catch {
+      /* ignorieren */
+    }
+
+    setUser(null);
+    setFahrer([]);
+    setDocuments({});
+    setDocumentCounts({});
+    setJobRequests([]);
+    setJobAssignments([]);
+
+    toast(
+      reason === 'manual'
+        ? { title: "Abgemeldet", description: "Sie wurden erfolgreich abgemeldet" }
+        : {
+            title: "Automatisch abgemeldet",
+            description: "Sie wurden wegen Inaktivität abgemeldet",
+            variant: "destructive" as const,
+          }
+    );
+
+    navigate('/admin/login', { replace: true });
+  };
+
+  const handleLogout = async () => {
+    console.log("📤 Admin: Abmeldung...");
+    await performLogout('manual');
   };
 
 
