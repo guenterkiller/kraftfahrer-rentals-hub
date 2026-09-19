@@ -36,18 +36,16 @@ export function EmailLogView() {
   const loadEmailLogs = async () => {
     setLoading(true);
     try {
-      const adminSession = localStorage.getItem('adminSession');
-      if (!adminSession) {
-        throw new Error('No admin session found');
+      // Gültige Supabase-Session ist maßgeblich (nicht der localStorage-Eintrag),
+      // damit der Aufruf nie ohne bzw. mit veraltetem Token rausgeht.
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        setEmailLogs([]);
+        return;
       }
-      
-      const session = JSON.parse(adminSession);
-      
+
       const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
-        body: {
-          email: session.email,
-          dataType: 'emails'
-        }
+        body: { dataType: 'emails' }
       });
 
       if (error) throw error;
