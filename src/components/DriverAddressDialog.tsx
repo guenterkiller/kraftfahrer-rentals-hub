@@ -130,9 +130,54 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
 
       if (error) throw error;
 
+      // Newsletter-/Abmeldestatus: liegt auf dem Fahrerprofil selbst
+      // (email_opt_out, unsubscribed_at) und wird hier nicht angefasst –
+      // er bleibt damit bei einer E-Mail-Änderung automatisch erhalten.
+      // Zusätzlich existiert die alte, rein E-Mail-basierte Jobalarm-Liste.
+      let listHint = "";
+      const oldEmail = (driver.email ?? "").trim();
+      if (oldEmail && oldEmail.toLowerCase() !== e.toLowerCase()) {
+        try {
+          // Nur umziehen, wenn die alte Adresse eindeutig zu diesem Fahrer gehört.
+          const { data: otherDrivers } = await supabase
+            .from("fahrer_profile")
+            .select("id")
+            .ilike("email", oldEmail)
+            .neq("id", driver.id);
+
+          if (!otherDrivers || otherDrivers.length === 0) {
+            const { data: oldEntries } = await supabase
+              .from("jobalarm_fahrer")
+              .select("id")
+              .ilike("email", oldEmail);
+
+            if (oldEntries && oldEntries.length > 0) {
+              const { data: newEntries } = await supabase
+                .from("jobalarm_fahrer")
+                .select("id")
+                .ilike("email", e);
+
+              if (!newEntries || newEntries.length === 0) {
+                await supabase.from("jobalarm_fahrer").insert({ email: e.toLowerCase() });
+              }
+              await supabase
+                .from("jobalarm_fahrer")
+                .delete()
+                .in("id", oldEntries.map((r) => r.id));
+              listHint = " Jobalarm-Eintrag auf die neue Adresse übertragen.";
+            }
+          } else {
+            listHint = " Alte Adresse wird von einem weiteren Fahrer genutzt – Jobalarm-Liste unverändert.";
+          }
+        } catch (listErr) {
+          console.error("Jobalarm-Liste konnte nicht umgezogen werden:", listErr);
+          listHint = " Hinweis: Jobalarm-Liste konnte nicht automatisch angepasst werden.";
+        }
+      }
+
       toast({
         title: "Fahrerdaten gespeichert",
-        description: `${v} ${n} – ${s} ${h}, ${p} ${o}, ${l}`,
+        description: `${v} ${n} – ${s} ${h}, ${p} ${o}, ${l}.${listHint}`,
       });
       onSaved();
       onClose();
