@@ -137,6 +137,7 @@ const Admin = () => {
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const authCheckStartedRef = useRef(false);
+  const signedOutRef = useRef(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
@@ -457,30 +458,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const handleAutoLogout = async () => {
-    if (user) {
-      await logAdminEvent('auto_logout', user.email);
-      
-      // Mark sessions as inactive
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        await supabase
-          .from('admin_sessions')
-          .update({ is_active: false })
-          .eq('user_id', session.user.id);
-      }
-      
-      await supabase.auth.signOut();
-      setUser(null);
-      setFahrer([]);
-      setDocuments({});
-      
-      toast({
-        title: "Automatisch abgemeldet",
-        description: "Sie wurden wegen Inaktivität abgemeldet",
-        variant: "destructive"
-      });
-      
-      navigate('/admin/login');
+    if (user && !signedOutRef.current) {
+      await performLogout('auto');
     }
   };
 
@@ -533,45 +512,88 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  const handleLogout = async () => {
-    console.log("📤 Admin: Abmeldung...");
-    
-    if (user) {
-      await logAdminEvent('manual_logout', user.email);
-    }
-    
-    // Mark sessions as inactive
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      await supabase
-        .from('admin_sessions')
-        .update({ is_active: false })
-        .eq('user_id', session.user.id);
-    }
-    
-    // Sign out from Supabase
-    await supabase.auth.signOut();
-    setUser(null);
-    setFahrer([]);
-    setDocuments({});
-    
+  // Bewusster Logout (manuell oder Inaktivität): lokale Session sicher entfernen,
+  // Admin-State zurücksetzen, Timer stoppen und zuverlässig zum Login navigieren.
+  const performLogout = async (reason: 'manual' | 'auto') => {
+    // Ab hier dürfen keine Admin-Datenabfragen mehr starten.
+    signedOutRef.current = true;
+
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
       inactivityTimerRef.current = null;
     }
-    
-    toast({
-      title: "Abgemeldet",
-      description: "Sie wurden erfolgreich abgemeldet"
-    });
 
-    navigate('/admin/login');
+    try {
+      if (user) {
+        await logAdminEvent(reason === 'manual' ? 'manual_logout' : 'auto_logout', user.email);
+      }
+    } catch (e) {
+      console.warn('Logout-Logging fehlgeschlagen (nicht blockierend):', e);
+    }
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await supabase
+          .from('admin_sessions')
+          .update({ is_active: false })
+          .eq('user_id', session.user.id);
+      }
+    } catch (e) {
+      console.warn('admin_sessions-Update fehlgeschlagen (nicht blockierend):', e);
+    }
+
+    // Serverseitige Session widerrufen – Fehler (z. B. session_not_found) dürfen
+    // die Abmeldung nicht verhindern.
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) console.warn('signOut (global) Hinweis:', error.message);
+    } catch (e) {
+      console.warn('signOut (global) Fehler:', e);
+    }
+
+    // Lokale Auth-Daten in jedem Fall entfernen.
+    try {
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch {
+      /* ignorieren */
+    }
+    try {
+      localStorage.removeItem('adminSession');
+    } catch {
+      /* ignorieren */
+    }
+
+    setUser(null);
+    setFahrer([]);
+    setDocuments({});
+    setDocumentCounts({});
+    setJobRequests([]);
+    setJobAssignments([]);
+
+    toast(
+      reason === 'manual'
+        ? { title: "Abgemeldet", description: "Sie wurden erfolgreich abgemeldet" }
+        : {
+            title: "Automatisch abgemeldet",
+            description: "Sie wurden wegen Inaktivität abgemeldet",
+            variant: "destructive" as const,
+          }
+    );
+
+    navigate('/admin/login', { replace: true });
+  };
+
+  const handleLogout = async () => {
+    console.log("📤 Admin: Abmeldung...");
+    await performLogout('manual');
   };
 
 
   const [isLoadingJobs, setIsLoadingJobs] = useState(false);
 
   const loadJobRequests = async () => {
+    if (signedOutRef.current) return;
     setIsLoadingJobs(true);
     try {
       console.log("📋 Admin: Lade Jobanfragen...");
@@ -626,6 +648,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const loadJobAssignments = async () => {
+    if (signedOutRef.current) return;
     try {
       console.log('🔄 Loading job assignments...');
       const { data: assignmentsData, error: assignmentsError } = await supabase
@@ -1245,6 +1268,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const loadFahrerData = async () => {
+    if (signedOutRef.current) return;
     setIsLoadingData(true);
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
@@ -1324,6 +1348,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const loadDocumentCounts = async (fahrerData: FahrerProfile[]) => {
+    if (signedOutRef.current) return;
     try {
       const fahrerIds = fahrerData.map(f => f.id);
 
