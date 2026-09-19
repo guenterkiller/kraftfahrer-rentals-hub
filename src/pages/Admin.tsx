@@ -1268,6 +1268,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   };
 
   const loadFahrerData = async () => {
+    if (signedOutRef.current) return;
     setIsLoadingData(true);
     console.log("🔍 Admin: Lade Fahrerdaten...");
     
