@@ -26,13 +26,8 @@ const AdminLogin = () => {
 
     // Check if already authenticated
     const checkAuth = async () => {
-      let { data: { session } } = await supabase.auth.getSession();
-
-      const expSec = (session as any)?.expires_at as number | undefined;
-      if (session && expSec && expSec * 1000 < Date.now() + 60_000) {
-        const { data } = await supabase.auth.refreshSession();
-        session = data.session;
-      }
+      // Kein eigener refreshSession() – der Supabase-Client erneuert das Token selbst.
+      const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
         // Verify admin role
@@ -118,7 +113,7 @@ const AdminLogin = () => {
 
       if (roleError || !roleData) {
         console.error('Role verification failed:', roleError);
-        try { await supabase.auth.signOut(); } catch (err) { console.error('[LOGIN signOut-CATCH]:', err); }
+        try { await supabase.auth.signOut({ scope: 'local' }); } catch (err) { console.error('[LOGIN signOut-CATCH]:', err); }
         toast({
           title: "Zugriff verweigert",
           description: "Sie haben keine Admin-Berechtigung",

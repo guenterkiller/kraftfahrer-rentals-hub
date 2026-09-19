@@ -136,6 +136,7 @@ const Admin = () => {
   const [jobAssignments, setJobAssignments] = useState<any[]>([]);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const authCheckStartedRef = useRef(false);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
@@ -398,7 +399,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const envOk = Boolean(SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY);
 
   useEffect(() => {
-    checkAuth();
+    // StrictMode montiert doppelt – Auth-/Ladelauf nur einmal starten.
+    if (!authCheckStartedRef.current) {
+      authCheckStartedRef.current = true;
+      checkAuth();
+    }
     const cleanupInactivityTimer = setupInactivityTimer();
 
     return () => {
@@ -481,7 +486,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   const checkAuth = async () => {
     console.log("🔍 Admin: Lese Session (Auth bereits durch AdminRoute geprüft)...");
-    setAuthChecking(true);
 
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -496,24 +500,25 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       // Keine erneute Rollen-/Refresh-Prüfung: AdminRoute ist die Sicherheitsinstanz.
       setUser({ email: session.user.email } as User);
-      
+
       // Persist simple admin session for edge function calls
       localStorage.setItem('adminSession', JSON.stringify({
         email: session.user.email,
         isAdmin: true,
         lastLogin: new Date().toISOString(),
       }));
-      
-      // Wait a tick to ensure the session is fully available to the Supabase client
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+
+      // Auth ist bestätigt – Oberfläche sofort freigeben.
+      setAuthChecking(false);
+
+      // Daten erst NACH bestätigter Auth laden; Fehler dürfen die Auth nicht beeinflussen.
       console.log("🔄 Admin: Lade Daten...");
-      await Promise.all([
+      void Promise.allSettled([
         loadFahrerData(),
         loadJobRequests(),
         loadJobAssignments()
       ]);
-      
+
       // Update session activity (fire-and-forget)
       supabase
         .from('admin_sessions')
@@ -521,8 +526,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         .eq('user_id', session.user.id)
         .eq('is_active', true)
         .then(() => {});
-      
-      setAuthChecking(false);
     } catch (e) {
       console.error("❌ Admin: Auth-Fehler:", e);
       setAuthChecking(false);
@@ -1256,7 +1259,19 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         const msg = (error as any)?.message || '';
         const ctxStatus = (error as any)?.context?.status;
         if (ctxStatus === 401 || /Auth session missing|Invalid token|JWT/i.test(msg)) {
-          await supabase.auth.signOut().catch(() => {});
+          // Ein einzelner 401 darf nicht global abmelden: Session einmal sauber nachprüfen.
+          const { data: { session: stillValid } } = await supabase.auth.getSession();
+          if (stillValid) {
+            console.warn("⚠️ Admin: 401 trotz gültiger Session – kein Logout, nur Hinweis.");
+            toast({
+              title: "Daten konnten nicht geladen werden",
+              description: "Bitte erneut aktualisieren.",
+              variant: "destructive",
+            });
+            return;
+          }
+          // Wirklich keine Session mehr: nur lokal abmelden, nie global.
+          await supabase.auth.signOut({ scope: 'local' }).catch(() => {});
           toast({
             title: "Sitzung abgelaufen",
             description: "Bitte melden Sie sich erneut an.",
