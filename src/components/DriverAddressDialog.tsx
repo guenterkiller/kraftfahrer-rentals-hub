@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { sanitizeEmail, isValidEmail } from "@/lib/emailSanitize";
 
 export interface DriverAddressDriver {
   id: string;
@@ -69,7 +70,7 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
 
     const v = vorname.trim();
     const n = nachname.trim();
-    const e = email.trim();
+    const e = sanitizeEmail(email);
     const t = telefon.trim();
     const s = strasse.trim();
     const h = hausnummer.trim();
@@ -90,7 +91,7 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
+    if (!isValidEmail(e)) {
       toast({
         title: "E-Mail ungültig",
         description: "Bitte eine gültige E-Mail-Adresse eingeben.",
@@ -110,6 +111,17 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
 
     setIsSaving(true);
     try {
+      const newValues: Record<string, string> = {
+        vorname: v, nachname: n, email: e, telefon: t, strasse: s, hausnummer: h,
+        plz: p, ort: o, land: l, fuehrerscheinklassen: kl.join(", "),
+      };
+      const oldValues: Record<string, string> = {
+        vorname: driver.vorname ?? "", nachname: driver.nachname ?? "", email: driver.email ?? "",
+        telefon: driver.telefon ?? "", strasse: driver.strasse ?? "", hausnummer: driver.hausnummer ?? "",
+        plz: driver.plz ?? "", ort: driver.ort ?? "", land: driver.land ?? "",
+        fuehrerscheinklassen: (driver.fuehrerscheinklassen ?? []).join(", "),
+      };
+
       const { error } = await supabase
         .from("fahrer_profile")
         .update({
@@ -125,10 +137,36 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
           fuehrerscheinklassen: kl,
           // Legacy-Feld: automatisch aus Straße + Hausnummer gebildet
           adresse: `${s} ${h}`,
+          updated_at: new Date().toISOString(),
         })
         .eq("id", driver.id);
 
       if (error) throw error;
+
+      // Änderungsprotokoll in admin_actions (ein Eintrag pro geändertem Feld)
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const ts = new Date().toISOString();
+        const rows = Object.keys(newValues)
+          .filter((k) => oldValues[k] !== newValues[k])
+          .map((k) => ({
+            action: "driver_profile_update",
+            admin_email: user?.email ?? null,
+            note: JSON.stringify({
+              fahrer_id: driver.id,
+              zeitpunkt: ts,
+              feld: k,
+              alt: oldValues[k],
+              neu: newValues[k],
+            }),
+          }));
+        if (rows.length > 0) {
+          const { error: logErr } = await supabase.from("admin_actions").insert(rows);
+          if (logErr) console.warn("Änderungsprotokoll fehlgeschlagen:", logErr.message);
+        }
+      } catch (logErr) {
+        console.warn("Änderungsprotokoll fehlgeschlagen:", logErr);
+      }
 
       // Newsletter-/Abmeldestatus: liegt auf dem Fahrerprofil selbst
       // (email_opt_out, unsubscribed_at) und wird hier nicht angefasst –
