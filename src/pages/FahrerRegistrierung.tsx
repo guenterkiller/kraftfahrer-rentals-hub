@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { sanitizeEmail, isValidEmail } from "@/lib/emailSanitize";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -189,7 +190,7 @@ const FahrerRegistrierung = () => {
       case 'email':
         if (!value || value.trim() === '') {
           errors.email = 'Bitte geben Sie Ihre E-Mail-Adresse ein';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        } else if (!isValidEmail(sanitizeEmail(value))) {
           errors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
         }
         break;
@@ -397,7 +398,7 @@ const FahrerRegistrierung = () => {
       
       // Basic data
       formDataToSend.append("name", `${formData.vorname} ${formData.nachname}`);
-      formDataToSend.append("email", formData.email);
+      formDataToSend.append("email", sanitizeEmail(formData.email));
       formDataToSend.append("phone", formData.telefon);
       formDataToSend.append("company", "");
       formDataToSend.append("message", "");
