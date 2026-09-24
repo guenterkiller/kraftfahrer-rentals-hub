@@ -201,6 +201,23 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // E-Mail serverseitig bereinigen (identisch zu src/lib/emailSanitize.ts)
+    {
+      let v = String(requestData.email ?? "").trim();
+      for (let i = 0; i < 3; i++) {
+        v = v.replace(/^[\s"'`„“”‚‘’<(\[]+|[\s"'`„“”‚‘’>)\],;]+$/g, "");
+      }
+      v = v.replace(/^(mailto:)+/i, "").replace(/\?.*$/, "").replace(/[\u200B-\u200D\uFEFF\s]/g, "");
+      requestData.email = v.toLowerCase();
+      const re = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)*\.[a-z]{2,}$/i;
+      if (requestData.email && (!re.test(requestData.email) || requestData.email.includes(".."))) {
+        return new Response(
+          JSON.stringify({ error: "Bitte eine gültige E-Mail-Adresse angeben." }),
+          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    }
+
     // Validation - only name, email, and phone are required
     if (!requestData.name || !requestData.email || !requestData.phone) {
       console.error("Missing required fields");

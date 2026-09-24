@@ -189,7 +189,7 @@ const FahrerRegistrierung = () => {
       case 'email':
         if (!value || value.trim() === '') {
           errors.email = 'Bitte geben Sie Ihre E-Mail-Adresse ein';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        } else if (!isValidEmail(sanitizeEmail(value))) {
           errors.email = 'Bitte geben Sie eine gültige E-Mail-Adresse ein';
         }
         break;
@@ -397,7 +397,7 @@ const FahrerRegistrierung = () => {
       
       // Basic data
       formDataToSend.append("name", `${formData.vorname} ${formData.nachname}`);
-      formDataToSend.append("email", formData.email);
+      formDataToSend.append("email", sanitizeEmail(formData.email));
       formDataToSend.append("phone", formData.telefon);
       formDataToSend.append("company", "");
       formDataToSend.append("message", "");
