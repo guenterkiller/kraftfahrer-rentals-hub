@@ -111,7 +111,6 @@ RewriteRule ^workbox-.*\.js$ - [L]
   AddType application/manifest+json .webmanifest
 </IfModule>
 
-# Vorgerenderte Unterseiten: statisches HTML direkt ausliefern
 RewriteCond %{REQUEST_URI} ^/([a-z0-9-]+)$
 RewriteCond %{DOCUMENT_ROOT}/prerender/%1.html -f
 RewriteRule ^ /prerender/%1.html [L]
