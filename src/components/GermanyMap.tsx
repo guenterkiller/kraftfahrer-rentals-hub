@@ -155,8 +155,7 @@ const GermanyMap = () => {
                   <div>
                     <h3 className="font-bold text-lg mb-2">Schnelle Vermittlung</h3>
                     <p className="text-muted-foreground">
-                      In weniger als 24 Stunden vermitteln wir Ihnen qualifizierte Fahrer 
-                      für Ihre Einsätze – zuverlässig und professionell.
+                      Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Voraussetzung ist, dass ein geeigneter selbstständiger Fahrer aktuell verfügbar ist und den Einsatz übernehmen kann. Eine Vermittlung innerhalb von 24 Stunden können wir nicht garantieren.
                     </p>
                   </div>
                 </div>

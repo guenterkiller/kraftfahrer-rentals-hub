@@ -972,7 +972,7 @@ const SimpleBookingForm = () => {
                     <li>• Die Stornoregelung gilt nach bestätigter Fahrerzuteilung und Auftragsbestätigung.</li>
                     <li>• Storno bis 24 Std. vorher → kostenlos</li>
                     <li>• Storno unter 24 Std. → 80 % des Tagessatzes, sofern kein geringerer Schaden nachgewiesen wird.</li>
-                    <li>• Same-Day-Buchungen ausgeschlossen (Mindestvorlauf 24h werktags)</li>
+                    <li>• Kurzfristiger Fahrerbedarf? Fragen Sie an – Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein.</li>
                   </ul>
                 </div>
 

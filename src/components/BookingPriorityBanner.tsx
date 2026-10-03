@@ -22,7 +22,7 @@ const BookingPriorityBanner = () => {
                   So vermeiden wir Rückfragen und können den passenden Fahrer schnell zuweisen.
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  ⏰ <strong>Mindestvorlauf:</strong> 24 Stunden werktags – Einsatzstart frühestens am nächsten Werktag
+                  ⏰ Kurzfristiger Fahrerbedarf? Fragen Sie an – Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein.
                 </p>
               </div>
               
