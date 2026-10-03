@@ -84,10 +84,6 @@ const LkwFahrerKurzfristig = () => {
         answer: "Ehrlichkeit: Unsere Fahrer sind <strong>Profis, keine Springer</strong>. Sie brauchen Zeit für Anfahrt, Einweisung, Vorbereitung. Qualität vor Schnelligkeit – dafür zuverlässig."
       },
       {
-        question: "Was wenn der Fahrer morgen früh starten muss?",
-        answer: "Wenn Sie heute Nachmittag buchen und morgen früh benötigen: <strong>Schwierig, aber möglich</strong> – je nach Fahrerverfügbarkeit in Ihrer Region. Fragen Sie an!"
-      },
-      {
         question: "Kosten kurzfristige Buchungen mehr?",
         answer: "<strong>Nein.</strong> Ob Sie 3 Wochen vorher oder 2 Tage vorher buchen – der Tagespreis bleibt 349 €. Keine Eilzuschläge, keine versteckten Kosten."
       },
