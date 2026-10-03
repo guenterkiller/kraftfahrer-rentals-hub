@@ -116,13 +116,18 @@ const Index = () => {
       <main id="main-content">
         <HeroSection />
         
-        {/* SEO H2-Struktur für Keyword-Abdeckung (mieten, leihen, etc.) */}
+        {/* Problemsituationen unterhalb des (unveränderten) Hero-Bereichs */}
         <section aria-label="Leistungsübersicht" className="py-8 bg-background">
           <div className="container mx-auto px-4 max-w-4xl space-y-4">
-            <h2 className="text-2xl font-bold text-foreground">LKW-Fahrer mieten oder leihen – flexibel & kurzfristig</h2>
-            <h2 className="text-2xl font-bold text-foreground">Ersatzfahrer & Aushilfsfahrer bei Fahrerausfall</h2>
-            <h2 className="text-2xl font-bold text-foreground">CE-Fahrer, Kipperfahrer & Baustellenfahrer bundesweit</h2>
-            <h2 className="text-2xl font-bold text-foreground">Mietfahrer & Leihfahrer ohne Arbeitnehmerüberlassung</h2>
+            <h2 className="text-2xl font-bold text-foreground">Fahrermangel? Wofür Unternehmen bei uns LKW-Fahrer anfragen</h2>
+            <p className="text-muted-foreground">
+              LKW-Fahrer gesucht, weil Ihr eigener Fahrer ausgefallen ist oder eine Tour nicht besetzt werden kann? Wir suchen schnellstmöglich einen passenden selbstständigen CE-Fahrer – als Ersatzfahrer, Aushilfsfahrer oder Mietfahrer, deutschlandweit und nach Verfügbarkeit. Wir vermitteln Fahrer, keine Fahrzeuge, und bieten keine Arbeitnehmerüberlassung an.
+            </p>
+            <ul className="space-y-2 text-foreground">
+              <li>Fahrer krank oder im Urlaub → <Link to="/ersatzfahrer-lkw" className="font-semibold underline">Ersatzfahrer LKW</Link></li>
+              <li>Zusätzliche Tour ohne Fahrer → <Link to="/lkw-fahrer-kurzfristig" className="font-semibold underline">LKW Fahrer kurzfristig</Link></li>
+              <li>Fahrer für einige Tage oder Wochen → <Link to="/mietfahrer" className="font-semibold underline">Mietfahrer &amp; Leihfahrer</Link></li>
+            </ul>
           </div>
         </section>
 
