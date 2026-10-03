@@ -31,11 +31,10 @@ export const PRERENDER_ROUTES = [
   "/projekte",
   "/vermittlung",
   "/versicherung",
-  "/fahrer-infos",
 ];
 
 // Seiten ohne H1 im bestehenden Inhalt (keine Inhaltsänderung erlaubt)
-const NO_H1 = new Set(["/fahrer-infos"]);
+const NO_H1 = new Set([]);
 
 // Pflichtprüfung: bekannter H1-Text muss im HTML stehen
 const MUST_CONTAIN = {
