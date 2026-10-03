@@ -262,6 +262,11 @@ const SimpleBookingForm = () => {
         });
       }
 
+      // OpenAI Ads Conversion: lead_created (nur nach erfolgreichem Submit, einmal pro Anfrage)
+      if (typeof window !== 'undefined' && typeof (window as any).oaiq === 'function') {
+        (window as any).oaiq('measure', 'lead_created', { type: 'customer_action' });
+      }
+
       // Zeige PWA-Installationshinweis nach Erfolg
       setFormSubmitted(true);
 
