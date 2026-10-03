@@ -23,7 +23,7 @@ const ErsatzfahrerLkw = () => {
     faqData: [
       {
         question: "Mein Fahrer ist krank – wo bekomme ich kurzfristig Ersatz?",
-        answer: "Stellen Sie eine Anfrage über das Formular oder rufen Sie an. Wir suchen schnellstmöglich einen passenden selbstständigen CE-Fahrer als Ersatzfahrer für Ihren LKW – deutschlandweit und nach Verfügbarkeit. Same-Day ist ausgeschlossen."
+        answer: "Stellen Sie eine Anfrage über das Formular oder rufen Sie an. Wir suchen schnellstmöglich einen passenden selbstständigen CE-Fahrer als Ersatzfahrer für Ihren LKW – deutschlandweit und nach Verfügbarkeit. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Was kostet ein Ersatzfahrer pro Tag?",
@@ -81,7 +81,7 @@ const ErsatzfahrerLkw = () => {
       },
       {
         question: "Wie schnell kann ein Ersatzfahrer starten?",
-        answer: "Wir melden uns schnellstmöglich nach Eingang Ihrer Anfrage. Same-Day ist ausgeschlossen – wir brauchen Zeit für Matching und Anfahrt."
+        answer: "Wir melden uns schnellstmöglich nach Eingang Ihrer Anfrage. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Sind Ersatzfahrer teurer als reguläre Fahrer?",

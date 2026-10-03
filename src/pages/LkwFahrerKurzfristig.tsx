@@ -77,7 +77,7 @@ const LkwFahrerKurzfristig = () => {
       },
       {
         question: "Was bedeutet kurzfristig bei Ihnen?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Warum kein Same-Day-Service?",

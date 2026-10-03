@@ -554,7 +554,7 @@ const SimpleBookingForm = () => {
                       }}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Frühester Einsatz: nächster Werktag (ausreichend Vorlauf nötig); kein Same-Day
+                      Frühester Einsatz: nächster Werktag; Einsätze ab etwa 24 Stunden Vorlauf je nach Fahrerverfügbarkeit möglich
                     </p>
                   </div>
                   <div>
@@ -972,7 +972,7 @@ const SimpleBookingForm = () => {
                     <li>• Die Stornoregelung gilt nach bestätigter Fahrerzuteilung und Auftragsbestätigung.</li>
                     <li>• Storno bis 24 Std. vorher → kostenlos</li>
                     <li>• Storno unter 24 Std. → 80 % des Tagessatzes, sofern kein geringerer Schaden nachgewiesen wird.</li>
-                    <li>• Kurzfristiger Fahrerbedarf? Fragen Sie an – Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein.</li>
+                    <li>• Kurzfristiger Fahrerbedarf? Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Fragen Sie einfach an.</li>
                   </ul>
                 </div>
 

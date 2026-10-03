@@ -22,7 +22,7 @@ const BookingPriorityBanner = () => {
                   So vermeiden wir Rückfragen und können den passenden Fahrer schnell zuweisen.
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  ⏰ Kurzfristiger Fahrerbedarf? Fragen Sie an – Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein.
+                  ⏰ Kurzfristiger Fahrerbedarf? Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Fragen Sie einfach an.
                 </p>
               </div>
               

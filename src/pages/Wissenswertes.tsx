@@ -453,7 +453,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Kurzfristige Vermittlung nach Verfügbarkeit.
+                    Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren.
                   </p>
                 </CardContent>
               </Card>

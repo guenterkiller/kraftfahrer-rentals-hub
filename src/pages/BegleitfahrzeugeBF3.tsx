@@ -77,7 +77,7 @@ const BegleitfahrzeugeBF3 = () => {
       },
       {
         question: "Wie schnell ist ein BF3-Fahrer verfügbar?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Was muss das Begleitfahrzeug haben?",
