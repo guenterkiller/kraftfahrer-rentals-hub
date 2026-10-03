@@ -2,14 +2,14 @@ import LandingPageLayout from "@/components/LandingPageLayout";
 
 const KraftfahrerMieten = () => {
   const seoData = {
-    title: "Kraftfahrer mieten – Fahrer leihen deutschlandweit",
-    description: "Kraftfahrer mieten oder leihen – Aushilfsfahrer, Mietfahrer deutschlandweit. Auf Abruf, tageweise, ohne AÜG.",
-    keywords: "Kraftfahrer mieten, Fahrer leihen, Fahrer bestellen, Aushilfsfahrer, Mietfahrer, Leihfahrer, Fahrer-Dienstleistungen, Fahrer Dienstleister, externe Fahrer, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Ersatzfahrer, Vertretungsfahrer, Notfallfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung Fahrer, Fahrerausfall, LKW Fahrer Vermittlung, Kipper Fahrer, Baustellen Fahrer, Berufskraftfahrer mieten",
+    title: "Kraftfahrer mieten – Fahrer für LKW, Fahrmischer & Baustelle | Fahrerexpress",
+    description: "Kraftfahrer für LKW, Fahrmischer, Kipper und Baustelle: Wir vermitteln selbstständige Fahrer und Baumaschinenführer deutschlandweit nach Verfügbarkeit. Keine Fahrzeugvermietung.",
+    keywords: "Kraftfahrer, Kraftfahrer mieten, Leihfahrer, Aushilfsfahrer, Berufskraftfahrer mieten, Baustellenfahrer",
     structuredData: {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "Kraftfahrer mieten deutschlandweit",
-      "description": "Kraftfahrer deutschlandweit mieten – selbstständige Berufskraftfahrer in ganz Deutschland für Nah-/Fernverkehr, Baustellen und Überführungen",
+      "description": "Vermittlung selbstständiger Kraftfahrer für LKW, Fahrmischer, Kipper und Baustellen sowie Baumaschinenführer – deutschlandweit nach Verfügbarkeit. Fahrzeug oder Maschine stellt der Auftraggeber; keine Arbeitnehmerüberlassung, keine Fahrzeugvermietung.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -31,12 +31,12 @@ const KraftfahrerMieten = () => {
   };
 
   const heroData = {
-    h1: "Kraftfahrer mieten – deutschlandweit nach Verfügbarkeit",
-    intro: "Bei Fahrerausfall, Krankheit oder Urlaub: Aushilfsfahrer, Mietfahrer und Leihfahrer bundesweit verfügbar. Fahrer tageweise oder wochenweise bestellen. Selbstständige LKW-Fahrer nach Verfügbarkeit.",
+    h1: "Kraftfahrer mieten – Fahrer für LKW, Bau und Spezialfahrzeuge",
+    intro: "Nicht jeder Einsatz ist ein Sattelzug: Wir vermitteln selbstständige Kraftfahrer für LKW, Fahrmischer, Kipper und Baustellen sowie Baumaschinenführer – deutschlandweit, nach Verfügbarkeit. Auch wer nach „Leihfahrer“ oder „Aushilfsfahrer“ sucht, ist hier richtig: Es handelt sich um eine Vermittlung, keine Arbeitnehmerüberlassung und keine Fahrzeugvermietung.",
     bullets: [
-      "Aushilfsfahrer bei Fahrerausfall",
-      "Fahrer nach Verfügbarkeit – tageweise/wochenweise",
-      "Kipper, Baustelle, Sattelzug, Fahrmischer"
+      "Kipper, Fahrmischer, Baustelle",
+      "Auch Baumaschinenführer",
+      "Fahrzeug stellen Sie"
     ]
   };
 

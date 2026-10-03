@@ -13,9 +13,9 @@ const Mietfahrer = () => {
   }, []);
 
   const seoData = {
-    title: "Mietfahrer LKW – tageweise mieten ab 349 €",
-    description: "Mietfahrer für LKW tageweise oder wochenweise mieten. Flexibel, keine Bindung, keine AÜG. Ab 349 €/Tag deutschlandweit.",
-    keywords: "Mietfahrer, LKW Fahrer mieten, Fahrer mieten, Mietfahrer LKW, Leihfahrer, Fahrer tageweise, Fahrer wochenweise, Fahrer auf Zeit, temporärer Fahrer, flexibler Fahrer, Miet-LKW-Fahrer",
+    title: "Mietfahrer & Leihfahrer LKW – Fahrer für einige Tage oder Wochen | Fahrerexpress",
+    description: "LKW Fahrer mieten für einige Tage oder Wochen: Mietfahrer und Leihfahrer als selbstständige, vermittelte Fahrer – keine Arbeitnehmerüberlassung. Deutschlandweit ab 349 €/Tag.",
+    keywords: "Mietfahrer, Leihfahrer, LKW Fahrer mieten, Leihfahrer LKW, Fahrer für eine Woche, offene Fahrerstelle überbrücken",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/mietfahrer',
       'x-default': 'https://www.kraftfahrer-mieten.com/mietfahrer'
@@ -38,7 +38,7 @@ const Mietfahrer = () => {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "Mietfahrer für LKW deutschlandweit",
-      "description": "LKW Mietfahrer tageweise oder wochenweise mieten – flexible Fahrervermittlung ohne Arbeitnehmerüberlassung",
+      "description": "Mietfahrer und Leihfahrer für LKW für einzelne Tage bis mehrere Wochen – Vermittlung selbstständiger Fahrer bei Personalengpass, Saisonspitze oder offener Fahrerstelle. Keine Arbeitnehmerüberlassung, keine Fahrzeugvermietung.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -59,14 +59,22 @@ const Mietfahrer = () => {
   };
 
   const heroData = {
-    h1: "Mietfahrer LKW – flexibel tageweise buchen",
-    intro: "Brauchen Sie einen Fahrer nur für bestimmte Tage oder Wochen? Mit unseren Mietfahrern buchen Sie genau die Kapazität, die Sie brauchen – ohne langfristige Bindung. Ab 349 € pro Tag.",
-    bullets: ["Tageweise buchbar", "Keine Vertragsbindung", "Flexible Verlängerung"]
+    h1: "Mietfahrer und Leihfahrer LKW – für einige Tage oder mehrere Wochen",
+    intro: "Sie brauchen einen Fahrer für eine Woche, eine Saisonspitze oder wollen eine offene Fahrerstelle überbrücken? Viele suchen dafür nach „LKW Fahrer mieten“ oder „Leihfahrer“. Bei uns bedeutet das: Wir vermitteln selbstständige LKW-Fahrer für genau Ihren Zeitraum – keine Arbeitnehmerüberlassung, kein Arbeitsvertrag. Ab 349 € pro Tag.",
+    bullets: ["Tage bis mehrere Wochen", "Offene Stelle überbrücken", "Keine Arbeitnehmerüberlassung"]
   };
 
   const faqData = {
-    title: "Mietfahrer – Häufige Fragen",
+    title: "Mietfahrer, Leihfahrer, Zeitarbeit – Häufige Fragen",
     items: [
+      {
+        question: "Ist ein Leihfahrer bei Ihnen ein Leiharbeiter?",
+        answer: "Nein. „Leihfahrer“ ist ein gängiger Suchbegriff – wir bieten jedoch <strong>keine Arbeitnehmerüberlassung</strong> an. Wir vermitteln selbstständige Fahrer, die auf Basis eines Dienst- oder Werkvertrags tätig sind."
+      },
+      {
+        question: "Ich suche einen Fahrer für eine Woche – geht das?",
+        answer: "Ja. Fahrer für einige Tage oder eine Woche sind nach Verfügbarkeit vermittelbar, auch zum Überbrücken einer offenen Fahrerstelle. Abgerechnet werden die tatsächlichen Einsatztage."
+      },
       {
         question: "Was genau ist ein Mietfahrer?",
         answer: "Ein <strong>Mietfahrer</strong> ist ein selbstständiger Berufskraftfahrer, den Sie temporär für Ihre Transporte buchen. Anders als bei Leiharbeit: Kein Arbeitsvertrag, keine Sozialabgaben, keine langfristige Bindung."

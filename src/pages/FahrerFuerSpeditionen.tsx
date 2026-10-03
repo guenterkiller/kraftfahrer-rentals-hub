@@ -13,9 +13,9 @@ const FahrerFuerSpeditionen = () => {
   }, []);
 
   const seoData = {
-    title: "Fahrer für Speditionen – Externe LKW Fahrer buchen",
-    description: "Externe Fahrer für Speditionen und Logistikunternehmen. Subunternehmer-Fahrer bei Fahrermangel, Auftragsspitzen oder Krankheit. Ab 349 €/Tag.",
-    keywords: "Fahrer für Speditionen, Speditionsfahrer, externe Fahrer Spedition, LKW Fahrer Logistik, Subunternehmer Spedition, Fahrer Transportunternehmen, Berufskraftfahrer Spedition, Fernfahrer buchen, Nahverkehr Fahrer, Verteilerverkehr Fahrer, Spedition Fahrermangel, Logistik Fahrer mieten",
+    title: "Fahrer für Speditionen – LKW-Fahrer bei Fahrermangel & planbarem Bedarf | Fahrerexpress",
+    description: "Für Speditionen und Logistikunternehmen: selbstständige CE-Fahrer für planbare Einsätze, Urlaubszeiten und wiederkehrende Engpässe. Deutschlandweit, ab 349 €/Tag.",
+    keywords: "Fahrer für Speditionen, Fahrermangel Spedition, LKW Fahrer Logistik, Berufskraftfahrer Spedition, Urlaubsvertretung Spedition",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/fahrer-fuer-speditionen',
       'x-default': 'https://www.kraftfahrer-mieten.com/fahrer-fuer-speditionen'
@@ -38,7 +38,7 @@ const FahrerFuerSpeditionen = () => {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "Fahrer für Speditionen deutschlandweit",
-      "description": "Externe LKW-Fahrer für Speditionen und Logistikunternehmen – selbstständige Subunternehmer für Nah- und Fernverkehr",
+      "description": "Vermittlung selbstständiger LKW-Fahrer für Speditionen und Logistikunternehmen mit wiederkehrendem oder planbarem Fahrerbedarf – Nah- und Fernverkehr, deutschlandweit nach Verfügbarkeit. Keine Arbeitnehmerüberlassung.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -59,8 +59,8 @@ const FahrerFuerSpeditionen = () => {
   };
 
   const heroData = {
-    h1: "Fahrer für Speditionen – Externe Kapazitäten buchen",
-    intro: "Fahrermangel in der Spedition? Auftragsspitze, Urlaubszeit oder Krankheitswelle? Wir vermitteln erfahrene LKW-Fahrer für Speditionen und Logistikunternehmen – deutschlandweit, als selbstständige Subunternehmer. Ab 349 € pro Tag.",
+    h1: "Fahrer für Speditionen – Fahrermangel planbar ausgleichen",
+    intro: "Urlaubszeit, regelmäßige Spitzen oder dauerhaft knappe Fahrerdecke? Wir vermitteln Speditionen und Logistikunternehmen selbstständige LKW-Fahrer für Nah- und Fernverkehr – planbar, deutschlandweit, nach Verfügbarkeit. Ab 349 € pro Tag. Wir vermitteln Fahrer, keine Fahrzeuge.",
     bullets: ["Erfahrung mit Speditionsabläufen", "Nah- und Fernverkehr", "Keine Arbeitnehmerüberlassung"]
   };
 

@@ -12,9 +12,9 @@ const LKWFahrerBuchen = () => {
     }
   }, []);
   const seoData = {
-    title: "LKW CE Fahrer buchen – ab 349 €/Tag deutschlandweit",
-    description: "LKW Fahrer buchen oder mieten – Ersatzfahrer, Mietfahrer deutschlandweit. Kurzfristig nach Verfügbarkeit, tageweise. 349 €/Tag.",
-    keywords: "LKW Fahrer buchen, LKW Fahrer mieten, LKW Fahrer leihen, Ersatzfahrer LKW, Ersatzfahrer LKW sofort, LKW Fahrer Krankheitsvertretung, Aushilfsfahrer LKW, LKW Mietfahrer, LKW Leihfahrer, Fahrer bestellen, externe Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer LKW, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW Fahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, CE Fahrer, ADR-Fahrer, LKW Fahrer Vermittlung",
+    title: "LKW CE Fahrer buchen – Berufskraftfahrer mit Fahrerkarte | Fahrerexpress",
+    description: "LKW Fahrer buchen: selbstständige CE-Fahrer und Berufskraftfahrer mit Fahrerkarte und Module 95 für Sattelzug, Kipper und Baustelle – deutschlandweit, 349 €/Tag.",
+    keywords: "LKW Fahrer, LKW Fahrer buchen, CE Fahrer, Berufskraftfahrer, CE Fahrer Sattelzug, LKW Fahrer gesucht",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen',
       'de-AT': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen',
@@ -79,7 +79,7 @@ const LKWFahrerBuchen = () => {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "LKW-Fahrer buchen deutschlandweit",
-      "description": "LKW-Fahrer (C/CE) deutschlandweit buchen – kurzfristig verfügbare Berufskraftfahrer in ganz Deutschland als selbstständige Subunternehmer",
+      "description": "Vermittlung selbstständiger LKW-Fahrer CE und Berufskraftfahrer mit Fahrerkarte und Module 95 für Sattelzug, Kipper, Fahrmischer, Baustelle und ADR – deutschlandweit nach Verfügbarkeit. Das Fahrzeug stellt der Auftraggeber.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -107,14 +107,18 @@ const LKWFahrerBuchen = () => {
   };
 
   const heroData = {
-    h1: "LKW CE Fahrer buchen – deutschlandweit verfügbar",
-    intro: "Ersatzfahrer, Aushilfsfahrer oder Mietfahrer für alle LKW-Einsatzarten: Sattelzug, Kipper, Fahrmischer, Baustelle, ADR. Selbstständige Fahrer für flexible Einsätze – tageweise buchbar. 349 € pro Einsatztag zzgl. An- und Abfahrt.",
-    bullets: ["Ersatzfahrer bei Fahrerausfall", "Fahrer kurzfristig nach Verfügbarkeit", "Transparente Tagessätze"]
+    h1: "LKW CE Fahrer buchen – qualifizierte Berufskraftfahrer deutschlandweit",
+    intro: "Sie suchen einen CE-Fahrer für Sattelzug, Kipper, Fahrmischer, Baustelle oder ADR? Wir vermitteln selbstständige Berufskraftfahrer mit Führerschein CE, Fahrerkarte und Module 95 – nach Verfügbarkeit. 349 € pro Einsatztag zzgl. An- und Abfahrt. Das Fahrzeug stellen Sie.",
+    bullets: ["CE + Fahrerkarte + Module 95", "ADR auf Wunsch", "Transparente Tagessätze"]
   };
 
   const faqData = {
-    title: "LKW-Fahrer buchen – Häufige Fragen",
+    title: "Welche Qualifikation haben die CE-Fahrer? – Häufige Fragen",
     items: [
+      {
+        question: "Ich suche einen CE-Fahrer für Sattelzug – welche Nachweise hat der Fahrer?",
+        answer: "Vermittelte LKW-Fahrer verfügen über eine gültige <strong>Fahrerlaubnis CE, Fahrerkarte und Module 95</strong> (Berufskraftfahrer-Qualifikation). Zusatzqualifikationen wie ADR geben Sie bei der Anfrage an."
+      },
       {
         question: "Wie funktioniert die Zusammenarbeit?",
         answer: "Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur. Die Einsätze werden über uns gebündelt abgerechnet – die Fahrer arbeiten als selbstständige Unternehmer. <strong>Hinweis:</strong> Unsere Fahrer arbeiten als selbstständige Unternehmer auf Basis eines Dienst- oder Werkvertrags. Es handelt sich nicht um Arbeitnehmerüberlassung."

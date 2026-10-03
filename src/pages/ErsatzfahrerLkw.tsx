@@ -13,17 +13,17 @@ const ErsatzfahrerLkw = () => {
   }, []);
 
   const seoData = {
-    title: "Ersatzfahrer LKW – Sofort-Vertretung bei Fahrerausfall",
-    description: "Ersatzfahrer LKW bei Krankheit, Urlaub oder Fahrerausfall. Vertretungsfahrer deutschlandweit in 24-72h verfügbar. Keine Arbeitnehmerüberlassung.",
-    keywords: "Ersatzfahrer LKW, Ersatzfahrer LKW sofort, LKW Fahrer Krankheitsvertretung, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW, Fahrerausfall, Notfallfahrer LKW, kurzfristiger Ersatz, LKW Fahrer Vertretung, Aushilfsfahrer Krankheit, Ersatz LKW Fahrer, spontaner Ersatzfahrer, Fahrerengpass, Personalengpass LKW",
+    title: "Ersatzfahrer LKW – Vertretung bei Krankheit, Urlaub & Fahrerausfall | Fahrerexpress",
+    description: "Fahrer krank, im Urlaub oder ausgefallen? Ersatzfahrer LKW als Krankheits- oder Urlaubsvertretung – selbstständige CE-Fahrer deutschlandweit nach Verfügbarkeit.",
+    keywords: "Ersatzfahrer, Ersatzfahrer LKW, Fahrer Vertretung, Krankheitsvertretung, Urlaubsvertretung, Fahrer krank, Fahrer ausgefallen",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/ersatzfahrer-lkw',
       'x-default': 'https://www.kraftfahrer-mieten.com/ersatzfahrer-lkw'
     },
     faqData: [
       {
-        question: "Wie schnell bekomme ich einen Ersatzfahrer bei Fahrerausfall?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Vermittlung nach Verfügbarkeit – deutschlandweit."
+        question: "Mein Fahrer ist krank – wo bekomme ich kurzfristig Ersatz?",
+        answer: "Stellen Sie eine Anfrage über das Formular oder rufen Sie an. Wir suchen schnellstmöglich einen passenden selbstständigen CE-Fahrer als Ersatzfahrer für Ihren LKW – deutschlandweit und nach Verfügbarkeit. Same-Day ist ausgeschlossen."
       },
       {
         question: "Was kostet ein Ersatzfahrer pro Tag?",
@@ -38,7 +38,7 @@ const ErsatzfahrerLkw = () => {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "Ersatzfahrer LKW bei Fahrerausfall",
-      "description": "Kurzfristige Ersatzfahrer und Vertretungsfahrer für LKW bei Krankheit, Urlaub oder spontanem Ausfall – deutschlandweit verfügbar",
+      "description": "Vermittlung selbstständiger CE-Fahrer als Ersatzfahrer für den vorhandenen LKW des Auftraggebers bei Krankheit, Urlaub oder Fahrerausfall – deutschlandweit nach Verfügbarkeit. Keine Fahrzeugvermietung, keine Arbeitnehmerüberlassung.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -59,17 +59,25 @@ const ErsatzfahrerLkw = () => {
   };
 
   const heroData = {
-    h1: "Ersatzfahrer LKW – Schnelle Hilfe bei Fahrerausfall",
-    intro: "Ihr Fahrer fällt kurzfristig aus? Krankheit, Urlaub oder spontaner Engpass – wir vermitteln Ersatzfahrer und Vertretungsfahrer deutschlandweit. Kein Stillstand, keine verpassten Touren. Selbstständige Fahrer nach Verfügbarkeit, ab 349 € pro Tag.",
-    bullets: ["Krankheitsvertretung in 24-72h", "Urlaubsvertretung planbar", "Kein AÜG notwendig"]
+    h1: "Ersatzfahrer LKW – wenn Ihr Fahrer krank ist oder ausfällt",
+    intro: "Ihr Fahrer ist krank, im Urlaub oder heute nicht erschienen – und der LKW steht ohne Fahrer? Wir suchen schnellstmöglich einen passenden selbstständigen CE-Fahrer als Vertretung für Ihr Fahrzeug, deutschlandweit und nach Verfügbarkeit. Ab 349 € pro Einsatztag. Wir vermitteln Fahrer, keine Fahrzeuge.",
+    bullets: ["Krankheits- & Urlaubsvertretung", "Für Ihren vorhandenen LKW", "Keine Arbeitnehmerüberlassung"]
   };
 
   const faqData = {
-    title: "Ersatzfahrer LKW – Häufige Fragen",
+    title: "Krankheitsvertretung und Urlaubsvertretung für LKW-Fahrer – Häufige Fragen",
     items: [
       {
+        question: "Mein Fahrer ist krank – wo bekomme ich kurzfristig Ersatz?",
+        answer: "Stellen Sie eine Anfrage über das Formular oder rufen Sie an. Wir suchen <strong>schnellstmöglich einen passenden selbstständigen CE-Fahrer</strong> als Ersatzfahrer für Ihren LKW – deutschlandweit und nach Verfügbarkeit."
+      },
+      {
+        question: "Was tun, wenn ein Fahrer morgens nicht erscheint?",
+        answer: "Wenn Ihr Fahrer ausgefallen ist und der LKW ohne Fahrer steht, fragen Sie die benötigten Einsatztage direkt an. Wir prüfen nach Eingang, welcher Fahrer verfügbar ist, und melden uns schnellstmöglich. Ein Einsatz am selben Tag ist ausgeschlossen."
+      },
+      {
         question: "Wann brauche ich einen Ersatzfahrer?",
-        answer: "<strong>Typische Situationen:</strong> Krankheit, Unfall, Urlaub, Kündigungen, plötzliche Auftragsspitzen. Mit einem Ersatzfahrer vermeiden Sie Ausfallzeiten und halten Ihre Lieferketten stabil."
+        answer: "<strong>Typische Situationen:</strong> Fahrer krank, Unfall, Urlaub, Kündigung oder ein Fahrer erscheint nicht. Ein Ersatzfahrer übernimmt als Vertretung Ihr vorhandenes Fahrzeug, damit der LKW nicht stillsteht."
       },
       {
         question: "Wie schnell kann ein Ersatzfahrer starten?",
