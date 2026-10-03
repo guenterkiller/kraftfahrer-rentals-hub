@@ -73,7 +73,7 @@ const ErsatzfahrerLkw = () => {
       },
       {
         question: "Was tun, wenn ein Fahrer morgens nicht erscheint?",
-        answer: "Wenn Ihr Fahrer ausgefallen ist und der LKW ohne Fahrer steht, fragen Sie die benötigten Einsatztage direkt an. Wir prüfen sofort nach Eingang, welcher Fahrer verfügbar ist, und melden uns schnellstmöglich. Ein Einsatz am selben Tag ist ausgeschlossen."
+        answer: "Wenn Ihr Fahrer ausgefallen ist und der LKW ohne Fahrer steht, fragen Sie die benötigten Einsatztage direkt an. Wir prüfen nach Eingang, welcher Fahrer verfügbar ist, und melden uns schnellstmöglich. Ein Einsatz am selben Tag ist ausgeschlossen."
       },
       {
         question: "Wann brauche ich einen Ersatzfahrer?",

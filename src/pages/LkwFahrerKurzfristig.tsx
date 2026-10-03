@@ -13,17 +13,17 @@ const LkwFahrerKurzfristig = () => {
   }, []);
 
   const seoData = {
-    title: "LKW Fahrer kurzfristig buchen – Schnell & zuverlässig",
-    description: "LKW Fahrer kurzfristig gesucht? Fahrer auf Abruf in 24-72h deutschlandweit. Spontane Buchung ohne langfristige Bindung. Ab 349 €/Tag.",
-    keywords: "LKW Fahrer kurzfristig, Fahrer kurzfristig buchen, kurzfristiger LKW Fahrer, Fahrer auf Abruf, schnell Fahrer finden, LKW Fahrer sofort, dringend LKW Fahrer, Fahrer spontan, eilig Fahrer gesucht, kurzfristige Fahrervermittlung, schnelle Fahrerbeschaffung",
+    title: "LKW Fahrer kurzfristig gesucht – für Zusatztouren & Auftragsspitzen | Fahrerexpress",
+    description: "Fahrer kurzfristig gesucht für eine zusätzliche Tour oder Auftragsspitze? Wir vermitteln selbstständige LKW-Fahrer CE deutschlandweit nach Verfügbarkeit, ab 349 €/Tag.",
+    keywords: "Fahrer kurzfristig, LKW Fahrer kurzfristig, kurzfristig Fahrer gesucht, LKW Fahrer gesucht, Fahrer für zusätzliche Tour, Auftragsspitze Fahrer",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-kurzfristig',
       'x-default': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-kurzfristig'
     },
     faqData: [
       {
-        question: "Wie kurzfristig kann ich einen LKW Fahrer buchen?",
-        answer: "Ab 24 Stunden Vorlauf werktags. Same-Day ist nicht möglich, aber 24-72h Reaktionszeit bei den meisten Anfragen."
+        question: "Wie kurzfristig kann ich einen LKW Fahrer anfragen?",
+        answer: "Jederzeit. Wir suchen schnellstmöglich einen passenden selbstständigen CE-Fahrer – deutschlandweit und nach Verfügbarkeit. Ein Einsatz am selben Tag ist ausgeschlossen."
       },
       {
         question: "Gibt es Zuschläge für kurzfristige Buchungen?",
@@ -38,7 +38,7 @@ const LkwFahrerKurzfristig = () => {
       "@context": "https://schema.org",
       "@type": "Service",
       "name": "LKW Fahrer kurzfristig buchen",
-      "description": "Kurzfristige Vermittlung von LKW-Fahrern deutschlandweit – schnelle Reaktionszeit, keine Bindung, selbstständige Subunternehmer",
+      "description": "Kurzfristige Vermittlung selbstständiger CE-Fahrer für zusätzliche Touren, Auftragsspitzen und unerwarteten Mehrbedarf – deutschlandweit nach Verfügbarkeit, ohne Kurzfristigkeitszuschlag. Keine Fahrzeugvermietung.",
       "provider": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur – Günter Killer",
@@ -59,14 +59,22 @@ const LkwFahrerKurzfristig = () => {
   };
 
   const heroData = {
-    h1: "LKW Fahrer kurzfristig buchen – Schnelle Hilfe",
-    intro: "Fahrer krank? Auftrag reinbekommen? Engpass in der Disposition? Wir vermitteln LKW-Fahrer kurzfristig – deutschlandweit. Kurzfristige Vermittlung nach Verfügbarkeit. Keine langen Vorlaufzeiten.",
-    bullets: ["Kurzfristige Vermittlung", "Keine Kurzfristigkeitszuschläge", "Deutschlandweit verfügbar"]
+    h1: "LKW Fahrer kurzfristig – für zusätzliche Touren und Auftragsspitzen",
+    intro: "Kurzfristig Fahrer gesucht, weil ein neuer Auftrag reinkommt oder ein zusätzliches Fahrzeug besetzt werden muss? Wir suchen schnellstmöglich einen selbstständigen CE-Fahrer für Ihre zusätzliche Tour – deutschlandweit, nach Verfügbarkeit, ohne Kurzfristigkeitszuschlag. Wir vermitteln Fahrer, keine Fahrzeuge.",
+    bullets: ["Zusatztouren besetzen", "Keine Kurzfristigkeitszuschläge", "Deutschlandweit"]
   };
 
   const faqData = {
-    title: "LKW Fahrer kurzfristig – Häufige Fragen",
+    title: "LKW Fahrer kurzfristig gesucht – Häufige Fragen",
     items: [
+      {
+        question: "Ich brauche dringend einen LKW-Fahrer für morgen – geht das?",
+        answer: "Fragen Sie an! Ob es klappt, hängt von der <strong>Verfügbarkeit</strong> passender Fahrer ab. Wir suchen schnellstmöglich und sagen Ihnen ehrlich, ob ein Fahrer frei ist. Ein Einsatz am selben Tag ist ausgeschlossen."
+      },
+      {
+        question: "Ich habe eine zusätzliche Tour, aber keinen Fahrer – was tun?",
+        answer: "Genau dafür sind wir da: bei Auftragsspitzen oder unerwartetem Mehrbedarf vermitteln wir einen <strong>selbstständigen CE-Fahrer</strong>, der Ihr zusätzliches Fahrzeug übernimmt – tageweise, nach Verfügbarkeit."
+      },
       {
         question: "Was bedeutet kurzfristig bei Ihnen?",
         answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Same-Day ist ausgeschlossen."
