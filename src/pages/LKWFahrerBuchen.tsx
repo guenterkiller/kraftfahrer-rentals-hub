@@ -16,10 +16,10 @@ const LKWFahrerBuchen = () => {
     description: "LKW Fahrer buchen oder mieten – Ersatzfahrer, Mietfahrer deutschlandweit. Kurzfristig nach Verfügbarkeit, tageweise. 349 €/Tag.",
     keywords: "LKW Fahrer buchen, LKW Fahrer mieten, LKW Fahrer leihen, Ersatzfahrer LKW, Ersatzfahrer LKW sofort, LKW Fahrer Krankheitsvertretung, Aushilfsfahrer LKW, LKW Mietfahrer, LKW Leihfahrer, Fahrer bestellen, externe Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer LKW, Vertretungsfahrer, Krankheitsvertretung Fahrer, Urlaubsvertretung LKW Fahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, CE Fahrer, ADR-Fahrer, LKW Fahrer Vermittlung",
     hreflang: {
-      'de': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
-      'de-AT': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
-      'de-CH': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen',
-      'x-default': 'https://kraftfahrer-mieten.com/lkw-fahrer-buchen'
+      'de': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen',
+      'de-AT': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen',
+      'de-CH': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen',
+      'x-default': 'https://www.kraftfahrer-mieten.com/lkw-fahrer-buchen'
     },
     faqData: [
       {

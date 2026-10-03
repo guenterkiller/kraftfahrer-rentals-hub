@@ -27,7 +27,7 @@ const Index = () => {
     title: "LKW Fahrer buchen & mieten – deutschlandweit ab 349 €",
     description: "LKW Fahrer deutschlandweit buchen – Ersatzfahrer, Aushilfsfahrer & Mietfahrer bundesweit. Kurzfristig, auf Abruf, ohne Arbeitnehmerüberlassung.",
     keywords: "LKW Fahrer buchen deutschlandweit, Kraftfahrer mieten bundesweit, CE Fahrer deutschlandweit, Ersatzfahrer LKW, Aushilfsfahrer LKW, Mietfahrer LKW, Leihfahrer LKW, Fahrer leihen, Fahrer bestellen, Fahrer-Dienstleistungen, externe LKW Fahrer, Fahrer Dienstleister, Fahrer sofort, Fahrer auf Abruf, Fahrer tageweise, Fahrer wochenweise, Notfallfahrer, Urlaubsvertretung Fahrer, Krankheitsvertretung Fahrer, Vertretungsfahrer, Fahrerausfall, Kipper Fahrer, Baustellen Fahrer, Sattelzug Fahrer, Fahrmischer Fahrer, Baumaschinenführer buchen, LKW Fahrer Vermittlung, Fahrer kurzfristig verfügbar",
-    ogImage: "https://kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
+    ogImage: "https://www.kraftfahrer-mieten.com/uploads/facebook-preview-v2.jpg",
     hreflang: {
       'de': 'https://www.kraftfahrer-mieten.com/',
       'de-AT': 'https://www.kraftfahrer-mieten.com/',
@@ -78,12 +78,12 @@ const Index = () => {
       "@type": "WebPage",
         "name": "LKW-Fahrer buchen deutschlandweit & Kraftfahrer mieten bundesweit - Fahrerexpress",
         "description": "LKW-Fahrer deutschlandweit buchen und Kraftfahrer bundesweit mieten - selbstständige Berufskraftfahrer in ganz Deutschland ohne Arbeitnehmerüberlassung",
-      "url": "https://kraftfahrer-mieten.com/",
+      "url": "https://www.kraftfahrer-mieten.com/",
       "mainEntity": {
         "@type": "LocalBusiness",
         "name": "Fahrerexpress-Agentur - Günter Killer",
         "description": "LKW CE Fahrer (349 €) sowie Baumaschinenführer / Mischmeister (489 €) deutschlandweit buchen – selbstständige Subunternehmer bundesweit verfügbar, keine Arbeitnehmerüberlassung",
-        "url": "https://kraftfahrer-mieten.com",
+        "url": "https://www.kraftfahrer-mieten.com",
         "telephone": "+49-1577-1442285",
         "priceRange": "Faire Preise",
         "areaServed": {
