@@ -37,7 +37,7 @@ const FahrerRegistrierung = () => {
       "provider": {
         "@type": "Organization",
         "name": "Fahrerexpress-Agentur - Günter Killer",
-        "url": "https://kraftfahrer-mieten.com"
+        "url": "https://www.kraftfahrer-mieten.com"
       },
       "areaServed": {
         "@type": "Country",
