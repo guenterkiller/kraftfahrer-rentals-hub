@@ -2,6 +2,11 @@
 # Version: 2026-01-02
 RewriteEngine On
 
+# Hauptdomain immer mit www
+RewriteCond %{HTTP_HOST} ^kraftfahrer-mieten\.com$ [NC]
+RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
+
+
 # ============================================================
 # CACHE-KONTROLLE (Lighthouse Performance Fix)
 # ============================================================
