@@ -80,7 +80,7 @@ const LkwFahrerKurzfristig = () => {
         answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
-        question: "Warum kein Same-Day-Service?",
+        question: "Wie kurzfristig kann ein LKW-Fahrer vermittelt werden?",
         answer: "Ehrlichkeit: Unsere Fahrer sind <strong>Profis, keine Springer</strong>. Sie brauchen Zeit für Anfahrt, Einweisung, Vorbereitung. Qualität vor Schnelligkeit – dafür zuverlässig."
       },
       {
