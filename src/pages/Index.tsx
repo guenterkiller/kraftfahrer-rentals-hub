@@ -253,7 +253,7 @@ const Index = () => {
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Wie kurzfristig kann ein Fahrer eingesetzt werden?</h3>
                 <p className="text-muted-foreground">
-                  Same-Day-Buchungen sind ausgeschlossen – wir benötigen mindestens 24 Stunden Vorlauf. Fahrer nach Verfügbarkeit, tageweise oder wochenweise buchbar. Für kurzfristigen Bedarf empfehlen wir, Ihren Fahrer-Dienstleister frühzeitig zu kontaktieren.
+                  Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Voraussetzung ist, dass ein geeigneter selbstständiger Fahrer aktuell verfügbar ist und den Einsatz übernehmen kann. Eine Vermittlung innerhalb von 24 Stunden können wir nicht garantieren.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">

@@ -443,7 +443,7 @@ const BookingForm = () => {
                   <p className="font-medium mb-2">⏰ Wichtige Timing-Hinweise:</p>
                   <ul className="space-y-1">
                     <li>• <strong>Frühester Einsatz:</strong> nächster Werktag nach schriftlicher Bestätigung (werktags)</li>
-                    <li>• <strong>Same-Day nicht möglich</strong> - Planung benötigt ausreichend Vorlauf</li>
+                    <li>• Kurzfristiger Fahrerbedarf? Fragen Sie an – Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein.</li>
                     <li>• <strong>Weite Einsätze (&gt;150 km):</strong> Anreise am Vortag empfohlen; Details nach Vereinbarung</li>
                   </ul>
                 </div>
