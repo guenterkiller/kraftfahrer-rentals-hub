@@ -112,8 +112,9 @@ RewriteRule ^workbox-.*\.js$ - [L]
 </IfModule>
 
 RewriteCond %{REQUEST_URI} ^/([a-z0-9-]+)$
-RewriteCond %{DOCUMENT_ROOT}/prerender/%1.html -f
-RewriteRule ^ /prerender/%1.html [L]
+RewriteCond %{REQUEST_FILENAME} ^(.+)/([a-z0-9-]+)$
+RewriteCond %1/prerender/%2.html -f
+RewriteRule ^ /prerender/%2.html [L]
 
 # SPA Catch-all: Alles andere → index.html
 RewriteCond %{REQUEST_FILENAME} !-f
