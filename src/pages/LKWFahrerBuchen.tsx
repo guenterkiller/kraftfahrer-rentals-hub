@@ -28,7 +28,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -56,7 +56,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
-        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Voraussetzung ist, dass ein geeigneter selbstständiger Fahrer aktuell verfügbar ist und den Einsatz übernehmen kann. Eine Vermittlung innerhalb von 24 Stunden können wir nicht garantieren."
+        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",
@@ -125,7 +125,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -153,7 +153,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie kurzfristig kann ein Fahrer eingesetzt werden?",
-        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Voraussetzung ist, dass ein geeigneter selbstständiger Fahrer aktuell verfügbar ist und den Einsatz übernehmen kann. Eine Vermittlung innerhalb von 24 Stunden können wir nicht garantieren."
+        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
       },
       {
         question: "Vermitteln Sie auch Kipper-Fahrer und Baustellen-Fahrer?",

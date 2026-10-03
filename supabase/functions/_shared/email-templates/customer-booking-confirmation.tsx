@@ -302,7 +302,7 @@ export const CustomerBookingConfirmation = ({
           Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers werden 100 % des Tagessatzes berechnet.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Voraussetzung ist, dass ein geeigneter selbstständiger Fahrer aktuell verfügbar ist und den Einsatz übernehmen kann. Eine Vermittlung innerhalb von 24 Stunden können wir nicht garantieren.
+          Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren.
         </Text>
         <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', margin: '10px 0 0 0' })}>
           Es gelten die auf unserer Webseite veröffentlichten Vermittlungsbedingungen.

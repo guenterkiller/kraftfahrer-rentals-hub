@@ -62,7 +62,7 @@ const Index = () => {
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Same-Day ist ausgeschlossen. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage – ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage – ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -253,7 +253,7 @@ const Index = () => {
               <div className="bg-background rounded-lg p-6 shadow-sm">
                 <h3 className="font-semibold text-lg mb-2">Wie kurzfristig kann ein Fahrer eingesetzt werden?</h3>
                 <p className="text-muted-foreground">
-                  Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Voraussetzung ist, dass ein geeigneter selbstständiger Fahrer aktuell verfügbar ist und den Einsatz übernehmen kann. Eine Vermittlung innerhalb von 24 Stunden können wir nicht garantieren.
+                  Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren.
                 </p>
               </div>
               <div className="bg-background rounded-lg p-6 shadow-sm">
