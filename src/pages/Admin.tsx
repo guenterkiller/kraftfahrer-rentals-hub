@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -167,6 +167,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [inactiveNotify, setInactiveNotify] = useState<boolean>(true);
   const [inactiveSubmitting, setInactiveSubmitting] = useState<boolean>(false);
   const [reactivatingDriver, setReactivatingDriver] = useState<string | null>(null);
+  const [mailReactivateDriver, setMailReactivateDriver] = useState<{ id: string; name: string } | null>(null);
+  const [reactivatingMailsDriver, setReactivatingMailsDriver] = useState<string | null>(null);
 
   const INACTIVE_REASONS: { code: string; label: string }[] = [
     { code: "docs_missing", label: "Unterlagen fehlen" },
