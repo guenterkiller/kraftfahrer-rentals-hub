@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -167,6 +167,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [inactiveNotify, setInactiveNotify] = useState<boolean>(true);
   const [inactiveSubmitting, setInactiveSubmitting] = useState<boolean>(false);
   const [reactivatingDriver, setReactivatingDriver] = useState<string | null>(null);
+  const [mailReactivateDriver, setMailReactivateDriver] = useState<{ id: string; name: string } | null>(null);
+  const [reactivatingMailsDriver, setReactivatingMailsDriver] = useState<string | null>(null);
 
   const INACTIVE_REASONS: { code: string; label: string }[] = [
     { code: "docs_missing", label: "Unterlagen fehlen" },
@@ -1129,6 +1131,48 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         description: error?.message ?? "Reaktivierung fehlgeschlagen",
         variant: "destructive",
       });
+    }
+  };
+
+  const submitMailReactivate = async () => {
+    if (!mailReactivateDriver) return;
+    setReactivatingMailsDriver(mailReactivateDriver.id);
+    try {
+      const { error } = await supabase
+        .from('fahrer_profile')
+        .update({
+          status: 'approved',
+          email_opt_out: false,
+          unsubscribed_at: null,
+          unsubscribed_reason: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', mailReactivateDriver.id);
+      if (error) throw error;
+
+      setFahrer(prev =>
+        prev.map(f => f.id === mailReactivateDriver.id ? {
+          ...f,
+          status: 'approved',
+          email_opt_out: false,
+          unsubscribed_at: null,
+          unsubscribed_reason: null,
+        } : f)
+      );
+
+      toast({
+        title: "Fahrer wieder aktiv",
+        description: `${mailReactivateDriver.name} wird wieder als genehmigt geführt und erhält wieder Auftragsmails.`,
+      });
+      setMailReactivateDriver(null);
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: error?.message ?? "Reaktivierung fehlgeschlagen",
+        variant: "destructive",
+      });
+    } finally {
+      setReactivatingMailsDriver(null);
     }
   };
 
@@ -2379,8 +2423,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                  {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                    <Badge
                                      variant="outline"
-                                     className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
-                                     title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                     className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 cursor-pointer hover:bg-orange-100 hover:border-orange-600"
+                                     title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')} · Klicken zum Wiederaktivieren` : 'Abgemeldet · Klicken zum Wiederaktivieren'}
+                                     onClick={() => setMailReactivateDriver({ id: f.id, name: `${f.vorname} ${f.nachname}` })}
                                    >
                                      📭 Abgemeldet
                                    </Badge>
@@ -2532,8 +2577,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                 <Badge
                                   variant="outline"
-                                  className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
-                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                  className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 cursor-pointer hover:bg-orange-100 hover:border-orange-600"
+                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')} · Klicken zum Wiederaktivieren` : 'Abgemeldet · Klicken zum Wiederaktivieren'}
+                                  onClick={() => setMailReactivateDriver({ id: f.id, name: `${f.vorname} ${f.nachname}` })}
                                 >
                                   📭 Abgemeldet
                                 </Badge>
@@ -2955,6 +3001,35 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Abgemeldet-Fahrer wieder aktivieren Dialog */}
+      <Dialog open={!!mailReactivateDriver} onOpenChange={(o) => { if (!reactivatingMailsDriver && !o) setMailReactivateDriver(null); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Fahrer wieder aktivieren?</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Der Fahrer wird wieder als genehmigt geführt und erhält wieder Auftragsmails.
+          </p>
+          {mailReactivateDriver && (
+            <div className="text-sm bg-muted/40 rounded p-2 font-semibold">
+              {mailReactivateDriver.name}
+            </div>
+          )}
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setMailReactivateDriver(null)} disabled={!!reactivatingMailsDriver}>
+              Abbrechen
+            </Button>
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={submitMailReactivate}
+              disabled={!!reactivatingMailsDriver}
+            >
+              {reactivatingMailsDriver ? "Wird aktiviert..." : "Wieder aktivieren"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
