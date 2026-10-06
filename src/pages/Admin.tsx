@@ -1134,6 +1134,48 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
+  const submitMailReactivate = async () => {
+    if (!mailReactivateDriver) return;
+    setReactivatingMailsDriver(mailReactivateDriver.id);
+    try {
+      const { error } = await supabase
+        .from('fahrer_profile')
+        .update({
+          status: 'approved',
+          email_opt_out: false,
+          unsubscribed_at: null,
+          unsubscribed_reason: null,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', mailReactivateDriver.id);
+      if (error) throw error;
+
+      setFahrer(prev =>
+        prev.map(f => f.id === mailReactivateDriver.id ? {
+          ...f,
+          status: 'approved',
+          email_opt_out: false,
+          unsubscribed_at: null,
+          unsubscribed_reason: null,
+        } : f)
+      );
+
+      toast({
+        title: "Fahrer wieder aktiv",
+        description: `${mailReactivateDriver.name} wird wieder als genehmigt geführt und erhält wieder Auftragsmails.`,
+      });
+      setMailReactivateDriver(null);
+    } catch (error: any) {
+      toast({
+        title: "Fehler",
+        description: error?.message ?? "Reaktivierung fehlgeschlagen",
+        variant: "destructive",
+      });
+    } finally {
+      setReactivatingMailsDriver(null);
+    }
+  };
+
   const handleSendJobToAllDrivers = async (jobId: string) => {
     console.log('📧 Sending job to all drivers via admin-approve-job:', jobId);
     setSendingJobToAll(jobId);
