@@ -3003,6 +3003,35 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Abgemeldet-Fahrer wieder aktivieren Dialog */}
+      <Dialog open={!!mailReactivateDriver} onOpenChange={(o) => { if (!reactivatingMailsDriver && !o) setMailReactivateDriver(null); }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Fahrer wieder aktivieren?</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Der Fahrer wird wieder als genehmigt geführt und erhält wieder Auftragsmails.
+          </p>
+          {mailReactivateDriver && (
+            <div className="text-sm bg-muted/40 rounded p-2 font-semibold">
+              {mailReactivateDriver.name}
+            </div>
+          )}
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={() => setMailReactivateDriver(null)} disabled={!!reactivatingMailsDriver}>
+              Abbrechen
+            </Button>
+            <Button
+              className="bg-green-600 hover:bg-green-700 text-white"
+              onClick={submitMailReactivate}
+              disabled={!!reactivatingMailsDriver}
+            >
+              {reactivatingMailsDriver ? "Wird aktiviert..." : "Wieder aktivieren"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
