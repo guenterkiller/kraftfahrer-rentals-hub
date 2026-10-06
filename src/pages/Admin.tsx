@@ -2423,8 +2423,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                  {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                    <Badge
                                      variant="outline"
-                                     className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
-                                     title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                     className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 cursor-pointer hover:bg-orange-100 hover:border-orange-600"
+                                     title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')} · Klicken zum Wiederaktivieren` : 'Abgemeldet · Klicken zum Wiederaktivieren'}
+                                     onClick={() => setMailReactivateDriver({ id: f.id, name: `${f.vorname} ${f.nachname}` })}
                                    >
                                      📭 Abgemeldet
                                    </Badge>
@@ -2576,8 +2577,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               {!f.is_blocked && !f.is_inactive && f.email_opt_out && (
                                 <Badge
                                   variant="outline"
-                                  className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 pointer-events-none"
-                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')}` : 'Abgemeldet'}
+                                  className="border-orange-500 text-orange-700 bg-orange-50 text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 cursor-pointer hover:bg-orange-100 hover:border-orange-600"
+                                  title={f.unsubscribed_at ? `Abgemeldet am ${new Date(f.unsubscribed_at).toLocaleString('de-DE')} · Klicken zum Wiederaktivieren` : 'Abgemeldet · Klicken zum Wiederaktivieren'}
+                                  onClick={() => setMailReactivateDriver({ id: f.id, name: `${f.vorname} ${f.nachname}` })}
                                 >
                                   📭 Abgemeldet
                                 </Badge>
