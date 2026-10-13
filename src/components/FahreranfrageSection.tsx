@@ -1,10 +1,10 @@
 import SimpleBookingForm from "@/components/SimpleBookingForm";
 import BookingAdvantagesInfo from "@/components/BookingAdvantagesInfo";
 
-const FahreranfrageSection = () => {
+const FahreranfrageSection = ({ variant = 'standard' }: { variant?: 'standard' | 'ueberfuehrung' } = {}) => {
   return (
     <div>
-      <SimpleBookingForm />
+      <SimpleBookingForm variant={variant} />
       <div className="container mx-auto px-4">
         <h2 className="text-2xl font-bold text-foreground text-center mt-8 mb-4">
           So funktioniert die LKW-Fahrer-Vermittlung

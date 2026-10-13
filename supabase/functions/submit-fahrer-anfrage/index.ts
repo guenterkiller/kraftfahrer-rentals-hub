@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
 import { AdminBookingNotification } from '../_shared/email-templates/admin-booking-notification.tsx';
-import { resolveTarif, MASCHINENBEDIENUNG_LABELS, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
+import { resolveTarif, MASCHINENBEDIENUNG_LABELS, isUeberfuehrung, UEBERFUEHRUNG_LABEL, UEBERFUEHRUNG_TARIF_TYPE, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
 import { listSurchargeDays } from '../_shared/german-holidays.ts';
 
 const corsHeaders = {
@@ -57,6 +57,7 @@ interface FahrerAnfrageRequest {
   // Tarifzuordnung (Formular)
   maschinenbedienung?: string;
   tarif_key?: string;
+  leistung?: string;
   
   // Consents
   consents?: {
@@ -128,13 +129,19 @@ const handler = async (req: Request): Promise<Response> => {
     const customer_city = String(requestData.customer_city || '').trim();
     
     // Job data
-    const fahrzeugtyp = String(requestData.fahrzeugtyp || 'lkw').trim();
+    const ueberfuehrung = isUeberfuehrung(String(requestData.leistung || ''), String(requestData.fahrzeugtyp || ''));
+    // Überführung: feste Leistungsbezeichnung, unabhängig vom übermittelten Fahrzeugtyp
+    const fahrzeugtyp = ueberfuehrung ? UEBERFUEHRUNG_LABEL : String(requestData.fahrzeugtyp || 'lkw').trim();
     const nachricht = String(requestData.nachricht || '').trim();
-    const anforderungen = Array.isArray(requestData.anforderungen) ? requestData.anforderungen : [];
+    const anforderungenRaw = Array.isArray(requestData.anforderungen) ? requestData.anforderungen : [];
+    // Bei Überführungen keine Fernverkehr-/Tarif-Hinweise übernehmen (keine 450-€-Pauschale möglich)
+    const anforderungen = ueberfuehrung
+      ? anforderungenRaw.filter((a: string) => !/fernverkehr|fernfahrer|tarif/i.test(String(a)))
+      : anforderungenRaw;
     
     // Hinweis "Fernverkehr / Übernachtung" aus den Anforderungen (nur Eingangssignal,
     // überschreibt niemals die vom Besteller gewählte Tarifkarte)
-    const fernverkehrAngefordert = anforderungen.some((a: string) =>
+    const fernverkehrAngefordert = !ueberfuehrung && anforderungen.some((a: string) =>
       a.toLowerCase().includes('fernverkehr') || a.toLowerCase().includes('fernfahrer')
     );
 
@@ -149,6 +156,7 @@ const handler = async (req: Request): Promise<Response> => {
       maschinenbedienung,
       longDistance: fernverkehrAngefordert,
       beschreibung: nachricht,
+      leistung: ueberfuehrung ? 'ueberfuehrung' : '',
     });
 
     // Maßgeblich ist ausschließlich der zugeordnete Tarif – kein zweiter Tarif in den E-Mails.
@@ -271,10 +279,10 @@ const handler = async (req: Request): Promise<Response> => {
       status: 'open', // Anfragen starten als 'open' (erlaubte Werte: open, assigned, completed, cancelled)
       billing_model: billing_model,
       // Tarifzuordnung dauerhaft am Auftrag speichern
-      tarif_type: tarif.tarif,
+      tarif_type: tarif.tarif === 'ueberfuehrung' ? UEBERFUEHRUNG_TARIF_TYPE : tarif.tarif,
       tarif_label: tarif.needsReview ? null : tarif.label,
       tarif_netto: tarif.netto,
-      tarif_unit: tarif.needsReview ? null : tarif.einheit,
+      tarif_unit: tarif.needsReview || !tarif.einheit ? null : tarif.einheit,
       tarif_mehrstunde_netto: tarif.mehrstunde,
       tarif_needs_review: tarif.needsReview,
       tarif_reason: tarif.reason,
@@ -383,7 +391,9 @@ const handler = async (req: Request): Promise<Response> => {
           : tarif.label;
         const adminSubject = tarif.needsReview
           ? `Neue Buchungsanfrage: Passenden Tarif manuell zuordnen – ${customer_city}`
-          : `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`;
+          : ueberfuehrung
+            ? `Neue Überführungsanfrage: ${UEBERFUEHRUNG_LABEL} – ${customer_city}`
+            : `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`;
 
         const adminEmailHtml = await renderAsync(
           React.createElement(AdminBookingNotification, {

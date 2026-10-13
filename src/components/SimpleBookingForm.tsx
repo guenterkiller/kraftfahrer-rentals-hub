@@ -18,10 +18,18 @@ import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 import {
   resolveTarif,
+  UEBERFUEHRUNG_LABEL,
+  UEBERFUEHRUNG_KOSTEN_HINWEIS,
   SPEZIALFAHRZEUG_BEISPIELE,
 } from "@/lib/tarifZuordnung";
 
-const SimpleBookingForm = () => {
+interface SimpleBookingFormProps {
+  /** 'ueberfuehrung': feste Leistung LKW-Überführung, keine Standardtarife sichtbar */
+  variant?: 'standard' | 'ueberfuehrung';
+}
+
+const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}) => {
+  const isUeberfuehrung = variant === 'ueberfuehrung';
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false); // prevents double-submit
@@ -46,7 +54,7 @@ const SimpleBookingForm = () => {
   const [escortExperience, setEscortExperience] = useState(false);
   const [requiresBf2, setRequiresBf2] = useState(false);
   const [requiresBf3, setRequiresBf3] = useState(false);
-  const [fahrzeugtyp, setFahrzeugtyp] = useState('');
+  const [fahrzeugtyp, setFahrzeugtyp] = useState(isUeberfuehrung ? UEBERFUEHRUNG_LABEL : '');
   const [bauTaetigkeit, setBauTaetigkeit] = useState(''); // Disposition-Detail bei Baumaschinen/Mischmeister
   const [beschreibung, setBeschreibung] = useState('');
   const [einsatzbeginn, setEinsatzbeginn] = useState('');
@@ -64,9 +72,10 @@ const SimpleBookingForm = () => {
   const tarif = resolveTarif({
     kategorie: fahrzeugtyp,
     maschinenbedienung: '',
-    longDistance,
+    longDistance: isUeberfuehrung ? false : longDistance,
     taetigkeit: bauTaetigkeit,
     beschreibung,
+    leistung: isUeberfuehrung ? 'ueberfuehrung' : '',
   });
 
   // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
@@ -164,7 +173,8 @@ const SimpleBookingForm = () => {
         einsatzbeginn: einsatzbeginn,
         einsatzende: einsatzende,
         einsatzdauer: einsatzdauerString,
-        fahrzeugtyp: fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
+        leistung: isUeberfuehrung ? 'ueberfuehrung' : undefined,
+        fahrzeugtyp: isUeberfuehrung ? UEBERFUEHRUNG_LABEL : fahrzeugtyp === 'Baumaschinenführer / Mischmeister' && bauTaetigkeit
           ? `Baumaschinenführer / Mischmeister – ${bauTaetigkeit}`
           : fahrzeugtyp === 'LKW CE Wochenpreis'
             ? 'LKW-Fahrer CE – Wochenpreis'
@@ -187,7 +197,7 @@ const SimpleBookingForm = () => {
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Ladekran-Erfahrung',
-          longDistance && 'Fernverkehr / Übernachtung im LKW',
+          !isUeberfuehrung && longDistance && 'Fernverkehr / Übernachtung im LKW',
           nightShift && 'Nachtschicht',
           weekendWork && 'Wochenendarbeit',
           heavyLift && 'Schwerlast',
@@ -215,12 +225,12 @@ const SimpleBookingForm = () => {
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
       const isWoche = fahrzeugtyp === 'LKW CE Wochenpreis';
       if (typeof window !== 'undefined' && (window as any).gtag) {
-        const eventName = isBaumaschinen
+        const eventName = isUeberfuehrung ? 'category_submit_ueberfuehrung' : isBaumaschinen
           ? 'category_submit_baumaschinen'
           : isWoche
             ? 'category_submit_lkw_woche'
             : 'category_submit_lkw';
-        const value = isBaumaschinen ? 489 : isWoche ? 1645 : (longDistance ? 450 : 349);
+        const value = isUeberfuehrung ? undefined : isBaumaschinen ? 489 : isWoche ? 1645 : (longDistance ? 450 : 349);
         (window as any).gtag('event', eventName, {
           event_category: 'Form Submission',
           event_label: fahrzeugtyp,
@@ -358,7 +368,7 @@ const SimpleBookingForm = () => {
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Transparent</strong> – faire Festpreise</span>
+                    <span><strong>Transparent</strong> – {isUeberfuehrung ? 'individuelles Angebot' : 'faire Festpreise'}</span>
                   </div>
                 </div>
               </div>
@@ -372,6 +382,12 @@ const SimpleBookingForm = () => {
                 </p>
               </div>
 
+              {isUeberfuehrung ? (
+                <div className="mb-6 rounded-lg border border-border bg-muted/40 p-4 text-center">
+                  <h3 className="text-lg font-semibold mb-1">{UEBERFUEHRUNG_LABEL}</h3>
+                  <p className="text-sm text-muted-foreground">{UEBERFUEHRUNG_KOSTEN_HINWEIS}</p>
+                </div>
+              ) : (<>
               {/* Pricing Info - Header */}
               <div className="mb-4">
                 <h3 className="text-lg font-semibold text-center mb-2">
@@ -451,9 +467,7 @@ const SimpleBookingForm = () => {
                   Details: Preise & Konditionen →
                 </Link>
               </div>
-
-
-
+              </>)}
 
               <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahrer-Bestellformular">
                 <div>
@@ -578,6 +592,12 @@ const SimpleBookingForm = () => {
 
                 <fieldset>
                   <legend className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Benötigter Fahrertyp / Qualifikation *</legend>
+                  {isUeberfuehrung ? (
+                    <div className="rounded-lg border bg-card p-4" aria-live="polite">
+                      <div className="font-semibold text-foreground">{UEBERFUEHRUNG_LABEL}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{UEBERFUEHRUNG_KOSTEN_HINWEIS}</div>
+                    </div>
+                  ) : (<>
                   <p id="fahrertyp-hint" className="text-sm opacity-80 mb-3" aria-live="polite">
                     Bitte wählen Sie genau eine der vier Hauptkategorien. BF3-Begleitung kann unten als Spezialanforderung gewählt werden.
                   </p>
@@ -677,10 +697,11 @@ const SimpleBookingForm = () => {
                       </div>
                     </label>
                   </div>
+                  </>)}
 
                   {/* Pflichtabfrage: Maschinen-/Anlagenbedienung (entscheidet die Tarifzuordnung) */}
                   {/* Kompakte Tarifvorschau zur gewählten Tarifkarte */}
-                  {fahrzeugtyp && !tarif.needsReview && (
+                  {!isUeberfuehrung && fahrzeugtyp && !tarif.needsReview && (
                     <div
                       className="mt-4 rounded-lg border border-orange-200 bg-orange-50/60 p-3 text-sm text-orange-900"
                       aria-live="polite"
@@ -866,7 +887,7 @@ const SimpleBookingForm = () => {
                 </fieldset>
 
                 {/* Fernfahrer-Tarif – nur für LKW CE sichtbar */}
-                {fahrzeugtyp === 'LKW CE' && (
+                {!isUeberfuehrung && fahrzeugtyp === 'LKW CE' && (
                   <fieldset>
                     <div className={`border-2 rounded-lg p-4 ${longDistance ? 'bg-green-50 border-green-400' : 'bg-green-50/50 border-green-200'}`}>
                       <div className="flex items-start space-x-2">
@@ -1068,7 +1089,9 @@ const SimpleBookingForm = () => {
                     <div className="text-center">
                       <div>Verbindliche Anfrage senden</div>
                       <div className="text-sm opacity-90">{
-                        !fahrzeugtyp
+                        isUeberfuehrung
+                          ? UEBERFUEHRUNG_KOSTEN_HINWEIS
+                          : !fahrzeugtyp
                           ? 'Preis gemäß Auswahl'
                           : tarif.needsReview
                             ? 'Passender veröffentlichter Tarif wird zugeordnet'

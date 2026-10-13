@@ -50,7 +50,7 @@ serve(async (req) => {
         rate_type, rate_value, start_date, end_date, admin_note,
         job_requests:job_id (
           id, status, customer_name, company, customer_phone, customer_email,
-          einsatzort, fahrzeugtyp, besonderheiten, zeitraum,
+          einsatzort, fahrzeugtyp, besonderheiten, zeitraum, tarif_type,
           customer_street, customer_house_number, customer_postal_code, customer_city
         ),
         fahrer_profile:driver_id (
@@ -119,8 +119,10 @@ serve(async (req) => {
     const vehicleType = job?.fahrzeugtyp || 'wird bekannt gegeben';
     
     // Detect Fernfahrer-Tarif from besonderheiten
-    const isFernfahrerTarif = (job?.besonderheiten || '').toLowerCase().includes('fernverkehr') || 
-                               (job?.besonderheiten || '').toLowerCase().includes('fernfahrer');
+    // LKW-Überführung: nie Standardtarif, Satz nur wenn im Admin festgelegt
+    const isUeberfuehrungJob = job?.tarif_type === 'Überführung' || /überführung/i.test(job?.fahrzeugtyp || '');
+    const isFernfahrerTarif = !isUeberfuehrungJob && ((job?.besonderheiten || '').toLowerCase().includes('fernverkehr') || 
+                               (job?.besonderheiten || '').toLowerCase().includes('fernfahrer'));
     const contactPerson = job?.customer_name || 'wird ergänzt';
     const contactPhone = job?.customer_phone || 'wird ergänzt';
     const contactEmail = job?.customer_email || 'wird ergänzt';
@@ -163,10 +165,12 @@ serve(async (req) => {
 
       ${sectionStart('#f8fafc')}
         ${h3('KONDITIONEN')}
-        ${row('Tarif', isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'))}
+        ${isUeberfuehrungJob
+          ? `${row('Tarif', 'LKW-Überführung – individuelles Angebot')}${row('Satz', assignment.rate_value != null && Number(assignment.rate_value) > 0 ? `${rateFormatted} zzgl. gesetzlicher USt` : 'nach Vereinbarung')}`
+          : `${row('Tarif', isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'))}
         ${isFernfahrerTarif
           ? `${row('Abrechnung', 'Pauschale pro Einsatztag')}<p class="body-text" style="margin:8px 0 0 0;font-size:13px;color:#6b7280;">Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.</p>`
-          : row('Satz', `${rateFormatted} zzgl. gesetzlicher USt`)}
+          : row('Satz', `${rateFormatted} zzgl. gesetzlicher USt`)}`}
       ${sectionEnd}
 
       ${sectionStart('#ffffff')}

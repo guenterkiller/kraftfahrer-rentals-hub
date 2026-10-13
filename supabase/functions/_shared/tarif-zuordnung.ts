@@ -22,7 +22,18 @@ export type TarifKey =
   | 'lkw_ce_woche'
   | 'fernfahrer'
   | 'baumaschine'
+  | 'ueberfuehrung'
   | 'pruefung';
+
+/** Feste Leistungsbezeichnung und gespeicherte Tarifart für LKW-Überführungen. */
+export const UEBERFUEHRUNG_LABEL = 'LKW-Überführung – individuelles Angebot';
+export const UEBERFUEHRUNG_TARIF_TYPE = 'Überführung';
+export const UEBERFUEHRUNG_KOSTEN_HINWEIS = 'Kosten nach Fahrzeug, Strecke und Aufwand – individuelles Angebot.';
+
+/** Erkennt eine Überführungsanfrage (explizites Kennzeichen oder feste Leistungsbezeichnung). */
+export const isUeberfuehrung = (leistung?: string, kategorie?: string): boolean =>
+  (leistung || '').trim().toLowerCase() === 'ueberfuehrung' ||
+  /überführung|ueberfuehrung/i.test(kategorie || '');
 
 export interface TarifResult {
   tarif: TarifKey;
@@ -78,6 +89,8 @@ export interface TarifInput {
   taetigkeit?: string;
   /** Freitext des Bestellers */
   beschreibung?: string;
+  /** Leistungsart; 'ueberfuehrung' hat Vorrang vor allen Standardtarifen */
+  leistung?: string;
 }
 
 const ZUORDNUNG_HINWEIS =
@@ -105,6 +118,20 @@ const BAUMASCHINE_TARIF: Omit<TarifResult, 'reason'> = {
 
 export function resolveTarif(input: TarifInput): TarifResult {
   const kategorie = (input.kategorie || '').trim();
+
+  // 0. LKW-Überführung: immer individuelles Angebot, Vorrang vor allen Standardtarifen.
+  //    Kein Tagessatz, kein Wochenpreis, keine Mehrstunde, keine Einheit – auch nicht bei Fernverkehr.
+  if (isUeberfuehrung(input.leistung, kategorie)) {
+    return {
+      tarif: 'ueberfuehrung',
+      label: UEBERFUEHRUNG_LABEL,
+      netto: null,
+      einheit: '',
+      mehrstunde: null,
+      needsReview: false,
+      reason: 'LKW-Überführung auf eigener Achse – Kosten nach Fahrzeug, Strecke und Aufwand, individuelles Angebot. Satz wird im Admin festgelegt.',
+    };
+  }
   const freitext = `${input.taetigkeit || ''} ${input.beschreibung || ''}`;
   const keywordHit = containsKeyword(freitext);
 

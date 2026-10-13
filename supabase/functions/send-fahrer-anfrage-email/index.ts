@@ -140,6 +140,7 @@ const handler = async (req: Request): Promise<Response> => {
         location: adresseText || einsatzort || 'Nicht angegeben',
         message: message,
         isFernfahrerTarif: isFernfahrerTarif && tarif?.tarif === 'fernfahrer',
+        isUeberfuehrung: tarif?.tarif === 'ueberfuehrung',
         weekendHolidayAffected: affected,
         weekendHolidayAcknowledged: acknowledged,
         tarif: tarif,
