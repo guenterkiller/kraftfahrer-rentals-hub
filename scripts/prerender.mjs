@@ -31,6 +31,7 @@ export const PRERENDER_ROUTES = [
   "/projekte",
   "/vermittlung",
   "/versicherung",
+  "/lkw-ueberfuehrung",
 ];
 
 // Seiten ohne H1 im bestehenden Inhalt (keine Inhaltsänderung erlaubt)
@@ -39,6 +40,7 @@ const NO_H1 = new Set([]);
 // Pflichtprüfung: bekannter H1-Text muss im HTML stehen
 const MUST_CONTAIN = {
   "/ersatzfahrer-lkw": "Ersatzfahrer LKW – wenn Ihr Fahrer krank ist oder ausfällt",
+  "/lkw-ueberfuehrung": "LKW Überführung auf eigener Achse – Fahrer für Ihre Überführung",
 };
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
