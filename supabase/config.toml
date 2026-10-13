@@ -3,6 +3,9 @@ project_id = "hxnabnsoffzevqhruvar"
 # ========================================
 # ADMIN FUNCTIONS - JWT REQUIRED
 # ========================================
+[functions.admin-cancel-job]
+verify_jwt = false
+
 [functions.admin-assign-driver]
 verify_jwt = true
 

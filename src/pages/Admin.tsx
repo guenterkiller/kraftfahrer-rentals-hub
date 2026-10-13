@@ -158,6 +158,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const [expandedJobRows, setExpandedJobRows] = useState<Set<string>>(new Set());
   const [approvingJob, setApprovingJob] = useState<string | null>(null);
   const [rejectingJob, setRejectingJob] = useState<string | null>(null);
+  const [cancelJob, setCancelJob] = useState<{ id: string; einsatzort: string; zeitraum: string } | null>(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancellingJob, setCancellingJob] = useState(false);
 
   // Vorübergehend deaktivieren (nicht aktiv)
   const [inactiveDialogOpen, setInactiveDialogOpen] = useState(false);
@@ -951,6 +954,39 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         description: err?.message ?? "Auflösen fehlgeschlagen",
         variant: "destructive",
       });
+    }
+  };
+
+  const submitJobCancellation = async () => {
+    if (!cancelJob || !cancelReason.trim() || cancellingJob) return;
+    setCancellingJob(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-cancel-job', {
+        body: { jobId: cancelJob.id, reason: cancelReason.trim() },
+      });
+      if (error) {
+        const context = (error as { context?: Response }).context;
+        const detail = context ? await context.clone().json().catch(() => null) : null;
+        if (detail?.cancelled) {
+          setJobRequests(prev => prev.map(j => j.id === cancelJob.id ? { ...j, status: 'cancelled' } : j));
+          await loadJobAssignments();
+        }
+        throw new Error(detail?.error || error.message);
+      }
+      if (!data?.success) throw new Error(data?.error || 'Stornierung fehlgeschlagen');
+      setJobRequests(prev => prev.map(j => j.id === cancelJob.id ? { ...j, status: 'cancelled' } : j));
+      await loadJobAssignments();
+      toast({
+        title: 'Auftrag storniert',
+        description: data.alreadyCancelled ? 'Bereits storniert – keine erneuten Mails versendet.' :
+          `${data.sent} Mails versendet · ${data.skipped} Fahrer übersprungen · ${data.alreadySent} bereits informiert · ${data.failed} fehlgeschlagen`,
+        variant: data.failed ? 'destructive' : 'default',
+      });
+      setCancelJob(null);
+    } catch (error) {
+      toast({ title: 'Stornierung prüfen', description: error instanceof Error ? error.message : 'Stornierung fehlgeschlagen', variant: 'destructive' });
+    } finally {
+      setCancellingJob(false);
     }
   };
 
@@ -1818,7 +1854,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 req.status === 'sent' ? 'bg-green-100 text-green-800 border-green-300' : ''
                               }
                             >
-                              {req.status === 'confirmed' ? 'Bestätigt' : 
+                              {req.status === 'cancelled' ? 'Storniert' : req.status === 'confirmed' ? 'Bestätigt' : 
                                 req.status === 'assigned' ? 'Zugewiesen' : 
                                 req.status === 'no_show' ? 'No-Show' :
                                 req.status === 'completed' ? 'Erledigt' : 
@@ -1870,6 +1906,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               }
 
                               // Rejected-Status: Nur Info anzeigen
+                              if (req.status === 'cancelled') {
+                                return <span className="text-sm text-muted-foreground">Storniert – keine weitere Aktion möglich</span>;
+                              }
                               if (req.status === 'rejected') {
                                 return (
                                   <div className="text-sm text-gray-500 italic">
@@ -1979,7 +2018,12 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                               </div>
                             );
                           })()}
-                        </TableCell>
+                           {!['completed', 'rejected', 'cancelled'].includes(req.status) && (
+                             <Button size="sm" variant="destructive" className="mt-2" onClick={() => { setCancelReason(''); setCancelJob(req); }}>
+                               <X className="h-3 w-3 mr-1" />Auftrag stornieren
+                             </Button>
+                           )}
+                         </TableCell>
                       </TableRow>,
                       /* Erweiterte Details Row */
                       expandedJobRows.has(req.id) ? (
@@ -2078,7 +2122,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   req.status === 'sent' ? 'bg-green-100 text-green-800 border-green-300' : ''
                                 }`}
                               >
-                                {req.status === 'confirmed' ? 'Bestätigt' : 
+                                {req.status === 'cancelled' ? 'Storniert' : req.status === 'confirmed' ? 'Bestätigt' : 
                                   req.status === 'assigned' ? 'Zugewiesen' : 
                                   req.status === 'no_show' ? 'No-Show' :
                                   req.status === 'completed' ? 'Erledigt' : 
@@ -2140,7 +2184,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           <JobAttachmentsList jobId={req.id} />
 
                           {/* Zuweisung */}
-                          {assignments.length > 0 ? (
+                          {req.status === 'cancelled' ? (
+                            <p className="text-sm text-muted-foreground">Storniert – keine weitere Aktion möglich</p>
+                          ) : assignments.length > 0 ? (
                             <div className="space-y-2">
                               {assignments.map((asg) => (
                                 <div key={asg.id} className="bg-blue-50 p-3 rounded space-y-2">
@@ -2262,6 +2308,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </div>
                           )}
 
+                          {!['completed', 'rejected', 'cancelled'].includes(req.status) && (
+                            <Button size="sm" variant="destructive" className="w-full h-11" onClick={() => { setCancelReason(''); setCancelJob(req); }}>
+                              <X className="h-4 w-4 mr-1" />Auftrag stornieren
+                            </Button>
+                          )}
                           {/* Einladungsstatus Toggle */}
                           <Button
                             variant="ghost"
@@ -3005,6 +3056,19 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       </Dialog>
 
       {/* Abgemeldet-Fahrer wieder aktivieren Dialog */}
+      <Dialog open={!!cancelJob} onOpenChange={open => { if (!open && !cancellingJob) setCancelJob(null); }}>
+        <DialogContent className="max-w-md">
+          <DialogHeader><DialogTitle>Auftrag stornieren?</DialogTitle></DialogHeader>
+          <p className="text-sm text-muted-foreground">{cancelJob?.einsatzort} / {cancelJob?.zeitraum}</p>
+          <p className="text-sm">Der Auftrag und seine aktiven Zuweisungen werden storniert. Nur aktuell freigegebene, nicht gesperrte, nicht deaktivierte und nicht abgemeldete Fahrer werden informiert.</p>
+          <Label htmlFor="cancel-job-reason">Stornierungsgrund (intern)</Label>
+          <Textarea id="cancel-job-reason" value={cancelReason} maxLength={2000} onChange={event => setCancelReason(event.target.value)} disabled={cancellingJob} />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCancelJob(null)} disabled={cancellingJob}>Abbrechen</Button>
+            <Button variant="destructive" onClick={submitJobCancellation} disabled={cancellingJob || !cancelReason.trim()}>{cancellingJob ? 'Wird storniert…' : 'Auftrag stornieren'}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <Dialog open={!!mailReactivateDriver} onOpenChange={(o) => { if (!reactivatingMailsDriver && !o) setMailReactivateDriver(null); }}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
