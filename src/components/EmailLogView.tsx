@@ -83,6 +83,10 @@ export function EmailLogView() {
     switch (template) {
       case 'driver_confirmation':
         return 'Fahrer-Bestätigung';
+      case 'job_cancelled_assigned':
+        return 'Stornierung – zugeteilter Fahrer';
+      case 'job_cancelled_invited':
+        return 'Stornierung – informierter Fahrer';
       case 'driver_approval_with_jobs':
         return 'Fahrer-Freischaltung';
       case 'job_alert':
