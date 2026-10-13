@@ -194,7 +194,7 @@ const LkwUeberfuehrung = () => {
         </section>
 
         <section id="fahreranfrage" className="scroll-mt-16">
-          <FahreranfrageSection />
+          <FahreranfrageSection variant="ueberfuehrung" />
         </section>
 
         <section id="contact" className="scroll-mt-16">
