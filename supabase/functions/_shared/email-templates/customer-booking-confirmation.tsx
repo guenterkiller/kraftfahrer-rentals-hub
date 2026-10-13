@@ -23,6 +23,7 @@ interface CustomerBookingConfirmationProps {
   location: string;
   message: string;
   isFernfahrerTarif?: boolean;
+  isUeberfuehrung?: boolean;
   weekendHolidayAffected?: boolean;
   weekendHolidayAcknowledged?: boolean;
   tarif?: {
@@ -95,7 +96,9 @@ export const CustomerBookingConfirmation = ({
   weekendHolidayAffected = false,
   weekendHolidayAcknowledged = false,
   tarif,
+  isUeberfuehrung = false,
 }: CustomerBookingConfirmationProps) => {
+  const ueberfuehrung = isUeberfuehrung || tarif?.tarif === 'ueberfuehrung';
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
@@ -173,7 +176,18 @@ export const CustomerBookingConfirmation = ({
       </Section>
 
 
-      {tarif && !tarif.needsReview && (
+      {ueberfuehrung && (
+        <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderLeftColor: '#16a34a' })}>
+          <Heading {...getTextProps({ ...textStyles.heading3, color: '#15803d' }, 'small-heading')}>
+            LKW-Überführung – individuelles Angebot
+          </Heading>
+          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+            Kosten nach Fahrzeug, Strecke und Aufwand – individuelles Angebot.
+          </Text>
+        </Section>
+      )}
+
+      {!ueberfuehrung && tarif && !tarif.needsReview && (
         <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderLeftColor: '#16a34a' })}>
           <Heading {...getTextProps({ ...textStyles.heading3, color: '#15803d' }, 'small-heading')}>
             Für Ihren Einsatz maßgeblicher Tarif
@@ -228,7 +242,7 @@ export const CustomerBookingConfirmation = ({
         </Section>
       )}
 
-      {(!tarif || tarif.needsReview) && (
+      {!ueberfuehrung && (!tarif || tarif.needsReview) && (
         <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
           <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>
             Zuordnung zum passenden veröffentlichten Tarif
@@ -252,7 +266,7 @@ export const CustomerBookingConfirmation = ({
         </Section>
       )}
 
-      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#f0f7ff', borderLeftColor: '#2563eb' })}>
+      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#f0f7ff', borderLeftColor: '#2563eb' })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: '#1e40af' }, 'small-heading')}>Einsatzzeit und Mehrstunden</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
@@ -261,9 +275,9 @@ export const CustomerBookingConfirmation = ({
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
           Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
         </Text>
-      </Section>
+      </Section>)}
 
-      <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
+      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
           Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird der Zuschlag automatisch auf den jeweiligen Tagessatz berechnet. Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
@@ -285,7 +299,7 @@ export const CustomerBookingConfirmation = ({
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
           Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
         </Text>
-      </Section>
+      </Section>)}
 
       <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung nach Einsatzbestätigung</Heading>
