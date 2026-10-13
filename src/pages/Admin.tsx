@@ -2308,6 +2308,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             </div>
                           )}
 
+                          {!['completed', 'rejected', 'cancelled'].includes(req.status) && (
+                            <Button size="sm" variant="destructive" className="w-full h-11" onClick={() => { setCancelReason(''); setCancelJob(req); }}>
+                              <X className="h-4 w-4 mr-1" />Auftrag stornieren
+                            </Button>
+                          )}
                           {/* Einladungsstatus Toggle */}
                           <Button
                             variant="ghost"
