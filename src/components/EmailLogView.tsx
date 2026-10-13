@@ -71,6 +71,7 @@ export function EmailLogView() {
       case 'sent':
         return <Badge variant="default" className="bg-green-500 text-xs py-0">✓</Badge>;
       case 'failed':
+      case 'error':
         return <Badge variant="destructive" className="text-xs py-0">✗</Badge>;
       case 'pending':
         return <Badge variant="outline" className="text-xs py-0">...</Badge>;

@@ -97,9 +97,18 @@ Deno.serve(async req => {
         return data?.id ?? null;
       },
       log: async (driver, mail, status, errorMessage, messageId) => {
+        if (status === 'skipped') {
+          const { error } = await supabase.from('admin_actions').insert({
+            action: 'job_cancellation_recipient_skipped', job_id: jobId, admin_email: user.email,
+            note: JSON.stringify({ driver_id: driver.id, reason: errorMessage }),
+          });
+          if (error) throw error;
+          return;
+        }
         const { error } = await supabase.from('email_log').insert({
           job_id: jobId, assignment_id: activeAssignments.find(a => a.driver_id === driver.id)?.id ?? null,
-          recipient: normalizeEmail(driver.email), subject: mail.subject, template: mail.template, status,
+          recipient: normalizeEmail(driver.email), subject: mail.subject, template: mail.template,
+          status: status === 'failed' ? 'error' : 'sent',
           error_message: errorMessage ?? null, message_id: messageId ?? null,
           sent_at: status === 'sent' ? new Date().toISOString() : null,
         });
