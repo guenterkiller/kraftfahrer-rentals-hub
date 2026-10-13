@@ -1,6 +1,6 @@
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import { z } from 'npm:zod@3.23.8';
-import { Resend } from 'npm:resend@4.0.0';
+import { Resend } from 'npm:resend@6.1.2';
 import { verifyAdminAuth } from '../_shared/admin-auth.ts';
 import { wrapDriverEmailHtml } from '../_shared/email-templates/driver-html-shell.ts';
 import { cancellationTemplates, invitationTemplates, deliverCancellations, normalizeEmail, type Driver } from './cancellation.ts';
