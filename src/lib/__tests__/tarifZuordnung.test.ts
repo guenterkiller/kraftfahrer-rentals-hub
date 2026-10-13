@@ -63,3 +63,21 @@ describe('Wochenend- und Feiertagserkennung', () => {
     expect(listSurchargeDays('2026-08-31', '2026-09-02')).toHaveLength(0);
   });
 });
+
+describe('LKW-Überführung', () => {
+  it('hat Vorrang vor allen Standardtarifen und setzt keinen Preis', () => {
+    for (const kategorie of ['LKW CE', 'LKW CE Wochenpreis', 'Baumaschinenführer / Mischmeister', '']) {
+      const r = resolveTarif({ kategorie, maschinenbedienung: '', longDistance: true, leistung: 'ueberfuehrung' });
+      expect(r.tarif).toBe('ueberfuehrung');
+      expect(r.netto).toBeNull();
+      expect(r.mehrstunde).toBeNull();
+      expect(r.einheit).toBe('');
+      expect(r.label).toBe('LKW-Überführung – individuelles Angebot');
+    }
+  });
+  it('erkennt die feste Leistungsbezeichnung auch ohne Kennzeichen, Fernverkehr ändert nichts', () => {
+    const r = resolveTarif({ kategorie: 'LKW-Überführung – individuelles Angebot', maschinenbedienung: '', longDistance: true });
+    expect(r.tarif).toBe('ueberfuehrung');
+    expect(r.netto).toBeNull();
+  });
+});
