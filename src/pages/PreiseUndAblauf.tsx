@@ -310,7 +310,7 @@ const PreiseUndAblauf = () => {
               <CardContent className="space-y-2 text-muted-foreground">
                 <p>Als Fernverkehrseinsatz gelten insbesondere:</p>
                 <ul className="ml-4 space-y-1">
-                  <li>• längere Überführungsfahrten</li>
+                  <li>• längere <Link to="/lkw-ueberfuehrung" className="underline text-primary">Überführungsfahrten</Link></li>
                   <li>• bundesweite Transporte</li>
                   <li>• Einsätze mit auswärtiger Übernachtung</li>
                   <li>• Einsätze mit längerer Tagesabwesenheit</li>

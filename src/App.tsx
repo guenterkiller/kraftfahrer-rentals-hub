@@ -29,6 +29,7 @@ const FahrerAntwortBestaetigen = lazy(() => import("./pages/FahrerAntwortBestaet
 const LKWFahrerBuchen = lazy(() => import("./pages/LKWFahrerBuchen"));
 const KraftfahrerMieten = lazy(() => import("./pages/KraftfahrerMieten"));
 const ErsatzfahrerLkw = lazy(() => import("./pages/ErsatzfahrerLkw"));
+const LkwUeberfuehrung = lazy(() => import("./pages/LkwUeberfuehrung"));
 const Mietfahrer = lazy(() => import("./pages/Mietfahrer"));
 const LkwFahrerKurzfristig = lazy(() => import("./pages/LkwFahrerKurzfristig"));
 const FahrerFuerSpeditionen = lazy(() => import("./pages/FahrerFuerSpeditionen"));
@@ -141,6 +142,7 @@ const App = () => (
             <Route path="/lkwfahrer-buchen" element={<Navigate to="/lkw-fahrer-buchen" replace />} />
             <Route path="/kraftfahrer-mieten" element={<KraftfahrerMieten />} />
             <Route path="/ersatzfahrer-lkw" element={<ErsatzfahrerLkw />} />
+            <Route path="/lkw-ueberfuehrung" element={<LkwUeberfuehrung />} />
             <Route path="/mietfahrer" element={<Mietfahrer />} />
             <Route path="/lkw-fahrer-kurzfristig" element={<LkwFahrerKurzfristig />} />
             <Route path="/fahrer-fuer-speditionen" element={<FahrerFuerSpeditionen />} />
