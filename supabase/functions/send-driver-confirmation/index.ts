@@ -159,7 +159,9 @@ serve(async (req) => {
           console.error('📧 binding invite insert failed:', invErr);
           return createErrorResponse("Annahmelink konnte nicht erstellt werden", 500, corsHeaders);
         }
-        const url = `https://www.kraftfahrer-mieten.com/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
+        // Optional nur für kontrollierte Tests: BINDING_LINK_BASE_URL (Standard: Live-Domain)
+        const linkBase = (Deno.env.get('BINDING_LINK_BASE_URL') || 'https://www.kraftfahrer-mieten.com').replace(/\/+$/, '');
+        const url = `${linkBase}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
         const until = expiresAt.toLocaleString('de-DE', { timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         bindingButtonHtml = `
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 8px 0;"><tr><td bgcolor="#16a34a" style="border-radius:6px;">
