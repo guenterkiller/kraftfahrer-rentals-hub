@@ -134,6 +134,8 @@ const Admin = () => {
   const [documentCounts, setDocumentCounts] = useState<Record<string, number>>({});
   const [jobRequests, setJobRequests] = useState<any[]>([]);
   const [jobAssignments, setJobAssignments] = useState<any[]>([]);
+  // Verbindliche Fahrerannahme – getrennt von der Admin-Zuteilung
+  const [bindingStatus, setBindingStatus] = useState<Record<string, { state: 'pending' | 'accepted' | 'declined' | 'expired'; at?: string }>>({});
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: string; filename: string } | null>(null);
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const authCheckStartedRef = useRef(false);
@@ -652,6 +654,39 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
+  const loadBindingStatus = async () => {
+    try {
+      // Abgelaufene Annahmelinks markieren + Admin einmalig benachrichtigen (keine Neuzuteilung)
+      await supabase.functions.invoke('check-binding-acceptance-expiry', { body: {} }).catch(() => null);
+      const [{ data: invites }, { data: accs }] = await Promise.all([
+        supabase.from('assignment_invites' as any).select('assignment_id, status, created_at, responded_at').eq('purpose', 'binding').order('created_at', { ascending: true }),
+        supabase.from('job_driver_acceptances').select('assignment_id, accepted_at').eq('flow', 'binding'),
+      ]);
+      const map: Record<string, { state: 'pending' | 'accepted' | 'declined' | 'expired'; at?: string }> = {};
+      for (const inv of (invites as any[]) || []) {
+        if (!inv.assignment_id) continue;
+        const st = inv.status === 'declined' ? 'declined' : inv.status === 'expired' ? 'expired' : 'pending';
+        map[inv.assignment_id] = { state: st, at: inv.responded_at ?? undefined };
+      }
+      // Nur ein gesperrter Annahmenachweis gilt als verbindliche Annahme
+      for (const a of (accs as any[]) || []) {
+        if (a.assignment_id) map[a.assignment_id] = { state: 'accepted', at: a.accepted_at };
+      }
+      setBindingStatus(map);
+    } catch (e) {
+      console.error('binding status load failed', e);
+    }
+  };
+
+  const renderBindingBadge = (assignmentId: string) => {
+    const b = bindingStatus[assignmentId];
+    if (!b) return <Badge variant="outline" className="text-xs">Fahrerannahme: kein Link</Badge>;
+    if (b.state === 'accepted') return <Badge className="text-xs bg-green-600 hover:bg-green-600">Fahrerannahme: verbindlich angenommen am {new Date(b.at!).toLocaleString('de-DE')}</Badge>;
+    if (b.state === 'declined') return <Badge variant="destructive" className="text-xs">Fahrerannahme: abgelehnt</Badge>;
+    if (b.state === 'expired') return <Badge variant="destructive" className="text-xs">Fahrerannahme: abgelaufen</Badge>;
+    return <Badge variant="secondary" className="text-xs">Fahrerannahme: ausstehend</Badge>;
+  };
+
   const loadJobAssignments = async () => {
     if (signedOutRef.current) return;
     try {
@@ -680,6 +715,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       console.log('✅ Assignments loaded:', assignmentsData?.length || 0);
       console.log('✅ Sample assignment:', assignmentsData?.[0]);
       setJobAssignments(assignmentsData || []);
+      void loadBindingStatus();
     } catch (error) {
       console.error('Error loading assignments:', error);
       toast({
@@ -1969,10 +2005,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                         {asg.rate_value}€/{asg.rate_type === 'hourly' ? 'Std' : asg.rate_type === 'weekly' ? 'Woche' : 'Tag'}
                                       </span>
                                       {asg.status === 'confirmed' ? (
-                                        <Badge variant="default">Bestätigt</Badge>
+                                        <Badge variant="default">Admin-Zuteilung bestätigt</Badge>
                                       ) : (
                                         <Badge variant="secondary">Zugewiesen</Badge>
                                       )}
+                                      {renderBindingBadge(asg.id)}
                                     </div>
                                     {(asg.start_date || asg.end_date) && (
                                       <div className="text-xs text-blue-700">
@@ -2204,7 +2241,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                       {' – '}
                                       {asg.end_date ? new Date(asg.end_date).toLocaleDateString('de-DE') : 'offen'}
                                       {' · '}
-                                      {asg.status === 'confirmed' ? 'Bestätigt' : 'Zugewiesen'}
+                                      {asg.status === 'confirmed' ? 'Admin-Zuteilung bestätigt' : 'Zugewiesen'}
+                                      {' · '}
+                                      {(() => { const b = bindingStatus[asg.id]; return b?.state === 'accepted' ? 'Fahrerannahme: verbindlich angenommen' : b?.state === 'declined' ? 'Fahrerannahme: abgelehnt' : b?.state === 'expired' ? 'Fahrerannahme: abgelaufen' : b ? 'Fahrerannahme: ausstehend' : 'Fahrerannahme: kein Link'; })()}
                                     </div>
                                   )}
                                   <div className="flex gap-2 flex-wrap">
@@ -2849,10 +2888,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           className="text-xs"
                         >
                           {assignment.status === 'assigned' ? 'Zugewiesen' :
-                           assignment.status === 'confirmed' ? 'Bestätigt' : 
+                           assignment.status === 'confirmed' ? 'Admin-Zuteilung bestätigt' : 
                            assignment.status === 'no_show' ? `No-Show${assignment.no_show_fee_cents ? ` – ${(assignment.no_show_fee_cents / 100).toFixed(0)} €` : ''}` : 
                            assignment.status === 'completed' ? 'Erledigt' : 'Storniert'}
                         </Badge>
+                        {(assignment.status === 'assigned' || assignment.status === 'confirmed') && renderBindingBadge(assignment.id)}
                       </div>
                   </div>
                   
@@ -2907,6 +2947,16 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                         <X className="h-4 w-4" />
                         No-Show markieren
                       </Button>
+                      {bindingStatus[assignment.id]?.state !== 'accepted' && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={async () => { await resendDriverConfirmationNew(assignment.id); await loadBindingStatus(); }}
+                          className="flex items-center gap-1 h-10 w-full md:w-auto"
+                        >
+                          Annahmelink erneut senden
+                        </Button>
+                      )}
                       <Button
                         size="sm"
                         variant="outline"
@@ -2927,7 +2977,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
                   {assignment.status === 'confirmed' && (
                     <div className="text-xs md:text-sm text-muted-foreground">
-                      Bestätigt am: {new Date(assignment.confirmed_at).toLocaleString('de-DE')}
+                      Admin-Zuteilung bestätigt am: {new Date(assignment.confirmed_at).toLocaleString('de-DE')} (keine Fahrerannahme)
                     </div>
                   )}
                 </div>
