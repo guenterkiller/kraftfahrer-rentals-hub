@@ -32,5 +32,7 @@
 - [x] Cookie-Schaltflächen bei 320 px: Umbruch nur unter 360 px, alle drei Buttons vollständig sichtbar; Zustimmungslogik unverändert, akzeptieren/speichern/ablehnen geprüft.
 - [x] Automatische Build-Prüfung OK, 12 Tests und 4/4 Prerender-Prüfungen bestanden; Layout ab 375 px und am Computer unverändert.
 - [x] Zwei Buttons im Abschnitt „EU-Fahrer willkommen" (Startseite): Textumbruch nur unter 360 px freigegeben und umgesetzt; bei 320/359 px vollständig im Kasten, ab 360 px nachweislich unverändert (keine Umbrüche, gleiche Höhen).
-- [ ] Selbe Sektion, bisher nicht freigegeben: Button-Text läuft bei 360–460 px über die Button-Fläche hinaus (375 px: Text 361 px in 275 px-Fläche) und die Buttons-Reihe übersteht bei 640–799 px den Bildschirm (640 px: 78 px seitlich schiebbar, beide Buttons abgeschnitten) – rein optische Korrektur wartet auf Freigabe.
+- [x] Selbe Sektion, beide Altfehler behoben (freigegeben): Textumbruch nun unter 470 px, Buttons unter 800 px untereinander; bei 360–1280 px bleibt der Text vollständig in der Button-Fläche und die Seite lässt sich nirgends seitlich schieben.
+- [x] Produktions-Build nach der Korrektur: Ausstieg 0, 21/21 vorgerenderte Seiten geprüft.
+- [x] Beide Buchungs-Mailfunktionen neu eingespielt (interne Benachrichtigung, Kundenbestätigung); Erreichbarkeit ohne Mailversand geprüft (405 bzw. 403 wie erwartet).
 - [ ] Stornierungsbedingungen bleiben unverändert; Kalkulationsgrundlagen 349 € / 329 € (1.645/5) / 450 € / 489 € netto je Einsatztag notiert, Rechtprüfung der Pauschalen 80 %/100 % offen.
