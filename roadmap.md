@@ -7,7 +7,7 @@
 # Technische IONOS-Prüfung und mobiler Überführungs-CTA
 - [x] Einheitliche Apache-Konfiguration; Paket übernimmt die geprüfte Datei unverändert, Abbruch bei Build-/Validierungsfehlern.
 - [x] Export umfasst alle 21 unveränderten Sitemap-URLs; HTML-Abnahme und 21 aus der Vorschau erzeugte Testdateien erfolgreich geprüft.
-- [ ] Tatsächlicher Produktions-dist-Abnahmelauf: automatische Vorschau-Builds melden OK, stellen hier aber keinen dist-Ordner bereit; Produktionsartefakte nicht verfügbar.
+- [x] Tatsächlicher Produktions-dist-Abnahmelauf: „npm run build“ ausgeführt, Ausstieg 0, 21/21 vorgerenderte HTML-Dateien samt Canonical, Meta/OG und Inhalt geprüft.
 - [x] Überführungs-CTA mit Umbruch und variabler Höhe; Formularfunktion unverändert.
 - [x] Echter Apache 2.4: 21 HTTP-HTML-Antworten, 20 Slash-301, Querystrings, Direktdatei-Redirects, Assets und SPA-Fallback; Mobilprüfung bei 320/375/390/768 Pixel bestanden.
 - [ ] IONOS-Live-Abnahme nach künftigem freigegebenem Upload; derzeit ausdrücklich kein Upload und keine Veröffentlichung.
@@ -31,5 +31,6 @@
 # Mobile Darstellung und Storno-Grundlagen
 - [x] Cookie-Schaltflächen bei 320 px: Umbruch nur unter 360 px, alle drei Buttons vollständig sichtbar; Zustimmungslogik unverändert, akzeptieren/speichern/ablehnen geprüft.
 - [x] Automatische Build-Prüfung OK, 12 Tests und 4/4 Prerender-Prüfungen bestanden; Layout ab 375 px und am Computer unverändert.
-- [ ] Zwei Buttons im Abschnitt „EU-Fahrer willkommen" (Startseite) brauchen bei 320 px 254 bzw. 288 px und erzeugen 20 px seitliches Überstehen: rein optische Korrektur (Textumbruch erlauben) wartet auf Freigabe.
+- [x] Zwei Buttons im Abschnitt „EU-Fahrer willkommen" (Startseite): Textumbruch nur unter 360 px freigegeben und umgesetzt; bei 320/359 px vollständig im Kasten, ab 360 px nachweislich unverändert (keine Umbrüche, gleiche Höhen).
+- [ ] Selbe Sektion, bisher nicht freigegeben: Button-Text läuft bei 360–460 px über die Button-Fläche hinaus (375 px: Text 361 px in 275 px-Fläche) und die Buttons-Reihe übersteht bei 640–799 px den Bildschirm (640 px: 78 px seitlich schiebbar, beide Buttons abgeschnitten) – rein optische Korrektur wartet auf Freigabe.
 - [ ] Stornierungsbedingungen bleiben unverändert; Kalkulationsgrundlagen 349 € / 329 € (1.645/5) / 450 € / 489 € netto je Einsatztag notiert, Rechtprüfung der Pauschalen 80 %/100 % offen.
