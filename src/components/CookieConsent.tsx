@@ -54,13 +54,14 @@ export function CookieConsent() {
     <div className="contents">
       {/* kleines Reopen-Widget, z. B. im Footer verlinken */}
       <style>{`.consent-banner{position:fixed;left:0;right:0;bottom:0;background:#0b1220;color:#fff;padding:16px;z-index:9999}
-      .consent-box{max-width:960px;margin:0 auto;display:flex;gap:16px;align-items:flex-start}
+      .consent-box{max-width:960px;margin:0 auto;display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
       .consent-actions{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
       .btn{border:1px solid #94a3b8;background:#0ea5e9;color:#fff;padding:.6rem 1rem;border-radius:8px;cursor:pointer}
       .btn.secondary{background:#1f2937}
       .switch{display:flex;gap:8px;align-items:center}
-      .card{background:#111827;border:1px solid #334155;padding:12px;border-radius:10px}
-      .link{color:#93c5fd;text-decoration:underline}`}</style>
+      .card{background:#111827;border:1px solid #334155;padding:12px;border-radius:10px;min-width:0}
+      .link{color:#93c5fd;text-decoration:underline}
+      @media (max-width:360px){.consent-banner{padding:12px}.consent-box{gap:12px}.consent-actions{margin-left:0;width:100%}}`}</style>
 
       {visible && (
         <div className="consent-banner" role="dialog" aria-live="polite">
