@@ -2,6 +2,7 @@ import { Heading, Text, Section, Link } from 'npm:@react-email/components@0.0.22
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
+import { OvernightCostNotice } from './overnight-cost-notice.tsx';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
 
@@ -300,6 +301,8 @@ export const CustomerBookingConfirmation = ({
           Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
         </Text>
       </Section>)}
+
+      <OvernightCostNotice tarifKey={ueberfuehrung ? 'ueberfuehrung' : tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} />
 
       <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung nach Einsatzbestätigung</Heading>

@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import TarifCardText from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel, PREISKARTEN_HINWEIS } from "@/lib/tarifTexte";
 import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
 const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
@@ -150,10 +151,14 @@ const PreiseUndAblauf = () => {
                 <p className="text-sm text-foreground">
                   Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und Feiertagszuschläge gelten automatisch; eine zusätzliche Vereinbarung ist hierfür nicht erforderlich. Weitere, nicht veröffentlichte Kosten entstehen nur nach vorheriger ausdrücklicher Vereinbarung.
                 </p>
-                <p className="text-sm text-foreground mt-2">
-                  Bei auswärtigen Einsätzen kann zusätzlich eine Übernachtung erforderlich sein. Diese wird vor Auftragserteilung abgestimmt.
-                </p>
               </div>
+              <section className="max-w-4xl mx-auto mt-6 space-y-3 text-sm text-foreground" aria-labelledby="overnight-costs-heading">
+                <h2 id="overnight-costs-heading" className="text-lg font-semibold">{OVERNIGHT_COSTS.title}</h2>
+                {OVERNIGHT_COSTS.standard.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                <h3 className="text-base font-semibold">{OVERNIGHT_COSTS.fernfahrerTitle}</h3>
+                {OVERNIGHT_COSTS.fernfahrer.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                <p>{OVERNIGHT_COSTS.legal}</p>
+              </section>
             </div>
 
             {/* Vergleich zu Zeitarbeit */}
