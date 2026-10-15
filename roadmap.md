@@ -1,3 +1,9 @@
+# Technische IONOS-Prüfung und mobiler Überführungs-CTA
+- [ ] Einheitliche Apache-Konfiguration und unveränderte Übernahme in den finalen Upload.
+- [ ] Alle Sitemap-Seiten einschließlich Startseite vorgerendert erzeugen; eindeutige Seitendaten und vollständige Dateien prüfen.
+- [ ] Überführungs-CTA mit Umbruch und variabler Höhe; Formularfunktion unverändert.
+- [ ] Lokale HTTP-/Apache-Tests und Mobilprüfung bei 320/375/390/768 Pixel; kein Upload, keine Veröffentlichung.
+
 # SEO-Freigabe A, B und D
 - [x] A: Keine Widersprüche gefunden; Fahrzeugverantwortung in der vorhandenen FAQ präzisiert, FAQ-Auszeichnung folgt demselben Text.
 - [x] B: Bestehende Startseiten-Linkzeile um /lkw-ueberfuehrung ergänzt; bisherige Links unverändert.
