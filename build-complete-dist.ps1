@@ -19,9 +19,11 @@ Set-Location $workDir
 
 Write-Host "2. Dependencies installieren..." -ForegroundColor Yellow
 npm install
+if ($LASTEXITCODE -ne 0) { throw "Dependency-Installation fehlgeschlagen." }
 
 Write-Host "3. Production Build erstellen..." -ForegroundColor Yellow
 npm run build
+if ($LASTEXITCODE -ne 0) { throw "Build oder Prerendering fehlgeschlagen; kein Upload-Paket erstellen." }
 
 Write-Host "4. Dist-Ordner vorbereiten..." -ForegroundColor Yellow
 New-Item -ItemType Directory -Path $distDir -Force
@@ -71,58 +73,19 @@ foreach ($dir in $criticalDirs) {
     }
 }
 
-Write-Host "8. .htaccess für IONOS anpassen..." -ForegroundColor Yellow
-$htaccessContent = @"
-# Kraftfahrer-Mieten.com - IONOS Hosting Configuration
-Options -MultiViews
-RewriteEngine On
+Write-Host "8. Geprüfte IONOS-Konfiguration unverändert übernehmen..." -ForegroundColor Yellow
+$sourceConfig = "public\htaccess-ionos"
+if ((Get-FileHash $sourceConfig).Hash -ne (Get-FileHash "public\.htaccess").Hash) {
+    throw "Die beiden Apache-Konfigurationen weichen voneinander ab."
+}
+Copy-Item $sourceConfig "$distDir\.htaccess" -Force
+if ((Get-FileHash $sourceConfig).Hash -ne (Get-FileHash "$distDir\.htaccess").Hash) {
+    throw "Die finale .htaccess wurde nicht unverändert übernommen."
+}
 
-# Bypass admin-check.html (serve static)
-RewriteRule ^admin-check\.html$ - [L]
-
-# MIME types
-AddType image/jpeg .jpg .jpeg
-AddType image/png .png
-AddType image/webp .webp
-
-# Security headers
-<IfModule mod_headers.c>
-  Header set Accept-Ranges none
-  Header always set X-Content-Type-Options nosniff
-  Header always set X-Frame-Options DENY
-  Header always set X-XSS-Protection "1; mode=block"
-</IfModule>
-
-# Canonical 301 redirects (HTTPS)
-RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
-RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
-
-# Remove .html extension redirects
-RewriteCond %{REQUEST_URI} \.html$ [NC]
-RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
-RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
-
-# Force HTTPS
-RewriteCond %{HTTPS} off
-RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
-
-# SPA routing
-RewriteBase /
-RewriteRule ^index\.html$ - [L]
-
-# Admin routes
-RewriteRule ^admin$ /index.html [L]
-RewriteRule ^admin/login$ /index.html [L]
-
-# Fallback for SPA
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|lovable-uploads/|styles/)
-RewriteRule . /index.html [L]
-"@
-
-Set-Content -Path "$distDir\.htaccess" -Value $htaccessContent -Encoding UTF8
+# Validiert ALLE Sitemap-Seiten im tatsächlich finalen Upload-Ordner.
+node scripts/validate-prerender.mjs $distDir
+if ($LASTEXITCODE -ne 0) { throw "Finales Upload-Paket enthält unvollständige Prerender-Dateien." }
 
 Write-Host "9. Version-Datei aktualisieren..." -ForegroundColor Yellow
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"

@@ -7,7 +7,7 @@ RewriteEngine On
 # ============================================
 
 <IfModule mod_headers.c>
-  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|svg|woff2)$">
+  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|woff2)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
   <FilesMatch "\.(html)$">
@@ -67,8 +67,9 @@ RewriteEngine On
 # ============================================
 
 # 1. Force HTTPS first (before www redirect)
+RewriteCond %{HTTP_HOST} ^(www\.)?kraftfahrer-mieten\.com$ [NC]
 RewriteCond %{HTTPS} off
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
 
 # 2. Force WWW (nach HTTPS)
 RewriteCond %{HTTP_HOST} ^kraftfahrer-mieten\.com$ [NC]
@@ -80,6 +81,9 @@ RewriteRule ^admin-check\.html$ - [L]
 # MIME types for images
 AddType image/jpeg .jpg .jpeg
 AddType image/png .png
+AddType image/webp .webp
+AddType image/avif .avif
+AddType application/manifest+json .webmanifest
 
 # Prevent partial content to avoid 206 issues for crawlers
 <IfModule mod_headers.c>
@@ -89,13 +93,13 @@ AddType image/png .png
 # Canonical 301 redirects for legacy .html URLs (one hop, HTTPS + WWW)
 # IMPORTANT: THE_REQUEST guards ensure only direct browser requests are redirected,
 # NOT internal SPA rewrites (which would cause 301 loops)
-RewriteCond %{THE_REQUEST} \s/index\.html\s [NC]
+RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
 RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
-RewriteCond %{THE_REQUEST} \s/impressum\.html\s [NC]
+RewriteCond %{THE_REQUEST} \s/+impressum\.html(?:[?\s]) [NC]
 RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
-RewriteCond %{THE_REQUEST} \s/datenschutzerklaerung\.html\s [NC]
+RewriteCond %{THE_REQUEST} \s/+datenschutzerklaerung\.html(?:[?\s]) [NC]
 RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
-RewriteCond %{THE_REQUEST} \s/allgemeine-geschaeftsbedingungen\.html\s [NC]
+RewriteCond %{THE_REQUEST} \s/+allgemeine-geschaeftsbedingungen\.html(?:[?\s]) [NC]
 RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/vermittlungsbedingungen [R=301,L]
 # Legacy mobile/smartphone/printable/vgapda URLs → Homepage
 RewriteRule ^mobile/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
@@ -110,9 +114,16 @@ RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://w
 # Any PHP files → Homepage
 RewriteCond %{REQUEST_URI} \.php$ [NC]
 RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+# Direkte Aufrufe der internen HTML-Dateien zur jeweiligen öffentlichen URL.
+# THE_REQUEST schützt interne Rewrites vor Rückleitungen und Schleifen.
+RewriteCond %{THE_REQUEST} \s/+prerender/index\.html(?:[?\s]) [NC]
+RewriteRule ^prerender/index\.html$ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+prerender/[a-z0-9-]+\.html(?:[?\s]) [NC]
+RewriteRule ^prerender/([a-z0-9-]+)\.html$ /$1 [R=301,L]
+
 # Generic: any other .html → sans extension, except admin-check.html
 # Only redirect direct browser requests, not internal rewrites
-RewriteCond %{THE_REQUEST} \.html\s [NC]
+RewriteCond %{THE_REQUEST} \.html(?:[?\s]) [NC]
 RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
 RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 
@@ -121,6 +132,24 @@ Redirect gone /fahrerboerse
 Redirect gone /fahrerbörse
 
 # (HTTPS redirect moved to top for correct order)
+
+# Einheitliche URLs ohne abschließenden Slash nur für erzeugte Sitemap-Seiten.
+# Assets, andere Verzeichnisse und SPA-Routen werden nicht verändert.
+RewriteCond %{DOCUMENT_ROOT}/prerender/$1.html -f
+RewriteRule ^([a-z0-9-]+)/+$ /$1 [R=301,L]
+
+# Intern vorgerenderte HTML-Dateien ohne Redirect direkt ausliefern.
+RewriteRule ^prerender/ - [END]
+RewriteCond %{DOCUMENT_ROOT}/prerender/index.html -f
+RewriteRule ^$ prerender/index.html [END]
+RewriteCond %{DOCUMENT_ROOT}/prerender/$1.html -f
+RewriteRule ^([a-z0-9-]+)$ prerender/$1.html [END]
+
+# Statische Dateien und Asset-Pfade niemals zum SPA-Fallback umschreiben.
+RewriteRule ^(assets|uploads|lovable-uploads|hero|styles)/ - [END]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [END]
 
 # SPA fallback routing
 RewriteBase /
