@@ -167,7 +167,7 @@ export function resolveTarif(input: TarifInput): TarifResult {
       mehrstunde: null,
       needsReview: false,
       internalConflict: keywordHit,
-      reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE – Wochenpreis (reines Fahren und Transportieren).' + conflictNote,
+      reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE – Wochenpreis.' + conflictNote,
     };
   }
 
@@ -180,7 +180,7 @@ export function resolveTarif(input: TarifInput): TarifResult {
       mehrstunde: null,
       needsReview: false,
       internalConflict: keywordHit,
-      reason: 'Vom Besteller gewählter veröffentlichter Tarif: Fernfahrer-Pauschale (reines Fahren und Transportieren).' + conflictNote,
+      reason: 'Vom Besteller gewählter veröffentlichter Tarif: Fernfahrer-Pauschale.' + conflictNote,
     };
   }
 
@@ -192,7 +192,7 @@ export function resolveTarif(input: TarifInput): TarifResult {
     mehrstunde: 45,
     needsReview: false,
     internalConflict: keywordHit,
-    reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE (reines Fahren und Transportieren).' + conflictNote,
+    reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE.' + conflictNote,
   };
 }
 
