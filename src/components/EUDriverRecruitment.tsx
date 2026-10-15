@@ -147,7 +147,7 @@ const EUDriverRecruitment = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col gap-4 justify-center min-[800px]:flex-row">
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 max-[359px]:h-auto max-[359px]:whitespace-normal max-[359px]:text-center max-[359px]:leading-snug"
