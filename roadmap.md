@@ -27,3 +27,9 @@
 - [x] Sechs isolierte Tests, Funktionstypprüfung und automatische Build-Prüfung erfolgreich; Edge-Deployment bestätigt.
 - [x] Nachweisbericht mit Grenzen der Live-Prüfung liefern.
 - [ ] Authentifizierter kompletter Stornierungsablauf samt bestehendem Resend-Laufzeitzugang: externe Supabase ohne verfügbare Admin-Testsitzung; reale Testmails nicht freigegeben.
+
+# Mobile Darstellung und Storno-Grundlagen
+- [x] Cookie-Schaltflächen bei 320 px: Umbruch nur unter 360 px, alle drei Buttons vollständig sichtbar; Zustimmungslogik unverändert, akzeptieren/speichern/ablehnen geprüft.
+- [x] Automatische Build-Prüfung OK, 12 Tests und 4/4 Prerender-Prüfungen bestanden; Layout ab 375 px und am Computer unverändert.
+- [ ] Zwei Buttons im Abschnitt „EU-Fahrer willkommen" (Startseite) brauchen bei 320 px 254 bzw. 288 px und erzeugen 20 px seitliches Überstehen: rein optische Korrektur (Textumbruch erlauben) wartet auf Freigabe.
+- [ ] Stornierungsbedingungen bleiben unverändert; Kalkulationsgrundlagen 349 € / 329 € (1.645/5) / 450 € / 489 € netto je Einsatztag notiert, Rechtprüfung der Pauschalen 80 %/100 % offen.

@@ -60,7 +60,8 @@ export function CookieConsent() {
       .btn.secondary{background:#1f2937}
       .switch{display:flex;gap:8px;align-items:center}
       .card{background:#111827;border:1px solid #334155;padding:12px;border-radius:10px}
-      .link{color:#93c5fd;text-decoration:underline}`}</style>
+      .link{color:#93c5fd;text-decoration:underline}
+      @media (max-width:360px){.consent-banner{padding:12px}.consent-box{gap:12px;flex-wrap:wrap}.card{min-width:0}.consent-actions{margin-left:0;width:100%}}`}</style>
 
       {visible && (
         <div className="consent-banner" role="dialog" aria-live="polite">
