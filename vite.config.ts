@@ -34,7 +34,8 @@ export default defineConfig(({ mode }) => ({
 
         // Vendor-Chunks + index.html precachen für domain-neutralen Betrieb
         // Verhindert 404-Fehler bei Deployments mit neuen Hashes
-        globPatterns: ['**/*-vendor*.js', '**/*.css', '**/*.{woff,woff2}', 'index.html'],
+        // Keine Schriftdateien: Projekt nutzt ausschließlich Systemschriften
+        globPatterns: ['**/*-vendor*.js', '**/*.css', 'index.html'],
         globIgnores: [
           '**/lovable-uploads/**',
           '**/hero/**',
