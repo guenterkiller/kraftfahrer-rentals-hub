@@ -136,8 +136,9 @@ const Vermittlungsbedingungen = () => {
                   etwa als zusätzlicher Einsatztag oder als Fernverkehrseinsatz.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
-                  An- und Abfahrt: Die ersten 25 km der Gesamtstrecke sind frei, ab dem 26. km
-                  werden 0,40 € netto je gefahrenem Kilometer berechnet.
+                  An- und Abfahrt: Die ersten 25 Kilometer je einfacher Fahrt sind kostenfrei. Ab dem 26. Kilometer werden 0,40 € netto je tatsächlich gefahrenem Kilometer berechnet. Dies gilt für die Anreise und die Rückfahrt. Bei mehrwöchigen auswärtigen Einsätzen gilt dieselbe
+                  Kilometerregelung für tatsächlich durchgeführte Wochenendheimfahrten und erneute Anreisen.
+                  Die voraussichtlichen Fahrtkosten werden vor verbindlicher Auftragserteilung mitgeteilt.
                 </p>
                 <p className="text-muted-foreground leading-relaxed mt-3">
                   LKW-Fahrer CE – Wochenpreis: 1.645,00 € netto für 5 Einsatztage von Montag bis Freitag – bis zu 9 Stunden Einsatzzeit je Einsatztag. Der Wochenpreis gilt
