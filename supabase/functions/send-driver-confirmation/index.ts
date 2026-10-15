@@ -184,6 +184,8 @@ serve(async (req) => {
       <p class="body-text" style="margin:0 0 8px 0;font-size:15px;color:#374151;">Hallo ${driver.vorname} ${driver.nachname},</p>
       <p class="body-text" style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:#374151;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
 
+      ${bindingButtonHtml}
+
       ${sectionStart('#f8fafc')}
         ${h3('AUFTRAGGEBER')}
         ${row('Unternehmen/Name', companyName)}
@@ -214,7 +216,7 @@ serve(async (req) => {
 
       ${sectionStart('#ffffff')}
         ${h3('VEREINBARUNGEN (Fahrerexpress)')}
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>1) Vermittlungsanteil:</strong> Der Vermittlungsanteil ergibt sich aus dem konkreten Auftragsangebot vor Einsatzbeginn. Standardeinsätze in der Regel 20 %, Sonder-/Projekt-/Pauschal- oder kurzfristige Einsätze bis zu 25 % des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises der reinen Fahrerdienstleistung (ohne An- und Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten). Die vollständigen Fahrer-Vermittlungsbedingungen wurden Ihnen mit der Registrierungsbestätigung per E-Mail übermittelt.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>1) Vermittlungsanteil:</strong> Für diesen Auftrag gilt ein Provisionssatz von ${commissionPct} %. Berechnungsgrundlage, Zahlungsbedingungen und Leistungsbericht ergeben sich aus den Vertragsbedingungen auf der persönlichen Bestätigungsseite (Button oben). An- und Abfahrtskosten sind provisionsfrei.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer stellt seine Rechnung nach Einsatzende an Fahrerexpress – bereits nach Abzug des vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Auslagen werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>3) Folgeaufträge:</strong> Auch direkt vereinbarte Folgeeinsätze mit diesem Auftraggeber sind provisionspflichtig, solange keine Festanstellung vorliegt.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
