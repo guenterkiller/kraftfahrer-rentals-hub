@@ -2,6 +2,7 @@ import { Heading, Text, Section, Link } from 'npm:@react-email/components@0.0.22
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
+import { TRAVEL_COSTS } from '../overnight-costs.ts';
 import { OvernightCostNotice, ZUSATZKOSTEN_BOX, ZUSATZKOSTEN_HEADING } from './overnight-cost-notice.tsx';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
@@ -218,7 +219,7 @@ export const CustomerBookingConfirmation = ({
             <tr style={{ backgroundColor: ZUSATZKOSTEN_BOX.backgroundColor }}>
               <td style={{ padding: '5px 6px', fontSize: '14px', color: ZUSATZKOSTEN_HEADING }} className="mobile-text"><strong>An- und Abfahrt:</strong></td>
               <td style={{ padding: '5px 6px', fontSize: '14px' }} className="mobile-text">
-                erste 25 km frei, danach 0,40 € netto je gefahrenem Kilometer
+                {TRAVEL_COSTS.short}
               </td>
             </tr>
           </table>

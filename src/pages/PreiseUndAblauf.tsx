@@ -208,13 +208,13 @@ const PreiseUndAblauf = () => {
                   Die An- und Abfahrt wird zusätzlich zum Tagessatz berechnet und vor Auftragserteilung klar ausgewiesen.
                 </p>
                 <div>
-                  <p className="font-semibold mb-2">Berechnung:</p>
-                  <p className="text-muted-foreground mb-2">
-                    Die Berechnung erfolgt auf Basis der Entfernung zwischen Wohnort bzw. Standort des eingesetzten Unternehmers und Einsatzort.
-                  </p>
+                  <p className="font-semibold mb-2">{TRAVEL_COSTS.title}:</p>
                   <ul className="space-y-1 text-muted-foreground ml-4">
-                    <li>• Die ersten 25 km bleiben frei.</li>
-                    <li>• Ab dem 26. km werden 0,40 € je gefahrenem Kilometer berechnet.</li>
+                    {TRAVEL_COSTS.rules.map((r) => <li key={r}>• {r}</li>)}
+                  </ul>
+                  <p className="font-semibold mt-4 mb-2">{TRAVEL_COSTS.exampleTitle}:</p>
+                  <ul className="space-y-1 text-muted-foreground ml-4">
+                    {TRAVEL_COSTS.example.map((r) => <li key={r}>• {r}</li>)}
                   </ul>
                 </div>
               </CardContent>
