@@ -268,8 +268,8 @@ const FlüssigbodenService = () => {
                     </div>
                     <div className="p-4 bg-background rounded-lg border">
                       <div className="text-sm text-muted-foreground mb-1">An- und Abfahrt</div>
-                      <div className="text-base font-semibold text-foreground">erste 25 km frei</div>
-                      <div className="text-xs text-muted-foreground mt-1">ab dem 26. km 0,40 € je gefahrenem Kilometer</div>
+                      <div className="text-base font-semibold text-foreground">erste 25 km je einfacher Fahrt frei</div>
+                      <div className="text-xs text-muted-foreground mt-1">ab dem 26. Kilometer 0,40 € netto je tatsächlich gefahrenem Kilometer; gilt für Anreise und Rückfahrt</div>
                     </div>
                   </div>
 
@@ -358,7 +358,7 @@ const FlüssigbodenService = () => {
                   <span className="ml-2 transform group-open:rotate-180 transition-transform">▼</span>
                 </summary>
                 <div className="mt-3 text-muted-foreground">
-                  <strong>489 € pro Einsatztag (gültig für: bis 8 Stunden).</strong> Zusätzlich: An- und Abfahrt – erste 25 km der Gesamtstrecke frei, ab dem 26. km 0,40 € je gefahrenem Kilometer. Anlagen und Materialien werden bauseits gestellt. Weitere Kosten nur nach vorheriger Vereinbarung.
+                  <strong>489 € pro Einsatztag (gültig für: bis 8 Stunden).</strong> Zusätzlich: An- und Abfahrt – Die ersten 25 Kilometer je einfacher Fahrt sind kostenfrei. Ab dem 26. Kilometer werden 0,40 € netto je tatsächlich gefahrenem Kilometer berechnet. Dies gilt für die Anreise und die Rückfahrt. Anlagen und Materialien werden bauseits gestellt. Weitere Kosten nur nach vorheriger Vereinbarung.
                 </div>
               </details>
               

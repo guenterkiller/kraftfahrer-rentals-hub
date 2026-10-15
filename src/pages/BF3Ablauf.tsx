@@ -149,7 +149,7 @@ const BF3Ablauf = () => {
                     <h3 className="text-xl font-semibold mb-3">BF3 Begleitfahrer – Konditionen</h3>
                     <ul className="space-y-2 text-sm">
                       <li>• Tagessatz auf Anfrage – abhängig von Einsatzart, Strecke und Dauer</li>
-                      <li>• Zusätzlich: An- und Abfahrt – erste 25 km der Gesamtstrecke frei, ab dem 26. km 0,40 € je gefahrenem Kilometer</li>
+                      <li>• Zusätzlich: An- und Abfahrt – Die ersten 25 Kilometer je einfacher Fahrt sind kostenfrei. Ab dem 26. Kilometer werden 0,40 € netto je tatsächlich gefahrenem Kilometer berechnet. Dies gilt für die Anreise und die Rückfahrt.</li>
                       <li>• Weitere Kosten nur nach vorheriger Vereinbarung</li>
                     </ul>
                   </div>
