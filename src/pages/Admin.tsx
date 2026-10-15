@@ -280,7 +280,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         description: "Der Auftrag wurde als offen markiert."
       });
 
-      await loadJobRequests();
+      await Promise.all([loadJobRequests(), loadJobAssignments()]);
       
     } catch (error: any) {
       console.error('Error marking job as open:', error);
@@ -332,7 +332,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       });
 
       // Reload job requests to show updated status
-      await loadJobRequests();
+      await Promise.all([loadJobRequests(), loadJobAssignments()]);
       
     } catch (error: any) {
       console.error('Error marking job as completed:', error);
