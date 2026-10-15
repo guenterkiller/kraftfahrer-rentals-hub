@@ -2,6 +2,7 @@ import { Heading, Text, Section, Hr } from 'npm:@react-email/components@0.0.22';
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
+import { OvernightCostNotice } from './overnight-cost-notice.tsx';
 
 interface AdminBookingNotificationProps {
   customerName: string;
@@ -196,6 +197,8 @@ export const AdminBookingNotification = ({
         </tr>
       </table>
     </Section>
+
+    <OvernightCostNotice tarifKey={tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} />
 
     <Hr style={{ borderTop: `2px solid ${colors.primary}`, margin: '30px 0' }} />
 

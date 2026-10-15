@@ -1,3 +1,8 @@
+# Übernachtungskosten mit Fernfahrer-Ausnahme
+- [x] Freigegebene Regelung auf Preise & Ablauf und tarifabhängig in Kunden-/Admin-Anfragevorlagen ergänzen, ohne Preis-/Formular-/SEO-Änderung.
+- [ ] Isolierte Vorlagentests, Tarifregression und Browserprüfung durchführen; keine echten Anfragen oder Mails.
+- [ ] Aktivierung der geänderten E-Mail-Vorlagen: kein Edge-Deployment ohne gesonderte Freigabe zur Veröffentlichung.
+
 # Technische IONOS-Prüfung und mobiler Überführungs-CTA
 - [x] Einheitliche Apache-Konfiguration; Paket übernimmt die geprüfte Datei unverändert, Abbruch bei Build-/Validierungsfehlern.
 - [x] Export umfasst alle 21 unveränderten Sitemap-URLs; HTML-Abnahme und 21 aus der Vorschau erzeugte Testdateien erfolgreich geprüft.
