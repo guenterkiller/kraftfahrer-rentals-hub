@@ -414,6 +414,11 @@ const handler = async (req: Request): Promise<Response> => {
               ? MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']
               : 'Keine Angabe',
             surchargeDays: surchargeDays.map((d) => `${d.label} – ${d.percent} % Zuschlag`),
+            multiWeek: (() => {
+              const b = Date.parse(String(requestData.einsatzbeginn || ''));
+              const e = Date.parse(String(requestData.einsatzende || ''));
+              return Number.isFinite(b) && Number.isFinite(e) && (e - b) / 86400000 + 1 > 7;
+            })(),
           })
         );
 

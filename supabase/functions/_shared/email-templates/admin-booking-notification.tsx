@@ -3,6 +3,7 @@ import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
 import { OvernightCostNotice } from './overnight-cost-notice.tsx';
+import { OVERNIGHT_COSTS } from '../overnight-costs.ts';
 
 interface AdminBookingNotificationProps {
   customerName: string;
@@ -28,6 +29,8 @@ interface AdminBookingNotificationProps {
   };
   maschinenbedienungLabel?: string;
   surchargeDays?: string[];
+  /** Einsatz länger als eine Woche (aus Beginn/Ende berechnet) */
+  multiWeek?: boolean;
 }
 
 export const AdminBookingNotification = ({
@@ -46,6 +49,7 @@ export const AdminBookingNotification = ({
   tarif,
   maschinenbedienungLabel,
   surchargeDays = [],
+  multiWeek = false,
 }: AdminBookingNotificationProps) => (
   <BaseEmail previewText={`Neue Buchungsanfrage: ${driverType} in ${address}`}>
     <Heading style={{ ...textStyles.heading2, color: colors.primary }}>
@@ -135,11 +139,23 @@ export const AdminBookingNotification = ({
           </tr>
           {tarif.netto !== null && (
             <tr>
-              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tagessatz:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>{tarif.tarif === 'lkw_ce_woche' ? 'Wochenpreis:' : 'Tagessatz:'}</strong></td>
               <td style={{ padding: '5px 0', fontSize: '14px' }}>
                 {tarifTextByKey(tarif.tarif)?.priceLine ?? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}`}
               </td>
             </tr>
+          )}
+          {tarif.tarif === 'lkw_ce_woche' && (
+            <>
+              <tr>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Einsatzzeit:</strong></td>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}>bis zu 9 Stunden je Einsatztag (5 Einsatztage)</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}>45,00 € netto je angefangene Stunde</td>
+              </tr>
+            </>
           )}
           {tarif.mehrstunde !== null && (
             <tr>
@@ -199,6 +215,14 @@ export const AdminBookingNotification = ({
     </Section>
 
     <OvernightCostNotice tarifKey={tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} />
+
+    {multiWeek && (
+      <Section style={{ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeft: '4px solid #d97706' }}>
+        <Text style={{ ...textStyles.paragraph, margin: '0' }}>
+          <strong>Planungshinweis – Einsatz länger als eine Woche:</strong> {OVERNIGHT_COSTS.multiWeek}
+        </Text>
+      </Section>
+    )}
 
     <Hr style={{ borderTop: `2px solid ${colors.primary}`, margin: '30px 0' }} />
 
