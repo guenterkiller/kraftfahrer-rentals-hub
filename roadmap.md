@@ -1,8 +1,10 @@
 # Technische IONOS-Prüfung und mobiler Überführungs-CTA
-- [ ] Einheitliche Apache-Konfiguration und unveränderte Übernahme in den finalen Upload.
-- [ ] Alle Sitemap-Seiten einschließlich Startseite vorgerendert erzeugen; eindeutige Seitendaten und vollständige Dateien prüfen.
-- [ ] Überführungs-CTA mit Umbruch und variabler Höhe; Formularfunktion unverändert.
-- [ ] Lokale HTTP-/Apache-Tests und Mobilprüfung bei 320/375/390/768 Pixel; kein Upload, keine Veröffentlichung.
+- [x] Einheitliche Apache-Konfiguration; Paket übernimmt die geprüfte Datei unverändert, Abbruch bei Build-/Validierungsfehlern.
+- [x] Export umfasst alle 21 unveränderten Sitemap-URLs; HTML-Abnahme und 21 aus der Vorschau erzeugte Testdateien erfolgreich geprüft.
+- [ ] Tatsächlicher Produktions-dist-Abnahmelauf: automatische Vorschau-Builds melden OK, stellen hier aber keinen dist-Ordner bereit; Produktionsartefakte nicht verfügbar.
+- [x] Überführungs-CTA mit Umbruch und variabler Höhe; Formularfunktion unverändert.
+- [x] Echter Apache 2.4: 21 HTTP-HTML-Antworten, 20 Slash-301, Querystrings, Direktdatei-Redirects, Assets und SPA-Fallback; Mobilprüfung bei 320/375/390/768 Pixel bestanden.
+- [ ] IONOS-Live-Abnahme nach künftigem freigegebenem Upload; derzeit ausdrücklich kein Upload und keine Veröffentlichung.
 
 # SEO-Freigabe A, B und D
 - [x] A: Keine Widersprüche gefunden; Fahrzeugverantwortung in der vorhandenen FAQ präzisiert, FAQ-Auszeichnung folgt demselben Text.

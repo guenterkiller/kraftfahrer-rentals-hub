@@ -8,6 +8,9 @@ export async function validatePrerender(dist) {
   const expected = routes.map(prerenderName).sort();
   const actual = (await readdir(path.join(dist, 'prerender'))).filter((file) => file.endsWith('.html')).sort();
   if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error('Prerender-Dateien entsprechen nicht vollständig der Sitemap.');
+  const config = await readFile(path.join(dist, '.htaccess'), 'utf8');
+  const authoritative = await readFile(new URL('../public/htaccess-ionos', import.meta.url), 'utf8');
+  if (config !== authoritative) throw new Error('Finale Apache-Konfiguration weicht von der geprüften Quelle ab.');
   const { default: puppeteer } = await import('puppeteer');
   const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   try {
@@ -19,7 +22,7 @@ export async function validatePrerender(dist) {
       await page.evaluate((source) => {
         window.__OUTPUT_DOCUMENT__ = new DOMParser().parseFromString(source, 'text/html');
       }, html);
-      await page.evaluate(`(${assertPage.toString()})(window.__OUTPUT_DOCUMENT__, ${JSON.stringify(route)})`.replace(/\$\{BASE_URL\}/g, 'https://www.kraftfahrer-mieten.com'));
+      await page.evaluate(`(${assertPage.toString()})(window.__OUTPUT_DOCUMENT__, ${JSON.stringify(route)})`);
     }
   } finally {
     await browser.close();

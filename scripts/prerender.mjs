@@ -138,7 +138,7 @@ async function main() {
       const html = mergeHead(template, data);
       await page.setJavaScriptEnabled(false);
       await page.evaluate((source) => { window.__OUTPUT_DOCUMENT__ = new DOMParser().parseFromString(source, "text/html"); }, html);
-      await page.evaluate(`(${assertPage.toString()})(window.__OUTPUT_DOCUMENT__, ${JSON.stringify(route)})`.replace(/\$\{BASE_URL\}/g, 'https://www.kraftfahrer-mieten.com'));
+      await page.evaluate(`(${assertPage.toString()})(window.__OUTPUT_DOCUMENT__, ${JSON.stringify(route)})`);
       await page.close();
 
       const must = MUST_CONTAIN[route];
