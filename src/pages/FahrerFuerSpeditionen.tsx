@@ -112,6 +112,11 @@ const FahrerFuerSpeditionen = () => {
       title: "Preise & Ablauf",
       path: "/preise-und-ablauf",
       description: "Transparente Preisübersicht"
+    },
+    {
+      title: "LKW-Überführung",
+      path: "/lkw-ueberfuehrung",
+      description: "Fahrer für Überführungen auf eigener Achse"
     }
   ];
 
