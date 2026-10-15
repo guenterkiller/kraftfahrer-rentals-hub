@@ -130,7 +130,7 @@ serve(async (req) => {
     const contactEmail = job?.customer_email || 'wird ergänzt';
     const companyName = job?.company || job?.customer_name || 'wird ergänzt';
     
-    const emailSubject = `Einsatzbestätigung – ${jobTitle} – ${location} am ${dateRange}`;
+    const emailSubject = `Auftragsangebot – ${jobTitle} – ${location} am ${dateRange}`;
 
     // ===== Persönlicher Link zur verbindlichen Fahrerannahme =====
     const commissionPct = normalizeCommissionPct((assignment as any).commission_pct);
@@ -178,7 +178,7 @@ serve(async (req) => {
       `<p class="body-text" style="margin:4px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>${label}:</strong> ${value}</p>`;
 
     const innerHtml = `
-      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;letter-spacing:.3px;">EINSATZBESTÄTIGUNG</h2>
+      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;letter-spacing:.3px;">VERBINDLICHES AUFTRAGSANGEBOT</h2>
       <p class="body-text" style="margin:0 0 18px 0;font-size:14px;color:#6b7280;">Fahrerexpress | kraftfahrer-mieten.com</p>
 
       <p class="body-text" style="margin:0 0 8px 0;font-size:15px;color:#374151;">Hallo ${driver.vorname} ${driver.nachname},</p>
@@ -234,7 +234,7 @@ serve(async (req) => {
 
       <p class="body-text" style="margin:18px 0 8px 0;font-size:14px;color:#374151;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
       <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
-      <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Bestätigung erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
+      <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Auftragsangebot erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
     `;
 
     const emailContent = wrapDriverEmailHtml(innerHtml, {
