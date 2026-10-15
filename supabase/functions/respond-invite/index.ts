@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { TERMS_VERSION_DRIVER } from "../_shared/terms-version.ts";
+import { handleBinding } from "./binding.ts";
 
 const escape = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -186,6 +187,22 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!invite) {
       return reply("invalid");
+    }
+
+    // ===== Verbindliche Fahrerannahme: eigener, getrennter Ablauf =====
+    if ((invite as any).purpose === "binding") {
+      const rawIpB = req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "";
+      return await handleBinding({
+        supabase,
+        invite,
+        intent,
+        action,
+        consentConfirmed,
+        checkboxText: checkboxTextIn,
+        ip: rawIpB.split(",")[0].trim(),
+        userAgent: req.headers.get("user-agent") ?? "",
+        json: jsonReply,
+      });
     }
 
     const jobRow: any = (invite as any).job || null;
