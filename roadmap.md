@@ -1,10 +1,10 @@
 # SEO-Freigabe A, B und D
-- [ ] A: Fahrzeugverantwortung mit Vermittlungsbedingungen abgleichen und FAQ präzisieren, sofern widerspruchsfrei.
-- [ ] B: Bestehende Startseiten-Linkzeile um /lkw-ueberfuehrung ergänzen; bisherige Links unverändert.
-- [ ] D: Je eine Überführungskarte auf /lkw-fahrer-buchen und /fahrer-fuer-speditionen ergänzen.
-- [ ] C: Tatsächlich missverständliche Formulierungen nur prüfen, nicht ändern.
-- [ ] E/F: Google-Search-Console-Rankings und Klickzahlen prüfen; Seitentitel unverändert lassen.
-- [ ] Automatische Build-Prüfung, interne Links und genauen Änderungsbericht abschließen; nichts veröffentlichen.
+- [x] A: Keine Widersprüche gefunden; Fahrzeugverantwortung in der vorhandenen FAQ präzisiert, FAQ-Auszeichnung folgt demselben Text.
+- [x] B: Bestehende Startseiten-Linkzeile um /lkw-ueberfuehrung ergänzt; bisherige Links unverändert.
+- [x] D: Je eine Überführungskarte auf /lkw-fahrer-buchen und /fahrer-fuer-speditionen ergänzt; bestehende Karten unverändert.
+- [x] C: Nur geprüft: ursprüngliche Karte nicht eingebunden; problematischer Begriff in Service-Auszeichnung von /mietfahrer vorhanden; keine Änderung.
+- [ ] E/F: Rankings und Klickzahlen warten auf zugängliche Google-Search-Console-Verbindung oder Nutzerexport; keine Verbindung verfügbar, Seitentitel unverändert.
+- [x] Automatische Build-Prüfung „build OK“, alle drei internen Links im Browser und FAQ-Auszeichnung erfolgreich geprüft; Änderungsbericht abgeschlossen, nichts veröffentlicht.
 
 # Auftragsstornierung
 - [x] Status-Trigger und Versandzugänge lesend prüfen: Funktion vorhanden, aber kein aktiver Trigger daran gebunden.
