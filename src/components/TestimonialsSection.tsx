@@ -68,17 +68,17 @@ const TestimonialsSection = () => {
         </div>
         
         <div className="text-center mt-12 space-y-4">
-          <div className="inline-flex items-center gap-6 bg-white rounded-lg px-6 py-4 shadow-md">
-            <div className="text-center border-r pr-6">
-              <div className="text-3xl font-bold text-primary">Bundesweit</div>
+          <div className="inline-flex max-w-full items-center gap-3 sm:gap-6 bg-white rounded-lg px-3 sm:px-6 py-4 shadow-md">
+            <div className="text-center border-r pr-3 sm:pr-6 min-w-0">
+              <div className="text-xl sm:text-3xl font-bold text-primary">Bundesweit</div>
               <div className="text-xs text-muted-foreground">Deutschlandweite<br/>Vermittlung</div>
             </div>
-            <div className="text-center border-r pr-6">
-              <div className="text-3xl font-bold text-green-600">B2B</div>
+            <div className="text-center border-r pr-3 sm:pr-6 min-w-0">
+              <div className="text-xl sm:text-3xl font-bold text-green-600">B2B</div>
               <div className="text-xs text-muted-foreground">Professionelle<br/>Abwicklung</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-orange-600">Erfahren</div>
+            <div className="text-center min-w-0">
+              <div className="text-xl sm:text-3xl font-bold text-orange-600">Erfahren</div>
               <div className="text-xs text-muted-foreground">Langjährige<br/>Branchenkenntnis</div>
             </div>
           </div>
