@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
+import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
 
 
 const PricingSection = () => {
@@ -141,11 +142,13 @@ const PricingSection = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-muted/40 max-w-5xl mx-auto mb-8">
-          <CardContent className="text-sm pt-6">
-            <p>Bei auswärtigen Einsätzen kann zusätzlich eine Übernachtung erforderlich sein. Diese wird vor Auftragserteilung abgestimmt.</p>
-          </CardContent>
-        </Card>
+        <section className="max-w-5xl mx-auto mb-8 space-y-3 text-sm text-foreground" aria-labelledby="pricing-overnight-heading">
+          <h2 id="pricing-overnight-heading" className="text-base font-semibold">{OVERNIGHT_COSTS.title}</h2>
+          {OVERNIGHT_COSTS.standard.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          <h3 className="text-base font-semibold">{OVERNIGHT_COSTS.fernfahrerTitle}</h3>
+          {OVERNIGHT_COSTS.fernfahrer.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          <p>{OVERNIGHT_COSTS.legal}</p>
+        </section>
 
         {/* Einsatzzeit & gesetzliche Lenkzeiten */}
         <Card className="max-w-5xl mx-auto mb-8">
