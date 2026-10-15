@@ -190,7 +190,7 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
       });
       await supabase.from("email_log").insert({
         job_id: assignment.job_id, assignment_id: assignment.id, recipient: driver.email, subject,
-        template: "driver_binding_acceptance", status: mErr ? "failed" : "sent",
+        template: "driver_binding_acceptance", status: mErr ? "error" : "sent",
         error_message: mErr ? JSON.stringify(mErr) : null, message_id: (m as any)?.id ?? null,
         sent_at: mErr ? null : new Date().toISOString(), delivery_mode: "both", pdf_path: upErr ? null : path,
       });
@@ -229,7 +229,7 @@ export async function notifyAgency(supabase: any, o: { subject: string; html: st
   });
   await supabase.from("email_log").insert({
     job_id: o.jobId, assignment_id: o.assignmentId, recipient: AGENCY, subject: o.subject, template: o.template,
-    status: error ? "failed" : "sent", error_message: error ? JSON.stringify(error) : null,
+    status: error ? "error" : "sent", error_message: error ? JSON.stringify(error) : null,
     message_id: (data as any)?.id ?? null, sent_at: error ? null : new Date().toISOString(), delivery_mode: "inline",
   });
   return !error;
