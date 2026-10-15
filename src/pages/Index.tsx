@@ -160,6 +160,9 @@ const Index = () => {
               <Link to="/fluessigboden-service" className="text-primary hover:underline font-medium">
                 → Mischmeister Flüssigboden
               </Link>
+              <Link to="/lkw-ueberfuehrung" className="text-primary hover:underline font-medium">
+                → LKW-Überführung
+              </Link>
             </div>
           </div>
         </section>

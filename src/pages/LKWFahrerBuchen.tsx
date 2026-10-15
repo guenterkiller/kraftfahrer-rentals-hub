@@ -184,6 +184,11 @@ const LKWFahrerBuchen = () => {
       title: "Preise & Konditionen",
       path: "/preise-und-ablauf",
       description: "Alle Preise und Ablauf im Detail"
+    },
+    {
+      title: "LKW-Überführung",
+      path: "/lkw-ueberfuehrung",
+      description: "Fahrer für Überführungen auf eigener Achse"
     }
   ];
 
