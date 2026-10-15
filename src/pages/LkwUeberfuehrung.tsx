@@ -106,7 +106,7 @@ const LkwUeberfuehrung = () => {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">LKW und Nutzfahrzeuge auf eigener Achse überführen</h2>
             <p className="text-muted-foreground mb-6">
-              Wir vermitteln selbstständige Fahrer für die Überführung fahrbereiter LKW und Nutzfahrzeuge auf eigener Achse.
+              Wir vermitteln selbstständige Fahrer für die Überführung fahrbereiter LKW und Nutzfahrzeuge auf eigener Achse sowie für LKW-Sonderfahrten.
             </p>
             <p className="font-semibold mb-3">Beispiele:</p>
             <ul className="grid sm:grid-cols-2 gap-3">
