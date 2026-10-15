@@ -13,6 +13,7 @@ interface AssignDriverRequest {
   startDate?: string;
   endDate?: string;
   note?: string;
+  commissionPct?: number;
 }
 
 Deno.serve(async (req) => {
@@ -63,7 +64,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const { jobId, driverId, rateType, rateValue, startDate, endDate, note }: AssignDriverRequest = await req.json();
+    const { jobId, driverId, rateType, rateValue, startDate, endDate, note, commissionPct }: AssignDriverRequest = await req.json();
     console.log('Assignment request by admin:', user.id);
 
     // Check if job exists
