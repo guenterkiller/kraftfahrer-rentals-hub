@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
-import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
+import { OVERNIGHT_COSTS, TRAVEL_COSTS } from "@/lib/overnightCosts";
 
 
 const PricingSection = () => {

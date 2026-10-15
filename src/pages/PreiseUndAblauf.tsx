@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import TarifCardText from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel, PREISKARTEN_HINWEIS } from "@/lib/tarifTexte";
 import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
-import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
+import { OVERNIGHT_COSTS, TRAVEL_COSTS } from "@/lib/overnightCosts";
 const PreiseUndAblauf = () => {
   useSEO({
     title: "Preise & Ablauf – LKW Fahrer mieten ab 349 € tageweise",
