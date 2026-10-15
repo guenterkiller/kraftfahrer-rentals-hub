@@ -134,6 +134,7 @@ Deno.serve(async (req) => {
         status: 'assigned',
         rate_type: rateType,
         rate_value: rateValue,
+        commission_pct: Number(commissionPct) === 25 ? 25 : 20,
         start_date: startDate || null,
         end_date: endDate || null,
         admin_note: note || null,

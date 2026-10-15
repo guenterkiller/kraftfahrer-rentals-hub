@@ -32,6 +32,7 @@ export function AdminAssignmentDialog({
   const [endDate, setEndDate] = useState("");
   const [note, setNote] = useState("");
   const [attachPdf, setAttachPdf] = useState(false);
+  const [commissionPct, setCommissionPct] = useState<"20" | "25">("20");
   const [isAssigning, setIsAssigning] = useState(false);
   const [isLoadingDrivers, setIsLoadingDrivers] = useState(false);
   
@@ -257,6 +258,7 @@ export function AdminAssignmentDialog({
           driverId: selectedDriverId,
           rateType: rateType,
           rateValue: parseFloat(rateValue),
+          commissionPct: Number(commissionPct),
           startDate: startDate || null,
           endDate: endDate || null,
           note: note || null
@@ -631,6 +633,20 @@ export function AdminAssignmentDialog({
                 onChange={(e) => setEndDate(e.target.value)}
               />
             </div>
+          </div>
+
+          <div>
+            <Label>Vermittlungsprovision</Label>
+            <Select value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="20">20 % – normaler Auftrag</SelectItem>
+                <SelectItem value="25">25 % – Sonderauftrag</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Wird dem Fahrer im Vertragstext zur verbindlichen Annahme angezeigt.
+            </p>
           </div>
 
           <div>
