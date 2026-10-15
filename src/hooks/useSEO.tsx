@@ -91,9 +91,15 @@ export const useSEO = (seoData: SEOData) => {
     const existingMetas = document.querySelectorAll('meta[data-seo]');
     existingMetas.forEach(meta => meta.remove());
 
+    // Technische Duplikate aus dem statischen Kopf bzw. Prerender entfernen.
+    // Die vorhandenen routenspezifischen Werte bleiben unverändert maßgeblich.
+    document.head.querySelectorAll('meta[name="description"], meta[name="robots"], meta[name="keywords"], meta[property="og:type"], meta[property="og:url"], meta[property="og:title"], meta[property="og:description"], meta[property="og:locale"], meta[name="twitter:card"], meta[name="twitter:title"], meta[name="twitter:description"], meta[name="twitter:url"]').forEach(meta => meta.remove());
+    if (seoData.ogImage) {
+      document.head.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]').forEach(meta => meta.remove());
+    }
+
     // Remove existing canonical link
-    const existingCanonical = document.querySelector('link[rel="canonical"]');
-    if (existingCanonical) existingCanonical.remove();
+    document.querySelectorAll('link[rel="canonical"]').forEach(link => link.remove());
 
     // Add canonical URL
     const canonical = document.createElement('link');
@@ -183,6 +189,12 @@ export const useSEO = (seoData: SEOData) => {
     twitterCard.content = 'summary_large_image';
     twitterCard.setAttribute('data-seo', 'true');
     document.head.appendChild(twitterCard);
+
+    const twitterUrl = document.createElement('meta');
+    twitterUrl.name = 'twitter:url';
+    twitterUrl.content = canonicalUrl;
+    twitterUrl.setAttribute('data-seo', 'true');
+    document.head.appendChild(twitterUrl);
 
     const twitterTitle = document.createElement('meta');
     twitterTitle.name = 'twitter:title';

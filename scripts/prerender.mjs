@@ -1,7 +1,7 @@
 /**
  * Statisches Prerendering der öffentlichen SEO-Unterseiten (nach `vite build`).
  *
- * - Startseite "/" wird NICHT vorgerendert.
+ * - Alle bestehenden Sitemap-URLs einschließlich Startseite werden vorgerendert.
  * - Ausgabe: dist/prerender/<route>.html (keine Ordner mit Routennamen → keine
  *   Apache-DirectorySlash-Weiterleitungen). Bestehende Dateien in dist/ werden
  *   weder verändert noch gelöscht.
@@ -14,28 +14,13 @@ import http from "node:http";
 import { readFile, writeFile, mkdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { readRoutes, prerenderName, mergeHead, assertPage } from "./prerender-utils.mjs";
+import { validatePrerender } from "./validate-prerender.mjs";
 
-export const PRERENDER_ROUTES = [
-  "/lkw-fahrer-buchen",
-  "/ersatzfahrer-lkw",
-  "/lkw-fahrer-kurzfristig",
-  "/mietfahrer",
-  "/fahrer-fuer-speditionen",
-  "/kraftfahrer-mieten",
-  "/baumaschinenfuehrer-buchen",
-  "/fluessigboden-service",
-  "/begleitfahrzeuge-bf3",
-  "/bf3-ablauf-kosten",
-  "/preise-und-ablauf",
-  "/wissenswertes",
-  "/projekte",
-  "/vermittlung",
-  "/versicherung",
-  "/lkw-ueberfuehrung",
-];
+export const PRERENDER_ROUTES = readRoutes(new URL('../public/sitemap.xml', import.meta.url));
 
-// Seiten ohne H1 im bestehenden Inhalt (keine Inhaltsänderung erlaubt)
-const NO_H1 = new Set([]);
+// Bestehende Seite ohne H1: Inhalt und Überschriften ausdrücklich unverändert.
+const NO_H1 = new Set(['/fahrer-infos']);
 
 // Pflichtprüfung: bekannter H1-Text muss im HTML stehen
 const MUST_CONTAIN = {
@@ -59,23 +44,6 @@ const MIME = {
   ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp",
   ".avif": "image/avif", ".ico": "image/x-icon", ".woff2": "font/woff2", ".woff": "font/woff",
 };
-
-// Statische Tags aus index.html, die useSEO pro Route neu setzt → im vorgerenderten
-// Kopf durch die routenspezifischen Werte ersetzen (sonst doppelt/mit Startseiten-Werten).
-const STATIC_OVERRIDDEN = [
-  /\s*<meta name="description"[^>]*>/,
-  /\s*<meta name="robots"[^>]*>/,
-  /\s*<meta property="og:type"[^>]*>/,
-  /\s*<meta property="og:url"[^>]*>/,
-  /\s*<meta property="og:title"[^>]*>/,
-  /\s*<meta property="og:description"[^>]*>/,
-  /\s*<meta property="og:image"[^>]*>/,
-  /\s*<meta property="og:locale"[^>]*>/,
-  /\s*<meta name="twitter:card"[^>]*>/,
-  /\s*<meta name="twitter:title"[^>]*>/,
-  /\s*<meta name="twitter:description"[^>]*>/,
-  /\s*<meta name="twitter:image"[^>]*>/,
-];
 
 async function main() {
   let template;
@@ -136,7 +104,7 @@ async function main() {
       });
 
       await page.goto(origin + route, { waitUntil: "networkidle0", timeout: 60000 });
-      await page.waitForSelector(NO_H1.has(route) ? "#root main, #root footer" : "#root h1", { timeout: 30000 });
+      await page.waitForSelector(NO_H1.has(route) ? "#root h3" : "#root h1", { timeout: 30000 });
       await page.waitForSelector('script[type="application/ld+json"][data-seo]', { timeout: 30000 });
       // Nach unten scrollen, damit ggf. verzögert geladene Abschnitte erscheinen
       await page.evaluate(async () => {
@@ -146,7 +114,9 @@ async function main() {
       await new Promise((r) => setTimeout(r, 800));
 
       const data = await page.evaluate(() => {
-        const root = document.getElementById("root").cloneNode(true);
+        const source = document.getElementById("root");
+        if (!source) throw new Error("Seiteninhalt fehlt.");
+        const root = source.cloneNode(true);
         // Dynamische Zustände entfernen (Cookie-Banner, Toasts, Dialoge)
         root.querySelectorAll('.consent-banner, [role="dialog"], [data-sonner-toaster], ol[tabindex="-1"] > li').forEach((n) => n.remove());
         const headNodes = [
@@ -161,16 +131,15 @@ async function main() {
           description: document.querySelector('meta[name="description"][data-seo]')?.content || "",
         };
       });
-      await page.close();
 
       if (!data.title || (!data.h1 && !NO_H1.has(route)) || !data.canonical || !data.description) fail(`Unvollständige Daten für ${route}: ${JSON.stringify({ title: data.title, h1: data.h1, canonical: data.canonical, description: !!data.description })}`);
-      if (!data.canonical.endsWith(route)) fail(`Canonical für ${route} unerwartet: ${data.canonical}`);
+      if (data.canonical !== `https://www.kraftfahrer-mieten.com${route}`) fail(`Canonical für ${route} unerwartet: ${data.canonical}`);
 
-      const escapeHtml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      let html = template.replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(data.title)}</title>`);
-      for (const re of STATIC_OVERRIDDEN) html = html.replace(re, "");
-      html = html.replace("</head>", `    ${data.headNodes.join("\n    ")}\n  </head>`);
-      html = html.replace('<div id="root"></div>', `<div id="root">${data.rootHtml}</div>`);
+      const html = mergeHead(template, data);
+      await page.setJavaScriptEnabled(false);
+      await page.evaluate((source) => { window.__OUTPUT_DOCUMENT__ = new DOMParser().parseFromString(source, "text/html"); }, html);
+      await page.evaluate(`(${assertPage.toString()})(window.__OUTPUT_DOCUMENT__, ${JSON.stringify(route)})`);
+      await page.close();
 
       const must = MUST_CONTAIN[route];
       if (must && !html.includes(must)) fail(`${route}: Pflichttext „${must}“ fehlt im HTML.`);
@@ -191,9 +160,10 @@ async function main() {
   // Erst schreiben, wenn ALLE Seiten erfolgreich waren
   await mkdir(OUT, { recursive: true });
   for (const r of results) {
-    await writeFile(path.join(OUT, r.route.slice(1) + ".html"), r.html, "utf8");
+    await writeFile(path.join(OUT, prerenderName(r.route)), r.html, "utf8");
     console.log(`[prerender] ✓ ${r.route}  →  dist/prerender${r.route}.html  |  H1: ${r.h1 || "(Seite hat keine H1)"}`);
   }
+  await validatePrerender(DIST);
   console.log(`[prerender] ${results.length}/${PRERENDER_ROUTES.length} Seiten vorgerendert.`);
 }
 

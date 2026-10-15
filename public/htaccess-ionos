@@ -1,18 +1,15 @@
-# IONOS .htaccess – Cache + Kompression + SPA-Fallback
-# Version: 2026-01-02
+Options -MultiViews
+
 RewriteEngine On
 
-# Hauptdomain immer mit www
-RewriteCond %{HTTP_HOST} ^kraftfahrer-mieten\.com$ [NC]
-RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
-
-
-# ============================================================
+# ============================================
 # CACHE-KONTROLLE (Lighthouse Performance Fix)
-# ============================================================
+# ============================================
 
-# 1) HTML: KEIN Cache (Deployments sofort sichtbar)
 <IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
   <FilesMatch "\.(html)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
@@ -20,16 +17,7 @@ RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
   </FilesMatch>
 </IfModule>
 
-# 2) Statische Assets: 1 Jahr immutable Cache (inkl. AVIF)
-<IfModule mod_headers.c>
-  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|avif|svg|woff2)$">
-    Header set Cache-Control "public, max-age=31536000, immutable"
-  </FilesMatch>
-</IfModule>
-
-# 2b) Service Worker & Web App Manifest: KEIN Cache (überschreibt 1-Jahr-Regel oben)
-# Stellt sicher, dass Updates an sw.js / Manifest (Icons, theme_color, ...)
-# zuverlässig bei Clients ankommen und nicht 1 Jahr "immutable" hängenbleiben.
+# Service Worker & Web App Manifest: KEIN Cache (überschreibt 1-Jahr-Regel oben)
 <IfModule mod_headers.c>
   <FilesMatch "(sw\.js|manifest\.webmanifest)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
@@ -38,15 +26,17 @@ RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
   </FilesMatch>
 </IfModule>
 
-# AVIF MIME-Type (für moderne Browser)
-<IfModule mod_mime.c>
-  AddType image/avif .avif
+# version.txt: KEIN Cache (Versionskennung muss immer frisch sein)
+<IfModule mod_headers.c>
+  <FilesMatch "^version\.txt$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
 </IfModule>
 
-# Fallback mit mod_expires
 <IfModule mod_expires.c>
   ExpiresActive On
-  ExpiresByType text/html "access plus 0 seconds"
   ExpiresByType text/css "access plus 1 year"
   ExpiresByType application/javascript "access plus 1 year"
   ExpiresByType text/javascript "access plus 1 year"
@@ -54,21 +44,10 @@ RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
   ExpiresByType image/png "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/webp "access plus 1 year"
-  ExpiresByType image/gif "access plus 1 year"
-  ExpiresByType image/avif "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
-  ExpiresByType image/x-icon "access plus 1 year"
   ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType font/woff "access plus 1 year"
-  ExpiresByType font/ttf "access plus 1 year"
-  ExpiresByType font/otf "access plus 1 year"
-  ExpiresByType application/font-woff "access plus 1 year"
-  ExpiresByType application/font-woff2 "access plus 1 year"
+  ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
-
-# ============================================================
-# KOMPRESSION (GZIP + Brotli)
-# ============================================================
 
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css
@@ -82,41 +61,105 @@ RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
   AddOutputFilterByType BROTLI_COMPRESS application/json application/xml image/svg+xml
 </IfModule>
 
-# ============================================================
-# SPA-FALLBACK (React/Vite)
-# ============================================================
+# ============================================
+# SEO: HTTPS + WWW Redirect (einheitliche URL-Struktur)
+# Canonical: https://www.kraftfahrer-mieten.com/
+# ============================================
 
-RewriteBase /
+# 1. Force HTTPS first (before www redirect)
+RewriteCond %{HTTP_HOST} ^(www\.)?kraftfahrer-mieten\.com$ [NC]
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://www.kraftfahrer-mieten.com%{REQUEST_URI} [R=301,L]
 
-# Statische Assets nicht umschreiben
-RewriteRule ^assets/ - [L]
-RewriteRule ^uploads/ - [L]
-RewriteRule ^lovable-uploads/ - [L]
-RewriteRule ^hero/ - [L]
+# 2. Force WWW (nach HTTPS)
+RewriteCond %{HTTP_HOST} ^kraftfahrer-mieten\.com$ [NC]
+RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
 
-# Statische Dateien direkt ausliefern
-RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|avif|svg|ico|woff|woff2|ttf|otf|eot|mp4|pdf)$ - [L]
+# Bypass all rewrites for admin-check.html (serve static)
+RewriteRule ^admin-check\.html$ - [L]
 
-# Bekannte statische Dateien im Root
-RewriteRule ^(robots\.txt|sitemap\.xml|favicon\.ico)$ - [L]
+# MIME types for images
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+AddType image/webp .webp
+AddType image/avif .avif
+AddType application/manifest+json .webmanifest
 
-# PWA-Dateien explizit durchlassen mit korrektem MIME-Type
-RewriteRule ^manifest\.webmanifest$ - [L]
-RewriteRule ^sw\.js$ - [L]
-RewriteRule ^registerSW\.js$ - [L]
-RewriteRule ^workbox-.*\.js$ - [L]
-
-# MIME-Type für Manifest (wichtig für Chrome PWA-Erkennung)
-<IfModule mod_mime.c>
-  AddType application/manifest+json .webmanifest
+# Prevent partial content to avoid 206 issues for crawlers
+<IfModule mod_headers.c>
+  Header set Accept-Ranges none
 </IfModule>
 
-RewriteCond %{REQUEST_URI} ^/([a-z0-9-]+)$
-RewriteCond %{REQUEST_FILENAME} ^(.+)/([a-z0-9-]+)$
-RewriteCond %1/prerender/%2.html -f
-RewriteRule ^ /prerender/%2.html [L]
+# Canonical 301 redirects for legacy .html URLs (one hop, HTTPS + WWW)
+# IMPORTANT: THE_REQUEST guards ensure only direct browser requests are redirected,
+# NOT internal SPA rewrites (which would cause 301 loops)
+RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
+RewriteRule ^index\.html$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+impressum\.html(?:[?\s]) [NC]
+RewriteRule ^impressum\.html$ https://www.kraftfahrer-mieten.com/impressum [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+datenschutzerklaerung\.html(?:[?\s]) [NC]
+RewriteRule ^datenschutzerklaerung\.html$ https://www.kraftfahrer-mieten.com/datenschutz [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+allgemeine-geschaeftsbedingungen\.html(?:[?\s]) [NC]
+RewriteRule ^allgemeine-geschaeftsbedingungen\.html$ https://www.kraftfahrer-mieten.com/vermittlungsbedingungen [R=301,L]
+# Legacy mobile/smartphone/printable/vgapda URLs → Homepage
+RewriteRule ^mobile/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^smartphone/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^printable/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
+RewriteRule ^vgapda/.* https://www.kraftfahrer-mieten.com/ [R=301,L]
 
-# SPA Catch-all: Alles andere → index.html
+# Referenzen variants (mobile/smartphone/printable .../default.html) → Projekte
+RewriteRule ^referenzen/default\.html$ https://www.kraftfahrer-mieten.com/projekte [R=301,L]
+RewriteRule ^referenzen/(mobile|smartphone|printable)/.*default\.html$ https://www.kraftfahrer-mieten.com/projekte [R=301,L]
+
+# Any PHP files → Homepage
+RewriteCond %{REQUEST_URI} \.php$ [NC]
+RewriteRule ^(.*)$ https://www.kraftfahrer-mieten.com/ [R=301,L]
+# Direkte Aufrufe der internen HTML-Dateien zur jeweiligen öffentlichen URL.
+# THE_REQUEST schützt interne Rewrites vor Rückleitungen und Schleifen.
+RewriteCond %{THE_REQUEST} \s/+prerender/index\.html(?:[?\s]) [NC]
+RewriteRule ^prerender/index\.html$ / [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+prerender/[a-z0-9-]+\.html(?:[?\s]) [NC]
+RewriteRule ^prerender/([a-z0-9-]+)\.html$ /$1 [R=301,L]
+
+# Generic: any other .html → sans extension, except admin-check.html
+# Only redirect direct browser requests, not internal rewrites
+RewriteCond %{THE_REQUEST} \.html(?:[?\s]) [NC]
+RewriteCond %{REQUEST_URI} !^/admin-check\.html$ [NC]
+RewriteRule ^(.+)\.html$ https://www.kraftfahrer-mieten.com/$1 [R=301,L]
+
+# Remove legacy Fahrerbörse URLs
+Redirect gone /fahrerboerse
+Redirect gone /fahrerbörse
+
+# (HTTPS redirect moved to top for correct order)
+
+# Einheitliche URLs ohne abschließenden Slash nur für erzeugte Sitemap-Seiten.
+# Assets, andere Verzeichnisse und SPA-Routen werden nicht verändert.
+RewriteCond %{DOCUMENT_ROOT}/prerender/$1.html -f
+RewriteRule ^([a-z0-9-]+)/+$ /$1 [R=301,L]
+
+# Intern vorgerenderte HTML-Dateien ohne Redirect direkt ausliefern.
+RewriteRule ^prerender/ - [END]
+RewriteCond %{DOCUMENT_ROOT}/prerender/index.html -f
+RewriteRule ^$ prerender/index.html [END]
+RewriteCond %{DOCUMENT_ROOT}/prerender/$1.html -f
+RewriteRule ^([a-z0-9-]+)$ prerender/$1.html [END]
+
+# Statische Dateien und Asset-Pfade niemals zum SPA-Fallback umschreiben.
+RewriteRule ^(assets|uploads|lovable-uploads|hero|styles)/ - [END]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [END]
+
+# SPA fallback routing
+RewriteBase /
+RewriteRule ^index\.html$ - [L]
+
+# Explicit SPA routes for admin (avoid any external redirects)
+RewriteRule ^admin$ /index.html [L]
+RewriteRule ^admin/login$ /index.html [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/(robots\.txt|sitemap\.xml|favicon\.ico|assets/|uploads/|public/)
 RewriteRule . /index.html [L]
