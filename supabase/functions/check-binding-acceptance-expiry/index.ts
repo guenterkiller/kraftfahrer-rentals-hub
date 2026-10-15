@@ -2,7 +2,7 @@
 // Keine automatische Neuzuteilung. Aufruf durch den Admin-Bereich beim Laden.
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest, createErrorResponse } from "../_shared/admin-auth.ts";
-import { notifyAgency } from "../respond-invite/binding.ts";
+import { notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 
 serve(async (req) => {
   const corsHeaders = createCorsHeaders();

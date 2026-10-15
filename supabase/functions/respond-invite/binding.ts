@@ -16,7 +16,8 @@ import {
 } from "../_shared/binding-acceptance.ts";
 import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts";
 
-const AGENCY = "info@kraftfahrer-mieten.com";
+import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
+export { notifyAgency };
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -217,20 +218,4 @@ function confirmationHtml(name: string, at: string, lines: [string, string][], c
     <h3 style="color:#0d2340;">Zustimmungserklärung</h3><p style="font-size:13px;">${esc(BINDING_CONSENT_TEXT)}</p>
     <p style="font-size:12px;color:#6b7280;margin-top:16px;">Die vollständige Bestätigung liegt als PDF bei. Digitaler Fingerabdruck: ${esc(hash)}</p>
     <p style="font-size:14px;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p></div>`;
-}
-
-export async function notifyAgency(supabase: any, o: { subject: string; html: string; jobId: string; assignmentId: string; template: string }) {
-  const key = Deno.env.get("RESEND_API_KEY");
-  if (!key) return false;
-  const resend = new Resend(key);
-  const { data, error } = await resend.emails.send({
-    from: Deno.env.get("MAIL_FROM") || "Kraftfahrer-Mieten <noreply@kraftfahrer-mieten.com>",
-    to: [AGENCY], subject: o.subject, html: `<div style="font-family:Arial,sans-serif;max-width:600px;">${o.html}</div>`,
-  });
-  await supabase.from("email_log").insert({
-    job_id: o.jobId, assignment_id: o.assignmentId, recipient: AGENCY, subject: o.subject, template: o.template,
-    status: error ? "error" : "sent", error_message: error ? JSON.stringify(error) : null,
-    message_id: (data as any)?.id ?? null, sent_at: error ? null : new Date().toISOString(), delivery_mode: "inline",
-  });
-  return !error;
 }
