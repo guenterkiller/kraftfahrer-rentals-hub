@@ -25,7 +25,7 @@ const faqItems = [
   },
   {
     question: "Was muss beim Fahrzeug erfüllt sein?",
-    answer: "Das Fahrzeug muss fahrbereit, verkehrssicher, zugelassen bzw. ordnungsgemäß für die Überführungsfahrt ausgestattet und versichert sein. Das stellt der Auftraggeber sicher.",
+    answer: "Das Fahrzeug muss fahrbereit und verkehrssicher sein. Kennzeichen, Zulassung, Versicherung und Fahrzeugpapiere stellt bzw. organisiert der Auftraggeber. Fahrerexpress stellt hierfür keine Kennzeichen, keine Zulassung und keine Versicherung.",
   },
   {
     question: "Was ist bei einem nicht zugelassenen Fahrzeug?",
