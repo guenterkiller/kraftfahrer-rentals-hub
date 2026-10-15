@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import TarifCardText, { PreiskartenHinweis, PreiskartenDetailsLink } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifTitel } from "@/lib/tarifTexte";
 import { useGoToBooking, BOOKING_LINK } from "@/lib/bookingNavigation";
-import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
+import { OVERNIGHT_COSTS, TRAVEL_COSTS } from "@/lib/overnightCosts";
 
 
 const PricingSection = () => {
@@ -131,8 +131,7 @@ const PricingSection = () => {
           <CardContent className="text-sm space-y-2">
             <p>Die An- und Abfahrt wird zusätzlich zum Tagessatz berechnet und vor Auftragserteilung klar ausgewiesen.</p>
             <ul className="ml-4 space-y-1 text-muted-foreground">
-              <li>• erste 25 km der Gesamtstrecke frei</li>
-              <li>• ab dem 26. km: 0,40 € je gefahrenem Kilometer</li>
+              {TRAVEL_COSTS.rules.map((r) => <li key={r}>• {r}</li>)}
             </ul>
             <p className="text-muted-foreground">
               Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und
