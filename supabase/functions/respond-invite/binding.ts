@@ -22,8 +22,10 @@ export { notifyAgency };
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+// Identische Formatierung wie in der Zuteilungs-E-Mail (send-driver-confirmation):
+// gespeicherter Wert ohne Zeitzonenumrechnung (UTC = Laufzeitzone der Zuteilungs-E-Mail).
 const fmtDate = (d: string | null | undefined) =>
-  d ? new Date(d).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin", day: "2-digit", month: "2-digit", year: "numeric" }) : null;
+  d ? new Date(d).toLocaleString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : null;
 
 export function buildJobLines(job: any, assignment: any): [string, string][] {
   const address = [job?.customer_street, job?.customer_house_number].filter(Boolean).join(" ");
