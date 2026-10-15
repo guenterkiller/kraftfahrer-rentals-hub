@@ -103,11 +103,14 @@ export type Database = {
       }
       assignment_invites: {
         Row: {
+          assignment_id: string | null
           created_at: string
           driver_id: string
+          expiry_notified_at: string | null
           id: string
           ip: unknown
           job_id: string
+          purpose: string
           responded_at: string | null
           status: string
           token: string
@@ -115,11 +118,14 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          assignment_id?: string | null
           created_at?: string
           driver_id: string
+          expiry_notified_at?: string | null
           id?: string
           ip?: unknown
           job_id: string
+          purpose?: string
           responded_at?: string | null
           status?: string
           token: string
@@ -127,11 +133,14 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          assignment_id?: string | null
           created_at?: string
           driver_id?: string
+          expiry_notified_at?: string | null
           id?: string
           ip?: unknown
           job_id?: string
+          purpose?: string
           responded_at?: string | null
           status?: string
           token?: string
@@ -139,6 +148,13 @@ export type Database = {
           user_agent?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "assignment_invites_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "job_assignments"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "assignment_invites_driver_id_fkey"
             columns: ["driver_id"]
@@ -470,6 +486,7 @@ export type Database = {
           assigned_at: string
           cancelled_at: string | null
           cancelled_reason: string | null
+          commission_pct: number | null
           confirmed_at: string | null
           confirmed_by_admin: boolean
           created_at: string
@@ -497,6 +514,7 @@ export type Database = {
           assigned_at?: string
           cancelled_at?: string | null
           cancelled_reason?: string | null
+          commission_pct?: number | null
           confirmed_at?: string | null
           confirmed_by_admin?: boolean
           created_at?: string
@@ -524,6 +542,7 @@ export type Database = {
           assigned_at?: string
           cancelled_at?: string | null
           cancelled_reason?: string | null
+          commission_pct?: number | null
           confirmed_at?: string | null
           confirmed_by_admin?: boolean
           created_at?: string
@@ -606,7 +625,11 @@ export type Database = {
             | Database["public"]["Enums"]["billing_model_enum"]
             | null
           checkbox_text: string | null
+          commission_pct: number | null
           consent_confirmed: boolean
+          content_hash: string | null
+          contract_text: string | null
+          contract_version: string | null
           driver_id: string
           flow: string | null
           id: string
@@ -614,6 +637,7 @@ export type Database = {
           ip: unknown
           job_id: string
           job_snapshot: Json | null
+          pdf_path: string | null
           terms_version: string | null
           user_agent: string | null
         }
@@ -624,7 +648,11 @@ export type Database = {
             | Database["public"]["Enums"]["billing_model_enum"]
             | null
           checkbox_text?: string | null
+          commission_pct?: number | null
           consent_confirmed?: boolean
+          content_hash?: string | null
+          contract_text?: string | null
+          contract_version?: string | null
           driver_id: string
           flow?: string | null
           id?: string
@@ -632,6 +660,7 @@ export type Database = {
           ip?: unknown
           job_id: string
           job_snapshot?: Json | null
+          pdf_path?: string | null
           terms_version?: string | null
           user_agent?: string | null
         }
@@ -642,7 +671,11 @@ export type Database = {
             | Database["public"]["Enums"]["billing_model_enum"]
             | null
           checkbox_text?: string | null
+          commission_pct?: number | null
           consent_confirmed?: boolean
+          content_hash?: string | null
+          contract_text?: string | null
+          contract_version?: string | null
           driver_id?: string
           flow?: string | null
           id?: string
@@ -650,6 +683,7 @@ export type Database = {
           ip?: unknown
           job_id?: string
           job_snapshot?: Json | null
+          pdf_path?: string | null
           terms_version?: string | null
           user_agent?: string | null
         }

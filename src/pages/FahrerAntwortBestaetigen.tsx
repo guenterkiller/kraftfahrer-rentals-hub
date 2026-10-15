@@ -6,6 +6,15 @@ import {
   DRIVER_ACCEPT_CHECKBOX_TEXT,
   DRIVER_ACCEPT_LEGAL_HINT,
 } from "@/lib/driverConsentText";
+import { BINDING_CONSENT_TEXT } from "@/lib/driverContractTerms";
+
+type BindingData = {
+  commission_pct: number;
+  contract_version: string;
+  contract_sections: { title: string; paragraphs: string[] }[];
+  job_lines: [string, string][];
+  expires_at: string;
+};
 
 const CHECKBOX_TEXT = DRIVER_ACCEPT_CHECKBOX_TEXT;
 
@@ -63,15 +72,20 @@ export default function FahrerAntwortBestaetigen() {
   const [job, setJob] = useState<JobPreview | null>(null);
   const [driverName, setDriverName] = useState<string>("");
   const [consent, setConsent] = useState<boolean>(false);
+  const [binding, setBinding] = useState<BindingData | null>(null);
+  const [bindingAcceptedAt, setBindingAcceptedAt] = useState<string | null>(null);
 
   const heading = useMemo(() => {
+    if (action === "accept" && binding) return "Auftrag prüfen und verbindlich annehmen";
     if (action === "accept") return "Auftragsangebot – bitte prüfen und verbindlich bestätigen";
     if (action === "decline") return "Möchten Sie diesen Auftrag wirklich ablehnen?";
     return "Rückmeldung bestätigen";
-  }, [action]);
+  }, [action, binding]);
 
   const buttonLabel =
-    action === "accept"
+    action === "accept" && binding
+      ? "Auftrag und Bedingungen verbindlich annehmen"
+      : action === "accept"
       ? "Auftrag zu diesen Bedingungen annehmen"
       : "Ja, Auftrag ablehnen";
 
@@ -87,7 +101,7 @@ export default function FahrerAntwortBestaetigen() {
       const { data, error } = await supabase.functions.invoke("respond-invite", {
         body:
           action === "accept"
-            ? { action, token, consent_confirmed: true, checkbox_text: CHECKBOX_TEXT }
+            ? { action, token, consent_confirmed: true, checkbox_text: binding ? BINDING_CONSENT_TEXT : CHECKBOX_TEXT }
             : { action, token },
       });
       if (error) {
@@ -96,6 +110,9 @@ export default function FahrerAntwortBestaetigen() {
         return;
       }
       const status: ServerStatus = (data?.status as ServerStatus) ?? "error";
+      if (data?.mode === "binding" && status === "accepted") {
+        setBindingAcceptedAt(data?.accepted_at ?? new Date().toISOString());
+      }
       setResult(status);
     } catch (_e) {
       setErrorMsg(
@@ -123,7 +140,18 @@ export default function FahrerAntwortBestaetigen() {
           return;
         }
         const status = data?.status;
-        if (status === "ready") {
+        if (status === "ready" && data?.mode === "binding") {
+          setBinding({
+            commission_pct: data.commission_pct,
+            contract_version: data.contract_version,
+            contract_sections: data.contract_sections ?? [],
+            job_lines: data.job_lines ?? [],
+            expires_at: data.expires_at,
+          });
+          if (data?.driver?.vorname) {
+            setDriverName(`${data.driver.vorname} ${data.driver.nachname ?? ""}`.trim());
+          }
+        } else if (status === "ready") {
           setJob(data?.job ?? null);
           if (data?.driver?.vorname) {
             setDriverName(
@@ -164,12 +192,51 @@ export default function FahrerAntwortBestaetigen() {
             Link aus Ihrer E-Mail oder kontaktieren Sie uns.
           </p>
         ) : result ? (
-          <p className="text-foreground">{STATUS_TEXT[result]}</p>
+          <p className="text-foreground">
+            {binding && result === "accepted"
+              ? `Sie haben den Auftrag am ${new Date(bindingAcceptedAt ?? Date.now()).toLocaleString("de-DE")} zu den angezeigten Bedingungen verbindlich angenommen. Die Annahmebestätigung mit dem vollständigen Vertragstext erhalten Sie per E-Mail als PDF.`
+              : binding && result === "declined"
+              ? "Sie haben die verbindliche Annahme abgelehnt. Fahrerexpress wurde informiert."
+              : STATUS_TEXT[result]}
+          </p>
         ) : loading ? (
           <p className="text-muted-foreground">Auftragsdaten werden geladen…</p>
         ) : (
           <>
-            {action === "accept" && job && (
+            {action === "accept" && binding && (
+              <section aria-label="Auftragsdaten und Vertragsbedingungen" className="mb-6 space-y-4 text-sm text-foreground">
+                {driverName && <p><strong>Fahrer:</strong> {driverName}</p>}
+                <div className="rounded-md border border-border bg-muted/40 p-4">
+                  <h2 className="mb-2 font-semibold">Auftragsdaten</h2>
+                  <dl className="grid grid-cols-1 gap-y-1 md:grid-cols-3 md:gap-x-4">
+                    {binding.job_lines.map(([k, v]) => (
+                      <div key={k} className="contents">
+                        <dt className="font-medium">{k}</dt>
+                        <dd className="md:col-span-2 whitespace-pre-line break-words">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+                <div className="rounded-md border border-border p-4">
+                  <h2 className="mb-2 font-semibold">
+                    Vertragsbedingungen (Fassung {binding.contract_version})
+                  </h2>
+                  {binding.contract_sections.map((sec) => (
+                    <div key={sec.title} className="mb-3">
+                      <p className="font-medium">{sec.title}</p>
+                      {sec.paragraphs.map((p) => (
+                        <p key={p} className="break-words">{p}</p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Link gültig bis {new Date(binding.expires_at).toLocaleString("de-DE")} Uhr.
+                </p>
+              </section>
+            )}
+
+            {action === "accept" && !binding && job && (
               <section
                 aria-label="Auftragsdetails"
                 className="mb-6 rounded-md border border-border bg-muted/40 p-4 text-sm text-foreground"
@@ -220,9 +287,11 @@ export default function FahrerAntwortBestaetigen() {
 
             {action === "accept" ? (
               <div className="mb-4">
-                <p className="mb-3 text-xs text-muted-foreground">
-                  {DRIVER_ACCEPT_LEGAL_HINT}
-                </p>
+                {!binding && (
+                  <p className="mb-3 text-xs text-muted-foreground">
+                    {DRIVER_ACCEPT_LEGAL_HINT}
+                  </p>
+                )}
                 <label className="flex items-start gap-3 text-sm text-foreground">
                   <input
                     type="checkbox"
@@ -230,7 +299,7 @@ export default function FahrerAntwortBestaetigen() {
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
                   />
-                  <span>{CHECKBOX_TEXT}</span>
+                  <span>{binding ? BINDING_CONSENT_TEXT : CHECKBOX_TEXT}</span>
                 </label>
               </div>
             ) : (
