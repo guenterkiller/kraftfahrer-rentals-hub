@@ -182,7 +182,7 @@ serve(async (req) => {
       <p class="body-text" style="margin:0 0 18px 0;font-size:14px;color:#6b7280;">Fahrerexpress | kraftfahrer-mieten.com</p>
 
       <p class="body-text" style="margin:0 0 8px 0;font-size:15px;color:#374151;">Hallo ${driver.vorname} ${driver.nachname},</p>
-      <p class="body-text" style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:#374151;">hiermit bestätigen wir Ihren Einsatz als selbstständiger Fahrer.</p>
+      <p class="body-text" style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:#374151;">Sie wurden für den nachfolgend beschriebenen Einsatz ausgewählt. Bitte prüfen und bestätigen Sie das verbindliche Auftragsangebot.</p>
 
       ${bindingButtonHtml}
 
@@ -222,7 +222,7 @@ serve(async (req) => {
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>5) Pauschalierter Schadensersatz:</strong> Bei Verstoß gegen die Ziffern 3 oder 4 schuldet der Fahrer Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 2.500 € je Verstoß, sofern kein geringerer Schaden nachgewiesen wird.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>6) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>7) Verbindliche Annahme:</strong> Der Fahrer nimmt den Einsatz zu den genannten Bedingungen als selbstständiger Unternehmer verbindlich an.</p>
+        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>7) Verbindliche Annahme:</strong> Der Auftrag wird durch Ihre ausdrückliche Annahme über den persönlichen Bestätigungslink verbindlich vereinbart.</p>
         <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>8) Mitteilungspflicht:</strong> Der Fahrer verpflichtet sich, Fahrerexpress unverzüglich zu informieren, wenn absehbar ist, dass er den Einsatz nicht, nicht rechtzeitig oder nicht vollständig durchführen kann.</p>
       ${sectionEnd}
 
