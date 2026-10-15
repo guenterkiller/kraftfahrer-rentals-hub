@@ -152,12 +152,14 @@ const PreiseUndAblauf = () => {
                   Die veröffentlichten Mehrstundensätze, die An- und Abfahrt sowie die Wochenend- und Feiertagszuschläge gelten automatisch; eine zusätzliche Vereinbarung ist hierfür nicht erforderlich. Weitere, nicht veröffentlichte Kosten entstehen nur nach vorheriger ausdrücklicher Vereinbarung.
                 </p>
               </div>
-              <section className="max-w-4xl mx-auto mt-6 space-y-3 text-sm text-foreground" aria-labelledby="overnight-costs-heading">
+              <section className="max-w-4xl mx-auto mt-6 space-y-3 text-sm text-foreground border rounded-lg p-4 border-red-200 bg-red-50/40" aria-labelledby="overnight-costs-heading">
                 <h2 id="overnight-costs-heading" className="text-lg font-semibold">{OVERNIGHT_COSTS.title}</h2>
                 {OVERNIGHT_COSTS.standard.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                 <h3 className="text-base font-semibold">{OVERNIGHT_COSTS.fernfahrerTitle}</h3>
                 {OVERNIGHT_COSTS.fernfahrer.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                 <p>{OVERNIGHT_COSTS.legal}</p>
+                <h3 className="text-base font-semibold">{OVERNIGHT_COSTS.multiWeekTitle}</h3>
+                <p>{OVERNIGHT_COSTS.multiWeek}</p>
               </section>
             </div>
 
@@ -194,7 +196,7 @@ const PreiseUndAblauf = () => {
             </Card>
 
             {/* An- und Abfahrt */}
-            <Card className="mb-12">
+            <Card className="mb-12 border-red-200 bg-red-50/40">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Truck className="h-6 w-6 text-primary" />
@@ -258,7 +260,7 @@ const PreiseUndAblauf = () => {
             </Card>
 
             {/* Mehrstundenregelung */}
-            <Card className="mb-12">
+            <Card className="mb-12 border-red-200 bg-red-50/40">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Clock className="h-6 w-6 text-primary" />
@@ -343,7 +345,7 @@ const PreiseUndAblauf = () => {
             </Card>
 
             {/* Stornierungsregelungen */}
-            <Card className="mb-12 border-amber-200 bg-amber-50/50">
+            <Card className="mb-12 border-red-200 bg-red-50/40">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <AlertCircle className="h-6 w-6 text-amber-600" />
