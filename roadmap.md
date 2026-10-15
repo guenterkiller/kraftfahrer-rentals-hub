@@ -36,3 +36,7 @@
 - [x] Produktions-Build nach der Korrektur: Ausstieg 0, 21/21 vorgerenderte Seiten geprüft.
 - [x] Beide Buchungs-Mailfunktionen neu eingespielt (interne Benachrichtigung, Kundenbestätigung); Erreichbarkeit ohne Mailversand geprüft (405 bzw. 403 wie erwartet).
 - [ ] Stornierungsbedingungen bleiben unverändert; Kalkulationsgrundlagen 349 € / 329 € (1.645/5) / 450 € / 489 € netto je Einsatztag notiert, Rechtprüfung der Pauschalen 80 %/100 % offen.
+# Veröffentlichung
+- [x] Sicherheitsprüfung vor der Veröffentlichung: keine kritischen Befunde; zwei Warnungen (offene Schreibregeln für Seitenaufruf- und Messwertetabellen) und ein Hinweis (Schutz vor geleakten Passwörtern aus).
+- [ ] Veröffentlichung nicht erfolgt: die Veröffentlichungsanfrage wurde zweimal abgelehnt; nichts ist live, IONOS-Upload ebenfalls nicht erfolgt.
+- [ ] Bei exakt 320 px: das lange Wort in der Überschrift „Kundenbewertungen & Erfahrungen" erzeugt 13 px seitlichen Spiel; rein optische Korrektur (Wortumbruch) wartet auf Freigabe.
