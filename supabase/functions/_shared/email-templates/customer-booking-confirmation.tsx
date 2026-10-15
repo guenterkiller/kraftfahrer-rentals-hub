@@ -2,7 +2,7 @@ import { Heading, Text, Section, Link } from 'npm:@react-email/components@0.0.22
 import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
-import { OvernightCostNotice } from './overnight-cost-notice.tsx';
+import { OvernightCostNotice, ZUSATZKOSTEN_BOX, ZUSATZKOSTEN_HEADING } from './overnight-cost-notice.tsx';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
 
@@ -215,9 +215,9 @@ export const CustomerBookingConfirmation = ({
                 </td>
               </tr>
             )}
-            <tr>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>An- und Abfahrt:</strong></td>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
+            <tr style={{ backgroundColor: ZUSATZKOSTEN_BOX.backgroundColor }}>
+              <td style={{ padding: '5px 6px', fontSize: '14px', color: ZUSATZKOSTEN_HEADING }} className="mobile-text"><strong>An- und Abfahrt:</strong></td>
+              <td style={{ padding: '5px 6px', fontSize: '14px' }} className="mobile-text">
                 erste 25 km frei, danach 0,40 € netto je gefahrenem Kilometer
               </td>
             </tr>
@@ -267,8 +267,8 @@ export const CustomerBookingConfirmation = ({
         </Section>
       )}
 
-      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#f0f7ff', borderLeftColor: '#2563eb' })}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: '#1e40af' }, 'small-heading')}>Einsatzzeit und Mehrstunden</Heading>
+      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Einsatzzeit und Mehrstunden</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
         </Text>
@@ -278,8 +278,8 @@ export const CustomerBookingConfirmation = ({
         </Text>
       </Section>)}
 
-      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
+      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
           Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird der Zuschlag automatisch auf den jeweiligen Tagessatz berechnet. Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
         </Text>
@@ -302,10 +302,10 @@ export const CustomerBookingConfirmation = ({
         </Text>
       </Section>)}
 
-      <OvernightCostNotice tarifKey={ueberfuehrung ? 'ueberfuehrung' : tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} />
+      <OvernightCostNotice tarifKey={ueberfuehrung ? 'ueberfuehrung' : tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} highlight showMultiWeek={!ueberfuehrung && (tarif?.tarif === 'lkw_ce_woche' || tarif?.tarif === 'fernfahrer')} />
 
-      <Section {...getBoxProps({ ...boxStyles.warningBox, backgroundColor: '#fffbeb', borderLeftColor: '#f59e0b' })}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: '#b45309' }, 'small-heading')}>Stornierungsregelung nach Einsatzbestätigung</Heading>
+      <Section {...getBoxProps({ ...boxStyles.warningBox, ...ZUSATZKOSTEN_BOX })}>
+        <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Stornierungsregelung nach Einsatzbestätigung</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
           Die nachfolgenden Stornokosten gelten ab der verbindlichen Einsatzbestätigung, also nachdem ein selbstständiger Fahrer den Auftrag angenommen hat und Ihnen der Einsatz bestätigt wurde.
         </Text>
@@ -313,10 +313,10 @@ export const CustomerBookingConfirmation = ({
           Eine kostenfreie Stornierung ist bis 24 Stunden vor Einsatzbeginn möglich.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Bei einer Stornierung unter 24 Stunden vor Einsatzbeginn werden 80 % des Tagessatzes berechnet.
+          Bei einer Stornierung unter 24 Stunden vor Einsatzbeginn behält sich Fahrerexpress vor, den entgangenen Aufwand pauschal mit 80 % des vereinbarten Tagessatzes zu berechnen, sofern der Auftraggeber keinen oder einen geringeren Schaden nachweist.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers werden 100 % des Tagessatzes berechnet.
+          Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers können 100 % des vereinbarten Tagessatzes berechnet werden, sofern der Auftraggeber keinen oder einen geringeren Schaden nachweist.
         </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
           Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren.
