@@ -18,6 +18,7 @@ import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts"
 
 import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
+import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -58,7 +59,7 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   const { supabase, invite, json } = ctx;
   const { data: assignment } = await supabase
     .from("job_assignments")
-    .select("id, job_id, driver_id, status, rate_type, rate_value, start_date, end_date, commission_pct, updated_at")
+    .select("id, job_id, driver_id, status, rate_type, rate_value, start_date, end_date, commission_pct, times_entered, updated_at")
     .eq("id", invite.assignment_id)
     .maybeSingle();
 
@@ -127,7 +128,7 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
     invite_id: invite.id,
     assignment: {
       id: assignment.id, rate_type: assignment.rate_type, rate_value: assignment.rate_value,
-      start_date: assignment.start_date, end_date: assignment.end_date, commission_pct: commission,
+      start_date: assignment.start_date, end_date: assignment.end_date, times_entered: assignment.times_entered ?? null, commission_pct: commission,
     },
     job: {
       id: job?.id, customer_name: job?.customer_name, company: job?.company,
