@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { berlinLocalToUtcIso } from "@/lib/berlinTime";
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -240,15 +239,17 @@ export function AdminAssignmentDialog({
       return;
     }
 
-    // Einsatzzeiten: Eingabe gilt als deutsche Ortszeit (geräteunabhängig umgerechnet)
-    const startIso = startDate ? berlinLocalToUtcIso(startDate) : null;
-    const endIso = endDate ? berlinLocalToUtcIso(endDate) : null;
+    // Einsatzzeitraum: nur Kalenderdatum, keine Uhrzeit (Abstimmung Besteller/Fahrer).
+    // Gespeichert als UTC-Tagesbeginn, wie bisheriger Altbestand ohne Uhrzeit.
+    const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+    const startIso = startDate && dateRe.test(startDate) ? `${startDate}T00:00:00.000Z` : null;
+    const endIso = endDate && dateRe.test(endDate) ? `${endDate}T00:00:00.000Z` : null;
     if ((startDate && !startIso) || (endDate && !endIso)) {
-      toast({ title: "Eingabefehler", description: "Bitte Einsatzbeginn und -ende jeweils mit Datum und Uhrzeit angeben.", variant: "destructive" });
+      toast({ title: "Eingabefehler", description: "Bitte Einsatzbeginn und -ende jeweils als Datum angeben.", variant: "destructive" });
       return;
     }
-    if (startIso && endIso && new Date(endIso) <= new Date(startIso)) {
-      toast({ title: "Eingabefehler", description: "Das Einsatzende muss nach dem Einsatzbeginn liegen.", variant: "destructive" });
+    if (startIso && endIso && endIso < startIso) {
+      toast({ title: "Eingabefehler", description: "Das Einsatzende darf nicht vor dem Einsatzbeginn liegen.", variant: "destructive" });
       return;
     }
 
@@ -274,7 +275,7 @@ export function AdminAssignmentDialog({
           commissionPct: Number(commissionPct),
           startDate: startIso,
           endDate: endIso,
-          timesEntered: !!(startIso || endIso),
+          timesEntered: false,
           note: note || null
         }
       });
@@ -631,18 +632,18 @@ export function AdminAssignmentDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Einsatzbeginn (Datum + Uhrzeit, deutsche Zeit)</Label>
+              <Label>Einsatzbeginn (Datum)</Label>
               <Input
-                type="datetime-local"
+                type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
-            
+
             <div>
-              <Label>Einsatzende (Datum + Uhrzeit, deutsche Zeit)</Label>
+              <Label>Einsatzende (Datum)</Label>
               <Input
-                type="datetime-local"
+                type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
