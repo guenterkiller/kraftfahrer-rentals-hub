@@ -506,6 +506,7 @@ export type Database = {
           start_date: string | null
           starts_at: string | null
           status: string
+          times_entered: boolean | null
           updated_at: string
         }
         Insert: {
@@ -534,6 +535,7 @@ export type Database = {
           start_date?: string | null
           starts_at?: string | null
           status?: string
+          times_entered?: boolean | null
           updated_at?: string
         }
         Update: {
@@ -562,6 +564,7 @@ export type Database = {
           start_date?: string | null
           starts_at?: string | null
           status?: string
+          times_entered?: boolean | null
           updated_at?: string
         }
         Relationships: [

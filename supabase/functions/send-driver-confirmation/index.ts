@@ -10,6 +10,7 @@ import {
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 import { normalizeCommissionPct } from "../_shared/driver-contract-terms.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
+import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -49,7 +50,7 @@ serve(async (req) => {
       .from("job_assignments")
       .select(`
         id, job_id, driver_id, status,
-        rate_type, rate_value, start_date, end_date, admin_note, commission_pct,
+        rate_type, rate_value, start_date, end_date, admin_note, commission_pct, times_entered,
         job_requests:job_id (
           id, status, customer_name, company, customer_phone, customer_email,
           einsatzort, fahrzeugtyp, besonderheiten, zeitraum, tarif_type,
@@ -116,7 +117,7 @@ serve(async (req) => {
     // Prepare email data
     const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
     const location = job?.einsatzort || 'wird noch bekannt gegeben';
-    const dateRange = formatDateRange(assignment.start_date, assignment.end_date) || job?.zeitraum || 'nach Absprache';
+    const dateRange = formatAssignmentPeriod(assignment.start_date, assignment.end_date, (assignment as any).times_entered) || job?.zeitraum || 'nach Absprache';
     const rateFormatted = formatRate(assignment.rate_type, assignment.rate_value) || 'nach Absprache';
     const vehicleType = job?.fahrzeugtyp || 'wird bekannt gegeben';
     
@@ -144,7 +145,7 @@ serve(async (req) => {
     if (existingBinding) {
       bindingButtonHtml = `<p class="body-text" style="margin:0 0 16px 0;font-size:14px;color:#166534;"><strong>Verbindliche Annahme:</strong> Sie haben diesen Auftrag bereits am ${new Date(existingBinding.accepted_at).toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })} verbindlich angenommen.</p>`;
     } else if (['assigned', 'confirmed'].includes(assignment.status)) {
-      const expiresAt = computeBindingExpiry(new Date(), assignment.start_date);
+      const expiresAt = computeBindingExpiry(new Date(), deadlineStartIso(assignment.start_date, (assignment as any).times_entered));
       if (expiresAt.getTime() > Date.now()) {
         // Ältere offene Links dieser Zuteilung ungültig machen (ohne Ablauf-Meldung)
         await supabase.from('assignment_invites')

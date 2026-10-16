@@ -17,6 +17,7 @@ interface NoShowDialogProps {
     rate_type: string;
     rate_value: number;
     start_date?: string;
+    times_entered?: boolean | null;
     job_requests: {
       customer_name: string;
       fahrzeugtyp: string;
@@ -54,6 +55,11 @@ export const NoShowDialog: React.FC<NoShowDialogProps> = ({
 
   const calculateFee = async () => {
     if (!assignment) return;
+    // Ohne tatsächlich erfasste Uhrzeit keine Fristberechnung (kein künstlicher Mitternachtswert)
+    if (assignment.times_entered !== true || !assignment.start_date) {
+      setCalculatedFee({ fee_cents: 0, tier: 'no_time' });
+      return;
+    }
     
     setIsCalculating(true);
     try {
@@ -152,7 +158,8 @@ export const NoShowDialog: React.FC<NoShowDialogProps> = ({
       '24-48h': 'Absage 24-48 Stunden vorher',
       '>=48h': 'Rechtzeitige Absage (über 48h)',
       'override': 'Individuell festgelegt',
-      'fallback': 'Standardpauschale'
+      'fallback': 'Standardpauschale',
+      'no_time': 'Einsatzbeginn ohne erfasste Uhrzeit – Betrag bitte manuell festlegen'
     };
     return labels[tier] || tier;
   };

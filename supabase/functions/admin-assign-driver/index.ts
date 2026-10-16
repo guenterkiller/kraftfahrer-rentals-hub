@@ -64,7 +64,10 @@ Deno.serve(async (req) => {
       );
     }
 
-    const { jobId, driverId, rateType, rateValue, startDate, endDate, note, commissionPct }: AssignDriverRequest = await req.json();
+    const { jobId, driverId, rateType, rateValue, startDate, endDate, note, commissionPct, timesEntered }: AssignDriverRequest & { timesEntered?: boolean } = await req.json();
+    // Tatsächliche Einsatzzeit nur bei vollständigem Zeitpunkt (ISO mit Uhrzeit) markieren
+    const isInstant = (v?: string | null) => !v || /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(v);
+    const timesEnteredFlag = timesEntered === true && !!(startDate || endDate) && isInstant(startDate) && isInstant(endDate) ? true : null;
     console.log('Assignment request by admin:', user.id);
 
     // Check if job exists
@@ -138,6 +141,7 @@ Deno.serve(async (req) => {
         commission_pct: Number(commissionPct) === 25 ? 25 : 20,
         start_date: startDate || null,
         end_date: endDate || null,
+        times_entered: timesEnteredFlag,
         admin_note: note || null,
         assigned_at: new Date().toISOString()
       });
