@@ -38,7 +38,7 @@ Deno.test("Rückumwandlung für Eingabefelder", () => {
 Deno.test("Altbestand ohne Uhrzeit: nur Datum, gesondert gekennzeichnet", () => {
   assertEquals(
     formatAssignmentPeriod("2026-10-22T00:00:00+00:00", "2026-10-23T00:00:00+00:00", null),
-    `22.10.2026 – 23.10.2026 (${TIME_NOT_ENTERED_NOTE})`,
+    `22.10.2026 – 23.10.2026`,
   );
 });
 

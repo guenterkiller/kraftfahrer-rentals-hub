@@ -65,8 +65,7 @@ export function formatAssignmentPeriod(
     return e ? `bis ${e}` : null;
   }
   const s = formatLegacyDate(start), e = formatLegacyDate(end);
-  const range = s && e ? `${s} – ${e}` : s ? `ab ${s}` : `bis ${e}`;
-  return `${range} (${TIME_NOT_ENTERED_NOTE})`;
+  return s && e ? `${s} – ${e}` : s ? `ab ${s}` : `bis ${e}`;
 }
 
 /**
