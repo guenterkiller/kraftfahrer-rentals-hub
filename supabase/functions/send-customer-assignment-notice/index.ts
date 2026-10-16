@@ -7,6 +7,7 @@ import {
   createErrorResponse,
 } from "../_shared/admin-auth.ts";
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
+import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -44,7 +45,7 @@ serve(async (req) => {
     const { data: assignment, error: aErr } = await supabase
       .from("job_assignments")
       .select(`
-        id, job_id, driver_id, start_date, end_date,
+        id, job_id, driver_id, start_date, end_date, times_entered,
         job_requests:job_id ( id, customer_email, customer_name, einsatzort ),
         fahrer_profile:driver_id ( id, vorname, nachname, email, telefon )
       `)
@@ -62,16 +63,16 @@ serve(async (req) => {
     if (!customerEmail) return createErrorResponse("Kunden-E-Mail fehlt", 400, corsHeaders);
     if (!fp?.vorname || !fp?.nachname) return createErrorResponse("Fahrerdaten unvollständig", 400, corsHeaders);
 
-    const fmt = (d: string | null) => {
-      if (!d) return "—";
-      try { return new Date(d).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }); }
-      catch { return d; }
-    };
-
     const driverName = `${fp.vorname} ${fp.nachname}`.trim();
     const driverPhone = fp.telefon || "—";
     const driverEmailLine = fp.email ? `E-Mail: ${fp.email}` : "";
-    const zeitraum = `${fmt(assignment.start_date)} bis ${fmt(assignment.end_date)}`;
+    // Einsatzzeitraum in deutscher Ortszeit (Europe/Berlin), identisch zur Fahrermail:
+    // mit erfasster Uhrzeit Datum + Uhrzeit; Altbestand ohne Uhrzeit nur Kalenderdatum mit Hinweis.
+    const zeitraum = formatAssignmentPeriod(
+      assignment.start_date,
+      assignment.end_date,
+      (assignment as any).times_entered,
+    ) || "—";
     const einsatzort = jr?.einsatzort || "—";
 
     const subject = "Fahrerinformation zu Ihrem Auftrag";
