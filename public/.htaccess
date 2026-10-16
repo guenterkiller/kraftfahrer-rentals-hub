@@ -135,14 +135,18 @@ Redirect gone /fahrerbörse
 
 # Einheitliche URLs ohne abschließenden Slash nur für erzeugte Sitemap-Seiten.
 # Assets, andere Verzeichnisse und SPA-Routen werden nicht verändert.
-RewriteCond %{DOCUMENT_ROOT}/prerender/$1.html -f
+# Pfad aus REQUEST_FILENAME ableiten (IONOS: DOCUMENT_ROOT zeigt nicht auf den Webspace).
+RewriteCond %{REQUEST_FILENAME} ^(.+)/([a-z0-9-]+)/*$
+RewriteCond %1/prerender/%2.html -f
 RewriteRule ^([a-z0-9-]+)/+$ /$1 [R=301,L]
 
 # Intern vorgerenderte HTML-Dateien ohne Redirect direkt ausliefern.
 RewriteRule ^prerender/ - [END]
-RewriteCond %{DOCUMENT_ROOT}/prerender/index.html -f
+RewriteCond %{REQUEST_FILENAME} ^(.+?)/*$
+RewriteCond %1/prerender/index.html -f
 RewriteRule ^$ prerender/index.html [END]
-RewriteCond %{DOCUMENT_ROOT}/prerender/$1.html -f
+RewriteCond %{REQUEST_FILENAME} ^(.+)/([a-z0-9-]+)$
+RewriteCond %1/prerender/%2.html -f
 RewriteRule ^([a-z0-9-]+)$ prerender/$1.html [END]
 
 # Statische Dateien und Asset-Pfade niemals zum SPA-Fallback umschreiben.
