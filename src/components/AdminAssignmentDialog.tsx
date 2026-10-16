@@ -272,8 +272,9 @@ export function AdminAssignmentDialog({
           rateType: rateType,
           rateValue: parseFloat(rateValue),
           commissionPct: Number(commissionPct),
-          startDate: startDate || null,
-          endDate: endDate || null,
+          startDate: startIso,
+          endDate: endIso,
+          timesEntered: !!(startIso || endIso),
           note: note || null
         }
       });
