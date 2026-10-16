@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { berlinLocalToUtcIso } from "@/lib/berlinTime";
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -236,6 +237,18 @@ export function AdminAssignmentDialog({
         description: "Bitte Auftraggeber-Daten vollständig eintragen (Straße, Nr., PLZ (5-stellig), Ort sowie Ansprechpartner und mind. Telefon oder E-Mail).",
         variant: "destructive"
       });
+      return;
+    }
+
+    // Einsatzzeiten: Eingabe gilt als deutsche Ortszeit (geräteunabhängig umgerechnet)
+    const startIso = startDate ? berlinLocalToUtcIso(startDate) : null;
+    const endIso = endDate ? berlinLocalToUtcIso(endDate) : null;
+    if ((startDate && !startIso) || (endDate && !endIso)) {
+      toast({ title: "Eingabefehler", description: "Bitte Einsatzbeginn und -ende jeweils mit Datum und Uhrzeit angeben.", variant: "destructive" });
+      return;
+    }
+    if (startIso && endIso && new Date(endIso) <= new Date(startIso)) {
+      toast({ title: "Eingabefehler", description: "Das Einsatzende muss nach dem Einsatzbeginn liegen.", variant: "destructive" });
       return;
     }
 
@@ -617,18 +630,18 @@ export function AdminAssignmentDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Startdatum (optional)</Label>
+              <Label>Einsatzbeginn (Datum + Uhrzeit, deutsche Zeit)</Label>
               <Input
-                type="date"
+                type="datetime-local"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
               />
             </div>
             
             <div>
-              <Label>Enddatum (optional)</Label>
+              <Label>Einsatzende (Datum + Uhrzeit, deutsche Zeit)</Label>
               <Input
-                type="date"
+                type="datetime-local"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
               />
