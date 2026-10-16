@@ -22,17 +22,12 @@ export { notifyAgency };
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-// Identische Formatierung wie in der Zuteilungs-E-Mail (send-driver-confirmation):
-// gespeicherter Wert ohne Zeitzonenumrechnung (UTC = Laufzeitzone der Zuteilungs-E-Mail).
-const fmtDate = (d: string | null | undefined) =>
-  d ? new Date(d).toLocaleString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }) : null;
-
 export function buildJobLines(job: any, assignment: any): [string, string][] {
   const address = [job?.customer_street, job?.customer_house_number].filter(Boolean).join(" ");
   const city = [job?.customer_postal_code, job?.customer_city].filter(Boolean).join(" ");
   const besteller = [job?.company || job?.customer_name, [address, city].filter(Boolean).join(", ")].filter(Boolean).join(" – ");
-  const start = fmtDate(assignment?.start_date), end = fmtDate(assignment?.end_date);
-  const zeitraum = start && end ? `${start} – ${end}` : start ? `ab ${start}` : (job?.zeitraum || "nach Absprache");
+  // Identische Darstellung wie in der Zuteilungs-E-Mail (gemeinsames Modul, deutsche Ortszeit)
+  const zeitraum = formatAssignmentPeriod(assignment?.start_date, assignment?.end_date, assignment?.times_entered) || job?.zeitraum || "nach Absprache";
   const rate = assignment?.rate_value != null && Number(assignment.rate_value) > 0
     ? `${formatEur(Number(assignment.rate_value))} netto je ${rateUnitLabel(assignment.rate_type)} zzgl. gesetzlicher USt`
     : "nach Vereinbarung";
