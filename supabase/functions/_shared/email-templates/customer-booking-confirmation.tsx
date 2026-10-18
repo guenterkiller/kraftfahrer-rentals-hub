@@ -182,6 +182,68 @@ export const CustomerBookingConfirmation = ({
         </Text>
       </Section>
 
+      {unterkunftOption && (
+        <Section {...getBoxProps(boxStyles.infoBox)}>
+          <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihre Angaben zur Unterkunft</Heading>
+          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+            {UNTERKUNFT_OPTIONEN[unterkunftOption]}
+          </Text>
+          {unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' && (
+            <Text {...getTextProps({ ...textStyles.paragraph, margin: '8px 0 0 0' })}>
+              <strong>Vereinbarte Kostenobergrenze:</strong> {formatEuroKosten(unterkunftObergrenze)} netto
+            </Text>
+          )}
+        </Section>
+      )}
+
+      {!ueberfuehrung && kostenUebersicht && (
+        <Section {...getBoxProps(boxStyles.infoBox)}>
+          <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>{VORKALKULATION_TITEL}</Heading>
+          <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '0 0 10px 0' })}>
+            {VORKALKULATION_HINWEIS}
+          </Text>
+          <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
+            {kostenUebersicht.positionen.map((p) => (
+              <tr key={p.label}>
+                <td style={{ padding: '4px 0', fontSize: '14px' }} className="mobile-text">{p.label}</td>
+                <td style={{ padding: '4px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">
+                  {formatEuroKosten(p.betrag)}
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td style={{ padding: '6px 0 2px 0', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #e5e7eb' }} className="mobile-text">Zwischensumme netto</td>
+              <td style={{ padding: '6px 0 2px 0', fontSize: '14px', fontWeight: 'bold', textAlign: 'right', whiteSpace: 'nowrap', borderTop: '1px solid #e5e7eb' }} className="mobile-text">
+                {formatEuroKosten(kostenUebersicht.netto)}
+              </td>
+            </tr>
+            <tr>
+              <td style={{ padding: '2px 0', fontSize: '14px' }} className="mobile-text">zzgl. 19 % Umsatzsteuer</td>
+              <td style={{ padding: '2px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">
+                {formatEuroKosten(kostenUebersicht.ust)}
+              </td>
+            </tr>
+            <tr>
+              <td style={{ padding: '2px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">Bruttosumme</td>
+              <td style={{ padding: '2px 0', fontSize: '14px', fontWeight: 'bold', textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">
+                {formatEuroKosten(kostenUebersicht.brutto)}
+              </td>
+            </tr>
+          </table>
+          <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
+            <strong>Noch offene Zusatzkosten (nicht in der Vorkalkulation enthalten):</strong>
+          </Text>
+          <ul style={listStyle} className="mobile-text">
+            {offenePositionen(unterkunftOption ?? '', unterkunftObergrenze).map((o) => (
+              <li key={o}>{o}</li>
+            ))}
+          </ul>
+          <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
+            {OFFENE_KOSTEN_HINWEIS}
+          </Text>
+        </Section>
+      )}
+
       <Section {...getBoxProps(boxStyles.infoBox)}>
         <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihr Vertragspartner</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>{ROLLENBESCHREIBUNG}</Text>
