@@ -171,6 +171,44 @@ const handler = async (req: Request): Promise<Response> => {
     // Maßgeblich ist ausschließlich der zugeordnete Tarif – kein zweiter Tarif in den E-Mails.
     const isFernfahrerTarif = tarif.tarif === 'fernfahrer';
 
+    // Unterkunftsregelung serverseitig validieren (nur bei relevanten Tarifen)
+    const unterkunftRelevant = ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
+    const unterkunftRaw = String(requestData.unterkunft_option || '').trim();
+    let unterkunftOption: UnterkunftOption | null = null;
+    let unterkunftObergrenze: number | null = null;
+    if (unterkunftRelevant) {
+      if (!UNTERKUNFT_OPTIONSWERTE.includes(unterkunftRaw as UnterkunftOption)) {
+        return new Response(JSON.stringify({
+          error: 'Bitte Unterkunftsregelung auswählen',
+          details: 'unterkunft_option must be one of: gestellt, fahrer_organisiert, keine'
+        }), {
+          status: 400,
+          headers: jsonCors
+        });
+      }
+      unterkunftOption = unterkunftRaw as UnterkunftOption;
+      if (unterkunftOption === 'fahrer_organisiert') {
+        const parsed = Number(String(requestData.unterkunft_obergrenze ?? '').replace(',', '.'));
+        if (!Number.isFinite(parsed) || parsed < 0) {
+          return new Response(JSON.stringify({
+            error: 'Bitte gültige Kostenobergrenze angeben',
+            details: 'unterkunft_obergrenze must be a number >= 0'
+          }), {
+            status: 400,
+            headers: jsonCors
+          });
+        }
+        unterkunftObergrenze = Math.round(parsed * 100) / 100;
+      }
+    }
+
+    // Unverbindliche Vorkalkulation serverseitig berechnen (Client-Werte sind nicht maßgeblich)
+    const kostenUebersicht = berechneKostenUebersicht(
+      tarif.tarif,
+      String(requestData.einsatzbeginn || ''),
+      String(requestData.einsatzende || requestData.einsatzbeginn || '')
+    );
+
     // Wochenend-/Feiertage im Einsatzzeitraum
     const surchargeDays = listSurchargeDays(
       String(requestData.einsatzbeginn || ''),
@@ -297,7 +335,10 @@ const handler = async (req: Request): Promise<Response> => {
       tarif_reason: tarif.reason,
       maschinenbedienung: maschinenbedienung || null,
       weekend_days: weekendDays.length ? weekendDays : null,
-      holiday_days: holidayDays.length ? holidayDays : null
+      holiday_days: holidayDays.length ? holidayDays : null,
+      unterkunft_option: unterkunftOption,
+      unterkunft_obergrenze: unterkunftObergrenze,
+      kosten_uebersicht: kostenUebersicht
     };
 
     console.log('Checking for duplicates before inserting...');
@@ -375,7 +416,10 @@ const handler = async (req: Request): Promise<Response> => {
           weekend_holiday_affected: weekend_holiday_affected,
           weekend_holiday_acknowledged: weekend_holiday_acknowledged,
           tarif: tarif,
-          surcharge_days: surchargeDays
+          surcharge_days: surchargeDays,
+          unterkunft_option: unterkunftOption,
+          unterkunft_obergrenze: unterkunftObergrenze,
+          kosten_uebersicht: kostenUebersicht
         }
       });
 
