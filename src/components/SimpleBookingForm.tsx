@@ -163,6 +163,22 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     }
     const einsatzdauerString = buildEinsatzdauer(einsatzbeginn, einsatzende);
 
+    // Unterkunftsauswahl: Pflicht bei relevanten Tarifen, Obergrenze Pflicht bei Fahrer-Organisation
+    if (showUnterkunft && !unterkunftOption) {
+      toast({ title: "Bitte Unterkunftsregelung auswählen", variant: "destructive" });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+    if (showUnterkunft && unterkunftOption === 'fahrer_organisiert' && !obergrenzeValid) {
+      toast({
+        title: "Bitte Kostenobergrenze angeben",
+        description: "Geben Sie die maximale Übernahme der Unterkunftskosten in € netto an.",
+        variant: "destructive",
+      });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+
     // Pflicht-Bestätigung bei Wochenend-/Feiertagseinsatz
     if (weekendHoliday.affected && !agreedToSurcharge) {
       toast({
@@ -217,6 +233,11 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
         tarif_mehrstunde: tarif.mehrstunde,
         tarif_needs_review: tarif.needsReview,
         tarif_reason: tarif.reason,
+        unterkunft_option: showUnterkunft && unterkunftOption ? unterkunftOption : undefined,
+        unterkunft_obergrenze:
+          showUnterkunft && unterkunftOption === 'fahrer_organisiert' && obergrenzeValid
+            ? obergrenzeParsed
+            : undefined,
         datenschutz: agreedToData,
         newsletter: false,
         billing_model: 'agency',
