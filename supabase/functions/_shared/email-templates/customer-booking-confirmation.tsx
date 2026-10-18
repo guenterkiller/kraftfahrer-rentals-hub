@@ -4,6 +4,16 @@ import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } f
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
 import { TRAVEL_COSTS } from '../overnight-costs.ts';
 import { OvernightCostNotice, ZUSATZKOSTEN_BOX, ZUSATZKOSTEN_HEADING } from './overnight-cost-notice.tsx';
+import {
+  UNTERKUNFT_OPTIONEN,
+  VORKALKULATION_TITEL,
+  VORKALKULATION_HINWEIS,
+  OFFENE_KOSTEN_HINWEIS,
+  offenePositionen,
+  formatEuro as formatEuroKosten,
+  type UnterkunftOption,
+  type KostenUebersicht,
+} from '../kosten-uebersicht.ts';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
 
@@ -39,6 +49,12 @@ interface CustomerBookingConfirmationProps {
   };
   /** Wird bewusst nicht mehr mit konkreten Datumsangaben ausgegeben. */
   surchargeDays?: Array<{ label: string; percent: number }>;
+  /** Gewählte Unterkunftsregelung (nur bei relevanten Tarifen). */
+  unterkunftOption?: UnterkunftOption | null;
+  /** Vereinbarte Kostenobergrenze netto (nur bei Option fahrer_organisiert). */
+  unterkunftObergrenze?: number | null;
+  /** Serverseitig berechnete unverbindliche Vorkalkulation. */
+  kostenUebersicht?: KostenUebersicht | null;
 }
 
 const listStyle = { margin: '6px 0 0 0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' };
@@ -99,6 +115,9 @@ export const CustomerBookingConfirmation = ({
   weekendHolidayAcknowledged = false,
   tarif,
   isUeberfuehrung = false,
+  unterkunftOption = null,
+  unterkunftObergrenze = null,
+  kostenUebersicht = null,
 }: CustomerBookingConfirmationProps) => {
   const ueberfuehrung = isUeberfuehrung || tarif?.tarif === 'ueberfuehrung';
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
