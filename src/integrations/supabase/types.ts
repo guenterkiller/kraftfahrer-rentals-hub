@@ -748,6 +748,7 @@ export type Database = {
           fuehrerscheinklasse: string
           holiday_days: string[] | null
           id: string
+          kosten_uebersicht: Json | null
           maschinenbedienung: string | null
           nachricht: string
           payout_status: string | null
@@ -764,6 +765,8 @@ export type Database = {
           tarif_reason: string | null
           tarif_type: string | null
           tarif_unit: string | null
+          unterkunft_obergrenze: number | null
+          unterkunft_option: string | null
           updated_at: string
           weekend_days: string[] | null
           zeitraum: string
@@ -794,6 +797,7 @@ export type Database = {
           fuehrerscheinklasse?: string
           holiday_days?: string[] | null
           id?: string
+          kosten_uebersicht?: Json | null
           maschinenbedienung?: string | null
           nachricht: string
           payout_status?: string | null
@@ -810,6 +814,8 @@ export type Database = {
           tarif_reason?: string | null
           tarif_type?: string | null
           tarif_unit?: string | null
+          unterkunft_obergrenze?: number | null
+          unterkunft_option?: string | null
           updated_at?: string
           weekend_days?: string[] | null
           zeitraum: string
@@ -840,6 +846,7 @@ export type Database = {
           fuehrerscheinklasse?: string
           holiday_days?: string[] | null
           id?: string
+          kosten_uebersicht?: Json | null
           maschinenbedienung?: string | null
           nachricht?: string
           payout_status?: string | null
@@ -856,6 +863,8 @@ export type Database = {
           tarif_reason?: string | null
           tarif_type?: string | null
           tarif_unit?: string | null
+          unterkunft_obergrenze?: number | null
+          unterkunft_option?: string | null
           updated_at?: string
           weekend_days?: string[] | null
           zeitraum?: string
@@ -1037,6 +1046,7 @@ export type Database = {
           fuehrerscheinklasse: string
           holiday_days: string[] | null
           id: string
+          kosten_uebersicht: Json | null
           maschinenbedienung: string | null
           nachricht: string
           payout_status: string | null
@@ -1053,6 +1063,8 @@ export type Database = {
           tarif_reason: string | null
           tarif_type: string | null
           tarif_unit: string | null
+          unterkunft_obergrenze: number | null
+          unterkunft_option: string | null
           updated_at: string
           weekend_days: string[] | null
           zeitraum: string
