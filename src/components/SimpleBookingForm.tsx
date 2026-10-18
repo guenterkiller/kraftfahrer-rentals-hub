@@ -17,6 +17,17 @@ import { PWAInstallButton } from "@/components/PWAInstallButton";
 import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 import {
+  berechneKostenUebersicht,
+  offenePositionen,
+  formatEuro,
+  UNTERKUNFT_OPTIONEN,
+  VORKALKULATION_TITEL,
+  VORKALKULATION_HINWEIS,
+  OFFENE_KOSTEN_HINWEIS,
+  type UnterkunftOption,
+} from "@/lib/kostenUebersicht";
+import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
+import {
   resolveTarif,
   UEBERFUEHRUNG_LABEL,
   UEBERFUEHRUNG_KOSTEN_HINWEIS,
@@ -63,6 +74,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [nachname, setNachname] = useState('');
   const [unternehmen, setUnternehmen] = useState('');
   const [agreedToSurcharge, setAgreedToSurcharge] = useState(false);
+  const [unterkunftOption, setUnterkunftOption] = useState<UnterkunftOption | ''>('');
+  const [unterkunftObergrenze, setUnterkunftObergrenze] = useState('');
   const { toast } = useToast();
 
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
@@ -77,6 +90,21 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     beschreibung,
     leistung: isUeberfuehrung ? 'ueberfuehrung' : '',
   });
+
+  // Unterkunftsauswahl nur bei Tarifen mit auswärtiger Übernachtungsfrage;
+  // Fernfahrer: tariflich festgelegt (Führerhaus), Überführung: individuelles Angebot.
+  const showUnterkunft =
+    !isUeberfuehrung && ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
+  const showFernfahrerHinweis = !isUeberfuehrung && tarif.tarif === 'fernfahrer';
+
+  const obergrenzeParsed = unterkunftObergrenze.trim()
+    ? Number(unterkunftObergrenze.replace(',', '.'))
+    : null;
+  const obergrenzeValid =
+    obergrenzeParsed !== null && Number.isFinite(obergrenzeParsed) && obergrenzeParsed >= 0;
+
+  // Unverbindliche Vorkalkulation aus Tarif und Einsatzzeitraum
+  const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende);
 
   // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -135,6 +163,22 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     }
     const einsatzdauerString = buildEinsatzdauer(einsatzbeginn, einsatzende);
 
+    // Unterkunftsauswahl: Pflicht bei relevanten Tarifen, Obergrenze Pflicht bei Fahrer-Organisation
+    if (showUnterkunft && !unterkunftOption) {
+      toast({ title: "Bitte Unterkunftsregelung auswählen", variant: "destructive" });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+    if (showUnterkunft && unterkunftOption === 'fahrer_organisiert' && !obergrenzeValid) {
+      toast({
+        title: "Bitte Kostenobergrenze angeben",
+        description: "Geben Sie die maximale Übernahme der Unterkunftskosten in € netto an.",
+        variant: "destructive",
+      });
+      setLoading(false); setSubmitted(false);
+      return;
+    }
+
     // Pflicht-Bestätigung bei Wochenend-/Feiertagseinsatz
     if (weekendHoliday.affected && !agreedToSurcharge) {
       toast({
@@ -189,6 +233,11 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
         tarif_mehrstunde: tarif.mehrstunde,
         tarif_needs_review: tarif.needsReview,
         tarif_reason: tarif.reason,
+        unterkunft_option: showUnterkunft && unterkunftOption ? unterkunftOption : undefined,
+        unterkunft_obergrenze:
+          showUnterkunft && unterkunftOption === 'fahrer_organisiert' && obergrenzeValid
+            ? obergrenzeParsed
+            : undefined,
         datenschutz: agreedToData,
         newsletter: false,
         billing_model: 'agency',
@@ -314,6 +363,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       setRequiresBf2(false);
       setRequiresBf3(false);
       setFahrzeugtyp('');
+      setUnterkunftOption('');
+      setUnterkunftObergrenze('');
 
     } catch (error: any) {
       console.error('Error submitting form:', error);
@@ -910,6 +961,63 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                   </fieldset>
                 )}
 
+                {/* Unterkunft / Übernachtung – nur bei relevanten Tarifen */}
+                {showUnterkunft && (
+                  <fieldset>
+                    <legend className="text-base font-medium">Übernachtung / Unterkunft *</legend>
+                    <p className="text-sm text-muted-foreground mt-1 mb-3">
+                      {OVERNIGHT_COSTS.standard[0]}
+                    </p>
+                    <div className="space-y-2" role="radiogroup" aria-label="Unterkunftsregelung" aria-required="true">
+                      {(Object.keys(UNTERKUNFT_OPTIONEN) as UnterkunftOption[]).map((option) => (
+                        <label
+                          key={option}
+                          className={`flex items-start gap-3 p-3 rounded-lg border bg-card cursor-pointer transition-all ${
+                            unterkunftOption === option ? 'ring-2 ring-primary shadow-sm' : 'hover:shadow-sm'
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="unterkunft_option"
+                            value={option}
+                            checked={unterkunftOption === option}
+                            onChange={() => setUnterkunftOption(option)}
+                            className="w-5 h-5 mt-0.5 accent-primary"
+                          />
+                          <span className="text-sm text-foreground">{UNTERKUNFT_OPTIONEN[option]}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {unterkunftOption === 'fahrer_organisiert' && (
+                      <div className="mt-3 max-w-xs">
+                        <Label htmlFor="unterkunft_obergrenze">Kostenobergrenze (€ netto) *</Label>
+                        <Input
+                          id="unterkunft_obergrenze"
+                          name="unterkunft_obergrenze"
+                          type="text"
+                          inputMode="decimal"
+                          required
+                          value={unterkunftObergrenze}
+                          onChange={(e) => setUnterkunftObergrenze(e.target.value)}
+                          placeholder="z. B. 120"
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Maximale Kostenübernahme je Übernachtung beziehungsweise Einsatz – die tatsächlichen Kosten werden vor verbindlicher Auftragserteilung mitgeteilt.
+                        </p>
+                      </div>
+                    )}
+                  </fieldset>
+                )}
+
+                {/* Fernfahrer: Übernachtung tariflich im Führerhaus festgelegt */}
+                {showFernfahrerHinweis && (
+                  <div className="rounded-lg border border-green-200 bg-green-50/50 p-4 text-sm text-green-900">
+                    <div className="font-semibold mb-1">{OVERNIGHT_COSTS.fernfahrerTitle}</div>
+                    <p>{OVERNIGHT_COSTS.fernfahrer[0]}</p>
+                    <p className="mt-1">{OVERNIGHT_COSTS.fernfahrer[1]}</p>
+                  </div>
+                )}
+
                 {/* Begleitfahrzeuge Requirements */}
                 <fieldset>
                   <div className="flex items-center gap-2 mb-2">
@@ -985,6 +1093,48 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                     </ul>
                   </div>
                 </div>
+
+                {/* Unverbindliche Vorkalkulation vor dem Absenden */}
+                {!isUeberfuehrung && kostenUebersicht && (
+                  <div className="rounded-lg border border-border bg-muted/30 p-4" aria-live="polite">
+                    <h4 className="font-semibold mb-1">{VORKALKULATION_TITEL}</h4>
+                    <p className="text-xs text-muted-foreground mb-3">{VORKALKULATION_HINWEIS}</p>
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {kostenUebersicht.positionen.map((p) => (
+                          <tr key={p.label}>
+                            <td className="py-1 pr-2 align-top">{p.label}</td>
+                            <td className="py-1 text-right whitespace-nowrap align-top">{formatEuro(p.betrag)}</td>
+                          </tr>
+                        ))}
+                        <tr className="border-t border-border">
+                          <td className="py-1 pr-2 font-medium">Zwischensumme netto</td>
+                          <td className="py-1 text-right font-medium whitespace-nowrap">{formatEuro(kostenUebersicht.netto)}</td>
+                        </tr>
+                        <tr>
+                          <td className="py-1 pr-2">zzgl. 19 % Umsatzsteuer</td>
+                          <td className="py-1 text-right whitespace-nowrap">{formatEuro(kostenUebersicht.ust)}</td>
+                        </tr>
+                        <tr>
+                          <td className="py-1 pr-2 font-semibold">Bruttosumme</td>
+                          <td className="py-1 text-right font-semibold whitespace-nowrap">{formatEuro(kostenUebersicht.brutto)}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div className="mt-3 border-t border-border pt-3">
+                      <p className="text-sm font-medium mb-1">Noch offene Zusatzkosten (nicht in der Vorkalkulation enthalten):</p>
+                      <ul className="text-sm text-muted-foreground space-y-1">
+                        {offenePositionen(
+                          showUnterkunft ? unterkunftOption : '',
+                          showUnterkunft && unterkunftOption === 'fahrer_organisiert' && obergrenzeValid ? obergrenzeParsed : null,
+                        ).map((o) => (
+                          <li key={o}>• {o}</li>
+                        ))}
+                      </ul>
+                      <p className="text-sm mt-2">{OFFENE_KOSTEN_HINWEIS}</p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Stornierungsregelung (statischer Hinweis) */}
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">

@@ -31,6 +31,7 @@ import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
+import { UNTERKUNFT_OPTIONEN, formatEuro, type UnterkunftOption } from "@/lib/kostenUebersicht";
 
 interface FahrerProfile {
   id: string;
@@ -2086,6 +2087,32 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                 <div className="bg-white p-3 rounded border">
                                   <span className="text-sm font-semibold text-gray-700 block mb-1">📍 Einsatzort:</span>
                                   <p className="text-sm text-gray-900">{req.einsatzort}</p>
+                                </div>
+                              )}
+                              {(req as any).unterkunft_option && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">🛏️ Unterkunft:</span>
+                                  <p className="text-sm text-gray-900">
+                                    {UNTERKUNFT_OPTIONEN[(req as any).unterkunft_option as UnterkunftOption] ?? (req as any).unterkunft_option}
+                                  </p>
+                                  {(req as any).unterkunft_option === 'fahrer_organisiert' && typeof (req as any).unterkunft_obergrenze === 'number' && (
+                                    <p className="text-sm text-gray-900 mt-1">
+                                      Kostenobergrenze: {formatEuro((req as any).unterkunft_obergrenze)} netto
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                              {(req as any).kosten_uebersicht && (
+                                <div className="bg-white p-3 rounded border">
+                                  <span className="text-sm font-semibold text-gray-700 block mb-1">🧾 Vorkalkulation (unverbindlich):</span>
+                                  <ul className="text-sm text-gray-900 space-y-0.5">
+                                    {((req as any).kosten_uebersicht.positionen ?? []).map((p: { label: string; betrag: number }) => (
+                                      <li key={p.label}>• {p.label}: {formatEuro(p.betrag)}</li>
+                                    ))}
+                                  </ul>
+                                  <p className="text-sm text-gray-900 mt-1">
+                                    Netto {formatEuro((req as any).kosten_uebersicht.netto)} · USt {formatEuro((req as any).kosten_uebersicht.ust)} · <strong>Brutto {formatEuro((req as any).kosten_uebersicht.brutto)}</strong>
+                                  </p>
                                 </div>
                               )}
                             </div>

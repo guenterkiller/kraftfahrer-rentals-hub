@@ -42,6 +42,14 @@ interface FahrerAnfrageEmailRequest {
     reason: string;
   };
   surcharge_days?: Array<{ label: string; percent: number }>;
+  unterkunft_option?: 'gestellt' | 'fahrer_organisiert' | 'keine' | null;
+  unterkunft_obergrenze?: number | null;
+  kosten_uebersicht?: {
+    positionen: Array<{ label: string; betrag: number }>;
+    netto: number;
+    ust: number;
+    brutto: number;
+  } | null;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -83,7 +91,10 @@ const handler = async (req: Request): Promise<Response> => {
       weekend_holiday_affected = false,
       weekend_holiday_acknowledged = false,
       tarif,
-      surcharge_days = []
+      surcharge_days = [],
+      unterkunft_option = null,
+      unterkunft_obergrenze = null,
+      kosten_uebersicht = null
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();
@@ -145,6 +156,9 @@ const handler = async (req: Request): Promise<Response> => {
         weekendHolidayAcknowledged: acknowledged,
         tarif: tarif,
         surchargeDays: surcharge_days,
+        unterkunftOption: unterkunft_option,
+        unterkunftObergrenze: unterkunft_obergrenze,
+        kostenUebersicht: kosten_uebersicht,
       })
     );
 
