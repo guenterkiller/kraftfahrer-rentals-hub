@@ -91,6 +91,21 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     leistung: isUeberfuehrung ? 'ueberfuehrung' : '',
   });
 
+  // Unterkunftsauswahl nur bei Tarifen mit auswärtiger Übernachtungsfrage;
+  // Fernfahrer: tariflich festgelegt (Führerhaus), Überführung: individuelles Angebot.
+  const showUnterkunft =
+    !isUeberfuehrung && ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
+  const showFernfahrerHinweis = !isUeberfuehrung && tarif.tarif === 'fernfahrer';
+
+  const obergrenzeParsed = unterkunftObergrenze.trim()
+    ? Number(unterkunftObergrenze.replace(',', '.'))
+    : null;
+  const obergrenzeValid =
+    obergrenzeParsed !== null && Number.isFinite(obergrenzeParsed) && obergrenzeParsed >= 0;
+
+  // Unverbindliche Vorkalkulation aus Tarif und Einsatzzeitraum
+  const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende);
+
   // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
   const ansprechpartnerName = norm(`${vorname} ${nachname}`);
