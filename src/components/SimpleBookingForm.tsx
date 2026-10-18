@@ -17,6 +17,17 @@ import { PWAInstallButton } from "@/components/PWAInstallButton";
 import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 import {
+  berechneKostenUebersicht,
+  offenePositionen,
+  formatEuro,
+  UNTERKUNFT_OPTIONEN,
+  VORKALKULATION_TITEL,
+  VORKALKULATION_HINWEIS,
+  OFFENE_KOSTEN_HINWEIS,
+  type UnterkunftOption,
+} from "@/lib/kostenUebersicht";
+import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
+import {
   resolveTarif,
   UEBERFUEHRUNG_LABEL,
   UEBERFUEHRUNG_KOSTEN_HINWEIS,
@@ -63,6 +74,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [nachname, setNachname] = useState('');
   const [unternehmen, setUnternehmen] = useState('');
   const [agreedToSurcharge, setAgreedToSurcharge] = useState(false);
+  const [unterkunftOption, setUnterkunftOption] = useState<UnterkunftOption | ''>('');
+  const [unterkunftObergrenze, setUnterkunftObergrenze] = useState('');
   const { toast } = useToast();
 
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
