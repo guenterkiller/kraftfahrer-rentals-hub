@@ -5,6 +5,7 @@ import React from 'npm:react@18.3.1';
 import { AdminBookingNotification } from '../_shared/email-templates/admin-booking-notification.tsx';
 import { resolveTarif, MASCHINENBEDIENUNG_LABELS, isUeberfuehrung, UEBERFUEHRUNG_LABEL, UEBERFUEHRUNG_TARIF_TYPE, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
 import { listSurchargeDays } from '../_shared/german-holidays.ts';
+import { parseUnterkunftObergrenze } from './unterkunft-obergrenze.ts';
 import {
   berechneKostenUebersicht,
   UNTERKUNFT_OPTIONSWERTE,
@@ -188,17 +189,17 @@ const handler = async (req: Request): Promise<Response> => {
       }
       unterkunftOption = unterkunftRaw as UnterkunftOption;
       if (unterkunftOption === 'fahrer_organisiert') {
-        const parsed = Number(String(requestData.unterkunft_obergrenze ?? '').replace(',', '.'));
-        if (!Number.isFinite(parsed) || parsed < 0) {
+        const parsed = parseUnterkunftObergrenze(requestData.unterkunft_obergrenze);
+        if (parsed === null) {
           return new Response(JSON.stringify({
             error: 'Bitte gültige Kostenobergrenze angeben',
-            details: 'unterkunft_obergrenze must be a number >= 0'
+            details: 'unterkunft_obergrenze must be a number > 0'
           }), {
             status: 400,
             headers: jsonCors
           });
         }
-        unterkunftObergrenze = Math.round(parsed * 100) / 100;
+        unterkunftObergrenze = parsed;
       }
     }
 
