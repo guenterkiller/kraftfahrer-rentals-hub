@@ -5,6 +5,11 @@ import React from 'npm:react@18.3.1';
 import { AdminBookingNotification } from '../_shared/email-templates/admin-booking-notification.tsx';
 import { resolveTarif, MASCHINENBEDIENUNG_LABELS, isUeberfuehrung, UEBERFUEHRUNG_LABEL, UEBERFUEHRUNG_TARIF_TYPE, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
 import { listSurchargeDays } from '../_shared/german-holidays.ts';
+import {
+  berechneKostenUebersicht,
+  UNTERKUNFT_OPTIONSWERTE,
+  type UnterkunftOption,
+} from '../_shared/kosten-uebersicht.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -74,6 +79,10 @@ interface FahrerAnfrageRequest {
   billing_model?: string;
   weekend_holiday_affected?: boolean;
   weekend_holiday_acknowledged?: boolean;
+
+  // Unterkunftsregelung (nur bei relevanten Tarifen)
+  unterkunft_option?: string;
+  unterkunft_obergrenze?: number | string | null;
   
   // Meta
   meta?: {
