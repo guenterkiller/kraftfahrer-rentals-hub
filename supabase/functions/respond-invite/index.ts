@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { isJobReleased, isDriverActive } from "../_shared/job-release.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { TERMS_VERSION_DRIVER } from "../_shared/terms-version.ts";
@@ -176,7 +177,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Token validieren und Einladung laden (inkl. Auftrag für Snapshot/Vorschau)
     const { data: invite, error } = await supabase
       .from("assignment_invites")
-      .select("*, job:job_requests(*), driver:fahrer_profile(id, vorname, nachname, email, telefon, plz, ort)")
+      .select("*, job:job_requests(*), driver:fahrer_profile(id, vorname, nachname, email, telefon, plz, ort, status, is_blocked, is_inactive)")
       .eq("token", token)
       .maybeSingle();
 
@@ -187,6 +188,19 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (!invite) {
       return reply("invalid");
+    }
+
+    // Deaktivierte, gesperrte oder nicht freigeschaltete Fahrer dürfen über
+    // bereits versendete Links nichts mehr annehmen (gilt für alle Linkarten).
+    if (!isDriverActive((invite as any).driver)) {
+      console.warn(`⛔ Invite ${invite.id}: driver not active – link rejected`);
+      return intent === "load" ? jsonReply({ status: "invalid" }) : reply("invalid");
+    }
+
+    // Interessenanfragen nur für ausdrücklich freigegebene Aufträge
+    if ((invite as any).purpose !== "binding" && !isJobReleased((invite as any).job)) {
+      console.warn(`⛔ Invite ${invite.id}: job not released – link rejected`);
+      return intent === "load" ? jsonReply({ status: "invalid" }) : reply("invalid");
     }
 
     // ===== Verbindliche Fahrerannahme: eigener, getrennter Ablauf =====

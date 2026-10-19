@@ -3,6 +3,7 @@ import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import { DriverApprovalEmail } from './_templates/driver-approval-email.tsx';
+import { isJobReleased } from '../_shared/job-release.ts';
 import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from '../_shared/driver-unsubscribe-token.ts';
 import { AdminDriverApprovalNotification } from './_templates/admin-driver-approval-notification.tsx';
 import { 
@@ -168,11 +169,12 @@ serve(async (req) => {
     const sixtyDaysAgo = new Date();
     sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
 
-    const OPEN_STATUSES = ['open', 'sent', 'pending'];
+    const OPEN_STATUSES = ['open', 'sent', 'pending', 'approved'];
     const { data: jobs, error: jobsError } = await supabase
       .from('job_requests')
       .select('*')
       .in('status', OPEN_STATUSES)
+      .not('approved_at', 'is', null)
       .gte('created_at', sixtyDaysAgo.toISOString())
       .order('created_at', { ascending: false })
       .limit(100);
@@ -188,6 +190,8 @@ serve(async (req) => {
     let skippedNoMatch = 0;
     const unclearJobs: Array<{ id: string; zeitraum: string; reason: string }> = [];
     const validJobs = (jobs || []).filter((job) => {
+      // Nur ausdrücklich vom Admin freigegebene Aufträge vermitteln
+      if (!isJobReleased(job)) { return false; }
       const { valid, reason } = jobPeriodIsValid(job);
       if (!valid) {
         skippedExpired++;

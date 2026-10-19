@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { isJobReleased, isDriverActive } from '../_shared/job-release.ts';
 import { Resend } from "npm:resend@2.0.0";
 import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 import { wrapDriverEmailHtml } from '../_shared/email-templates/driver-html-shell.ts';
@@ -56,6 +57,13 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    if (!isJobReleased(job)) {
+      return new Response(JSON.stringify({ error: 'Job not released by admin' }), {
+        status: 409,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     // Get driver details
     const { data: driver, error: driverError } = await supabase
       .from('fahrer_profile')
@@ -66,6 +74,13 @@ const handler = async (req: Request): Promise<Response> => {
     if (driverError || !driver) {
       return new Response(JSON.stringify({ error: 'Driver not found' }), {
         status: 404,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
+    if (!isDriverActive(driver)) {
+      return new Response(JSON.stringify({ error: 'Driver not active' }), {
+        status: 409,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }

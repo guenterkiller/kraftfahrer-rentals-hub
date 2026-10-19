@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { isJobReleased } from "../_shared/job-release.ts";
 import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
 const corsHeaders = createCorsHeaders();
@@ -18,14 +19,17 @@ const handler = async (req: Request): Promise<Response> => {
     const adminEmail = Deno.env.get("ADMIN_EMAIL") || "info@kraftfahrer-mieten.com";
 
     // Hole die 2 neuesten offenen Jobs
-    const { data: jobs, error: jobsError } = await supabase
+    const { data: rawJobs, error: jobsError } = await supabase
       .from("job_requests")
       .select("*")
-      .eq("status", "open")
+      .in("status", ["open", "approved", "sent", "pending"])
+      .not("approved_at", "is", null)
       .order("created_at", { ascending: false })
       .limit(2);
 
     if (jobsError) throw jobsError;
+    // Nur ausdrücklich freigegebene Aufträge
+    const jobs = (rawJobs || []).filter((j: any) => isJobReleased(j));
     if (!jobs || jobs.length === 0) {
       return new Response(JSON.stringify({ error: "No open jobs found" }), {
         status: 404,
