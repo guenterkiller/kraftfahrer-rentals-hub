@@ -78,6 +78,13 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    if (!isDriverActive(driver)) {
+      return new Response(JSON.stringify({ error: 'Driver not active' }), {
+        status: 409,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
 
     // Generate unique token and store invitation
     if (driver.email_opt_out || driver.is_blocked || driver.is_inactive) {
