@@ -31,7 +31,7 @@ import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
-import { UNTERKUNFT_OPTIONEN, formatEuro, type UnterkunftOption } from "@/lib/kostenUebersicht";
+import { UNTERKUNFT_OPTIONEN, OBERGRENZE_LABEL, formatEuro, type UnterkunftOption } from "@/lib/kostenUebersicht";
 
 interface FahrerProfile {
   id: string;

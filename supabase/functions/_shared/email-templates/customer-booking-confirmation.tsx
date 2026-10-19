@@ -13,6 +13,7 @@ import {
   formatEuro as formatEuroKosten,
   type UnterkunftOption,
   type KostenUebersicht,
+  OBERGRENZE_LABEL,
 } from '../kosten-uebersicht.ts';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';

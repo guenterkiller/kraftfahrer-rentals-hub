@@ -25,6 +25,11 @@ import {
   VORKALKULATION_HINWEIS,
   OFFENE_KOSTEN_HINWEIS,
   type UnterkunftOption,
+  parseUnterkunftObergrenze,
+  UNTERKUNFT_GRUNDSATZ,
+  OBERGRENZE_LABEL,
+  OBERGRENZE_ERKLAERUNG,
+  OBERGRENZE_FEHLER,
 } from "@/lib/kostenUebersicht";
 import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
 import {
@@ -170,7 +175,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     if (showUnterkunft && unterkunftOption === 'fahrer_organisiert' && !obergrenzeValid) {
       toast({
         title: "Bitte Kostenobergrenze angeben",
-        description: "Geben Sie die maximale Übernahme der Unterkunftskosten in € netto an.",
+        description: OBERGRENZE_FEHLER,
         variant: "destructive",
       });
       setLoading(false); setSubmitted(false);
