@@ -126,7 +126,7 @@ serve(async (req) => {
       const decision = inviteDecision(existing, invitesToSend.length);
       if (decision === 'limit') break;
       if (decision === 'duplicate') {
-        console.log(`↩️  Invite already exists for job ${job.id} (status=${existing.status}) – skipping`);
+        console.log(`↩️  Invite already exists for job ${job.id} (status=${existing?.status}) – skipping`);
         skippedDuplicate++;
         continue;
       }
