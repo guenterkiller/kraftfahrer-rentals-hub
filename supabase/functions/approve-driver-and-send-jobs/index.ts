@@ -3,7 +3,7 @@ import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import { DriverApprovalEmail } from './_templates/driver-approval-email.tsx';
-import { isJobReleased } from '../_shared/job-release.ts';
+import { selectOfferableJobs, inviteDecision, MAX_INVITES } from './matching.ts';
 import { makeDriverUnsubscribeToken, buildDriverUnsubscribeUrl } from '../_shared/driver-unsubscribe-token.ts';
 import { AdminDriverApprovalNotification } from './_templates/admin-driver-approval-notification.tsx';
 import { 
@@ -18,86 +18,6 @@ function randomToken(len = 48): string {
   const arr = new Uint8Array(len);
   crypto.getRandomValues(arr);
   return Array.from(arr, b => ("0" + b.toString(16)).slice(-2)).join("").slice(0, len);
-}
-
-// Normalize license class strings: "C+E", "C + E", "Klasse CE", "Führerschein CE" → "CE"
-function normalizeClass(raw: string): string {
-  if (!raw) return '';
-  let s = String(raw).toUpperCase();
-  s = s.replace(/KLASSE/g, '').replace(/FÜHRERSCHEIN/g, '').replace(/FUEHRERSCHEIN/g, '');
-  s = s.replace(/[\s+\-_/.]/g, '');
-  return s.trim();
-}
-
-// Defensive license-class match with normalization.
-function driverMatchesJob(driver: any, job: any): boolean {
-  const driverClasses: string[] = Array.isArray(driver?.fuehrerscheinklassen)
-    ? driver.fuehrerscheinklassen.map((c: string) => normalizeClass(c)).filter(Boolean)
-    : [];
-  if (driverClasses.length === 0) return false;
-  const required = normalizeClass(String(job?.fuehrerscheinklasse || ''));
-  if (!required) return false;
-  if (driverClasses.includes(required)) return true;
-  // CE driver covers C / C1 jobs (CE > C > C1)
-  if (driverClasses.includes('CE') && (required === 'C' || required === 'C1')) return true;
-  if (driverClasses.includes('C') && required === 'C1') return true;
-  return false;
-}
-
-// Parse all D.M.YYYY dates out of a freetext `zeitraum`.
-function parseZeitraumDates(zeitraum: string): Date[] {
-  if (!zeitraum) return [];
-  const re = /(\d{1,2})\.(\d{1,2})\.(\d{2,4})/g;
-  const dates: Date[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(String(zeitraum))) !== null) {
-    const d = parseInt(m[1], 10);
-    const mo = parseInt(m[2], 10);
-    let y = parseInt(m[3], 10);
-    if (y < 100) y += 2000;
-    if (y < 2020 || y > 2100 || mo < 1 || mo > 12 || d < 1 || d > 31) continue;
-    dates.push(new Date(y, mo - 1, d));
-  }
-  return dates;
-}
-
-// Strict validity check: a job may only be offered if its Einsatzende is NOT in the past.
-// No grace window. Undecidable cases are skipped (defensive) and reported.
-// Returns { valid, reason }.
-function jobPeriodIsValid(job: any): { valid: boolean; reason: string } {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  // 1) Explicit end date columns win, if present.
-  const explicitEnd = job?.end_date ?? job?.einsatz_ende ?? null;
-  if (explicitEnd) {
-    const end = new Date(explicitEnd);
-    if (!isNaN(end.getTime())) {
-      end.setHours(0, 0, 0, 0);
-      return end >= today
-        ? { valid: true, reason: 'end_date_future' }
-        : { valid: false, reason: 'end_date_past' };
-    }
-  }
-
-  // 2) Fall back to freetext `zeitraum`.
-  const dates = parseZeitraumDates(job?.zeitraum || '');
-  if (dates.length === 0) return { valid: false, reason: 'no_parseable_date' };
-
-  const maxDate = new Date(Math.max(...dates.map((d) => d.getTime())));
-  maxDate.setHours(0, 0, 0, 0);
-
-  if (dates.length === 1) {
-    // Only a start date known, no end date: skip if the start lies clearly in the past.
-    const graceDays = 7;
-    const limit = new Date(today.getTime() - graceDays * 24 * 60 * 60 * 1000);
-    if (maxDate < limit) return { valid: false, reason: 'start_only_far_past' };
-    return { valid: true, reason: 'start_only_recent' };
-  }
-
-  return maxDate >= today
-    ? { valid: true, reason: 'zeitraum_end_future' }
-    : { valid: false, reason: 'zeitraum_end_past' };
 }
 
 
@@ -185,40 +105,16 @@ serve(async (req) => {
 
     console.log('📋 Found jobs:', jobs?.length || 0);
 
-    // 3b. Step 1: remove expired / undecidable jobs BEFORE matching and BEFORE MAX_INVITES.
-    let skippedExpired = 0;
-    let skippedNoMatch = 0;
-    const unclearJobs: Array<{ id: string; zeitraum: string; reason: string }> = [];
-    const validJobs = (jobs || []).filter((job) => {
-      // Nur ausdrücklich vom Admin freigegebene Aufträge vermitteln
-      if (!isJobReleased(job)) { return false; }
-      const { valid, reason } = jobPeriodIsValid(job);
-      if (!valid) {
-        skippedExpired++;
-        if (reason === 'no_parseable_date' || reason === 'start_only_far_past') {
-          unclearJobs.push({ id: job.id, zeitraum: job.zeitraum || '', reason });
-        }
-        console.log(`⏭️  Job ${job.id} skipped (period invalid: ${reason}, zeitraum="${job.zeitraum || ''}")`);
-        return false;
-      }
-      return true;
-    });
-
-    // 3b. Step 2: license matching on the remaining valid jobs only.
-    const matchingJobs = validJobs.filter((job) => {
-      if (!driverMatchesJob(driver, job)) { skippedNoMatch++; return false; }
-      return true;
-    });
+    // 3b. Freigabe, Zeitraum und Führerscheinklasse (reine Regeln in matching.ts)
+    const { validJobs, matchingJobs, skippedExpired, skippedNoMatch, unclearJobs } =
+      selectOfferableJobs(driver, jobs || []);
     console.log(`🎯 Valid jobs: ${validJobs.length}/${jobs?.length || 0} – matching: ${matchingJobs.length} (skippedExpired=${skippedExpired}, skippedNoMatch=${skippedNoMatch})`);
-
 
     // 3c. Create assignment_invites for each matching job (skip if invite already exists)
     const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
     const invitesToSend: Array<{ job: any; token: string }> = [];
     let skippedDuplicate = 0;
-    const MAX_INVITES = 5;
     for (const job of matchingJobs) {
-      if (invitesToSend.length >= MAX_INVITES) break;
       const { data: existing } = await supabase
         .from('assignment_invites')
         .select('id, status')
@@ -227,8 +123,10 @@ serve(async (req) => {
         .limit(1)
         .maybeSingle();
 
-      if (existing) {
-        console.log(`↩️  Invite already exists for job ${job.id} (status=${existing.status}) – skipping`);
+      const decision = inviteDecision(existing, invitesToSend.length);
+      if (decision === 'limit') break;
+      if (decision === 'duplicate') {
+        console.log(`↩️  Invite already exists for job ${job.id} (status=${existing?.status}) – skipping`);
         skippedDuplicate++;
         continue;
       }

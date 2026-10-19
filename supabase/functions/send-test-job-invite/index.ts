@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { decideTestSend } from "./test-send-policy.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
 import React from "npm:react@18.3.1";
@@ -125,21 +126,15 @@ serve(async (req) => {
       if (signed?.signedUrl) attachments.push({ filename: a.filename, url: signed.signedUrl });
     }
 
-    // Optional assignment_invite (only if we have a real driver profile)
-    let acceptUrl: string | undefined;
-    let declineUrl: string | undefined;
-    if (driver.id) {
-      const inviteToken = randomToken(48);
-      const expires = new Date(Date.now() + 1000 * 60 * 60 * 48);
-      const { error: invErr } = await supabase.from("assignment_invites").insert({
-        job_id: jobId, driver_id: driver.id, token: inviteToken,
-        token_expires_at: expires.toISOString(), status: "pending",
+    // Testversand ist immer reine Vorschau: keine Einladung, kein Antwort-/Annahmelink.
+    const decision = decideTestSend(driver.email, job);
+    if (!decision.allowed) {
+      return new Response(JSON.stringify({ error: "Auftrag ist nicht freigegeben – Testversand nur an die interne Testadresse möglich" }), {
+        status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-      if (invErr) console.error("invite insert error:", invErr);
-      const SITE_BASE = Deno.env.get("SITE_URL") || "https://www.kraftfahrer-mieten.com";
-      acceptUrl = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(inviteToken)}`;
-      declineUrl = `${SITE_BASE}/fahrer-antwort-bestaetigen?action=decline&token=${encodeURIComponent(inviteToken)}`;
     }
+    const acceptUrl: string | undefined = undefined;
+    const declineUrl: string | undefined = undefined;
 
     const unsubSecret = Deno.env.get("INTERNAL_FN_SECRET") || "";
     const unsubscribeUrl = driver.id && unsubSecret
