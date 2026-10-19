@@ -190,7 +190,7 @@ export const CustomerBookingConfirmation = ({
           </Text>
           {unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' && (
             <Text {...getTextProps({ ...textStyles.paragraph, margin: '8px 0 0 0' })}>
-              <strong>Vereinbarte Kostenobergrenze:</strong> {formatEuroKosten(unterkunftObergrenze)} netto
+              <strong>{OBERGRENZE_LABEL}:</strong> {formatEuroKosten(unterkunftObergrenze)}
             </Text>
           )}
         </Section>

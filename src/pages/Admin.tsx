@@ -2097,7 +2097,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   </p>
                                   {(req as any).unterkunft_option === 'fahrer_organisiert' && typeof (req as any).unterkunft_obergrenze === 'number' && (
                                     <p className="text-sm text-gray-900 mt-1">
-                                      Kostenobergrenze: {formatEuro((req as any).unterkunft_obergrenze)} netto
+                                      {OBERGRENZE_LABEL}: {formatEuro((req as any).unterkunft_obergrenze)}
                                     </p>
                                   )}
                                 </div>
