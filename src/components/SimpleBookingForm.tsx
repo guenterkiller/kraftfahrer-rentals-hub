@@ -25,6 +25,11 @@ import {
   VORKALKULATION_HINWEIS,
   OFFENE_KOSTEN_HINWEIS,
   type UnterkunftOption,
+  parseUnterkunftObergrenze,
+  UNTERKUNFT_GRUNDSATZ,
+  OBERGRENZE_LABEL,
+  OBERGRENZE_ERKLAERUNG,
+  OBERGRENZE_FEHLER,
 } from "@/lib/kostenUebersicht";
 import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
 import {
@@ -97,11 +102,9 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     !isUeberfuehrung && ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
   const showFernfahrerHinweis = !isUeberfuehrung && tarif.tarif === 'fernfahrer';
 
-  const obergrenzeParsed = unterkunftObergrenze.trim()
-    ? Number(unterkunftObergrenze.replace(',', '.'))
-    : null;
-  const obergrenzeValid =
-    obergrenzeParsed !== null && Number.isFinite(obergrenzeParsed) && obergrenzeParsed >= 0;
+  const obergrenzeParsed = parseUnterkunftObergrenze(unterkunftObergrenze);
+  const obergrenzeValid = obergrenzeParsed !== null;
+  const obergrenzeFehler = unterkunftObergrenze.trim() !== '' && !obergrenzeValid;
 
   // Unverbindliche Vorkalkulation aus Tarif und Einsatzzeitraum
   const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende);
@@ -172,7 +175,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
     if (showUnterkunft && unterkunftOption === 'fahrer_organisiert' && !obergrenzeValid) {
       toast({
         title: "Bitte Kostenobergrenze angeben",
-        description: "Geben Sie die maximale Übernahme der Unterkunftskosten in € netto an.",
+        description: OBERGRENZE_FEHLER,
         variant: "destructive",
       });
       setLoading(false); setSubmitted(false);
@@ -965,9 +968,10 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 {showUnterkunft && (
                   <fieldset>
                     <legend className="text-base font-medium">Übernachtung / Unterkunft *</legend>
-                    <p className="text-sm text-muted-foreground mt-1 mb-3">
+                    <p className="text-sm text-muted-foreground mt-1 mb-2">
                       {OVERNIGHT_COSTS.standard[0]}
                     </p>
+                    <p className="text-sm text-foreground mb-3">{UNTERKUNFT_GRUNDSATZ}</p>
                     <div className="space-y-2" role="radiogroup" aria-label="Unterkunftsregelung" aria-required="true">
                       {(Object.keys(UNTERKUNFT_OPTIONEN) as UnterkunftOption[]).map((option) => (
                         <label
@@ -989,8 +993,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                       ))}
                     </div>
                     {unterkunftOption === 'fahrer_organisiert' && (
-                      <div className="mt-3 max-w-xs">
-                        <Label htmlFor="unterkunft_obergrenze">Kostenobergrenze (€ netto) *</Label>
+                      <div className="mt-3 max-w-md">
+                        <Label htmlFor="unterkunft_obergrenze">{OBERGRENZE_LABEL} *</Label>
                         <Input
                           id="unterkunft_obergrenze"
                           name="unterkunft_obergrenze"
@@ -999,10 +1003,15 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                           required
                           value={unterkunftObergrenze}
                           onChange={(e) => setUnterkunftObergrenze(e.target.value)}
-                          placeholder="z. B. 120"
+                          placeholder="z. B. 60"
+                          aria-invalid={obergrenzeFehler}
+                          aria-describedby="unterkunft_obergrenze_hinweis"
                         />
-                        <p className="text-xs text-muted-foreground mt-1">
-                          Maximale Kostenübernahme je Übernachtung beziehungsweise Einsatz – die tatsächlichen Kosten werden vor verbindlicher Auftragserteilung mitgeteilt.
+                        {obergrenzeFehler && (
+                          <p className="text-sm text-destructive mt-1" role="alert">{OBERGRENZE_FEHLER}</p>
+                        )}
+                        <p id="unterkunft_obergrenze_hinweis" className="text-xs text-muted-foreground mt-1">
+                          {OBERGRENZE_ERKLAERUNG}
                         </p>
                       </div>
                     )}

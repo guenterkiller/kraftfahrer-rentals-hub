@@ -22,6 +22,39 @@ export const UNTERKUNFT_OPTIONEN: Record<UnterkunftOption, string> = {
 
 export const UNTERKUNFT_OPTIONSWERTE: readonly UnterkunftOption[] = ['gestellt', 'fahrer_organisiert', 'keine'];
 
+/** Grundsatz zur Unterkunft (Formular, wortgleich freigegeben). */
+export const UNTERKUNFT_GRUNDSATZ =
+  'Eine Unterkunft ist nur erforderlich, wenn der eingesetzte Fahrer nicht aus der unmittelbaren Umgebung des Einsatzortes kommt und eine tägliche Heimfahrt nicht zumutbar ist. Unterkunftskosten entstehen nur bei tatsächlichem Bedarf und nach vorheriger Vereinbarung mit dem Auftraggeber.';
+
+/** Einheitliche Bezeichnung in Formular, Kundenbestätigung und Adminbereich. */
+export const OBERGRENZE_LABEL = 'Kostenobergrenze je Nacht (€ netto)';
+
+export const OBERGRENZE_ERKLAERUNG =
+  'Höchstbetrag, den Sie je tatsächlich erforderlicher Übernachtung übernehmen. Wir bevorzugen kostengünstige, geeignete Unterkünfte. Eine Übernachtung wird nur gebucht, wenn sie für den eingesetzten Fahrer tatsächlich erforderlich ist. Die Angabe der Obergrenze ist keine Zustimmung zu einer automatischen Buchung oder Berechnung; die konkreten Kosten stimmen wir vor verbindlicher Auftragserteilung mit Ihnen ab.';
+
+export const OBERGRENZE_FEHLER =
+  'Bitte geben Sie einen Betrag größer als 0 € mit höchstens zwei Nachkommastellen ein, z. B. 60 oder 59,50.';
+
+/**
+ * Kostenobergrenze je Nacht: nur explizite Geldbeträge > 0 € mit höchstens zwei
+ * Nachkommastellen. Formular und Server verwenden ausschließlich diese Regel.
+ */
+export const parseUnterkunftObergrenze = (value: unknown): number | null => {
+  let parsed: number;
+  if (typeof value === 'string') {
+    const t = value.trim();
+    if (!/^\d+(?:[.,]\d{1,2})?$/.test(t)) return null;
+    parsed = Number(t.replace(',', '.'));
+  } else if (typeof value === 'number') {
+    parsed = value;
+    if (!Number.isFinite(parsed) || Math.round(parsed * 100) / 100 !== parsed) return null;
+  } else {
+    return null;
+  }
+  if (!Number.isFinite(parsed) || parsed <= 0) return null;
+  return parsed;
+};
+
 /** Gesetzlicher Umsatzsteuersatz. */
 export const UST_SATZ = 0.19;
 
@@ -172,7 +205,7 @@ export const offenePositionen = (
   const offen: string[] = [FAHRTKOSTEN_OFFEN];
   if (unterkunftOption === 'fahrer_organisiert') {
     offen.push(
-      `Unterkunftskosten: bis zur vereinbarten Obergrenze von ${formatEuro(obergrenze ?? 0)} netto – die tatsächlichen Kosten werden vor verbindlicher Auftragserteilung mitgeteilt.`,
+      `Unterkunftskosten: nur bei tatsächlich erforderlicher Übernachtung, bis zur vereinbarten Kostenobergrenze von ${formatEuro(obergrenze ?? 0)} netto je Nacht – die tatsächlichen Kosten werden vor verbindlicher Auftragserteilung mitgeteilt.`,
     );
   }
   return offen;

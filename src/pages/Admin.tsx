@@ -31,7 +31,7 @@ import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
-import { UNTERKUNFT_OPTIONEN, formatEuro, type UnterkunftOption } from "@/lib/kostenUebersicht";
+import { UNTERKUNFT_OPTIONEN, OBERGRENZE_LABEL, formatEuro, type UnterkunftOption } from "@/lib/kostenUebersicht";
 
 interface FahrerProfile {
   id: string;
@@ -2097,7 +2097,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   </p>
                                   {(req as any).unterkunft_option === 'fahrer_organisiert' && typeof (req as any).unterkunft_obergrenze === 'number' && (
                                     <p className="text-sm text-gray-900 mt-1">
-                                      Kostenobergrenze: {formatEuro((req as any).unterkunft_obergrenze)} netto
+                                      {OBERGRENZE_LABEL}: {formatEuro((req as any).unterkunft_obergrenze)}
                                     </p>
                                   )}
                                 </div>
