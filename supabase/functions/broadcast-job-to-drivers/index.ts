@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { isJobReleased } from "../_shared/job-release.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
 import React from "npm:react@18.3.1";
@@ -95,6 +96,15 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Job not found" }),
         { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Serverseitige Freigabeprüfung: ohne ausdrückliche Admin-Freigabe kein Versand
+    if (!isJobReleased(job)) {
+      console.warn(`⛔ Job ${actualJobId} not released (status=${job.status}, approved_at=${job.approved_at}) – no broadcast`);
+      return new Response(
+        JSON.stringify({ success: false, error: "Job not released by admin" }),
+        { status: 409, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
