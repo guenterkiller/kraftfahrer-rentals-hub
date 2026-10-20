@@ -1,3 +1,5 @@
+// @refresh reset
+// Remount the preview after edits so reverted custom-hook signatures cannot reuse stale hook state.
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
