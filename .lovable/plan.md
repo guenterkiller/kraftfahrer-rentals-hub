@@ -4,6 +4,24 @@
 
 Den frühen Ladeumfang reduzieren, ohne Bilder, Gestaltung, Farben, Texte, SEO-Daten, Preise, Formularinhalte, Buchungsregeln, Cookie-Einwilligung oder Conversion-Erfassung zu verändern. Dieser Plan ist keine Umsetzung: keine Codeänderungen, neuen Produktions-Builds, E-Mails, Veröffentlichung oder IONOS-Uploads. Server-Funktionen und produktive Daten bleiben unangetastet.
 
+## Verbindliche Schutzvorgabe für Desktop und Mobilgeräte
+
+Diese Bedingungen haben Vorrang vor allen nachfolgenden Optimierungsvorschlägen. Ein mobiler Geschwindigkeitsgewinn rechtfertigt niemals eine Verschlechterung der bestehenden Desktop-Version.
+
+- **Geschwindigkeit:** LCP, FCP, TBT und CLS dürfen sich weder auf Desktop noch auf Mobilgeräten nachweisbar verschlechtern. Vorher-nachher-Messungen sind für beide Geräteklassen und jede einzelne Maßnahme Pflicht; ein besserer Gesamtscore gleicht einen schlechteren Einzelwert nicht aus.
+- **Darstellung:** Abstände, Schriften, Farben, Bilder, Bildausschnitte, Navigation, Buttons und sämtliche Seitenabschnitte bleiben auf Desktop und Mobilgeräten unverändert. Keine verzögert sichtbaren Inhalte, neuen Platzhalter oder zusätzlichen Layoutverschiebungen. Visuelle Vergleiche umfassen die gesamte Seite, verschiedene Fensterbreiten sowie schnelle Scrollbewegungen und direkte Sprungziele.
+- **Bedienbarkeit:** Buchungsformular, direkte Buchungslinks, Scrollziele, Fahrerregistrierung und Adminbereich bleiben unverändert zuverlässig bedienbar. Keine zusätzliche Wartezeit durch eine Optimierung akzeptieren, wenn sie diese Abläufe nachweisbar verschlechtert.
+- **SEO und HTML:** SEO-Daten, vollständige vorgerenderte HTML-Inhalte aller 21 Seiten und interne Links bleiben unverändert. Keine Änderung der Voraussetzungen für die Google-Indexierung: insbesondere Canonicals, Weiterleitungen, Sitemap, robots und strukturierte Daten. Google-Rankings sind nicht technisch garantierbar; es werden keine indexierungsrelevanten Änderungen vorgenommen.
+- **Tracking und Geschäftsregeln:** Tracking, Google Ads, sämtliche bestehenden Conversion-Messungen, Cookie-Einwilligung und Geschäftsregeln müssen unverändert funktionieren. Fehlender Gleichwertigkeitsnachweis blockiert die betreffende Optimierung.
+- **Einzelprüfung und Rücknahme:** Jede Änderung getrennt auf einem dokumentierten Ausgangsstand prüfen und erst nach bestandener Abnahme beibehalten. Bei einer reproduzierbaren Verschlechterung auf einer der beiden Geräteklassen die betreffende Änderung zurücknehmen und den wiederhergestellten Zustand erneut prüfen. Keine Verrechnung schlechterer Werte mit Verbesserungen anderer Änderungen.
+- **Keine pauschale spätere Einbindung:** Lazy Loading darf weder sichtbare Inhalte verzögern noch die vollständige Vorberechnung der 21 Seiten gefährden. Die nachfolgenden Kandidaten sind Prüfoptionen, keine pauschale Freigabe. Ein riskanter Kandidat entfällt, wenn diese Schutzvorgaben nicht vollständig nachgewiesen werden können.
+
+### Verbindliches Mess- und Abnahmeverfahren
+
+Vor jeder später freigegebenen Einzeländerung und danach mindestens drei vergleichbare Lighthouse-Läufe **je Geräteklasse** durchführen. Gleiche Lighthouse-/Browser-Version, feste Fenstergröße je Profil, identische Verbindung/CPU-Einstellung, Cookie-Auswahl und Cache-Ausgangslage verwenden. Frische Besuche und Service-Worker-kontrollierte Wiederholungsbesuche getrennt vergleichen. LCP, FCP, TBT und CLS samt Einzelwerten und Median dokumentieren; Desktop nicht aus mobilen Messungen ableiten.
+
+Bei einem schlechteren Wert Vergleichsläufe wiederholen, um Messstreuung von einer reproduzierbaren Regression zu unterscheiden. Ungeklärte Verschlechterungen sperren die Abnahme; keine nachträglich erfundene Toleranzgrenze. Zusätzlich vollständige visuelle und Bedienprüfungen auf beiden Geräteklassen sowie HTML-/SEO-Vergleich aller 21 Seiten durchführen. Sämtliche Tests erfolgen ohne echte Buchungen, Conversion-Sendungen oder E-Mails. Dies beschreibt die spätere Abnahme, nicht bereits durchgeführte Vorher-nachher-Messungen.
+
 ## Gesicherte Ausgangslage
 
 - Das bestehende WebP-Bild ist rund 79 KiB groß, vorab geladen und hoch priorisiert; es bleibt unverändert.
@@ -53,7 +71,7 @@ Die aktuell öffentlich ausgelieferte GTM-Version enthält:
 
 **Erwarteter Vorteil:** Die gemessenen mindestens 14,5 KiB spekulativen Seitenabrufe und ihre Auswertung verlassen die kritische Phase. Größerer indirekter Vorteil bei langsamer Verbindung und gemeinsamen schweren Abhängigkeiten; konkrete Sekunden erst im Vergleich messbar.
 
-**Risiko:** niedrig; ein erstmaliger Unterseitenwechsel ohne vorherige Absicht kann länger dauern. Kein Verlust von Links oder Inhalten.
+**Risiko:** niedrig; ein erstmaliger Unterseitenwechsel ohne vorherige Absicht kann länger dauern. Kein Verlust von Links oder Inhalten. Eine nachweisbare Verschlechterung der Bedienbarkeit ist jedoch nicht zulässig: in diesem Fall Vorladepolitik anpassen oder die Einzeländerung zurücknehmen, insbesondere auf Desktop.
 
 **Tests:** identische fünf URLs und normale Klicknavigation; frühe Buchung; langsame/unbekannte Verbindung, offline, Datensparmodus, Hintergrundtab; keine Parallelflut; Importfehler beeinträchtigt Navigation nicht; Aufräumen nach Routenwechsel; React-StrictMode erzeugt keine doppelten Aufträge; kein Vorladen im Adminbereich. Vergleich mit und ohne Service Worker getrennt messen.
 
@@ -105,4 +123,4 @@ Der Fallback ist `index.html`. Dessen direkte URL wird produktiv auf `/` weiterg
 
 **Gemeinsame Funktionstests:** alle Buchungswege in Header/Mobilmenü, Hero, Produktkarten, Kontakt, Prioritätsbanner und Footer; `/fahrer-buchen#buchungsformular` sowie bestehende Hashziele; lokale Unterseitenbuchung; langsames Laden, Zurück/Vorwärts und Tastaturbedienung. Bestehende Unterkunfts-/Tarif-/Kostenübersichtstests behalten und ausführen. Erfolgs-/Fehlerfälle mit simulierten Serverantworten und abgefangenen Trackern testen, ohne reale Anfragen oder Mails.
 
-**Abnahme nach späterer Implementierung:** alle 21 Sitemap-Seiten vollständig vorgerendert, einschließlich nachgelagerter Abschnitte, mit unveränderten SEO-Daten und Tracking-Auslösern; keine Platzhalter im ausgelieferten Inhalt. Mobil und Desktop visuell vergleichen, CLS unverändert. Je mindestens drei mobile Vergleichsläufe mit gleicher Lighthouse-Version, Verbindung und Cookie-Auswahl; Median, Dateiumfang, LCP-Element und TBT getrennt für frische und SW-kontrollierte Besuche dokumentieren. Keine Veröffentlichung durch diese Abnahme.
+**Abnahme nach späterer Implementierung:** alle 21 Sitemap-Seiten vollständig vorgerendert, einschließlich nachgelagerter Abschnitte, mit unveränderten HTML-Inhalten, SEO-Daten, internen Links und Tracking-Auslösern; keine Platzhalter im ausgelieferten Inhalt. Die verbindliche Desktop-/Mobil-Schutzvorgabe einschließlich Einzelmessungen von LCP, FCP, TBT und CLS, vollständiger visueller Vergleiche, Bedienprüfungen und Rücknahme nachgewiesener Verschlechterungen gilt für jeden Schritt. Dateiumfang und LCP-Element zusätzlich dokumentieren. Keine Veröffentlichung durch diese Abnahme.
