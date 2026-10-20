@@ -1,3 +1,6 @@
+# Technischer Optimierungsplan mit Desktop-Schutz
+- [ ] Laufenden Plan um verbindlichen Erhalt von Desktop/Mobil, Einzelprüfungen und Rücknahme bei nachgewiesener Verschlechterung ergänzen und zur Prüfung vorlegen; keine Umsetzung.
+
 # Übernachtungskosten mit Fernfahrer-Ausnahme
 - [x] Freigegebene Regelung auf Preise & Ablauf und tarifabhängig in Kunden-/Admin-Anfragevorlagen ergänzen, ohne Preis-/Formular-/SEO-Änderung.
 - [x] 7 isolierte Tests beider Anfragevorlagen, 10 Text-/Tarifregressionstests und Browserprüfung bei 320/375/390/768 Pixel bestanden; keine echten Anfragen oder Mails; automatische Build-Prüfung OK.
