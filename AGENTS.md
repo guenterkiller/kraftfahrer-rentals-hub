@@ -1,6 +1,5 @@
 # AGENTS.md
 
-- Speculative route loading uses the five-target whitelist and a shared serial queue, triggered only by delegated link intent after load/idle; real navigation cancels pending work and never waits. Why: prevents initial fan-out without changing links, form availability, or route content.
 
 - Overnight-cost copy has matching frontend and function-local text modules and a shared customer/admin email notice selected by tariff key before legacy flags. Why: keeps approved wording consistent without coupling Edge Functions to frontend files or changing tariff calculations.
 
