@@ -1,5 +1,6 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 - [x] Laufenden Plan um verbindlichen Erhalt von Desktop/Mobil, Einzelprüfungen und Rücknahme bei nachgewiesener Verschlechterung ergänzt; überarbeiteter Plan zur Prüfung vorbereitet, keine Umsetzung.
+- [x] Ausschließlich Stufe 1 probeweise umgesetzt, Desktop/Mobil vorher/nachher und erneut gemessen; keine verlässlich verschlechterungsfreie Abnahme, daher vollständig zurückgenommen. 21 Seitenzustände je Geräteklasse unverändert, bestehende Tests bestanden; Prüfbericht dokumentiert Produktions-Prerender-/Messgrenzen. Alle anderen Stufen gesperrt; keine Veröffentlichung, Uploads oder E-Mails.
 
 # Übernachtungskosten mit Fernfahrer-Ausnahme
 - [x] Freigegebene Regelung auf Preise & Ablauf und tarifabhängig in Kunden-/Admin-Anfragevorlagen ergänzen, ohne Preis-/Formular-/SEO-Änderung.
