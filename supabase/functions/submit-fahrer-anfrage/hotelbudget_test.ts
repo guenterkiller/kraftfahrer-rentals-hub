@@ -19,7 +19,7 @@ for (const [wert, text] of [[0, '0,00'], [20, '20,00'], [75, '75,00']] as const)
     const html = await renderAsync(React.createElement(AdminBookingNotification, {
       customerName: 'TEST Kunde', email: 'test@example.invalid', phone: '0', address: 'x',
       timeframe: 'x', driverType: 'LKW CE', message: 'x', billingModel: 'agency', jobId: 'TEST',
-      tarif: { tarif: 'lkw_ce', label: 'LKW CE', needsReview: false, reason: '' } as never,
+      tarif: { tarif: 'lkw_ce', label: 'LKW CE', needsReview: true, reason: 'TEST', netto: 349, mehrstunde: 30, unit: 'Tag' } as never,
       unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: wert,
     }));
     assert(html.includes('Hotelbudget je erforderlicher Übernachtung'));
