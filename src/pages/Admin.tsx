@@ -1,3 +1,4 @@
+import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
@@ -2584,6 +2585,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                                </Button>
+                                <DriverContractStatus driverId={f.id} />
                                 {f.is_inactive ? (
                                   <Button
                                     size="sm"

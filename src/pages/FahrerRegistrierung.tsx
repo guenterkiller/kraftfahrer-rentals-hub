@@ -1,3 +1,4 @@
+import { REGISTRATION_CONTRACT_NOTICE } from "@/lib/driverMediationContract";
 import { useState, useEffect } from "react";
 import { sanitizeEmail, isValidEmail } from "@/lib/emailSanitize";
 import { Button } from "@/components/ui/button";
@@ -1361,16 +1362,7 @@ const FahrerRegistrierung = () => {
                           required 
                         />
                         <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
-                          Ich habe die{" "}
-                          <Link
-                            to="/vermittlungsbedingungen"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary underline decoration-primary/50 hover:decoration-primary"
-                          >
-                            Vermittlungsbedingungen
-                          </Link>{" "}
-                          gelesen und stimme diesen zu. Mit dem Absenden der Registrierung bestätige ich, dass ich als selbstständiger Unternehmer tätig bin. *
+                          {REGISTRATION_CONTRACT_NOTICE} Mit dem Absenden der Registrierung bestätige ich, dass ich als selbstständiger Unternehmer tätig bin. *
                         </Label>
                       </div>
                       {validationErrors.vermittlungszustimmung && (

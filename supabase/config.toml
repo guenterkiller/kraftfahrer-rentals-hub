@@ -110,3 +110,6 @@ verify_jwt = true
 
 [functions.driver-info-newsletter]
 verify_jwt = false
+
+[functions.driver-contract]
+verify_jwt = false
