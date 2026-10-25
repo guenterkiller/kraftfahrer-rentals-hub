@@ -50,8 +50,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false); // prevents double-submit
   const [agreedToData, setAgreedToData] = useState(false);
-  const [agreedToBinding, setAgreedToBinding] = useState(false);
-  const [agreedToTasks, setAgreedToTasks] = useState(false);
+  const [agreedToConditions, setAgreedToConditions] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
   const [longDistance, setLongDistance] = useState(false);
@@ -78,7 +77,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [vorname, setVorname] = useState('');
   const [nachname, setNachname] = useState('');
   const [unternehmen, setUnternehmen] = useState('');
-  const [agreedToSurcharge, setAgreedToSurcharge] = useState(false);
   const [unterkunftOption, setUnterkunftOption] = useState<UnterkunftOption | ''>('');
   const [unterkunftObergrenze, setUnterkunftObergrenze] = useState('');
   const { toast } = useToast();
@@ -182,17 +180,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       return;
     }
 
-    // Pflicht-Bestätigung bei Wochenend-/Feiertagseinsatz
-    if (weekendHoliday.affected && !agreedToSurcharge) {
-      toast({
-        title: "Bitte Wochenend-/Feiertagszuschläge bestätigen",
-        description: "Der Einsatzzeitraum enthält Samstag, Sonntag oder einen gesetzlichen Feiertag.",
-        variant: "destructive",
-      });
-      setLoading(false); setSubmitted(false);
-      return;
-    }
-    
     // Debug form data
     console.log('Form data entries:');
     for (const [key, value] of formData.entries()) {
@@ -245,7 +232,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
         newsletter: false,
         billing_model: 'agency',
         weekend_holiday_affected: weekendHoliday.affected,
-        weekend_holiday_acknowledged: weekendHoliday.affected ? agreedToSurcharge : false,
+        weekend_holiday_acknowledged: weekendHoliday.affected ? agreedToConditions : false,
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Ladekran-Erfahrung',
@@ -271,7 +258,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       };
 
       console.log('Sending payload:', payload);
-      console.log('Consent states - data:', agreedToData, 'binding:', agreedToBinding);
+      console.log('Consent states - data:', agreedToData, 'conditions:', agreedToConditions);
 
       // Track conversion with category
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
@@ -339,9 +326,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       setEinsatzbeginn('');
       setEinsatzende('');
       setAgreedToData(false);
-      setAgreedToBinding(false);
-      setAgreedToTasks(false);
-      setAgreedToSurcharge(false);
+      setAgreedToConditions(false);
       setBeschreibung('');
       setBauTaetigkeit('');
       setVorname('');
@@ -1178,18 +1163,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                           ...weekendHoliday.holidays
                         ].filter(Boolean).join(', ')}
                       </p>
-                      <div className="flex items-start space-x-2 mt-3">
-                        <Checkbox
-                          id="surcharge-ack"
-                          checked={agreedToSurcharge}
-                          onCheckedChange={(checked) => setAgreedToSurcharge(checked as boolean)}
-                          required
-                          className="mt-0.5"
-                        />
-                        <Label htmlFor="surcharge-ack" className="text-sm leading-snug">
-                          Ich habe zur Kenntnis genommen, dass für Einsätze an Samstagen, Sonntagen und gesetzlichen Feiertagen automatisch Zuschläge auf den jeweiligen Tagessatz berechnet werden. *
-                        </Label>
-                      </div>
                     </div>
                   )}
                   
@@ -1209,31 +1182,20 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                   </div>
 
                   <div className="flex items-start space-x-2 bg-red-50 border border-red-200 rounded-lg p-3">
-                    <Checkbox 
-                      id="binding" 
-                      checked={agreedToBinding}
-                      onCheckedChange={(checked) => setAgreedToBinding(checked as boolean)}
-                      required
-                      className="mt-0.5"
-                    />
-                    <Label htmlFor="binding" className="text-sm leading-snug">
-                      Ich bestätige, dass ich mit Absenden des Formulars eine verbindliche Anfrage zur Fahrerdisposition stelle.
-                      Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht.
-                      Nach Mitteilung der Fahrerzuteilung habe ich die Möglichkeit, der Zuteilung unverzüglich zu widersprechen, sofern die mitgeteilten Daten nicht passen. *
-                    </Label>
-                  </div>
-
-                  <div className="flex items-start space-x-2 bg-amber-50 border border-amber-200 rounded-lg p-3">
                     <Checkbox
-                      id="tasks-confirmation"
-                      checked={agreedToTasks}
-                      onCheckedChange={(checked) => setAgreedToTasks(checked as boolean)}
+                      id="conditions"
+                      checked={agreedToConditions}
+                      onCheckedChange={(checked) => setAgreedToConditions(checked as boolean)}
                       required
                       className="mt-0.5"
                     />
-                    <Label htmlFor="tasks-confirmation" className="text-sm leading-snug">
-                      Ich bestätige, dass die von mir beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind.
-                      Mir ist bekannt, dass diese Angaben Grundlage der Fahrerabstimmung und der Auftragsannahme durch den selbstständigen Fahrer sind. *
+                    <Label htmlFor="conditions" className="text-sm leading-snug">
+                      Ich bestätige die Richtigkeit meiner Angaben und akzeptiere die{' '}
+                      <Link to="/vermittlungsbedingungen" className="text-primary hover:underline font-semibold">
+                        Vermittlungsbedingungen
+                      </Link>{' '}
+                      einschließlich der Preis- und Zuschlagsregelungen.
+                      Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht. *
                     </Label>
                   </div>
                 </div>
@@ -1241,7 +1203,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 <Button 
                   type="submit" 
                   className={`w-full bg-green-600 hover:bg-green-700 text-lg py-6${isUeberfuehrung ? ' h-auto min-h-16 whitespace-normal' : ''}`}
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
+                  disabled={loading || submitted || !agreedToData || !agreedToConditions || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
