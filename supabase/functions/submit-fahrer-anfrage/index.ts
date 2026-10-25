@@ -73,6 +73,8 @@ interface FahrerAnfrageRequest {
     confirmed_at?: string;
   };
   datenschutz?: boolean;
+  /** Einzige Pflichtbestätigung (Angaben, Vermittlungsbedingungen, Preis-/Zuschlagsregeln). */
+  bedingungen_akzeptiert?: boolean;
   newsletter?: boolean;
   price_acknowledged?: boolean;
   price_ack_time?: string;
@@ -219,7 +221,10 @@ const handler = async (req: Request): Promise<Response> => {
     const holidayDays = surchargeDays.filter((d) => d.kind === 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
     
     // Consent data
-    const datenschutz = Boolean(requestData.datenschutz);
+    // Einzige Pflichtbestätigung. Übergangsweise akzeptiert: bisheriges Formular (noch live bis IONOS-Upload)
+    // sendet datenschutz=true und sperrte das Absenden ohne Verbindlichkeitsbestätigung.
+    const bedingungenAkzeptiert = requestData.bedingungen_akzeptiert === true ||
+      (requestData.bedingungen_akzeptiert === undefined && requestData.datenschutz === true);
     const newsletter = Boolean(requestData.newsletter);
     const billing_model = String(requestData.billing_model || 'agency');
     const weekend_holiday_affected = Boolean(requestData.weekend_holiday_affected);
@@ -271,10 +276,10 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
     
-    if (!datenschutz) {
+    if (!bedingungenAkzeptiert) {
       return new Response(JSON.stringify({ 
-        error: 'Datenschutz-Zustimmung erforderlich',
-        details: 'DSGVO consent is required'
+        error: 'Bestätigung der Angaben und Vermittlungsbedingungen erforderlich',
+        details: 'bedingungen_akzeptiert must be true'
       }), {
         status: 400,
         headers: jsonCors
