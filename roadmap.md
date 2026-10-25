@@ -1,4 +1,6 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Kundenbestätigung bei neuen Anfragen
+- [ ] Bestehenden Bestätigungsweg und Altformular-Übergang lesend prüfen; konkreten technischen Plan für minimalen Nachweis und Administratoranzeige vorlegen. Umsetzung wartet auf gesonderte Freigabe; keine Datenbankänderung, E-Mails oder Veröffentlichung.
 # Sichere Löschverwaltung in Supabase
 - [x] Dauerhafte atomare SQL-Editor-Löschfunktionen für Fahrer und Kundenaufträge sowie serverseitige Schutzprüfung eingerichtet; keine Archivierung oder Mails, keine neuen Sicherheitswarnungen.
 - [x] Direkte Tabelleneditor-Löschung gegen Verlust geschützter Geschäfts-/Vertragsnachweise abgesichert; direkte Löschung, Funktionen, E-Mail-Bestätigung, Schutz/Rollback und anonyme Zugriffssperre mit zurückgerollten Beispieldaten geprüft; Prüfsummen der Bestands-/Auth-Daten unverändert.
