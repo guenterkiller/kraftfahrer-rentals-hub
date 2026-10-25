@@ -1,0 +1,7 @@
+REVOKE ALL ON FUNCTION public.admin_delete_driver(uuid,text) FROM authenticated;
+REVOKE ALL ON FUNCTION public.admin_delete_job(uuid,text) FROM authenticated;
+COMMENT ON FUNCTION public.admin_delete_driver(uuid,text) IS 'Administrative atomare Löschung im Supabase SQL Editor (postgres); geschützte Nachweise und ungeklärte Geschäftsdaten blockieren die gesamte Löschung.';
+COMMENT ON FUNCTION public.admin_delete_job(uuid,text) IS 'Administrative atomare Löschung im Supabase SQL Editor (postgres); geschützte Nachweise und ungeklärte Geschäftsdaten blockieren die gesamte Löschung.';
+DO $$ BEGIN
+ IF has_function_privilege('anon','public.admin_delete_driver(uuid,text)','EXECUTE') OR has_function_privilege('authenticated','public.admin_delete_driver(uuid,text)','EXECUTE') OR has_function_privilege('service_role','public.admin_delete_driver(uuid,text)','EXECUTE') OR has_function_privilege('anon','public.admin_delete_job(uuid,text)','EXECUTE') OR has_function_privilege('authenticated','public.admin_delete_job(uuid,text)','EXECUTE') OR has_function_privilege('service_role','public.admin_delete_job(uuid,text)','EXECUTE') THEN RAISE EXCEPTION 'TEST: Löschfunktionen dürfen nicht über die Website erreichbar sein'; END IF;
+END $$;
