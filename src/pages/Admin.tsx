@@ -1,4 +1,5 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
+import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
@@ -2434,6 +2435,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
             )}
           </CardContent>
         </Card>
+
+        <DriverContractInvites
+          refreshKey={fahrer}
+          onViewProfile={(driver) => { setAddressDialogDriver(driver); setAddressDialogOpen(true); }}
+        />
 
         {/* Registrierte Fahrer Section - jetzt unter Fahreranfragen */}
         <Card className="mt-6 md:mt-8">

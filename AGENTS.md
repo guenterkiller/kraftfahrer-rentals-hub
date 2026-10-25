@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- The admin contract-invitation overview reads paginated invitation rows joined to driver profiles through the existing foreign key, omits tokens and opens the existing driver-data dialog; invitation state is not a contractual decision. Why: administrators can identify and search every invitation without new write paths or disclosure of private links.
+
 
 - Overnight-cost copy has matching frontend and function-local text modules and a shared customer/admin email notice selected by tariff key before legacy flags. Why: keeps approved wording consistent without coupling Edge Functions to frontend files or changing tariff calculations.
 

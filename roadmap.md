@@ -1,4 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Fahrervertragseinladungen
+- [x] Vorhandene Administratoransicht und Profilverknüpfung lesend geprüft; Umsetzungsvorschlag freigegeben.
+- [x] Deutsche lesende Einladungsübersicht mit Namens-/E-Mail-Suche, gespeicherter Version, Einladungsdatum und vorhandenem Profilzugang ergänzt; keine Tabellen- oder Serveränderung.
+- [ ] Status-/Suchtests und Vorschauprüfung abschließen; authentifizierte Live-Abnahme wegen externem Supabase ohne verfügbare Sitzung nicht möglich.
+
 - [x] Laufenden Plan um verbindlichen Erhalt von Desktop/Mobil, Einzelprüfungen und Rücknahme bei nachgewiesener Verschlechterung ergänzt; überarbeiteter Plan zur Prüfung vorbereitet, keine Umsetzung.
 - [x] Ausschließlich Stufe 1 probeweise umgesetzt, Desktop/Mobil vorher/nachher und erneut gemessen; keine verlässlich verschlechterungsfreie Abnahme, daher vollständig zurückgenommen. 21 Seitenzustände je Geräteklasse unverändert, bestehende Tests bestanden; Prüfbericht dokumentiert Produktions-Prerender-/Messgrenzen. Alle anderen Stufen gesperrt; keine Veröffentlichung, Uploads oder E-Mails.
 
