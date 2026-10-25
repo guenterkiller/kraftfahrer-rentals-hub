@@ -326,9 +326,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       setEinsatzbeginn('');
       setEinsatzende('');
       setAgreedToData(false);
-      setAgreedToBinding(false);
-      setAgreedToTasks(false);
-      setAgreedToSurcharge(false);
+      setAgreedToConditions(false);
       setBeschreibung('');
       setBauTaetigkeit('');
       setVorname('');
