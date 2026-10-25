@@ -24,6 +24,7 @@ import NotFound from "./pages/NotFound";
 // Admin-Bereich (nur bei Zugriff geladen)
 const Admin = lazy(() => import("./pages/Admin"));
 const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const DriverEmailPreview = lazy(() => import("./pages/DriverEmailPreview"));
 const DriverJobResponse = lazy(() => import("./pages/DriverJobResponse"));
 const FahrerAntwortBestaetigen = lazy(() => import("./pages/FahrerAntwortBestaetigen"));
 const FahrerVertrag = lazy(() => import("./pages/FahrerVertrag"));
@@ -177,6 +178,7 @@ const App = () => (
             {/* Admin-Bereich - lazy loaded */}
             <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            {import.meta.env.DEV && <Route path="/admin/email-vorschau" element={<DriverEmailPreview />} />}
             <Route path="/driver/accept" element={<DriverJobResponse />} />
             <Route path="/fahrer-antwort-bestaetigen" element={<FahrerAntwortBestaetigen />} />
             <Route path="/fahrer-vertrag" element={<FahrerVertrag />} />
