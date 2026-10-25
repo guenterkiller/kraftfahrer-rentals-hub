@@ -1,3 +1,5 @@
+import React from "react";
+import { CUSTOMER_TERMS_SECTIONS } from "@/lib/customerConfirmation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,232 +27,23 @@ const Vermittlungsbedingungen = () => {
           <Card className="mb-8">
             <CardContent className="p-6 md:p-8 space-y-8">
               
-              {/* 1. Geltungsbereich */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">1. Geltungsbereich</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Diese Vermittlungsbedingungen gelten für alle Anfragen, Buchungen und Aufträge von Fahrerdienstleistungen über die Fahrerexpress-Agentur (Günter Killer, Walther-von-Cronberg-Platz 12, 60594 Frankfurt am Main).
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Mit der Bestellung eines Fahrers erkennt der Auftraggeber diese Vermittlungsbedingungen als verbindlich an.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 2. Vertragsmodell */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">2. Vertragsmodell</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Die Fahrerexpress-Agentur vermittelt ausschließlich selbstständige, gewerblich tätige Unternehmer für Fahrerdienstleistungen.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Es handelt sich ausdrücklich <strong className="text-foreground">nicht</strong> um Arbeitnehmerüberlassung, Personalgestellung oder ein arbeitsrechtliches Vertragsverhältnis.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Der Einsatz erfolgt auf Grundlage eines projektbezogenen Dienst- oder Werkvertrags mit selbstständigen Unternehmern.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Eine Eingliederung des eingesetzten Unternehmers in die Arbeitsorganisation des Auftraggebers sowie eine fachliche Weisungsgebundenheit sind nicht vorgesehen. Der Auftraggeber beschreibt den gewünschten Leistungsumfang, Einsatzort, Zeitraum und die erforderlichen Rahmenbedingungen.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Fahrzeuge und Arbeitsmittel werden vom Auftraggeber gestellt. Fahrerexpress stellt keine Fahrzeuge.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 3. Rolle der Fahrerexpress-Agentur */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">3. Rolle der Fahrerexpress-Agentur</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Fahrerexpress fungiert als Vermittlungs- und Koordinationsagentur.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Fahrerexpress schuldet die Organisation und Koordination der vermittelten Fahrerdienstleistung. Die konkrete Leistungserbringung erfolgt durch den eingesetzten selbstständigen Unternehmer in eigener Verantwortung.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Die Einsatzkoordination sowie die Abrechnung erfolgen ausschließlich über Fahrerexpress, insbesondere aus Gründen der Qualitätssicherung und der ordnungsgemäßen Dokumentation.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 4. Abwicklung & Abrechnung */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">4. Abwicklung & Abrechnung</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Maßgeblich für Preis, Leistungsumfang, Einsatzzeitraum, Zusatzkosten und besondere Bedingungen ist die jeweilige Auftragsbestätigung der Fahrerexpress-Agentur.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Die Abrechnung der beauftragten Einsätze erfolgt über die Fahrerexpress-Agentur.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Der Auftraggeber erhält eine Rechnung über die vereinbarten Leistungen.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Die Abrechnung erfolgt nach Abschluss des Einsatzes auf Grundlage der tatsächlich geleisteten Einsatztage, angefangenen Mehrstunden, gefahrenen Kilometer und gegebenenfalls angefallenen Zuschläge. Verlängerungen oder Änderungen des Einsatzes werden entsprechend berücksichtigt.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 4a. Einsatzzeit */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">4a. Einsatzzeit</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Der Tagessatz gilt für die gesamte Einsatzzeit, nicht ausschließlich für die
-                  reine Fahrzeit. Die Einsatzdauer beträgt maximal 9 Stunden je Einsatztag (für
-                  Baumaschinenführer / Mischmeister bis zu 8 Stunden Einsatzzeit).
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Zur Einsatzzeit zählen insbesondere: Fahrzeugübernahme, Abfahrtskontrolle,
-                  gesetzliche Pausen, Wartezeiten, Dokumentation, Be-/Entladeabstimmung,
-                  Übergaben und Fahrzeit.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Hinweis zu gesetzlichen Lenkzeiten: Die gesetzliche Tageslenkzeit beträgt in
-                  der Regel maximal 9 Stunden; eine gesetzlich zulässige Verlängerung der
-                  täglichen Lenkzeit ist nur im engen Rahmen der geltenden Vorschriften möglich.
-                  Nach spätestens 4,5 Stunden Lenkzeit ist eine gesetzliche Pause erforderlich.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 4b. Mehrstunden */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">4b. Mehrstundenregelung</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Mehrstunden über die vereinbarte Einsatzzeit hinaus werden zusätzlich berechnet,
-                  sofern sie erforderlich sind oder durch den Auftraggeber verursacht bzw.
-                  angeordnet werden.
-                </p>
-                <ul className="list-disc list-inside text-muted-foreground mt-3 space-y-2 ml-4">
-                  <li>LKW-Fahrer CE: 45,00 € netto je angefangene Stunde</li>
-                  <li>Baumaschinenführer / Mischmeister: 60,00 € netto je angefangene Stunde</li>
-                </ul>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in
-                  den nächsten Kalendertag hineinreichen, können gesondert berechnet werden –
-                  etwa als zusätzlicher Einsatztag oder als Fernverkehrseinsatz.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  An- und Abfahrt: Die ersten 25 Kilometer je einfacher Fahrt sind kostenfrei. Ab dem 26. Kilometer werden 0,40 € netto je tatsächlich gefahrenem Kilometer berechnet. Dies gilt für die Anreise und die Rückfahrt. Bei mehrwöchigen auswärtigen Einsätzen gilt dieselbe
-                  Kilometerregelung für tatsächlich durchgeführte Wochenendheimfahrten und erneute Anreisen.
-                  Die voraussichtlichen Fahrtkosten werden vor verbindlicher Auftragserteilung mitgeteilt.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  LKW-Fahrer CE – Wochenpreis: 1.645,00 € netto für 5 Einsatztage von Montag bis Freitag – bis zu 9 Stunden Einsatzzeit je Einsatztag. Der Wochenpreis gilt
-                  ausschließlich für Montag bis Freitag. Samstage, Sonntage und gesetzliche
-                  Feiertage sind nicht im Wochenpreis enthalten und werden bei einem Einsatz
-                  separat nach dem geltenden Tagessatz zuzüglich des zutreffenden Zuschlags
-                  berechnet. Fällt ein gesetzlicher Feiertag auf einen
-                  Montag bis Freitag, wird dieser Feiertagseinsatz ebenfalls separat nach dem
-                  geltenden Tagessatz zuzüglich 50 % Feiertagszuschlag berechnet.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Wochenend- und Feiertagszuschläge: Samstag 25 %, Sonntag und gesetzliche
-                  Feiertage 50 % auf den jeweiligen Tagessatz. Die veröffentlichten
-                  Mehrstundensätze, die An- und Abfahrt sowie diese Zuschläge gelten automatisch;
-                  eine zusätzliche Vereinbarung ist hierfür nicht erforderlich.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 4c. Fernverkehr */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">4c. Fernverkehr</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Als Fernverkehrseinsatz gelten insbesondere längere Überführungsfahrten,
-                  bundesweite Transporte, Einsätze mit auswärtiger Übernachtung sowie Einsätze
-                  mit längerer Tagesabwesenheit. Für solche Einsätze kann anstelle des normalen
-                  Tagessatzes die Fernfahrer-Pauschale (450,00 € netto je tatsächlichem
-                  Fernverkehrs-Einsatztag) verwendet werden.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 5. Stornoregelung */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">5. Stornoregelung</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Storno bis 24 Stunden vor Einsatzbeginn ist kostenfrei.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Bei Storno unter 24 Stunden vor Einsatzbeginn behält sich Fahrerexpress vor, den entgangenen Aufwand pauschal mit 80 % des vereinbarten Tagessatzes zu berechnen, sofern der Auftraggeber keinen geringeren Schaden nachweist.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers können 100 % des vereinbarten Tagessatzes berechnet werden.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 6. Direktbeauftragung */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">6. Direktbeauftragung</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Die direkte oder umgehende Beauftragung eines durch Fahrerexpress vermittelten Unternehmers außerhalb der Fahrerexpress-Agentur ist ohne vorherige Zustimmung von Fahrerexpress unzulässig. Dies gilt für den konkreten Einsatz sowie für Folgeaufträge im sachlichen Zusammenhang für einen Zeitraum von 12 Monaten nach Einsatzende.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 7. Haftung */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">7. Haftung</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Die Fahrerexpress-Agentur haftet nach den gesetzlichen Vorschriften für eigenes Verschulden. Die eingesetzten Unternehmer handeln eigenverantwortlich.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 8. Zahlungsbedingungen */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">8. Zahlungsbedingungen</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Rechnungen sind innerhalb von 7 Kalendertagen ab Rechnungsdatum ohne Abzug zu begleichen.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Bei Zahlungsverzug gelten die gesetzlichen Regelungen des § 288 BGB.
-                </p>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Bei Unternehmern beträgt der Verzugszinssatz für Entgeltforderungen 9 Prozentpunkte über dem Basiszinssatz.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 9. Vertragsschluss */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">9. Vertragsschluss</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Der Vertrag kommt zustande durch:
-                </p>
-                <ul className="list-disc list-inside text-muted-foreground mt-3 space-y-2 ml-4">
-                  <li>die Bestellung eines Fahrers durch den Auftraggeber (z. B. per Formular, E-Mail oder Telefon) und</li>
-                  <li>die Bestätigung durch die Fahrerexpress-Agentur.</li>
-                </ul>
-                <p className="text-muted-foreground leading-relaxed mt-3">
-                  Eine gesonderte Unterschrift ist nicht erforderlich.
-                </p>
-              </section>
-
-              <Separator />
-
-              {/* 10. Gerichtsstand */}
-              <section>
-                <h2 className="text-xl font-semibold text-foreground mb-4">10. Gerichtsstand</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  Gerichtsstand für alle Streitigkeiten aus Vertragsverhältnissen, die diesen Vermittlungsbedingungen unterliegen, ist – soweit gesetzlich zulässig – Frankfurt am Main.
-                </p>
-              </section>
-
-              <Separator />
+              {CUSTOMER_TERMS_SECTIONS.map((section) => (
+                <React.Fragment key={section.title}>
+                  <section>
+                    <h2 className="text-xl font-semibold text-foreground mb-4">{section.title}</h2>
+                    {section.blocks.map((block, index) => block.kind === 'list' ? (
+                      <ul key={index} className={block.className}>
+                        {block.items.map((item) => <li key={item}>{item}</li>)}
+                      </ul>
+                    ) : (
+                      <p key={index} className={block.className}>
+                        {block.emphasis ? <>{block.text.split(block.emphasis)[0]}<strong className="text-foreground">{block.emphasis}</strong>{block.text.split(block.emphasis)[1]}</> : block.text}
+                      </p>
+                    ))}
+                  </section>
+                  <Separator />
+                </React.Fragment>
+              ))}
 
               {/* Kontakt */}
               <section>

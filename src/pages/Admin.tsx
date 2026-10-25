@@ -1,5 +1,6 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
+import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from "@/integrations/supabase/client";
@@ -2071,6 +2072,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           <TableCell colSpan={7} className="bg-muted/50 p-4 space-y-4">
                             {/* Rechnungsdaten */}
                             <BillingDataBlock job={req} />
+                            <CustomerConfirmationEvidence job={req} />
                             {/* Nachricht und Besonderheiten */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {req.nachricht && (
@@ -2410,6 +2412,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             <div className="space-y-3">
                               {/* Rechnungsdaten */}
                               <BillingDataBlock job={req} />
+                              <CustomerConfirmationEvidence job={req} />
                               {/* Nachricht und Besonderheiten */}
                               {req.nachricht && (
                                 <div className="bg-white p-3 rounded border">

@@ -837,6 +837,9 @@ export type Database = {
           completed_at: string | null
           created_at: string
           customer_city: string | null
+          customer_confirmation_at: string | null
+          customer_confirmation_given: boolean | null
+          customer_confirmation_text: string | null
           customer_email: string
           customer_house_number: string | null
           customer_invoice_id: string | null
@@ -847,6 +850,8 @@ export type Database = {
           customer_phone: string
           customer_postal_code: string | null
           customer_street: string | null
+          customer_terms_text: string | null
+          customer_terms_version: string | null
           einsatzort: string
           fahrzeugtyp: string
           fuehrerscheinklasse: string
@@ -886,6 +891,9 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           customer_city?: string | null
+          customer_confirmation_at?: string | null
+          customer_confirmation_given?: boolean | null
+          customer_confirmation_text?: string | null
           customer_email: string
           customer_house_number?: string | null
           customer_invoice_id?: string | null
@@ -896,6 +904,8 @@ export type Database = {
           customer_phone: string
           customer_postal_code?: string | null
           customer_street?: string | null
+          customer_terms_text?: string | null
+          customer_terms_version?: string | null
           einsatzort: string
           fahrzeugtyp: string
           fuehrerscheinklasse?: string
@@ -935,6 +945,9 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           customer_city?: string | null
+          customer_confirmation_at?: string | null
+          customer_confirmation_given?: boolean | null
+          customer_confirmation_text?: string | null
           customer_email?: string
           customer_house_number?: string | null
           customer_invoice_id?: string | null
@@ -945,6 +958,8 @@ export type Database = {
           customer_phone?: string
           customer_postal_code?: string | null
           customer_street?: string | null
+          customer_terms_text?: string | null
+          customer_terms_version?: string | null
           einsatzort?: string
           fahrzeugtyp?: string
           fuehrerscheinklasse?: string
@@ -1144,6 +1159,9 @@ export type Database = {
           completed_at: string | null
           created_at: string
           customer_city: string | null
+          customer_confirmation_at: string | null
+          customer_confirmation_given: boolean | null
+          customer_confirmation_text: string | null
           customer_email: string
           customer_house_number: string | null
           customer_invoice_id: string | null
@@ -1154,6 +1172,8 @@ export type Database = {
           customer_phone: string
           customer_postal_code: string | null
           customer_street: string | null
+          customer_terms_text: string | null
+          customer_terms_version: string | null
           einsatzort: string
           fahrzeugtyp: string
           fuehrerscheinklasse: string

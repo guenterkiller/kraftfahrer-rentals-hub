@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { CUSTOMER_TERMS_VERSION, CUSTOMER_CONFIRMATION_TEXT } from '@/lib/customerConfirmation';
 import { scrollToBookingForm } from "@/lib/bookingNavigation";
 import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifKurz, tarifTitel } from "@/lib/tarifTexte";
@@ -228,6 +229,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
             ? obergrenzeParsed
             : undefined,
         bedingungen_akzeptiert: agreedToConditions,
+        bedingungen_fassung: CUSTOMER_TERMS_VERSION,
         newsletter: false,
         billing_model: 'agency',
         weekend_holiday_affected: weekendHoliday.affected,
@@ -1173,12 +1175,10 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                       className="mt-0.5"
                     />
                     <Label htmlFor="conditions" className="text-sm leading-snug">
-                      Ich bestätige, dass meine Angaben vollständig und richtig sind, und akzeptiere die{' '}
+                      {CUSTOMER_CONFIRMATION_TEXT.split('Vermittlungsbedingungen')[0]}
                       <Link to="/vermittlungsbedingungen" className="text-primary hover:underline font-semibold">
                         Vermittlungsbedingungen
-                      </Link>{' '}
-                      einschließlich der Preis- und Zuschlagsregelungen.
-                      Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht. *
+                      </Link>{CUSTOMER_CONFIRMATION_TEXT.split('Vermittlungsbedingungen')[1]} *
                     </Label>
                   </div>
                   <p className="text-sm text-muted-foreground">

@@ -6,17 +6,13 @@ import { AdminBookingNotification } from '../_shared/email-templates/admin-booki
 import { resolveTarif, MASCHINENBEDIENUNG_LABELS, isUeberfuehrung, UEBERFUEHRUNG_LABEL, UEBERFUEHRUNG_TARIF_TYPE, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
 import { listSurchargeDays } from '../_shared/german-holidays.ts';
 import { parseUnterkunftObergrenze } from './unterkunft-obergrenze.ts';
+import { validateCustomerConfirmation } from '../_shared/customer-confirmation.ts';
+import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 import {
   berechneKostenUebersicht,
   UNTERKUNFT_OPTIONSWERTE,
   type UnterkunftOption,
 } from '../_shared/kosten-uebersicht.ts';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
 
 const jsonCors = { ...corsHeaders, 'Content-Type': 'application/json' };
 
@@ -75,6 +71,7 @@ interface FahrerAnfrageRequest {
   datenschutz?: boolean;
   /** Einzige Pflichtbestätigung (Angaben, Vermittlungsbedingungen, Preis-/Zuschlagsregeln). */
   bedingungen_akzeptiert?: boolean;
+  bedingungen_fassung?: string;
   newsletter?: boolean;
   price_acknowledged?: boolean;
   price_ack_time?: string;
@@ -223,8 +220,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Consent data
     // Einzige Pflichtbestätigung. Übergangsweise akzeptiert: bisheriges Formular (noch live bis IONOS-Upload)
     // sendet datenschutz=true und sperrte das Absenden ohne Verbindlichkeitsbestätigung.
-    const bedingungenAkzeptiert = requestData.bedingungen_akzeptiert === true ||
-      (requestData.bedingungen_akzeptiert === undefined && requestData.datenschutz === true);
+    const confirmation = validateCustomerConfirmation(requestData);
     const newsletter = Boolean(requestData.newsletter);
     const billing_model = String(requestData.billing_model || 'agency');
     const weekend_holiday_affected = Boolean(requestData.weekend_holiday_affected);
@@ -276,10 +272,10 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
     
-    if (!bedingungenAkzeptiert) {
+    if (confirmation.ok === false) {
       return new Response(JSON.stringify({ 
-        error: 'Bestätigung der Angaben und Vermittlungsbedingungen erforderlich',
-        details: 'bedingungen_akzeptiert must be true'
+        error: confirmation.error,
+        details: 'Gültige Pflichtbestätigung und Bedingungsfassung erforderlich'
       }), {
         status: 400,
         headers: jsonCors
@@ -315,6 +311,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Prepare data for database insert
     const jobRequestData = {
+      ...confirmation.evidence,
       customer_name: `${vorname} ${nachname}`.trim(),
       customer_email: email,
       customer_phone: phone,
