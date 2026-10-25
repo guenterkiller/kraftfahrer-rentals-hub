@@ -257,7 +257,7 @@ const PricingSection = () => {
             <CardTitle className="text-base">Wichtiger Hinweis</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Fahrzeuge werden nicht gestellt. Abrechnung erfolgt über Fahrerexpress nach Abschluss des Einsatzes; Zahlungsziel 7 Tage netto.</p>
+            <p>Alle Fahrer arbeiten selbstständig als Subunternehmer. Vermittlung nach § 652 BGB (Maklervertrag). Fahrzeuge werden nicht gestellt. Abrechnung erfolgt über Fahrerexpress nach Abschluss des Einsatzes; Zahlungsziel 7 Kalendertage netto ab Rechnungsdatum.</p>
           </CardContent>
         </Card>
       </div>

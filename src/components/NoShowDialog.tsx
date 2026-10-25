@@ -89,7 +89,7 @@ export const NoShowDialog: React.FC<NoShowDialogProps> = ({
     setIsLoading(true);
     try {
       // Mark No-Show in database
-      const overrideFeeValue = overrideFee && parseFloat(overrideFee) > 0 ? parseFloat(overrideFee) : null;
+      const overrideFeeValue = overrideFee && parseFloat(overrideFee) >= 0 ? parseFloat(overrideFee) : null;
       
       const { data, error } = await supabase.rpc('admin_mark_no_show', {
         _assignment_id: assignment.id,
@@ -164,7 +164,7 @@ export const NoShowDialog: React.FC<NoShowDialogProps> = ({
     return labels[tier] || tier;
   };
 
-  const finalFeeEur = overrideFee && parseFloat(overrideFee) > 0 
+  const finalFeeEur = overrideFee && parseFloat(overrideFee) >= 0 
     ? parseFloat(overrideFee) 
     : calculatedFee ? calculatedFee.fee_cents / 100 : 150;
 

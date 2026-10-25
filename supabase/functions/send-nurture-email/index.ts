@@ -115,7 +115,7 @@ erste Einsätze in Ihrer Region sind verfügbar:
 **Wichtige Infos zur Zusammenarbeit:**
 ✅ Abrechnung läuft über Fahrerexpress (eine Rechnung für den Auftraggeber)
 ✅ Sie arbeiten als selbstständiger Subunternehmer
-✅ Keine Arbeitnehmerüberlassung – rechtssichere Dienst-/Werkleistung
+✅ Keine Arbeitnehmerüberlassung – selbstständige Dienst-/Werkleistung
 
 Bei Interesse einfach anrufen oder per E-Mail melden.
 

@@ -432,7 +432,7 @@ const Wissenswertes = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-lg mb-2">6. Gerichtsstand</h4>
-                  <p className="text-muted-foreground">Gerichtsstand ist Frankfurt am Main.</p>
+                  <p className="text-muted-foreground">Gerichtsstand ist Frankfurt am Main, soweit eine solche Vereinbarung gesetzlich zulässig ist.</p>
                 </div>
               </CardContent>
             </Card>

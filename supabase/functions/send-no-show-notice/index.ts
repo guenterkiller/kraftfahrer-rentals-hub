@@ -87,7 +87,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Generate email content with fee calculation
     const subject = `No-Show-Mitteilung – Fahrer ist nicht erschienen (${formatDate(assignmentData.start_date || job.created_at)} / ${job.company || job.customer_name})`;
 
-    const feeEur = assignmentData.no_show_fee_cents ? (assignmentData.no_show_fee_cents / 100).toFixed(2) : '150.00';
+    const feeEur = assignmentData.no_show_fee_cents != null ? (assignmentData.no_show_fee_cents / 100).toFixed(2) : '150.00';
     const tier = assignmentData.no_show_tier || 'standard';
 
     const tierLabels: Record<string, string> = {
