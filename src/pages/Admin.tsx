@@ -2412,6 +2412,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                             <div className="space-y-3">
                               {/* Rechnungsdaten */}
                               <BillingDataBlock job={req} />
+                              <CustomerConfirmationEvidence job={req} />
                               {/* Nachricht und Besonderheiten */}
                               {req.nachricht && (
                                 <div className="bg-white p-3 rounded border">
