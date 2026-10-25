@@ -14,8 +14,15 @@ if (Test-Path $workDir) { Remove-Item $workDir -Recurse -Force }
 if (Test-Path $distDir) { Remove-Item $distDir -Recurse -Force }
 
 Write-Host "1. Repository klonen..." -ForegroundColor Yellow
-git clone https://github.com/brasilio-thomazo/fahrerexpress.de.git $workDir
+git clone --branch main --single-branch https://github.com/guenterkiller/kraftfahrer-rentals-hub.git $workDir
+if ($LASTEXITCODE -ne 0) { throw "Repository konnte nicht geklont werden; kein Build oder Upload-Paket erstellen." }
 Set-Location $workDir
+if ((git remote get-url origin) -ne "https://github.com/guenterkiller/kraftfahrer-rentals-hub.git") {
+    throw "Unerwartetes Repository; kein Build oder Upload-Paket erstellen."
+}
+$sourceCommit = git rev-parse HEAD
+if ($LASTEXITCODE -ne 0) { throw "Quellstand konnte nicht ermittelt werden." }
+Write-Host "Quellstand: guenterkiller/kraftfahrer-rentals-hub / main / $sourceCommit" -ForegroundColor Cyan
 
 Write-Host "2. Dependencies installieren..." -ForegroundColor Yellow
 npm install
