@@ -232,7 +232,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
         newsletter: false,
         billing_model: 'agency',
         weekend_holiday_affected: weekendHoliday.affected,
-        weekend_holiday_acknowledged: weekendHoliday.affected ? agreedToSurcharge : false,
+        weekend_holiday_acknowledged: weekendHoliday.affected ? agreedToConditions : false,
         anforderungen: [
           adrRequired && 'ADR-Schein',
           craneRequired && 'Ladekran-Erfahrung',
