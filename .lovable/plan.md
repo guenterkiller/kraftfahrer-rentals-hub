@@ -1,126 +1,72 @@
-# Technischer Optimierungsplan: mobile Fahrerexpress-Startseite
+# Prüfbericht: Vertrags- und Zahlungskonstrukt Fahrerexpress (nur Lesen, keine Änderungen)
 
-## Ziel und unveränderte Grenzen
+Dieser Bericht enthält keinen Umsetzungsschritt. Eine Freigabe löst keine Änderung aus.
 
-Den frühen Ladeumfang reduzieren, ohne Bilder, Gestaltung, Farben, Texte, SEO-Daten, Preise, Formularinhalte, Buchungsregeln, Cookie-Einwilligung oder Conversion-Erfassung zu verändern. Dieser Plan ist keine Umsetzung: keine Codeänderungen, neuen Produktions-Builds, E-Mails, Veröffentlichung oder IONOS-Uploads. Server-Funktionen und produktive Daten bleiben unangetastet.
+## 1. Wer stellt wem die Rechnung?
 
-## Verbindliche Schutzvorgabe für Desktop und Mobilgeräte
+Vertraglich gilt ein Zwei-Stufen-Modell (Agenturmodell), keine Rechnung im Namen des Fahrers:
+- Der Fahrer stellt seine Rechnung an Fahrerexpress. `supabase/functions/send-driver-confirmation/index.ts` Z. 223: „Der Fahrer stellt seine Rechnung nach Einsatzende an Fahrerexpress … – bereits nach Abzug des vereinbarten Vermittlungsanteils … Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung."
+- Fahrerexpress stellt dem Auftraggeber die Rechnung im eigenen Namen. `src/pages/Vermittlungsbedingungen.tsx` Z. 86–89: „Die Abrechnung der beauftragten Einsätze erfolgt über die Fahrerexpress-Agentur. Der Auftraggeber erhält eine Rechnung über die vereinbarten Leistungen." `src/pages/PreiseUndAblauf.tsx` Z. 492: „Vertragspartner des Auftraggebers ist die Fahrerexpress-Agentur."
+- Datenbank-Kommentar (Migration `20251126085134_…sql` Z. 12): „driver invoices Fahrerexpress, and Fahrerexpress invoices the customer."
+- Direkt abrechnen ist verboten: `_shared/email-templates/driver-registration-confirmation.tsx` Z. 53: „Es darf nicht direkt mit dem Auftraggeber abgerechnet werden … Die gesamte Abrechnung läuft über Fahrerexpress."
 
-Diese Bedingungen haben Vorrang vor allen nachfolgenden Optimierungsvorschlägen. Ein mobiler Geschwindigkeitsgewinn rechtfertigt niemals eine Verschlechterung der bestehenden Desktop-Version.
+## 2. Wer schuldet wem die Vergütung?
 
-- **Geschwindigkeit:** LCP, FCP, TBT und CLS dürfen sich weder auf Desktop noch auf Mobilgeräten nachweisbar verschlechtern. Vorher-nachher-Messungen sind für beide Geräteklassen und jede einzelne Maßnahme Pflicht; ein besserer Gesamtscore gleicht einen schlechteren Einzelwert nicht aus.
-- **Darstellung:** Abstände, Schriften, Farben, Bilder, Bildausschnitte, Navigation, Buttons und sämtliche Seitenabschnitte bleiben auf Desktop und Mobilgeräten unverändert. Keine verzögert sichtbaren Inhalte, neuen Platzhalter oder zusätzlichen Layoutverschiebungen. Visuelle Vergleiche umfassen die gesamte Seite, verschiedene Fensterbreiten sowie schnelle Scrollbewegungen und direkte Sprungziele.
-- **Bedienbarkeit:** Buchungsformular, direkte Buchungslinks, Scrollziele, Fahrerregistrierung und Adminbereich bleiben unverändert zuverlässig bedienbar. Keine zusätzliche Wartezeit durch eine Optimierung akzeptieren, wenn sie diese Abläufe nachweisbar verschlechtert.
-- **SEO und HTML:** SEO-Daten, vollständige vorgerenderte HTML-Inhalte aller 21 Seiten und interne Links bleiben unverändert. Keine Änderung der Voraussetzungen für die Google-Indexierung: insbesondere Canonicals, Weiterleitungen, Sitemap, robots und strukturierte Daten. Google-Rankings sind nicht technisch garantierbar; es werden keine indexierungsrelevanten Änderungen vorgenommen.
-- **Tracking und Geschäftsregeln:** Tracking, Google Ads, sämtliche bestehenden Conversion-Messungen, Cookie-Einwilligung und Geschäftsregeln müssen unverändert funktionieren. Fehlender Gleichwertigkeitsnachweis blockiert die betreffende Optimierung.
-- **Einzelprüfung und Rücknahme:** Jede Änderung getrennt auf einem dokumentierten Ausgangsstand prüfen und erst nach bestandener Abnahme beibehalten. Bei einer reproduzierbaren Verschlechterung auf einer der beiden Geräteklassen die betreffende Änderung zurücknehmen und den wiederhergestellten Zustand erneut prüfen. Keine Verrechnung schlechterer Werte mit Verbesserungen anderer Änderungen.
-- **Keine pauschale spätere Einbindung:** Lazy Loading darf weder sichtbare Inhalte verzögern noch die vollständige Vorberechnung der 21 Seiten gefährden. Die nachfolgenden Kandidaten sind Prüfoptionen, keine pauschale Freigabe. Ein riskanter Kandidat entfällt, wenn diese Schutzvorgaben nicht vollständig nachgewiesen werden können.
+- Der Auftraggeber schuldet sie **Fahrerexpress** (Vertragspartner, Rechnung durch die Agentur, 7 Tage).
+- Fahrerexpress schuldet sie **dem Fahrer** (Rechnungsempfänger der Fahrerrechnung).
+- Unsicherheit: `Vermittlungsbedingungen.tsx` Z. 70 („Fahrerexpress schuldet die Organisation und Koordination …") und `PricingSection.tsx` Z. 260 („Vermittlung nach § 652 BGB (Maklervertrag)") stehen im Spannungsverhältnis zur eigenen Vertragspartnerschaft und Gesamtrechnung. Ein Makler schuldet keine Leistung und rechnet in der Regel nicht die Hauptleistung ab. Rechtliche Prüfung empfohlen.
 
-### Verbindliches Mess- und Abnahmeverfahren
+## 3. Fälligkeit der Fahrerzahlung
 
-Vor jeder später freigegebenen Einzeländerung und danach mindestens drei vergleichbare Lighthouse-Läufe **je Geräteklasse** durchführen. Gleiche Lighthouse-/Browser-Version, feste Fenstergröße je Profil, identische Verbindung/CPU-Einstellung, Cookie-Auswahl und Cache-Ausgangslage verwenden. Frische Besuche und Service-Worker-kontrollierte Wiederholungsbesuche getrennt vergleichen. LCP, FCP, TBT und CLS samt Einzelwerten und Median dokumentieren; Desktop nicht aus mobilen Messungen ableiten.
+- `src/lib/driverContractTerms.ts` / `supabase/functions/_shared/driver-contract-terms.ts`, Abschnitt 2: „Die Auszahlung an den Fahrer erfolgt grundsätzlich nach Eingang der entsprechenden Zahlung des Bestellers bei Fahrerexpress. Bei längeren Aufträgen kann eine wöchentliche Abrechnung individuell vereinbart werden."
+- `driver-registration-confirmation.tsx` Z. 47: „Die Zahlung erfolgt nach vollständiger und ordnungsgemäßer Durchführung des Einsatzes; soweit im konkreten Auftragsangebot nichts anderes vereinbart ist, nach Zahlungseingang des Auftraggebers bei Fahrerexpress."
+- **Es gibt keine konkrete Zahlungsfrist** (z. B. „x Tage nach Kundengeldeingang") gegenüber dem Fahrer. Ich habe keine gefunden.
+- Unsicherheit: Es ist nicht geregelt, was gilt, wenn der Kunde nie zahlt (z. B. Zahlungsausfall, Insolvenz). Das Wort „grundsätzlich" lässt offen, ob das Ausfallrisiko beim Fahrer liegt. Solche Klauseln („pay-when-paid") können in AGB nach § 307 BGB unwirksam sein. Rechtliche Prüfung nötig.
 
-Bei einem schlechteren Wert Vergleichsläufe wiederholen, um Messstreuung von einer reproduzierbaren Regression zu unterscheiden. Ungeklärte Verschlechterungen sperren die Abnahme; keine nachträglich erfundene Toleranzgrenze. Zusätzlich vollständige visuelle und Bedienprüfungen auf beiden Geräteklassen sowie HTML-/SEO-Vergleich aller 21 Seiten durchführen. Sämtliche Tests erfolgen ohne echte Buchungen, Conversion-Sendungen oder E-Mails. Dies beschreibt die spätere Abnahme, nicht bereits durchgeführte Vorher-nachher-Messungen.
+## 4. Provisionsabzug (20 % / 25 %)
 
-## Gesicherte Ausgangslage
+- Vertragstext, Abschnitt 1: 20 % bei normalen Aufträgen, 25 % bei Sonderaufträgen. „Berechnungsgrundlage sind sämtliche vereinbarten Nettovergütungen aus der Fahrleistung, einschließlich Mehrstunden und einsatzbezogener Zuschläge. An- und Abfahrtskosten sind provisionsfrei."
+- Zeitpunkt: Der Abzug erfolgt schon **vor** der Rechnung des Fahrers, nicht als nachträgliche Verrechnung (`send-driver-confirmation` Z. 223; `driver-accept-job/index.ts` Z. 254).
+- Tatsächliche Umsetzung: Es gibt **keine Funktion, die die Provision berechnet oder abzieht**. Gespeichert wird nur der Satz (`commission_pct` in der Zuteilung bzw. im Annahmenachweis, PDF-Zeile in `_shared/binding-acceptance-pdf.ts` Z. 68).
 
-- Das bestehende WebP-Bild ist rund 79 KiB groß, vorab geladen und hoch priorisiert; es bleibt unverändert.
-- Direktes Google Ads und ein weiterer Google-Ads-Lader über GTM werden gleichzeitig angefordert. Mehrfaches Laden ist belegt, doppelte Conversion-Zählung nicht.
-- Die fünf Unterseiten beginnen im direkten Browserlauf bereits nach rund 0,75–1,15 Sekunden zu laden. In der Lighthouse-Kontrollmessung beginnen sie nach rund 1,86–2,26 Sekunden, vor dem dortigen LCP von 3,5 Sekunden.
-- Die kleinen nachgeladenen Seitendateien umfassen mindestens rund 14,5 KiB übertragen einschließlich zweier gemeinsam verwendeter Dateien. Der Preis-Seitenabruf hatte keine separat ausgewiesenen Transferbytes; daraus folgt nicht, dass sein Code kostenlos ist. Gemeinsame Formularabhängigkeiten können bei einer späteren Aufteilung zusätzlich geladen werden.
-- Die erneute Service-Worker-Prüfung präzisiert den Vorbericht: `/index.html` leitet auf `/` weiter. Beim getesteten Wiederholungsbesuch lieferte der Service Worker ebenfalls vollständiges vorgerendertes Startseiten-HTML. Eine aktuell ausgelieferte leere Startseite ist damit **nicht nachgewiesen**.
-- Sekundenangaben sind keine garantierten Einsparungen. Jede Maßnahme wird einzeln gegen denselben Ausgangsstand gemessen; Vorteile werden nicht addiert.
+## 5. Leistungsnachweis / unterschriebene Stundenzettel
 
-## 1. Google Ads: größte mögliche Einsparung, vorerst gesperrt
+- Vertragstext, Abschnitt 3: „Jeder Fahrer muss mit seiner Rechnung den zugehörigen Leistungsbericht einreichen. Der Leistungsbericht muss vom Besteller unterschrieben und abgestempelt sein. Ohne ordnungsgemäßen Leistungsbericht erfolgt keine Zahlungsfreigabe."
+- Die Begriffe „Stundenzettel" oder „Stundennachweis" kommen nicht vor. Es gibt keine Upload- oder Prüffunktion für Leistungsberichte.
 
-### Tatsächlich erforderliche Bestandteile
+## 6. Vorzeitiger Auftragsabbruch
 
-Die aktuell öffentlich ausgelieferte GTM-Version enthält:
+- Gegenüber dem Fahrer gibt es nur eine Mitteilungspflicht (`send-driver-confirmation` Z. 229, Ziffer 8): „… unverzüglich zu informieren, wenn absehbar ist, dass er den Einsatz nicht, nicht rechtzeitig oder nicht vollständig durchführen kann."
+- Bei Nichterscheinen: Gebühr von 150 € (`send-no-show-notice/index.ts` Z. 90, Feld `no_show_fee_cents`; Ablauf über einen Admin-Button).
+- Nicht geregelt: wie ein teilweise erbrachter Einsatz vergütet wird oder welche Folgen ein Abbruch für den Fahrer hat.
+- Gegenüber dem Kunden gelten Stornostufen (Memory: unter 24 h 80 %, am selben Tag 100 %). Sie wurden hier nicht erneut wörtlich geprüft. Ihre Auswirkung auf die Vergütung des Fahrers ist nicht geregelt.
 
-| Bestandteil | Bestehende Auslösung |
-|---|---|
-| Conversion Linker | Start des GTM-Containers |
-| Google-Tag `G-DWYHN7QBG3` | GTM-Initialisierung |
-| Ads `AW-1009180387/DrscCMb1xNkcEOO9m-ED` | Formular-Absendereignis auf einer URL mit `fahrer-registrierung` |
-| Ads `AW-1009180387/i1qMCNiKxdkcEOO9m-ED` | Ereignisname `conversion` |
+## 7. Zahlungsverzug
 
-`index.html` lädt zusätzlich direkt `gtag/js?id=AW-1009180387`, definiert die globale `gtag`-Warteschlange und setzt die Ads-Konfiguration. Mehrere Seiten und das aktive Buchungsformular benötigen diese globale Funktion für bestehende Ereignisse.
+- Kunde: `Vermittlungsbedingungen.tsx` Z. 216–222: „Rechnungen sind innerhalb von 7 Kalendertagen ab Rechnungsdatum ohne Abzug zu begleichen. Bei Zahlungsverzug gelten die gesetzlichen Regelungen des § 288 BGB … 9 Prozentpunkte über dem Basiszinssatz."
+- Fahrerexpress gegenüber dem Fahrer: keine Regelung gefunden. Es gilt also das Gesetz, wobei die Fälligkeit wegen Abschnitt 3 unklar bleibt.
 
-**Entscheidende Prüfgrenze:** Das aktive Formular enthält als direkte Conversion-Zieladresse noch `AW-1009180387/HIER_DAS_CONVERSION_LABEL_EINFÜGEN`. Die beiden echten GTM-Labels sind vorhanden, aber ihre vollständige Zuordnung zu allen gewünschten Google-Ads-Aktionen und möglichen GA4-Importen ist nicht verfügbar. Die Registrierung wird im veröffentlichten Container über das Absenden und nicht über den bestätigten Servererfolg ausgelöst. Diese bestehenden Einstellungen werden in diesem Optimierungsplan ausdrücklich nicht korrigiert oder umgestellt.
+## 8. Tatsächlich umgesetzt vs. vertraglich geregelt
 
-### Vorgeschlagenes Vorgehen
+| Thema | Im Vertragstext | Im System umgesetzt |
+|---|---|---|
+| Agenturmodell | ja | Feld `billing_model='agency'` (alle 79 Aufträge) |
+| Kundenrechnung | ja | nur Status `customer_invoice_status='draft'` bei Annahme (`driver-accept-job` Z. 234); keine Rechnungserstellung |
+| Fahrerrechnung / Auszahlung | ja | Felder `subcontractor_invoice_status` / `payout_status` vorhanden, alle stehen auf `draft`/`pending` und werden nirgends im Code fortgeschrieben |
+| Provisionsabzug | ja | nur der Satz wird gespeichert, keine Berechnung |
+| Leistungsbericht | ja | keine Funktion |
+| Nichterscheinen 150 € | ja | Admin-Markierung und Mail |
+| Fristen / Mahnwesen | nur für Kunden | keine |
 
-1. Versionierten GTM-Export und Übersicht der bestehenden Ads-/GA4-Conversion-Aktionen lesend abgleichen: Labels, importierte Ereignisse, Attribution und zuständiger Lader.
-2. In einer isolierten Testfassung ausschließlich den externen direkten Ads-Lader entfernen; globale `gtag`-Warteschlange, bisherige Konfiguration, Ereignisse, GTM, Linker und OpenAI-Pixel zunächst exakt erhalten.
-3. Alle externen Messanfragen in dieser Testfassung abfangen, nicht an Google/OpenAI senden. Formularantworten simulieren, keine Daten speichern und keine E-Mails auslösen.
-4. Nur bei nachgewiesener Gleichwertigkeit eine konkrete Lader-Entfernung zur Freigabe vorschlagen. Zeigt sich eine notwendige Änderung an Labels, Auslösern, Einwilligung oder Conversion-Semantik, diesen Schritt stoppen und separat vorlegen.
+Die Abrechnung läuft also tatsächlich außerhalb des Systems (manuell).
 
-**Dateien:** gegebenenfalls `index.html`; zusätzliche isolierte Tests im Projekt. Keine geplanten Änderungen an `SimpleBookingForm.tsx`, `FahrerRegistrierung.tsx`, `CookieConsent.tsx` oder am GTM-Container.
+## 9. Offene Punkte und Unsicherheiten
 
-**Erwarteter Vorteil:** Falls wirklich entbehrlich, entfällt ein direkter Download von rund 194 KiB. Der direkte Lader beanspruchte in der Kontrollmessung rund 0,87 Sekunden CPU-Zeit; das ist kein garantierter LCP- oder TBT-Gewinn. Eine Verschiebung weiterer Downloads kann den Nettoeffekt verkleinern.
+1. Die eigene Seite `/fahrer-vermittlungsbedingungen` ist in den Seitenrouten von `src/App.tsx` **nicht vorhanden**, wird aber in Abschnitt 4 des Vertragstexts verlinkt. Die zuletzt gültige Fassung (`TERMS_VERSION_DRIVER = 2026-07-26`) ist im Code nicht als Text auffindbar. Das deckt sich mit dem früher gemeldeten falschen Bedingungslink.
+2. Es fehlt eine Zahlungsfrist gegenüber dem Fahrer, und das Ausfallrisiko ist offen (pay-when-paid).
+3. Die Einordnung als Maklervertrag (§ 652) passt nicht zur Vertragspartnerschaft mit Gesamtrechnung.
+4. Die Vergütung bei Abbruch oder Teilleistung ist nicht geregelt.
+5. Verschiedene Fassungen weichen leicht voneinander ab. Beispiel: In der Registrierungsmail sind Diesel, Maut und Hotel provisionsfrei, im Vertragstext nur An- und Abfahrt.
+6. Für die Absage durch den Kunden (Storno) gibt es keine Regel zur Fahrervergütung.
 
-**Risiko:** mittel bis hoch; fehlende Initialisierung, Attribution oder verlorene Ereignisse. Das Entfernen des gesamten `gtag`-Blocks ist ausdrücklich nicht vorgesehen.
-
-**Erforderliche Tests:** Ausgangsstand gegen Testfassung für alle vorhandenen Ereignisnamen, Werte, Ziele und Reihenfolgen; Buchungserfolg, Fehler, Duplikat und Wiederholung; Registrierung und Teil-Upload; Kategorieaufrufe; verzögertes/fehlgeschlagenes GTM; alle vorhandenen Einwilligungszustände ohne Änderung ihres Verhaltens; Erstaufruf und Seitenwechsel. Das aktuelle Verhalten ist der Vergleichsmaßstab, keine neu erfundene Tracking-Regel. Ohne vollständigen Abgleich bleibt dieser Schritt gesperrt.
-
-## 2. Unterseiten-Vorladen: erste risikoarme Umsetzungsstufe
-
-**Dateien:** `src/hooks/usePrefetchRoutes.ts`, gegebenenfalls die Einbindung in `src/App.tsx`; neuer kleiner Vorlade-Koordinator mit Tests. Falls Link-Absicht als Auslöser genutzt wird: `src/components/Navigation.tsx` und die bestehenden Startseitenlinks in `src/pages/Index.tsx`.
-
-**Änderung:** Die fünf bestehenden Zielseiten erhalten bleiben, aber kein pauschaler Start nach 2/3 Sekunden oder sofort verfügbarem Leerlauf. Vorrang für das tatsächlich angezeigte Linkziel bei Fokus oder Zeigerabsicht; ein Klick und die normale Navigation warten niemals auf spekulatives Vorladen. Optionales Hintergrundladen nur nach abgeschlossener Anfangsladephase, sichtbar und online, nicht bei Datensparmodus/langsamer Verbindung. Bei unbekannter Verbindung zunächst nur absichtsbezogen laden. Imports nacheinander statt im 100-ms-Takt starten; Buchungszugriff hat Vorrang. Auf Routenwechsel und im Adminbereich ausstehende Arbeit abbrechen; bereits gestartete Imports lassen sich nicht zuverlässig abbrechen.
-
-**Erwarteter Vorteil:** Die gemessenen mindestens 14,5 KiB spekulativen Seitenabrufe und ihre Auswertung verlassen die kritische Phase. Größerer indirekter Vorteil bei langsamer Verbindung und gemeinsamen schweren Abhängigkeiten; konkrete Sekunden erst im Vergleich messbar.
-
-**Risiko:** niedrig; ein erstmaliger Unterseitenwechsel ohne vorherige Absicht kann länger dauern. Kein Verlust von Links oder Inhalten. Eine nachweisbare Verschlechterung der Bedienbarkeit ist jedoch nicht zulässig: in diesem Fall Vorladepolitik anpassen oder die Einzeländerung zurücknehmen, insbesondere auf Desktop.
-
-**Tests:** identische fünf URLs und normale Klicknavigation; frühe Buchung; langsame/unbekannte Verbindung, offline, Datensparmodus, Hintergrundtab; keine Parallelflut; Importfehler beeinträchtigt Navigation nicht; Aufräumen nach Routenwechsel; React-StrictMode erzeugt keine doppelten Aufträge; kein Vorladen im Adminbereich. Vergleich mit und ohne Service Worker getrennt messen.
-
-## 3. Komponenten und Abhängigkeiten: konservative Ladegrenzen
-
-### Sofort eingebunden lassen
-
-- `Index`, `useSEO`, Navigation, Hero, Hauptinhalt-/Sprungziele und `ProductCards`.
-- Inline-Texte, FAQ, interne Links sowie bestehende Cookie-Anzeige.
-- Router, zentrale Buchungsnavigation, `ScrollToTop`, globale Meldungs-/Tooltip-Infrastruktur.
-- **`FahreranfrageSection` und `SimpleBookingForm` einschließlich Validierung, Tarif-/Kostenberechnung und Formularfeldern.** In der ersten Stufe wird das Formular nicht verzögert: damit bleiben sämtliche direkten und lokalen Buchungszugänge unverändert zuverlässig.
-
-### Präzise Kandidaten, aber nicht pauschal freigeben
-
-| Kandidat | Dateien | Empfehlung / Vorteil | Risiko und Tests |
-|---|---|---|---|
-| Admin-Zugangsschutz | `src/App.tsx`, bestehendes `src/components/AdminRoute.tsx` | Import ausschließlich an geschützter Admin-Route; kein unnötiger Admin-Code im frühen Startseitenumfang | Niedrig bis mittel: Zugriffsschutz bleibt unverändert; Tests ohne Sitzung, Nicht-Admin, Admin, verzögerter Import, unveränderte Weiterleitung. Supabase entfällt dadurch **nicht**, solange das Formular direkt eingebunden bleibt. |
-| `ProcessSteps`, `WhyFahrerexpress`, `TestimonialsSection` | `Index.tsx` und diese drei Komponenten; gegebenenfalls neuer lokaler Ladebaustein | Gemeinsame nachgelagerte Gruppe statt drei Mini-Dateien; weniger frühe React-Arbeit möglich | Mittel: variable Höhe/Scrollposition und vollständiger HTML-Inhalt. Nur umsetzen, wenn gleiches Erscheinungsbild, kein zusätzlicher CLS und vollständiges Prerendering nachgewiesen werden. |
-| `LegalSecuritySection`, `BookingPriorityBanner`, `EUDriverRecruitment`, `ContactSection` | `Index.tsx` und diese vier Komponenten | Nachgelagerte zweite Gruppe möglich | Mittel: Buchungslinks und `#eu-fahrer` müssen auch vor dem Laden zuverlässig bleiben; unveränderte Tastatur-/Linkfunktion und schnelle Scrollsprünge testen. |
-| Footer | `Index.tsx`, `Footer.tsx` | Bereits geteilt, derzeit aber sofort angefordert; wirklich späteres Mounten möglich | Kleiner Vorteil: gemessen rund 1,8 KiB. Mittleres Risiko für Endseitenhöhe, Footerlinks und vollständige HTML-Ausgabe; deshalb geringe Priorität. |
-| Erfolgshinweis im Formular | `SimpleBookingForm.tsx`, `PWAInstallSuccessBox.tsx` | Code erst vor Anzeige des bereits bestehenden Erfolgshinweises laden | Sehr kleiner Vorteil; geteilte Icons/Card-Abhängigkeiten bleiben. Erfolg darf nicht verzögert/verdeckt werden; Schließen und unveränderte Anzeige testen. Nur bei messbarem Nutzen. |
-
-Die statischen Abschnitte benutzen überwiegend ohnehin benötigte Icons, Buttons und Cards. Spätere Einbindung entfernt diese gemeinsamen Bibliotheken nicht automatisch. Daher **keine seriöse KiB- oder Sekunden-Zusage für diese Gruppen vor einer Bundle-Gegenprüfung**. Kein `form-vendor`-/`date-vendor`-Vorteil behaupten: das aktive Formular importiert React Hook Form und date-fns nicht direkt.
-
-### Buchungsformular selbst: nicht Bestandteil der ersten Umsetzung
-
-Ein späteres Formular wäre nur mit eigenem stabilen Ankerbereich, explizitem Laden bei jedem Buchungslink/direkten Hash und Scrollen nach tatsächlicher Bereitschaft sicher. Das heutige rund zweisekündige Scroll-Polling genügt nicht; ein leerer Anker würde fälschlich als fertiges Formular erkannt. Die bestehende frühe PWA-Ereigniserfassung und einmal eingegebene Daten müssten erhalten bleiben. Variable Formularhöhe ohne sichtbare Platzhalter oder Layoutverschiebung ist zusätzlich nachzuweisen. Unter den aktuellen Grenzen ist diese Änderung **nicht gefahrlos freigabefähig** und bleibt zurückgestellt.
-
-Betroffene Dateien wären erst bei separater Freigabe `Index.tsx`, `FahreranfrageSection.tsx`, `SimpleBookingForm.tsx`, `bookingNavigation.ts`, `ScrollToTop.tsx` sowie direkte Scrollzugriffe in `LandingPageLayout.tsx`, `LkwUeberfuehrung.tsx` und `FlüssigbodenService.tsx`. Keine solchen Änderungen in Stufe 1.
-
-## 4. Service Worker: nur Diagnose, keine Änderung
-
-**Dateien zur Prüfung:** `vite.config.ts`, `src/main.tsx`, `public/.htaccess`, `public/htaccess-ionos`, ausgeliefertes `sw.js` und dessen Cache Storage. Apache-Konfiguration und Service Worker bleiben unverändert.
-
-Der Fallback ist `index.html`. Dessen direkte URL wird produktiv auf `/` weitergeleitet; im frischen kontrollierten Wiederholungsbesuch wurde vollständiges Startseiten-HTML geliefert. Risiko für andere Routen bleibt: ein Fallback mit Startseiteninhalt ist nicht gleichbedeutend mit deren routenspezifischem Prerender-HTML.
-
-**Nächste Prüfung:** Dokumentantworten bei Erstbesuch und kontrolliertem Wiederholungsbesuch für `/`, `/mietfahrer`, `/lkw-fahrer-buchen` und direkte persönliche Seiten vergleichen: Herkunft aus Cache, tatsächlicher Root-Inhalt, Titel/Canonical, Aktualisierung nach neuem Asset-Stand. Keine persönlichen Antwortaktionen auslösen. Installations-Precache lädt Vendor-Dateien nach dem Seitenladen; daher kann er reine Code-Aufteilung teilweise wieder neutralisieren.
-
-**Erwarteter Vorteil:** zunächst Messklarheit, kein behaupteter Geschwindigkeitsgewinn. Erst bei belegter Beeinträchtigung separate SW-Maßnahme vorlegen.
-
-**Risiko späterer Änderungen:** mittel bis hoch für Offline-Zugriff, Aktualisierung und persönliche Links. Kein Umbau, Cache-Löschen bei Nutzern oder Hydration-Wechsel Bestandteil dieses Plans.
-
-## Abnahme und Reihenfolge
-
-1. Nach ausdrücklicher Umsetzungsfreigabe zuerst nur das Unterseiten-Vorladen optimieren; Formular und sichtbare Abschnitte direkt eingebunden lassen.
-2. Google-Ads-Lader erst nach vollständigem Conversion-Abgleich separat entscheiden. Keine Änderung von Labels, Auslösern oder Cookie-Verhalten zur Ermöglichung der Optimierung.
-3. Admin-Ladegrenze und sekundäre Abschnitte nur einzeln mit nachgewiesenem Nettovorteil aufnehmen; keine pauschale Lazy-Loading-Umstellung.
-4. Service Worker ausschließlich weiter prüfen.
-
-**Gemeinsame Funktionstests:** alle Buchungswege in Header/Mobilmenü, Hero, Produktkarten, Kontakt, Prioritätsbanner und Footer; `/fahrer-buchen#buchungsformular` sowie bestehende Hashziele; lokale Unterseitenbuchung; langsames Laden, Zurück/Vorwärts und Tastaturbedienung. Bestehende Unterkunfts-/Tarif-/Kostenübersichtstests behalten und ausführen. Erfolgs-/Fehlerfälle mit simulierten Serverantworten und abgefangenen Trackern testen, ohne reale Anfragen oder Mails.
-
-**Abnahme nach späterer Implementierung:** alle 21 Sitemap-Seiten vollständig vorgerendert, einschließlich nachgelagerter Abschnitte, mit unveränderten HTML-Inhalten, SEO-Daten, internen Links und Tracking-Auslösern; keine Platzhalter im ausgelieferten Inhalt. Die verbindliche Desktop-/Mobil-Schutzvorgabe einschließlich Einzelmessungen von LCP, FCP, TBT und CLS, vollständiger visueller Vergleiche, Bedienprüfungen und Rücknahme nachgewiesener Verschlechterungen gilt für jeden Schritt. Dateiumfang und LCP-Element zusätzlich dokumentieren. Keine Veröffentlichung durch diese Abnahme.
+Alle Aussagen beruhen auf Code und Texten im Projekt sowie auf einer Datenbankabfrage, die nur gelesen hat. Rechtsverbindliche Bewertung nur durch einen Anwalt.
