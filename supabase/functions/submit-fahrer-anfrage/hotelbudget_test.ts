@@ -26,3 +26,15 @@ for (const [wert, text] of [[0, '0,00'], [20, '20,00'], [75, '75,00']] as const)
     assert(html.includes(text), `Betrag ${text} fehlt`);
   });
 }
+
+import { CustomerBookingConfirmation } from '../_shared/email-templates/customer-booking-confirmation.tsx';
+for (const [wert, text] of [[0, '0,00'], [20, '20,00'], [75, '75,00']] as const) {
+  Deno.test(`Kunden-Mail zeigt Hotelbudget ${wert} €`, async () => {
+    const html = await renderAsync(React.createElement(CustomerBookingConfirmation as never, {
+      customerName: 'TEST Kunde', vorname: 'TEST', nachname: 'Kunde', fahrzeugtyp: 'LKW CE',
+      unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: wert,
+    }));
+    assert(html.includes('Hotelbudget je erforderlicher Übernachtung'));
+    assert(html.includes(text), `Betrag ${text} fehlt`);
+  });
+}
