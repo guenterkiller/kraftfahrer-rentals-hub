@@ -260,7 +260,7 @@ const FahrerRegistrierung = () => {
         break;
       case 'gewerbenachweis_bestaetigt':
         if (!value) {
-          errors.gewerbenachweis_bestaetigt = 'Bitte bestätigen Sie, dass Sie selbstständig tätig sind und den Gewerbenachweis nachreichen';
+          errors.gewerbenachweis_bestaetigt = 'Bitte bestätigen Sie, dass Sie selbstständig tätig sind und den Gewerbenachweis vor der Freischaltung einreichen';
         }
         break;
     }
@@ -728,7 +728,7 @@ const FahrerRegistrierung = () => {
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
-                    <span className="font-semibold">Gewerbeanmeldung ist erforderlich. Falls der Nachweis bei der Registrierung nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress nachgereicht werden.</span>
+                    <span className="font-semibold">Gewerbeanmeldung ist erforderlich. Falls der Nachweis bei der Registrierung nicht zur Hand ist, muss er vor der Freischaltung an Fahrerexpress nachgereicht und geprüft werden.</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
@@ -1129,7 +1129,7 @@ const FahrerRegistrierung = () => {
                        Dokumente hochladen – erforderlich für die Prüfung
                      </Label>
                       <p className="text-sm text-muted-foreground -mt-2">
-                        Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
+                        Bitte laden Sie Führerschein, Fahrerkarte und Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Fehlende erforderliche Unterlagen müssen vor der Freischaltung eingereicht und von Fahrerexpress geprüft werden. Registrierung und Vertragsannahme bedeuten keine Freischaltung.
                       </p>
                      
                      <div className="grid md:grid-cols-2 gap-4">
@@ -1239,7 +1239,7 @@ const FahrerRegistrierung = () => {
                          <FileText className="h-8 w-8 text-primary" aria-hidden="true" />
                           <h4 className="font-medium">Gewerbeanmeldung</h4>
                           <p className="text-sm text-muted-foreground mb-2">
-                            Bitte laden Sie Ihre Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er spätestens mit der ersten Rechnung an Fahrerexpress mitgesendet werden.
+                            Bitte laden Sie Ihre Gewerbeanmeldung hoch, sofern sie Ihnen bereits vorliegt. Falls der Nachweis aktuell nicht zur Hand ist, muss er vor der Freischaltung eingereicht und von Fahrerexpress geprüft werden.
                           </p>
                           <p className="text-xs text-destructive font-medium mb-2">
                             Ohne nachgereichten Gewerbenachweis kann keine weitere Zusammenarbeit bzw. Auszahlung erfolgen.
@@ -1392,7 +1392,7 @@ const FahrerRegistrierung = () => {
                            required
                          />
                           <Label htmlFor="gewerbenachweis_bestaetigt" className="text-sm leading-relaxed">
-                            Ich bestätige, dass ich als selbstständiger Unternehmer tätig bin, über eine Gewerbeanmeldung verfüge und den Gewerbenachweis spätestens mit meiner ersten Rechnung an Fahrerexpress mitsende. *
+                            Ich bestätige, dass ich als selbstständiger Unternehmer tätig bin, über eine Gewerbeanmeldung verfüge und den Gewerbenachweis vor der Freischaltung bei Fahrerexpress einreiche. Mir ist bekannt, dass die Freischaltung ausschließlich manuell durch den Administrator nach Prüfung der Gewerbeanmeldung und der erforderlichen Fahrerunterlagen erfolgt. *
                           </Label>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1 ml-6">
