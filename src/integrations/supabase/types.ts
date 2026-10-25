@@ -213,6 +213,110 @@ export type Database = {
         }
         Relationships: []
       }
+      driver_contract_decisions: {
+        Row: {
+          consent_text: string
+          content_hash: string
+          contract_text: string
+          contract_version: string
+          created_at: string
+          decided_at: string
+          decision: string
+          driver_id: string
+          id: string
+          invite_id: string | null
+          ip: unknown
+          user_agent: string | null
+        }
+        Insert: {
+          consent_text: string
+          content_hash: string
+          contract_text: string
+          contract_version: string
+          created_at?: string
+          decided_at?: string
+          decision: string
+          driver_id: string
+          id?: string
+          invite_id?: string | null
+          ip?: unknown
+          user_agent?: string | null
+        }
+        Update: {
+          consent_text?: string
+          content_hash?: string
+          contract_text?: string
+          contract_version?: string
+          created_at?: string
+          decided_at?: string
+          decision?: string
+          driver_id?: string
+          id?: string
+          invite_id?: string | null
+          ip?: unknown
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_contract_decisions_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "driver_contract_decisions_invite_id_fkey"
+            columns: ["invite_id"]
+            isOneToOne: false
+            referencedRelation: "driver_contract_invites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      driver_contract_invites: {
+        Row: {
+          contract_version: string
+          created_at: string
+          created_by: string | null
+          driver_id: string
+          expires_at: string
+          id: string
+          status: string
+          token: string
+          used_at: string | null
+        }
+        Insert: {
+          contract_version: string
+          created_at?: string
+          created_by?: string | null
+          driver_id: string
+          expires_at: string
+          id?: string
+          status?: string
+          token: string
+          used_at?: string | null
+        }
+        Update: {
+          contract_version?: string
+          created_at?: string
+          created_by?: string | null
+          driver_id?: string
+          expires_at?: string
+          id?: string
+          status?: string
+          token?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "driver_contract_invites_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "fahrer_profile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_log: {
         Row: {
           assignment_id: string | null
