@@ -1,4 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Fahrer-E-Mail-Vorschau und Vergütung
+- [x] Tatsächliche Registrierungs-/Freischaltungs-/Angebotsvorlagen und Spaltenmetadaten geprüft; individuelle Fahrtkosten und bezifferte Mehrstunden fehlen als eindeutige Vergütungsquelle.
+- [x] DEV-only /admin/email-vorschau mit fünf kompakten Entwürfen, unveränderten Antwortweg-Varianten und getrenntem Cent-Rechner ohne Versand/Datenzugriff erstellt.
+- [x] 20 Vergütungsregeltests und 9 unveränderte Freigabetests bestanden; fünf Entwürfe bei 1280/390 px geprüft, Betragsrechnung und Sperre fehlender Fahrtkosten bestätigt, automatische Prüfung OK. Bericht docs/fahrer-email-vorschau.md.
+- [ ] Integration in produktiven Versand bleibt gesperrt: benötigt Freigabe für Serveränderungen und eindeutige vereinbarte individuelle Vergütungsquelle; aktuelle Versandfunktionen bewusst unverändert.
 # Fahrerregistrierung und manuelle Freischaltung
 - [x] Registrierung, Vertragsentscheidung, Administratoranzeige und Angebotswege ausschließlich lesend geprüft: Registrierung pending, Vertragsannahme ohne Freischaltung; serverseitige Unterlagenprüfung fehlt.
 - [x] Vorschau-Unterlagenprüfung, Vertragsanzeige und Registrierungs-Unterlagenhinweise umgesetzt; beide E-Mail-Entwürfe und § 4 Abs. 2 ausschließlich in docs/fahrerfreischaltung-vorschau.md vorbereitet, produktive Vorlagen und Vertragsmodule unverändert.
