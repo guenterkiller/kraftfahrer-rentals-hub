@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# IONOS-Freigabehindernisse
+- [ ] Sämtliche Aufrufer und alternativen Anfrage-Schreibwege prüfen; unbenutzten SQL-Schreibweg ohne Datenänderungen sperren und Berechtigungsregressionen prüfen.
+- [ ] Beide GitHub-Repositories gegen den aktuellen Formular-, Hotelbudget-, Nachweis- und Verwaltungsstand vergleichen; Skript nur bei eindeutigem Nachweis ändern.
+- [ ] Vollständiges Produktionspaket und Prerender-Abdeckung verifizieren; keine Buchungen, E-Mails oder IONOS-Veröffentlichung.
 # Kundenbestätigung bei neuen Anfragen
 - [x] Bestätigungsweg, Altformular-Ersatzprüfung und aktuelle Datenbankfelder/Zugriffsregeln lesend geprüft; konkreten technischen Plan für minimalen Nachweis und Administratoranzeige erstellt.
 - [x] Nach Planfreigabe fünf optionale Nachweisfelder, atomaren Speicherweg, Serverzeit und Änderungs-/Nachtragschutz sowie deutsche Administratoranzeige umgesetzt; Altformular ohne behaupteten Nachweis erhalten.
