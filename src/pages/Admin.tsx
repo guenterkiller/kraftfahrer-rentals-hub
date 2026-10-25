@@ -1092,7 +1092,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       }
 
       console.log('✅ Driver approved successfully:', data);
-      if (!data?.success) throw new Error(data?.error || 'Freischaltung nicht bestätigt');
+      if (data?.ok !== true) throw new Error(data?.error || 'Freischaltung nicht bestätigt');
       setApprovalReviewDriver(null);
       
       // Update local state
@@ -1104,7 +1104,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       toast({
         title: "Fahrer erfolgreich freigeschaltet",
-        description: `Fahrer wurde freigeschaltet und ${data.sentJobs || 0} aktuelle Jobs per E-Mail gesendet.`,
+        description: `Fahrer wurde freigeschaltet und ${data.invitesSent || 0} aktuelle Jobs per E-Mail gesendet.`,
       });
 
     } catch (error) {
