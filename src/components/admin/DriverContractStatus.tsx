@@ -21,8 +21,8 @@ export function DriverContractStatus({ driverId }: { driverId: string }) {
 
   useEffect(() => {
     loadStatus().then(({ decisions, invites }) => {
-      const d = decisions.find((x) => x.driver_id === driverId && x.contract_version === MEDIATION_CONTRACT_VERSION);
-      if (d) return setLabel(`Vertrag ${d.decision === "accept" ? "angenommen" : "abgelehnt"} am ${new Date(d.decided_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })}`);
+      const d = decisions.filter((x) => x.driver_id === driverId).sort((a, b) => Date.parse(b.decided_at) - Date.parse(a.decided_at))[0];
+      if (d) return setLabel(`Vertrag ${d.decision === "accept" ? "angenommen" : "abgelehnt"} am ${new Date(d.decided_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })} · Fassung ${d.contract_version}`);
       const open = invites.find((x) => x.driver_id === driverId && x.status === "pending" && new Date(x.expires_at) > new Date());
       setLabel(open ? `Vertrag offen (Link bis ${new Date(open.expires_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })})` : "Vertrag offen");
     });
@@ -39,7 +39,7 @@ export function DriverContractStatus({ driverId }: { driverId: string }) {
 
   return (
     <div className="text-xs text-muted-foreground space-y-1">
-      <div>{label} · Fassung {MEDIATION_CONTRACT_VERSION}</div>
+      <div>{label}{label.startsWith("Vertrag angenommen") || label.startsWith("Vertrag abgelehnt") ? "" : ` · Fassung ${MEDIATION_CONTRACT_VERSION}`}</div>
       {!label.startsWith("Vertrag angenommen") && !label.startsWith("Vertrag abgelehnt") && (
         <Button size="sm" variant="outline" className="h-7 text-xs" disabled={busy} onClick={create}>
           Vertragslink erzeugen (keine Mail)

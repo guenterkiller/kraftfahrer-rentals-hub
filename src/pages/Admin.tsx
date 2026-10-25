@@ -1,4 +1,5 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
+import { canConfirmDriverApproval } from "@/lib/driverApprovalReview";
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
 import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
 import React, { useState, useEffect, useRef } from "react";
@@ -147,6 +148,9 @@ const Admin = () => {
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
+  const [approvalReviewDriver, setApprovalReviewDriver] = useState<FahrerProfile | null>(null);
+  const [tradeReviewed, setTradeReviewed] = useState(false);
+  const [driverDocumentsReviewed, setDriverDocumentsReviewed] = useState(false);
   const [sendingJobToAll, setSendingJobToAll] = useState<string | null>(null);
   const [confirmingAssignment, setConfirmingAssignment] = useState<string | null>(null);
   const [markingNoShow, setMarkingNoShow] = useState<string | null>(null);
@@ -1052,7 +1056,22 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  const handleApproveDriver = async (driverId: string) => {
+  const handleApproveDriver = async (driverId: string, reviewConfirmed = false) => {
+    const driver = fahrer.find(f => f.id === driverId);
+    if (!driver || driver.status !== 'pending' || driver.is_blocked || driver.is_inactive) return;
+    if (!reviewConfirmed) {
+      setTradeReviewed(false);
+      setDriverDocumentsReviewed(false);
+      setApprovalReviewDriver(driver);
+      void loadDocuments(driver.email, driver.id);
+      return;
+    }
+    if (approvalReviewDriver?.id !== driverId || !canConfirmDriverApproval({
+      ...driver,
+      documentTypes: (documents[driverId] ?? []).map(doc => doc.type),
+      tradeReviewed,
+      driverDocumentsReviewed,
+    })) return;
     console.log('🚀 Starting driver approval process for:', driverId);
     setApprovingDriver(driverId);
     
@@ -1073,11 +1092,13 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       }
 
       console.log('✅ Driver approved successfully:', data);
+      if (!data?.success) throw new Error(data?.error || 'Freischaltung nicht bestätigt');
+      setApprovalReviewDriver(null);
       
       // Update local state
       setFahrer(prev => 
         prev.map(f => 
-          f.id === driverId ? { ...f, status: 'active' } : f
+          f.id === driverId ? { ...f, status: 'approved' } : f
         )
       );
 
@@ -2754,6 +2775,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           </div>
 
                           <div className="flex gap-2 pt-2 mt-1 flex-wrap border-t border-dashed border-gray-200">
+                            <DriverContractStatus driverId={f.id} />
                             <span className="w-full text-[10px] uppercase tracking-wide text-muted-foreground">Aktionen</span>
                             {f.status === 'pending' && (
                               <Button
@@ -2862,6 +2884,38 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       </div>
 
       {/* Preview Dialog */}
+      <Dialog open={!!approvalReviewDriver} onOpenChange={(open) => { if (!open && !approvingDriver) setApprovalReviewDriver(null); }}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Fahrer manuell freischalten</DialogTitle>
+          </DialogHeader>
+          {approvalReviewDriver && (
+            <div className="space-y-4">
+              <p className="font-medium">{approvalReviewDriver.vorname} {approvalReviewDriver.nachname}</p>
+              <p className="text-sm text-muted-foreground">Registrierung und Vertragsannahme sind keine Freischaltung. Erst nach erfolgreicher Prüfung durch Fahrerexpress darf der Fahrer Auftragsangebote erhalten.</p>
+              <DriverContractStatus driverId={approvalReviewDriver.id} />
+              {renderDriverDocuments(approvalReviewDriver.id)}
+              {documents[approvalReviewDriver.id] && !documents[approvalReviewDriver.id].some(doc => doc.type === 'gewerbeanmeldung') && (
+                <p role="alert" className="text-sm text-destructive">Gewerbeanmeldung fehlt. Vor der Freischaltung muss sie eingereicht sein.</p>
+              )}
+              <div className="flex items-start gap-2">
+                <Checkbox id="trade-reviewed" checked={tradeReviewed} onCheckedChange={v => setTradeReviewed(v === true)} />
+                <Label htmlFor="trade-reviewed" className="leading-relaxed">Die Gewerbeanmeldung liegt vor und wurde von mir geprüft.</Label>
+              </div>
+              <div className="flex items-start gap-2">
+                <Checkbox id="driver-documents-reviewed" checked={driverDocumentsReviewed} onCheckedChange={v => setDriverDocumentsReviewed(v === true)} />
+                <Label htmlFor="driver-documents-reviewed" className="leading-relaxed">Alle für die Tätigkeit erforderlichen Fahrerunterlagen, einschließlich Führerschein, gegebenenfalls Fahrerkarte und Zertifikaten, liegen vor und wurden von mir geprüft.</Label>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" disabled={!!approvingDriver} onClick={() => setApprovalReviewDriver(null)}>Abbrechen</Button>
+                <Button disabled={!!approvingDriver || !canConfirmDriverApproval({ ...approvalReviewDriver, documentTypes: (documents[approvalReviewDriver.id] ?? []).map(doc => doc.type), tradeReviewed, driverDocumentsReviewed })} onClick={() => handleApproveDriver(approvalReviewDriver.id, true)}>
+                  Nach Prüfung manuell freischalten
+                </Button>
+              </DialogFooter>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
       <Dialog open={!!previewDoc} onOpenChange={() => setPreviewDoc(null)}>
         <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] max-h-[90vh] flex flex-col p-0 overflow-hidden border-0 sm:rounded-lg">
           <DialogHeader className="px-6 pt-6 pb-2 shrink-0">
