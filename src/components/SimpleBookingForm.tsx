@@ -180,17 +180,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       return;
     }
 
-    // Pflicht-Bestätigung bei Wochenend-/Feiertagseinsatz
-    if (weekendHoliday.affected && !agreedToSurcharge) {
-      toast({
-        title: "Bitte Wochenend-/Feiertagszuschläge bestätigen",
-        description: "Der Einsatzzeitraum enthält Samstag, Sonntag oder einen gesetzlichen Feiertag.",
-        variant: "destructive",
-      });
-      setLoading(false); setSubmitted(false);
-      return;
-    }
-    
     // Debug form data
     console.log('Form data entries:');
     for (const [key, value] of formData.entries()) {
