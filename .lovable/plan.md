@@ -25,7 +25,7 @@ Keine zusätzlichen Namen, Kontaktdaten, IP-Adressen, Geräteangaben oder sonsti
 
 ### 3. Übergang für das alte Liveformular
 - Den bisherigen Ersatzweg bis zum IONOS-Upload unverändert beibehalten: nur bei fehlendem `bedingungen_akzeptiert` darf weiterhin `datenschutz=true` die bisherige Verarbeitung ermöglichen. Ein ausdrücklich falsches neues Bestätigungsfeld darf diesen Ersatzweg nicht nutzen.
-- Bei diesem Weg **keinen neuen Bestätigungsnachweis behaupten**: die fünf Felder bleiben leer. Dies gilt auch für vorübergehend ältere Vorschauformulare ohne Fassungskennung; ausdrücklich neue Anfragen ohne Kennung werden dagegen abgewiesen.
+- Bei diesem Weg **keinen neuen Bestätigungsnachweis behaupten**: die fünf Felder bleiben leer. Neue Anfragen mit `bedingungen_akzeptiert`, aber ohne Fassungskennung werden dagegen abgewiesen; die aktualisierte Vorschau erhält die Kennung zusammen mit der neuen Speicherung.
 - Keine nachträgliche Zuordnung eines heutigen Bedingungstextes zu alten Anfragen.
 - Erst nach gesondert freigegebenem IONOS-Upload prüfen, ob alle tatsächlich erreichbaren Formulare die Bestätigung und Fassungskennung senden, einschließlich alter zwischengespeicherter Seiten und weiterer Anfragewege. Entfernung des Ersatzwegs erst nach dieser Prüfung und gesonderter Freigabe; nicht Bestandteil dieser Umsetzung.
 
