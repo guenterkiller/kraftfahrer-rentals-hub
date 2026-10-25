@@ -14,7 +14,6 @@ describe('Serverseitige Unterkunfts-Kostenobergrenze', () => {
       expect(client(v)).toBe(parseUnterkunftObergrenze(v));
     }
   });
-  });
   it('Offene Position: 0 € heißt keine Hotelkosten, sonst Budget genannt', async () => {
     const { offenePositionen, HOTELKOSTEN_KEINE } = await import('../kostenUebersicht');
     expect(offenePositionen('fahrer_organisiert', 0)).toContain(HOTELKOSTEN_KEINE);

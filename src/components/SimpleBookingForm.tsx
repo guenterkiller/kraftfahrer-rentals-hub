@@ -1003,7 +1003,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                           required
                           value={unterkunftObergrenze}
                           onChange={(e) => setUnterkunftObergrenze(e.target.value)}
-                          placeholder="z. B. 60"
+                          placeholder="z. B. 0 oder 60"
                           aria-invalid={obergrenzeFehler}
                           aria-describedby="unterkunft_obergrenze_hinweis"
                         />
