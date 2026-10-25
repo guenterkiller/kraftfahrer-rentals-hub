@@ -49,7 +49,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false); // prevents double-submit
-  const [agreedToData, setAgreedToData] = useState(false);
   const [agreedToConditions, setAgreedToConditions] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
@@ -228,7 +227,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
           showUnterkunft && unterkunftOption === 'fahrer_organisiert' && obergrenzeValid
             ? obergrenzeParsed
             : undefined,
-        datenschutz: agreedToData,
+        bedingungen_akzeptiert: agreedToConditions,
         newsletter: false,
         billing_model: 'agency',
         weekend_holiday_affected: weekendHoliday.affected,
@@ -258,7 +257,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       };
 
       console.log('Sending payload:', payload);
-      console.log('Consent states - data:', agreedToData, 'conditions:', agreedToConditions);
+      console.log('Consent states - conditions:', agreedToConditions);
 
       // Track conversion with category
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
@@ -1166,21 +1165,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                     </div>
                   )}
                   
-                  <div className="flex items-center space-x-2">
-                    <Checkbox 
-                      id="data" 
-                      checked={agreedToData}
-                      onCheckedChange={(checked) => setAgreedToData(checked as boolean)}
-                      required
-                    />
-                    <Label htmlFor="data" className="inline">
-                      Ich stimme der Verarbeitung meiner Daten zu. *{' '}
-                      <Link to="/datenschutz" className="text-primary hover:underline">
-                        Datenschutzerklärung
-                      </Link>
-                    </Label>
-                  </div>
-
                   <div className="flex items-start space-x-2 bg-red-50 border border-red-200 rounded-lg p-3">
                     <Checkbox
                       id="conditions"
@@ -1190,7 +1174,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                       className="mt-0.5"
                     />
                     <Label htmlFor="conditions" className="text-sm leading-snug">
-                      Ich bestätige die Richtigkeit meiner Angaben und akzeptiere die{' '}
+                      Ich bestätige, dass meine Angaben vollständig und richtig sind, und akzeptiere die{' '}
                       <Link to="/vermittlungsbedingungen" className="text-primary hover:underline font-semibold">
                         Vermittlungsbedingungen
                       </Link>{' '}
@@ -1198,12 +1182,18 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                       Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht. *
                     </Label>
                   </div>
+                  <p className="text-sm text-muted-foreground">
+                    Informationen zur Verarbeitung Ihrer personenbezogenen Daten finden Sie in unserer{' '}
+                    <Link to="/datenschutz" className="text-primary hover:underline">
+                      Datenschutzerklärung
+                    </Link>.
+                  </p>
                 </div>
 
                 <Button 
                   type="submit" 
                   className={`w-full bg-green-600 hover:bg-green-700 text-lg py-6${isUeberfuehrung ? ' h-auto min-h-16 whitespace-normal' : ''}`}
-                  disabled={loading || submitted || !agreedToData || !agreedToConditions || !fahrzeugtyp}
+                  disabled={loading || submitted || !agreedToConditions || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
