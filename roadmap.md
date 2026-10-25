@@ -1,8 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # Fahrerregistrierung und manuelle Freischaltung
-- [ ] Registrierung, Vertragsentscheidung, Administratoranzeige und Angebotswege ausschließlich lesend prüfen.
-- [ ] Nur notwendige Vorschauänderungen an manueller Prüfbestätigung und Vertragsanzeige umsetzen; Registrierungs-E-Mails und § 4 Abs. 2 ohne produktives Serverdeployment vorbereiten.
-- [ ] Isolierte Tests ohne echte E-Mails, Freischaltungen oder Bestandsänderungen durchführen; verbleibende Serverfreigabe benennen.
+- [x] Registrierung, Vertragsentscheidung, Administratoranzeige und Angebotswege ausschließlich lesend geprüft: Registrierung pending, Vertragsannahme ohne Freischaltung; serverseitige Unterlagenprüfung fehlt.
+- [x] Vorschau-Unterlagenprüfung, Vertragsanzeige und Registrierungs-Unterlagenhinweise umgesetzt; beide E-Mail-Entwürfe und § 4 Abs. 2 ausschließlich in docs/fahrerfreischaltung-vorschau.md vorbereitet, produktive Vorlagen und Vertragsmodule unverändert.
+- [x] Isolierte Desktop-/Mobilprüfung mit simulierten Daten/Antworten: keine Freigabe ohne beide Prüfbestätigungen, genau ein manueller simulierte Aufruf danach; keine echte Freigabe oder Mail. Weiterleitung unverändert.
+- [ ] Vollständige serverseitige Durchsetzung und Aktivierung der E-Mail-/Vertragsentwürfe: warten auf gesonderte Freigabe für unmittelbar produktive Funktionsänderungen; reine Vorschau kann diese Schutzregel nicht durchsetzen.
 # IONOS-Freigabehindernisse
 - [x] Sämtliche lokalen Aufrufer geprüft; unbenutzter submit_job_request für PUBLIC/anon/authenticated/service_role gesperrt. Drei Rollenaufrufe ohne Einfügung getestet; alle 79 Anfragen samt Prüfsumme unverändert. Aktiver Edge-/Adminweg bleibt unverändert; Legacy-Datenschutzfallback ausdrücklich erhalten.
 - [x] Vollständiger GitHub-Baum guenterkiller/kraftfahrer-rentals-hub/main (0192afe1bc6b1a07da88627c260ce611d90fd7bd) entspricht dem aktuellen Stand bis auf die neuen Sicherheits-/Skript-/Architekturänderungen; anderes Repository zuletzt nicht öffentlich erreichbar. PowerShell auf nachgewiesenes Repository/main mit Clone-Abbruch und Commitausgabe umgestellt.

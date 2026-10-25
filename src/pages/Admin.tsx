@@ -2885,14 +2885,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       {/* Preview Dialog */}
       <Dialog open={!!approvalReviewDriver} onOpenChange={(open) => { if (!open && !approvingDriver) setApprovalReviewDriver(null); }}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto" aria-describedby="driver-approval-description">
           <DialogHeader>
             <DialogTitle>Fahrer manuell freischalten</DialogTitle>
           </DialogHeader>
           {approvalReviewDriver && (
             <div className="space-y-4">
               <p className="font-medium">{approvalReviewDriver.vorname} {approvalReviewDriver.nachname}</p>
-              <p className="text-sm text-muted-foreground">Registrierung und Vertragsannahme sind keine Freischaltung. Erst nach erfolgreicher Prüfung durch Fahrerexpress darf der Fahrer Auftragsangebote erhalten.</p>
+              <p id="driver-approval-description" className="text-sm text-muted-foreground">Registrierung und Vertragsannahme sind keine Freischaltung. Erst nach erfolgreicher Prüfung durch Fahrerexpress darf der Fahrer Auftragsangebote erhalten.</p>
               <DriverContractStatus driverId={approvalReviewDriver.id} />
               {renderDriverDocuments(approvalReviewDriver.id)}
               {documents[approvalReviewDriver.id] && !documents[approvalReviewDriver.id].some(doc => doc.type === 'gewerbeanmeldung') && (
