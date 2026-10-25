@@ -1,4 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Sichere Löschverwaltung in Supabase
+- [ ] Dauerhafte atomare Löschfunktionen für Fahrer und Kundenaufträge mit serverseitiger Berechtigung und Schutzprüfung einrichten; keine Archivierung oder Mails.
+- [ ] Direkte Tabelleneditor-Löschung gegen Verlust geschützter Geschäfts-/Vertragsnachweise absichern und Funktionen mit zurückgerollten Beispieldaten prüfen.
+- [ ] Drei benannte Profile und freie Registrierungsadresse nachkontrollieren; ausschließlich eindeutig zulässige Testdaten entfernen.
+- [ ] Deutsche Bedienanleitung und konkrete verbleibende Hindernisse berichten.
 # Fahrervertragseinladungen
 - [x] Vorhandene Administratoransicht und Profilverknüpfung lesend geprüft; Umsetzungsvorschlag freigegeben.
 - [x] Deutsche lesende Einladungsübersicht mit Namens-/E-Mail-Suche, gespeicherter Version, Einladungsdatum und vorhandenem Profilzugang ergänzt; keine Tabellen- oder Serveränderung.
