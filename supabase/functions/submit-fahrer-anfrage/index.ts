@@ -192,8 +192,8 @@ const handler = async (req: Request): Promise<Response> => {
         const parsed = parseUnterkunftObergrenze(requestData.unterkunft_obergrenze);
         if (parsed === null) {
           return new Response(JSON.stringify({
-            error: 'Bitte gültige Kostenobergrenze angeben',
-            details: 'unterkunft_obergrenze must be a number > 0'
+            error: 'Bitte gültiges Hotelbudget zwischen 0 € und 75 € angeben',
+            details: 'unterkunft_obergrenze must be a number between 0 and 75'
           }), {
             status: 400,
             headers: jsonCors
