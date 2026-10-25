@@ -272,7 +272,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
     
-    if (!confirmation.ok) {
+    if (confirmation.ok === false) {
       return new Response(JSON.stringify({ 
         error: confirmation.error,
         details: 'Gültige Pflichtbestätigung und Bedingungsfassung erforderlich'

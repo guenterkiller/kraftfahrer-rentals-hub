@@ -6,7 +6,7 @@ describe('Kundenbestätigung', () => {
   it('speichert die ausdrückliche Bestätigung mit exaktem freigegebenem Wortlaut', () => {
     const result = server.validateCustomerConfirmation({ bedingungen_akzeptiert: true, bedingungen_fassung: web.CUSTOMER_TERMS_VERSION });
     expect(result.ok).toBe(true);
-    if (!result.ok) throw new Error(result.error);
+    if (result.ok === false) throw new Error(result.error);
     expect(result.evidence.customer_confirmation_given).toBe(true);
     expect(result.evidence.customer_confirmation_text).toBe('Ich bestätige, dass meine Angaben vollständig und richtig sind, und akzeptiere die Vermittlungsbedingungen einschließlich der Preis- und Zuschlagsregelungen. Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht.');
     expect(result.evidence.customer_terms_text).toBe(web.CUSTOMER_TERMS_TEXT);
@@ -24,7 +24,7 @@ describe('Kundenbestätigung', () => {
   it('erhält den Altformularweg ohne erfundenen Nachweis', () => {
     const result = server.validateCustomerConfirmation({ datenschutz: true });
     expect(result.ok).toBe(true);
-    if (!result.ok) throw new Error(result.error);
+    if (result.ok === false) throw new Error(result.error);
     expect(Object.values(result.evidence)).toEqual([null, null, null, null, null]);
     expect(server.validateCustomerConfirmation({ bedingungen_akzeptiert: false, datenschutz: true }).ok).toBe(false);
     expect(server.validateCustomerConfirmation({ datenschutz: 'true' }).ok).toBe(false);
@@ -32,14 +32,14 @@ describe('Kundenbestätigung', () => {
   it('übernimmt keine clientseitigen Texte oder Zeitangaben', () => {
     const input = { bedingungen_akzeptiert: true, bedingungen_fassung: web.CUSTOMER_TERMS_VERSION, customer_terms_text: 'FALSCH', customer_confirmation_at: '2000-01-01', ip: 'TEST' };
     const result = server.validateCustomerConfirmation(input);
-    if (!result.ok) throw new Error(result.error);
+    if (result.ok === false) throw new Error(result.error);
     expect(result.evidence.customer_terms_text).toBe(web.CUSTOMER_TERMS_TEXT);
     expect(result.evidence.customer_confirmation_at).toBeNull();
     expect(result.evidence).not.toHaveProperty('ip');
   });
   it('zeigt nur vollständige gespeicherte Nachweise als Bestätigung', () => {
     const result = server.validateCustomerConfirmation({ bedingungen_akzeptiert: true, bedingungen_fassung: web.CUSTOMER_TERMS_VERSION });
-    if (!result.ok) throw new Error(result.error);
+    if (result.ok === false) throw new Error(result.error);
     expect(web.hasCustomerConfirmation({})).toBe(false);
     expect(web.hasCustomerConfirmation(result.evidence)).toBe(false);
     expect(web.hasCustomerConfirmation({ ...result.evidence, customer_confirmation_at: '2026-10-25T17:00:00Z' })).toBe(true);
