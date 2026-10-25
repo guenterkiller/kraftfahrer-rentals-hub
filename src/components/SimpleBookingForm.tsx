@@ -1184,31 +1184,20 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                   </div>
 
                   <div className="flex items-start space-x-2 bg-red-50 border border-red-200 rounded-lg p-3">
-                    <Checkbox 
-                      id="binding" 
-                      checked={agreedToBinding}
-                      onCheckedChange={(checked) => setAgreedToBinding(checked as boolean)}
-                      required
-                      className="mt-0.5"
-                    />
-                    <Label htmlFor="binding" className="text-sm leading-snug">
-                      Ich bestätige, dass ich mit Absenden des Formulars eine verbindliche Anfrage zur Fahrerdisposition stelle.
-                      Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht.
-                      Nach Mitteilung der Fahrerzuteilung habe ich die Möglichkeit, der Zuteilung unverzüglich zu widersprechen, sofern die mitgeteilten Daten nicht passen. *
-                    </Label>
-                  </div>
-
-                  <div className="flex items-start space-x-2 bg-amber-50 border border-amber-200 rounded-lg p-3">
                     <Checkbox
-                      id="tasks-confirmation"
-                      checked={agreedToTasks}
-                      onCheckedChange={(checked) => setAgreedToTasks(checked as boolean)}
+                      id="conditions"
+                      checked={agreedToConditions}
+                      onCheckedChange={(checked) => setAgreedToConditions(checked as boolean)}
                       required
                       className="mt-0.5"
                     />
-                    <Label htmlFor="tasks-confirmation" className="text-sm leading-snug">
-                      Ich bestätige, dass die von mir beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind.
-                      Mir ist bekannt, dass diese Angaben Grundlage der Fahrerabstimmung und der Auftragsannahme durch den selbstständigen Fahrer sind. *
+                    <Label htmlFor="conditions" className="text-sm leading-snug">
+                      Ich bestätige die Richtigkeit meiner Angaben und akzeptiere die{' '}
+                      <Link to="/vermittlungsbedingungen" className="text-primary hover:underline font-semibold">
+                        Vermittlungsbedingungen
+                      </Link>{' '}
+                      einschließlich der Preis- und Zuschlagsregelungen.
+                      Mir ist bekannt, dass ein kostenpflichtiger Auftrag erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung entsteht. *
                     </Label>
                   </div>
                 </div>
