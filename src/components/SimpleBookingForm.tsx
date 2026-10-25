@@ -1205,7 +1205,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 <Button 
                   type="submit" 
                   className={`w-full bg-green-600 hover:bg-green-700 text-lg py-6${isUeberfuehrung ? ' h-auto min-h-16 whitespace-normal' : ''}`}
-                  disabled={loading || submitted || !agreedToData || !agreedToBinding || !agreedToTasks || !fahrzeugtyp || (weekendHoliday.affected && !agreedToSurcharge)}
+                  disabled={loading || submitted || !agreedToData || !agreedToConditions || !fahrzeugtyp}
                   aria-describedby="form-description"
                 >
                    {loading ? "Wird gesendet..." : (
