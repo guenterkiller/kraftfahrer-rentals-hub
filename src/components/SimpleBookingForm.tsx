@@ -50,8 +50,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false); // prevents double-submit
   const [agreedToData, setAgreedToData] = useState(false);
-  const [agreedToBinding, setAgreedToBinding] = useState(false);
-  const [agreedToTasks, setAgreedToTasks] = useState(false);
+  const [agreedToConditions, setAgreedToConditions] = useState(false);
   const [adrRequired, setAdrRequired] = useState(false);
   const [craneRequired, setCraneRequired] = useState(false);
   const [longDistance, setLongDistance] = useState(false);
