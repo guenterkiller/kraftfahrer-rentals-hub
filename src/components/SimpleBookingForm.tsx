@@ -77,7 +77,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const [vorname, setVorname] = useState('');
   const [nachname, setNachname] = useState('');
   const [unternehmen, setUnternehmen] = useState('');
-  const [agreedToSurcharge, setAgreedToSurcharge] = useState(false);
   const [unterkunftOption, setUnterkunftOption] = useState<UnterkunftOption | ''>('');
   const [unterkunftObergrenze, setUnterkunftObergrenze] = useState('');
   const { toast } = useToast();
