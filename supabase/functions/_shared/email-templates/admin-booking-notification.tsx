@@ -4,6 +4,13 @@ import { BaseEmail, colors, boxStyles, textStyles } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
 import { OvernightCostNotice } from './overnight-cost-notice.tsx';
 import { OVERNIGHT_COSTS } from '../overnight-costs.ts';
+import {
+  UNTERKUNFT_OPTIONEN,
+  OBERGRENZE_LABEL,
+  formatEuro,
+  zuweisungsHinweis,
+  type UnterkunftOption,
+} from '../kosten-uebersicht.ts';
 
 interface AdminBookingNotificationProps {
   customerName: string;
@@ -31,6 +38,8 @@ interface AdminBookingNotificationProps {
   surchargeDays?: string[];
   /** Einsatz länger als eine Woche (aus Beginn/Ende berechnet) */
   multiWeek?: boolean;
+  unterkunftOption?: UnterkunftOption | null;
+  unterkunftObergrenze?: number | null;
 }
 
 export const AdminBookingNotification = ({
@@ -50,6 +59,8 @@ export const AdminBookingNotification = ({
   maschinenbedienungLabel,
   surchargeDays = [],
   multiWeek = false,
+  unterkunftOption = null,
+  unterkunftObergrenze = null,
 }: AdminBookingNotificationProps) => (
   <BaseEmail previewText={`Neue Buchungsanfrage: ${driverType} in ${address}`}>
     <Heading style={{ ...textStyles.heading2, color: colors.primary }}>
@@ -181,6 +192,17 @@ export const AdminBookingNotification = ({
               {surchargeDays.map((d) => (<li key={d}>{d}</li>))}
             </ul>
           </>
+        )}
+        {unterkunftOption && (
+          <Text style={{ ...textStyles.paragraph, margin: '12px 0 0 0' }}>
+            <strong>Unterkunft:</strong> {UNTERKUNFT_OPTIONEN[unterkunftOption]}
+            {unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' && (
+              <>
+                <br /><strong>{OBERGRENZE_LABEL}:</strong> {formatEuro(unterkunftObergrenze)}
+                <br />{zuweisungsHinweis(unterkunftObergrenze)}
+              </>
+            )}
+          </Text>
         )}
         {tarif.needsReview && (
           <Text style={{ ...textStyles.paragraph, margin: '12px 0 0 0', fontWeight: 'bold' }}>
