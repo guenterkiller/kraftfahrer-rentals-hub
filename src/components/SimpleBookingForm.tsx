@@ -258,7 +258,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       };
 
       console.log('Sending payload:', payload);
-      console.log('Consent states - data:', agreedToData, 'binding:', agreedToBinding);
+      console.log('Consent states - data:', agreedToData, 'conditions:', agreedToConditions);
 
       // Track conversion with category
       const isBaumaschinen = fahrzeugtyp === 'Baumaschinenführer / Mischmeister';
