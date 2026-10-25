@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Fahrer-E-Mail-Vorschau und Vergütung
+- [ ] Verwendete Versandvorlagen und vorhandene Vergütungsfelder lesen.
+- [ ] Ausschließlich isolierte Vorschau der fünf E-Mails und vollständige Vergütungsprüfung ohne Versand erstellen.
+- [ ] Regeltests und Vorschau prüfen; Grenzen fehlender Daten und unveränderter produktiver Funktionen berichten.
 # Fahrerregistrierung und manuelle Freischaltung
 - [x] Registrierung, Vertragsentscheidung, Administratoranzeige und Angebotswege ausschließlich lesend geprüft: Registrierung pending, Vertragsannahme ohne Freischaltung; serverseitige Unterlagenprüfung fehlt.
 - [x] Vorschau-Unterlagenprüfung, Vertragsanzeige und Registrierungs-Unterlagenhinweise umgesetzt; beide E-Mail-Entwürfe und § 4 Abs. 2 ausschließlich in docs/fahrerfreischaltung-vorschau.md vorbereitet, produktive Vorlagen und Vertragsmodule unverändert.
