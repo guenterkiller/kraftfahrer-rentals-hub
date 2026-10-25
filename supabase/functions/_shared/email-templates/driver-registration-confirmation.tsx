@@ -4,10 +4,12 @@ import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } f
 
 interface DriverRegistrationConfirmationProps {
   driverName: string;
+  contractUrl?: string;
 }
 
 export const DriverRegistrationConfirmation = ({
   driverName,
+  contractUrl,
 }: DriverRegistrationConfirmationProps) => (
   <BaseEmail previewText="Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt">
     <Heading {...getTextProps(textStyles.heading2, 'heading')}>
@@ -28,6 +30,19 @@ export const DriverRegistrationConfirmation = ({
         ablehnen möchten.
       </Text>
     </Section>
+
+    {contractUrl ? (
+      <Section {...getBoxProps(boxStyles.highlightBox)}>
+        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihr persönlicher Vermittlungsvertrag</Heading>
+        <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px' })}>
+          Bitte lesen Sie den vollständigen Vermittlungsvertrag auf Ihrer persönlichen Seite und nehmen Sie ihn dort an oder lehnen Sie ihn ab. Der Link ist 14 Tage gültig. Ein Klick in dieser E-Mail allein entscheidet nichts.
+        </Text>
+        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+          <a href={contractUrl} style={{ display: 'inline-block', padding: '10px 16px', backgroundColor: '#1d4ed8', color: '#ffffff', borderRadius: '6px', textDecoration: 'none', fontWeight: 600, marginRight: '8px', marginBottom: '8px' }}>Vermittlungsvertrag verbindlich annehmen</a>
+          <a href={contractUrl} style={{ display: 'inline-block', padding: '10px 16px', backgroundColor: '#ffffff', color: '#1d4ed8', border: '1px solid #1d4ed8', borderRadius: '6px', textDecoration: 'none', fontWeight: 600 }}>Vermittlungsvertrag ablehnen</a>
+        </Text>
+      </Section>
+    ) : null}
 
     <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderColor: '#16a34a' })}>
       <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Fahrer-Vermittlungsbedingungen</Heading>
