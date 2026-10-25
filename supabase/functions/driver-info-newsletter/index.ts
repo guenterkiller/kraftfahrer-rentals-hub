@@ -177,7 +177,9 @@ serve(async (req) => {
       .select("id, vorname, nachname, email, status, is_blocked, email_opt_out")
       .eq("status", "approved")
       .eq("is_blocked", false)
-      .eq("email_opt_out", false);
+      .eq("email_opt_out", false)
+      .eq("is_inactive", false)
+      .is("unsubscribed_at", null);
     if (dErr) throw dErr;
 
     const recipients = (drivers ?? []).filter(

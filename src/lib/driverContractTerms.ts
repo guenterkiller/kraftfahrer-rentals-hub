@@ -2,7 +2,7 @@
 // WORTGLEICH zu supabase/functions/_shared/driver-contract-terms.ts halten (Test prüft Gleichheit).
 // Keine Imports – Datei wird auch vom Frontend-Test gelesen.
 
-export const DRIVER_CONTRACT_VERSION = "2026-10-15";
+export const DRIVER_CONTRACT_VERSION = "2026-10-25";
 
 export const BINDING_CONSENT_TEXT =
   "Ich habe die oben dargestellten Auftragsdaten und Vertragsbedingungen vollständig gelesen und nehme den Auftrag zu diesen Bedingungen als selbstständiger Unternehmer verbindlich an.";
@@ -43,7 +43,7 @@ export function buildDriverContractSections(commissionPct: CommissionPct): { tit
     {
       title: "4. Geltende Bedingungen",
       paragraphs: [
-        "Ergänzend gelten die Fahrer-Vermittlungsbedingungen von Fahrerexpress in der zum Zeitpunkt der Annahme gültigen Fassung (https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen). Der Einsatz erfolgt als selbstständiger Unternehmer; es handelt sich nicht um Arbeitnehmerüberlassung.",
+        "Ergänzend gilt der vom Fahrer im persönlichen Zustimmungsverfahren angenommene Vermittlungsvertrag von Fahrerexpress in der jeweils angenommenen Fassung. Der Einsatz erfolgt als selbstständiger Unternehmer; es handelt sich nicht um Arbeitnehmerüberlassung.",
       ],
     },
   ];

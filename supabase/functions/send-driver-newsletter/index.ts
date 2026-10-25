@@ -141,6 +141,7 @@ serve(async (req) => {
         .in('status', ['active', 'approved', 'aktiv'])
         .eq('email_opt_out', false)
         .eq('is_blocked', false)
+        .eq('is_inactive', false)
         .is('unsubscribed_at', null)
         .not('email', 'is', null);
       drivers = result.data;
