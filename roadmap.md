@@ -1,7 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # Kundenbestätigung bei neuen Anfragen
 - [x] Bestätigungsweg, Altformular-Ersatzprüfung und aktuelle Datenbankfelder/Zugriffsregeln lesend geprüft; konkreten technischen Plan für minimalen Nachweis und Administratoranzeige erstellt.
-- [ ] Nachweisspeicherung und Administratoranzeige umsetzen: wartet auf Freigabe des Plans; keine Datenbankänderung, E-Mails oder Veröffentlichung erfolgt.
+- [x] Nach Planfreigabe fünf optionale Nachweisfelder, atomaren Speicherweg, Serverzeit und Änderungs-/Nachtragschutz sowie deutsche Administratoranzeige umgesetzt; Altformular ohne behaupteten Nachweis erhalten.
+- [x] 53 Regeltests, ein Deno-Test, isolierter tatsächlicher Anfragehandler und Desktop-/Mobilprüfung bestanden; Datenbankschutz mit zurückgerollten Prüfeinträgen geprüft, alle 79 bestehenden Anfragen unverändert. Anfragefunktion eingespielt; Bericht unter docs/kundenbestaetigung-pruefbericht.md.
+- [ ] Altformular-Ersatzweg nach IONOS-Upload prüfen und nur mit gesonderter Freigabe entfernen; Upload/Veröffentlichung nicht freigegeben. Produktive End-to-End-Abnahme ohne echte Anfrage und externe Admin-Sitzung nicht durchgeführt.
 # Sichere Löschverwaltung in Supabase
 - [x] Dauerhafte atomare SQL-Editor-Löschfunktionen für Fahrer und Kundenaufträge sowie serverseitige Schutzprüfung eingerichtet; keine Archivierung oder Mails, keine neuen Sicherheitswarnungen.
 - [x] Direkte Tabelleneditor-Löschung gegen Verlust geschützter Geschäfts-/Vertragsnachweise abgesichert; direkte Löschung, Funktionen, E-Mail-Bestätigung, Schutz/Rollback und anonyme Zugriffssperre mit zurückgerollten Beispieldaten geprüft; Prüfsummen der Bestands-/Auth-Daten unverändert.
