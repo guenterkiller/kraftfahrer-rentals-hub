@@ -2,8 +2,8 @@
 # Sichere Löschverwaltung in Supabase
 - [x] Dauerhafte atomare SQL-Editor-Löschfunktionen für Fahrer und Kundenaufträge sowie serverseitige Schutzprüfung eingerichtet; keine Archivierung oder Mails, keine neuen Sicherheitswarnungen.
 - [x] Direkte Tabelleneditor-Löschung gegen Verlust geschützter Geschäfts-/Vertragsnachweise abgesichert; direkte Löschung, Funktionen, E-Mail-Bestätigung, Schutz/Rollback und anonyme Zugriffssperre mit zurückgerollten Beispieldaten geprüft; Prüfsummen der Bestands-/Auth-Daten unverändert.
-- [x] Drei benannte Profile und Registrierungsadresse nachkontrolliert: zwei TEST-Profile bereits gelöscht, Günter unverändert erhalten, Adresse weiterhin belegt.
-- [ ] Günter-Profillöschung und Freigabe der bisherigen Fahreradresse: blockiert durch geschützten Vertragsnachweis und 21 Auftragsverknüpfungen; konkrete rechtliche Löschzulässigkeit bzw. ausschließlich künstlicher Vorgang nicht bestätigt.
+- [x] Drei benannte Profile nachkontrolliert: zwei TEST-Profile zuvor gelöscht, drittes Testprofil nach ausdrücklicher Bestätigung des Administrators als selbst angelegter Testeintrag ebenfalls entfernt.
+- [x] Günter-Testprofil einschließlich Vertragsnachweis, Vertragseinladung und 21 Angebotsverknüpfungen gelöscht; Fahreradresse wieder frei; Löschschutz in derselben Transaktion wiederhergestellt und mit zwei Prüfungen getestet.
 - [x] Deutsche Bedienanleitung unter docs/supabase-loeschverwaltung.md erstellt; Registrierung/Vermittlung nur lesend geprüft, keine Mails oder Veröffentlichung.
 # Fahrervertragseinladungen
 - [x] Vorhandene Administratoransicht und Profilverknüpfung lesend geprüft; Umsetzungsvorschlag freigegeben.

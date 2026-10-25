@@ -33,8 +33,8 @@ Erfolg: `geloescht: true`. Falsche E-Mail, fehlender Datensatz, fehlende Berecht
 
 ## Kontrolle vom 25.10.2026
 
-- Die zwei künstlichen TEST-Fahrer waren bereits vollständig gelöscht.
-- Günter Killer bleibt erhalten: ein geschützter Vertragsentscheidungsnachweis und 21 Auftragsangebote; kein ausschließlich künstlicher Gesamtvorgang nachgewiesen. Die bisherige Fahrer-E-Mail bleibt belegt.
+- Alle vier freigegebenen Testeinträge sind gelöscht: die zwei künstlichen TEST-Fahrer sowie das vom Administrator selbst angelegte Testprofil „Günter Killer“ samt seinem Vertragsentscheidungsnachweis, der zugehörigen Vertragseinladung und 21 Angebotsverknüpfungen.
+- Die Fahrer-E-Mail-Adresse guenter.killer@t-online.de ist in `fahrer_profile` nicht mehr geführt und damit für eine erneute Registrierung frei. Der Administratorzugang in `user_roles` und `auth.users` blieb unberührt.
 - Atomare Funktionslöschung, direkte Tabellenlöschung, falsche Bestätigung, Nachweisschutz, Abrechnungsschutz und fehlende anonyme Berechtigung wurden mit zurückgerollten SQL-Beispieldaten geprüft.
 - Prüfsummen von Fahrerprofilen, Aufträgen, Zuteilungen, Auftragsannahmen, Vertragsentscheidungen, Benutzerrollen und Authentifizierungskonten waren vor und nach der Schutz-/Rollback-Prüfung identisch.
 - Keine neuen Registrierungen, Vermittlungen oder E-Mails ausgelöst; diese Abläufe wurden nur lesend geprüft, nicht vollständig erneut ausgeführt. Keine Veröffentlichung.
