@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { driverMayReceiveOffers } from '../_shared/driver-contract-gate.ts';
 import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
@@ -71,6 +72,11 @@ serve(async (req) => {
     }
 
     console.log('👤 Driver found:', driver.vorname, driver.nachname);
+
+    // Stichtagsschalter Vermittlungsvertrag (aus = unverändert)
+    if (!(await driverMayReceiveOffers(supabase, driverId))) {
+      return createErrorResponse('Vermittlungsvertrag noch nicht angenommen', 409, corsHeaders);
+    }
 
     // 2. Update driver status to 'approved'
     const { error: updateError } = await supabase
