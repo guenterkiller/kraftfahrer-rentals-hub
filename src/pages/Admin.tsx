@@ -33,7 +33,7 @@ import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
-import { UNTERKUNFT_OPTIONEN, OBERGRENZE_LABEL, formatEuro, type UnterkunftOption } from "@/lib/kostenUebersicht";
+import { UNTERKUNFT_OPTIONEN, OBERGRENZE_LABEL, formatEuro, zuweisungsHinweis, type UnterkunftOption } from "@/lib/kostenUebersicht";
 
 interface FahrerProfile {
   id: string;
@@ -2100,6 +2100,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   {(req as any).unterkunft_option === 'fahrer_organisiert' && typeof (req as any).unterkunft_obergrenze === 'number' && (
                                     <p className="text-sm text-gray-900 mt-1">
                                       {OBERGRENZE_LABEL}: {formatEuro((req as any).unterkunft_obergrenze)}
+                                    </p>
+                                  )}
+                                  {(req as any).unterkunft_option === 'fahrer_organisiert' && (
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      {zuweisungsHinweis(typeof (req as any).unterkunft_obergrenze === 'number' ? (req as any).unterkunft_obergrenze : null)}
                                     </p>
                                   )}
                                 </div>
