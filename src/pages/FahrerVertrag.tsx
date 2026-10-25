@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,14 @@ async function call(body: Record<string, unknown>) {
   try { return await (error as any)?.context?.json(); } catch { return { status: "error" }; }
 }
 
+export function scheduleContractRedirect(savedStatus: string | null) {
+  if (savedStatus !== "accepted" && savedStatus !== "rejected") return;
+  const timer = window.setTimeout(() => {
+    window.location.assign("https://www.kraftfahrer-mieten.com/");
+  }, 10_000);
+  return () => window.clearTimeout(timer);
+}
+
 export default function FahrerVertrag() {
   useSEO({ title: "Vermittlungsvertrag | Fahrerexpress", description: "Persönlicher Vermittlungsvertrag", noindex: true } as any);
   const [params] = useSearchParams();
@@ -37,6 +45,10 @@ export default function FahrerVertrag() {
   const [mode, setMode] = useState<"accept" | "reject" | null>(null);
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [savedStatus, setSavedStatus] = useState<string | null>(null);
+  const submissionLocked = useRef(false);
+
+  useEffect(() => scheduleContractRedirect(savedStatus), [savedStatus]);
 
   useEffect(() => {
     if (!token) { setResult("invalid"); return; }
@@ -44,17 +56,33 @@ export default function FahrerVertrag() {
   }, [token]);
 
   const submit = async () => {
+    if (submissionLocked.current) return;
     if (!mode || !checked) return setResult("consent_required");
+    submissionLocked.current = true;
     setBusy(true);
-    const r = await call({ action: mode, token, consent: true });
-    setBusy(false);
-    setResult(r?.status ?? "error");
+    try {
+      const r = await call({ action: mode, token, consent: true });
+      const status = r?.status ?? "error";
+      setResult(status);
+      if (status === "accepted" || status === "rejected") setSavedStatus(status);
+    } catch {
+      setResult("error");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
     <main className="container mx-auto max-w-3xl px-4 py-10">
       {result && result !== "consent_required" ? (
-        <p role="status" className="rounded-md border border-border bg-muted p-4 text-foreground">{RESULT[result] ?? RESULT.error}</p>
+        <div className="space-y-6">
+          <p role="status" className="rounded-md border border-border bg-muted p-4 text-foreground">{RESULT[result] ?? RESULT.error}</p>
+          {savedStatus && (
+            <Button asChild size="lg">
+              <a href="https://www.kraftfahrer-mieten.com/">Zurück zur Startseite</a>
+            </Button>
+          )}
+        </div>
       ) : !data ? (
         <p className="text-muted-foreground">Vertrag wird geladen …</p>
       ) : (
