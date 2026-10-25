@@ -473,6 +473,8 @@ const handler = async (req: Request): Promise<Response> => {
               const e = Date.parse(String(requestData.einsatzende || ''));
               return Number.isFinite(b) && Number.isFinite(e) && (e - b) / 86400000 + 1 > 7;
             })(),
+            unterkunftOption: unterkunftOption,
+            unterkunftObergrenze: unterkunftObergrenze,
           })
         );
 
