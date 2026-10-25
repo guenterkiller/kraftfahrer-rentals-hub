@@ -44,3 +44,10 @@
 - [x] Sicherheitsprüfung vor der Veröffentlichung: keine kritischen Befunde; zwei Warnungen (offene Schreibregeln für Seitenaufruf- und Messwertetabellen) und ein Hinweis (Schutz vor geleakten Passwörtern aus).
 - [ ] Veröffentlichung nicht erfolgt: die Veröffentlichungsanfrage wurde zweimal abgelehnt; nichts ist live, IONOS-Upload ebenfalls nicht erfolgt.
 - [ ] Bei exakt 320 px: das lange Wort in der Überschrift „Kundenbewertungen & Erfahrungen" erzeugt 13 px seitlichen Spiel; rein optische Korrektur (Wortumbruch) wartet auf Freigabe.
+
+# Vermittlungsvertrag Fahrer (Abschlussauftrag)
+- [x] Vertrag v2 mit § 6 Nr. 2 (12 Monate), § 7 Nr. 2 (Verschulden, Anrechnung), § 7a; ohne 2.500 €, ohne Festanstellung.
+- [x] Persönliche Vertragsseite, 14-Tage-Link, Annahme/Ablehnung mit unveränderlichem Nachweis; Ablehnung deaktiviert + sperrt Werbe-Mails.
+- [x] Angebotsmail angepasst; Registrierungshäkchen; Adminstatus + Linkerzeugung ohne Mail; Stichtagsschalter aus.
+- [ ] Einspielen der Serverfunktionen und Live-Durchlauf: wartet auf Freigabe.
+- [ ] Versand der Vertragslinks an die 41 Fahrer: wartet auf Freigabe.
