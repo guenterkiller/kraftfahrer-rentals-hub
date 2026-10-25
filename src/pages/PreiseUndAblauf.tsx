@@ -456,7 +456,7 @@ const PreiseUndAblauf = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Zahlungsziel: 7 Tage netto</span>
+                    <span>Zahlungsziel: 7 Kalendertage netto ab Rechnungsdatum</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />

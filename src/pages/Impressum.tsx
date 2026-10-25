@@ -74,7 +74,7 @@ const Impressum = () => {
                   Selbstständige Durchführung von Fahrdienstleistungen im gesamten Bundesgebiet. Einsatz erfolgt flexibel nach Auftrag und Fahrzeugart – ohne Einschränkung auf bestimmte Fahrzeugtypen.
                 </p>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Keine Güter- oder Personenbeförderung im eigenen Namen. Keine Vermittlungstätigkeit.
+                  Keine Güter- oder Personenbeförderung im eigenen Namen.
                 </p>
               </div>
               

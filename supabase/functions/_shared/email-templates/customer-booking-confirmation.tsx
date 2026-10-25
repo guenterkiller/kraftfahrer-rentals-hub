@@ -321,7 +321,7 @@ export const CustomerBookingConfirmation = ({
           </Text>
           <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>{ABRECHNUNGSTEXT}</Text>
           <Text {...getTextProps({ ...textStyles.muted, fontSize: '13px', margin: '12px 0 0 0' })}>
-            <strong>Alle Preise netto zzgl. gesetzlicher MwSt.</strong> Zahlungsziel: 7 Tage netto ab Rechnungsdatum.
+            <strong>Alle Preise netto zzgl. gesetzlicher MwSt.</strong> Zahlungsziel: 7 Kalendertage netto ab Rechnungsdatum.
           </Text>
         </Section>
       )}
@@ -345,7 +345,7 @@ export const CustomerBookingConfirmation = ({
           </Text>
           <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>{ABRECHNUNGSTEXT}</Text>
           <Text {...getTextProps({ ...textStyles.muted, fontSize: '13px', margin: '12px 0 0 0' })}>
-            <strong>Alle Preise netto zzgl. gesetzlicher MwSt.</strong> Zahlungsziel: 7 Tage netto ab Rechnungsdatum.
+            <strong>Alle Preise netto zzgl. gesetzlicher MwSt.</strong> Zahlungsziel: 7 Kalendertage netto ab Rechnungsdatum.
           </Text>
         </Section>
       )}

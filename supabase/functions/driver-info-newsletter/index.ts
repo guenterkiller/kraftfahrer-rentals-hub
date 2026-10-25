@@ -79,9 +79,9 @@ function renderHtml(vorname: string, unsubscribeUrl: string): string {
 
     <p><strong>Hinweis zur Vergütung und zum Vermittlungsanteil:</strong></p>
     <p>Jeder Einsatz wird Ihnen vorab einzeln angeboten. Die konkrete Vergütung und der Vermittlungsanteil ergeben sich aus dem jeweiligen Auftragsangebot vor Einsatzbeginn.</p>
-    <p>Für Standardeinsätze beträgt der Vermittlungsanteil der Fahrerexpress-Agentur in der Regel <strong>20 %</strong> des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises ohne An- und Abfahrt.</p>
-    <p>Für Sonder-, Projekt-, Pauschal-, kurzfristige oder besonders aufwendige Einsätze kann der Vermittlungsanteil <strong>bis zu 25 %</strong> betragen.</p>
-    <p>Der Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Der Fahrer stellt Fahrerexpress seine Rechnung bereits nach Abzug dieses Vermittlungsanteils – der Anteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten. Auslagen wie An- und Abfahrt, Fahrtkosten, Bahn, Hotel, Diesel, Maut oder Parkgebühren werden gesondert behandelt und nicht vom Vermittlungsanteil gekürzt.</p>
+    <p>Für Standardeinsätze beträgt der Vermittlungsanteil der Fahrerexpress-Agentur <strong>20 %</strong> des mit dem Auftraggeber vereinbarten Netto-Einsatzpreises ohne An- und Abfahrt.</p>
+    <p>Für ausdrücklich als Sonderauftrag vereinbarte Einsätze beträgt der Vermittlungsanteil <strong>25 %</strong>.</p>
+    <p>Der Vermittlungsanteil wird vom vereinbarten Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Der Fahrer stellt Fahrerexpress seine Rechnung bereits nach Abzug dieses Vermittlungsanteils – der Anteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten. Ausschließlich die vereinbarten An- und Abfahrtskosten sind provisionsfrei.</p>
     <p>Sie entscheiden bei jedem Angebot frei, ob Sie den Einsatz übernehmen möchten oder nicht.</p>
 
     <p style="margin-top:24px;"><strong>Keine weiteren Auftragsangebote gewünscht?</strong></p>

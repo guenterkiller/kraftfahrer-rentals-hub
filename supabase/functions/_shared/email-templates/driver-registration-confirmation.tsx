@@ -47,7 +47,7 @@ export const DriverRegistrationConfirmation = ({
         <strong>Rechnungsstellung &amp; Zahlung:</strong> Der Fahrer stellt seine Rechnung an Fahrerexpress – <strong>bereits nach Abzug des Vermittlungsanteils</strong>. Die Zahlung erfolgt nach vollständiger und ordnungsgemäßer Durchführung des Einsatzes; soweit im konkreten Auftragsangebot nichts anderes vereinbart ist, nach Zahlungseingang des Auftraggebers bei Fahrerexpress.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
-        <strong>Auslagen:</strong> Fahrtkosten, An-/Abfahrt, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten sind <strong>nicht provisionspflichtig</strong> und werden separat behandelt.
+        <strong>Auslagen:</strong> Ausschließlich die vereinbarten An- und Abfahrtskosten sind <strong>provisionsfrei</strong>.
       </Text>
       <Text {...getTextProps({ ...textStyles.paragraph, marginTop: '8px', marginBottom: '0' })}>
         <strong>Keine Direktabrechnung:</strong> Es darf <strong>nicht direkt mit dem Auftraggeber abgerechnet</strong> werden, und es dürfen keine eigenen Preisabsprachen mit Auftraggebern getroffen werden. Die gesamte Abrechnung läuft über Fahrerexpress.

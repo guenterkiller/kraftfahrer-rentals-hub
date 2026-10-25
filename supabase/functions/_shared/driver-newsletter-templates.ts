@@ -51,8 +51,8 @@ const FAHRERINFORMATIONEN_V1: DriverNewsletterTemplate = {
           type: 'list',
           items: [
             'Sie sind <strong>selbstständiger Fahrer / selbstständiger Unternehmer</strong>. Es besteht kein Arbeitsverhältnis und keine Arbeitnehmerüberlassung.',
-            '<strong>Vermittlungsanteil:</strong> Bei Standardaufträgen beträgt der Vermittlungsanteil in der Regel 20 % der vereinbarten Netto-Vergütung für die Fahrerdienstleistung. In Sonderfällen kann der Vermittlungsanteil bis zu 25 % betragen. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.',
-            'Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Auslagen</strong> wie An- und Abfahrt, Fahrtkosten, Diesel, Maut, Parkgebühren, Bahn- und Hotelkosten sowie sonstige vorab freigegebene Auslagen <strong>werden nicht vom Vermittlungsanteil gekürzt</strong>.',
+            '<strong>Vermittlungsanteil:</strong> Bei Standardaufträgen beträgt der Vermittlungsanteil 20 % der vereinbarten Netto-Vergütung für die Fahrerdienstleistung. Bei ausdrücklich als Sonderauftrag vereinbarten Aufträgen beträgt er 25 %. Maßgeblich ist immer das konkrete Auftragsangebot vor Einsatzbeginn.',
+            'Der Vermittlungsanteil bezieht sich ausschließlich auf die reine Fahrerdienstleistung. <strong>Ausschließlich die vereinbarten An- und Abfahrtskosten sind provisionsfrei</strong>.',
             'Ihre <strong>Rechnung</strong> stellen Sie an Fahrerexpress – bereits <strong>nach Abzug</strong> des Vermittlungsanteils.',
             'Keine Direktabrechnung mit Auftraggebern. Keine Preisabsprachen mit Auftraggebern.',
             'Die Rückmeldung <strong>„Ich kann übernehmen"</strong> ist ausschließlich eine Verfügbarkeitsmeldung. Die finale, verbindliche Einsatzbestätigung erfolgt separat durch Fahrerexpress.',
