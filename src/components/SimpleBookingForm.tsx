@@ -1165,18 +1165,6 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                           ...weekendHoliday.holidays
                         ].filter(Boolean).join(', ')}
                       </p>
-                      <div className="flex items-start space-x-2 mt-3">
-                        <Checkbox
-                          id="surcharge-ack"
-                          checked={agreedToSurcharge}
-                          onCheckedChange={(checked) => setAgreedToSurcharge(checked as boolean)}
-                          required
-                          className="mt-0.5"
-                        />
-                        <Label htmlFor="surcharge-ack" className="text-sm leading-snug">
-                          Ich habe zur Kenntnis genommen, dass für Einsätze an Samstagen, Sonntagen und gesetzlichen Feiertagen automatisch Zuschläge auf den jeweiligen Tagessatz berechnet werden. *
-                        </Label>
-                      </div>
                     </div>
                   )}
                   
