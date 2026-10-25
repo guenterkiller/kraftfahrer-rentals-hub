@@ -1,8 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # IONOS-Freigabehindernisse
-- [ ] Sämtliche Aufrufer und alternativen Anfrage-Schreibwege prüfen; unbenutzten SQL-Schreibweg ohne Datenänderungen sperren und Berechtigungsregressionen prüfen.
-- [ ] Beide GitHub-Repositories gegen den aktuellen Formular-, Hotelbudget-, Nachweis- und Verwaltungsstand vergleichen; Skript nur bei eindeutigem Nachweis ändern.
-- [ ] Vollständiges Produktionspaket und Prerender-Abdeckung verifizieren; keine Buchungen, E-Mails oder IONOS-Veröffentlichung.
+- [x] Sämtliche lokalen Aufrufer geprüft; unbenutzter submit_job_request für PUBLIC/anon/authenticated/service_role gesperrt. Drei Rollenaufrufe ohne Einfügung getestet; alle 79 Anfragen samt Prüfsumme unverändert. Aktiver Edge-/Adminweg bleibt unverändert; Legacy-Datenschutzfallback ausdrücklich erhalten.
+- [x] Vollständiger GitHub-Baum guenterkiller/kraftfahrer-rentals-hub/main (0192afe1bc6b1a07da88627c260ce611d90fd7bd) entspricht dem aktuellen Stand bis auf die neuen Sicherheits-/Skript-/Architekturänderungen; anderes Repository zuletzt nicht öffentlich erreichbar. PowerShell auf nachgewiesenes Repository/main mit Clone-Abbruch und Commitausgabe umgestellt.
+- [x] 53 Frontend-Regeltests, 8 isolierte Servertests, 4 Prerender-Regeltests und tatsächlicher Handler mit simulierten Speicher-/Versandabhängigkeiten bestanden; automatische Prüfung build OK. Keine Buchungen, E-Mails oder IONOS-Veröffentlichung.
+- [ ] Vollständiges Produktionspaket verifizieren: automatische Prüfung liefert hier kein dist; manueller Projektbuild ist durch die Ausführungsumgebung gesperrt. Neues GitHub-Skript/Migration nach Synchronisation erneut prüfen; vollständige Uploadfreigabe bleibt ausstehend.
 # Kundenbestätigung bei neuen Anfragen
 - [x] Bestätigungsweg, Altformular-Ersatzprüfung und aktuelle Datenbankfelder/Zugriffsregeln lesend geprüft; konkreten technischen Plan für minimalen Nachweis und Administratoranzeige erstellt.
 - [x] Nach Planfreigabe fünf optionale Nachweisfelder, atomaren Speicherweg, Serverzeit und Änderungs-/Nachtragschutz sowie deutsche Administratoranzeige umgesetzt; Altformular ohne behaupteten Nachweis erhalten.
