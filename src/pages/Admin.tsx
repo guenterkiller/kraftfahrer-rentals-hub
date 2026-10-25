@@ -1,5 +1,4 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
-import { canConfirmDriverApproval } from "@/lib/driverApprovalReview";
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
 import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
 import React, { useState, useEffect, useRef } from "react";
@@ -148,9 +147,6 @@ const Admin = () => {
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("");
   const [approvingDriver, setApprovingDriver] = useState<string | null>(null);
-  const [approvalReviewDriver, setApprovalReviewDriver] = useState<FahrerProfile | null>(null);
-  const [tradeReviewed, setTradeReviewed] = useState(false);
-  const [driverDocumentsReviewed, setDriverDocumentsReviewed] = useState(false);
   const [sendingJobToAll, setSendingJobToAll] = useState<string | null>(null);
   const [confirmingAssignment, setConfirmingAssignment] = useState<string | null>(null);
   const [markingNoShow, setMarkingNoShow] = useState<string | null>(null);
@@ -1056,22 +1052,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
     }
   };
 
-  const handleApproveDriver = async (driverId: string, reviewConfirmed = false) => {
+  const handleApproveDriver = async (driverId: string) => {
     const driver = fahrer.find(f => f.id === driverId);
     if (!driver || driver.status !== 'pending' || driver.is_blocked || driver.is_inactive) return;
-    if (!reviewConfirmed) {
-      setTradeReviewed(false);
-      setDriverDocumentsReviewed(false);
-      setApprovalReviewDriver(driver);
-      void loadDocuments(driver.email, driver.id);
-      return;
-    }
-    if (approvalReviewDriver?.id !== driverId || !canConfirmDriverApproval({
-      ...driver,
-      documentTypes: (documents[driverId] ?? []).map(doc => doc.type),
-      tradeReviewed,
-      driverDocumentsReviewed,
-    })) return;
     console.log('🚀 Starting driver approval process for:', driverId);
     setApprovingDriver(driverId);
     
@@ -1093,7 +1076,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       console.log('✅ Driver approved successfully:', data);
       if (data?.ok !== true) throw new Error(data?.error || 'Freischaltung nicht bestätigt');
-      setApprovalReviewDriver(null);
+      
       
       // Update local state
       setFahrer(prev => 
