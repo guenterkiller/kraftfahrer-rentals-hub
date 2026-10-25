@@ -2867,38 +2867,6 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       </div>
 
       {/* Preview Dialog */}
-      <Dialog open={!!approvalReviewDriver} onOpenChange={(open) => { if (!open && !approvingDriver) setApprovalReviewDriver(null); }}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto" aria-describedby="driver-approval-description">
-          <DialogHeader>
-            <DialogTitle>Fahrer manuell freischalten</DialogTitle>
-          </DialogHeader>
-          {approvalReviewDriver && (
-            <div className="space-y-4">
-              <p className="font-medium">{approvalReviewDriver.vorname} {approvalReviewDriver.nachname}</p>
-              <p id="driver-approval-description" className="text-sm text-muted-foreground">Registrierung und Vertragsannahme sind keine Freischaltung. Erst nach erfolgreicher Prüfung durch Fahrerexpress darf der Fahrer Auftragsangebote erhalten.</p>
-              <DriverContractStatus driverId={approvalReviewDriver.id} />
-              {renderDriverDocuments(approvalReviewDriver.id)}
-              {documents[approvalReviewDriver.id] && !documents[approvalReviewDriver.id].some(doc => doc.type === 'gewerbeanmeldung') && (
-                <p role="alert" className="text-sm text-destructive">Gewerbeanmeldung fehlt. Vor der Freischaltung muss sie eingereicht sein.</p>
-              )}
-              <div className="flex items-start gap-2">
-                <Checkbox id="trade-reviewed" checked={tradeReviewed} onCheckedChange={v => setTradeReviewed(v === true)} />
-                <Label htmlFor="trade-reviewed" className="leading-relaxed">Die Gewerbeanmeldung liegt vor und wurde von mir geprüft.</Label>
-              </div>
-              <div className="flex items-start gap-2">
-                <Checkbox id="driver-documents-reviewed" checked={driverDocumentsReviewed} onCheckedChange={v => setDriverDocumentsReviewed(v === true)} />
-                <Label htmlFor="driver-documents-reviewed" className="leading-relaxed">Alle für die Tätigkeit erforderlichen Fahrerunterlagen, einschließlich Führerschein, gegebenenfalls Fahrerkarte und Zertifikaten, liegen vor und wurden von mir geprüft.</Label>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" disabled={!!approvingDriver} onClick={() => setApprovalReviewDriver(null)}>Abbrechen</Button>
-                <Button disabled={!!approvingDriver || !canConfirmDriverApproval({ ...approvalReviewDriver, documentTypes: (documents[approvalReviewDriver.id] ?? []).map(doc => doc.type), tradeReviewed, driverDocumentsReviewed })} onClick={() => handleApproveDriver(approvalReviewDriver.id, true)}>
-                  Nach Prüfung manuell freischalten
-                </Button>
-              </DialogFooter>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
       <Dialog open={!!previewDoc} onOpenChange={() => setPreviewDoc(null)}>
         <DialogContent className="max-w-[90vw] w-[90vw] h-[90vh] max-h-[90vh] flex flex-col p-0 overflow-hidden border-0 sm:rounded-lg">
           <DialogHeader className="px-6 pt-6 pb-2 shrink-0">
