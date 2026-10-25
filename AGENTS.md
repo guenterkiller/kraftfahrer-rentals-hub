@@ -1,4 +1,5 @@
 # AGENTS.md
+- Administrative physical deletion uses guarded parent-table DELETE triggers and SQL-editor-only atomic functions with ID plus email confirmation; contract decisions, consents, assignments, offers linked to drivers, billing evidence and files block deletion pending retention review. Why: preserves immutable evidence and auth while removing only unencumbered records without storage or email side effects.
 
 - The admin contract-invitation overview reads paginated invitation rows joined to driver profiles through the existing foreign key, omits tokens and opens the existing driver-data dialog; invitation state is not a contractual decision. Why: administrators can identify and search every invitation without new write paths or disclosure of private links.
 
