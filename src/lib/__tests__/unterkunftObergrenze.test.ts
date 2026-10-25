@@ -2,8 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { parseUnterkunftObergrenze } from '../../../supabase/functions/submit-fahrer-anfrage/unterkunft-obergrenze';
 
 describe('Serverseitige Unterkunfts-Kostenobergrenze', () => {
-  it.each([undefined, null, '', ' ', 'ungueltig', true, false, [], {}, -1, '-1', NaN, Infinity, 'Infinity', 0.001, '0,001', '60,555', 60.555, '1e3', '60 €', '60,', 75.01, '75,01', 120, '120,50'])('weist fehlende, ungültige, negative oder über 75 € liegende Werte zurück: %j', (value) => {
-    expect(parseUnterkunftObergrenze(value)).toBeNull();
+  it('weist fehlende, ungültige, negative oder über 75 € liegende Werte zurück', () => {
+    const values = [undefined, null, '', ' ', 'ungueltig', true, false, [], {}, -1, '-1', NaN, Infinity, 'Infinity', 0.001, '0,001', '60,555', 60.555, '1e3', '60 €', '60,', 75.01, '75,01', 120, '120,50'];
+    for (const value of values) {
+      expect(parseUnterkunftObergrenze(value)).toBeNull();
+    }
   });
   it.each([[0, 0], ['0', 0], ['0,00', 0], [75, 75], ['75,00', 75], ['59,50', 59.5], ['59.50', 59.5], [0.01, 0.01]])('akzeptiert Beträge von 0 bis 75 €: %j', (input, expected) => {
     expect(parseUnterkunftObergrenze(input)).toBe(expected);
