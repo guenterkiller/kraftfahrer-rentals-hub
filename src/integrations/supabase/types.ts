@@ -1122,6 +1122,15 @@ export type Database = {
         Args: { _assignment_id: string }
         Returns: boolean
       }
+      admin_delete_access_allowed: { Args: never; Returns: boolean }
+      admin_delete_driver: {
+        Args: { _confirm_email: string; _driver_id: string }
+        Returns: Json
+      }
+      admin_delete_job: {
+        Args: { _confirm_email: string; _job_id: string }
+        Returns: Json
+      }
       admin_get_job: {
         Args: { _job_id: string }
         Returns: {
