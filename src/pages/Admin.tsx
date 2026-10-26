@@ -1087,7 +1087,11 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
       toast({
         title: "Fahrer erfolgreich freigeschaltet",
-        description: `Fahrer wurde freigeschaltet und ${data.invitesSent || 0} aktuelle Jobs per E-Mail gesendet.`,
+        description: data?.contractPending
+          ? (data.contractEmailSent
+              ? "Vertrags-E-Mail mit persönlichem Link wurde versendet. Auftragsangebote erst nach Vertragsannahme."
+              : "Vertrag ist noch offen (gültiger Link bereits vorhanden). Auftragsangebote erst nach Vertragsannahme.")
+          : `Fahrer wurde freigeschaltet und ${data.invitesSent || 0} aktuelle Jobs per E-Mail gesendet.`,
       });
 
     } catch (error) {

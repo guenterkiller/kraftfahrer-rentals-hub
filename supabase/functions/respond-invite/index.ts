@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { isJobReleased, isDriverActive } from "../_shared/job-release.ts";
+import { driverHasOpenContract } from "../_shared/driver-contract-gate.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { TERMS_VERSION_DRIVER } from "../_shared/terms-version.ts";
@@ -194,6 +195,12 @@ const handler = async (req: Request): Promise<Response> => {
     // bereits versendete Links nichts mehr annehmen (gilt für alle Linkarten).
     if (!isDriverActive((invite as any).driver)) {
       console.warn(`⛔ Invite ${invite.id}: driver not active – link rejected`);
+      return intent === "load" ? jsonReply({ status: "invalid" }) : reply("invalid");
+    }
+
+    // Fahrer mit offenem Vermittlungsvertrag dürfen keine Angebote annehmen
+    if ((invite as any).purpose !== "binding" && await driverHasOpenContract(supabase, (invite as any).driver?.id)) {
+      console.warn(`⛔ Invite ${invite.id}: contract not accepted – link rejected`);
       return intent === "load" ? jsonReply({ status: "invalid" }) : reply("invalid");
     }
 

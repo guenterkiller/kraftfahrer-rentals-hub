@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 import { isJobReleased } from "../_shared/job-release.ts";
+import { openContractDriverIds } from "../_shared/driver-contract-gate.ts";
 import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
 
 const corsHeaders = createCorsHeaders();
@@ -58,11 +59,21 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log(`👥 Found ${drivers.length} approved drivers`);
 
+    // Fahrer mit offenem Vermittlungsvertrag erhalten keine Einladungen
+    const blockedContractIds = await openContractDriverIds(supabase, drivers.map((d: any) => d.id));
+    const eligibleDrivers = drivers.filter((d: any) => !blockedContractIds.has(d.id));
+    if (eligibleDrivers.length === 0) {
+      return new Response(JSON.stringify({ error: "No eligible drivers (contract pending)" }), {
+        status: 404,
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
+      });
+    }
+
     const results = [];
     const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
     // Für jeden Fahrer
-    for (const driver of drivers) {
+    for (const driver of eligibleDrivers) {
       const invites = [];
 
       // Erstelle Invite-Token für jeden Job

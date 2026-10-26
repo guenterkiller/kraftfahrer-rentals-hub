@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { isJobReleased } from "../_shared/job-release.ts";
+import { openContractDriverIds } from "../_shared/driver-contract-gate.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
 import React from "npm:react@18.3.1";
@@ -136,6 +137,17 @@ serve(async (req) => {
 
     console.log(`Found ${drivers.length} approved drivers to notify`);
 
+    // Fahrer mit offenem Vermittlungsvertrag erhalten keine Angebote
+    const blockedContractIds = await openContractDriverIds(supabase, drivers.map((d: any) => d.id));
+    const eligibleDrivers = drivers.filter((d: any) => !blockedContractIds.has(d.id));
+    if (eligibleDrivers.length === 0) {
+      console.log("All approved drivers have an open contract – nothing to send");
+      return new Response(
+        JSON.stringify({ success: true, message: "No eligible drivers (contract pending)", count: 0 }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Fetch attachments and create signed URLs (7 days)
     const { data: attachmentRows } = await supabase
       .from("job_attachments")
@@ -164,7 +176,7 @@ serve(async (req) => {
     let successCount = 0;
     let errorCount = 0;
 
-    for (const driver of drivers) {
+    for (const driver of eligibleDrivers) {
       try {
         // Generate unique token and store invitation
         const token = randomToken(48);

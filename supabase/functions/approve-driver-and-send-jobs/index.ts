@@ -1,5 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { driverMayReceiveOffers } from '../_shared/driver-contract-gate.ts';
+import { inviteExpiry } from '../_shared/driver-contract-gate.ts';
+import { MEDIATION_CONTRACT_VERSION } from '../_shared/driver-mediation-contract.ts';
+import { DriverContractInviteEmail } from './_templates/driver-contract-invite-email.tsx';
 import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
@@ -73,11 +75,6 @@ serve(async (req) => {
 
     console.log('👤 Driver found:', driver.vorname, driver.nachname);
 
-    // Stichtagsschalter Vermittlungsvertrag (aus = unverändert)
-    if (!(await driverMayReceiveOffers(supabase, driverId))) {
-      return createErrorResponse('Vermittlungsvertrag noch nicht angenommen', 409, corsHeaders);
-    }
-
     // 2. Update driver status to 'approved'
     const { error: updateError } = await supabase
       .from('fahrer_profile')
@@ -90,6 +87,109 @@ serve(async (req) => {
     }
 
     console.log('✅ Driver status updated to approved');
+
+    // 2b. Vertragsablauf: Auftragsangebote erst nach unveränderlich gespeicherter
+    // Annahme der aktuellen Vertragsfassung. Ohne Annahme: genau eine
+    // Vertrags-E-Mail mit persönlichem 14-Tage-Link, keine Angebote.
+    const { data: acceptedDecision } = await supabase
+      .from('driver_contract_decisions')
+      .select('id')
+      .eq('driver_id', driverId)
+      .eq('decision', 'accept')
+      .eq('contract_version', MEDIATION_CONTRACT_VERSION)
+      .maybeSingle();
+
+    if (!acceptedDecision) {
+      // Kein erneuter Versand, wenn bereits ein gültiger Link existiert
+      const { data: pendingInvite } = await supabase
+        .from('driver_contract_invites')
+        .select('id, token, expires_at')
+        .eq('driver_id', driverId)
+        .eq('status', 'pending')
+        .gt('expires_at', new Date().toISOString())
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      let contractEmailStatus: 'sent' | 'failed' | 'skipped_existing' = 'skipped_existing';
+      let contractExpiresAt: string | null = pendingInvite?.expires_at ?? null;
+
+      if (!pendingInvite) {
+        const token = randomToken(64);
+        const expires_at = inviteExpiry();
+        const { error: invErr } = await supabase.from('driver_contract_invites').insert({
+          driver_id: driverId,
+          token,
+          contract_version: MEDIATION_CONTRACT_VERSION,
+          expires_at,
+          created_by: 'admin-approval',
+        });
+        if (invErr) {
+          console.error('❌ contract invite insert failed:', invErr);
+          return createErrorResponse('Vertragseinladung konnte nicht erstellt werden', 500, corsHeaders);
+        }
+        contractExpiresAt = expires_at;
+
+        const contractUrl = `https://www.kraftfahrer-mieten.com/fahrer-vertrag?token=${token}`;
+        const contractSubject = 'Ihr persönlicher Vermittlungsvertrag – bitte prüfen und bestätigen';
+        const contractHtml = await renderAsync(
+          React.createElement(DriverContractInviteEmail, {
+            driverName: `${driver.vorname} ${driver.nachname}`,
+            contractUrl,
+            expiresAt: expires_at,
+          })
+        );
+        try {
+          const r = await resend.emails.send({
+            from: MAIL_FROM,
+            to: [driver.email],
+            reply_to: Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com',
+            subject: contractSubject,
+            html: contractHtml,
+          });
+          contractEmailStatus = 'sent';
+          await supabase.from('email_log').insert({
+            recipient: driver.email,
+            subject: contractSubject,
+            template: 'driver_contract_invite',
+            status: 'sent',
+            message_id: (r as any)?.data?.id ?? null,
+            sent_at: new Date().toISOString(),
+            delivery_mode: 'inline',
+          });
+          console.log('✅ Contract invite email sent');
+        } catch (e) {
+          contractEmailStatus = 'failed';
+          console.error('❌ Contract invite email failed:', e);
+          await supabase.from('email_log').insert({
+            recipient: driver.email,
+            subject: contractSubject,
+            template: 'driver_contract_invite',
+            status: 'failed',
+            error_message: e instanceof Error ? e.message : String(e),
+            delivery_mode: 'inline',
+          });
+        }
+      } else {
+        console.log('↩️  Pending contract invite already exists – no re-send');
+      }
+
+      await logAdminAction(supabase, 'approve_driver', user.email, {
+        note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); Vertrag offen, Einladung ${pendingInvite ? 'bereits vorhanden' : 'erstellt'}, Vertragsmail=${contractEmailStatus}`
+      });
+
+      return new Response(JSON.stringify({
+        ok: true,
+        contractPending: true,
+        contractEmailSent: contractEmailStatus === 'sent',
+        contractEmailStatus,
+        contractExpiresAt,
+        invitesSent: 0,
+      }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
 
     // 3. Get recent open/sent/pending jobs (last 60 days created window — date check via zeitraum)
     const sixtyDaysAgo = new Date();
