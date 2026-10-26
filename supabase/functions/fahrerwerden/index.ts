@@ -3,8 +3,6 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@2.0.0";
 import { renderAsync } from 'npm:@react-email/components@0.0.22';
 import React from 'npm:react@18.3.1';
-import { MEDIATION_CONTRACT_VERSION } from '../_shared/driver-mediation-contract.ts';
-import { inviteExpiry } from '../_shared/driver-contract-gate.ts';
 import { DriverRegistrationConfirmation } from '../_shared/email-templates/driver-registration-confirmation.tsx';
 import { AdminDriverNotification } from '../_shared/email-templates/admin-driver-notification.tsx';
 import { DRIVER_DOCS_BUCKET, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '../_shared/storage-config.ts';
@@ -526,24 +524,14 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Persönlichen Vertragslink (14 Tage) erzeugen – Fehler blockieren die Registrierung nicht
-    let contractUrl: string | undefined;
-    try {
-      const newId = (data as any)?.[0]?.id;
-      if (newId) {
-        const token = crypto.randomUUID().replace(/-/g, '') + crypto.randomUUID().replace(/-/g, '');
-        const { error: invErr } = await supabase.from('driver_contract_invites').insert({
-          driver_id: newId, token, contract_version: MEDIATION_CONTRACT_VERSION, expires_at: inviteExpiry(), created_by: 'registration',
-        });
-        if (!invErr) contractUrl = `https://www.kraftfahrer-mieten.com/fahrer-vertrag?token=${token}`;
-      }
-    } catch (e) { console.error('contract invite failed', e); }
+    // Kein Vertragsversand bei Registrierung: Der persönliche Vermittlungsvertrag
+    // wird erst nach der manuellen administrativen Freischaltung versendet
+    // (approve-driver-and-send-jobs).
 
     // Send confirmation email to applicant
     const confirmationEmailHtml = await renderAsync(
       React.createElement(DriverRegistrationConfirmation, {
         driverName: `${insertData.vorname} ${insertData.nachname}`,
-        contractUrl,
       })
     );
 
