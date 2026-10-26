@@ -61,3 +61,45 @@ export async function driverMayReceiveOffers(supabase: any, driverId: string): P
     .maybeSingle();
   return mayReceiveOffers(true, data?.contract_version ?? null);
 }
+
+/**
+ * Neuer Freigabeablauf: Fahrer, die eine Vertragseinladung erhalten haben,
+ * aber die aktuelle Fassung noch nicht angenommen haben, erhalten keine
+ * Auftragsangebote. Historische Fahrer ohne Einladung bleiben unberührt
+ * (kein Rueckwirkungseffekt, Stichtagsschalter bleibt unveraendert).
+ */
+// deno-lint-ignore no-explicit-any
+export async function driverHasOpenContract(supabase: any, driverId: string): Promise<boolean> {
+  const { data: acc } = await supabase
+    .from("driver_contract_decisions")
+    .select("id")
+    .eq("driver_id", driverId)
+    .eq("decision", "accept")
+    .eq("contract_version", MEDIATION_CONTRACT_VERSION)
+    .maybeSingle();
+  if (acc) return false;
+  const { data: inv } = await supabase
+    .from("driver_contract_invites")
+    .select("id")
+    .eq("driver_id", driverId)
+    .limit(1)
+    .maybeSingle();
+  return !!inv;
+}
+
+/** Batch-Variante fuer Sammelversand: liefert die IDs gesperrter Fahrer. */
+// deno-lint-ignore no-explicit-any
+export async function openContractDriverIds(supabase: any, driverIds: string[]): Promise<Set<string>> {
+  const blocked = new Set<string>();
+  if (driverIds.length === 0) return blocked;
+  const [{ data: accs }, { data: invs }] = await Promise.all([
+    supabase.from("driver_contract_decisions").select("driver_id")
+      .in("driver_id", driverIds).eq("decision", "accept").eq("contract_version", MEDIATION_CONTRACT_VERSION),
+    supabase.from("driver_contract_invites").select("driver_id").in("driver_id", driverIds),
+  ]);
+  const accepted = new Set((accs ?? []).map((r: any) => r.driver_id));
+  for (const r of invs ?? []) {
+    if (!accepted.has(r.driver_id)) blocked.add(r.driver_id);
+  }
+  return blocked;
+}
