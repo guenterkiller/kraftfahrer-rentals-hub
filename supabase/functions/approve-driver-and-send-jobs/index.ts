@@ -174,6 +174,36 @@ serve(async (req) => {
         console.log('↩️  Pending contract invite already exists – no re-send');
       }
 
+      // Interne Admin-Benachrichtigung: korrekter Status, keine Auftragsaussage, kein Token
+      const escAdm = (s: unknown) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const adminEmail = 'info@kraftfahrer-mieten.com';
+      const adminSubject = `Fahrer administrativ freigeschaltet – Vertragsannahme ausstehend: ${driver.vorname} ${driver.nachname}`;
+      const contractMailLine = contractEmailStatus === 'sent'
+        ? 'Vertrags-E-Mail mit persönlichem Link versandt'
+        : contractEmailStatus === 'failed'
+          ? 'Vertrags-E-Mail-Versand FEHLGESCHLAGEN – Link bitte manuell im Adminbereich erzeugen'
+          : 'Vertrags-E-Mail nicht erneut versandt – gültiger persönlicher Link bereits vorhanden';
+      const adminHtml = `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
+        <h2 style="color:#1f2937;">Fahrer administrativ freigeschaltet</h2>
+        <p style="color:#111827;font-size:14px;"><strong>Fahrer:</strong> ${escAdm(driver.vorname)} ${escAdm(driver.nachname)} (${escAdm(driver.email)})</p>
+        <p style="color:#111827;font-size:14px;"><strong>Status:</strong> administrativ freigeschaltet – Vertragsannahme ausstehend (Fassung ${MEDIATION_CONTRACT_VERSION})</p>
+        <p style="color:#111827;font-size:14px;"><strong>Vertrags-E-Mail:</strong> ${contractMailLine}</p>
+        <p style="color:#374151;font-size:14px;">Der Fahrer erhält erst nach unveränderlich gespeicherter Vertragsannahme Auftragsangebote.</p>
+      </body></html>`;
+      try {
+        const r = await resend.emails.send({ from: MAIL_FROM, to: [adminEmail], subject: adminSubject, html: adminHtml });
+        await supabase.from('email_log').insert({
+          recipient: adminEmail, subject: adminSubject, template: 'admin_driver_approval_contract_pending',
+          status: 'sent', message_id: (r as any)?.data?.id ?? null, sent_at: new Date().toISOString(), delivery_mode: 'inline',
+        });
+      } catch (e) {
+        console.error('❌ Admin contract-pending notification failed:', e);
+        await supabase.from('email_log').insert({
+          recipient: adminEmail, subject: adminSubject, template: 'admin_driver_approval_contract_pending',
+          status: 'failed', error_message: e instanceof Error ? e.message : String(e), delivery_mode: 'inline',
+        });
+      }
+
       await logAdminAction(supabase, 'approve_driver', user.email, {
         note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); Vertrag offen, Einladung ${pendingInvite ? 'bereits vorhanden' : 'erstellt'}, Vertragsmail=${contractEmailStatus}`
       });
