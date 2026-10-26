@@ -313,7 +313,7 @@ serve(async (req) => {
         success: true,
         message: "Job broadcast completed",
         sentToCount: successCount,
-        total: drivers.length,
+        total: eligibleDrivers.length,
         sent: successCount,
         failed: errorCount,
       }),

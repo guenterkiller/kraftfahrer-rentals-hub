@@ -217,7 +217,7 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(JSON.stringify({
       success: true,
       jobs: jobs.length,
-      drivers: drivers.length,
+      drivers: eligibleDrivers.length,
       results: results
     }), {
       status: 200,
