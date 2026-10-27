@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { inviteExpiry } from '../_shared/driver-contract-gate.ts';
 import { MEDIATION_CONTRACT_VERSION } from '../_shared/driver-mediation-contract.ts';
+import { contractMailAction, interpretSendResult, type ContractMailStatus } from './contract-mail.ts';
 import { DriverContractInviteEmail } from './_templates/driver-contract-invite-email.tsx';
 import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
@@ -100,33 +101,73 @@ serve(async (req) => {
       .maybeSingle();
 
     if (!acceptedDecision) {
-      // Kein erneuter Versand, wenn bereits ein gültiger Link existiert
+      // Vorhandene Entscheidung (z. B. Ablehnung) der aktuellen Fassung bleibt unverändert
+      const { data: anyDecision } = await supabase
+        .from('driver_contract_decisions')
+        .select('id')
+        .eq('driver_id', driverId)
+        .eq('contract_version', MEDIATION_CONTRACT_VERSION)
+        .limit(1)
+        .maybeSingle();
+
       const { data: pendingInvite } = await supabase
         .from('driver_contract_invites')
-        .select('id, token, expires_at')
+        .select('id, token, expires_at, created_at')
         .eq('driver_id', driverId)
         .eq('status', 'pending')
+        .is('used_at', null)
         .gt('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
 
-      let contractEmailStatus: 'sent' | 'failed' | 'skipped_existing' = 'skipped_existing';
+      // Wurde der vorhandene Link bereits erfolgreich vom E-Mail-Dienst angenommen?
+      let inviteMailSucceeded = false;
+      if (pendingInvite) {
+        const { data: okLog } = await supabase
+          .from('email_log')
+          .select('id')
+          .eq('recipient', driver.email)
+          .eq('template', 'driver_contract_invite')
+          .eq('status', 'sent')
+          .not('message_id', 'is', null)
+          .gte('created_at', pendingInvite.created_at)
+          .limit(1)
+          .maybeSingle();
+        inviteMailSucceeded = !!okLog;
+      }
+
+      const action = contractMailAction({
+        hasDecision: !!anyDecision,
+        hasValidInvite: !!pendingInvite,
+        inviteMailSucceeded,
+      });
+
+      let contractEmailStatus: ContractMailStatus =
+        action === 'none_decided' ? 'decided' : 'skipped_existing';
+      let contractEmailError: string | null = null;
       let contractExpiresAt: string | null = pendingInvite?.expires_at ?? null;
 
-      if (!pendingInvite) {
-        const token = randomToken(64);
-        const expires_at = inviteExpiry();
-        const { error: invErr } = await supabase.from('driver_contract_invites').insert({
-          driver_id: driverId,
-          token,
-          contract_version: MEDIATION_CONTRACT_VERSION,
-          expires_at,
-          created_by: 'admin-approval',
-        });
-        if (invErr) {
-          console.error('❌ contract invite insert failed:', invErr);
-          return createErrorResponse('Vertragseinladung konnte nicht erstellt werden', 500, corsHeaders);
+      if (action === 'create_and_send' || action === 'resend_existing') {
+        let token: string;
+        let expires_at: string;
+        if (action === 'resend_existing') {
+          token = pendingInvite!.token;
+          expires_at = pendingInvite!.expires_at;
+        } else {
+          token = randomToken(64);
+          expires_at = inviteExpiry();
+          const { error: invErr } = await supabase.from('driver_contract_invites').insert({
+            driver_id: driverId,
+            token,
+            contract_version: MEDIATION_CONTRACT_VERSION,
+            expires_at,
+            created_by: 'admin-approval',
+          });
+          if (invErr) {
+            console.error('❌ contract invite insert failed:', invErr);
+            return createErrorResponse('Vertragseinladung konnte nicht erstellt werden', 500, corsHeaders);
+          }
         }
         contractExpiresAt = expires_at;
 
@@ -139,6 +180,7 @@ serve(async (req) => {
             expiresAt: expires_at,
           })
         );
+        let result: ReturnType<typeof interpretSendResult>;
         try {
           const r = await resend.emails.send({
             from: MAIL_FROM,
@@ -147,31 +189,34 @@ serve(async (req) => {
             subject: contractSubject,
             html: contractHtml,
           });
-          contractEmailStatus = 'sent';
-          await supabase.from('email_log').insert({
-            recipient: driver.email,
-            subject: contractSubject,
-            template: 'driver_contract_invite',
-            status: 'sent',
-            message_id: (r as any)?.data?.id ?? null,
-            sent_at: new Date().toISOString(),
-            delivery_mode: 'inline',
-          });
-          console.log('✅ Contract invite email sent');
+          result = interpretSendResult(r);
         } catch (e) {
-          contractEmailStatus = 'failed';
-          console.error('❌ Contract invite email failed:', e);
-          await supabase.from('email_log').insert({
-            recipient: driver.email,
-            subject: contractSubject,
-            template: 'driver_contract_invite',
-            status: 'failed',
-            error_message: e instanceof Error ? e.message : String(e),
-            delivery_mode: 'inline',
-          });
+          result = { ok: false, error: e instanceof Error ? e.message : String(e) };
         }
+
+        if (result.ok) {
+          contractEmailStatus = 'sent';
+          console.log(`✅ Contract invite email accepted (${action})`);
+        } else {
+          contractEmailStatus = 'failed';
+          contractEmailError = result.error;
+          console.error('❌ Contract invite email failed:', result.error);
+        }
+        const { error: logErr } = await supabase.from('email_log').insert({
+          recipient: driver.email,
+          subject: contractSubject,
+          template: 'driver_contract_invite',
+          status: result.ok ? 'sent' : 'failed',
+          message_id: result.ok ? result.messageId : null,
+          sent_at: result.ok ? new Date().toISOString() : null,
+          error_message: result.ok ? null : result.error,
+          delivery_mode: 'inline',
+        });
+        if (logErr) console.error('❌ email_log insert failed:', logErr);
+      } else if (action === 'skip') {
+        console.log('↩️  Pending contract invite already sent successfully – no re-send');
       } else {
-        console.log('↩️  Pending contract invite already exists – no re-send');
+        console.log('↩️  Contract decision already recorded – nothing changed');
       }
 
       // Interne Admin-Benachrichtigung: korrekter Status, keine Auftragsaussage, kein Token
@@ -181,8 +226,10 @@ serve(async (req) => {
       const contractMailLine = contractEmailStatus === 'sent'
         ? 'Vertrags-E-Mail mit persönlichem Link versandt'
         : contractEmailStatus === 'failed'
-          ? 'Vertrags-E-Mail-Versand FEHLGESCHLAGEN – Link bitte manuell im Adminbereich erzeugen'
-          : 'Vertrags-E-Mail nicht erneut versandt – gültiger persönlicher Link bereits vorhanden';
+          ? `Vertrags-E-Mail-Versand FEHLGESCHLAGEN (${escAdm(contractEmailError)}) – erneute Freischaltung versendet denselben Link erneut`
+          : contractEmailStatus === 'decided'
+            ? 'Keine Vertrags-E-Mail – Vertragsentscheidung bereits gespeichert (unverändert)'
+            : 'Vertrags-E-Mail nicht erneut versandt – gültiger persönlicher Link wurde bereits erfolgreich versandt';
       const adminHtml = `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
         <h2 style="color:#1f2937;">Fahrer administrativ freigeschaltet</h2>
         <p style="color:#111827;font-size:14px;"><strong>Fahrer:</strong> ${escAdm(driver.vorname)} ${escAdm(driver.nachname)} (${escAdm(driver.email)})</p>
@@ -205,7 +252,7 @@ serve(async (req) => {
       }
 
       await logAdminAction(supabase, 'approve_driver', user.email, {
-        note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); Vertrag offen, Einladung ${pendingInvite ? 'bereits vorhanden' : 'erstellt'}, Vertragsmail=${contractEmailStatus}`
+        note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); Vertrag offen, Aktion=${action}, Vertragsmail=${contractEmailStatus}${contractEmailError ? ' (' + contractEmailError + ')' : ''}`
       });
 
       return new Response(JSON.stringify({
@@ -213,6 +260,7 @@ serve(async (req) => {
         contractPending: true,
         contractEmailSent: contractEmailStatus === 'sent',
         contractEmailStatus,
+        contractEmailError,
         contractExpiresAt,
         invitesSent: 0,
       }), {
