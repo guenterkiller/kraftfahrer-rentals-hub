@@ -450,6 +450,7 @@ export type Database = {
           inactive_since: string | null
           is_blocked: boolean
           is_inactive: boolean
+          is_test: boolean
           land: string | null
           nachname: string
           no_show_count: number
@@ -493,6 +494,7 @@ export type Database = {
           inactive_since?: string | null
           is_blocked?: boolean
           is_inactive?: boolean
+          is_test?: boolean
           land?: string | null
           nachname: string
           no_show_count?: number
@@ -536,6 +538,7 @@ export type Database = {
           inactive_since?: string | null
           is_blocked?: boolean
           is_inactive?: boolean
+          is_test?: boolean
           land?: string | null
           nachname?: string
           no_show_count?: number
@@ -857,6 +860,7 @@ export type Database = {
           fuehrerscheinklasse: string
           holiday_days: string[] | null
           id: string
+          is_test: boolean
           kosten_uebersicht: Json | null
           maschinenbedienung: string | null
           nachricht: string
@@ -911,6 +915,7 @@ export type Database = {
           fuehrerscheinklasse?: string
           holiday_days?: string[] | null
           id?: string
+          is_test?: boolean
           kosten_uebersicht?: Json | null
           maschinenbedienung?: string | null
           nachricht: string
@@ -965,6 +970,7 @@ export type Database = {
           fuehrerscheinklasse?: string
           holiday_days?: string[] | null
           id?: string
+          is_test?: boolean
           kosten_uebersicht?: Json | null
           maschinenbedienung?: string | null
           nachricht?: string
@@ -1061,6 +1067,27 @@ export type Database = {
           referrer?: string | null
           route?: string
           user_agent?: string | null
+        }
+        Relationships: []
+      }
+      test_identities: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          id?: string
         }
         Relationships: []
       }
@@ -1179,6 +1206,7 @@ export type Database = {
           fuehrerscheinklasse: string
           holiday_days: string[] | null
           id: string
+          is_test: boolean
           kosten_uebersicht: Json | null
           maschinenbedienung: string | null
           nachricht: string
@@ -1234,6 +1262,24 @@ export type Database = {
         }[]
       }
       admin_reset_jobs_by_email: { Args: { _email: string }; Returns: Json }
+      admin_test_archive_job: {
+        Args: { _admin_email: string; _confirm_email: string; _id: string }
+        Returns: Json
+      }
+      admin_test_purge: {
+        Args: {
+          _admin_email: string
+          _confirm_email: string
+          _confirm_text: string
+          _id: string
+          _kind: string
+        }
+        Returns: Json
+      }
+      admin_test_purge_preview: {
+        Args: { _id: string; _kind: string }
+        Returns: Json
+      }
       admin_update_job_contact: {
         Args: {
           _ansprechpartner: string
@@ -1265,6 +1311,7 @@ export type Database = {
       is_admin_user:
         | { Args: never; Returns: boolean }
         | { Args: { user_uuid?: string }; Returns: boolean }
+      is_test_email: { Args: { _email: string }; Returns: boolean }
       log_job_mail: {
         Args: {
           p_driver_snapshot?: Json
@@ -1296,6 +1343,7 @@ export type Database = {
         Returns: string
       }
       subscribe_to_job_alerts: { Args: { _email: string }; Returns: string }
+      test_purge_active: { Args: never; Returns: boolean }
     }
     Enums: {
       billing_model_enum: "direct" | "agency"
