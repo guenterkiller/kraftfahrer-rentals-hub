@@ -6,6 +6,9 @@ project_id = "hxnabnsoffzevqhruvar"
 [functions.admin-cancel-job]
 verify_jwt = false
 
+[functions.admin-purge-test-data]
+verify_jwt = false
+
 [functions.admin-assign-driver]
 verify_jwt = true
 
