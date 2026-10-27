@@ -1,5 +1,6 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
+import { TestDataCleanup } from "@/components/admin/TestDataCleanup";
 import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -2467,6 +2468,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
           refreshKey={fahrer}
           onViewProfile={(driver) => { setAddressDialogDriver(driver); setAddressDialogOpen(true); }}
         />
+
+        <TestDataCleanup />
 
         {/* Registrierte Fahrer Section - jetzt unter Fahreranfragen */}
         <Card className="mt-6 md:mt-8">
