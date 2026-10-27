@@ -1085,12 +1085,23 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         )
       );
 
+      if (data?.contractPending && data.contractEmailStatus === 'failed') {
+        toast({
+          title: "Vertrags-E-Mail NICHT versendet",
+          description: `Fahrer ist freigeschaltet, aber der E-Mail-Dienst hat den Versand abgelehnt: ${data.contractEmailError || 'Unbekannter Fehler'}. Erneutes Freischalten versendet denselben persönlichen Link erneut.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
       toast({
         title: "Fahrer erfolgreich freigeschaltet",
         description: data?.contractPending
-          ? (data.contractEmailSent
+          ? (data.contractEmailStatus === 'sent'
               ? "Vertrags-E-Mail mit persönlichem Link wurde versendet. Auftragsangebote erst nach Vertragsannahme."
-              : "Vertrag ist noch offen (gültiger Link bereits vorhanden). Auftragsangebote erst nach Vertragsannahme.")
+              : data.contractEmailStatus === 'decided'
+                ? "Vertragsentscheidung bereits gespeichert – keine Vertrags-E-Mail, nichts verändert."
+                : "Vertrag ist noch offen (gültiger Link wurde bereits erfolgreich versendet). Auftragsangebote erst nach Vertragsannahme.")
           : `Fahrer wurde freigeschaltet und ${data.invitesSent || 0} aktuelle Jobs per E-Mail gesendet.`,
       });
 
