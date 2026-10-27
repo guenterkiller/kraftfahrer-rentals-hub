@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { inviteExpiry } from '../_shared/driver-contract-gate.ts';
 import { MEDIATION_CONTRACT_VERSION } from '../_shared/driver-mediation-contract.ts';
+import { contractMailAction, interpretSendResult, type ContractMailStatus } from './contract-mail.ts';
 import { DriverContractInviteEmail } from './_templates/driver-contract-invite-email.tsx';
 import { Resend } from "npm:resend@2.0.0";
 import React from 'npm:react@18.3.1';
@@ -225,8 +226,10 @@ serve(async (req) => {
       const contractMailLine = contractEmailStatus === 'sent'
         ? 'Vertrags-E-Mail mit persönlichem Link versandt'
         : contractEmailStatus === 'failed'
-          ? 'Vertrags-E-Mail-Versand FEHLGESCHLAGEN – Link bitte manuell im Adminbereich erzeugen'
-          : 'Vertrags-E-Mail nicht erneut versandt – gültiger persönlicher Link bereits vorhanden';
+          ? `Vertrags-E-Mail-Versand FEHLGESCHLAGEN (${escAdm(contractEmailError)}) – erneute Freischaltung versendet denselben Link erneut`
+          : contractEmailStatus === 'decided'
+            ? 'Keine Vertrags-E-Mail – Vertragsentscheidung bereits gespeichert (unverändert)'
+            : 'Vertrags-E-Mail nicht erneut versandt – gültiger persönlicher Link wurde bereits erfolgreich versandt';
       const adminHtml = `<!DOCTYPE html><html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
         <h2 style="color:#1f2937;">Fahrer administrativ freigeschaltet</h2>
         <p style="color:#111827;font-size:14px;"><strong>Fahrer:</strong> ${escAdm(driver.vorname)} ${escAdm(driver.nachname)} (${escAdm(driver.email)})</p>
@@ -249,7 +252,7 @@ serve(async (req) => {
       }
 
       await logAdminAction(supabase, 'approve_driver', user.email, {
-        note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); Vertrag offen, Einladung ${pendingInvite ? 'bereits vorhanden' : 'erstellt'}, Vertragsmail=${contractEmailStatus}`
+        note: `Approved driver: ${driver.vorname} ${driver.nachname} (${driver.email}); Vertrag offen, Aktion=${action}, Vertragsmail=${contractEmailStatus}${contractEmailError ? ' (' + contractEmailError + ')' : ''}`
       });
 
       return new Response(JSON.stringify({
@@ -257,6 +260,7 @@ serve(async (req) => {
         contractPending: true,
         contractEmailSent: contractEmailStatus === 'sent',
         contractEmailStatus,
+        contractEmailError,
         contractExpiresAt,
         invitesSent: 0,
       }), {
