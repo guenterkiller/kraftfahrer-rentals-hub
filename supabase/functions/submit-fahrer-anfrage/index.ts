@@ -477,6 +477,7 @@ const handler = async (req: Request): Promise<Response> => {
             })(),
             unterkunftOption: unterkunftOption,
             unterkunftObergrenze: unterkunftObergrenze,
+            kostenUebersicht: kostenUebersicht,
           })
         );
 

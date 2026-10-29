@@ -10,6 +10,11 @@ import {
   formatEuro,
   zuweisungsHinweis,
   type UnterkunftOption,
+  type KostenUebersicht,
+  VORKALKULATION_TITEL,
+  VORKALKULATION_HINWEIS,
+  OFFENE_KOSTEN_HINWEIS,
+  offenePositionen,
 } from '../kosten-uebersicht.ts';
 
 interface AdminBookingNotificationProps {
@@ -40,6 +45,7 @@ interface AdminBookingNotificationProps {
   multiWeek?: boolean;
   unterkunftOption?: UnterkunftOption | null;
   unterkunftObergrenze?: number | null;
+  kostenUebersicht?: KostenUebersicht | null;
 }
 
 export const AdminBookingNotification = ({
@@ -61,6 +67,7 @@ export const AdminBookingNotification = ({
   multiWeek = false,
   unterkunftOption = null,
   unterkunftObergrenze = null,
+  kostenUebersicht = null,
 }: AdminBookingNotificationProps) => (
   <BaseEmail previewText={`Neue Buchungsanfrage: ${driverType} in ${address}`}>
     <Heading style={{ ...textStyles.heading2, color: colors.primary }}>
@@ -209,6 +216,40 @@ export const AdminBookingNotification = ({
             ⚠️ Dem Besteller wurde noch kein Fahrertyp bestätigt. Bitte den passenden veröffentlichten Tarif manuell zuordnen – die Preise selbst stehen fest.
           </Text>
         )}
+      </Section>
+    )}
+
+    {kostenUebersicht && (
+      <Section style={boxStyles.infoBox}>
+        <Heading style={textStyles.heading3}>{VORKALKULATION_TITEL}</Heading>
+        <Text style={textStyles.paragraph}>{VORKALKULATION_HINWEIS}</Text>
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          {kostenUebersicht.positionen.map((position) => (
+            <tr key={position.label}>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>{position.label}</td>
+              <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>{formatEuro(position.betrag)}</td>
+            </tr>
+          ))}
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Voraussichtliche Gesamtsumme netto:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>{formatEuro(kostenUebersicht.netto)}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>zzgl. 19 % Umsatzsteuer:</td>
+            <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>{formatEuro(kostenUebersicht.ust)}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Voraussichtliche Gesamtsumme brutto:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}><strong>{formatEuro(kostenUebersicht.brutto)}</strong></td>
+          </tr>
+        </table>
+        <Text style={textStyles.paragraph}><strong>Noch offene Zusatzkosten (nicht in der Vorkalkulation enthalten):</strong></Text>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }}>
+          {offenePositionen(unterkunftOption ?? '', unterkunftObergrenze).map((position) => (
+            <li key={position}>{position}</li>
+          ))}
+        </ul>
+        <Text style={textStyles.paragraph}>{OFFENE_KOSTEN_HINWEIS}</Text>
       </Section>
     )}
 
