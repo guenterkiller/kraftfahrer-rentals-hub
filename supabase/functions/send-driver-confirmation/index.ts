@@ -11,6 +11,7 @@ import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shel
 import { normalizeCommissionPct } from "../_shared/driver-contract-terms.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
 import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
+import { createOfferSnapshot, renderOfferLines } from '../_shared/binding-offer.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -53,7 +54,9 @@ serve(async (req) => {
         rate_type, rate_value, start_date, end_date, admin_note, commission_pct, times_entered,
         job_requests:job_id (
           id, status, customer_name, company, customer_phone, customer_email,
-          einsatzort, fahrzeugtyp, besonderheiten, zeitraum, tarif_type,
+          einsatzort, fahrzeugtyp, besonderheiten, nachricht, fuehrerscheinklasse, maschinenbedienung,
+          zeitraum, tarif_type, tarif_label, tarif_netto, tarif_unit, tarif_mehrstunde_netto,
+          tarif_needs_review, kosten_uebersicht, unterkunft_option, unterkunft_obergrenze,
           customer_street, customer_house_number, customer_postal_code, customer_city
         ),
         fahrer_profile:driver_id (
@@ -130,6 +133,7 @@ serve(async (req) => {
     const contactPhone = job?.customer_phone || 'wird ergänzt';
     const contactEmail = job?.customer_email || 'wird ergänzt';
     const companyName = job?.company || job?.customer_name || 'wird ergänzt';
+    const offerSnapshot = createOfferSnapshot(job, assignment);
     
     const emailSubject = `Auftragsangebot – ${jobTitle} – ${location} am ${dateRange}`;
 
@@ -145,6 +149,13 @@ serve(async (req) => {
     if (existingBinding) {
       bindingButtonHtml = `<p class="body-text" style="margin:0 0 16px 0;font-size:14px;color:#166534;"><strong>Verbindliche Annahme:</strong> Sie haben diesen Auftrag bereits am ${new Date(existingBinding.accepted_at).toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })} verbindlich angenommen.</p>`;
     } else if (['assigned', 'confirmed'].includes(assignment.status)) {
+      // Never replace or reissue any previously sent binding offer.
+      const { data: previousOffer, error: previousError } = await supabase.from('assignment_invites')
+        .select('id').eq('assignment_id', assignment_id).eq('purpose', 'binding').limit(1);
+      if (previousError) return createErrorResponse('Bestehendes Angebot konnte nicht geprüft werden', 500, corsHeaders);
+      if (previousOffer?.length) return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Bestehendes verbindliches Angebot bleibt unverändert; kein erneuter Versand' }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
       const expiresAt = computeBindingExpiry(new Date(), deadlineStartIso(assignment.start_date, (assignment as any).times_entered));
       if (expiresAt.getTime() > Date.now()) {
         // Ältere offene Links dieser Zuteilung ungültig machen (ohne Ablauf-Meldung)
@@ -155,6 +166,7 @@ serve(async (req) => {
         const { error: invErr } = await supabase.from('assignment_invites').insert({
           job_id: assignment.job_id, driver_id: assignment.driver_id, assignment_id,
           purpose: 'binding', status: 'pending', token, token_expires_at: expiresAt.toISOString(),
+          offer_snapshot: offerSnapshot,
         });
         if (invErr) {
           console.error('📧 binding invite insert failed:', invErr);
@@ -190,31 +202,8 @@ serve(async (req) => {
       ${bindingButtonHtml}
 
       ${sectionStart('#f8fafc')}
-        ${h3('AUFTRAGGEBER')}
-        ${row('Unternehmen/Name', companyName)}
-        ${row('Ansprechpartner', contactPerson)}
-        ${row('Anschrift', job?.customer_street && job?.customer_house_number && job?.customer_postal_code && job?.customer_city ?
-          `${job.customer_street} ${job.customer_house_number}, ${job.customer_postal_code} ${job.customer_city}` : 'wird ergänzt')}
-        ${row('Telefon', contactPhone)}
-        ${row('E-Mail', contactEmail)}
-      ${sectionEnd}
-
-      ${sectionStart('#ffffff')}
-        ${h3('EINSATZ')}
-        ${row('Datum/Zeitraum', dateRange)}
-        ${row('Einsatzort / Treffpunkt', location)}
-        ${row('Fahrzeug/Typ', vehicleType)}
-        ${row('Besonderheiten', job?.besonderheiten || '—')}
-      ${sectionEnd}
-
-      ${sectionStart('#f8fafc')}
-        ${h3('KONDITIONEN')}
-        ${isUeberfuehrungJob
-          ? `${row('Tarif', 'LKW-Überführung – individuelles Angebot')}${row('Satz', assignment.rate_value != null && Number(assignment.rate_value) > 0 ? `${rateFormatted} zzgl. gesetzlicher USt` : 'nach Vereinbarung')}`
-          : `${row('Tarif', isFernfahrerTarif ? 'Fernfahrer-Pauschale (450 € netto / Einsatztag)' : (assignment.rate_type === 'hourly' ? 'Stundensatz' : assignment.rate_type === 'daily' ? 'Tagessatz' : 'Nach Vereinbarung'))}
-        ${isFernfahrerTarif
-          ? `${row('Abrechnung', 'Pauschale pro Einsatztag')}<p class="body-text" style="margin:8px 0 0 0;font-size:13px;color:#6b7280;">Fernfahrer-Pauschale: 450 € pro Fernverkehrs-Einsatztag. Zusätzlich An- und Abfahrt.</p>`
-          : row('Satz', `${rateFormatted} zzgl. gesetzlicher USt`)}`}
+        ${h3('AUFTRAGSDATEN UND FAHRERABRECHNUNG')}
+        ${renderOfferLines(offerSnapshot.job_lines ?? [])}
       ${sectionEnd}
 
       ${sectionStart('#ffffff')}
@@ -254,8 +243,11 @@ serve(async (req) => {
       html: emailContent,
     });
 
-    if (emailResult.error) {
+    if (emailResult.error || !emailResult.data?.id) {
       console.error('📧 Email sending failed:', emailResult.error);
+      await supabase.from('email_log').insert({ assignment_id, job_id: assignment.job_id,
+        recipient: driver.email, template: 'driver_confirmation', subject: emailSubject,
+        status: 'error', error_message: emailResult.error?.message || 'Keine Versand-ID erhalten', delivery_mode: 'inline' });
       return createErrorResponse("Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut.", 500, corsHeaders);
     }
 
@@ -267,6 +259,7 @@ serve(async (req) => {
       job_id: assignment.job_id,
       recipient: driver.email,
       status: 'sent',
+      sent_at: new Date().toISOString(),
       subject: emailSubject,
       template: 'driver_confirmation',
       delivery_mode: 'inline',

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { loadAdminContact } from '@/lib/adminContact';
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -91,8 +92,9 @@ export function AdminAssignmentDialog({
           return value.trim();
         };
         
-        const cNameValue = cleanValue(job.customer_name) || cleanValue(job.company) || "";
-        const contactValue = cleanValue(job.customer_name) || "";
+        const loadedContact = loadAdminContact(job);
+        const cNameValue = cleanValue(loadedContact.company) || "";
+        const contactValue = cleanValue(loadedContact.contact) || "";
         
         console.log('🔍 Processed values:', {
           cNameValue,

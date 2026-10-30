@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { contactUpdate } from './contact-data.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -43,8 +44,9 @@ serve(async (req) => {
 
     // JWT is already validated by Supabase (verify_jwt = true in config.toml)
     const token = authHeader.replace('Bearer ', '');
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!supabaseUrl || !supabaseServiceKey) throw new Error('Serverkonfiguration fehlt');
     
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
@@ -73,22 +75,17 @@ serve(async (req) => {
     }
 
     const body: UpdateContactRequest = await req.json();
+    if (typeof body.cName !== 'string' || typeof body.contact !== 'string' || !body.cName.trim() || !body.contact.trim()) {
+      return new Response(JSON.stringify({ error: 'Firma und Ansprechpartner sind getrennt erforderlich' }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
     const { jobId, cName, contact, street, house, postal, city, phone, contactEmail, einsatzort } = body;
 
     console.log('📝 Admin update contact by:', user.id);
 
     // Update job contact data and location
-    const updateData: any = {
-      customer_name: cName,
-      company: cName,
-      customer_street: street,
-      customer_house_number: house,
-      customer_postal_code: postal,
-      customer_city: city,
-      customer_phone: phone,
-      customer_email: contactEmail,
-      updated_at: new Date().toISOString()
-    };
+    const updateData = contactUpdate(body);
 
     // Add einsatzort if provided
     if (einsatzort) {
