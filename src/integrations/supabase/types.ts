@@ -110,6 +110,7 @@ export type Database = {
           id: string
           ip: unknown
           job_id: string
+          offer_snapshot: Json | null
           purpose: string
           responded_at: string | null
           status: string
@@ -125,6 +126,7 @@ export type Database = {
           id?: string
           ip?: unknown
           job_id: string
+          offer_snapshot?: Json | null
           purpose?: string
           responded_at?: string | null
           status?: string
@@ -140,6 +142,7 @@ export type Database = {
           id?: string
           ip?: unknown
           job_id?: string
+          offer_snapshot?: Json | null
           purpose?: string
           responded_at?: string | null
           status?: string
@@ -1295,6 +1298,10 @@ export type Database = {
         Returns: boolean
       }
       assign_admin_role: { Args: { _user_id: string }; Returns: undefined }
+      binding_offer_source: {
+        Args: { _assignment_id: string; _job_id: string }
+        Returns: Json
+      }
       calc_no_show_fee_cents: {
         Args: { _rate_type: string; _rate_value: number; _starts_at: string }
         Returns: {
