@@ -80,17 +80,12 @@ serve(async (req) => {
         status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-    const { jobId, cName, contact, street, house, postal, city, phone, contactEmail, einsatzort } = body;
+    const { jobId } = body;
 
     console.log('📝 Admin update contact by:', user.id);
 
     // Update job contact data and location
     const updateData = contactUpdate(body);
-
-    // Add einsatzort if provided
-    if (einsatzort) {
-      updateData.einsatzort = einsatzort;
-    }
 
     const { error } = await supabase
       .from('job_requests')
