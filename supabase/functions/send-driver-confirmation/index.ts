@@ -83,56 +83,10 @@ serve(async (req) => {
 
     console.log(`📧 Sending email to driver: ${driver.email}`);
 
-    // Helper functions
-    function formatRate(rateType: string | null, rateValue: number | null, currency = 'EUR'): string | null {
-      if (!rateType || rateValue == null) return null;
-      const v = Number(rateValue).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      const unit = rateType === 'hourly' ? 'Std'
-                 : rateType === 'daily'  ? 'Tag'
-                 : rateType === 'weekly' ? 'Woche'
-                 : 'pauschal';
-      return `${v} ${currency}/${unit}`;
-    }
-
-    function formatDateRange(startDate: string | null, endDate: string | null): string {
-      if (!startDate && !endDate) return '—';
-      
-      const formatDate = (dateStr: string) => {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('de-DE', { 
-          day: '2-digit', 
-          month: '2-digit', 
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      };
-
-      if (startDate && endDate) {
-        return `${formatDate(startDate)} – ${formatDate(endDate)}`;
-      } else if (startDate) {
-        return `ab ${formatDate(startDate)}`;
-      } else {
-        return '—';
-      }
-    }
-
     // Prepare email data
     const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
     const location = job?.einsatzort || 'wird noch bekannt gegeben';
     const dateRange = formatAssignmentPeriod(assignment.start_date, assignment.end_date, (assignment as any).times_entered) || job?.zeitraum || 'nach Absprache';
-    const rateFormatted = formatRate(assignment.rate_type, assignment.rate_value) || 'nach Absprache';
-    const vehicleType = job?.fahrzeugtyp || 'wird bekannt gegeben';
-    
-    // Detect Fernfahrer-Tarif from besonderheiten
-    // LKW-Überführung: nie Standardtarif, Satz nur wenn im Admin festgelegt
-    const isUeberfuehrungJob = job?.tarif_type === 'Überführung' || /überführung/i.test(job?.fahrzeugtyp || '');
-    const isFernfahrerTarif = !isUeberfuehrungJob && ((job?.besonderheiten || '').toLowerCase().includes('fernverkehr') || 
-                               (job?.besonderheiten || '').toLowerCase().includes('fernfahrer'));
-    const contactPerson = job?.customer_name || 'wird ergänzt';
-    const contactPhone = job?.customer_phone || 'wird ergänzt';
-    const contactEmail = job?.customer_email || 'wird ergänzt';
-    const companyName = job?.company || job?.customer_name || 'wird ergänzt';
     const offerSnapshot = createOfferSnapshot(job, assignment);
     
     const emailSubject = `Auftragsangebot – ${jobTitle} – ${location} am ${dateRange}`;
@@ -140,14 +94,17 @@ serve(async (req) => {
     // ===== Persönlicher Link zur verbindlichen Fahrerannahme =====
     const commissionPct = normalizeCommissionPct((assignment as any).commission_pct);
     let bindingButtonHtml = '';
-    const { data: existingBinding } = await supabase
+    const { data: existingBinding, error: bindingError } = await supabase
       .from('job_driver_acceptances')
       .select('id, accepted_at')
       .eq('assignment_id', assignment_id)
       .eq('flow', 'binding')
       .maybeSingle();
+    if (bindingError) return createErrorResponse('Annahmenachweis konnte nicht geprüft werden', 500, corsHeaders);
     if (existingBinding) {
-      bindingButtonHtml = `<p class="body-text" style="margin:0 0 16px 0;font-size:14px;color:#166534;"><strong>Verbindliche Annahme:</strong> Sie haben diesen Auftrag bereits am ${new Date(existingBinding.accepted_at).toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })} verbindlich angenommen.</p>`;
+      return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Bestehende Annahme bleibt unverändert; kein erneuter Versand' }), {
+        status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
     } else if (['assigned', 'confirmed'].includes(assignment.status)) {
       // Never replace or reissue any previously sent binding offer.
       const { data: previousOffer, error: previousError } = await supabase.from('assignment_invites')
@@ -158,10 +115,6 @@ serve(async (req) => {
       });
       const expiresAt = computeBindingExpiry(new Date(), deadlineStartIso(assignment.start_date, (assignment as any).times_entered));
       if (expiresAt.getTime() > Date.now()) {
-        // Ältere offene Links dieser Zuteilung ungültig machen (ohne Ablauf-Meldung)
-        await supabase.from('assignment_invites')
-          .update({ status: 'expired', responded_at: new Date().toISOString(), expiry_notified_at: new Date().toISOString() })
-          .eq('assignment_id', assignment_id).eq('purpose', 'binding').eq('status', 'pending');
         const token = generateToken();
         const { error: invErr } = await supabase.from('assignment_invites').insert({
           job_id: assignment.job_id, driver_id: assignment.driver_id, assignment_id,
@@ -181,16 +134,14 @@ serve(async (req) => {
             <a href="${url}" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:6px;">Auftrag verbindlich annehmen</a>
           </td></tr></table>
           <p class="body-text" style="margin:0 0 18px 0;font-size:12px;line-height:1.5;color:#6b7280;">Persönlicher Link, gültig bis ${until} Uhr. Die verbindliche Annahme erfolgt erst auf der Bestätigungsseite nach Prüfung der Auftragsdaten und Vertragsbedingungen.</p>`;
-      }
-    }
+      } else return createErrorResponse('Angebotsfrist bereits abgelaufen; kein Versand', 400, corsHeaders);
+    } else return createErrorResponse('Zuteilung ist nicht für ein neues Angebot verfügbar', 400, corsHeaders);
 
     const sectionStart = (bg: string) =>
       `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background-color:${bg};border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 16px 0;"><tr><td style="padding:16px 18px;">`;
     const sectionEnd = `</td></tr></table>`;
     const h3 = (txt: string, color = '#0d2340') =>
       `<h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:${color};font-weight:700;">${txt}</h3>`;
-    const row = (label: string, value: string) =>
-      `<p class="body-text" style="margin:4px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>${label}:</strong> ${value}</p>`;
 
     const innerHtml = `
       <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;letter-spacing:.3px;">VERBINDLICHES AUFTRAGSANGEBOT</h2>

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { loadAdminContact } from '@/lib/adminContact';
 
 interface ContactDataDialogProps {
   open: boolean;
@@ -50,8 +51,9 @@ export function ContactDataDialog({
       if (error) throw error;
       
       if (job) {
-        setCName(job.customer_name || job.company || "");
-        setContact(job.customer_name || "");
+        const loaded = loadAdminContact(job);
+        setCName(loaded.company);
+        setContact(loaded.contact);
         setStreet(job.customer_street || "");
         setHouse(job.customer_house_number || "");
         setPostal(job.customer_postal_code || "");

@@ -16,7 +16,7 @@ export function remuneration(job: OfferData, assignment: OfferData) {
   const iso = (d: string) => d.split('.').reverse().join('-');
   const start = day(assignment.start_date), end = day(assignment.end_date);
   const count = start && end ? Math.round((Date.parse(end) - Date.parse(start)) / 86400000) + 1 : null;
-  const samePeriod = dates.length >= 2 && iso(dates[0]) === start && iso(dates[1]) === end;
+  const samePeriod = dates.length >= 2 && iso(dates[0] ?? '') === start && iso(dates[1] ?? '') === end;
   const sameRate = Number(assignment.rate_value) === job.tarif_netto &&
     ((assignment.rate_type === 'daily' && ['lkw_ce', 'fernfahrer', 'baumaschine'].includes(job.tarif_type)) ||
       (assignment.rate_type === 'weekly' && job.tarif_type === 'lkw_ce_woche'));
