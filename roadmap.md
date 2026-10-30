@@ -1,9 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # Zukünftige verbindliche Fahrerangebote (Freigabe 30.10.2026)
-- [ ] Unveränderliche Versandbasis für neue Angebote und unveränderte Darstellung bestehender offener Angebote sichern.
-- [ ] Vorhandene Einsatzangaben und interne Netto-Vergütung in Fahrermail/Annahmeseite einheitlich ergänzen; Kundenkosten getrennt halten.
-- [ ] Firma und Ansprechpartner getrennt laden/speichern; keine Bestandsaufträge korrigieren.
-- [ ] Isolierte Sicherheits-/Versandtests ohne Buchungen, echte E-Mails oder Annahmen durchführen; bestehenden Otte/Kessner-Auftrag nachprüfen.
+- [x] Unveränderliche Versandbasis v2 für neue Angebote und alte v1-Darstellung bestehender Angebote gesichert; keine Auftrags-/Nachweisänderungen.
+- [x] Einsatzangaben und interne Netto-Vergütung in Fahrermail/Annahmeseite einheitlich ergänzt; Kundenkosten unverändert getrennt.
+- [x] Beide Verwaltungsdialoge und beide Speicherwege trennen Firma/Ansprechpartner; keine Bestandskorrektur.
+- [x] 35 Deno- und 45 Vitest-Prüfungen ohne echte Buchungen/Mails/Annahmen sowie isolierte Browserprüfung bestanden; drei Serverfunktionen bereitgestellt. Otte/Kessner-Daten/Nachweis nur lesend nachgeprüft, Details docs/verbindliche-fahrerangebote-korrektur.md.
 # Fahrer-E-Mail-Vorschau und Vergütung
 - [x] Tatsächliche Registrierungs-/Freischaltungs-/Angebotsvorlagen und Spaltenmetadaten geprüft; individuelle Fahrtkosten und bezifferte Mehrstunden fehlen als eindeutige Vergütungsquelle.
 - [x] DEV-only /admin/email-vorschau mit fünf kompakten Entwürfen, unveränderten Antwortweg-Varianten und getrenntem Cent-Rechner ohne Versand/Datenzugriff erstellt.
