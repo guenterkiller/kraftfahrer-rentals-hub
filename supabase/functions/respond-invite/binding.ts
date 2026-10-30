@@ -19,6 +19,7 @@ import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts"
 import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
+import { type OfferSnapshot } from '../_shared/binding-offer.ts';
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -71,10 +72,13 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   }
   if (check !== "ok") return json({ status: check === "cancelled" ? "invalid" : check, mode: "binding" });
 
-  const job = invite.job;
+  const frozen = invite.offer_snapshot as OfferSnapshot | null;
+  const job = frozen?.job ?? invite.job;
   const driver = invite.driver;
-  const commission = normalizeCommissionPct(assignment.commission_pct);
-  const jobLines = buildJobLines(job, assignment);
+  const offerAssignment = frozen?.assignment ?? assignment;
+  const commission = normalizeCommissionPct(offerAssignment.commission_pct);
+  // Version 1 keeps exactly the legacy fields; v2 serves the stored lines, never recalculates.
+  const jobLines = frozen?.version === 2 && frozen.job_lines ? frozen.job_lines : buildJobLines(job, offerAssignment);
 
   if (ctx.intent === "load") {
     return json({
@@ -127,8 +131,8 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
     flow: "binding",
     invite_id: invite.id,
     assignment: {
-      id: assignment.id, rate_type: assignment.rate_type, rate_value: assignment.rate_value,
-      start_date: assignment.start_date, end_date: assignment.end_date, times_entered: assignment.times_entered ?? null, commission_pct: commission,
+      id: assignment.id, rate_type: offerAssignment.rate_type, rate_value: offerAssignment.rate_value,
+      start_date: offerAssignment.start_date, end_date: offerAssignment.end_date, times_entered: offerAssignment.times_entered ?? null, commission_pct: commission,
     },
     job: {
       id: job?.id, customer_name: job?.customer_name, company: job?.company,
@@ -138,6 +142,7 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
       nachricht: job?.nachricht, besonderheiten: job?.besonderheiten,
     },
     job_lines: jobLines,
+    ...(frozen?.version === 2 ? { offer_snapshot: frozen } : {}),
   };
   const contentHash = await sha256Hex(stableStringify({
     driver_id: invite.driver_id, job_id: assignment.job_id, assignment_id: assignment.id,
