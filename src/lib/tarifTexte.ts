@@ -117,7 +117,7 @@ export const TARIF_TEXTE = {
     ],
     undefined,
     'netto pro tatsächlichem Einsatztag (Pauschale)',
-    ['Keine Stundenabrechnung, keine Wochenend- und Feiertagszuschläge'],
+    [],
   ),
 } as const;
 
