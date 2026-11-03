@@ -1,6 +1,6 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # Showtruck- und Eventfahrer (Vorschau)
-- [ ] Zusätzliche Freigabe: nur neue Leistungsseite um Musical-/Veranstaltungstourneen, Messetransporte, Bühnentechnik und separat vereinbarbare Tourneepauschalen ergänzen und prüfen; übrigen Stand unverändert lassen.
+- [x] Zusätzliche Freigabe: nur neue Leistungsseite um Musical-/Veranstaltungstourneen, Messetransporte, Bühnentechnik und separat vereinbarbare Tourneepauschalen ergänzt; 26 Tests und Browserprüfung bei 1280/390/320 px bestanden. Übrige Seiten, Formulare, Navigation, Preise und Versand unverändert; nichts veröffentlicht.
 - [x] Spezialfahrzeug-Preisübersicht um freigegebene Einsatzarten ergänzt, bestehende Preise/Konditionen erhalten.
 - [x] /showtruck-eventfahrer mit bestehender Buchungsmöglichkeit, Links von Leistungs-/Preisseiten und zusätzlichem Sitemap-Eintrag vorbereitet.
 - [x] 26 automatisierte Prüfungen bestanden; Seite, Suchmaschinenangaben und Buchungssprung bei 1280/390/320 px geprüft, automatische Prüfung OK; keine Buchung, E-Mail oder Veröffentlichung. Veröffentlichung wartet auf ausdrückliche Nutzerfreigabe.
