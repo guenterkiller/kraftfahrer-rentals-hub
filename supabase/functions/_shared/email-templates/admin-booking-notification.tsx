@@ -25,6 +25,7 @@ interface AdminBookingNotificationProps {
   address: string;
   timeframe: string;
   driverType: string;
+  selectedActivity?: string;
   requirements?: string[];
   message: string;
   billingModel: string;
@@ -56,6 +57,7 @@ export const AdminBookingNotification = ({
   address,
   timeframe,
   driverType,
+  selectedActivity,
   requirements = [],
   message,
   billingModel,
@@ -117,6 +119,12 @@ export const AdminBookingNotification = ({
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Fahrertyp:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px' }}>{driverType}</td>
         </tr>
+        {selectedActivity && selectedActivity !== driverType && (
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Gewählte Spezialtätigkeit / Fahrzeugart:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{selectedActivity}</td>
+          </tr>
+        )}
         <tr>
           <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tarif:</strong></td>
           <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }}>

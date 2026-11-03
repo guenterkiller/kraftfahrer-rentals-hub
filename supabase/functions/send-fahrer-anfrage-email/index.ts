@@ -146,6 +146,7 @@ const handler = async (req: Request): Promise<Response> => {
         customerName: kundenname,
         companyName: company || undefined,
         driverType: fahrerTyp,
+        selectedActivity: fahrzeugtyp,
         requirements: anforderungen,
         timeframe: zeitraumText,
         location: adresseText || einsatzort || 'Nicht angegeben',

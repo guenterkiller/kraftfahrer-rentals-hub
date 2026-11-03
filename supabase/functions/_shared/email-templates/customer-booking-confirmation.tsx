@@ -32,6 +32,7 @@ interface CustomerBookingConfirmationProps {
   customerName: string;
   companyName?: string;
   driverType: string;
+  selectedActivity?: string;
   requirements?: string[];
   timeframe: string;
   location: string;
@@ -108,6 +109,7 @@ export const CustomerBookingConfirmation = ({
   customerName,
   companyName,
   driverType,
+  selectedActivity,
   requirements = [],
   timeframe,
   location,
@@ -160,6 +162,12 @@ export const CustomerBookingConfirmation = ({
                 : driverType}
             </td>
           </tr>
+        {selectedActivity && selectedActivity !== driverType && (
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Gewählte Spezialtätigkeit / Fahrzeugart:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{selectedActivity}</td>
+          </tr>
+        )}
           {spezialanforderungen.length > 0 && (
             <tr>
               <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Spezialanforderungen:</strong></td>
