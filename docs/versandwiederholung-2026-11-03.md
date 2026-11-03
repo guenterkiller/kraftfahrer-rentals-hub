@@ -19,4 +19,4 @@
 - Authentifizierter produktiver End-to-End-Versand nicht durchgeführt: externe Supabase, keine verfügbare Administrator-Sitzung; echte Testmails ausdrücklich ausgeschlossen.
 
 ## Veröffentlichung
-Die zwei Serverfunktionen werden gezielt bereitgestellt; Verwaltungsänderungen sind in der Vorschau vorhanden, auf IONOS erst nach gesondertem Upload. Kein Upload/keine Veröffentlichung ausgeführt. Kein bestehender Auftrag, Link oder Nachweis verändert.
+Die zwei Serverfunktionen wurden erfolgreich bereitgestellt; Verwaltungsänderungen sind in der Vorschau vorhanden, auf IONOS erst nach gesondertem Upload. Kein Upload/keine Veröffentlichung ausgeführt. Kein bestehender Auftrag, Link oder Nachweis verändert.
