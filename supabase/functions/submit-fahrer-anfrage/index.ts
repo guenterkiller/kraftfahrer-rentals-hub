@@ -460,6 +460,7 @@ const handler = async (req: Request): Promise<Response> => {
             address: `${customer_street} ${customer_house_number}, ${customer_postal_code} ${customer_city}`,
             timeframe: zeitraumFormatted,
             driverType: driverTypeDisplay,
+            selectedActivity: fahrzeugtyp,
             requirements: anforderungen,
             message: nachricht,
             billingModel: billing_model,
