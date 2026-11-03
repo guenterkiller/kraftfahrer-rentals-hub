@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Vollständiges IONOS-Paket (Auftrag 03.11.2026)
+- [ ] Aktuelles Produktionspaket mit 22 Seiten erstellen und prüfen: kein dist vorhanden; manueller Projektbuild in dieser Arbeitsumgebung nicht zulässig, kein unterstützter Build-Export nachgewiesen.
+- [ ] Verwaltung angemeldet ohne echten Versand prüfen: external_unmanaged, keine verfügbare Administrator-Sitzung; vorhandene isolierte Prüfungen ersetzen Liveabnahme nicht.
+- [ ] ZIP erst nach vollständiger Produktionsdateiprüfung bereitstellen; keine Veröffentlichung/kein IONOS-Upload und keine echten Buchungen/E-Mails.
 # Abschlussprüfung vor IONOS (03.11.2026)
 - [x] Ausschließlich Unterkunftstext auf Eventseite ersetzt. Vier Eventtätigkeiten vorhanden und auswählbar nach Auswahl bestehender Spezialfahrzeug-Hauptkategorie; kein Defekt, keine Formularlogik geändert.
 - [x] 96 Frontend-Regeltests, 56 Deno-Versand-/Wiederholungsprüfungen und 4 Prerender-/Paketregeltests bestanden. Tatsächliches Eventformular lokal abgefangen, Kostenvorschau und alle vier Datenflüsse geprüft; Vertragsmail-Wiederholung isoliert im Browser Fehler→Erfolg geprüft. 22 Sitemap-Seiten Desktop/Mobil besucht: 21 mit H1, bestehende /fahrer-infos ohne H1; keine Laufzeitfehler. Keine echten Mails/Buchungen, keine Bestands-/SEO-/Preisänderung.
