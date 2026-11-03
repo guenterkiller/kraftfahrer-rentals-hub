@@ -103,6 +103,22 @@ export const TARIF_TEXTE = {
     'netto je tatsächlichem Einsatztag',
     ['Bis zu 8 Stunden Einsatzzeit'],
   ),
+  event: build(
+    'Event-Tourneepauschale (Showtruck, Promotion, Konzert, Musical, Event)',
+    '489,00 €',
+    'netto pro tatsächlichem Einsatztag als feste Pauschale',
+    [
+      'Feste Tagespauschale ohne zusätzliche Stundenabrechnung',
+      'Keine Samstags-, Sonntags- oder Feiertagszuschläge',
+      'Keine vertragliche tägliche 8-Stunden-Preisgrenze',
+      'Gesetzlich geltende tägliche und wöchentliche Arbeits-, Lenk- und Ruhezeiten werden uneingeschränkt eingehalten',
+      'Erforderliche Hotelübernachtungen organisiert und bezahlt der Auftraggeber',
+      'An- und Abfahrt werden gemäß den bestehenden Konditionen gesondert berechnet',
+    ],
+    undefined,
+    'netto pro tatsächlichem Einsatztag (Pauschale)',
+    ['Keine Stundenabrechnung, keine Wochenend- und Feiertagszuschläge'],
+  ),
 } as const;
 
 export type TarifTextKey = keyof typeof TARIF_TEXTE;
