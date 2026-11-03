@@ -1,0 +1,309 @@
+import { Heading, Text, Section, Hr } from 'npm:@react-email/components@0.0.22';
+import * as React from 'npm:react@18.3.1';
+import { BaseEmail, colors, boxStyles, textStyles } from '../../supabase/functions/_shared/email-templates/base-email.tsx';
+import { TARIF_TEXTE, tarifTextByKey } from '../../supabase/functions/_shared/email-templates/tarif-text-helper.ts';
+import { OvernightCostNotice } from '../../supabase/functions/_shared/email-templates/overnight-cost-notice.tsx';
+import { OVERNIGHT_COSTS } from '../../supabase/functions/_shared/overnight-costs.ts';
+import {
+  UNTERKUNFT_OPTIONEN,
+  OBERGRENZE_LABEL,
+  formatEuro,
+  zuweisungsHinweis,
+  type UnterkunftOption,
+  type KostenUebersicht,
+  VORKALKULATION_TITEL,
+  VORKALKULATION_HINWEIS,
+  OFFENE_KOSTEN_HINWEIS,
+  offenePositionen,
+} from '../../supabase/functions/_shared/kosten-uebersicht.ts';
+
+interface AdminBookingNotificationProps {
+  customerName: string;
+  companyName?: string;
+  email: string;
+  phone: string;
+  address: string;
+  timeframe: string;
+  driverType: string;
+  selectedActivity?: string;
+  requirements?: string[];
+  message: string;
+  billingModel: string;
+  jobId: string;
+  isFernfahrerTarif?: boolean;
+  tarif?: {
+    tarif: string;
+    label: string;
+    netto: number | null;
+    einheit: string;
+    mehrstunde: number | null;
+    needsReview: boolean;
+    reason: string;
+  };
+  maschinenbedienungLabel?: string;
+  surchargeDays?: string[];
+  /** Einsatz länger als eine Woche (aus Beginn/Ende berechnet) */
+  multiWeek?: boolean;
+  unterkunftOption?: UnterkunftOption | null;
+  unterkunftObergrenze?: number | null;
+  kostenUebersicht?: KostenUebersicht | null;
+}
+
+export const AdminBookingNotification = ({
+  customerName,
+  companyName,
+  email,
+  phone,
+  address,
+  timeframe,
+  driverType,
+  selectedActivity,
+  requirements = [],
+  message,
+  billingModel,
+  jobId,
+  isFernfahrerTarif = false,
+  tarif,
+  maschinenbedienungLabel,
+  surchargeDays = [],
+  multiWeek = false,
+  unterkunftOption = null,
+  unterkunftObergrenze = null,
+  kostenUebersicht = null,
+}: AdminBookingNotificationProps) => (
+  <BaseEmail previewText={`Neue Buchungsanfrage: ${driverType} in ${address}`}>
+    <Heading style={{ ...textStyles.heading2, color: colors.primary }}>
+      📥 Neue Buchungsanfrage eingegangen
+    </Heading>
+
+    <Text style={textStyles.paragraph}>
+      Eine neue Fahrerbuchung wurde über das Portal eingereicht:
+    </Text>
+
+    <Section style={boxStyles.highlightBox}>
+      <Heading style={textStyles.heading3}>👤 Kundendaten</Heading>
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Kunde:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>
+            {customerName}{companyName ? ` (${companyName})` : ''}
+          </td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>E-Mail:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>
+            <a href={`mailto:${email}`} style={{ color: colors.primary }}>{email}</a>
+          </td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Telefon:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>
+            <a href={`tel:${phone}`} style={{ color: colors.primary }}>{phone}</a>
+          </td>
+        </tr>
+      </table>
+    </Section>
+
+    <Section style={boxStyles.infoBox}>
+      <Heading style={textStyles.heading3}>🚛 Auftragsdaten</Heading>
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Einsatzort:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>{address}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Zeitraum:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>{timeframe}</td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Fahrertyp:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>{driverType}</td>
+        </tr>
+        {selectedActivity && selectedActivity !== driverType && (
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Gewählte Spezialtätigkeit / Fahrzeugart:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{selectedActivity}</td>
+          </tr>
+        )}
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Tarif:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }}>
+            {tarif
+              ? (tarif.needsReview
+                  ? 'Tarifzuordnung erforderlich'
+                  : `${tarif.label}${tarifTextByKey(tarif.tarif) ? ` – ${tarifTextByKey(tarif.tarif)!.priceLine}` : ''}`)
+              : (isFernfahrerTarif ? `${TARIF_TEXTE.fernfahrer.name} (${TARIF_TEXTE.fernfahrer.priceLine})` : 'Standard-Tagessatz')}
+          </td>
+        </tr>
+        {requirements.length > 0 && (
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Anforderungen:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{requirements.join(', ')}</td>
+          </tr>
+        )}
+        {message && (
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>{message}</td>
+          </tr>
+        )}
+      </table>
+      <Text style={{ ...textStyles.paragraph, fontSize: '13px', fontStyle: 'italic', margin: '12px 0 0 0' }}>
+        Der Besteller hat bestätigt, dass die beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind. Diese Angaben bilden die Grundlage der Einsatzabstimmung und der Auftragsannahme durch den selbstständigen Fahrer.
+      </Text>
+    </Section>
+
+    {tarif && (
+      <Section style={{ ...boxStyles.infoBox, backgroundColor: tarif.needsReview ? '#fef3c7' : '#f0fdf4', borderLeft: `4px solid ${tarif.needsReview ? '#d97706' : '#16a34a'}` }}>
+        <Heading style={textStyles.heading3}>🧮 Tarifzuordnung</Heading>
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Maßgeblicher Tarif:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>
+              {tarif.needsReview ? 'Zuordnung zu einem veröffentlichten Tarif erforderlich' : `${tarif.label}`}
+            </td>
+          </tr>
+          {tarif.netto !== null && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>{tarif.tarif === 'lkw_ce_woche' ? 'Wochenpreis:' : 'Tagessatz:'}</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>
+                {tarifTextByKey(tarif.tarif)?.priceLine ?? `${tarif.netto.toLocaleString('de-DE')} € netto ${tarif.einheit}`}
+              </td>
+            </tr>
+          )}
+          {tarif.tarif === 'lkw_ce_woche' && (
+            <>
+              <tr>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Einsatzzeit:</strong></td>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}>bis zu 9 Stunden je Einsatztag (5 Einsatztage)</td>
+              </tr>
+              <tr>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
+                <td style={{ padding: '5px 0', fontSize: '14px' }}>45,00 € netto je angefangene Stunde</td>
+              </tr>
+            </>
+          )}
+          {tarif.mehrstunde !== null && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Mehrstunde:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>
+              {`${tarif.mehrstunde.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} € netto je angefangene Stunde`}
+              </td>
+            </tr>
+          )}
+          {tarif.reason && (
+            <tr>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Begründung:</strong></td>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>{tarif.reason}</td>
+            </tr>
+          )}
+        </table>
+        {surchargeDays.length > 0 && (
+          <>
+            <Text style={{ ...textStyles.paragraph, margin: '12px 0 4px 0' }}>
+              <strong>Wochenend-/Feiertage im Einsatzzeitraum:</strong>
+            </Text>
+            <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }}>
+              {surchargeDays.map((d) => (<li key={d}>{d}</li>))}
+            </ul>
+          </>
+        )}
+        {unterkunftOption && (
+          <Text style={{ ...textStyles.paragraph, margin: '12px 0 0 0' }}>
+            <strong>Unterkunft:</strong> {UNTERKUNFT_OPTIONEN[unterkunftOption]}
+            {unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' && (
+              <>
+                <br /><strong>{OBERGRENZE_LABEL}:</strong> {formatEuro(unterkunftObergrenze)}
+                <br />{zuweisungsHinweis(unterkunftObergrenze)}
+              </>
+            )}
+          </Text>
+        )}
+        {tarif.needsReview && (
+          <Text style={{ ...textStyles.paragraph, margin: '12px 0 0 0', fontWeight: 'bold' }}>
+            ⚠️ Dem Besteller wurde noch kein Fahrertyp bestätigt. Bitte den passenden veröffentlichten Tarif manuell zuordnen – die Preise selbst stehen fest.
+          </Text>
+        )}
+      </Section>
+    )}
+
+    {kostenUebersicht && (
+      <Section style={boxStyles.infoBox}>
+        <Heading style={textStyles.heading3}>{VORKALKULATION_TITEL}</Heading>
+        <Text style={textStyles.paragraph}>{VORKALKULATION_HINWEIS}</Text>
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          {kostenUebersicht.positionen.map((position) => (
+            <tr key={position.label}>
+              <td style={{ padding: '5px 0', fontSize: '14px' }}>{position.label}</td>
+              <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>{formatEuro(position.betrag)}</td>
+            </tr>
+          ))}
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Voraussichtliche Gesamtsumme netto:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>{formatEuro(kostenUebersicht.netto)}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}>zzgl. 19 % Umsatzsteuer:</td>
+            <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}>{formatEuro(kostenUebersicht.ust)}</td>
+          </tr>
+          <tr>
+            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Voraussichtliche Gesamtsumme brutto:</strong></td>
+            <td style={{ padding: '5px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }}><strong>{formatEuro(kostenUebersicht.brutto)}</strong></td>
+          </tr>
+        </table>
+        <Text style={textStyles.paragraph}><strong>Noch offene Zusatzkosten (nicht in der Vorkalkulation enthalten):</strong></Text>
+        <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }}>
+          {offenePositionen(unterkunftOption ?? '', unterkunftObergrenze).map((position) => (
+            <li key={position}>{position}</li>
+          ))}
+        </ul>
+        <Text style={textStyles.paragraph}>{OFFENE_KOSTEN_HINWEIS}</Text>
+      </Section>
+    )}
+
+    {isFernfahrerTarif && tarif?.tarif === 'fernfahrer' && (
+      <Section style={{ ...boxStyles.infoBox, backgroundColor: '#eff6ff', borderLeft: '4px solid #3b82f6' }}>
+        <Text style={{ ...textStyles.paragraph, margin: '0' }}>
+          <strong>{TARIF_TEXTE.fernfahrer.name} aktiv:</strong> {TARIF_TEXTE.fernfahrer.priceLine}. {TARIF_TEXTE.fernfahrer.details.join(' ')}
+        </Text>
+      </Section>
+    )}
+
+    <Section style={{ ...boxStyles.infoBox, backgroundColor: '#fef3f2' }}>
+      <Heading style={textStyles.heading3}>💼 Abrechnungsdetails</Heading>
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px', width: '40%' }}><strong>Abrechnungsmodell:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}>
+            {billingModel === 'agency' ? 'Vermittlung' : billingModel === 'direct' ? 'Direktabrechnung' : billingModel}
+          </td>
+        </tr>
+        <tr>
+          <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Job ID:</strong></td>
+          <td style={{ padding: '5px 0', fontSize: '14px', fontFamily: 'monospace' }}>{jobId}</td>
+        </tr>
+      </table>
+    </Section>
+
+    <OvernightCostNotice tarifKey={tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} />
+
+    {multiWeek && (
+      <Section style={{ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeft: '4px solid #d97706' }}>
+        <Text style={{ ...textStyles.paragraph, margin: '0' }}>
+          <strong>Planungshinweis – Einsatz länger als eine Woche:</strong> {OVERNIGHT_COSTS.multiWeek}
+        </Text>
+      </Section>
+    )}
+
+    <Hr style={{ borderTop: `2px solid ${colors.primary}`, margin: '30px 0' }} />
+
+    <Text style={{ ...textStyles.muted, fontSize: '12px', textAlign: 'center' as const }}>
+      📅 Eingegangen am: {new Date().toLocaleString('de-DE', { 
+        dateStyle: 'full', 
+        timeStyle: 'short' 
+      })}
+    </Text>
+  </BaseEmail>
+);
+
+export default AdminBookingNotification;

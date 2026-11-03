@@ -1,0 +1,545 @@
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import React from 'npm:react@18.3.1';
+import { AdminBookingNotification } from './admin-booking-notification.tsx';
+import { resolveTarif, MASCHINENBEDIENUNG_LABELS, isUeberfuehrung, UEBERFUEHRUNG_LABEL, UEBERFUEHRUNG_TARIF_TYPE, type Maschinenbedienung } from '../../supabase/functions/_shared/tarif-zuordnung.ts';
+import { listSurchargeDays } from '../../supabase/functions/_shared/german-holidays.ts';
+import { parseUnterkunftObergrenze } from '../../supabase/functions/submit-fahrer-anfrage/unterkunft-obergrenze.ts';
+import { validateCustomerConfirmation } from '../../supabase/functions/_shared/customer-confirmation.ts';
+import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import {
+  berechneKostenUebersicht,
+  UNTERKUNFT_OPTIONSWERTE,
+  type UnterkunftOption,
+} from '../../supabase/functions/_shared/kosten-uebersicht.ts';
+
+const jsonCors = { ...corsHeaders, 'Content-Type': 'application/json' };
+
+interface FahrerAnfrageRequest {
+  // Customer data - flexible format
+  vorname?: string;
+  nachname?: string;
+  customer?: {
+    firstName?: string;
+    lastName?: string;
+    name?: string;
+    email: string;
+    phone: string;
+  };
+  email?: string;
+  phone?: string;
+  company?: string;
+  
+  // Customer address fields
+  customer_street?: string;
+  customer_house_number?: string;
+  customer_postal_code?: string;
+  customer_city?: string;
+  
+  // Job details
+  job?: {
+    company?: string;
+    einsatzort?: string;
+    einsatzbeginn?: string;
+    einsatzdauer?: string;
+    einsatzdauer_wochen?: number;
+    zeitraum?: string;
+    fahrzeugtyp?: string;
+    fuehrerscheinklasse?: string;
+    nachricht?: string;
+  };
+  einsatzbeginn?: string;
+  einsatzdauer?: string;
+  einsatzende?: string;
+  fahrzeugtyp?: string;
+  anforderungen?: string[];
+  nachricht?: string;
+
+  // Tarifzuordnung (Formular)
+  maschinenbedienung?: string;
+  tarif_key?: string;
+  leistung?: string;
+  
+  // Consents
+  consents?: {
+    datenschutz_ok?: boolean;
+    newsletter_ok?: boolean;
+    price_confirmed?: boolean;
+    confirmed_at?: string;
+  };
+  datenschutz?: boolean;
+  /** Einzige Pflichtbestätigung (Angaben, Vermittlungsbedingungen, Preis-/Zuschlagsregeln). */
+  bedingungen_akzeptiert?: boolean;
+  bedingungen_fassung?: string;
+  newsletter?: boolean;
+  price_acknowledged?: boolean;
+  price_ack_time?: string;
+  price_plan?: string;
+  billing_model?: string;
+  weekend_holiday_affected?: boolean;
+  weekend_holiday_acknowledged?: boolean;
+
+  // Unterkunftsregelung (nur bei relevanten Tarifen)
+  unterkunft_option?: string;
+  unterkunft_obergrenze?: number | string | null;
+  
+  // Meta
+  meta?: {
+    source?: string;
+    ip?: string;
+    userAgent?: string;
+  };
+}
+
+const handler = async (req: Request): Promise<Response> => {
+  // Handle CORS preflight requests
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: jsonCors
+    });
+  }
+
+  try {
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Missing Supabase environment variables');
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), {
+        status: 500,
+        headers: jsonCors
+      });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    
+    // Safely parse JSON body
+    const requestData: FahrerAnfrageRequest = await req.json().catch(() => ({} as any));
+    
+    console.log('Received booking request');
+    
+    // Extract data directly from the flat structure sent by SimpleBookingForm
+    const vorname = String(requestData.vorname || '').trim();
+    const nachname = String(requestData.nachname || '').trim();
+    const email = String(requestData.email || '').trim().toLowerCase();
+    const phone = String(requestData.phone || '').trim();
+    const company = String(requestData.company || '').trim();
+    
+    // Customer address data
+    const customer_street = String(requestData.customer_street || '').trim();
+    const customer_house_number = String(requestData.customer_house_number || '').trim();
+    const customer_postal_code = String(requestData.customer_postal_code || '').trim();
+    const customer_city = String(requestData.customer_city || '').trim();
+    
+    // Job data
+    const ueberfuehrung = isUeberfuehrung(String(requestData.leistung || ''), String(requestData.fahrzeugtyp || ''));
+    // Überführung: feste Leistungsbezeichnung, unabhängig vom übermittelten Fahrzeugtyp
+    const fahrzeugtyp = ueberfuehrung ? UEBERFUEHRUNG_LABEL : String(requestData.fahrzeugtyp || 'lkw').trim();
+    const nachricht = String(requestData.nachricht || '').trim();
+    const anforderungenRaw = Array.isArray(requestData.anforderungen) ? requestData.anforderungen : [];
+    // Bei Überführungen keine Fernverkehr-/Tarif-Hinweise übernehmen (keine 450-€-Pauschale möglich)
+    const anforderungen = ueberfuehrung
+      ? anforderungenRaw.filter((a: string) => !/fernverkehr|fernfahrer|tarif/i.test(String(a)))
+      : anforderungenRaw;
+    
+    // Hinweis "Fernverkehr / Übernachtung" aus den Anforderungen (nur Eingangssignal,
+    // überschreibt niemals die vom Besteller gewählte Tarifkarte)
+    const fernverkehrAngefordert = !ueberfuehrung && anforderungen.some((a: string) =>
+      a.toLowerCase().includes('fernverkehr') || a.toLowerCase().includes('fernfahrer')
+    );
+
+    // Tarifzuordnung serverseitig (regelbasiert, nie reine Stichworterkennung)
+    const maschinenbedienungRaw = String(requestData.maschinenbedienung || '').trim().toLowerCase();
+    const maschinenbedienung: Maschinenbedienung =
+      maschinenbedienungRaw === 'ja' || maschinenbedienungRaw === 'nein' || maschinenbedienungRaw === 'unklar'
+        ? (maschinenbedienungRaw as Maschinenbedienung)
+        : '';
+    const tarif = resolveTarif({
+      kategorie: fahrzeugtyp,
+      maschinenbedienung,
+      longDistance: fernverkehrAngefordert,
+      beschreibung: nachricht,
+      leistung: ueberfuehrung ? 'ueberfuehrung' : '',
+    });
+
+    // Maßgeblich ist ausschließlich der zugeordnete Tarif – kein zweiter Tarif in den E-Mails.
+    const isFernfahrerTarif = tarif.tarif === 'fernfahrer';
+
+    // Unterkunftsregelung serverseitig validieren (nur bei relevanten Tarifen)
+    const unterkunftRelevant = ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
+    const unterkunftRaw = String(requestData.unterkunft_option || '').trim();
+    let unterkunftOption: UnterkunftOption | null = null;
+    let unterkunftObergrenze: number | null = null;
+    if (unterkunftRelevant) {
+      if (!UNTERKUNFT_OPTIONSWERTE.includes(unterkunftRaw as UnterkunftOption)) {
+        return new Response(JSON.stringify({
+          error: 'Bitte Unterkunftsregelung auswählen',
+          details: 'unterkunft_option must be one of: gestellt, fahrer_organisiert, keine'
+        }), {
+          status: 400,
+          headers: jsonCors
+        });
+      }
+      unterkunftOption = unterkunftRaw as UnterkunftOption;
+      if (unterkunftOption === 'fahrer_organisiert') {
+        const parsed = parseUnterkunftObergrenze(requestData.unterkunft_obergrenze);
+        if (parsed === null) {
+          return new Response(JSON.stringify({
+            error: 'Bitte gültiges Hotelbudget zwischen 0 € und 75 € angeben',
+            details: 'unterkunft_obergrenze must be a number between 0 and 75'
+          }), {
+            status: 400,
+            headers: jsonCors
+          });
+        }
+        unterkunftObergrenze = parsed;
+      }
+    }
+
+    // Unverbindliche Vorkalkulation serverseitig berechnen (Client-Werte sind nicht maßgeblich)
+    const kostenUebersicht = berechneKostenUebersicht(
+      tarif.tarif,
+      String(requestData.einsatzbeginn || ''),
+      String(requestData.einsatzende || requestData.einsatzbeginn || '')
+    );
+
+    // Wochenend-/Feiertage im Einsatzzeitraum
+    const surchargeDays = listSurchargeDays(
+      String(requestData.einsatzbeginn || ''),
+      String(requestData.einsatzende || requestData.einsatzbeginn || '')
+    );
+    const weekendDays = surchargeDays.filter((d) => d.kind !== 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
+    const holidayDays = surchargeDays.filter((d) => d.kind === 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
+    
+    // Consent data
+    // Einzige Pflichtbestätigung. Übergangsweise akzeptiert: bisheriges Formular (noch live bis IONOS-Upload)
+    // sendet datenschutz=true und sperrte das Absenden ohne Verbindlichkeitsbestätigung.
+    const confirmation = validateCustomerConfirmation(requestData);
+    const newsletter = Boolean(requestData.newsletter);
+    const billing_model = String(requestData.billing_model || 'agency');
+    const weekend_holiday_affected = Boolean(requestData.weekend_holiday_affected);
+    const weekend_holiday_acknowledged = Boolean(requestData.weekend_holiday_acknowledged);
+    
+    // Validate required fields
+    const required = [
+      { field: 'vorname', value: vorname },
+      { field: 'nachname', value: nachname },
+      { field: 'email', value: email },
+      { field: 'phone', value: phone },
+      { field: 'customer_street', value: customer_street },
+      { field: 'customer_house_number', value: customer_house_number },
+      { field: 'customer_postal_code', value: customer_postal_code },
+      { field: 'customer_city', value: customer_city },
+      { field: 'nachricht', value: nachricht }
+    ];
+    
+    const missing = required.filter(r => !r.value);
+    if (missing.length > 0) {
+      return new Response(JSON.stringify({ 
+        error: 'Pflichtfelder fehlen',
+        details: `Missing required fields: ${missing.map(m => m.field).join(', ')}`
+      }), {
+        status: 400,
+        headers: jsonCors
+      });
+    }
+    
+    // Validate email format
+    if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)) {
+      return new Response(JSON.stringify({ 
+        error: 'Ungültige E-Mail-Adresse',
+        details: 'Invalid email format'
+      }), {
+        status: 400,
+        headers: jsonCors
+      });
+    }
+    
+    // Validate PLZ format
+    if (!/^\d{5}$/.test(customer_postal_code)) {
+      return new Response(JSON.stringify({ 
+        error: 'PLZ muss 5-stellig sein',
+        details: 'customer_postal_code must be exactly 5 digits'
+      }), {
+        status: 400,
+        headers: jsonCors
+      });
+    }
+    
+    if (confirmation.ok === false) {
+      return new Response(JSON.stringify({ 
+        error: confirmation.error,
+        details: 'Gültige Pflichtbestätigung und Bedingungsfassung erforderlich'
+      }), {
+        status: 400,
+        headers: jsonCors
+      });
+    }
+
+    // Format zeitraum from einsatzbeginn and einsatzdauer
+    let zeitraumFormatted = "Nach Absprache";
+    const einsatzbeginn = requestData.einsatzbeginn;
+    const einsatzdauer = requestData.einsatzdauer;
+    
+    if (einsatzbeginn) {
+      try {
+        const date = new Date(einsatzbeginn + "T08:00:00");
+        if (!isNaN(date.getTime())) {
+          const formattedDate = date.toLocaleDateString('de-DE');
+          zeitraumFormatted = einsatzdauer
+            ? (einsatzdauer.startsWith('vom ')
+                ? einsatzdauer
+                : `Ab ${formattedDate} für ${einsatzdauer}`)
+            : `Ab ${formattedDate}`;
+        }
+      } catch (dateError) {
+        console.error("Date conversion error:", dateError);
+        zeitraumFormatted = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
+      }
+    } else if (einsatzdauer) {
+      zeitraumFormatted = `Dauer: ${einsatzdauer}`;
+    }
+    
+    // Create einsatzort from address
+    const einsatzort = `${customer_city}, ${customer_postal_code}`;
+
+    // Prepare data for database insert
+    const jobRequestData = {
+      ...confirmation.evidence,
+      customer_name: `${vorname} ${nachname}`.trim(),
+      customer_email: email,
+      customer_phone: phone,
+      company: company || null,
+      customer_street: customer_street,
+      customer_house_number: customer_house_number,
+      customer_postal_code: customer_postal_code,
+      customer_city: customer_city,
+      einsatzort: einsatzort,
+      zeitraum: zeitraumFormatted,
+      fahrzeugtyp: fahrzeugtyp,
+      fuehrerscheinklasse: 'C+E',
+      besonderheiten: anforderungen.length > 0 ? anforderungen.join(", ") : null,
+      nachricht: nachricht,
+      status: 'open', // Anfragen starten als 'open' (erlaubte Werte: open, assigned, completed, cancelled)
+      billing_model: billing_model,
+      // Tarifzuordnung dauerhaft am Auftrag speichern
+      tarif_type: tarif.tarif === 'ueberfuehrung' ? UEBERFUEHRUNG_TARIF_TYPE : tarif.tarif,
+      tarif_label: tarif.needsReview ? null : tarif.label,
+      tarif_netto: tarif.netto,
+      tarif_unit: tarif.needsReview || !tarif.einheit ? null : tarif.einheit,
+      tarif_mehrstunde_netto: tarif.mehrstunde,
+      tarif_needs_review: tarif.needsReview,
+      tarif_reason: tarif.reason,
+      maschinenbedienung: maschinenbedienung || null,
+      weekend_days: weekendDays.length ? weekendDays : null,
+      holiday_days: holidayDays.length ? holidayDays : null,
+      unterkunft_option: unterkunftOption,
+      unterkunft_obergrenze: unterkunftObergrenze,
+      kosten_uebersicht: kostenUebersicht
+    };
+
+    console.log('Checking for duplicates before inserting...');
+
+    // Duplikat-Schutz: gleiche E-Mail + Einsatzort innerhalb 5 Minuten blockieren
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { data: existingJobs } = await supabase
+      .from('job_requests')
+      .select('id, created_at')
+      .eq('customer_email', email)
+      .eq('einsatzort', einsatzort)
+      .gte('created_at', fiveMinutesAgo)
+      .limit(1);
+
+    if (existingJobs && existingJobs.length > 0) {
+      console.log('Duplicate detected, existing job:', existingJobs[0].id);
+      return new Response(JSON.stringify({
+        error: 'Duplikat erkannt',
+        details: 'Eine identische Anfrage wurde bereits innerhalb der letzten 5 Minuten gesendet.',
+        existing_job_id: existingJobs[0].id
+      }), {
+        status: 409,
+        headers: jsonCors
+      });
+    }
+
+    console.log('No duplicate found, inserting job request for:', customer_city);
+
+    // Save job request to database
+    const { data: jobRequest, error: jobError } = await supabase
+      .from('job_requests')
+      .insert([jobRequestData])
+      .select()
+      .single();
+
+    if (jobError) {
+      console.error("Error saving job request:", jobError);
+      return new Response(JSON.stringify({ 
+        error: 'Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'
+      }), {
+        status: 400,
+        headers: jsonCors
+      });
+    }
+
+    console.log("Job request saved with status 'open'");
+
+    // WICHTIG: Kein sofortiger Broadcast an Fahrer mehr!
+    // Der Versand erfolgt erst nach Admin-Freigabe über admin-approve-job
+
+    // Send customer notification email
+    try {
+      const customerResponse = await supabase.functions.invoke('send-fahrer-anfrage-email', {
+        headers: {
+          'x-internal-secret': Deno.env.get('INTERNAL_FN_SECRET') ?? '',
+        },
+        body: {
+          vorname: vorname,
+          nachname: nachname,
+          email: email,
+          phone: phone,
+          company: company,
+          message: nachricht,
+          einsatzbeginn: einsatzbeginn || '',
+          einsatzdauer: einsatzdauer || '',
+          einsatzende: requestData.einsatzende || '',
+          fahrzeugtyp: fahrzeugtyp,
+          anforderungen: anforderungen,
+          customer_street: customer_street,
+          customer_house_number: customer_house_number,
+          customer_postal_code: customer_postal_code,
+          customer_city: customer_city,
+          einsatzort: einsatzort,
+          isFernfahrerTarif: isFernfahrerTarif,
+          weekend_holiday_affected: weekend_holiday_affected,
+          weekend_holiday_acknowledged: weekend_holiday_acknowledged,
+          tarif: tarif,
+          surcharge_days: surchargeDays,
+          unterkunft_option: unterkunftOption,
+          unterkunft_obergrenze: unterkunftObergrenze,
+          kosten_uebersicht: kostenUebersicht
+        }
+      });
+
+      if (customerResponse.error) {
+        console.error("Error sending customer email:", customerResponse.error);
+      }
+    } catch (emailError) {
+      console.error("Error with customer email:", emailError);
+    }
+
+    // Send admin notification email
+    try {
+      const { data: adminSettings } = await supabase
+        .from('admin_settings')
+        .select('admin_email')
+        .single();
+
+      if (adminSettings?.admin_email) {
+        // Fahrertyp aus der regelbasierten Tarifzuordnung (kein Stichwort-Raten)
+        const driverTypeDisplay = tarif.needsReview
+          ? 'Tarifzuordnung erforderlich'
+          : tarif.label;
+        const adminSubject = tarif.needsReview
+          ? `Neue Buchungsanfrage: Passenden Tarif manuell zuordnen – ${customer_city}`
+          : ueberfuehrung
+            ? `Neue Überführungsanfrage: ${UEBERFUEHRUNG_LABEL} – ${customer_city}`
+            : `Neue Buchungsanfrage: ${driverTypeDisplay} in ${customer_city}`;
+
+        const adminEmailHtml = await renderAsync(
+          React.createElement(AdminBookingNotification, {
+            customerName: `${vorname} ${nachname}`,
+            companyName: company || undefined,
+            email: email,
+            phone: phone,
+            address: `${customer_street} ${customer_house_number}, ${customer_postal_code} ${customer_city}`,
+            timeframe: zeitraumFormatted,
+            driverType: driverTypeDisplay,
+            selectedActivity: fahrzeugtyp,
+            requirements: anforderungen,
+            message: nachricht,
+            billingModel: billing_model,
+            jobId: jobRequest.id,
+            isFernfahrerTarif: isFernfahrerTarif,
+            tarif: tarif,
+            maschinenbedienungLabel: maschinenbedienung
+              ? MASCHINENBEDIENUNG_LABELS[maschinenbedienung as 'ja' | 'nein' | 'unklar']
+              : 'Keine Angabe',
+            surchargeDays: surchargeDays.map((d) => `${d.label} – ${d.percent} % Zuschlag`),
+            multiWeek: (() => {
+              const b = Date.parse(String(requestData.einsatzbeginn || ''));
+              const e = Date.parse(String(requestData.einsatzende || ''));
+              return Number.isFinite(b) && Number.isFinite(e) && (e - b) / 86400000 + 1 > 7;
+            })(),
+            unterkunftOption: unterkunftOption,
+            unterkunftObergrenze: unterkunftObergrenze,
+            kostenUebersicht: kostenUebersicht,
+          })
+        );
+
+        const { Resend } = await import("npm:resend@2.0.0");
+        const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+        const adminEmailResponse = await resend.emails.send({
+          from: "Fahrerexpress System <info@kraftfahrer-mieten.com>",
+          to: [adminSettings.admin_email],
+          subject: adminSubject,
+          html: adminEmailHtml,
+        });
+
+        // Log admin email
+        if (adminEmailResponse.error) {
+          console.error("Failed to send admin notification:", adminEmailResponse.error);
+          
+          await supabase.from('email_log').insert({
+            recipient: adminSettings.admin_email,
+            subject: adminSubject,
+            template: 'admin_booking_notification',
+            status: 'failed',
+            job_id: jobRequest.id,
+            error_message: adminEmailResponse.error.message || String(adminEmailResponse.error),
+          });
+        } else {
+          console.log("Admin notification sent successfully:", adminEmailResponse);
+          
+          await supabase.from('email_log').insert({
+            recipient: adminSettings.admin_email,
+            subject: adminSubject,
+            template: 'admin_booking_notification',
+            status: 'sent',
+            job_id: jobRequest.id,
+            sent_at: new Date().toISOString(),
+            message_id: adminEmailResponse.data?.id,
+          });
+        }
+      }
+    } catch (adminEmailError) {
+      console.error("Error sending admin notification:", adminEmailError);
+    }
+
+    return new Response(JSON.stringify({ 
+      success: true, 
+      message: 'Anfrage erfolgreich gesendet',
+      job_id: jobRequest.id 
+    }), {
+      status: 200,
+      headers: jsonCors
+    });
+
+  } catch (error: any) {
+    console.error('Unexpected error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut.'
+    }), {
+      status: 500,
+      headers: jsonCors
+    });
+  }
+};
+
+export { handler }; // Preview draft only: no server registration.
