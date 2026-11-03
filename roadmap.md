@@ -1,4 +1,7 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Showtruck-Leistungsbereich Startseite (nur Vorschau)
+- [ ] Kompakten Bild-Text-Bereich nach bestehender Einleitung vor Preisübersichten mit exakt freigegebenem Text und zwei bestehenden Zielen ergänzen.
+- [ ] Realistisches Bild optimieren; Desktop/Mobil, Verlinkungen und unveränderte SEO-/Bestandsinhalte prüfen. Keine Buchung, Mail, Veröffentlichung oder IONOS-Upload.
 # Aktivierung Eventtätigkeiten in Bestätigungsmails (Freigabe 03.11.2026)
 - [x] Ausschließlich geprüfte Weitergabe/Anzeige in beide bestehende Versandfunktionen und Vorlagen übernommen; exakte Übereinstimmung mit Entwürfen außer Importpfaden/Serverstart bestätigt.
 - [x] Bestehende vier Event-Datenflussprüfungen auf tatsächliche Handler übertragen; insgesamt 15 Deno-Prüfungen bestanden, einschließlich Kostenvorschau/Hotelbudget/Bestätigung und simuliertem Versandfehler. Keine echten Buchungen/Mails.
