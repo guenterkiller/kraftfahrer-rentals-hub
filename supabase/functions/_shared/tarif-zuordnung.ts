@@ -82,7 +82,7 @@ export const EVENT_TAETIGKEITEN = [
   'Transporte von Bühnen- und Veranstaltungstechnik',
 ] as const;
 
-export const EVENT_LABEL = 'Event-Tourneepauschale (Showtruck-, Promotion-, Konzert-, Musical- und Eventfahrer)';
+export const EVENT_LABEL = 'Event-Tourneepauschale';
 
 /** Erkennt eine der vier Eventtätigkeiten (exakte Bezeichnung in Tätigkeit oder gespeicherter Kategorie). */
 export const isEventTaetigkeit = (...texte: Array<string | undefined>): boolean =>
