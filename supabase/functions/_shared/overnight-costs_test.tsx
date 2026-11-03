@@ -44,6 +44,7 @@ for (const key of ['event']) {
       assert(!text.includes('\uFFFD'), 'Zeichensalat');
     }
     assert(!customer.includes('Wochenend- und Feiertagszuschläge'), 'Zuschlagsabschnitt darf nicht erscheinen');
+    for (const verboten of ['Provision', 'provision', 'Vermittlungsanteil', '25 %', '20 %', 'Fahrervergütung']) assert(!customer.includes(verboten), `Kundenmail enthält ${verboten}`);
     assert(!customer.includes('Einsatzzeit und Mehrstunden'), 'Mehrstundenabschnitt darf nicht erscheinen');
     assert(customer.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge'), 'Zuschlagsausschluss fehlt');
   });
