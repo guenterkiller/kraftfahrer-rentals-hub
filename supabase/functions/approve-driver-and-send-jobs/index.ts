@@ -50,7 +50,9 @@ serve(async (req) => {
     }
     
     // Parse request body to get driverId
-    const { driverId }: { driverId?: string } = await req.json();
+    const { driverId, action: requestAction }: { driverId?: string; action?: string } = await req.json();
+    if (requestAction && requestAction !== 'retry_contract_email') return createErrorResponse('Unbekannte Versandaktion', 400, corsHeaders);
+    const retryOnly = requestAction === 'retry_contract_email';
     
     console.log('👤 Driver ID to approve:', driverId);
 
@@ -76,7 +78,12 @@ serve(async (req) => {
 
     console.log('👤 Driver found:', driver.vorname, driver.nachname);
 
+    if (retryOnly && (!['approved', 'active'].includes(driver.status) || driver.is_blocked || driver.is_inactive)) {
+      return createErrorResponse('Vertrags-E-Mail kann nur für bereits freigeschaltete, nicht gesperrte oder deaktivierte Fahrer wiederholt werden', 400, corsHeaders);
+    }
+
     // 2. Update driver status to 'approved'
+    if (!retryOnly) {
     const { error: updateError } = await supabase
       .from('fahrer_profile')
       .update({ status: 'approved' })
@@ -88,43 +95,51 @@ serve(async (req) => {
     }
 
     console.log('✅ Driver status updated to approved');
+    }
 
     // 2b. Vertragsablauf: Auftragsangebote erst nach unveränderlich gespeicherter
     // Annahme der aktuellen Vertragsfassung. Ohne Annahme: genau eine
     // Vertrags-E-Mail mit persönlichem 14-Tage-Link, keine Angebote.
-    const { data: acceptedDecision } = await supabase
+    const { data: acceptedDecision, error: acceptedError } = await supabase
       .from('driver_contract_decisions')
       .select('id')
       .eq('driver_id', driverId)
       .eq('decision', 'accept')
       .eq('contract_version', MEDIATION_CONTRACT_VERSION)
       .maybeSingle();
+    if (acceptedError) return createErrorResponse('Vertragsentscheidung konnte nicht geprüft werden; kein Versand', 500, corsHeaders);
+    if (retryOnly && acceptedDecision) return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Vertrag bereits angenommen; keine E-Mail versendet' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
     if (!acceptedDecision) {
       // Vorhandene Entscheidung (z. B. Ablehnung) der aktuellen Fassung bleibt unverändert
-      const { data: anyDecision } = await supabase
+      const { data: anyDecision, error: decisionError } = await supabase
         .from('driver_contract_decisions')
         .select('id')
         .eq('driver_id', driverId)
         .eq('contract_version', MEDIATION_CONTRACT_VERSION)
         .limit(1)
         .maybeSingle();
+      if (decisionError) return createErrorResponse('Vertragsentscheidung konnte nicht geprüft werden; kein Versand', 500, corsHeaders);
+      if (retryOnly && anyDecision) return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Vertragsentscheidung bereits gespeichert; keine E-Mail versendet' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
-      const { data: pendingInvite } = await supabase
+      const { data: pendingInvite, error: inviteError } = await supabase
         .from('driver_contract_invites')
         .select('id, token, expires_at, created_at')
         .eq('driver_id', driverId)
+        .eq('contract_version', MEDIATION_CONTRACT_VERSION)
         .eq('status', 'pending')
         .is('used_at', null)
         .gt('expires_at', new Date().toISOString())
         .order('created_at', { ascending: false })
         .limit(1)
         .maybeSingle();
+      if (inviteError) return createErrorResponse('Persönlicher Vertragslink konnte nicht geprüft werden; kein Versand', 500, corsHeaders);
+      if (retryOnly && !pendingInvite) return createErrorResponse('Kein gültiger, unbeantworteter Vertragslink vorhanden. Es wurde kein neuer Link erstellt und keine E-Mail versendet.', 400, corsHeaders);
 
       // Wurde der vorhandene Link bereits erfolgreich vom E-Mail-Dienst angenommen?
       let inviteMailSucceeded = false;
       if (pendingInvite) {
-        const { data: okLog } = await supabase
+        const { data: okLog, error: mailStatusError } = await supabase
           .from('email_log')
           .select('id')
           .eq('recipient', driver.email)
@@ -134,6 +149,7 @@ serve(async (req) => {
           .gte('created_at', pendingInvite.created_at)
           .limit(1)
           .maybeSingle();
+        if (mailStatusError) return createErrorResponse('Versandstatus konnte nicht geprüft werden; kein Versand', 500, corsHeaders);
         inviteMailSucceeded = !!okLog;
       }
 
@@ -152,8 +168,9 @@ serve(async (req) => {
         let token: string;
         let expires_at: string;
         if (action === 'resend_existing') {
-          token = pendingInvite!.token;
-          expires_at = pendingInvite!.expires_at;
+          if (!pendingInvite) return createErrorResponse('Bestehender Vertragslink fehlt; kein Versand', 400, corsHeaders);
+          token = pendingInvite.token;
+          expires_at = pendingInvite.expires_at;
         } else {
           token = randomToken(64);
           expires_at = inviteExpiry();
@@ -182,13 +199,15 @@ serve(async (req) => {
         );
         let result: ReturnType<typeof interpretSendResult>;
         try {
+          const headers = new Headers(resend.headers);
+          headers.set('Idempotency-Key', `driver-contract/${token}`);
           const r = await resend.emails.send({
             from: MAIL_FROM,
             to: [driver.email],
             reply_to: Deno.env.get('MAIL_REPLY_TO') || 'info@kraftfahrer-mieten.com',
             subject: contractSubject,
             html: contractHtml,
-          });
+          }, { headers });
           result = interpretSendResult(r);
         } catch (e) {
           result = { ok: false, error: e instanceof Error ? e.message : String(e) };
@@ -212,12 +231,24 @@ serve(async (req) => {
           error_message: result.ok ? null : result.error,
           delivery_mode: 'inline',
         });
-        if (logErr) console.error('❌ email_log insert failed:', logErr);
+        if (logErr) {
+          console.error('❌ email_log insert failed:', logErr);
+          contractEmailError = result.ok
+            ? 'E-Mail-Dienst hat den Versand angenommen, aber die Protokollierung ist fehlgeschlagen. Bitte Versandprotokoll prüfen.'
+            : `${result.error}; zusätzlich ist die Protokollierung fehlgeschlagen`;
+          contractEmailStatus = 'failed';
+        }
       } else if (action === 'skip') {
         console.log('↩️  Pending contract invite already sent successfully – no re-send');
       } else {
         console.log('↩️  Contract decision already recorded – nothing changed');
       }
+
+      // Explicit retry never approves, creates offers or sends an admin notification.
+      if (retryOnly) return new Response(JSON.stringify({
+        ok: true, contractPending: true, contractEmailSent: contractEmailStatus === 'sent',
+        contractEmailStatus, contractEmailError, contractExpiresAt, invitesSent: 0,
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
 
       // Interne Admin-Benachrichtigung: korrekter Status, keine Auftragsaussage, kein Token
       const escAdm = (s: unknown) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -226,7 +257,7 @@ serve(async (req) => {
       const contractMailLine = contractEmailStatus === 'sent'
         ? 'Vertrags-E-Mail mit persönlichem Link versandt'
         : contractEmailStatus === 'failed'
-          ? `Vertrags-E-Mail-Versand FEHLGESCHLAGEN (${escAdm(contractEmailError)}) – erneute Freischaltung versendet denselben Link erneut`
+          ? `Vertrags-E-Mail-Versand FEHLGESCHLAGEN (${escAdm(contractEmailError)}) – „Vertrags-E-Mail erneut senden“ in der Verwaltung verwendet denselben Link`
           : contractEmailStatus === 'decided'
             ? 'Keine Vertrags-E-Mail – Vertragsentscheidung bereits gespeichert (unverändert)'
             : 'Vertrags-E-Mail nicht erneut versandt – gültiger persönlicher Link wurde bereits erfolgreich versandt';
@@ -239,9 +270,12 @@ serve(async (req) => {
       </body></html>`;
       try {
         const r = await resend.emails.send({ from: MAIL_FROM, to: [adminEmail], subject: adminSubject, html: adminHtml });
+        const delivered = interpretSendResult(r);
         await supabase.from('email_log').insert({
           recipient: adminEmail, subject: adminSubject, template: 'admin_driver_approval_contract_pending',
-          status: 'sent', message_id: (r as any)?.data?.id ?? null, sent_at: new Date().toISOString(), delivery_mode: 'inline',
+          status: delivered.ok ? 'sent' : 'failed', message_id: delivered.ok ? delivered.messageId : null,
+          error_message: delivered.ok ? null : delivered.error,
+          sent_at: delivered.ok ? new Date().toISOString() : null, delivery_mode: 'inline',
         });
       } catch (e) {
         console.error('❌ Admin contract-pending notification failed:', e);

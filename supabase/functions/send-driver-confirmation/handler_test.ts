@@ -2,7 +2,7 @@
 import { assertEquals, assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
 
-for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-error']) {
+for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-error', 'retry', 'retry-error', 'throw', 'expired', 'declined']) {
   Deno.test(`Fahrerangebot: isolierter Original-Versandablauf ${scenario}`, async () => {
     const sends: any[] = [], inserts: { table: string; value: any }[] = [];
     const start = new Date(Date.now() + 10 * 86400000).toISOString().slice(0,10);
@@ -10,10 +10,12 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
     const de = (d: string) => d.split('-').reverse().join('.');
     const job = { id: 'TEST-JOB', company: 'TEST GmbH', customer_name: 'TEST Kontakt', nachricht: 'Schubboden Scania', fahrzeugtyp: 'LKW CE', zeitraum: `${de(start)} bis ${de(end)}`, tarif_type: 'lkw_ce', tarif_netto: 349, tarif_unit: 'je Einsatztag bis 9 Stunden', tarif_mehrstunde_netto: 45, kosten_uebersicht: { netto: 698, positionen: [{ label: '2 Tage × 349 €', betrag: 698 }] }, unterkunft_option: 'keine' };
     const assignment = { id: 'TEST-ASSIGNMENT', job_id: job.id, driver_id: 'TEST-DRIVER', status: 'assigned', rate_type: 'daily', rate_value: 349, commission_pct: 20, start_date: `${start}T00:00:00Z`, end_date: `${end}T00:00:00Z`, times_entered: null, job_requests: job, fahrer_profile: { email: 'driver@example.invalid', vorname: 'TEST', nachname: 'Fahrer' } };
+    const oldSnapshot = createOfferSnapshot({ ...job, company: 'FROZEN COMPANY' }, assignment);
+    const oldInvite = { id: 'OLD-INVITE', token: 'UNCHANGED-TOKEN', status: scenario === 'declined' ? 'declined' : 'pending', created_at: '2026-10-30T12:00:00Z', token_expires_at: new Date(Date.now() + (scenario === 'expired' ? -1 : 1) * 86400000).toISOString(), offer_snapshot: oldSnapshot };
     const fakeClient = { from(table: string) {
-      const q = { select() { return q; }, eq() { return q; },
+      const q = { select() { return q; }, eq() { return q; }, order() { return q; }, not() { return q; }, gte() { return q; },
         maybeSingle() { return Promise.resolve({ data: table === 'job_assignments' ? assignment : scenario === 'accepted' ? { id: 'TEST-ACCEPTANCE' } : null, error: null }); },
-        limit() { return Promise.resolve({ data: scenario === 'sent' ? [{ id: 'OLD-INVITE' }] : [], error: null }); },
+        limit() { return Promise.resolve({ data: table === 'assignment_invites' && ['sent','retry','retry-error','expired','declined'].includes(scenario) ? [oldInvite] : table === 'email_log' && scenario === 'sent' ? [{ id: 'SUCCESS' }] : [], error: null }); },
         insert(value: any) { inserts.push({ table,value }); return Promise.resolve({ error: table === 'assignment_invites' && scenario === 'snapshot-error' ? { message: 'TEST snapshot error' } : null }); },
       }; return q;
     } };
@@ -24,7 +26,7 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
       createCorsHeaders: () => ({}), handleCorsPreflightRequest: () => new Response(),
       createErrorResponse: (message: string, status: number) => new Response(JSON.stringify({ message }), { status }),
       logAdminAction: async () => {},
-      Resend: class { emails = { send(payload: any) { sends.push(payload); return Promise.resolve(scenario === 'error' ? { error: { message: 'TEST failure' }, data: null } : scenario === 'no-id' ? { error: null, data: {} } : { error: null, data: { id: 'TEST-MAIL' } }); } }; },
+      Resend: class { headers = new Headers(); emails = { send(payload: any) { sends.push(payload); if (scenario === 'throw') throw new Error('TEST network failure'); return Promise.resolve(['error','retry-error'].includes(scenario) ? { error: { message: 'TEST failure' }, data: null } : scenario === 'no-id' ? { error: null, data: {} } : { error: null, data: { id: 'TEST-MAIL' } }); } }; },
     });
     try {
       const original = await Deno.readTextFile(new URL('./index.ts', import.meta.url));
@@ -37,15 +39,19 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
       const { handler } = await import(`data:application/typescript;base64,${btoa(unescape(encodeURIComponent(source)))}#${scenario}`);
       const response = await handler(new Request('https://test.invalid', { method:'POST', body:JSON.stringify({ assignment_id: assignment.id }) }));
       await response.text();
-      assertEquals(response.status, ['error','no-id','snapshot-error'].includes(scenario) ? 500 : 200);
-      assertEquals(sends.length, ['sent','accepted','snapshot-error'].includes(scenario) ? 0 : 1);
-      assertEquals(inserts.filter(i => i.table === 'assignment_invites').length, ['sent','accepted'].includes(scenario) ? 0 : 1);
+      assertEquals(response.status, scenario === 'expired' ? 400 : ['error','no-id','snapshot-error','retry-error','throw'].includes(scenario) ? 500 : 200);
+      assertEquals(sends.length, ['sent','accepted','snapshot-error','expired','declined'].includes(scenario) ? 0 : 1);
+      assertEquals(inserts.filter(i => i.table === 'assignment_invites').length, ['sent','accepted','retry','retry-error','expired','declined'].includes(scenario) ? 0 : 1);
       if (sends.length) {
         assertEquals(sends[0].to, ['driver@example.invalid']);
         const snapshot = inserts.find(i => i.table === 'assignment_invites')?.value.offer_snapshot;
-        assertEquals(snapshot.job_lines, createOfferSnapshot(job, assignment).job_lines);
+        if (scenario.startsWith('retry')) {
+          assert(sends[0].html.includes('UNCHANGED-TOKEN'));
+          assert(sends[0].html.includes('FROZEN COMPANY'));
+          assertEquals(oldInvite.offer_snapshot, oldSnapshot);
+        } else assertEquals(snapshot.job_lines, createOfferSnapshot(job, assignment).job_lines);
         assert(sends[0].html.includes('558,40'));
-        assertEquals(inserts.find(i => i.table === 'email_log')?.value.status, ['error','no-id'].includes(scenario) ? 'error' : 'sent');
+        assertEquals(inserts.find(i => i.table === 'email_log')?.value.status, ['error','no-id','retry-error','throw'].includes(scenario) ? 'error' : 'sent');
       }
     } finally { Reflect.deleteProperty(globalThis,key); }
   });

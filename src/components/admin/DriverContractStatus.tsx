@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { MEDIATION_CONTRACT_VERSION } from "@/lib/driverMediationContract";
+import { requireMailResult } from '@/lib/adminMailResult';
 
 type Decision = { driver_id: string; decision: "accept" | "reject"; contract_version: string; decided_at: string };
 type Invite = { driver_id: string; status: string; expires_at: string; contract_version: string };
@@ -14,19 +15,41 @@ const loadStatus = () =>
   ]).then(([d, i]) => ({ decisions: (d.data ?? []) as any, invites: (i.data ?? []) as any })));
 
 /** Vertragsstatus je Fahrer + Link erzeugen (ohne E-Mail-Versand). */
-export function DriverContractStatus({ driverId }: { driverId: string }) {
+export function DriverContractStatus({ driverId, canRetry = false }: { driverId: string; canRetry?: boolean }) {
   const [label, setLabel] = useState("Vertrag: …");
   const [url, setUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [hasOpenInvite, setHasOpenInvite] = useState(false);
+  const [mailMessage, setMailMessage] = useState('');
+  const [mailFailed, setMailFailed] = useState(false);
 
   useEffect(() => {
+    cache = null;
     loadStatus().then(({ decisions, invites }) => {
       const d = decisions.filter((x) => x.driver_id === driverId).sort((a, b) => Date.parse(b.decided_at) - Date.parse(a.decided_at))[0];
-      if (d) return setLabel(`Vertrag ${d.decision === "accept" ? "angenommen" : "abgelehnt"} am ${new Date(d.decided_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })} · Fassung ${d.contract_version}`);
-      const open = invites.find((x) => x.driver_id === driverId && x.status === "pending" && new Date(x.expires_at) > new Date());
+      if (d) { setHasOpenInvite(false); return setLabel(`Vertrag ${d.decision === "accept" ? "angenommen" : "abgelehnt"} am ${new Date(d.decided_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })} · Fassung ${d.contract_version}`); }
+      const open = invites.find((x) => x.driver_id === driverId && x.contract_version === MEDIATION_CONTRACT_VERSION && x.status === "pending" && new Date(x.expires_at) > new Date());
+      setHasOpenInvite(!!open);
       setLabel(open ? `Vertrag offen (Link bis ${new Date(open.expires_at).toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" })})` : "Vertrag offen");
     });
-  }, [driverId]);
+  }, [driverId, canRetry]);
+
+  const retryMail = async () => {
+    if (busy) return;
+    setBusy(true);
+    setMailMessage('');
+    try {
+      const { data, error } = await supabase.functions.invoke('approve-driver-and-send-jobs', {
+        body: { driverId, action: 'retry_contract_email' },
+      });
+      const result = await requireMailResult(data, error);
+      setMailFailed(false);
+      setMailMessage(result === 'sent' ? 'Vertrags-E-Mail erfolgreich versendet.' : data?.message || 'Bereits erfolgreich versendet; keine weitere E-Mail versendet.');
+    } catch (error) {
+      setMailFailed(true);
+      setMailMessage(error instanceof Error ? error.message : 'Vertrags-E-Mail nicht versendet');
+    } finally { setBusy(false); }
+  };
 
   const create = async () => {
     setBusy(true);
@@ -40,6 +63,12 @@ export function DriverContractStatus({ driverId }: { driverId: string }) {
   return (
     <div className="text-xs text-muted-foreground space-y-1">
       <div>{label}{label.startsWith("Vertrag angenommen") || label.startsWith("Vertrag abgelehnt") ? "" : ` · Fassung ${MEDIATION_CONTRACT_VERSION}`}</div>
+      {canRetry && hasOpenInvite && (
+        <Button size="sm" variant="outline" className="h-7 text-xs" disabled={busy} onClick={retryMail}>
+          Vertrags-E-Mail erneut senden
+        </Button>
+      )}
+      {mailMessage && <div role="status" className={mailFailed ? 'text-destructive' : 'text-muted-foreground'}>{mailMessage}</div>}
       {!label.startsWith("Vertrag angenommen") && !label.startsWith("Vertrag abgelehnt") && (
         <Button size="sm" variant="outline" className="h-7 text-xs" disabled={busy} onClick={create}>
           Vertragslink erzeugen (keine Mail)

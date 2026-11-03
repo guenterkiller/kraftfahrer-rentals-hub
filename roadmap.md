@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Versandfehler Fahrerangebote und Vertragsmails (03.11.2026)
+- [x] Fehlgeschlagenen Angebotsversand mit unverändertem gültigem Link/Angebot wiederholbar gemacht; Verwaltung unterscheidet bestätigten/übersprungenen Versand.
+- [x] Vertragsmail-Wiederholung im bestehenden Vertragsstatus-Bereich für freigeschaltete Fahrer erreichbar; mail-only-Serverweg ohne Freischaltung, neue Links, Angebote oder Adminmail.
+- [x] 41 Deno- und 5 Vitest-Prüfungen sowie isolierte Browserprüfung bestanden; keine echten Mails/Vorgangsänderungen. Beide Serverfunktionen bereitgestellt; Verwaltungsänderungen auf IONOS erst nach gesondertem Upload.
 # Showtruck- und Eventfahrer (Vorschau)
 - [x] Zusätzliche Freigabe: nur neue Leistungsseite um Musical-/Veranstaltungstourneen, Messetransporte, Bühnentechnik und separat vereinbarbare Tourneepauschalen ergänzt; 26 Tests und Browserprüfung bei 1280/390/320 px bestanden. Übrige Seiten, Formulare, Navigation, Preise und Versand unverändert; nichts veröffentlicht.
 - [x] Spezialfahrzeug-Preisübersicht um freigegebene Einsatzarten ergänzt, bestehende Preise/Konditionen erhalten.
