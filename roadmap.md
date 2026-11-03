@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Versandfehler Fahrerangebote und Vertragsmails (03.11.2026)
+- [ ] Bestehenden fehlgeschlagenen Angebotsversand mit unverändertem Link/Angebot wiederholen; Verwaltung nur bei bestätigtem Versand erfolgreich melden.
+- [ ] Vertragsmail-Wiederholung für freigeschaltete Fahrer in bestehender Verwaltung erreichbar machen, ohne Freischaltung oder Angebote auszulösen.
+- [ ] Isolierte automatisierte Handler-/Verwaltungsprüfungen ohne echte Mails/Vorgangsänderungen; nur betroffene Serverfunktionen bereitstellen und Veröffentlichungsgrenzen berichten.
 # Showtruck- und Eventfahrer (Vorschau)
 - [x] Zusätzliche Freigabe: nur neue Leistungsseite um Musical-/Veranstaltungstourneen, Messetransporte, Bühnentechnik und separat vereinbarbare Tourneepauschalen ergänzt; 26 Tests und Browserprüfung bei 1280/390/320 px bestanden. Übrige Seiten, Formulare, Navigation, Preise und Versand unverändert; nichts veröffentlicht.
 - [x] Spezialfahrzeug-Preisübersicht um freigegebene Einsatzarten ergänzt, bestehende Preise/Konditionen erhalten.
