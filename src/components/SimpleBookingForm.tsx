@@ -4,7 +4,7 @@ import { CUSTOMER_TERMS_VERSION, CUSTOMER_CONFIRMATION_TEXT } from '@/lib/custom
 import { EVENT_TAETIGKEITEN } from '@/lib/eventTaetigkeiten';
 import { scrollToBookingForm } from "@/lib/bookingNavigation";
 import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
-import { TARIF_TEXTE, tarifKurz, tarifTitel } from "@/lib/tarifTexte";
+import { TARIF_TEXTE, tarifKurz, tarifTitel, EVENT_PREISANZEIGE } from "@/lib/tarifTexte";
 import { Car, ShieldAlert, Construction } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -734,7 +734,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         />
                         <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister / Spezialfahrzeuge (Maschinenbedienung)</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">{tarifKurz('baumaschine')}</div>
+                      <div className="text-xs text-muted-foreground pl-8">{isEventTarif ? EVENT_PREISANZEIGE : tarifKurz('baumaschine')}</div>
                       <div className="text-xs text-muted-foreground pl-8">
                         z. B. {SPEZIALFAHRZEUG_BEISPIELE.join(' · ')}
                       </div>
@@ -749,8 +749,12 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                       className="mt-4 rounded-lg border border-orange-200 bg-orange-50/60 p-3 text-sm text-orange-900"
                       aria-live="polite"
                     >
-                      <div className="font-semibold">Es gilt: {tarif.label}</div>
-                      {tarif.netto && (
+                      {isEventTarif ? (
+                        <div className="font-semibold">{EVENT_PREISANZEIGE}</div>
+                      ) : (
+                        <div className="font-semibold">Es gilt: {tarif.label}</div>
+                      )}
+                      {tarif.netto && !isEventTarif && (
                         <div>
                           {tarif.netto.toLocaleString('de-DE')} € netto {tarif.einheit}
                           {tarif.mehrstunde ? ` · ${tarif.mehrstunde} € netto je angefangene Mehrstunde` : ''}
@@ -788,8 +792,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         <option value="Sonstiges">Sonstiges</option>
                       </select>
                       <div className="mt-3 text-xs text-orange-900">
-                        <div className="font-semibold">{TARIF_TEXTE.baumaschine.priceLine}</div>
-                        {TARIF_TEXTE.baumaschine.details.map((d) => (
+                        <div className="font-semibold">{isEventTarif ? EVENT_PREISANZEIGE : TARIF_TEXTE.baumaschine.priceLine}</div>
+                        {(isEventTarif ? TARIF_TEXTE.event.details : TARIF_TEXTE.baumaschine.details).map((d) => (
                           <div key={d}>{d}</div>
                         ))}
                       </div>
