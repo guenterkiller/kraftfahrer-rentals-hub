@@ -734,7 +734,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         />
                         <span className="font-semibold text-foreground break-words">Baumaschinenführer / Mischmeister / Spezialfahrzeuge (Maschinenbedienung)</span>
                       </div>
-                      <div className="text-xs text-muted-foreground pl-8">{tarifKurz('baumaschine')}</div>
+                      <div className="text-xs text-muted-foreground pl-8">{isEventTarif ? EVENT_PREISANZEIGE : tarifKurz('baumaschine')}</div>
                       <div className="text-xs text-muted-foreground pl-8">
                         z. B. {SPEZIALFAHRZEUG_BEISPIELE.join(' · ')}
                       </div>
