@@ -81,6 +81,8 @@ export function AdminAssignmentDialog({
         });
         
         setJobData(job);
+        // Event-Tourneepauschale: Sonderauftrag mit 25 % Provision vorbelegen (änderbar).
+        if (job.tarif_type === 'event') setCommissionPct("25");
         
         // Helper function to clean placeholder values
         const cleanValue = (value: string | null, fallback = "") => {
@@ -611,7 +613,7 @@ export function AdminAssignmentDialog({
                   <SelectItem value="hourly_custom">Stundensatz (individuell)</SelectItem>
                   <SelectItem value="daily_349">Tagessatz – LKW-Fahrer CE – 349,00 €</SelectItem>
                   <SelectItem value="daily_450">Tagessatz – Fernfahrer-Pauschale – 450,00 €</SelectItem>
-                  <SelectItem value="daily_489">Tagessatz – Baumaschinenführer / Fahrmischerfahrer – 489,00 €</SelectItem>
+                  <SelectItem value="daily_489">Tagessatz – Baumaschinenführer / Fahrmischerfahrer / Event-Tourneepauschale – 489,00 €</SelectItem>
                   <SelectItem value="daily_custom">Tagessatz (individuell)</SelectItem>
                   <SelectItem value="weekly_1645">Wochenpreis – LKW-Fahrer CE – 1.645,00 € (5 Einsatztage)</SelectItem>
                   <SelectItem value="weekly_custom">Wochenpreis (individuell)</SelectItem>

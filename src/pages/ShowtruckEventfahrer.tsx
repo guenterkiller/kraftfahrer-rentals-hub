@@ -83,15 +83,13 @@ export default function ShowtruckEventfahrer() {
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-2xl font-bold mb-4">Preise für Showtruck- und Eventfahrer</h2>
-              <p className="text-muted-foreground mb-4">Showtruck-Fahrer, Werbefahrzeuge, Promotionfahrzeuge und Eventfahrzeuge gehören zur Kategorie „Baumaschinenführer / Mischmeister / Spezialfahrzeuge“ mit einem regulären Tagessatz ab {TARIF_TEXTE.baumaschine.amount} netto.</p>
+              <p className="text-muted-foreground mb-4">Für Showtruck-, Promotion-, Konzert-, Musical- und Eventfahrer gilt ein eigenständiger Tourneetarif: {TARIF_TEXTE.event.priceLine}. Die regulären Preise und Zuschläge für LKW-Fahrer, Fernfahrer, Baumaschinenführer und andere Spezialfahrzeuge bleiben unverändert.</p>
               <p className="text-sm text-muted-foreground mb-4">{PREISKARTEN_HINWEIS}</p>
-              <p className="text-muted-foreground mb-4">Individuelle Tourneepauschalen können gesondert vereinbart werden. Der veröffentlichte Spezialfahrzeugpreis von {TARIF_TEXTE.baumaschine.amount} netto bleibt unverändert.</p>
               <Link to="/preise-und-ablauf" className="text-primary font-semibold underline">Alle Preise, Zusatzkosten und Konditionen</Link>
             </div>
             <div className="border-l-2 border-primary pl-6">
-              <TarifCardText tarif={TARIF_TEXTE.baumaschine} amountClassName="text-3xl font-bold text-primary mb-2" unitClassName="font-semibold" detailClassName="text-muted-foreground mt-3" />
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">{TARIF_TEXTE.baumaschine.details.slice(1).map((detail) => <li key={detail}>{detail}</li>)}</ul>
-              <p className="mt-3 text-sm text-muted-foreground">Bei Event- und Tourneeeinsätzen stellt der Auftraggeber die erforderliche Unterkunft auf eigene Kosten. An- und Abfahrt werden gemäß unseren veröffentlichten Konditionen zusätzlich berechnet.</p>
+              <TarifCardText tarif={TARIF_TEXTE.event} amountClassName="text-3xl font-bold text-primary mb-2" unitClassName="font-semibold" detailClassName="text-muted-foreground mt-3" />
+              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">{TARIF_TEXTE.event.details.map((detail) => <li key={detail}>{detail}</li>)}</ul>
             </div>
           </div>
         </section>
