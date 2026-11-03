@@ -71,12 +71,21 @@ export default function ShowtruckEventfahrer() {
           </div>
         </section>
 
+        <section className="pb-12 px-4">
+          <div className="max-w-5xl mx-auto space-y-4">
+            <h2 className="text-2xl font-bold">Musical- und Veranstaltungstourneen, Messetransporte und Bühnentechnik</h2>
+            <p className="text-muted-foreground leading-relaxed max-w-3xl">Auch für Musical- und Veranstaltungstourneen vermitteln wir selbstständige Tourneefahrer bundesweit nach Verfügbarkeit. Die Anfrage kann einzelne Fahrten oder mehrere geplante Tourneestationen umfassen.</p>
+            <p className="text-muted-foreground leading-relaxed max-w-3xl">Für Messetransporte und Transporte von Bühnen- und Veranstaltungstechnik können Sie einen LKW-Fahrer für Veranstaltungstechnik anfragen. Die Fahrerdienstleistung erfolgt mit Ihrem Fahrzeug und Ihrer Ausstattung; Fahrerexpress vermietet keine Showtrucks, Werbefahrzeuge oder Veranstaltungstechnik.</p>
+          </div>
+        </section>
+
         <section className="py-12 px-4 bg-muted/50">
           <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
             <div>
               <h2 className="text-2xl font-bold mb-4">Preise für Showtruck- und Eventfahrer</h2>
               <p className="text-muted-foreground mb-4">Showtruck-Fahrer, Werbefahrzeuge, Promotionfahrzeuge und Eventfahrzeuge gehören zur Kategorie „Baumaschinenführer / Mischmeister / Spezialfahrzeuge“ mit einem regulären Tagessatz ab {TARIF_TEXTE.baumaschine.amount} netto.</p>
               <p className="text-sm text-muted-foreground mb-4">{PREISKARTEN_HINWEIS}</p>
+              <p className="text-muted-foreground mb-4">Individuelle Tourneepauschalen können gesondert vereinbart werden. Der veröffentlichte Spezialfahrzeugpreis von {TARIF_TEXTE.baumaschine.amount} netto bleibt unverändert.</p>
               <Link to="/preise-und-ablauf" className="text-primary font-semibold underline">Alle Preise, Zusatzkosten und Konditionen</Link>
             </div>
             <div className="border-l-2 border-primary pl-6">
