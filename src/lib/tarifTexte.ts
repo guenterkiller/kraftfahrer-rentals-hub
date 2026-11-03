@@ -128,3 +128,7 @@ export const tarifKurz = (key: TarifTextKey): string => {
   const t = TARIF_TEXTE[key];
   return [`${t.amount} ${t.cardUnit}`, ...t.cardLines].join(' · ');
 };
+
+/** Freigegebene Preisanzeige im Buchungsformular, sobald eine Eventtätigkeit gewählt ist. */
+export const EVENT_PREISANZEIGE =
+  'Event-Tourneetarif: 489,00 € netto je tatsächlichem Einsatztag – feste Tagespauschale ohne zusätzliche Stundenabrechnung, Wochenend- oder Feiertagszuschläge.';

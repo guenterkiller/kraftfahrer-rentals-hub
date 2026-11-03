@@ -36,3 +36,13 @@ describe('Event-Tourneepauschale (nur vier Eventtätigkeiten)', () => {
     expect(resolveTarif({ kategorie: 'LKW-Fahrer CE', maschinenbedienung: '', longDistance: true })).toMatchObject({ tarif: 'fernfahrer', netto: 450 });
   });
 });
+
+import { EVENT_PREISANZEIGE, TARIF_TEXTE as TT } from '@/lib/tarifTexte';
+describe('Event-Preisanzeige im Formular', () => {
+  it('nennt 489 € Pauschale und keine 8-Stunden-Grenze', () => {
+    expect(EVENT_PREISANZEIGE).toContain('489,00 € netto je tatsächlichem Einsatztag');
+    expect(EVENT_PREISANZEIGE).not.toMatch(/Bis zu 8 Stunden/);
+    expect(TT.event.details.join(' ')).not.toMatch(/Bis zu 8 Stunden/);
+    expect(TT.baumaschine.details).toContain('Bis zu 8 Stunden Einsatzzeit');
+  });
+});
