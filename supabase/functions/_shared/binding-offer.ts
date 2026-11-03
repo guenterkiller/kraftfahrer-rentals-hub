@@ -45,6 +45,7 @@ export function bindingAcceptanceAllowed(job: OfferData | null | undefined, assi
 
 export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): [string, string][] {
   const pay = remuneration(job, assignment);
+  const isEvent = job.tarif_type === 'event';
   const unit = assignment.rate_type === 'daily' ? 'Einsatztag' : assignment.rate_type === 'weekly' ? 'Woche' : assignment.rate_type === 'hourly' ? 'Stunde' : 'Auftrag';
   const address = [job.customer_street, job.customer_house_number, job.customer_postal_code, job.customer_city].filter(Boolean).join(' ');
   const option = job.unterkunft_option as UnterkunftOption;
@@ -69,9 +70,9 @@ export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): 
   ];
   for (const p of pay.positions) lines.push([`Fahrleistung: ${p.label}`, `${formatEuro(p.betrag)} netto`]);
   lines.push(
-    ['Gesamtwert Fahrerdienstleistung netto (vor weiteren Zusatzkosten)', pay.serviceCents === null ? 'Nicht eindeutig aus den gespeicherten, vereinbarten Konditionen bezifferbar – vor Annahme klären' : formatEuro(pay.serviceCents / 100)],
-    [`Vermittlungsanteil ${pay.pct} %`, pay.commissionCents === null ? 'Eurobetrag mangels eindeutigen Gesamtwerts offen' : `${formatEuro(pay.commissionCents / 100)} netto`],
-    ['Verbleibende Fahrervergütung netto (vor weiteren Zusatzkosten)', pay.driverCents === null ? 'Noch nicht bezifferbar – vor Annahme klären' : formatEuro(pay.driverCents / 100)],
+    [isEvent ? 'Nettoauftragswert' : 'Gesamtwert Fahrerdienstleistung netto (vor weiteren Zusatzkosten)', pay.serviceCents === null ? 'Nicht eindeutig aus den gespeicherten, vereinbarten Konditionen bezifferbar – vor Annahme klären' : formatEuro(pay.serviceCents / 100)],
+    [isEvent ? `Agenturprovision Fahrerexpress (${pay.pct} %)` : `Vermittlungsanteil ${pay.pct} %`, pay.commissionCents === null ? 'Eurobetrag mangels eindeutigen Gesamtwerts offen' : `${formatEuro(pay.commissionCents / 100)} netto`],
+    [isEvent ? 'Nettovergütung des selbstständigen Fahrers' : 'Verbleibende Fahrervergütung netto (vor weiteren Zusatzkosten)', pay.driverCents === null ? 'Noch nicht bezifferbar – vor Annahme klären' : formatEuro(pay.driverCents / 100)],
     ['An- und Abfahrtskosten (provisionsfrei)', `Kein vereinbarter Betrag gespeichert – nicht als 0 € angesetzt. ${TRAVEL_COSTS.short}. Vor Einsatz abstimmen.`],
     ['Unterkunftsauswahl', option && option in UNTERKUNFT_OPTIONEN ? UNTERKUNFT_OPTIONEN[option] : 'Keine Angabe gespeichert'],
   );

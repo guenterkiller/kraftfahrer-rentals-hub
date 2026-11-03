@@ -655,12 +655,12 @@ export function AdminAssignmentDialog({
           </div>
 
           <div>
-            <Label>Vermittlungsprovision</Label>
+            <Label>{jobData?.tarif_type === "event" ? "Agenturprovision Fahrerexpress" : "Vermittlungsprovision"}</Label>
             <Select disabled={jobData?.tarif_type === "event"} value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="20">20 % – normaler Auftrag</SelectItem>
-                <SelectItem value="25">25 % – Sonderauftrag</SelectItem>
+                <SelectItem value="25">{jobData?.tarif_type === "event" ? "Agenturprovision Fahrerexpress (25 %) – Event-Tourneepauschale" : "25 % – Sonderauftrag"}</SelectItem>
               </SelectContent>
             </Select>
             <p className="mt-1 text-xs text-muted-foreground">
