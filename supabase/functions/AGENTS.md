@@ -1,0 +1,1 @@
+- Booking emails render via `_shared/render-email.ts` (sync `render`), not react-email `renderAsync`. Why: renderAsync can corrupt umlauts at stream chunk boundaries.
