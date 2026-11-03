@@ -4,6 +4,9 @@ import { useSEO } from "@/hooks/useSEO";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Suspense, lazy } from "react";
+import { ArrowRight } from "lucide-react";
+import showtruckMobile from "@/assets/showtruck-event-640.webp";
+import showtruckDesktop from "@/assets/showtruck-event-1024.webp";
 
 // ============================================
 // DIRECT IMPORTS für zuverlässiges Rendering
@@ -178,6 +181,50 @@ const Index = () => {
               werden umgangssprachlich verwendet und bezeichnen ausschließlich
               selbstständige Unternehmer – keine Arbeitnehmerüberlassung.
             </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="eventfahrer-heading" className="bg-background pb-10 pt-2">
+          <div className="container mx-auto max-w-6xl px-4">
+            <div className="grid overflow-hidden rounded-lg border border-border bg-card text-card-foreground md:grid-cols-[0.95fr_1.05fr]">
+              <div className="flex items-center bg-muted">
+                <img
+                  src={showtruckDesktop}
+                  srcSet={`${showtruckMobile} 640w, ${showtruckDesktop} 1024w`}
+                  sizes="(min-width: 1152px) 530px, (min-width: 768px) 46vw, calc(100vw - 32px)"
+                  width={1024}
+                  height={683}
+                  loading="lazy"
+                  decoding="async"
+                  alt="Roter Showtruck mit geöffneter Veranstaltungsbühne und Bühnentechnik auf einem Veranstaltungsgelände"
+                  className="block aspect-[3/2] w-full object-cover"
+                />
+              </div>
+              <div className="flex flex-col justify-center gap-5 border-t-4 border-primary p-6 md:border-l-4 md:border-t-0 md:p-8">
+                <h2 id="eventfahrer-heading" className="text-2xl font-bold leading-snug text-foreground">
+                  Showtruck- &amp; Eventfahrer bundesweit buchen
+                </h2>
+                <p className="leading-relaxed text-muted-foreground">
+                  Selbstständige Fahrer für Showtrucks, Werbe- und Promotionfahrzeuge, Roadshows, Konzert- und Musicaltourneen sowie Transporte von Bühnen- und Veranstaltungstechnik.
+                </p>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  <strong className="block text-base font-semibold text-foreground">Ab 489 € netto je Einsatztag.</strong>
+                  Individuelle Tourneevereinbarungen auf Anfrage. Es gelten die veröffentlichten Konditionen.
+                </p>
+                <div className="flex flex-col items-stretch gap-3 lg:items-start">
+                  <Button asChild className="button h-auto min-h-11 whitespace-normal py-3">
+                    <Link to="/#booking-form" onClick={() => document.getElementById("booking-form")?.scrollIntoView({ block: "start", behavior: "smooth" })}>
+                      Eventfahrer anfragen <ArrowRight aria-hidden="true" />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="link" className="button h-auto min-h-10 whitespace-normal px-0 text-left">
+                    <Link to="/showtruck-eventfahrer">
+                      Alle Eventfahrer-Leistungen <ArrowRight aria-hidden="true" />
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
