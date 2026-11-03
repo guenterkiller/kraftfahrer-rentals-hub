@@ -40,7 +40,7 @@ export function buildJobLines(job: any, assignment: any): [string, string][] {
     ["Einsatztätigkeiten und Anforderungen", job?.nachricht || "–"],
     ["Einsatzbeginn und -dauer", zeitraum],
     ["Vereinbarte Vergütung", rate],
-    ["Zuschläge", "Samstag 25 %, Sonn- und Feiertag 50 %"],
+    ["Zuschläge", job?.tarif_type === "event" ? "Keine – Event-Tourneepauschale ohne Mehrstunden und ohne Wochenend-/Feiertagszuschläge" : "Samstag 25 %, Sonn- und Feiertag 50 %"],
   ];
 }
 

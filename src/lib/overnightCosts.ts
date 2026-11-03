@@ -10,6 +10,10 @@ export const OVERNIGHT_COSTS = {
     'Bei der Fernfahrer-Pauschale von 450,00 € netto je Einsatztag ist grundsätzlich die Übernachtung im Führerhaus vorgesehen, sofern dieses über eine geeignete Schlafmöglichkeit verfügt und die gesetzlichen Voraussetzungen eingehalten werden.',
     'Zusätzliche Hotelkosten entstehen bei diesem Tarif nicht automatisch. Sollte ausnahmsweise eine externe Unterkunft erforderlich sein, werden deren Kosten vorab mit dem Auftraggeber vereinbart.',
   ],
+  eventTitle: 'Event-Tourneepauschale',
+  event: [
+    'Erforderliche Hotelübernachtungen organisiert und bezahlt der Auftraggeber.',
+  ],
   multiWeekTitle: 'Mehrwöchige auswärtige Einsätze',
   multiWeek: 'Bei mehrwöchigen auswärtigen Einsätzen werden tatsächlich durchgeführte Heimfahrten zum Wochenende und erneute Anreisen zum Beginn der folgenden Einsatzwoche ebenfalls nach der Regelung zu den An- und Abfahrtskosten berechnet. Die voraussichtlichen Fahrtkosten werden dem Auftraggeber vor verbindlicher Auftragserteilung mitgeteilt.',
   legal: 'Die gesetzlichen Vorschriften zu Ruhezeiten und Übernachtungen außerhalb des Fahrzeugs bleiben unberührt. Insbesondere darf eine regelmäßige wöchentliche Ruhezeit von mindestens 45 Stunden nicht im Fahrzeug verbracht werden.',

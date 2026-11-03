@@ -18,7 +18,7 @@ export function remuneration(job: OfferData, assignment: OfferData) {
   const count = start && end ? Math.round((Date.parse(end) - Date.parse(start)) / 86400000) + 1 : null;
   const samePeriod = dates.length >= 2 && iso(dates[0] ?? '') === start && iso(dates[1] ?? '') === end;
   const sameRate = Number(assignment.rate_value) === job.tarif_netto &&
-    ((assignment.rate_type === 'daily' && ['lkw_ce', 'fernfahrer', 'baumaschine'].includes(job.tarif_type)) ||
+    ((assignment.rate_type === 'daily' && ['lkw_ce', 'fernfahrer', 'baumaschine', 'event'].includes(job.tarif_type)) ||
       (assignment.rate_type === 'weekly' && job.tarif_type === 'lkw_ce_woche'));
   const costs = job.kosten_uebersicht;
   const valid = samePeriod && sameRate && !job.tarif_needs_review && costs &&
@@ -56,7 +56,7 @@ export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): 
     ['Tarif', known(job.tarif_label, 'Individuell vereinbarter Satz')],
     ['Vereinbarter Satz netto', Number(assignment.rate_value) > 0 ? `${formatEuro(Number(assignment.rate_value))} je ${unit}` : 'Nicht vereinbart'],
     ['Enthaltene Einsatzzeit / Tarifeinheit', known(job.tarif_unit)],
-    ['Mehrstundenpreis netto', typeof job.tarif_mehrstunde_netto === 'number' ? `${formatEuro(job.tarif_mehrstunde_netto)} je angefangene Mehrstunde` : job.tarif_type === 'fernfahrer' ? 'Pauschaltarif ohne Mehrstundenabrechnung' : 'Nicht gespeichert / nicht vereinbart'],
+    ['Mehrstundenpreis netto', typeof job.tarif_mehrstunde_netto === 'number' ? `${formatEuro(job.tarif_mehrstunde_netto)} je angefangene Mehrstunde` : job.tarif_type === 'fernfahrer' || job.tarif_type === 'event' ? 'Pauschaltarif ohne Mehrstundenabrechnung' : 'Nicht gespeichert / nicht vereinbart'],
   ];
   for (const p of pay.positions) lines.push([`Fahrleistung: ${p.label}`, `${formatEuro(p.betrag)} netto`]);
   lines.push(
@@ -68,7 +68,7 @@ export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): 
   );
   if (typeof job.unterkunft_obergrenze === 'number') lines.push(['Kostenobergrenze je Nacht (€ netto)', `${formatEuro(job.unterkunft_obergrenze)} – Budget, keine automatische Kostenpauschale`]);
   lines.push(['Unterkunftsregelung', [UNTERKUNFT_GRUNDSATZ, ...overnightParagraphs(job.tarif_type)].join('\n')],
-    ['Mögliche Zusatzkosten', 'Tatsächlich anfallende Mehrstunden und einsatzbezogene Zuschläge sind provisionspflichtig; An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.'],
+    ['Mögliche Zusatzkosten', job.tarif_type === 'event' ? 'Event-Tourneepauschale: keine Mehrstunden und keine Samstags-, Sonntags- oder Feiertagszuschläge; keine vertragliche tägliche 8-Stunden-Grenze. Gesetzliche Arbeits-, Lenk- und Ruhezeiten sind uneingeschränkt einzuhalten. Hotelübernachtungen organisiert und bezahlt der Auftraggeber. An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.' : 'Tatsächlich anfallende Mehrstunden und einsatzbezogene Zuschläge sind provisionspflichtig; An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.'],
     ['Zuschläge', 'Samstag 25 %, Sonn- und Feiertag 50 %']);
   return lines;
 }
