@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Aktivierung Eventtätigkeiten in Bestätigungsmails (Freigabe 03.11.2026)
+- [ ] Ausschließlich geprüfte Weitergabe und Anzeige aus preview/event-booking in die beiden bestehenden Versandfunktionen/Vorlagen übernehmen.
+- [ ] Vorhandene isolierte Datenflussprüfung auf tatsächliche Versandfunktionen anwenden und Regressionstests ohne echte Buchungen/Mails ausführen.
+- [ ] Beide Versandfunktionen bereitstellen und betroffene Dateien/Testergebnis berichten; keine Webseite veröffentlichen und kein IONOS-Upload.
 # Eventauswahl im Buchungsformular (nur Vorschau, 03.11.2026)
 - [x] Vier Tätigkeiten im bestehenden Spezialfahrzeugfeld ergänzt; vier Hauptkategorien und 489-Euro-Tarif erhalten.
 - [x] Bestätigungsweitergabe als ungeschaltete Entwürfe unter preview/event-booking vorbereitet; Fahrerangebot nutzt vorhandenes Feld fahrzeugtyp, Bestands-Snapshots unverändert.
