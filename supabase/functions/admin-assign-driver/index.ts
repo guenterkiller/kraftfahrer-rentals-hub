@@ -73,7 +73,7 @@ Deno.serve(async (req) => {
     // Check if job exists
     const { data: job, error: jobError } = await supabase
       .from('job_requests')
-      .select('id, status')
+      .select('id, status, tarif_type')
       .eq('id', jobId)
       .single();
     
@@ -138,7 +138,8 @@ Deno.serve(async (req) => {
         status: 'assigned',
         rate_type: rateType,
         rate_value: rateValue,
-        commission_pct: Number(commissionPct) === 25 ? 25 : 20,
+        // Event-Tourneepauschale: Fahrerprovision verbindlich 25 % (nur intern/Fahrer sichtbar).
+        commission_pct: (job as { tarif_type?: string } | null)?.tarif_type === 'event' || Number(commissionPct) === 25 ? 25 : 20,
         start_date: startDate || null,
         end_date: endDate || null,
         times_entered: timesEnteredFlag,

@@ -656,7 +656,7 @@ export function AdminAssignmentDialog({
 
           <div>
             <Label>Vermittlungsprovision</Label>
-            <Select value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
+            <Select disabled={jobData?.tarif_type === "event"} value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="20">20 % – normaler Auftrag</SelectItem>
