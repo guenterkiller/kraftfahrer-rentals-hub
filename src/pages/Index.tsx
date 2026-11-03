@@ -163,6 +163,9 @@ const Index = () => {
               <Link to="/lkw-ueberfuehrung" className="text-primary hover:underline font-medium">
                 → LKW-Überführung
               </Link>
+              <Link to="/showtruck-eventfahrer" className="text-primary hover:underline font-medium">
+                → Showtruck- &amp; Eventfahrer
+              </Link>
             </div>
           </div>
         </section>

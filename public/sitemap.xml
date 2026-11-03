@@ -169,4 +169,11 @@
     <mobile:mobile/>
   </url>
   
+  <url>
+    <loc>https://www.kraftfahrer-mieten.com/showtruck-eventfahrer</loc>
+    <lastmod>2026-11-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <mobile:mobile/>
+  </url>
 </urlset>

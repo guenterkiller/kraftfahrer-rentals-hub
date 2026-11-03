@@ -176,6 +176,11 @@ const LKWFahrerBuchen = () => {
 
   const relatedServices = [
     {
+      title: "Showtruck- & Eventfahrer",
+      path: "/showtruck-eventfahrer",
+      description: "Fahrer für Werbefahrzeuge, Tourneen und Roadshows"
+    },
+    {
       title: "Baumaschinenführer",
       path: "/baumaschinenfuehrer-buchen",
       description: "Baumaschinenführer / Mischmeister – 489 € pro Einsatztag"

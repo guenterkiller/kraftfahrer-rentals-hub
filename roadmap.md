@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Showtruck- und Eventfahrer (Vorschau)
+- [x] Spezialfahrzeug-Preisübersicht um freigegebene Einsatzarten ergänzt, bestehende Preise/Konditionen erhalten.
+- [x] /showtruck-eventfahrer mit bestehender Buchungsmöglichkeit, Links von Leistungs-/Preisseiten und zusätzlichem Sitemap-Eintrag vorbereitet.
+- [x] 26 automatisierte Prüfungen bestanden; Seite, Suchmaschinenangaben und Buchungssprung bei 1280/390/320 px geprüft, automatische Prüfung OK; keine Buchung, E-Mail oder Veröffentlichung. Veröffentlichung wartet auf ausdrückliche Nutzerfreigabe.
 # Zukünftige verbindliche Fahrerangebote (Freigabe 30.10.2026)
 - [x] Unveränderliche Versandbasis v2 für neue Angebote und alte v1-Darstellung bestehender Angebote gesichert; keine Auftrags-/Nachweisänderungen.
 - [x] Einsatzangaben und interne Netto-Vergütung in Fahrermail/Annahmeseite einheitlich ergänzt; Kundenkosten unverändert getrennt.

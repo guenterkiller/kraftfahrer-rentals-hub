@@ -3,6 +3,11 @@ import { resolveTarif } from '../tarifZuordnung';
 import { listSurchargeDays, analyzeWeekendHoliday } from '../germanHolidays';
 
 describe('resolveTarif', () => {
+  it('belässt Showtruck-, Werbe-, Promotion- und Eventfahrzeuge im gewählten Spezialfahrzeugtarif bei 489 Euro netto', () => {
+    for (const beschreibung of ['Showtruck', 'Werbefahrzeug', 'Promotionfahrzeug', 'Eventfahrzeug']) {
+      expect(resolveTarif({ kategorie: 'Baumaschinenführer/Mischmeister/Spezialfahrzeuge', maschinenbedienung: '', beschreibung })).toMatchObject({ tarif: 'baumaschine', netto: 489, mehrstunde: 60 });
+    }
+  });
   it('setzt Baumaschinentarif, wenn der Besteller die Spezialfahrzeug-Tarifkarte wählt', () => {
     const r = resolveTarif({ kategorie: 'Baumaschinenführer / Mischmeister', maschinenbedienung: '' });
     expect(r.tarif).toBe('baumaschine');
