@@ -1,4 +1,5 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
+import { requireMailResult } from '@/lib/adminMailResult';
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
 import { TestDataCleanup } from "@/components/admin/TestDataCleanup";
 import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
@@ -808,17 +809,17 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   async function resendDriverConfirmationNew(assignmentId: string) {
     try {
       // No need to pass email - JWT is sent automatically via Authorization header
-      const { error } = await supabase.functions.invoke(
+      const { data, error } = await supabase.functions.invoke(
         "send-driver-confirmation",
         { body: { 
           assignment_id: assignmentId, 
           stage: "resend" 
         } }
       );
-      if (error) throw error;
+      const result = await requireMailResult(data, error);
       toast({
-        title: "E-Mail erneut gesendet",
-        description: "Bestätigung wurde an den Fahrer gesendet."
+        title: result === 'sent' ? "E-Mail erneut gesendet" : "Keine E-Mail versendet",
+        description: result === 'sent' ? "Bestätigung wurde an den Fahrer gesendet." : data.message
       });
     } catch (e: any) {
       toast({
@@ -940,15 +941,15 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       if (rpcErr) throw rpcErr;
 
       // 2) E-Mail + PDF an Fahrer (BCC an Admin) - JWT sent automatically
-      const { error: fnErr } = await supabase.functions.invoke(
+      const { data, error: fnErr } = await supabase.functions.invoke(
         "send-driver-confirmation",
         { body: { assignment_id: assignmentId } }
       );
-      if (fnErr) throw fnErr;
+      const result = await requireMailResult(data, fnErr);
 
       toast({
-        title: "Bestätigt & E-Mail versendet",
-        description: "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)."
+        title: result === 'sent' ? "Bestätigt & E-Mail versendet" : "Keine E-Mail versendet",
+        description: result === 'sent' ? "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)." : data.message
       });
       await loadJobRequests();
       await loadJobAssignments();
@@ -1034,14 +1035,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
   const resendDriverConfirmation = async (assignmentId: string) => {
     try {
       // JWT sent automatically via Authorization header
-      const { error } = await supabase.functions.invoke(
+      const { data, error } = await supabase.functions.invoke(
         "send-driver-confirmation",
         { body: { assignment_id: assignmentId, resend: true } }
       );
-      if (error) throw error;
+      const result = await requireMailResult(data, error);
       toast({
-        title: "E-Mail erneut gesendet",
-        description: "Bestätigung wurde an den Fahrer gesendet."
+        title: result === 'sent' ? "E-Mail erneut gesendet" : "Keine E-Mail versendet",
+        description: result === 'sent' ? "Bestätigung wurde an den Fahrer gesendet." : data.message
       });
     } catch (err: any) {
       console.error(err);
@@ -1089,7 +1090,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       if (data?.contractPending && data.contractEmailStatus === 'failed') {
         toast({
           title: "Vertrags-E-Mail NICHT versendet",
-          description: `Fahrer ist freigeschaltet, aber der E-Mail-Dienst hat den Versand abgelehnt: ${data.contractEmailError || 'Unbekannter Fehler'}. Erneutes Freischalten versendet denselben persönlichen Link erneut.`,
+          description: `Fahrer ist freigeschaltet, aber die Vertrags-E-Mail konnte nicht bestätigt werden: ${data.contractEmailError || 'Unbekannter Fehler'}. Bitte „Vertrags-E-Mail erneut senden“ verwenden; derselbe persönliche Link bleibt erhalten.`,
           variant: "destructive",
         });
         return;
@@ -2621,7 +2622,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                >
                                  {f.is_blocked ? '🔓 Entsperren' : '🚫 Sperren'}
                                </Button>
-                                <DriverContractStatus driverId={f.id} />
+                                <DriverContractStatus driverId={f.id} canRetry={['approved', 'active'].includes(f.status) && !f.is_blocked && !f.is_inactive} />
                                 {f.is_inactive ? (
                                   <Button
                                     size="sm"
@@ -2776,7 +2777,7 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                           </div>
 
                           <div className="flex gap-2 pt-2 mt-1 flex-wrap border-t border-dashed border-gray-200">
-                            <DriverContractStatus driverId={f.id} />
+                            <DriverContractStatus driverId={f.id} canRetry={['approved', 'active'].includes(f.status) && !f.is_blocked && !f.is_inactive} />
                             <span className="w-full text-[10px] uppercase tracking-wide text-muted-foreground">Aktionen</span>
                             {f.status === 'pending' && (
                               <Button
