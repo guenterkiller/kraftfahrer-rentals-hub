@@ -37,3 +37,17 @@ Deno.test("Andere Tarife: Annahmeregel und Provision unverändert", () => {
     assertEquals(offer.bindingAcceptanceAllowed({ tarif_type: t, kosten_uebersicht: null }, { commission_pct: 20 }), true);
   }
 });
+
+Deno.test("Event-Angebot: Bezeichnung Agenturprovision; andere Tarife wörtlich unverändert", () => {
+  const job = { tarif_type: "event", tarif_netto: 489, zeitraum: "06.11.2026 - 08.11.2026",
+    kosten_uebersicht: { netto: 1467, positionen: [{ label: "x", betrag: 1467 }] } };
+  const a = { rate_type: "daily", rate_value: 489, start_date: "2026-11-06", end_date: "2026-11-08", commission_pct: 25 };
+  const m = new Map(offer.buildCompleteOfferLines(job, a));
+  assertEquals(m.get("Nettoauftragswert"), "1.467,00 €");
+  assertEquals(m.get("Agenturprovision Fahrerexpress (25 %)"), "366,75 € netto");
+  assertEquals(m.get("Nettovergütung des selbstständigen Fahrers"), "1.100,25 €");
+  assert(![...m.keys()].some((k) => k.startsWith("Vermittlungsanteil")));
+  const r = new Map(offer.buildCompleteOfferLines({ ...job, tarif_type: "baumaschine" }, { ...a, commission_pct: 20 }));
+  assert(r.has("Vermittlungsanteil 20 %"));
+  assert(!r.has("Agenturprovision Fahrerexpress (20 %)"));
+});

@@ -39,7 +39,7 @@ const STATUS_TEXT: Record<Exclude<ServerStatus, null>, string> = {
   consent_required:
     "Bitte bestätigen Sie die Pflicht-Checkbox, um den Auftrag verbindlich anzunehmen.",
   remuneration_incomplete:
-    "Dieser Auftrag kann noch nicht verbindlich angenommen werden, weil Ihre Vergütung (Auftragswert, Vermittlungsprovision und verbleibende Nettovergütung) noch nicht vollständig ausgewiesen ist. Fahrerexpress meldet sich mit einem vollständigen Angebot. Fragen: info@kraftfahrer-mieten.com oder 01577 1442285.",
+    "Dieser Auftrag kann noch nicht verbindlich angenommen werden, weil Ihre Vergütung (Nettoauftragswert, Agenturprovision Fahrerexpress (25 %) und Nettovergütung des selbstständigen Fahrers) noch nicht vollständig ausgewiesen ist. Fahrerexpress meldet sich mit einem vollständigen Angebot. Fragen: info@kraftfahrer-mieten.com oder 01577 1442285.",
   error:
     "Es ist ein Fehler aufgetreten. Bitte melden Sie sich direkt bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285.",
 };
