@@ -135,6 +135,9 @@ const PreiseUndAblauf = () => {
                               unitClassName="text-orange-800 font-medium text-sm"
                               detailClassName="text-orange-700 text-xs mt-2 leading-snug"
                             />
+                      <p className="text-sm text-foreground mt-4">
+                        <Link to="/showtruck-eventfahrer" className="text-primary underline">Showtruck-Fahrer, Werbefahrzeuge, Promotionfahrzeuge und Eventfahrzeuge</Link>
+                      </p>
                     </div>
                   </CardContent>
                 </Card>

@@ -5,9 +5,10 @@ import { sitemapRoutes, readRoutes, prerenderName, mergeHead } from './prerender
 
 test('all existing sitemap routes including homepage are covered exactly once', () => {
   const routes = readRoutes(new URL('../public/sitemap.xml', import.meta.url));
-  assert.equal(routes.length, 21);
+  assert.equal(routes.length, 22);
   assert.ok(routes.includes('/'));
   assert.ok(routes.includes('/lkw-ueberfuehrung'));
+  assert.ok(routes.includes('/showtruck-eventfahrer'));
   assert.equal(prerenderName('/'), 'index.html');
   assert.equal(prerenderName('/lkw-ueberfuehrung'), 'lkw-ueberfuehrung.html');
 });
