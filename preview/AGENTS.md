@@ -1,0 +1,2 @@
+# Preview-only server drafts
+- Files here are disconnected copies of production handlers/templates for simulated tests; never deploy or wire them into real requests without explicit activation approval. Why: Supabase function edits deploy automatically, while preview-only work must leave production mail unchanged.

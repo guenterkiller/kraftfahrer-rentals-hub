@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CUSTOMER_TERMS_VERSION, CUSTOMER_CONFIRMATION_TEXT } from '@/lib/customerConfirmation';
+import { EVENT_TAETIGKEITEN } from '@/lib/eventTaetigkeiten';
 import { scrollToBookingForm } from "@/lib/bookingNavigation";
 import TarifCardText, { PreiskartenHinweis } from "@/components/TarifCardText";
 import { TARIF_TEXTE, tarifKurz, tarifTitel } from "@/lib/tarifTexte";
@@ -778,6 +779,9 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         <option value="Kanal- / Entsorgungsfahrzeug">Kanal- / Entsorgungsfahrzeug</option>
                         <option value="Arbeitsmaschine / Spezialfahrzeug">Arbeitsmaschine / Spezialfahrzeug</option>
                         <option value="Flüssigboden">Flüssigboden</option>
+                        {EVENT_TAETIGKEITEN.map((taetigkeit) => (
+                          <option key={taetigkeit} value={taetigkeit}>{taetigkeit}</option>
+                        ))}
                         <option value="Sonstiges">Sonstiges</option>
                       </select>
                       <div className="mt-3 text-xs text-orange-900">

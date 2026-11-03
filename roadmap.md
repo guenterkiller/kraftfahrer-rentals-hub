@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Eventauswahl im Buchungsformular (nur Vorschau, 03.11.2026)
+- [x] Vier Tätigkeiten im bestehenden Spezialfahrzeugfeld ergänzt; vier Hauptkategorien und 489-Euro-Tarif erhalten.
+- [x] Bestätigungsweitergabe als ungeschaltete Entwürfe unter preview/event-booking vorbereitet; Fahrerangebot nutzt vorhandenes Feld fahrzeugtyp, Bestands-Snapshots unverändert.
+- [x] 27 Vitest- und 4 isolierte Deno-Tests sowie Browserauswahl/Kostenvorschau/abgefangene Formularübertragung bestanden; keine echten Buchungen/Mails oder Bereitstellung/Veröffentlichung. Produktive Bestätigungsaktivierung wartet auf ausdrückliche Freigabe.
 # Versandfehler Fahrerangebote und Vertragsmails (03.11.2026)
 - [x] Fehlgeschlagenen Angebotsversand mit unverändertem gültigem Link/Angebot wiederholbar gemacht; Verwaltung unterscheidet bestätigten/übersprungenen Versand.
 - [x] Vertragsmail-Wiederholung im bestehenden Vertragsstatus-Bereich für freigeschaltete Fahrer erreichbar; mail-only-Serverweg ohne Freischaltung, neue Links, Angebote oder Adminmail.

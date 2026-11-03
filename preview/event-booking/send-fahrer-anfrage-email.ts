@@ -1,0 +1,225 @@
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { Resend } from "npm:resend@2.0.0";
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import React from 'npm:react@18.3.1';
+import { CustomerBookingConfirmation } from './customer-booking-confirmation.tsx';
+import { analyzeWeekendHoliday } from '../../supabase/functions/_shared/german-holidays.ts';
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+interface FahrerAnfrageEmailRequest {
+  vorname: string;
+  nachname: string;
+  email: string;
+  phone: string;
+  company?: string;
+  message: string;
+  einsatzbeginn?: string;
+  einsatzdauer?: string;
+  einsatzende?: string;
+  fahrzeugtyp: string;
+  anforderungen?: string[];
+  customer_street?: string;
+  customer_house_number?: string;
+  customer_postal_code?: string;
+  customer_city?: string;
+  einsatzort?: string;
+  isFernfahrerTarif?: boolean;
+  weekend_holiday_affected?: boolean;
+  weekend_holiday_acknowledged?: boolean;
+  tarif?: {
+    tarif: string;
+    label: string;
+    netto: number | null;
+    einheit: string;
+    mehrstunde: number | null;
+    needsReview: boolean;
+    reason: string;
+  };
+  surcharge_days?: Array<{ label: string; percent: number }>;
+  unterkunft_option?: 'gestellt' | 'fahrer_organisiert' | 'keine' | null;
+  unterkunft_obergrenze?: number | null;
+  kosten_uebersicht?: {
+    positionen: Array<{ label: string; betrag: number }>;
+    netto: number;
+    ust: number;
+    brutto: number;
+  } | null;
+}
+
+const handler = async (req: Request): Promise<Response> => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    // Internal-only function: require x-internal-secret header
+    const providedSecret = req.headers.get("x-internal-secret");
+    const expectedSecret = Deno.env.get("INTERNAL_FN_SECRET");
+    if (!expectedSecret || providedSecret !== expectedSecret) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden" }),
+        { status: 403, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const requestData: FahrerAnfrageEmailRequest = await req.json();
+    
+    const {
+      vorname,
+      nachname,
+      email,
+      phone,
+      company,
+      message,
+      einsatzbeginn,
+      einsatzdauer,
+      einsatzende,
+      fahrzeugtyp,
+      anforderungen = [],
+      customer_street,
+      customer_house_number,
+      customer_postal_code,
+      customer_city,
+      einsatzort,
+      isFernfahrerTarif = false,
+      weekend_holiday_affected = false,
+      weekend_holiday_acknowledged = false,
+      tarif,
+      surcharge_days = [],
+      unterkunft_option = null,
+      unterkunft_obergrenze = null,
+      kosten_uebersicht = null
+    } = requestData;
+
+    const kundenname = `${vorname} ${nachname}`.trim();
+
+    // Maßgeblich ist der tatsächliche Einsatzzeitraum: wenn ISO-Daten vorliegen,
+    // wird die Wochenend-/Feiertagserkennung serverseitig neu berechnet.
+    const computed = einsatzbeginn ? analyzeWeekendHoliday(einsatzbeginn, einsatzende || einsatzbeginn) : undefined;
+    const affected = computed ? computed.affected : Boolean(weekend_holiday_affected);
+    const acknowledged = affected && Boolean(weekend_holiday_acknowledged);
+    
+    // Format date range
+    let zeitraumText = "Nach Absprache";
+    if (einsatzbeginn) {
+      try {
+        const date = new Date(einsatzbeginn + "T08:00:00");
+        if (!isNaN(date.getTime())) {
+          const formattedDate = date.toLocaleDateString('de-DE');
+          zeitraumText = einsatzdauer
+            ? (einsatzdauer.startsWith('vom ')
+                ? einsatzdauer
+                : `Ab ${formattedDate} für ${einsatzdauer}`)
+            : `Ab ${formattedDate}`;
+        }
+      } catch (dateError) {
+        console.error("Date conversion error:", dateError);
+        zeitraumText = einsatzbeginn + (einsatzdauer ? ` für ${einsatzdauer}` : "");
+      }
+    } else if (einsatzdauer) {
+      zeitraumText = `Dauer: ${einsatzdauer}`;
+    }
+
+    // Format address
+    let adresseText = "";
+    if (customer_street && customer_house_number && customer_postal_code && customer_city) {
+      adresseText = `${customer_street} ${customer_house_number}, ${customer_postal_code} ${customer_city}`;
+    } else if (customer_city && customer_postal_code) {
+      adresseText = `${customer_postal_code} ${customer_city}`;
+    }
+
+    // Fahrertyp ausschließlich aus der übergebenen Tarifzuordnung.
+    // Ohne eindeutige Zuordnung wird KEIN Fahrertyp genannt.
+    const fahrerTyp = tarif
+      ? (tarif.needsReview ? 'wird dem passenden veröffentlichten Tarif zugeordnet' : tarif.label)
+      : 'wird dem passenden veröffentlichten Tarif zugeordnet';
+
+    // Render React Email template
+    const emailHtml = await renderAsync(
+      React.createElement(CustomerBookingConfirmation, {
+        customerName: kundenname,
+        companyName: company || undefined,
+        driverType: fahrerTyp,
+        selectedActivity: fahrzeugtyp,
+        requirements: anforderungen,
+        timeframe: zeitraumText,
+        location: adresseText || einsatzort || 'Nicht angegeben',
+        message: message,
+        isFernfahrerTarif: isFernfahrerTarif && tarif?.tarif === 'fernfahrer',
+        isUeberfuehrung: tarif?.tarif === 'ueberfuehrung',
+        weekendHolidayAffected: affected,
+        weekendHolidayAcknowledged: acknowledged,
+        tarif: tarif,
+        surchargeDays: surcharge_days,
+        unterkunftOption: unterkunft_option,
+        unterkunftObergrenze: unterkunft_obergrenze,
+        kostenUebersicht: kosten_uebersicht,
+      })
+    );
+
+    const emailResponse = await resend.emails.send({
+      from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
+      to: [email],
+      subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+      html: emailHtml,
+    });
+
+    // Create Supabase client for logging
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    if (supabaseUrl && supabaseKey) {
+      const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.52.0");
+      const supabase = createClient(supabaseUrl, supabaseKey);
+      
+      // Log email sending
+      if (emailResponse.error) {
+        console.error("Failed to send customer confirmation:", emailResponse.error);
+        
+        await supabase.from('email_log').insert({
+          recipient: email,
+          subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+          template: 'customer_booking_confirmation',
+          status: 'failed',
+          error_message: emailResponse.error.message || String(emailResponse.error),
+        });
+      } else {
+        console.log("Customer confirmation email sent successfully:", emailResponse);
+        
+        await supabase.from('email_log').insert({
+          recipient: email,
+          subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+          template: 'customer_booking_confirmation',
+          status: 'sent',
+          sent_at: new Date().toISOString(),
+          message_id: emailResponse.data?.id,
+        });
+      }
+    }
+
+    return new Response(JSON.stringify(emailResponse), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        ...corsHeaders,
+      },
+    });
+  } catch (error: any) {
+    console.error("Error in send-fahrer-anfrage-email function:", error);
+    return new Response(
+      JSON.stringify({ error: "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+};
+
+export { handler }; // Preview draft only: no server registration.
