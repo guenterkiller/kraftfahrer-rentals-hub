@@ -80,6 +80,11 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   // Version 1 keeps exactly the legacy fields; v2 serves the stored lines, never recalculates.
   const jobLines = frozen?.version === 2 && frozen.job_lines ? frozen.job_lines : buildJobLines(job, offerAssignment);
 
+  // Eventaufträge: ohne vollständig ausgewiesene Vergütung (Auftragswert, 25 % Provision, Netto) keine Annahme.
+  if (!bindingAcceptanceAllowed(job, offerAssignment) && (ctx.intent === "load" || ctx.action === "accept")) {
+    return json({ status: "remuneration_incomplete", mode: "binding" }, ctx.intent === "load" ? 200 : 409);
+  }
+
   if (ctx.intent === "load") {
     return json({
       status: "ready",

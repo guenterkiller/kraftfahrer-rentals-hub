@@ -34,6 +34,15 @@ export function remuneration(job: OfferData, assignment: OfferData) {
     positions: valid ? costs.positionen as { label: string; betrag: number }[] : [] };
 }
 
+/** Event-Tourneepauschale: Annahme nur mit vollständig bezifferter Vergütung bei 25 % Provision. Andere Tarife unverändert. */
+export function bindingAcceptanceAllowed(job: OfferData | null | undefined, assignment: OfferData | null | undefined): boolean {
+  if (job?.tarif_type !== 'event') return true;
+  if (!assignment) return false;
+  const pay = remuneration(job, assignment);
+  return pay.pct === 25 && pay.serviceCents !== null && pay.serviceCents > 0 &&
+    pay.commissionCents !== null && pay.driverCents !== null && pay.driverCents > 0;
+}
+
 export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): [string, string][] {
   const pay = remuneration(job, assignment);
   const unit = assignment.rate_type === 'daily' ? 'Einsatztag' : assignment.rate_type === 'weekly' ? 'Woche' : assignment.rate_type === 'hourly' ? 'Stunde' : 'Auftrag';
