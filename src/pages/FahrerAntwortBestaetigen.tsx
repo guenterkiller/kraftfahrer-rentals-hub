@@ -25,6 +25,7 @@ type ServerStatus =
   | "expired"
   | "invalid"
   | "consent_required"
+  | "remuneration_incomplete"
   | "error"
   | null;
 
@@ -37,6 +38,8 @@ const STATUS_TEXT: Record<Exclude<ServerStatus, null>, string> = {
   invalid: "Dieser Link ist ungültig oder wurde nicht gefunden.",
   consent_required:
     "Bitte bestätigen Sie die Pflicht-Checkbox, um den Auftrag verbindlich anzunehmen.",
+  remuneration_incomplete:
+    "Dieser Auftrag kann noch nicht verbindlich angenommen werden, weil Ihre Vergütung (Auftragswert, Vermittlungsprovision und verbleibende Nettovergütung) noch nicht vollständig ausgewiesen ist. Fahrerexpress meldet sich mit einem vollständigen Angebot. Fragen: info@kraftfahrer-mieten.com oder 01577 1442285.",
   error:
     "Es ist ein Fehler aufgetreten. Bitte melden Sie sich direkt bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285.",
 };
@@ -160,6 +163,7 @@ export default function FahrerAntwortBestaetigen() {
           }
         } else if (
           status === "already_answered" ||
+          status === "remuneration_incomplete" ||
           status === "expired" ||
           status === "invalid"
         ) {

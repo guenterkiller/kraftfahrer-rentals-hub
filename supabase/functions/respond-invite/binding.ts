@@ -19,7 +19,7 @@ import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts"
 import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
-import { type OfferSnapshot } from '../_shared/binding-offer.ts';
+import { type OfferSnapshot, bindingAcceptanceAllowed } from '../_shared/binding-offer.ts';
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -79,6 +79,11 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   const commission = normalizeCommissionPct(offerAssignment.commission_pct);
   // Version 1 keeps exactly the legacy fields; v2 serves the stored lines, never recalculates.
   const jobLines = frozen?.version === 2 && frozen.job_lines ? frozen.job_lines : buildJobLines(job, offerAssignment);
+
+  // Eventaufträge: ohne vollständig ausgewiesene Vergütung (Auftragswert, 25 % Provision, Netto) keine Annahme.
+  if (!bindingAcceptanceAllowed(job, offerAssignment) && (ctx.intent === "load" || ctx.action === "accept")) {
+    return json({ status: "remuneration_incomplete", mode: "binding" }, ctx.intent === "load" ? 200 : 409);
+  }
 
   if (ctx.intent === "load") {
     return json({

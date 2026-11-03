@@ -14,3 +14,15 @@ for (const version of [1,2]) {
     assertEquals(data.job_lines, version === 1 ? buildJobLines(job,assignment) : (snapshot as any).job_lines);
   });
 }
+Deno.test('Eventauftrag ohne vollständige Vergütung: Laden und Annahme gesperrt, kein Statuswechsel', async () => {
+  const a = { ...assignment, rate_value: 489, commission_pct: 25 };
+  const job = { tarif_type: 'event', tarif_netto: 489, zeitraum: 'offen', kosten_uebersicht: null, einsatzort: 'TEST' };
+  const invite = { purpose:'binding',assignment_id:a.id,driver_id:a.driver_id,status:'pending',created_at:'2099-01-01T00:00:00Z',token_expires_at:'2099-11-01T00:00:00Z',offer_snapshot:createOfferSnapshot(job,a),job };
+  let updates = 0;
+  const q: any = { select(){return q;},eq(){return q;},update(){updates++;return q;},maybeSingle(){return Promise.resolve({data:a});} };
+  for (const [intent, action] of [['load', null], [null, 'accept']] as const) {
+    const r = await handleBinding({supabase:{from(){return q;}},invite,intent,action,consentConfirmed:true,checkboxText:'x',ip:'',userAgent:'',json:(d:any)=>new Response(JSON.stringify(d))});
+    assertEquals((await r.json()).status, 'remuneration_incomplete');
+  }
+  assertEquals(updates, 0);
+});
