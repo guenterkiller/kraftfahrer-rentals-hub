@@ -12,6 +12,7 @@ import { normalizeCommissionPct } from "../_shared/driver-contract-terms.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
 import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
 import { createOfferSnapshot, renderOfferLines } from '../_shared/binding-offer.ts';
+import { interpretSendResult } from '../approve-driver-and-send-jobs/contract-mail.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -74,7 +75,7 @@ serve(async (req) => {
     const _fp: any = (assignment as any).fahrer_profile;
     const _jr: any = (assignment as any).job_requests;
     const driver: any = Array.isArray(_fp) ? _fp[0] : _fp;
-    const job: any = Array.isArray(_jr) ? _jr[0] : _jr;
+    let job: any = Array.isArray(_jr) ? _jr[0] : _jr;
 
     if (!driver || !driver.email || !driver.vorname || !driver.nachname) {
       console.error('📧 Driver data incomplete');
@@ -84,15 +85,12 @@ serve(async (req) => {
     console.log(`📧 Sending email to driver: ${driver.email}`);
 
     // Prepare email data
-    const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
-    const location = job?.einsatzort || 'wird noch bekannt gegeben';
-    const dateRange = formatAssignmentPeriod(assignment.start_date, assignment.end_date, (assignment as any).times_entered) || job?.zeitraum || 'nach Absprache';
-    const offerSnapshot = createOfferSnapshot(job, assignment);
-    
-    const emailSubject = `Auftragsangebot – ${jobTitle} – ${location} am ${dateRange}`;
+    let offerSnapshot = createOfferSnapshot(job, assignment);
+    let offerAssignment = assignment;
+    let inviteCreatedAt = new Date().toISOString();
+    let sendKey = '';
 
     // ===== Persönlicher Link zur verbindlichen Fahrerannahme =====
-    const commissionPct = normalizeCommissionPct((assignment as any).commission_pct);
     let bindingButtonHtml = '';
     const { data: existingBinding, error: bindingError } = await supabase
       .from('job_driver_acceptances')
@@ -106,16 +104,39 @@ serve(async (req) => {
         status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
       });
     } else if (['assigned', 'confirmed'].includes(assignment.status)) {
-      // Never replace or reissue any previously sent binding offer.
+      // A failed delivery reuses the immutable offer, token and deadline.
       const { data: previousOffer, error: previousError } = await supabase.from('assignment_invites')
-        .select('id').eq('assignment_id', assignment_id).eq('purpose', 'binding').limit(1);
+        .select('id, token, token_expires_at, status, created_at, offer_snapshot')
+        .eq('assignment_id', assignment_id).eq('purpose', 'binding').order('created_at', { ascending: false }).limit(1);
       if (previousError) return createErrorResponse('Bestehendes Angebot konnte nicht geprüft werden', 500, corsHeaders);
-      if (previousOffer?.length) return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Bestehendes verbindliches Angebot bleibt unverändert; kein erneuter Versand' }), {
-        status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
-      });
-      const expiresAt = computeBindingExpiry(new Date(), deadlineStartIso(assignment.start_date, (assignment as any).times_entered));
+      const previous = previousOffer?.[0];
+      let token: string;
+      let expiresAt: Date;
+      if (previous) {
+        if (previous.status !== 'pending') return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Angebot bereits beantwortet oder beendet; keine E-Mail versendet' }), {
+          status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+        expiresAt = new Date(previous.token_expires_at);
+        if (!Number.isFinite(expiresAt.getTime()) || expiresAt.getTime() <= Date.now()) return createErrorResponse('Annahmelink abgelaufen; kein neuer Link und kein Versand', 400, corsHeaders);
+        const { data: successfulMail, error: mailCheckError } = await supabase.from('email_log')
+          .select('id').eq('assignment_id', assignment_id).eq('template', 'driver_confirmation')
+          .eq('status', 'sent').not('message_id', 'is', null).gte('created_at', previous.created_at).limit(1);
+        if (mailCheckError) return createErrorResponse('Versandstatus konnte nicht geprüft werden; bitte erneut versuchen', 500, corsHeaders);
+        if (successfulMail?.length) return new Response(JSON.stringify({ ok: true, skipped: true, message: 'Angebot bereits erfolgreich versendet; keine weitere E-Mail versendet' }), {
+          status: 200, headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+        if (!previous.offer_snapshot?.job || !previous.offer_snapshot?.assignment || !previous.token) return createErrorResponse('Gespeicherte Angebotsdaten unvollständig; kein neuer Link und kein Versand', 400, corsHeaders);
+        offerSnapshot = previous.offer_snapshot;
+        job = offerSnapshot.job;
+        offerAssignment = offerSnapshot.assignment as typeof assignment;
+        inviteCreatedAt = previous.created_at;
+        token = previous.token;
+      } else {
+        expiresAt = computeBindingExpiry(new Date(), deadlineStartIso(assignment.start_date, (assignment as any).times_entered));
+        token = generateToken();
+      }
       if (expiresAt.getTime() > Date.now()) {
-        const token = generateToken();
+        if (!previous) {
         const { error: invErr } = await supabase.from('assignment_invites').insert({
           job_id: assignment.job_id, driver_id: assignment.driver_id, assignment_id,
           purpose: 'binding', status: 'pending', token, token_expires_at: expiresAt.toISOString(),
@@ -125,6 +146,8 @@ serve(async (req) => {
           console.error('📧 binding invite insert failed:', invErr);
           return createErrorResponse("Annahmelink konnte nicht erstellt werden", 500, corsHeaders);
         }
+        }
+        sendKey = `binding-offer/${token}`;
         // Alle Annahmelinks verweisen ausschließlich auf die Live-Domain
         const linkBase = 'https://www.kraftfahrer-mieten.com';
         const url = `${linkBase}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
@@ -136,6 +159,12 @@ serve(async (req) => {
           <p class="body-text" style="margin:0 0 18px 0;font-size:12px;line-height:1.5;color:#6b7280;">Persönlicher Link, gültig bis ${until} Uhr. Die verbindliche Annahme erfolgt erst auf der Bestätigungsseite nach Prüfung der Auftragsdaten und Vertragsbedingungen.</p>`;
       } else return createErrorResponse('Angebotsfrist bereits abgelaufen; kein Versand', 400, corsHeaders);
     } else return createErrorResponse('Zuteilung ist nicht für ein neues Angebot verfügbar', 400, corsHeaders);
+
+    const commissionPct = normalizeCommissionPct(offerAssignment.commission_pct);
+    const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
+    const location = job?.einsatzort || 'wird noch bekannt gegeben';
+    const dateRange = formatAssignmentPeriod(offerAssignment.start_date, offerAssignment.end_date, offerAssignment.times_entered) || job?.zeitraum || 'nach Absprache';
+    const emailSubject = `Auftragsangebot – ${jobTitle} – ${location} am ${dateRange}`;
 
     const sectionStart = (bg: string) =>
       `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background-color:${bg};border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 16px 0;"><tr><td style="padding:16px 18px;">`;
@@ -176,7 +205,7 @@ serve(async (req) => {
 
       <p class="body-text" style="margin:18px 0 8px 0;font-size:14px;color:#374151;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
       <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
-      <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Auftragsangebot erstellt am: ${new Date().toLocaleDateString('de-DE')}</p>
+      <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Auftragsangebot erstellt am: ${new Date(inviteCreatedAt).toLocaleDateString('de-DE')}</p>
     `;
 
     const emailContent = wrapDriverEmailHtml(innerHtml, {
@@ -186,26 +215,33 @@ serve(async (req) => {
     });
 
     // Send email using Resend
+    let delivery: ReturnType<typeof interpretSendResult>;
+    try {
+    const headers = new Headers(resend.headers);
+    headers.set('Idempotency-Key', sendKey);
     const emailResult = await resend.emails.send({
       from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [driver.email],
       bcc: ['info@kraftfahrer-mieten.com'],
       subject: emailSubject,
       html: emailContent,
-    });
-
-    if (emailResult.error || !emailResult.data?.id) {
-      console.error('📧 Email sending failed:', emailResult.error);
+    }, { headers });
+    delivery = interpretSendResult(emailResult);
+    } catch (error) {
+      delivery = { ok: false, error: error instanceof Error ? error.message : String(error) };
+    }
+    if (!delivery.ok) {
+      console.error('📧 Email sending failed:', delivery.error);
       await supabase.from('email_log').insert({ assignment_id, job_id: assignment.job_id,
         recipient: driver.email, template: 'driver_confirmation', subject: emailSubject,
-        status: 'error', error_message: emailResult.error?.message || 'Keine Versand-ID erhalten', delivery_mode: 'inline' });
-      return createErrorResponse("Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut.", 500, corsHeaders);
+        status: 'error', error_message: delivery.error, delivery_mode: 'inline' });
+      return createErrorResponse("Fahrerangebot nicht versendet: " + delivery.error + ". Bitte E-Mail erneut senden; derselbe Annahmelink bleibt erhalten.", 500, corsHeaders);
     }
 
-    console.log('📧 Email sent successfully:', emailResult.data?.id);
+    console.log('📧 Email sent successfully:', delivery.messageId);
 
     // Log the email
-    await supabase.from('email_log').insert({
+    const { error: logError } = await supabase.from('email_log').insert({
       assignment_id: assignment_id,
       job_id: assignment.job_id,
       recipient: driver.email,
@@ -214,8 +250,9 @@ serve(async (req) => {
       subject: emailSubject,
       template: 'driver_confirmation',
       delivery_mode: 'inline',
-      message_id: emailResult.data?.id
+      message_id: delivery.messageId
     });
+    if (logError) return createErrorResponse('E-Mail-Dienst hat den Versand angenommen, aber die Protokollierung ist fehlgeschlagen. Nicht als ungesendet behandeln; bitte Versandprotokoll prüfen.', 500, corsHeaders);
 
     // Log admin action
     await logAdminAction(supabase, 'send_driver_confirmation', user.email, {
@@ -229,7 +266,7 @@ serve(async (req) => {
     return new Response(JSON.stringify({ 
       ok: true, 
       message: "E-Mail erfolgreich versendet",
-      email_id: emailResult.data?.id,
+      email_id: delivery.messageId,
       delivery_mode: 'inline'
     }), { 
       status: 200,
