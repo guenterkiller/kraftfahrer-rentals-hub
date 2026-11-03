@@ -111,6 +111,9 @@ for (const activity of EVENT_TAETIGKEITEN) {
       const stored = gespeicherteAuftraege[0];
       assertEquals(stored.fahrzeugtyp, `Baumaschinenführer / Mischmeister – ${activity}`);
       assertEquals(stored.tarif_netto, 489);
+      assertEquals(stored.tarif_type, 'event');
+      assertEquals(stored.tarif_mehrstunde_netto, null);
+      assertEquals(stored.unterkunft_option, 'gestellt');
       assertEquals((stored.kosten_uebersicht as { netto: number; ust: number; brutto: number }).netto, 978);
       assertEquals((stored.kosten_uebersicht as { netto: number; ust: number; brutto: number }).ust, 185.82);
       assertEquals((stored.kosten_uebersicht as { netto: number; ust: number; brutto: number }).brutto, 1163.82);
