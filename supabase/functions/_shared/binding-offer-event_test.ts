@@ -21,3 +21,19 @@ Deno.test("Event: 489 € Pauschale je Tag, 25 % Provision, Fahrer erhält Rest"
   const lines = offer.buildCompleteOfferLines(job, assignment);
   assertEquals(lines.find(([k]) => k === "Mehrstundenpreis netto")?.[1], "Pauschaltarif ohne Mehrstundenabrechnung");
 });
+
+Deno.test("Annahmesperre: Event nur mit vollständiger Vergütung und 25 %", () => {
+  const job = { tarif_type: "event", tarif_netto: 489, zeitraum: "06.11.2026 - 08.11.2026",
+    kosten_uebersicht: { netto: 1467, positionen: [{ label: "x", betrag: 1467 }] } };
+  const a = { rate_type: "daily", rate_value: 489, start_date: "2026-11-06", end_date: "2026-11-08", commission_pct: 25 };
+  assertEquals(offer.bindingAcceptanceAllowed(job, a), true);
+  assertEquals(offer.bindingAcceptanceAllowed(job, { ...a, commission_pct: 20 }), false);
+  assertEquals(offer.bindingAcceptanceAllowed(job, { ...a, end_date: "2026-11-09" }), false); // Zeitraum passt nicht
+  assertEquals(offer.bindingAcceptanceAllowed({ ...job, kosten_uebersicht: null }, a), false);
+  assertEquals(offer.bindingAcceptanceAllowed(job, null), false);
+});
+Deno.test("Andere Tarife: Annahmeregel und Provision unverändert", () => {
+  for (const t of ["lkw_ce", "lkw_ce_woche", "fernfahrer", "baumaschine", "ueberfuehrung", undefined]) {
+    assertEquals(offer.bindingAcceptanceAllowed({ tarif_type: t, kosten_uebersicht: null }, { commission_pct: 20 }), true);
+  }
+});

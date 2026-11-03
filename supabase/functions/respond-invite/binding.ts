@@ -19,7 +19,7 @@ import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts"
 import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
-import { type OfferSnapshot } from '../_shared/binding-offer.ts';
+import { type OfferSnapshot, bindingAcceptanceAllowed } from '../_shared/binding-offer.ts';
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
