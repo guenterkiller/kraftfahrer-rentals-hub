@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Abschlussprüfung vor IONOS (03.11.2026)
+- [ ] Ausschließlich Unterkunftstext auf Eventseite ersetzen und vorhandene vier Eventtätigkeiten im tatsächlichen Formular prüfen.
+- [ ] Gesamte vorhandene Regeltests, Eventübertragung und E-Mail-Wiederholungen isoliert prüfen; Desktop/Mobil und SEO-Bestandsschutz bestätigen.
+- [ ] IONOS-Bereitschaft ausdrücklich mit Paket-/Liveprüfungsgrenzen berichten; keine Veröffentlichung oder Upload.
 # Showtruck-Leistungsbereich Startseite (nur Vorschau)
 - [x] Genau eine Bild-Text-Kachel nach Begriffsklarstellung vor ProductCards mit freigegebenem Text und zwei Links ergänzt; Formular unverändert, daher keine neue Vorauswahllogik.
 - [x] KI-generiertes Bild als WebP 640/1024 px (40/88 KB), Lazy Loading, feste Seitenverhältnisse und Alt-Text. 27 Tarif-/Event-/Kostentests bestanden; Bild/Links/Formular bei 1280/390/320 px geprüft; SEO, bisherige Texte und Links bei Desktop/Mobil identisch. Neuer Bereich ohne Überlauf; bekannter 320-px-Seitenüberlauf unangetastet. Keine Buchung, Mail, Veröffentlichung oder IONOS-Upload; Leistungskennzahlen nicht als verschlechterungsfrei nachgewiesen.

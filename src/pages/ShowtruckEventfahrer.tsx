@@ -91,7 +91,7 @@ export default function ShowtruckEventfahrer() {
             <div className="border-l-2 border-primary pl-6">
               <TarifCardText tarif={TARIF_TEXTE.baumaschine} amountClassName="text-3xl font-bold text-primary mb-2" unitClassName="font-semibold" detailClassName="text-muted-foreground mt-3" />
               <ul className="mt-4 space-y-2 text-sm text-muted-foreground">{TARIF_TEXTE.baumaschine.details.slice(1).map((detail) => <li key={detail}>{detail}</li>)}</ul>
-              <p className="mt-3 text-sm text-muted-foreground">Gegebenenfalls anfallende Unterkunftskosten richten sich nach den bestehenden veröffentlichten Konditionen.</p>
+              <p className="mt-3 text-sm text-muted-foreground">Bei Event- und Tourneeeinsätzen stellt der Auftraggeber die erforderliche Unterkunft auf eigene Kosten. An- und Abfahrt werden gemäß unseren veröffentlichten Konditionen zusätzlich berechnet.</p>
             </div>
           </div>
         </section>
