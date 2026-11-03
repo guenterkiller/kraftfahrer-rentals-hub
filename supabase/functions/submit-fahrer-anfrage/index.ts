@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
-import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import { renderAsync } from '../_shared/render-email.ts';
 import React from 'npm:react@18.3.1';
 import { AdminBookingNotification } from '../_shared/email-templates/admin-booking-notification.tsx';
 import { resolveTarif, MASCHINENBEDIENUNG_LABELS, isUeberfuehrung, UEBERFUEHRUNG_LABEL, UEBERFUEHRUNG_TARIF_TYPE, type Maschinenbedienung } from '../_shared/tarif-zuordnung.ts';
@@ -173,10 +173,14 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Unterkunftsregelung serverseitig validieren (nur bei relevanten Tarifen)
     const unterkunftRelevant = ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
+    const isEventTarif = tarif.tarif === 'event';
     const unterkunftRaw = String(requestData.unterkunft_option || '').trim();
     let unterkunftOption: UnterkunftOption | null = null;
     let unterkunftObergrenze: number | null = null;
-    if (unterkunftRelevant) {
+    if (isEventTarif) {
+      // Event-Tourneepauschale: Hotelübernachtungen organisiert und bezahlt der Auftraggeber (fest, keine Auswahl).
+      unterkunftOption = 'gestellt';
+    } else if (unterkunftRelevant) {
       if (!UNTERKUNFT_OPTIONSWERTE.includes(unterkunftRaw as UnterkunftOption)) {
         return new Response(JSON.stringify({
           error: 'Bitte Unterkunftsregelung auswählen',
@@ -210,7 +214,8 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     // Wochenend-/Feiertage im Einsatzzeitraum
-    const surchargeDays = listSurchargeDays(
+    // Event-Tourneepauschale: keine Wochenend-/Feiertagszuschläge.
+    const surchargeDays = isEventTarif ? [] : listSurchargeDays(
       String(requestData.einsatzbeginn || ''),
       String(requestData.einsatzende || requestData.einsatzbeginn || '')
     );
@@ -223,8 +228,8 @@ const handler = async (req: Request): Promise<Response> => {
     const confirmation = validateCustomerConfirmation(requestData);
     const newsletter = Boolean(requestData.newsletter);
     const billing_model = String(requestData.billing_model || 'agency');
-    const weekend_holiday_affected = Boolean(requestData.weekend_holiday_affected);
-    const weekend_holiday_acknowledged = Boolean(requestData.weekend_holiday_acknowledged);
+    const weekend_holiday_affected = isEventTarif ? false : Boolean(requestData.weekend_holiday_affected);
+    const weekend_holiday_acknowledged = isEventTarif ? false : Boolean(requestData.weekend_holiday_acknowledged);
     
     // Validate required fields
     const required = [

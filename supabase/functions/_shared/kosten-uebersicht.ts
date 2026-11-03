@@ -90,6 +90,7 @@ const TAGESSATZ: Record<string, number> = {
   lkw_ce: 349,
   fernfahrer: 450,
   baumaschine: 489,
+  event: 489,
 };
 
 const WOCHENPREIS = 1645;
@@ -101,6 +102,7 @@ const TARIF_NAME: Record<string, string> = {
   lkw_ce_woche: 'LKW-Fahrer CE – Wochenpreis',
   fernfahrer: 'Fernfahrer-Pauschale',
   baumaschine: 'Baumaschinenführer/Mischmeister/Spezialfahrzeuge',
+  event: 'Event-Tourneepauschale',
 };
 
 const round2 = (v: number) => Math.round(v * 100) / 100;
@@ -129,7 +131,8 @@ export const berechneKostenUebersicht = (
   const tagessatz = TAGESSATZ[tarifKey];
   if (!isWoche && !tagessatz) return null;
 
-  const surchargeDays = listSurchargeDays(startISO, endISO || startISO);
+  // Event-Tourneepauschale: keine Samstags-, Sonntags- oder Feiertagszuschläge.
+  const surchargeDays = tarifKey === 'event' ? [] : listSurchargeDays(startISO, endISO || startISO);
   const surchargeByDate = new Map(surchargeDays.map((d) => [d.date, d]));
 
   const positionen: KostenPosition[] = [];

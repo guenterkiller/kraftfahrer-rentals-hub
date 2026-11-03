@@ -126,6 +126,8 @@ export const CustomerBookingConfirmation = ({
   const ueberfuehrung = isUeberfuehrung || tarif?.tarif === 'ueberfuehrung';
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
+  // Event-Tourneepauschale: keine Mehrstunden- und keine Wochenend-/Feiertagszuschlagsabschnitte.
+  const istEvent = tarif?.tarif === 'event';
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
   const spezialanforderungen = eigenstaendigeAnforderungen(requirements, message);
 
@@ -362,7 +364,7 @@ export const CustomerBookingConfirmation = ({
         </Section>
       )}
 
-      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
+      {!ueberfuehrung && !istEvent && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Einsatzzeit und Mehrstunden</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
@@ -373,7 +375,7 @@ export const CustomerBookingConfirmation = ({
         </Text>
       </Section>)}
 
-      {!ueberfuehrung && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
+      {!ueberfuehrung && !istEvent && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
           Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird der Zuschlag automatisch auf den jeweiligen Tagessatz berechnet. Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.

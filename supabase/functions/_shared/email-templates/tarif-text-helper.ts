@@ -9,6 +9,8 @@ export const tarifTextByKey = (key?: string): TarifText | undefined => {
       return TARIF_TEXTE.lkw_ce_woche;
     case 'fernfahrer':
       return TARIF_TEXTE.fernfahrer;
+    case 'event':
+      return TARIF_TEXTE.event;
     case 'baumaschine':
       return TARIF_TEXTE.baumaschine;
     default:

@@ -22,6 +22,7 @@ export type TarifKey =
   | 'lkw_ce_woche'
   | 'fernfahrer'
   | 'baumaschine'
+  | 'event'
   | 'ueberfuehrung'
   | 'pruefung';
 
@@ -73,6 +74,20 @@ export const SPEZIALFAHRZEUG_BEISPIELE = [
 
 export const BAUMASCHINE_LABEL = 'Baumaschinenführer/Mischmeister/Spezialfahrzeuge';
 
+/** Die vier Eventtätigkeiten innerhalb der Spezialfahrzeug-Kategorie (eigenständiger Tourneetarif). */
+export const EVENT_TAETIGKEITEN = [
+  'Showtruck-Fahrer / Eventfahrer',
+  'Werbe- und Promotionfahrzeuge',
+  'Konzert-, Musical- und Veranstaltungstourneen',
+  'Transporte von Bühnen- und Veranstaltungstechnik',
+] as const;
+
+export const EVENT_LABEL = 'Event-Tourneepauschale';
+
+/** Erkennt eine der vier Eventtätigkeiten (exakte Bezeichnung in Tätigkeit oder gespeicherter Kategorie). */
+export const isEventTaetigkeit = (...texte: Array<string | undefined>): boolean =>
+  texte.some((t) => !!t && EVENT_TAETIGKEITEN.some((e) => t.includes(e)));
+
 const containsKeyword = (text: string): boolean => {
   const t = (text || '').toLowerCase();
   return SPEZIALFAHRZEUG_KEYWORDS.some((k) => t.includes(k));
@@ -116,6 +131,15 @@ const BAUMASCHINE_TARIF: Omit<TarifResult, 'reason'> = {
   needsReview: false,
 };
 
+const EVENT_TARIF: Omit<TarifResult, 'reason'> = {
+  tarif: 'event',
+  label: EVENT_LABEL,
+  netto: 489,
+  einheit: 'je tatsächlichem Einsatztag (feste Pauschale)',
+  mehrstunde: null,
+  needsReview: false,
+};
+
 export function resolveTarif(input: TarifInput): TarifResult {
   const kategorie = (input.kategorie || '').trim();
 
@@ -140,6 +164,13 @@ export function resolveTarif(input: TarifInput): TarifResult {
   const isFern = !!input.longDistance && !isBaumaschinenKategorie && !isWoche;
 
   // 1. Der Besteller hat den Tarif Baumaschinenführer / Mischmeister / Spezialfahrzeuge gewählt.
+  if (isBaumaschinenKategorie && isEventTaetigkeit(kategorie, input.taetigkeit)) {
+    return {
+      ...EVENT_TARIF,
+      reason:
+        'Vom Besteller gewählte Eventtätigkeit: eigenständige Event-Tourneepauschale ohne Mehrstunden und ohne Wochenend-/Feiertagszuschläge.',
+    };
+  }
   if (isBaumaschinenKategorie) {
     return {
       ...BAUMASCHINE_TARIF,

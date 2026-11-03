@@ -1,7 +1,7 @@
 // Tatsächliche Versandhandler; alle Datenbank- und E-Mail-Operationen sind simuliert.
 import { assertEquals, assert } from 'jsr:@std/assert@1';
 import * as React from 'npm:react@18.3.1';
-import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import { renderAsync } from '../_shared/render-email.ts';
 import { CUSTOMER_TERMS_VERSION } from '../_shared/customer-confirmation.ts';
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
 const EVENT_TAETIGKEITEN = [
@@ -111,6 +111,9 @@ for (const activity of EVENT_TAETIGKEITEN) {
       const stored = gespeicherteAuftraege[0];
       assertEquals(stored.fahrzeugtyp, `Baumaschinenführer / Mischmeister – ${activity}`);
       assertEquals(stored.tarif_netto, 489);
+      assertEquals(stored.tarif_type, 'event');
+      assertEquals(stored.tarif_mehrstunde_netto, null);
+      assertEquals(stored.unterkunft_option, 'gestellt');
       assertEquals((stored.kosten_uebersicht as { netto: number; ust: number; brutto: number }).netto, 978);
       assertEquals((stored.kosten_uebersicht as { netto: number; ust: number; brutto: number }).ust, 185.82);
       assertEquals((stored.kosten_uebersicht as { netto: number; ust: number; brutto: number }).brutto, 1163.82);

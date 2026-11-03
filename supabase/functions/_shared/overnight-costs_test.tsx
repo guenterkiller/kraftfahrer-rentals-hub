@@ -1,4 +1,4 @@
-import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import { renderAsync } from './render-email.ts';
 import * as React from 'npm:react@18.3.1';
 import { CustomerBookingConfirmation } from './email-templates/customer-booking-confirmation.tsx';
 import { AdminBookingNotification } from './email-templates/admin-booking-notification.tsx';
@@ -31,3 +31,20 @@ Deno.test('Tarif hat Vorrang vor altem Fernfahrer-Flag', () => {
   assert(overnightParagraphs('fernfahrer', false)[0] === OVERNIGHT_COSTS.fernfahrer[0], 'Fernfahrer-Key nicht erkannt');
   assert(overnightParagraphs(undefined, true)[0] === OVERNIGHT_COSTS.fernfahrer[0], 'Legacy-Rückfall fehlt');
 });
+for (const key of ['event']) {
+  Deno.test('Anfragevorlagen: Event-Tourneepauschale ohne Mehrstunden-/Zuschlagsabschnitt, Hotel durch Auftraggeber', async () => {
+    const tarif = { tarif: key, label: 'Event-Tourneepauschale', netto: 489, einheit: '', mehrstunde: null, needsReview: false, reason: '' };
+    const common = { customerName: 'TEST', driverType: 'Baumaschinenführer / Mischmeister – Werbe- und Promotionfahrzeuge', selectedActivity: 'Werbe- und Promotionfahrzeuge', timeframe: 'Testzeitraum', message: 'Testtätigkeit', tarif, isFernfahrerTarif: false };
+    const customer = (await renderAsync(React.createElement(CustomerBookingConfirmation, { ...common, location: 'Testort' }))).replace(/<[^>]*>/g, '');
+    const admin = (await renderAsync(React.createElement(AdminBookingNotification, { ...common, address: 'Testort', email: 'test@example.invalid', phone: '000', billingModel: 'agency', jobId: 'test' }))).replace(/<[^>]*>/g, '');
+    for (const text of [customer, admin]) {
+      assert(text.includes(OVERNIGHT_COSTS.event[0]), 'Hotelregel fehlt');
+      assert(text.includes('489,00 € netto pro tatsächlichem Einsatztag als feste Pauschale'), 'Pauschale fehlt');
+      assert(!text.includes('Mehrstunde:'), 'Mehrstunde darf nicht erscheinen');
+      assert(!text.includes('\uFFFD'), 'Zeichensalat');
+    }
+    assert(!customer.includes('Wochenend- und Feiertagszuschläge'), 'Zuschlagsabschnitt darf nicht erscheinen');
+    assert(!customer.includes('Einsatzzeit und Mehrstunden'), 'Mehrstundenabschnitt darf nicht erscheinen');
+    assert(customer.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge'), 'Zuschlagsausschluss fehlt');
+  });
+}

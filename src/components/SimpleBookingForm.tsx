@@ -83,7 +83,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const { toast } = useToast();
 
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
-  const weekendHoliday = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+  const weekendHolidayRaw = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
 
   // Tarifzuordnung ausschließlich anhand der vom Besteller gewählten Tarifkarte
   const tarif = resolveTarif({
@@ -100,6 +100,9 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const showUnterkunft =
     !isUeberfuehrung && ['lkw_ce', 'lkw_ce_woche', 'baumaschine'].includes(tarif.tarif);
   const showFernfahrerHinweis = !isUeberfuehrung && tarif.tarif === 'fernfahrer';
+  // Event-Tourneepauschale: Hotel fest durch Auftraggeber, keine Wochenend-/Feiertagszuschläge.
+  const isEventTarif = !isUeberfuehrung && tarif.tarif === 'event';
+  const weekendHoliday = isEventTarif ? { ...weekendHolidayRaw, affected: false } : weekendHolidayRaw;
 
   const obergrenzeParsed = parseUnterkunftObergrenze(unterkunftObergrenze);
   const obergrenzeValid = obergrenzeParsed !== null;
@@ -224,7 +227,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
         tarif_mehrstunde: tarif.mehrstunde,
         tarif_needs_review: tarif.needsReview,
         tarif_reason: tarif.reason,
-        unterkunft_option: showUnterkunft && unterkunftOption ? unterkunftOption : undefined,
+        unterkunft_option: isEventTarif ? 'gestellt' : showUnterkunft && unterkunftOption ? unterkunftOption : undefined,
         unterkunft_obergrenze:
           showUnterkunft && unterkunftOption === 'fahrer_organisiert' && obergrenzeValid
             ? obergrenzeParsed
@@ -1004,6 +1007,14 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         </p>
                       </div>
                     )}
+                  </fieldset>
+                )}
+
+                {/* Event-Tourneepauschale: Hotel fest durch den Auftraggeber */}
+                {isEventTarif && (
+                  <fieldset>
+                    <legend className="text-base font-medium">Übernachtung / Unterkunft</legend>
+                    <p className="text-sm text-foreground mt-1">{OVERNIGHT_COSTS.event[0]}</p>
                   </fieldset>
                 )}
 
