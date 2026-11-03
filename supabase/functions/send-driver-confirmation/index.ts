@@ -12,7 +12,7 @@ import { normalizeCommissionPct } from "../_shared/driver-contract-terms.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
 import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
 import { createOfferSnapshot, renderOfferLines } from '../_shared/binding-offer.ts';
-import { interpretSendResult } from '../approve-driver-and-send-jobs/contract-mail.ts';
+import { interpretSendResult } from '../_shared/mail-delivery.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 

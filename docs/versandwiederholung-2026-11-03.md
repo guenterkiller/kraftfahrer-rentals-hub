@@ -9,6 +9,7 @@
 - `supabase/functions/approve-driver-and-send-jobs/index.ts`: expliziter `retry_contract_email`-Aufruf in derselben Funktion. Kein Statusupdate, keine neue Einladung, keine Fahrerangebote, keine Administrator-E-Mail im Wiederholmodus. Annahme/Ablehnung und abgelaufene/fehlende Links verhindern Versand. Prüf- und Protokollfehler nicht ignorieren.
 - `src/components/admin/DriverContractStatus.tsx`: Wiederholaktion bei vorhandenem gültigem Link für bereits freigeschaltete, nicht gesperrte/deaktivierte Fahrer; konkrete Fehler-/Erfolgsmeldung.
 - `src/pages/Admin.tsx` und `src/lib/adminMailResult.ts`: alle drei Angebotsaktionen unterscheiden bestätigten Versand von übersprungenem Versand; Serverfehler verständlich ausgeben. Falschen Hinweis auf erneute Freischaltung ersetzt.
+- `supabase/functions/_shared/mail-delivery.ts`: bestehende Versandprüfung aus `contract-mail.ts` unverändert in gemeinsam bereitstellbaren Bereich verschoben; `contract-mail.ts` bleibt als Weiterexport erhalten.
 
 ## Prüfungen
 - 41 Deno-Tests der beiden Versandfunktionen bestanden, einschließlich 21 isolierter tatsächlicher Handler-Szenarien. SDK und Datenzugriffe ersetzt; keine echten Mails oder Datenänderungen.
