@@ -2,7 +2,7 @@
 // WORTGLEICH zu supabase/functions/_shared/driver-mediation-contract.ts halten (Test prüft Gleichheit).
 // Keine Imports – Datei wird auch vom Frontend-Test gelesen.
 
-export const MEDIATION_CONTRACT_VERSION = "2026-11-07";
+export const MEDIATION_CONTRACT_VERSION = "2026-10-25";
 export const CONTRACT_LINK_VALID_DAYS = 14;
 
 export const MEDIATION_ACCEPT_TEXT =
@@ -47,7 +47,7 @@ export const MEDIATION_CONTRACT_SECTIONS: { title: string; paragraphs: string[] 
     paragraphs: [
       "1. Der Fahrer stellt seine Rechnung nach Einsatzende an Fahrerexpress – bereits nach Abzug des vereinbarten Vermittlungsanteils. Bei längerfristigen Aufträgen kann ausdrücklich eine wöchentliche Abrechnung vereinbart werden.",
       "2. Der Fahrer sendet den Gewerbenachweis spätestens mit seiner ersten Rechnung an Fahrerexpress. Ohne vorliegenden Gewerbenachweis erfolgt keine Auszahlung.",
-      "3. Die Vergütung des Fahrers wird nach ordnungsgemäßer Durchführung des Einsatzes sowie Zugang einer prüffähigen Rechnung und des vereinbarten Leistungsberichts innerhalb von 14 Kalendertagen zur Zahlung fällig. Gesetzliche Zurückbehaltungsrechte bleiben unberührt. Der Zahlungseingang des Auftraggebers bei Fahrerexpress ist keine Voraussetzung für die Fälligkeit.",
+      "3. Die Auszahlung an den Fahrer erfolgt grundsätzlich nach Eingang der entsprechenden Zahlung des Bestellers bei Fahrerexpress.",
       "4. Individuelle Vereinbarungen müssen ausdrücklich dokumentiert werden.",
     ],
   },
@@ -61,7 +61,7 @@ export const MEDIATION_CONTRACT_SECTIONS: { title: string; paragraphs: string[] 
     title: "§ 6 Keine Direktabrechnung, Kundenschutz",
     paragraphs: [
       "1. Es darf nicht direkt mit dem Auftraggeber abgerechnet werden, und es dürfen keine eigenen Preisabsprachen mit Auftraggebern getroffen werden. Die gesamte Abrechnung läuft über Fahrerexpress.",
-      "2. Für Folgeaufträge, die der Fahrer innerhalb von zwölf Monaten nach Beendigung eines durch Fahrerexpress vermittelten Einsatzes unmittelbar mit demselben Auftraggeber vereinbart und die auf die ursprüngliche Vermittlung durch Fahrerexpress zurückzuführen sind, schuldet der Fahrer die im jeweiligen vermittelten Einzelauftrag vereinbarte Vermittlungsprovision auf die Nettovergütung des Folgeauftrags. Dies gilt nicht für Aufträge, die nachweislich unabhängig von der Vermittlung durch Fahrerexpress zustande gekommen sind, insbesondere aufgrund einer bereits zuvor bestehenden Geschäftsbeziehung.",
+      "2. Für Folgeaufträge mit demselben Auftraggeber, die auf die Vermittlung durch Fahrerexpress zurückgehen, ist die Provision nach § 3 für einen Zeitraum von 12 Monaten nach Ende des vermittelten Einsatzes ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über Fahrerexpress erfolgt. Nicht provisionspflichtig sind Direktaufträge mit anderen Auftraggebern, die nicht durch Fahrerexpress vermittelt wurden.",
       "3. Direkt vereinbarte Folgeaufträge im Sinne von Nr. 2 sind Fahrerexpress unaufgefordert mitzuteilen.",
     ],
   },
