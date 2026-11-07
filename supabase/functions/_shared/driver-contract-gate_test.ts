@@ -35,7 +35,7 @@ Deno.test("Vertrag ohne 2.500 €, ohne Festanstellung, mit 12 Monaten und § 7a
   const t = buildMediationContractText();
   assert(!t.includes("2.500"));
   assert(!t.includes("Festanstellung"));
-  assert(t.includes("12 Monaten nach Ende des vermittelten Einsatzes"));
+  assert(t.includes("innerhalb von zwölf Monaten nach Beendigung eines durch Fahrerexpress vermittelten Einsatzes"));
   assert(t.includes("§ 7a Haftung des Fahrers"));
   assert(t.includes("sofern er das Nichterscheinen oder die kurzfristige Absage zu vertreten hat"));
   assert(!t.includes("Etwaige Ansprüche des Auftraggebers bleiben hiervon unberührt"));
