@@ -198,6 +198,7 @@ export default function FahrerAntwortBestaetigen() {
             Link aus Ihrer E-Mail oder kontaktieren Sie uns.
           </p>
         ) : result ? (
+          <>
           <p className="text-foreground">
             {binding && result === "accepted"
               ? `Sie haben den Auftrag am ${new Date(bindingAcceptedAt ?? Date.now()).toLocaleString("de-DE")} zu den angezeigten Bedingungen verbindlich angenommen. Die Annahmebestätigung mit dem vollständigen Vertragstext erhalten Sie per E-Mail als PDF.`
@@ -217,6 +218,7 @@ export default function FahrerAntwortBestaetigen() {
               ))}
             </dl>
           )}
+          </>
         ) : loading ? (
           <p className="text-muted-foreground">Auftragsdaten werden geladen…</p>
         ) : (
