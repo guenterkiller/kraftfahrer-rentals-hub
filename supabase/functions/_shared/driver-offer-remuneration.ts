@@ -1,11 +1,19 @@
 // Private driver offers only (offer snapshot v3). Never import into customer mail/booking paths.
 // Fahrerhonorar = auftragsbezogener Fahrersatz × vergütete Einheiten; nie aus dem Kundenpreis abgeleitet.
 import { formatEuro } from './kosten-uebersicht.ts';
+import { listSurchargeDays } from './german-holidays.ts';
 
 type Data = Record<string, any>;
 export type DriverOfferView = { mode: 'binding' | 'interest'; pct: 20 | 25 | null; lines: [string, string][]; missing: string[] };
 
 /** Provisionssatz nach gespeicherter Tarifart; unbekannt/„Prüfung nötig“ → null (nie geraten). */
+/** Zuschlagszeile für neue Fahrerangebote: Fernfahrer- und Eventpauschale ohne Sa-/So-/Feiertagszuschläge; übrige Tarife unverändert. */
+export function driverSurchargeText(tarifType: unknown): string {
+  if (tarifType === 'event') return 'Keine – Event-Tourneepauschale ohne Mehrstunden und ohne Wochenend-/Feiertagszuschläge';
+  if (tarifType === 'fernfahrer') return 'Keine – Fernfahrerpauschale ohne Samstags-, Sonntags- oder Feiertagszuschläge und ohne Mehrstundenabrechnung';
+  return 'Samstag 25 %, Sonn- und Feiertag 50 %';
+}
+
 export function commissionPctForTarif(tarifType: unknown): 20 | 25 | null {
   switch (String(tarifType ?? '')) {
     case 'lkw_ce': case 'lkw_ce_woche': case 'fernfahrer': return 20;
@@ -39,8 +47,15 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
   if (assignment?.rate_type === 'weekly') {
     if (job?.tarif_type === 'fernfahrer') return days % 5 === 0 ? { units: days / 5, label: days === 5 ? 'Woche (5 abrechenbare Tage)' : 'Wochen (je 5 abrechenbare Tage)', unit: 'Woche' } : null;
     if (job?.tarif_type === 'lkw_ce_woche') {
-      const monday = new Date(`${day(assignment.start_date)}T00:00:00Z`).getUTCDay() === 1;
-      return monday && days === 5 ? { units: 1, label: 'Woche (Montag–Freitag)', unit: 'Woche' } : null;
+      // Nur vollständige Wochen Montag–Freitag (Beginn Montag, Ende Freitag) ohne Feiertag Mo–Fr sind eindeutig.
+      // Dazwischenliegende Wochenenden sind nicht im Wochensatz enthalten und ohne vereinbarten Fahrer-Tagessatz.
+      // Resttage, Wochenendbeginn/-ende oder Feiertage → kein eindeutiger Anspruch (null).
+      const s = day(assignment.start_date), e = day(assignment.end_date);
+      const monday = new Date(`${s}T00:00:00Z`).getUTCDay() === 1;
+      if (!monday || (days + 2) % 7 !== 0) return null;
+      if (listSurchargeDays(s, e).some((d: any) => { const wd = new Date(`${d.date}T00:00:00Z`).getUTCDay(); return wd >= 1 && wd <= 5; })) return null;
+      const weeks = (days + 2) / 7;
+      return { units: weeks, label: weeks === 1 ? 'Woche (Montag–Freitag)' : 'Wochen (je Montag–Freitag; dazwischenliegende Wochenenden nicht vergütet angesetzt)', unit: 'Woche' };
     }
   }
   return null;
@@ -64,7 +79,9 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   const none = 'Nicht bestimmt – keine Zahl angegeben';
   const lines: [string, string][] = [
     ['Vergütete Einheiten', complete ? `${units!.units} ${units!.label} (aus dem vereinbarten Zeitraum)` : 'Nicht eindeutig bestimmt'],
-    ['Stand-/Ruhetage', 'Nicht gesondert vereinbart – keine zusätzlichen Tage angesetzt'],
+    ['Stand-/Ruhetage', complete && job?.tarif_type === 'lkw_ce_woche' && units!.units > 1
+      ? 'Dazwischenliegende Samstage/Sonntage sind nicht im Wochensatz enthalten; kein Fahrer-Tagessatz vereinbart – ein Wochenendeinsatz ist nicht Gegenstand dieses Angebots und vorab gesondert zu vereinbaren'
+      : 'Nicht gesondert vereinbart – keine zusätzlichen Tage angesetzt'],
     ['Fahrerhonorar netto vor Provision (gesamter Auftrag)', complete ? `${formatEuro(rateCents! / 100)} je ${units!.unit} × ${units!.units} = ${formatEuro(feeCents! / 100)}` : none],
     ['Vermittlungsprovision', complete ? `${pct} % = ${formatEuro(commissionCents! / 100)} netto` : 'Nicht festgelegt – keine Zahl angegeben'],
     ['Verbleibende Nettovergütung (gesamter Auftrag, zzgl. provisionsfreier An-/Abfahrt)', complete ? formatEuro((feeCents! - commissionCents!) / 100) : none],

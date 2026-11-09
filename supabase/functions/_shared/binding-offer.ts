@@ -79,8 +79,8 @@ export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): 
   );
   if (typeof job.unterkunft_obergrenze === 'number') lines.push(['Kostenobergrenze je Nacht (€ netto)', `${formatEuro(job.unterkunft_obergrenze)} – Budget, keine automatische Kostenpauschale`]);
   lines.push(['Unterkunftsregelung', [UNTERKUNFT_GRUNDSATZ, ...overnightParagraphs(job.tarif_type)].join('\n')],
-    ['Mögliche Zusatzkosten', job.tarif_type === 'event' ? 'Event-Tourneepauschale: keine Mehrstunden und keine Samstags-, Sonntags- oder Feiertagszuschläge; keine vertragliche tägliche 8-Stunden-Grenze. Gesetzliche Arbeits-, Lenk- und Ruhezeiten sind uneingeschränkt einzuhalten. Hotelübernachtungen organisiert und bezahlt der Auftraggeber. An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.' : 'Tatsächlich anfallende Mehrstunden und einsatzbezogene Zuschläge sind provisionspflichtig; An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.'],
-    ['Zuschläge', 'Samstag 25 %, Sonn- und Feiertag 50 %']);
+    ['Mögliche Zusatzkosten', job.tarif_type === 'fernfahrer' ? 'Fernfahrerpauschale: keine Mehrstunden und keine Samstags-, Sonntags- oder Feiertagszuschläge. An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.' : job.tarif_type === 'event' ? 'Event-Tourneepauschale: keine Mehrstunden und keine Samstags-, Sonntags- oder Feiertagszuschläge; keine vertragliche tägliche 8-Stunden-Grenze. Gesetzliche Arbeits-, Lenk- und Ruhezeiten sind uneingeschränkt einzuhalten. Hotelübernachtungen organisiert und bezahlt der Auftraggeber. An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.' : 'Tatsächlich anfallende Mehrstunden und einsatzbezogene Zuschläge sind provisionspflichtig; An- und Abfahrtskosten sind provisionsfrei. Nicht bezifferte Kosten wurden nicht hinzugerechnet.'],
+    ['Zuschläge', driverSurchargeText(job.tarif_type)]);
   return lines;
 }
 
