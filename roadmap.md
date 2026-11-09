@@ -1,4 +1,7 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# Fernfahrer-Wochenpreis (09.11.2026, ausschließlich Vorschau)
+- [x] Exklusive Fernverkehr-Auswahl erhalten; je 5 abrechenbare Einsatztage exakt 2.121,06 € netto, zusätzliche Tage 450 €, keine Zuschläge oder Admin-/DB-Einstellung; vorbereitete Mailquellen angeglichen.
+- [x] 113 Frontend-Regeltests und 2 isolierte Bestätigungstests bestanden; Formular bei 1280/390 px: 8 Tage 3.471,06 € netto / 4.130,56 € brutto, Rückwechsel CE 2.933,75 €. Automatische Prüfung OK; keine echte Buchung/Mail oder Bereitstellung/Veröffentlichung. Bestehende ältere IONOS-/Admin-Liveabnahmen bleiben separat blockiert.
 # Vollständiges IONOS-Paket (Auftrag 03.11.2026)
 - [ ] Aktuelles Produktionspaket mit 22 Seiten erstellen und prüfen: kein dist vorhanden; manueller Projektbuild in dieser Arbeitsumgebung nicht zulässig, kein unterstützter Build-Export nachgewiesen.
 - [ ] Verwaltung angemeldet ohne echten Versand prüfen: external_unmanaged, keine verfügbare Administrator-Sitzung; vorhandene isolierte Prüfungen ersetzen Liveabnahme nicht.

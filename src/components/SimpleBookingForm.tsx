@@ -957,10 +957,10 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         />
                         <div>
                           <Label htmlFor="fernverkehr" className="font-semibold text-green-900">
-                            Fernfahrer-Pauschale (1 Fernverkehrs-Einsatztag)
+                            Fernfahrer-Pauschale (Fernverkehr / Übernachtung im LKW)
                           </Label>
                           <p className="text-xs text-green-800 mt-1">
-                            {TARIF_TEXTE.fernfahrer.priceLine} – {TARIF_TEXTE.fernfahrer.details[0]}
+                            {TARIF_TEXTE.fernfahrer.priceLine} – {TARIF_TEXTE.fernfahrer.details.join(' · ')}
                           </p>
                         </div>
                       </div>

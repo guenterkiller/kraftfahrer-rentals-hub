@@ -57,6 +57,7 @@ export const TARIF_TEXTE = {
     'netto je tatsächlichem Fernverkehrs-Einsatztag',
     [
       'Gilt unabhängig vom Wochentag: keine Samstags-, Sonntags- oder Feiertagszuschläge',
+      'Wochenpreis: 2.121,06 € netto für je 5 abrechenbare Einsatztage; zusätzliche Einsatztage je 450,00 € netto',
       'Pauschale ohne Mehrstundenabrechnung',
       'Hat bei Fernverkehr / Übernachtung im LKW Vorrang vor dem CE-Wochenpreis',
       'Zuzüglich An- und Abfahrt',
