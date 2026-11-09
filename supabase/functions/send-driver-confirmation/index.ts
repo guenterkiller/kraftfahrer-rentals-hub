@@ -152,7 +152,9 @@ serve(async (req) => {
         const linkBase = 'https://www.kraftfahrer-mieten.com';
         const url = `${linkBase}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
         const until = expiresAt.toLocaleString('de-DE', { timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-        bindingButtonHtml = `
+        const interestOnly = offerSnapshot.version === 3 && offerSnapshot.binding_allowed !== true;
+        bindingButtonHtml = interestOnly ? `
+          <p class="body-text" style="margin:4px 0 18px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>Noch keine verbindliche Annahme möglich:</strong> Die Vergütung ist noch nicht vollständig bestimmt (siehe „Antwortart“). Bei Interesse melden Sie sich bitte telefonisch oder per WhatsApp bei Fahrerexpress; Sie erhalten danach ein vollständiges Angebot.</p>` : `
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 8px 0;"><tr><td bgcolor="#16a34a" style="border-radius:6px;">
             <a href="${url}" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:6px;">Auftrag verbindlich annehmen</a>
           </td></tr></table>
