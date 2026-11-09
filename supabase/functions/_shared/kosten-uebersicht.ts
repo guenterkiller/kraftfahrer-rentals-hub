@@ -93,6 +93,10 @@ const TAGESSATZ: Record<string, number> = {
   event: 489,
 };
 
+/** Vorläufig freigegebener Fernfahrerpreis, bewusst ohne Rundung auf volle Euro. */
+export const FERNFAHRER_WOCHENPREIS = 2121.06;
+export const FERNFAHRER_WOCHENTAGE = 5;
+
 const WOCHENPREIS = 1645;
 const WOCHENPREIS_RESTTAG = 329; // 1.645 / 5
 const WOCHENPREIS_ZUSCHLAG_BASIS = 349; // geltender Tagessatz für Wochenend-/Feiertagseinsätze
@@ -111,7 +115,7 @@ export const tarifOhneZuschlaege = (tarifKey?: string | null): boolean =>
 
 /** Hinweis zur Fernfahrer-Pauschale vor der Kundenbestätigung (Formular und E-Mail wortgleich). */
 export const FERNFAHRER_PREIS_HINWEIS =
-  'Fernfahrer-Pauschale: 450,00 € netto je abrechenbarem Einsatztag – unabhängig vom Wochentag, ohne Samstags-, Sonntags- und Feiertagszuschläge und ohne Mehrstundenabrechnung. Ein CE-Wochenpreis wird bei Fernverkehr / Übernachtung im LKW nicht angewendet.';
+  'Fernfahrer-Pauschale: 2.121,06 € netto je 5 abrechenbaren Einsatztagen; bei weniger als 5 Einsatztagen sowie je zusätzlichem Einsatztag 450,00 € netto. Unabhängig vom Wochentag, ohne Samstags-, Sonntags- und Feiertagszuschläge und ohne Mehrstundenabrechnung. Ein CE-Wochenpreis wird bei Fernverkehr / Übernachtung im LKW nicht angewendet.';
 export const FERNFAHRER_WOCHENENDRUHE_HINWEIS =
   'Die Vorkalkulation zählt jeden Kalendertag des angefragten Zeitraums als Einsatztag. Ob Wochenenden oder einzelne Tage als Ruhetage (z. B. Wochenendruhe) nicht abgerechnet werden, wird vor verbindlicher Auftragserteilung mit Ihnen geklärt; abgerechnet werden nur tatsächlich geleistete Einsatztage.';
 
@@ -148,7 +152,24 @@ export const berechneKostenUebersicht = (
   const positionen: KostenPosition[] = [];
   const holidayCache: Record<number, Record<string, string>> = {};
 
-  if (isWoche) {
+  if (tarifKey === 'fernfahrer') {
+    // Jeder ausgewählte Tag zählt zunächst; keine Mo–Fr- oder Feiertagsausnahme.
+    const tage = Math.round((end.getTime() - start.getTime()) / 86400000) + 1;
+    const wochen = Math.floor(tage / FERNFAHRER_WOCHENTAGE);
+    const resttage = tage % FERNFAHRER_WOCHENTAGE;
+    if (wochen > 0) {
+      positionen.push({
+        label: `Fernfahrer-Wochenpreis: ${wochen} × 5 abrechenbare Einsatztage × ${formatEuro(FERNFAHRER_WOCHENPREIS)}`,
+        betrag: round2(wochen * FERNFAHRER_WOCHENPREIS),
+      });
+    }
+    if (resttage > 0) {
+      positionen.push({
+        label: `${resttage} ${wochen > 0 ? 'zusätzliche ' : ''}abrechenbare ${resttage === 1 ? 'Einsatztag' : 'Einsatztage'} × ${formatEuro(TAGESSATZ.fernfahrer)}`,
+        betrag: resttage * TAGESSATZ.fernfahrer,
+      });
+    }
+  } else if (isWoche) {
     // Mo–Fr ohne Feiertag: volle Wochen zu 1.645 €, Resttage zu 329 €.
     // Sa/So/Feiertage: separat zum geltenden Tagessatz (349 €) zzgl. Zuschlag.
     let werktage = 0;
