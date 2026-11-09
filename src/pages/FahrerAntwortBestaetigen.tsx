@@ -73,6 +73,7 @@ export default function FahrerAntwortBestaetigen() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(action === "accept");
   const [job, setJob] = useState<JobPreview | null>(null);
+  const [interestLines, setInterestLines] = useState<[string, string][] | null>(null);
   const [driverName, setDriverName] = useState<string>("");
   const [consent, setConsent] = useState<boolean>(false);
   const [binding, setBinding] = useState<BindingData | null>(null);
@@ -167,6 +168,7 @@ export default function FahrerAntwortBestaetigen() {
           status === "expired" ||
           status === "invalid"
         ) {
+          if (status === "remuneration_incomplete" && Array.isArray(data?.job_lines)) setInterestLines(data.job_lines);
           setResult(status);
         } else {
           setResult("error");
@@ -201,8 +203,20 @@ export default function FahrerAntwortBestaetigen() {
               ? `Sie haben den Auftrag am ${new Date(bindingAcceptedAt ?? Date.now()).toLocaleString("de-DE")} zu den angezeigten Bedingungen verbindlich angenommen. Die Annahmebestätigung mit dem vollständigen Vertragstext erhalten Sie per E-Mail als PDF.`
               : binding && result === "declined"
               ? "Sie haben die verbindliche Annahme abgelehnt. Fahrerexpress wurde informiert."
+              : result === "remuneration_incomplete" && interestLines
+              ? "Dieser Auftrag kann noch nicht verbindlich angenommen werden, weil die Vergütung noch nicht vollständig bestimmt ist. Bei Interesse melden Sie sich bitte bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285."
               : STATUS_TEXT[result]}
           </p>
+          {result === "remuneration_incomplete" && interestLines && (
+            <dl className="mt-4 grid grid-cols-1 gap-y-1 rounded-md border border-border bg-muted/40 p-4 text-sm text-foreground md:grid-cols-3 md:gap-x-4">
+              {interestLines.map(([k, v]) => (
+                <div key={k} className="contents">
+                  <dt className="font-medium">{k}</dt>
+                  <dd className="md:col-span-2 whitespace-pre-line break-words">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
         ) : loading ? (
           <p className="text-muted-foreground">Auftragsdaten werden geladen…</p>
         ) : (
