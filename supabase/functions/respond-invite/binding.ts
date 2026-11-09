@@ -76,13 +76,18 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   const job = frozen?.job ?? invite.job;
   const driver = invite.driver;
   const offerAssignment = frozen?.assignment ?? assignment;
-  const commission = normalizeCommissionPct(offerAssignment.commission_pct);
+  const isV3 = frozen?.version === 3;
+  // v3: Provision nach Tarifart aus der unveränderlichen Angebotskopie; v1/v2 unverändert.
+  const commission = isV3 && (frozen.commission_pct === 20 || frozen.commission_pct === 25)
+    ? frozen.commission_pct : normalizeCommissionPct(offerAssignment.commission_pct);
   // Version 1 keeps exactly the legacy fields; v2 serves the stored lines, never recalculates.
-  const jobLines = frozen?.version === 2 && frozen.job_lines ? frozen.job_lines : buildJobLines(job, offerAssignment);
+  const jobLines = (frozen?.version === 2 || isV3) && frozen.job_lines ? frozen.job_lines : buildJobLines(job, offerAssignment);
 
   // Eventaufträge: ohne vollständig ausgewiesene Vergütung (Auftragswert, 25 % Provision, Netto) keine Annahme.
-  if (!bindingAcceptanceAllowed(job, offerAssignment) && (ctx.intent === "load" || ctx.action === "accept")) {
-    return json({ status: "remuneration_incomplete", mode: "binding" }, ctx.intent === "load" ? 200 : 409);
+  // v3: nur vollständig bestimmte Konditionen erlauben eine verbindliche Annahme (sonst Interessenbekundung).
+  const allowed = isV3 ? frozen.binding_allowed === true : bindingAcceptanceAllowed(job, offerAssignment);
+  if (!allowed && (ctx.intent === "load" || ctx.action === "accept")) {
+    return json({ status: "remuneration_incomplete", mode: "binding", ...(isV3 ? { job_lines: jobLines } : {}) }, ctx.intent === "load" ? 200 : 409);
   }
 
   if (ctx.intent === "load") {
@@ -147,7 +152,7 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
       nachricht: job?.nachricht, besonderheiten: job?.besonderheiten,
     },
     job_lines: jobLines,
-    ...(frozen?.version === 2 ? { offer_snapshot: frozen } : {}),
+    ...(frozen?.version === 2 || isV3 ? { offer_snapshot: frozen } : {}),
   };
   const contentHash = await sha256Hex(stableStringify({
     driver_id: invite.driver_id, job_id: assignment.job_id, assignment_id: assignment.id,
