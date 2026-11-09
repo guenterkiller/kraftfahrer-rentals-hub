@@ -3,7 +3,7 @@ import { formatAssignmentPeriod } from './berlin-time.ts';
 import { normalizeCommissionPct } from './driver-contract-terms.ts';
 import { formatEuro, UNTERKUNFT_OPTIONEN, UNTERKUNFT_GRUNDSATZ, type UnterkunftOption } from './kosten-uebersicht.ts';
 import { TRAVEL_COSTS, overnightParagraphs } from './overnight-costs.ts';
-import { buildDriverOfferView } from './driver-offer-remuneration.ts';
+import { buildDriverOfferView, driverSurchargeText } from './driver-offer-remuneration.ts';
 
 export type OfferData = Record<string, any>;
 export type OfferSnapshot = { version: number; job: OfferData; assignment: OfferData; job_lines?: [string, string][]; binding_allowed?: boolean; commission_pct?: 20 | 25 | null };
