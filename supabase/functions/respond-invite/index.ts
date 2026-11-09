@@ -1,3 +1,5 @@
+import { tarifOhneZuschlaege } from '../_shared/kosten-uebersicht.ts';
+import { driverSurchargeText } from '../_shared/driver-offer-remuneration.ts';
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { isJobReleased, isDriverActive } from "../_shared/job-release.ts";
 import { driverHasOpenContract } from "../_shared/driver-contract-gate.ts";
@@ -248,6 +250,7 @@ const handler = async (req: Request): Promise<Response> => {
               fuehrerscheinklasse: jobRow.fuehrerscheinklasse,
               besonderheiten: jobRow.besonderheiten,
               nachricht: jobRow.nachricht,
+              tarif_type: jobRow.tarif_type ?? null,
             }
           : null,
         driver: driverRow
@@ -326,7 +329,9 @@ const handler = async (req: Request): Promise<Response> => {
           besonderheiten: jobRow.besonderheiten,
           nachricht: jobRow.nachricht,
         },
-        conditions: {
+        conditions: tarifOhneZuschlaege(jobRow.tarif_type)
+          ? { weekend_surcharge_pct: 0, holiday_sunday_surcharge_pct: 0, note: driverSurchargeText(jobRow.tarif_type) }
+          : {
           weekend_surcharge_pct: 25,
           holiday_sunday_surcharge_pct: 50,
           note:

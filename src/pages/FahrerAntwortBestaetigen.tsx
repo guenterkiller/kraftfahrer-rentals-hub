@@ -54,6 +54,7 @@ type JobPreview = {
   fuehrerscheinklasse: string | null;
   besonderheiten: string | null;
   nachricht: string | null;
+  tarif_type?: string | null;
 };
 
 export default function FahrerAntwortBestaetigen() {
@@ -297,8 +298,13 @@ export default function FahrerAntwortBestaetigen() {
                   </p>
                 </div>
                 <div className="mt-3 rounded border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
-                  <strong>Konditionen:</strong> Wochenend- und Feiertagszuschläge
-                  gelten automatisch (Samstag 25 %, Sonn-/Feiertag 50 %). Details
+                  <strong>Konditionen:</strong>{" "}
+                  {job.tarif_type === "fernfahrer"
+                    ? "Fernfahrerpauschale ohne Samstags-, Sonntags- oder Feiertagszuschläge und ohne Mehrstundenabrechnung."
+                    : job.tarif_type === "event"
+                      ? "Event-Tourneepauschale ohne Mehrstunden und ohne Wochenend-/Feiertagszuschläge."
+                      : "Wochenend- und Feiertagszuschläge gelten automatisch (Samstag 25 %, Sonn-/Feiertag 50 %)."}{" "}
+                  Details
                   zu Vergütung und Vermittlungsanteil ergeben sich aus dem
                   Auftragsangebot vor Einsatzbeginn.
                 </div>
