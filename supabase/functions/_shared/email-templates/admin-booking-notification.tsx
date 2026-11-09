@@ -15,6 +15,8 @@ import {
   VORKALKULATION_HINWEIS,
   OFFENE_KOSTEN_HINWEIS,
   offenePositionen,
+  FERNFAHRER_PREIS_HINWEIS,
+  FERNFAHRER_WOCHENENDRUHE_HINWEIS,
 } from '../kosten-uebersicht.ts';
 
 interface AdminBookingNotificationProps {
@@ -231,6 +233,12 @@ export const AdminBookingNotification = ({
       <Section style={boxStyles.infoBox}>
         <Heading style={textStyles.heading3}>{VORKALKULATION_TITEL}</Heading>
         <Text style={textStyles.paragraph}>{VORKALKULATION_HINWEIS}</Text>
+        {tarif?.tarif === 'fernfahrer' && (
+          <>
+            <Text style={textStyles.paragraph}><strong>{FERNFAHRER_PREIS_HINWEIS}</strong></Text>
+            <Text style={textStyles.paragraph}>{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</Text>
+          </>
+        )}
         <table width="100%" cellPadding="0" cellSpacing="0">
           {kostenUebersicht.positionen.map((position) => (
             <tr key={position.label}>

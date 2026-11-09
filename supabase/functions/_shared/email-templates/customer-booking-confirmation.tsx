@@ -15,6 +15,8 @@ import {
   type KostenUebersicht,
   OBERGRENZE_LABEL,
   UNTERKUNFT_GRUNDSATZ,
+  FERNFAHRER_PREIS_HINWEIS,
+  FERNFAHRER_WOCHENENDRUHE_HINWEIS,
 } from '../kosten-uebersicht.ts';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
@@ -128,6 +130,9 @@ export const CustomerBookingConfirmation = ({
   const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
   // Event-Tourneepauschale: keine Mehrstunden- und keine Wochenend-/Feiertagszuschlagsabschnitte.
   const istEvent = tarif?.tarif === 'event';
+  // Fernfahrer-Pauschale: ebenfalls ohne Mehrstunden- und Wochenend-/Feiertagszuschläge.
+  const istFernfahrer = tarif?.tarif === 'fernfahrer';
+  const ohneZuschlaege = istEvent || istFernfahrer;
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
   const spezialanforderungen = eigenstaendigeAnforderungen(requirements, message);
 
@@ -217,6 +222,12 @@ export const CustomerBookingConfirmation = ({
           <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '0 0 10px 0' })}>
             {VORKALKULATION_HINWEIS}
           </Text>
+          {istFernfahrer && (
+            <>
+              <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', fontWeight: 'bold', margin: '0 0 6px 0' })}>{FERNFAHRER_PREIS_HINWEIS}</Text>
+              <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '0 0 10px 0' })}>{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</Text>
+            </>
+          )}
           <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
             {kostenUebersicht.positionen.map((p) => (
               <tr key={p.label}>
@@ -364,7 +375,7 @@ export const CustomerBookingConfirmation = ({
         </Section>
       )}
 
-      {!ueberfuehrung && !istEvent && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
+      {!ueberfuehrung && !ohneZuschlaege && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Einsatzzeit und Mehrstunden</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
           Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
@@ -375,7 +386,7 @@ export const CustomerBookingConfirmation = ({
         </Text>
       </Section>)}
 
-      {!ueberfuehrung && !istEvent && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
+      {!ueberfuehrung && !ohneZuschlaege && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
         <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
           Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird der Zuschlag automatisch auf den jeweiligen Tagessatz berechnet. Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
