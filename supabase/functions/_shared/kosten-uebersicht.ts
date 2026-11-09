@@ -105,6 +105,16 @@ const TARIF_NAME: Record<string, string> = {
   event: 'Event-Tourneepauschale',
 };
 
+/** Tarife ohne Samstags-, Sonntags- und Feiertagszuschläge (feste Pauschalen je abrechenbarem Einsatztag). */
+export const tarifOhneZuschlaege = (tarifKey?: string | null): boolean =>
+  tarifKey === 'event' || tarifKey === 'fernfahrer';
+
+/** Hinweis zur Fernfahrer-Pauschale vor der Kundenbestätigung (Formular und E-Mail wortgleich). */
+export const FERNFAHRER_PREIS_HINWEIS =
+  'Fernfahrer-Pauschale: 450,00 € netto je abrechenbarem Einsatztag – unabhängig vom Wochentag, ohne Samstags-, Sonntags- und Feiertagszuschläge und ohne Mehrstundenabrechnung. Ein CE-Wochenpreis wird bei Fernverkehr / Übernachtung im LKW nicht angewendet.';
+export const FERNFAHRER_WOCHENENDRUHE_HINWEIS =
+  'Die Vorkalkulation zählt jeden Kalendertag des angefragten Zeitraums als Einsatztag. Ob Wochenenden oder einzelne Tage als Ruhetage (z. B. Wochenendruhe) nicht abgerechnet werden, wird vor verbindlicher Auftragserteilung mit Ihnen geklärt; abgerechnet werden nur tatsächlich geleistete Einsatztage.';
+
 const round2 = (v: number) => Math.round(v * 100) / 100;
 
 export const formatEuro = (v: number): string =>
@@ -131,8 +141,8 @@ export const berechneKostenUebersicht = (
   const tagessatz = TAGESSATZ[tarifKey];
   if (!isWoche && !tagessatz) return null;
 
-  // Event-Tourneepauschale: keine Samstags-, Sonntags- oder Feiertagszuschläge.
-  const surchargeDays = tarifKey === 'event' ? [] : listSurchargeDays(startISO, endISO || startISO);
+  // Event-Tourneepauschale und Fernfahrer-Pauschale: keine Samstags-, Sonntags- oder Feiertagszuschläge.
+  const surchargeDays = tarifOhneZuschlaege(tarifKey) ? [] : listSurchargeDays(startISO, endISO || startISO);
   const surchargeByDate = new Map(surchargeDays.map((d) => [d.date, d]));
 
   const positionen: KostenPosition[] = [];
