@@ -12,6 +12,7 @@ import {
   berechneKostenUebersicht,
   UNTERKUNFT_OPTIONSWERTE,
   type UnterkunftOption,
+  tarifOhneZuschlaege,
 } from '../_shared/kosten-uebersicht.ts';
 
 const jsonCors = { ...corsHeaders, 'Content-Type': 'application/json' };
@@ -215,7 +216,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Wochenend-/Feiertage im Einsatzzeitraum
     // Event-Tourneepauschale: keine Wochenend-/Feiertagszuschläge.
-    const surchargeDays = isEventTarif ? [] : listSurchargeDays(
+    // Fernfahrer-Pauschale: ebenfalls keine Wochenend-/Feiertagszuschläge.
+    const ohneZuschlaege = tarifOhneZuschlaege(tarif.tarif);
+    const surchargeDays = ohneZuschlaege ? [] : listSurchargeDays(
       String(requestData.einsatzbeginn || ''),
       String(requestData.einsatzende || requestData.einsatzbeginn || '')
     );
@@ -228,8 +231,8 @@ const handler = async (req: Request): Promise<Response> => {
     const confirmation = validateCustomerConfirmation(requestData);
     const newsletter = Boolean(requestData.newsletter);
     const billing_model = String(requestData.billing_model || 'agency');
-    const weekend_holiday_affected = isEventTarif ? false : Boolean(requestData.weekend_holiday_affected);
-    const weekend_holiday_acknowledged = isEventTarif ? false : Boolean(requestData.weekend_holiday_acknowledged);
+    const weekend_holiday_affected = ohneZuschlaege ? false : Boolean(requestData.weekend_holiday_affected);
+    const weekend_holiday_acknowledged = ohneZuschlaege ? false : Boolean(requestData.weekend_holiday_acknowledged);
     
     // Validate required fields
     const required = [
