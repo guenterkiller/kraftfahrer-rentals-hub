@@ -1,4 +1,5 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { commissionPctForTarif } from '../_shared/driver-offer-remuneration.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -138,8 +139,8 @@ Deno.serve(async (req) => {
         status: 'assigned',
         rate_type: rateType,
         rate_value: rateValue,
-        // Event-Tourneepauschale: Fahrerprovision verbindlich 25 % (nur intern/Fahrer sichtbar).
-        commission_pct: (job as { tarif_type?: string } | null)?.tarif_type === 'event' || Number(commissionPct) === 25 ? 25 : 20,
+        // Provision automatisch nach Tarifart (CE/Fernfahrer 20 %, Spezial/Bau/Event/Überführung 25 %); sonst Adminauswahl.
+        commission_pct: commissionPctForTarif((job as { tarif_type?: string } | null)?.tarif_type) ?? (Number(commissionPct) === 25 ? 25 : 20),
         start_date: startDate || null,
         end_date: endDate || null,
         times_entered: timesEnteredFlag,

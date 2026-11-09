@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { loadAdminContact } from '@/lib/adminContact';
+import { commissionPctForTarif } from '@/lib/driverOfferCommission';
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -81,8 +82,9 @@ export function AdminAssignmentDialog({
         });
         
         setJobData(job);
-        // Event-Tourneepauschale: Sonderauftrag mit 25 % Provision vorbelegen (änderbar).
-        if (job.tarif_type === 'event') setCommissionPct("25");
+        // Provision automatisch nach Tarifart (serverseitig ebenso erzwungen).
+        const autoPct = commissionPctForTarif(job.tarif_type);
+        if (autoPct) setCommissionPct(String(autoPct) as "20" | "25");
         
         // Helper function to clean placeholder values
         const cleanValue = (value: string | null, fallback = "") => {
@@ -656,7 +658,7 @@ export function AdminAssignmentDialog({
 
           <div>
             <Label>{jobData?.tarif_type === "event" ? "Agenturprovision Fahrerexpress" : "Vermittlungsprovision"}</Label>
-            <Select disabled={jobData?.tarif_type === "event"} value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
+            <Select disabled={commissionPctForTarif(jobData?.tarif_type) !== null} value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="20">20 % – normaler Auftrag</SelectItem>
@@ -664,7 +666,9 @@ export function AdminAssignmentDialog({
               </SelectContent>
             </Select>
             <p className="mt-1 text-xs text-muted-foreground">
-              Wird dem Fahrer im Vertragstext zur verbindlichen Annahme angezeigt.
+              {commissionPctForTarif(jobData?.tarif_type) !== null
+                ? "Automatisch nach Tarifart festgelegt (CE/Fernfahrer 20 %, Spezialfahrzeuge/Baumaschinen/Event/Überführung 25 %). "
+                : ""}Wird dem Fahrer im Vertragstext zur verbindlichen Annahme angezeigt.
             </p>
           </div>
 

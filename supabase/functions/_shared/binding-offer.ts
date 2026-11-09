@@ -3,9 +3,10 @@ import { formatAssignmentPeriod } from './berlin-time.ts';
 import { normalizeCommissionPct } from './driver-contract-terms.ts';
 import { formatEuro, UNTERKUNFT_OPTIONEN, UNTERKUNFT_GRUNDSATZ, type UnterkunftOption } from './kosten-uebersicht.ts';
 import { TRAVEL_COSTS, overnightParagraphs } from './overnight-costs.ts';
+import { buildDriverOfferView } from './driver-offer-remuneration.ts';
 
 export type OfferData = Record<string, any>;
-export type OfferSnapshot = { version: number; job: OfferData; assignment: OfferData; job_lines?: [string, string][] };
+export type OfferSnapshot = { version: number; job: OfferData; assignment: OfferData; job_lines?: [string, string][]; binding_allowed?: boolean; commission_pct?: 20 | 25 | null };
 export const escapeOffer = (value: unknown) => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const known = (value: unknown, missing = 'Nicht erfasst – vor Einsatz abstimmen') => String(value ?? '').trim() || missing;
 const day = (value: unknown) => typeof value === 'string' && !isNaN(Date.parse(value)) ? value.slice(0, 10) : '';
@@ -83,9 +84,15 @@ export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): 
   return lines;
 }
 
+/** Neue Angebote (v3): Vergütung aus Fahrersatz × vergüteten Einheiten, Provision nach Tarifart. v1/v2 bleiben unverändert lesbar. */
 export function createOfferSnapshot(job: OfferData, assignment: OfferData): OfferSnapshot {
-  const copy = JSON.parse(JSON.stringify({ version: 2, job, assignment })) as OfferSnapshot;
-  copy.job_lines = buildCompleteOfferLines(copy.job, copy.assignment);
+  const copy = JSON.parse(JSON.stringify({ version: 3, job, assignment })) as OfferSnapshot;
+  const view = buildDriverOfferView(copy.job, copy.assignment);
+  const base = buildCompleteOfferLines(copy.job, copy.assignment).filter(([l]) =>
+    !/^(Fahrleistung:|Nettoauftragswert|Gesamtwert Fahrerdienstleistung|Agenturprovision|Vermittlungsanteil|Nettovergütung des|Verbleibende Fahrervergütung)/.test(l));
+  copy.job_lines = [...base, ...view.lines];
+  copy.binding_allowed = view.mode === 'binding';
+  copy.commission_pct = view.pct;
   return copy;
 }
 
