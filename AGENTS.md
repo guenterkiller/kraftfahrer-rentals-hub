@@ -25,5 +25,3 @@
 - Test-data purge only touches rows with the insert-time immutable `is_test` flag (email in `test_identities`) via `admin-purge-test-data` and service-role SQL functions whose transaction-local bypass the protection triggers honour only for flagged rows; jobs touching real drivers can only be archived silently. Why: real evidence stays protected.
 - Event tariff (`tarif_type='event'`) comes only from the four exact event labels: no overtime/surcharges, forced client accommodation, server-forced 25 %, binding acceptance only with fully computed pay (`bindingAcceptanceAllowed`). Why: other tariffs unchanged.
 - supabase/functions has its own AGENTS.md; read it before changing files there.
-
-- Fernfahrer weekly estimation groups every five billable days regardless of weekday in the mirrored cost modules; saved booking snapshots are never recalculated. Why: keep new form and prepared email estimates identical without altering historical evidence.

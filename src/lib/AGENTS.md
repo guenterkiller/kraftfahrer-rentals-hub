@@ -1,0 +1,1 @@
+- Fernfahrer weekly estimation groups every five billable days regardless of weekday in the mirrored cost modules; saved booking snapshots are never recalculated. Why: keep new form and prepared email estimates identical without altering historical evidence.
