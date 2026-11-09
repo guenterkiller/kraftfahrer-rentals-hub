@@ -1,4 +1,7 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+ # Fernfahrer-Wochenpreis (09.11.2026, ausschließlich Vorschau)
+- [ ] Exklusive Fernverkehr-Auswahl mit 2.121,06 € netto je 5 abrechenbaren Einsatztagen und 450 € je zusätzlichem Einsatztag umsetzen; keine Zuschläge, keine Admin-/DB-Einstellung.
+- [ ] Rechenregeln und Formular Desktop/Mobil ohne echte Buchung oder Mail prüfen; geänderte Dateien berichten, keine Bereitstellung/Veröffentlichung.
 # Vollständiges IONOS-Paket (Auftrag 03.11.2026)
 - [ ] Aktuelles Produktionspaket mit 22 Seiten erstellen und prüfen: kein dist vorhanden; manueller Projektbuild in dieser Arbeitsumgebung nicht zulässig, kein unterstützter Build-Export nachgewiesen.
 - [ ] Verwaltung angemeldet ohne echten Versand prüfen: external_unmanaged, keine verfügbare Administrator-Sitzung; vorhandene isolierte Prüfungen ersetzen Liveabnahme nicht.
