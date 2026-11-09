@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-// @ts-expect-error Node-Typen sind im App-Typecheck nicht eingebunden; Vitest läuft unter Node.
+// @ts-ignore Node-Typen sind je nach Typecheck-Konfiguration nicht eingebunden; Vitest läuft unter Node.
 import { readFileSync } from 'node:fs';
 import { TARIF_TEXTE } from '../tarifTexte';
 import { berechneKostenUebersicht, offenePositionen } from '../kostenUebersicht';
