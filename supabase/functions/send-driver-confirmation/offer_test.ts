@@ -20,7 +20,7 @@ Deno.test('Versandkopie bleibt trotz später geänderter Auftragsdaten unveränd
   const snapshot = createOfferSnapshot(mutable, assignment);
   mutable.company = 'GEÄNDERT'; mutable.kosten_uebersicht.netto = 1;
   assertEquals(snapshot.job.company, 'TEST GmbH'); assertEquals(snapshot.job.kosten_uebersicht.netto, 698);
-  assert(snapshot.job_lines?.some(([k,v]) => k.includes('Fahrervergütung') && v === '558,40 €'));
+  assert(snapshot.job_lines?.some(([k,v]) => k.startsWith('Verbleibende Nettovergütung') && v === '558,40 €'));
 });
 Deno.test('Nicht vereinbarte Fahrtkosten verändern Provisionsbasis und Vergütung nicht', () => {
   const result = remuneration({ ...job, unterkunft_obergrenze: 75 }, assignment);
