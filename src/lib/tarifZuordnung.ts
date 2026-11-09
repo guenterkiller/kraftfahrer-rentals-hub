@@ -161,7 +161,8 @@ export function resolveTarif(input: TarifInput): TarifResult {
 
   const isBaumaschinenKategorie = /baumaschin|mischmeister|spezialfahrzeug/i.test(kategorie);
   const isWoche = /wochenpreis/i.test(kategorie);
-  const isFern = !!input.longDistance && !isBaumaschinenKategorie && !isWoche;
+  // Fernverkehr / Übernachtung im LKW hat Vorrang vor der CE-Wochenpreis-Karte (Fernfahrer-Pauschale).
+  const isFern = !!input.longDistance && !isBaumaschinenKategorie;
 
   // 1. Der Besteller hat den Tarif Baumaschinenführer / Mischmeister / Spezialfahrzeuge gewählt.
   if (isBaumaschinenKategorie && isEventTaetigkeit(kategorie, input.taetigkeit)) {
@@ -189,6 +190,22 @@ export function resolveTarif(input: TarifInput): TarifResult {
     ? ' Interner Kontrollhinweis: Die Tätigkeitsbeschreibung nennt ein Spezialfahrzeug bzw. eine technische Anlage – Tarifauswahl des Bestellers bleibt unverändert gespeichert.'
     : '';
 
+  if (isFern) {
+    return {
+      tarif: 'fernfahrer',
+      label: 'Fernfahrer-Pauschale',
+      netto: 450,
+      einheit: 'je Fernverkehrs-Einsatztag',
+      mehrstunde: null,
+      needsReview: false,
+      internalConflict: keywordHit,
+      reason:
+        (isWoche
+          ? 'Fernverkehr / Übernachtung im LKW gewählt: Fernfahrer-Pauschale hat Vorrang vor dem CE-Wochenpreis.'
+          : 'Vom Besteller gewählter veröffentlichter Tarif: Fernfahrer-Pauschale.') + conflictNote,
+    };
+  }
+
   if (isWoche) {
     return {
       tarif: 'lkw_ce_woche',
@@ -199,19 +216,6 @@ export function resolveTarif(input: TarifInput): TarifResult {
       needsReview: false,
       internalConflict: keywordHit,
       reason: 'Vom Besteller gewählter veröffentlichter Tarif: LKW-Fahrer CE – Wochenpreis.' + conflictNote,
-    };
-  }
-
-  if (isFern) {
-    return {
-      tarif: 'fernfahrer',
-      label: 'Fernfahrer-Pauschale',
-      netto: 450,
-      einheit: 'je Fernverkehrs-Einsatztag',
-      mehrstunde: null,
-      needsReview: false,
-      internalConflict: keywordHit,
-      reason: 'Vom Besteller gewählter veröffentlichter Tarif: Fernfahrer-Pauschale.' + conflictNote,
     };
   }
 

@@ -55,7 +55,12 @@ export const TARIF_TEXTE = {
     'Fernfahrer-Pauschale',
     '450,00 €',
     'netto je tatsächlichem Fernverkehrs-Einsatztag',
-    ['Zuzüglich An- und Abfahrt sowie gegebenenfalls veröffentlichter Zuschläge'],
+    [
+      'Gilt unabhängig vom Wochentag: keine Samstags-, Sonntags- oder Feiertagszuschläge',
+      'Pauschale ohne Mehrstundenabrechnung',
+      'Hat bei Fernverkehr / Übernachtung im LKW Vorrang vor dem CE-Wochenpreis',
+      'Zuzüglich An- und Abfahrt',
+    ],
   ),
   baumaschine: build(
     'Baumaschinenführer/Mischmeister/Spezialfahrzeuge',

@@ -20,6 +20,9 @@ import { PWAInstallSuccessBox } from "@/components/PWAInstallSuccessBox";
 import { analyzeWeekendHoliday } from "@/lib/germanHolidays";
 import {
   berechneKostenUebersicht,
+  tarifOhneZuschlaege,
+  FERNFAHRER_PREIS_HINWEIS,
+  FERNFAHRER_WOCHENENDRUHE_HINWEIS,
   offenePositionen,
   formatEuro,
   UNTERKUNFT_OPTIONEN,
@@ -102,7 +105,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const showFernfahrerHinweis = !isUeberfuehrung && tarif.tarif === 'fernfahrer';
   // Event-Tourneepauschale: Hotel fest durch Auftraggeber, keine Wochenend-/Feiertagszuschläge.
   const isEventTarif = !isUeberfuehrung && tarif.tarif === 'event';
-  const weekendHoliday = isEventTarif ? { ...weekendHolidayRaw, affected: false } : weekendHolidayRaw;
+  // Fernfahrer-Pauschale: ebenfalls keine Wochenend-/Feiertagszuschläge.
+  const weekendHoliday = tarifOhneZuschlaege(isUeberfuehrung ? '' : tarif.tarif) ? { ...weekendHolidayRaw, affected: false } : weekendHolidayRaw;
 
   const obergrenzeParsed = parseUnterkunftObergrenze(unterkunftObergrenze);
   const obergrenzeValid = obergrenzeParsed !== null;
@@ -825,7 +829,11 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                       <Checkbox 
                         id="langstrecke" 
                         checked={longDistance}
-                        onCheckedChange={(checked) => setLongDistance(checked as boolean)}
+                        onCheckedChange={(checked) => {
+                          setLongDistance(checked as boolean);
+                          // Fernverkehr hat Vorrang vor dem CE-Wochenpreis: Auswahl auf Fernfahrer-Pauschale umstellen.
+                          if (checked && fahrzeugtyp === 'LKW CE Wochenpreis') setFahrzeugtyp('LKW CE');
+                        }}
                       />
                       <Label htmlFor="langstrecke">Langstreckenfahrten</Label>
                     </div>
@@ -1112,6 +1120,12 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                   <div className="rounded-lg border border-border bg-muted/30 p-4" aria-live="polite">
                     <h4 className="font-semibold mb-1">{VORKALKULATION_TITEL}</h4>
                     <p className="text-xs text-muted-foreground mb-3">{VORKALKULATION_HINWEIS}</p>
+                    {showFernfahrerHinweis && (
+                      <div className="mb-3 space-y-1" data-testid="fernfahrer-preis-hinweis">
+                        <p className="text-sm font-medium">{FERNFAHRER_PREIS_HINWEIS}</p>
+                        <p className="text-xs text-muted-foreground">{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</p>
+                      </div>
+                    )}
                     <table className="w-full text-sm">
                       <tbody>
                         {kostenUebersicht.positionen.map((p) => (

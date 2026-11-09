@@ -4,6 +4,7 @@ import { renderAsync } from '../_shared/render-email.ts';
 import React from 'npm:react@18.3.1';
 import { CustomerBookingConfirmation } from '../_shared/email-templates/customer-booking-confirmation.tsx';
 import { analyzeWeekendHoliday } from '../_shared/german-holidays.ts';
+import { tarifOhneZuschlaege } from '../_shared/kosten-uebersicht.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -102,7 +103,8 @@ const handler = async (req: Request): Promise<Response> => {
     // Maßgeblich ist der tatsächliche Einsatzzeitraum: wenn ISO-Daten vorliegen,
     // wird die Wochenend-/Feiertagserkennung serverseitig neu berechnet.
     const computed = einsatzbeginn ? analyzeWeekendHoliday(einsatzbeginn, einsatzende || einsatzbeginn) : undefined;
-    const affected = computed ? computed.affected : Boolean(weekend_holiday_affected);
+    // Event- und Fernfahrer-Pauschale: keine Wochenend-/Feiertagszuschläge.
+    const affected = tarifOhneZuschlaege(tarif?.tarif) ? false : computed ? computed.affected : Boolean(weekend_holiday_affected);
     const acknowledged = affected && Boolean(weekend_holiday_acknowledged);
     
     // Format date range
