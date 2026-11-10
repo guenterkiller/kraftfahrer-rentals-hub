@@ -131,3 +131,8 @@
 - [x] Kundenmails automatisiert geprüft: keine Verstöße. 140 Deno- + 125 Vitest-Prüfungen bestanden.
 - [x] Druckübersicht v2 (164 S.) und ionos-upload-fahrerexpress_v3.zip (113 Dateien, 22/22 Seiten).
 - [ ] GitHub main (13f3b35) ≠ Projektstand vor dieser Runde (8cd9681); Abgleich nach Rundenende durch Nutzer prüfen.
+
+# Fernverkehr-Klarstellung (10.11.2026)
+- [x] 450 €-Satz nur Fernverkehr, CE-Konflikt gesperrt, Wochenend-Kalendertage nicht automatisch vergütet; Tests, Druckübersicht v3, Serverfunktionen live.
+- [ ] MIAG-Auftrag: Tarifart in der Verwaltung auf Fernfahrer stellen und vergütete Tage festlegen – wartet auf Inhaber.
+- [ ] Website-Paket mit Dialogtext erst beim nächsten Upload durch Inhaber.
