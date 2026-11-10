@@ -105,18 +105,19 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
     ['4b', 'Fahrerangebot – CE Tag, vereinbarter Fahrersatz 300 € (verbindlich)', job('lkw_ce'), asg({ rate_value: 300 })],
     ['4c', 'Fahrerangebot – Baumaschine, vereinbarter Fahrersatz 420 € (25 %, verbindlich)', job('baumaschine'), asg({ rate_value: 420, end_date: '2026-11-17T00:00:00Z' })],
     ['4d', 'Fahrerangebot – Fernverkehr 8 vereinbarte Tage inkl. Wochenende (verbindlich)', job('fernfahrer'), asg({ end_date: '2026-11-23T00:00:00Z' })],
-    ['4e', 'Fahrerangebot – Fernverkehr ohne vereinbarten Fahrersatz (unverbindlich, kein Betrag)', job('fernfahrer'), asg({ rate_value: null })],
-    ['4f', 'Fahrerangebot – Einsatzort nicht erfasst (gesperrt: unverbindlich, kein Betrag)', job('lkw_ce', { einsatzort: null }), asg({ rate_value: 300 })],
+    ['4e', 'Verwaltungssperre – Fernverkehr ohne vereinbarten Fahrersatz', job('fernfahrer'), asg({ rate_value: null })],
+    ['4f', 'Verwaltungssperre – Einsatzort nicht erfasst', job('lkw_ce', { einsatzort: null }), asg({ rate_value: 300 })],
   ];
   const expected: Record<string, string> = { '4a': '1.800,00 €', '4b': '1.200,00 €', '4c': '630,00 €', '4d': '2.880,00 €' };
   for (const [nr, titel, j, a] of variants) {
     a.admin_note = agreementNote('TEST', { rate: Number(a.rate_value), unit: a.rate_type, units: nr === '4c' ? 2 : nr === '4d' ? 8 : 5, place: j.einsatzort ?? '', remunerationConfirmed: true, placeConfirmed: true });
     const issues = [...agreementErrors(j, a), ...buildDriverOfferView(j, a).missing];
     if (issues.length) {
-      mails.push({ nr, titel: nr === '4e' ? 'VERWALTUNG – Versand gesperrt: fehlender Fahrerhonorarsatz' : 'VERWALTUNG – Versand gesperrt: fehlender Einsatzort', empfaenger: 'Nur Verwaltung – KEINE Fahrer-Mail', ausloeser: 'Unvollständige Zuteilung', betreff: 'Kein Versand / kein Annahmelink', html: `<h2>Versand gesperrt</h2><ul>${issues.map((i) => `<li>${i}</li>`).join('')}</ul><p>Kein Ersatzangebot, keine Fahrer-Mail, kein persönlicher Link. Bestehende Angebote bleiben unverändert.</p>` });
-      assert(nr === '4e' || nr === '4f');
+      mails.push({ nr, titel: nr === '4e' ? 'ADMIN-VALIDIERUNGSFEHLER – fehlender Fahrerhonorarsatz (keine Fahrer-Mail)' : 'ADMIN-VALIDIERUNGSFEHLER – fehlender Einsatzort (keine Fahrer-Mail)', empfaenger: 'Nur Verwaltung (Fehlerhinweis im Zuteilungsdialog) – KEINE E-Mail an den Fahrer', ausloeser: 'Verwaltung → Zuteilen: Schaltfläche gesperrt; Server antwortet 422 ohne Versand', betreff: 'Keine E-Mail · kein Annahmelink · keine unverbindliche Anfrage', html: `<h2>ADMIN-VALIDIERUNGSFEHLER – Versand gesperrt</h2><ul>${issues.map((i) => `<li>${i}</li>`).join('')}</ul><p>Kein Ersatzangebot, keine Fahrer-Mail, kein persönlicher Link. Bestehende Angebote bleiben unverändert.</p>` });
+      assert(nr === '4e' || nr === '4f', `${nr}: unerwartete Sperre ${issues}`);
       continue;
     }
+    assert(nr !== '4e' && nr !== '4f', `${nr}: unvollständiges Angebot nicht gesperrt`);
     const s = createOfferSnapshot(j, a);
     const binding = s.binding_allowed === true;
     const zr = nr === '4d' ? '16.11.2026 – 23.11.2026' : nr === '4c' ? '16.11.2026 – 17.11.2026' : '16.11.2026 – 20.11.2026';
@@ -124,16 +125,14 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
     const fa = lines.find(([k]) => k === 'Fahrzeugart')?.[1];
     assert(fa === j.fahrzeugtyp, `${nr}: Fahrzeugart ${fa}`);
     if (nr === '4c') assert(fa === 'Baumaschinenführer' && !lines.some(([, v]) => /Sattelzug|Fernverkehr/.test(v)), '4c: falsche Tätigkeit');
-    if (nr === '4f') assert(lines.find(([k]) => k.startsWith('Einsatzort'))?.[1] === 'Nicht erfasst – vor Einsatz abstimmen');
-    const button = binding ? '<p><a href="https://www.kraftfahrer-mieten.com/fahrer-antwort-bestaetigen?action=accept&token=TEST-TOKEN" style="display:inline-block;padding:12px 20px;background:#16a34a;color:#fff;font-weight:700;border-radius:6px;text-decoration:none;">Auftrag verbindlich annehmen</a></p><p style="font-size:13px;">Die vollständigen Vertragsbedingungen werden auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>' : '<p><strong>Noch keine verbindliche Annahme möglich:</strong> Vergütung oder wesentliche Auftragsdaten sind noch nicht eindeutig bestimmt. Bitte melden Sie sich bei Interesse telefonisch.</p>';
-    const html = wrapDriverEmailHtml(`<h2>${binding ? 'VERBINDLICHES AUFTRAGSANGEBOT' : 'AUFTRAGSANFRAGE (UNVERBINDLICH)'}</h2><p>Hallo TEST Max Mustermann,<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>${renderShortOffer(lines)}${button}`, { subject: 'x', previewText: 'x', showUnsubscribe: false });
+    assert(binding && lines.some(([k]) => k === 'Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)') && !lines.some(([k, v]) => /nicht bestätigt|Nicht erfasst/.test(k + v)), `${nr}: Einsatzort nicht bestätigt`);
+    const button = '<p><a href="https://www.kraftfahrer-mieten.com/fahrer-antwort-bestaetigen?action=accept&token=TEST-TOKEN" style="display:inline-block;padding:12px 20px;background:#16a34a;color:#fff;font-weight:700;border-radius:6px;text-decoration:none;">Auftrag verbindlich annehmen</a></p><p style="font-size:13px;">Die vollständigen Vertragsbedingungen werden auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>';
+    const html = wrapDriverEmailHtml(`<h2>VERBINDLICHES AUFTRAGSANGEBOT</h2><p>Hallo TEST Max Mustermann,<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>${renderShortOffer(lines)}${button}`, { subject: 'x', previewText: 'x', showUnsubscribe: false });
     mails.push({ nr, titel, empfaenger: 'Fahrer (Kopie Verwaltung)', ausloeser: 'Verwaltung → Zuteilen → Zuweisen & Bestätigung senden', betreff: `Auftragsangebot – ${j.fahrzeugtyp} – ${j.einsatzort ?? 'Einsatzort nicht erfasst'} am …`, html });
     const x = text(html).replace(NET_LABEL, '');
     const euros = x.match(/[\d.]+,\d{2} €/g) ?? [];
-    if (expected[nr]) { assert(binding && euros.length === 1 && euros[0] === expected[nr], `${nr}: ${euros}`); }
-    else assert(!binding && euros.length === 0, `${nr}: ${euros}`);
+    assert(euros.length === 1 && euros[0] === expected[nr], `${nr}: ${euros}`);
     assert(!/450,00|349,00|489,00|300,00|420,00|1\.645|2\.121|9\.999|\b20 %|\b25 %|vor Provision/.test(x), `${nr}: interner Wert sichtbar`);
-    if (nr === '4f') assert(!binding && x.includes('Noch keine verbindliche Annahme möglich'), '4f: fehlender Einsatzort sperrt Annahme');
     if (nr === '4a') {
       const c = confirmationHtml('TEST Max Mustermann', '16.11.2026, 08:00:00', lines, 'TEST-HASH');
       mails.push({ nr: '5', titel: 'Annahmebestätigung an Fahrer (mit PDF-Anhang)', empfaenger: 'Fahrer (Kopie Verwaltung)', ausloeser: 'Fahrer bestätigt auf der Bestätigungsseite', betreff: 'Annahmebestätigung – verbindliche Auftragsannahme – TEST-Ort 12345 Musterstadt', html: c });
