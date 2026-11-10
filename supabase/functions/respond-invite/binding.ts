@@ -225,7 +225,7 @@ export function confirmationHtml(name: string, at: string, lines: [string, strin
     <p>Hallo ${esc(name)},</p>
     <p>Sie haben diesen Auftrag am <strong>${esc(at)}</strong> verbindlich angenommen.</p>
     ${renderShortOffer(lines)}
-    <p style="font-size:14px;">Die vollständigen Vertragsbedingungen und Ihre Zustimmung finden Sie im beigefügten PDF sowie unter <a href="https://www.kraftfahrer-mieten.com/fahrer-vertrag">Fahrer-Vertragsbedingungen</a>.</p>
+    <p style="font-size:14px;">Die vollständigen Vertragsbedingungen und Ihre Zustimmung finden Sie im beigefügten PDF.</p>
     <p style="font-size:12px;color:#6b7280;">Digitaler Fingerabdruck: ${esc(hash)}</p>
     <p style="font-size:14px;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p></div>`;
 }
