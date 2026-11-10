@@ -18,6 +18,9 @@ import {
   FERNFAHRER_WOCHENENDRUHE_HINWEIS,
 } from '../kosten-uebersicht.ts';
 
+export const FERNVERKEHR_UEBERNACHTUNG =
+  'Übernachtung im Führerhaus/LKW (vorbehaltlich der gesetzlich vorgeschriebenen Ruhezeiten); keine Hotelkosten.';
+
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
 const BEDINGUNGEN_URL = 'https://www.kraftfahrer-mieten.com/vermittlungsbedingungen';
 
@@ -127,7 +130,11 @@ export const CustomerBookingConfirmation = ({
   const row = (k: string, v: React.ReactNode) => (
     <tr key={k}><td style={{ ...cell, width: '40%' }} className="mobile-text"><strong>{k}:</strong></td><td style={cell} className="mobile-text">{v}</td></tr>
   );
-  const unterkunft = unterkunftOption
+  // Fernverkehr: Übernachtung im Führerhaus/LKW. "Keine Übernachtung erforderlich" wäre hier widersprüchlich;
+  // reine Anzeigekorrektur, es entstehen dadurch keine Hotelkosten.
+  const unterkunft = istFernfahrer && (!unterkunftOption || unterkunftOption === 'keine')
+    ? FERNVERKEHR_UEBERNACHTUNG
+    : unterkunftOption
     ? `${UNTERKUNFT_OPTIONEN[unterkunftOption]}${unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' ? ` ${OBERGRENZE_LABEL}: ${formatEuroKosten(unterkunftObergrenze)}` : ''}`
     : tarif?.tarif === 'event' ? 'Erforderliche Hotelübernachtungen organisiert und bezahlt der Auftraggeber.' : '';
 

@@ -145,3 +145,5 @@
 - [x] Kunden-Fernverkehrsmail: Einzeltag und vergünstigte Woche als getrennte Tarifoptionen; Tarife unverändert.
 - [x] Baumaschinen-Testdaten passend; Fernverkehr-Wochenende nicht pauschal gesperrt; Zuteilungsmail ohne Schweigen-gilt-als-bestätigt; keine erfundene Adresse.
 - [x] Tests, PDF v2, IONOS v5. GitHub-Abgleich nach Rundenende durch Nutzer zu prüfen.
+# Abschlussprüfung Fernverkehr-Unterkunft (10.11.2026)
+- [x] Kunden-Eingangsbestätigung Fernverkehr: Unterkunft „Übernachtung im Führerhaus/LKW (vorbehaltlich gesetzlicher Ruhezeiten); keine Hotelkosten" statt „Keine Übernachtung erforderlich"; nur Anzeige, keine Kosten. Tests CE Tag/Woche und Fahrerbetrag unabhängig vom Kundenpreis ergänzt; 152 Deno + 126 Vitest bestanden; Kurzübersicht v3 und IONOS-Paket v6.

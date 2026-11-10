@@ -50,6 +50,11 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
   assert(ff.t.includes('450,00 € netto je tatsächlichem Fernverkehrs-Einsatztag') && ff.t.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge') && !ff.t.includes('Samstag 25 %'));
   assert(ff.t.includes('Tarifoption Einzeltag') && ff.t.includes('Tarifoption Woche (vergünstigt)') && ff.t.includes('2.121,06 € netto für je 5 abrechenbare Einsatztage') && !ff.t.includes('2.250'), 'Fernverkehr-Tarifoptionen');
   assert(wo.t.includes('1.645,00 €') && !wo.t.includes('1.745'));
+  // Fernverkehr: Übernachtung im Führerhaus/LKW, kein Widerspruch, keine Hotelkosten.
+  assert(ff.t.includes('Übernachtung im Führerhaus/LKW (vorbehaltlich der gesetzlich vorgeschriebenen Ruhezeiten); keine Hotelkosten') && !ff.t.includes('Keine Übernachtung erforderlich') && !/Hotelbudget|Hotelkosten:/.test(ff.t), 'Fernverkehr-Unterkunft');
+  // CE Tag vs. CE Woche: jeweils nur der gewählte Tarif.
+  assert(ce.t.includes('349,00 €') && !ce.t.includes('1.645'), 'CE Tag zeigt keinen Wochenpreis');
+  assert(wo.t.includes('1.645,00 €') && !wo.t.includes('349,00 € netto je tatsächlichem Einsatztag'), 'CE Woche zeigt keinen Tagespreis');
   const bm = await kundenmail('1d', 'Eingangsbestätigung – Baumaschinenführer/Spezialfahrzeuge, Hotelbudget 75 €', 'baumaschine', 'Baumaschinenführer', false, { unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: 75 });
   assert(bm.t.includes('489,00 € netto je tatsächlichem Einsatztag') && bm.t.includes('75,00 €') && !bm.t.includes('90,00'));
   const ue = await kundenmail('1e', 'Eingangsbestätigung – LKW-Überführung', 'ueberfuehrung', 'LKW-Überführung', false);
@@ -57,7 +62,7 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
     assert(m.t.includes('noch keine Einsatzbestätigung') && m.t.includes('Vermittlungsbedingungen'));
-    assert(m.t.length < (m === ff ? 2800 : 2600), `zu lang: ${m.t.length}`);
+    assert(m.t.length < (m === ff ? 2900 : 2600), `zu lang: ${m.t.length}`);
   }
 });
 
@@ -119,6 +124,32 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
       assert((cx.match(/[\d.]+,\d{2} €/g) ?? []).length === 1 && !/Provisionssatz|\b20 %/.test(cx));
     }
   }
+});
+
+Deno.test('Kunden-Zuteilungsmitteilung: CE Tag und CE Woche zeigen nur den gewählten Kundentarif', () => {
+  const tag = text(buildCustomerAssignmentNotice({ job: job('lkw_ce'), driverName: 'TEST Max', driverPhone: '+49 000', zeitraum: 'x', einsatzort: 'TEST' }).html);
+  const woche = text(buildCustomerAssignmentNotice({ job: job('lkw_ce_woche'), driverName: 'TEST Max', driverPhone: '+49 000', zeitraum: 'x', einsatzort: 'TEST' }).html);
+  assert(tag.includes('349,00 €') && !tag.includes('1.645'));
+  assert(woche.includes('1.645,00 €') && !woche.includes('349,00 €'));
+});
+
+Deno.test('Fahrer-Endbetrag stammt nur aus dem manuell eingegebenen Fahrersatz, nie aus dem Kundenpreis', () => {
+  const net = (j: any, a: any) => {
+    const s = createOfferSnapshot(j, a);
+    return (shortOfferLines(s.job_lines!, s.binding_allowed === true, 'x').map(([, v]) => v).join(' ').match(/[\d.]+,\d{2} €/g) ?? []);
+  };
+  // Gleicher Fahrersatz, völlig andere Kundenkalkulation → identischer Fahrerbetrag.
+  const a1 = net(job('fernfahrer', { kosten_uebersicht: { netto: 2121.06 } }), asg());
+  const a2 = net(job('fernfahrer', { kosten_uebersicht: { netto: 99999 } }), asg());
+  assert(a1.length === 1 && a1[0] === '1.800,00 €' && a2[0] === '1.800,00 €', `${a1} / ${a2}`);
+  // Kundenwochenpreis 2.121,06 € ergibt KEINEN abgeleiteten Fahrerbetrag (2.121,06 × 0,8 = 1.696,85 €).
+  assert(!a1.includes('1.696,85 €'));
+  // Manuell geänderter Fahrersatz (400 €) bestimmt den Betrag: 400 × 5 × 0,8 = 1.600,00 €.
+  const m = net(job('fernfahrer'), asg({ rate_value: 400 }));
+  assert(m.length === 1 && m[0] === '1.600,00 €', `${m}`);
+  // CE-Woche-Kundenpreis 1.645 € wird nicht zum Fahrerbetrag (1.645 × 0,8 = 1.316,00 €).
+  const w = net(job('lkw_ce_woche', { kosten_uebersicht: { netto: 1645 } }), asg({ rate_type: 'weekly', rate_value: 1500 }));
+  assert(!w.includes('1.316,00 €'), `${w}`);
 });
 
 Deno.test('Stornierung an Fahrer: freigegebene Kurztexte', () => {
