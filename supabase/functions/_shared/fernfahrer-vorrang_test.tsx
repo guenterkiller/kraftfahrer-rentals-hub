@@ -22,10 +22,14 @@ Deno.test('Kunden-/Adminmail Fernfahrer: Preis-/Ruhetagshinweis, kein Zuschlags-
   const common = { customerName: 'TEST', driverType: tarif.label, timeframe: 'Testzeitraum', message: 'Test', tarif, isFernfahrerTarif: true, kostenUebersicht };
   const customer = decode(await renderAsync(React.createElement(CustomerBookingConfirmation, { ...common, location: 'Testort' })));
   const admin = decode(await renderAsync(React.createElement(AdminBookingNotification, { ...common, address: 'Testort', email: 'test@example.invalid', phone: '000', billingModel: 'agency', jobId: 'test' })));
+  assert(customer.includes('450,00 € netto je tatsächlichem Fernverkehrs-Einsatztag'), 'Kundenpreis fehlt');
+  assert(customer.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge'), 'Zuschlagsausschluss fehlt');
   for (const text of [customer, admin]) {
-    assert(text.includes(FERNFAHRER_PREIS_HINWEIS), 'Preishinweis fehlt');
     assert(text.includes(FERNFAHRER_WOCHENENDRUHE_HINWEIS), 'Ruhetagshinweis fehlt');
     assert(text.includes('3.471,06 €') && text.includes('4.130,56 €'), 'Summen fehlen');
+  }
+  for (const text of [admin]) {
+    assert(text.includes(FERNFAHRER_PREIS_HINWEIS), 'Preishinweis fehlt');
     assert(!text.includes('1.645'), 'Wochenpreis darf nicht erscheinen');
   }
   assert(!customer.includes('Wochenend- und Feiertagszuschläge'), 'Zuschlagsabschnitt darf nicht erscheinen');

@@ -127,7 +127,7 @@ export const CustomerBookingConfirmation = ({
   );
   const unterkunft = unterkunftOption
     ? `${UNTERKUNFT_OPTIONEN[unterkunftOption]}${unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' ? ` ${OBERGRENZE_LABEL}: ${formatEuroKosten(unterkunftObergrenze)}` : ''}`
-    : '';
+    : tarif?.tarif === 'event' ? 'Erforderliche Hotelübernachtungen organisiert und bezahlt der Auftraggeber.' : '';
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
