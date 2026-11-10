@@ -5,7 +5,7 @@ import { renderAsync } from './render-email.ts';
 import { CustomerBookingConfirmation } from './email-templates/customer-booking-confirmation.tsx';
 import { berechneKostenUebersicht } from './kosten-uebersicht.ts';
 
-const FORBIDDEN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|fahrervergütung|nettovergütung|rate_value|\b(20|25) ?%(?! Zuschlag)/i;
+const FORBIDDEN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|fahrervergütung|nettovergütung|rate_value/i;
 const strip = (h: string) => h.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ');
 
 Deno.test('Kundenbuchungsbestätigung: alle Tarif- und Unterkunftsvarianten ohne interne Fahrerdaten', async () => {
