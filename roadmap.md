@@ -152,6 +152,7 @@
 - [ ] Buchungsformular-Vorschau Fernverkehr zählt Kalendertage (wartet auf Freigabe, Bestandsschutz).
 
 # Versandsperre unvollständiger Fahrerangebote (10.11.2026)
-- [ ] Gemeinsame UI-/Serverprüfung für ausdrücklich vereinbarte Vergütungseinheiten und bestätigten konkreten Einsatzort; keine Ersatzanfrage, Bestand unverändert.
-- [ ] Isolierte Versand-, Wiederholungs- und Vergütungstests sowie gerenderte Druckübersicht aktualisieren.
-- [ ] GitHub-Abgleich und vollständiges IONOS-Paket prüfen; keine Veröffentlichung oder echten Daten-/Mailtests.
+- [x] Gemeinsame UI-/Serverprüfung: ausdrücklich bestätigte Rate, Einheit und vergütete Menge sowie konkreter bestätigter Einsatzort in bestehender Zuteilungsnotiz; vor Zuteilung/Token/Versand sperren, keine Ersatzmail, keine Bestandsänderung. Drei betroffene Funktionen bereitgestellt.
+- [x] 116 isolierte Servertests und 136 Website-Regeltests bestanden; beide geänderten Handler Deno-geprüft. Tatsächlicher Dialog bei 1280/390 px mit abgefangenen Testantworten durchgespielt; keine authentifizierte Liveabnahme (external_unmanaged). PDF/HTML v5 erstellt, alle 27 Druckseiten angesehen.
+- [ ] GitHub: main am Ende weiterhin 2485153633819551db77b730a43b9faa74ea52f4, neuer Quellstand noch nicht enthalten; Sync-Erfolg daher nicht bestätigt.
+- [ ] Neues vollständiges IONOS-Paket: kein aktuelles dist oder unterstützter Produktionsartefakt-Export verfügbar; manueller Projektbuild in dieser Umgebung nicht zulässig. Vorhandenes v7 enthält die neue Verwaltung nicht und darf nicht als aktualisiertes Paket ausgegeben werden. Nutzer-PowerShell-Build erst mit synchronisiertem Quellstand.
