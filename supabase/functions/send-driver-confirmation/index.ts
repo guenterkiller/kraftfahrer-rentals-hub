@@ -10,9 +10,11 @@ import {
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
 import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
+import { agreementErrors } from '../_shared/offer-readiness.ts';
+import { buildDriverOfferView } from '../_shared/driver-offer-remuneration.ts';
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
 import { escapeOffer } from '../_shared/binding-offer.ts';
-import { shortOfferLines, renderShortOffer } from './short-offer.ts';
+import { shortOfferLines, renderShortOffer, shortOfferNet } from './short-offer.ts';
 import { interpretSendResult } from '../_shared/mail-delivery.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -136,6 +138,12 @@ serve(async (req) => {
         expiresAt = computeBindingExpiry(new Date(), deadlineStartIso(assignment.start_date, (assignment as any).times_entered));
         token = generateToken();
       }
+      const issues = [...new Set([
+        ...agreementErrors(offerSnapshot.job, offerSnapshot.assignment),
+        ...buildDriverOfferView(offerSnapshot.job, offerSnapshot.assignment).missing,
+      ])];
+      if (offerSnapshot.binding_allowed !== true || !shortOfferNet(offerSnapshot.job_lines ?? [], true)) issues.push('Gespeicherte endgültige Netto-Gesamtvergütung fehlt.');
+      if (issues.length) return createErrorResponse('Versand gesperrt: ' + issues.join(' ') + (previous ? ' Das alte Angebot bleibt unverändert; eine bewusste neue Zuteilung ist erforderlich.' : ''), 422, corsHeaders);
       if (expiresAt.getTime() > Date.now()) {
         if (!previous) {
         const { error: invErr } = await supabase.from('assignment_invites').insert({
@@ -153,9 +161,7 @@ serve(async (req) => {
         const linkBase = 'https://www.kraftfahrer-mieten.com';
         const url = `${linkBase}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
         const until = expiresAt.toLocaleString('de-DE', { timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-        const interestOnly = offerSnapshot.version === 3 && offerSnapshot.binding_allowed !== true;
-        bindingButtonHtml = interestOnly ? `
-          <p class="body-text" style="margin:4px 0 18px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>Noch keine verbindliche Annahme möglich:</strong> Die Vergütung oder wesentliche Auftragsdaten sind noch nicht eindeutig bestimmt. Bei Interesse melden Sie sich bitte telefonisch oder per WhatsApp bei Fahrerexpress; Sie erhalten danach ein vollständiges Angebot.</p>` : `
+        bindingButtonHtml = `
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 8px 0;"><tr><td bgcolor="#16a34a" style="border-radius:6px;">
             <a href="${url}" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:6px;">Auftrag verbindlich annehmen</a>
           </td></tr></table>
@@ -174,9 +180,9 @@ serve(async (req) => {
     const h3 = (txt: string, color = '#0d2340') =>
       `<h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:${color};font-weight:700;">${txt}</h3>`;
 
-    const bindingAllowed = !(offerSnapshot.version === 3 && offerSnapshot.binding_allowed !== true);
+    const bindingAllowed = true;
     const innerHtml = `
-      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;">${bindingAllowed ? 'VERBINDLICHES AUFTRAGSANGEBOT' : 'AUFTRAGSANFRAGE (UNVERBINDLICH)'}</h2>
+      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;">VERBINDLICHES AUFTRAGSANGEBOT</h2>
       <p class="body-text" style="margin:0 0 16px 0;font-size:15px;color:#374151;">Hallo ${escapeOffer(driver.vorname)} ${escapeOffer(driver.nachname)},<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>
       ${sectionStart('#f8fafc')}
         ${renderShortOffer(shortOfferLines(offerSnapshot.job_lines ?? [], bindingAllowed, dateRange))}

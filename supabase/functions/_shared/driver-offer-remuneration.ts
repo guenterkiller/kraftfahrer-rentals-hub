@@ -3,6 +3,8 @@
 import { formatEuro } from './kosten-uebersicht.ts';
 import { listSurchargeDays } from './german-holidays.ts';
 
+import { readAgreement } from './offer-readiness.ts';
+
 type Data = Record<string, any>;
 export type DriverOfferView = { mode: 'binding' | 'interest'; pct: 20 | 25 | null; lines: [string, string][]; missing: string[] };
 
@@ -51,6 +53,19 @@ export function hasWeekend(assignment: Data): boolean {
 export function paidUnits(job: Data, assignment: Data): { units: number; label: string; unit: string } | null {
   const days = periodDays(assignment);
   if (!days) return null;
+  const agreed = readAgreement(assignment);
+  if (agreed) {
+    if (!Number.isFinite(agreed.units) || agreed.units <= 0) return null;
+    if (assignment.rate_type === 'daily') {
+      if (!Number.isInteger(agreed.units) || agreed.units > days) return null;
+      if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
+      return { units: agreed.units, label: 'vereinbarte vergütete Einsatztage', unit: 'Einsatztag' };
+    }
+    if (assignment.rate_type === 'hourly') return { units: agreed.units, label: 'vereinbarte vergütete Stunden', unit: 'Stunde' };
+    if (assignment.rate_type === 'weekly' && job?.tarif_type === 'fernfahrer') {
+      return Number.isInteger(agreed.units) && agreed.units * 5 <= days ? { units: agreed.units, label: 'vereinbarte vergütete Wochen (je 5 Einsatztage)', unit: 'Woche' } : null;
+    }
+  }
   if (assignment?.rate_type === 'daily') {
     // CE-Wochentarif schließt Wochenenden aus: Kalendertage inkl. Sa/So sind dann nicht automatisch vergütete Tage.
     if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
@@ -69,6 +84,7 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
       if (!monday || (days + 2) % 7 !== 0) return null;
       if (listSurchargeDays(s, e).some((d: any) => { const wd = new Date(`${d.date}T00:00:00Z`).getUTCDay(); return wd >= 1 && wd <= 5; })) return null;
       const weeks = (days + 2) / 7;
+      if (agreed && agreed.units !== weeks) return null;
       return { units: weeks, label: weeks === 1 ? 'Woche (Montag–Freitag)' : 'Wochen (je Montag–Freitag; dazwischenliegende Wochenenden nicht vergütet angesetzt)', unit: 'Woche' };
     }
   }
@@ -96,18 +112,18 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   if (job?.tarif_needs_review) missing.push('Tarifzuordnung noch zu prüfen');
   if (pct === null) missing.push('Tarifart ohne festgelegte Provisionsregel');
 
-  const complete = missing.length === 0;
-  const feeCents = complete ? rateCents! * units!.units : null;
-  const commissionCents = complete ? Math.round(feeCents! * pct! / 100) : null;
+  const complete = missing.length === 0 && rateCents !== null && units !== null && pct !== null;
+  const feeCents = complete && rateCents !== null && units ? Math.round(rateCents * units.units) : null;
+  const commissionCents = feeCents !== null && pct !== null ? Math.round(feeCents * pct / 100) : null;
   const none = 'Nicht bestimmt – keine Zahl angegeben';
   const lines: [string, string][] = [
-    ['Vergütete Einheiten', complete ? `${units!.units} ${units!.label} (aus dem vereinbarten Zeitraum${job?.tarif_type === 'fernfahrer' && assignment?.rate_type === 'daily' && hasWeekend(assignment) ? '; enthaltene Samstage/Sonntage sind als vergütete Fernverkehrs-Einsatztage angesetzt – nur so versenden, wenn vereinbart, sonst Zeitraum anpassen' : ''})` : 'Nicht eindeutig bestimmt'],
-    ['Stand-/Ruhetage', complete && job?.tarif_type === 'lkw_ce_woche' && units!.units > 1
+    ['Vergütete Einheiten', complete ? `${units?.units} ${units?.label} (${agreed ? 'aus ausdrücklich gespeicherten vergüteten Einheiten' : 'aus dem vereinbarten Zeitraum'}${!agreed && job?.tarif_type === 'fernfahrer' && assignment?.rate_type === 'daily' && hasWeekend(assignment) ? '; enthaltene Samstage/Sonntage sind als vergütete Fernverkehrs-Einsatztage angesetzt – nur so versenden, wenn vereinbart, sonst Zeitraum anpassen' : ''})` : 'Nicht eindeutig bestimmt'],
+    ['Stand-/Ruhetage', complete && job?.tarif_type === 'lkw_ce_woche' && units?.units > 1
       ? 'Dazwischenliegende Samstage/Sonntage sind nicht im Wochensatz enthalten; kein Fahrer-Tagessatz vereinbart – ein Wochenendeinsatz ist nicht Gegenstand dieses Angebots und vorab gesondert zu vereinbaren'
       : 'Nicht gesondert vereinbart – keine zusätzlichen Tage angesetzt'],
-    ['Fahrerhonorar netto vor Provision (gesamter Auftrag)', complete ? `${formatEuro(rateCents! / 100)} je ${units!.unit} × ${units!.units} = ${formatEuro(feeCents! / 100)}` : none],
-    ['Vermittlungsprovision', complete ? `${pct} % = ${formatEuro(commissionCents! / 100)} netto` : 'Nicht festgelegt – keine Zahl angegeben'],
-    ['Verbleibende Nettovergütung (gesamter Auftrag, zzgl. provisionsfreier An-/Abfahrt)', complete ? formatEuro((feeCents! - commissionCents!) / 100) : none],
+    ['Fahrerhonorar netto vor Provision (gesamter Auftrag)', complete ? `${formatEuro((rateCents ?? 0) / 100)} je ${units?.unit} × ${units?.units} = ${formatEuro((feeCents ?? 0) / 100)}` : none],
+    ['Vermittlungsprovision', complete ? `${pct} % = ${formatEuro((commissionCents ?? 0) / 100)} netto` : 'Nicht festgelegt – keine Zahl angegeben'],
+    ['Verbleibende Nettovergütung (gesamter Auftrag, zzgl. provisionsfreier An-/Abfahrt)', complete ? formatEuro(((feeCents ?? 0) - (commissionCents ?? 0)) / 100) : none],
     ['Antwortart', complete ? 'Verbindliche Annahme oder Ablehnung möglich' : `Nur unverbindliche Interessenbekundung – fehlend: ${missing.join('; ')}`],
   ];
   return { mode: complete ? 'binding' : 'interest', pct, lines, missing };

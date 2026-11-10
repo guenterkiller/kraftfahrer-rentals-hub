@@ -3,6 +3,7 @@ import { formatAssignmentPeriod } from './berlin-time.ts';
 import { normalizeCommissionPct } from './driver-contract-terms.ts';
 import { formatEuro, UNTERKUNFT_OPTIONEN, UNTERKUNFT_GRUNDSATZ, type UnterkunftOption } from './kosten-uebersicht.ts';
 import { TRAVEL_COSTS, overnightParagraphs } from './overnight-costs.ts';
+import { readAgreement } from './offer-readiness.ts';
 import { buildDriverOfferView, driverSurchargeText } from './driver-offer-remuneration.ts';
 
 export type OfferData = Record<string, any>;
@@ -90,6 +91,12 @@ export function createOfferSnapshot(job: OfferData, assignment: OfferData): Offe
   const view = buildDriverOfferView(copy.job, copy.assignment);
   const base = buildCompleteOfferLines(copy.job, copy.assignment).filter(([l]) =>
     !/^(Fahrleistung:|Nettoauftragswert|Gesamtwert Fahrerdienstleistung|Agenturprovision|Vermittlungsanteil|Nettovergütung des|Verbleibende Fahrervergütung)/.test(l));
+  if (readAgreement(copy.assignment)?.placeConfirmed === true) {
+    const placeIndex = base.findIndex(([label]) => label.startsWith('Einsatzort / Treffpunkt'));
+    if (placeIndex >= 0) base[placeIndex] = ['Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)', String(copy.job.einsatzort).trim()];
+    const addressIndex = base.findIndex(([label]) => label === 'Einsatzanschrift');
+    if (addressIndex >= 0) base[addressIndex] = ['Einsatzanschrift / Treffpunkt', String(copy.job.einsatzort).trim()];
+  }
   copy.job_lines = [...base, ...view.lines];
   copy.binding_allowed = view.mode === 'binding';
   copy.commission_pct = view.pct;
