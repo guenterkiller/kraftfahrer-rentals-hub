@@ -615,7 +615,7 @@ export function AdminAssignmentDialog({
                 <SelectContent>
                   <SelectItem value="hourly_custom">Stundensatz (individuell)</SelectItem>
                   <SelectItem value="daily_349">Tagessatz – LKW-Fahrer CE – 349,00 €</SelectItem>
-                  <SelectItem value="daily_450">Tagessatz – Fernfahrer-Pauschale – 450,00 €</SelectItem>
+                  <SelectItem value="daily_450">Tagessatz – nur Fernverkehr (Tarif Fernfahrer) – 450,00 € vor 20 % Provision</SelectItem>
                   <SelectItem value="daily_489">Tagessatz – Baumaschinenführer / Fahrmischerfahrer / Event-Tourneepauschale – 489,00 €</SelectItem>
                   <SelectItem value="daily_custom">Tagessatz (individuell)</SelectItem>
                   <SelectItem value="weekly_1645">Wochenpreis – LKW-Fahrer CE – 1.645,00 € (5 Einsatztage)</SelectItem>
