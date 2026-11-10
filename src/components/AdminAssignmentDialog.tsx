@@ -572,7 +572,7 @@ export function AdminAssignmentDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Abrechnungsart</Label>
+              <Label>Abrechnungseinheit (pro Stunde / Tag / Woche)</Label>
               <Select
                 value={billingPreset}
                 onValueChange={(value) => {
@@ -635,7 +635,7 @@ export function AdminAssignmentDialog({
                 min="0"
                 id="driver-rate"
               />
-              <p className="mt-1 text-xs text-muted-foreground">Auftragsbezogen frei änderbar. Kundenpreis bleibt unverändert; Vorgabewert wird nicht aus dem Kundenpreis abgeleitet.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Frei änderbar. Der Wert der Auswahl ist nur ein Vorschlag – bitte den mit dem Fahrer vereinbarten Satz eintragen. Der Kundenpreis bleibt unverändert.</p>
             </div>
           </div>
 
