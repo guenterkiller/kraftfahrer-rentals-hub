@@ -55,5 +55,5 @@ export function buildCustomerAssignmentNotice({ job, driverName, driverPhone, dr
   Mit freundlichen Grüßen
   Fahrerexpress-Agentur – Günter Killer`;
 
-  return { subject, html, text };
+  return { subject, html, text: text.replace(/^ +/gm, "") };
 }
