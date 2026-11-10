@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
-import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import { renderAsync } from '../_shared/render-email.ts';
+import { formatAssignmentPeriod } from '../_shared/berlin-time.ts';
 import * as React from 'npm:react@18.3.1';
 import { NoShowNotice } from '../_shared/email-templates/no-show-notice.tsx';
 import { verifyAdminAuth, createCorsHeaders, handleCorsPreflightRequest } from '../_shared/admin-auth.ts';
@@ -85,7 +86,7 @@ const handler = async (req: Request): Promise<Response> => {
     };
 
     // Generate email content with fee calculation
-    const subject = `No-Show-Mitteilung – Fahrer ist nicht erschienen (${formatDate(assignmentData.start_date || job.created_at)} / ${job.company || job.customer_name})`;
+    const subject = `Fahrer nicht erschienen – ${job.einsatzort || 'Ihr Einsatz'} (${formatDate(assignmentData.start_date || job.created_at)})`;
 
     const feeEur = assignmentData.no_show_fee_cents != null ? (assignmentData.no_show_fee_cents / 100).toFixed(2) : '150.00';
     const tier = assignmentData.no_show_tier || 'standard';
@@ -99,20 +100,14 @@ const handler = async (req: Request): Promise<Response> => {
       'standard': 'Standardpauschale'
     };
 
+    const zeitraum = formatAssignmentPeriod(assignmentData.start_date, assignmentData.end_date, assignmentData.times_entered) || job.zeitraum || '';
     const emailHtml = await renderAsync(
       React.createElement(NoShowNotice, {
         customerName: job.customer_name,
         company: job.company,
-        customerPhone: job.customer_phone,
-        customerEmail: job.customer_email,
         einsatzort: job.einsatzort,
-        zeitraum: job.zeitraum,
-        startDate: assignmentData.start_date,
-        endDate: assignmentData.end_date,
+        zeitraum,
         fahrzeugtyp: job.fahrzeugtyp,
-        fuehrerscheinklasse: job.fuehrerscheinklasse,
-        feeEur,
-        tierLabel: tierLabels[tier] || tier,
       })
     );
 

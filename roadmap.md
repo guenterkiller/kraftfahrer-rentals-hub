@@ -136,3 +136,8 @@
 - [x] 450 €-Satz nur Fernverkehr, CE-Konflikt gesperrt, Wochenend-Kalendertage nicht automatisch vergütet; Tests, Druckübersicht v3, Serverfunktionen live.
 - [ ] MIAG-Auftrag: Tarifart in der Verwaltung auf Fernfahrer stellen und vergütete Tage festlegen – wartet auf Inhaber.
 - [ ] Website-Paket mit Dialogtext erst beim nächsten Upload durch Inhaber.
+
+# Kurze operative Mails (10.11.2026)
+- [x] Kunden-Eingangsbestätigung, Zuteilung, No-Show, Fahrerangebot, Annahmebestätigung, Auftragsbenachrichtigung gekürzt; Tests + Kurzübersicht; Funktionen live.
+- [x] Windows-Build-Ursache (veraltete package-lock, Peer-Konflikt) behoben; Paket v4.
+- [ ] Upload IONOS durch Inhaber.

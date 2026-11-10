@@ -14,7 +14,11 @@ for (const key of ['lkw_ce', 'lkw_ce_woche', 'baumaschine', 'fernfahrer', 'ueber
     const common = { customerName: 'TEST', driverType: key, timeframe: 'Testzeitraum', message: 'Testtätigkeit', tarif, isFernfahrerTarif: false };
     const customer = await renderAsync(React.createElement(CustomerBookingConfirmation, { ...common, location: 'Testort' }));
     const admin = await renderAsync(React.createElement(AdminBookingNotification, { ...common, address: 'Testort', email: 'test@example.invalid', phone: '000', billingModel: 'agency', jobId: 'test' }));
-    for (const html of [customer, admin]) {
+    // Kundenmail ist bewusst kurz: Übernachtungsregeln nur per Link; vollständiger Hinweis bleibt in der Adminmail.
+    const ctext = customer.replace(/<[^>]*>/g, '');
+    for (const paragraph of [...OVERNIGHT_COSTS.standard, ...OVERNIGHT_COSTS.fernfahrer]) assert(!ctext.includes(paragraph), `Kundenmail enthält langen Übernachtungstext für ${key}`);
+    assert(ctext.includes('Vermittlungsbedingungen'), 'Link auf Vermittlungsbedingungen fehlt');
+    for (const html of [admin]) {
       const text = html.replace(/<[^>]*>/g, '').replace(/<!--.*?-->/g, '');
       for (const paragraph of overnightParagraphs(key)) assert(text.includes(paragraph), `Absatz fehlt für ${key}: ${paragraph}`);
       const other = key === 'fernfahrer' ? OVERNIGHT_COSTS.standard : OVERNIGHT_COSTS.fernfahrer;

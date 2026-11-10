@@ -6,8 +6,8 @@ import {
   handleCorsPreflightRequest,
   createErrorResponse,
 } from "../_shared/admin-auth.ts";
-import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
+import { buildCustomerAssignmentNotice } from "./notice.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -46,7 +46,7 @@ serve(async (req) => {
       .from("job_assignments")
       .select(`
         id, job_id, driver_id, start_date, end_date, times_entered,
-        job_requests:job_id ( id, customer_email, customer_name, einsatzort ),
+        job_requests:job_id ( id, customer_email, customer_name, company, einsatzort, tarif_type, tarif_needs_review ),
         fahrer_profile:driver_id ( id, vorname, nachname, email, telefon )
       `)
       .eq("id", assignment_id)
@@ -65,7 +65,6 @@ serve(async (req) => {
 
     const driverName = `${fp.vorname} ${fp.nachname}`.trim();
     const driverPhone = fp.telefon || "—";
-    const driverEmailLine = fp.email ? `E-Mail: ${fp.email}` : "";
     // Einsatzzeitraum in deutscher Ortszeit (Europe/Berlin), identisch zur Fahrermail:
     // mit erfasster Uhrzeit Datum + Uhrzeit; Altbestand ohne Uhrzeit nur Kalenderdatum mit Hinweis.
     const zeitraum = formatAssignmentPeriod(
@@ -75,82 +74,7 @@ serve(async (req) => {
     ) || "—";
     const einsatzort = jr?.einsatzort || "—";
 
-    const subject = "Fahrerinformation zu Ihrem Auftrag";
-    const inner = `
-      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">Sehr geehrte Damen und Herren,</p>
-      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        wir teilen Ihnen für den angefragten Einsatz folgenden selbstständigen Fahrer zu:
-      </p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f8fafc;border-left:4px solid #bb2c29;border-radius:4px;margin:0 0 18px 0;">
-        <tr><td style="padding:14px 16px;font-size:15px;line-height:1.6;color:#0d2340;" class="body-text">
-          <strong>Name:</strong> ${driverName}<br/>
-          <strong>Telefon:</strong> ${driverPhone}
-          ${fp.email ? `<br/><strong>E-Mail:</strong> ${fp.email}` : ""}
-        </td></tr>
-      </table>
-      <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Auftrag / Einsatz:</strong></p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;background:#f8fafc;border-left:4px solid #0d2340;border-radius:4px;margin:0 0 18px 0;">
-        <tr><td style="padding:14px 16px;font-size:15px;line-height:1.6;color:#0d2340;" class="body-text">
-          <strong>Einsatzzeitraum:</strong> ${zeitraum}<br/>
-          <strong>Einsatzort:</strong> ${einsatzort}
-        </td></tr>
-      </table>
-      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Die Kontaktdaten werden Ihnen zur unmittelbaren einsatzbezogenen Abstimmung übermittelt.
-      </p>
-      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Bitte prüfen Sie die mitgeteilten Daten unverzüglich. Sollten die Angaben nicht stimmen oder Sie der Zuteilung widersprechen wollen, teilen Sie uns dies bitte unverzüglich mit. Erfolgt kein unverzüglicher Widerspruch, gilt die Fahrerzuteilung als bestätigt.
-      </p>
-      <p style="margin:0 0 6px 0;font-size:15px;line-height:1.6;" class="body-text"><strong>Bitte beachten Sie:</strong></p>
-      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Fahrerexpress vermittelt den benannten selbstständigen Fahrer für den angefragten Einsatz. Die Durchführung erfolgt eigenverantwortlich durch den selbstständigen Fahrer. Fahrerexpress erbringt keine Arbeitnehmerüberlassung und stellt keine eigenen Arbeitnehmer zur Verfügung. Die Benennung erfolgt nach aktueller Rückmeldung des Fahrers zu seiner Verfügbarkeit und Einsatzbereitschaft; eine Zusage für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung ist damit nicht verbunden. Sollte der Fahrer aus Krankheit, höherer Gewalt oder sonstigen unvorhersehbaren Gründen ausfallen, bemüht sich Fahrerexpress nach Möglichkeit um eine Ersatzlösung. Eine jederzeitige Ersatzgestellung wird nicht zugesagt. Fahrerexpress haftet nicht für mittelbare Schäden, entgangenen Gewinn, Produktionsausfall, Vertragsstrafen oder Folgeschäden des Auftraggebers, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit von Fahrerexpress beruhen.
-      </p>
-      <p style="margin:0 0 14px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Sollte sich vor oder während des Einsatzes eine Änderung, Verzögerung oder ein Ausfall ergeben, bitten wir um unverzügliche Mitteilung, damit der Sachverhalt geprüft und das weitere Vorgehen abgestimmt werden kann.
-      </p>
-      <p style="margin:0 0 18px 0;font-size:15px;line-height:1.6;" class="body-text">
-        Diese Information ändert nichts an den vereinbarten Konditionen und begründet keine über die bestehende Auftragsabstimmung hinausgehende Zusage.
-      </p>
-      <p style="margin:0;font-size:15px;line-height:1.6;" class="body-text">
-        Mit freundlichen Grüßen<br/><br/>
-        Fahrerexpress-Agentur<br/>
-        Günter Killer
-      </p>
-    `;
-    const html = wrapDriverEmailHtml(inner, {
-      subject,
-      previewText: "Fahrerinformation zu Ihrem Auftrag",
-      showUnsubscribe: false,
-    });
-
-    const text =
-`Sehr geehrte Damen und Herren,
-
-wir teilen Ihnen für den angefragten Einsatz folgenden selbstständigen Fahrer zu:
-
-Name: ${driverName}
-Telefon: ${driverPhone}
-${driverEmailLine}
-
-Auftrag / Einsatz:
-Einsatzzeitraum: ${zeitraum}
-Einsatzort: ${einsatzort}
-
-Die Kontaktdaten werden Ihnen zur unmittelbaren einsatzbezogenen Abstimmung übermittelt.
-
-Bitte prüfen Sie die mitgeteilten Daten unverzüglich. Sollten die Angaben nicht stimmen oder Sie der Zuteilung widersprechen wollen, teilen Sie uns dies bitte unverzüglich mit. Erfolgt kein unverzüglicher Widerspruch, gilt die Fahrerzuteilung als bestätigt.
-
-Bitte beachten Sie:
-Fahrerexpress vermittelt den benannten selbstständigen Fahrer für den angefragten Einsatz. Die Durchführung erfolgt eigenverantwortlich durch den selbstständigen Fahrer. Fahrerexpress erbringt keine Arbeitnehmerüberlassung und stellt keine eigenen Arbeitnehmer zur Verfügung. Die Benennung erfolgt nach aktueller Rückmeldung des Fahrers zu seiner Verfügbarkeit und Einsatzbereitschaft; eine Zusage für den tatsächlichen Einsatzantritt, die durchgehende Verfügbarkeit oder eine störungsfreie Durchführung ist damit nicht verbunden. Sollte der Fahrer aus Krankheit, höherer Gewalt oder sonstigen unvorhersehbaren Gründen ausfallen, bemüht sich Fahrerexpress nach Möglichkeit um eine Ersatzlösung. Eine jederzeitige Ersatzgestellung wird nicht zugesagt. Fahrerexpress haftet nicht für mittelbare Schäden, entgangenen Gewinn, Produktionsausfall, Vertragsstrafen oder Folgeschäden des Auftraggebers, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit von Fahrerexpress beruhen.
-
-Sollte sich vor oder während des Einsatzes eine Änderung, Verzögerung oder ein Ausfall ergeben, bitten wir um unverzügliche Mitteilung, damit der Sachverhalt geprüft und das weitere Vorgehen abgestimmt werden kann.
-
-Diese Information ändert nichts an den vereinbarten Konditionen und begründet keine über die bestehende Auftragsabstimmung hinausgehende Zusage.
-
-Mit freundlichen Grüßen
-
-Fahrerexpress-Agentur
-Günter Killer`;
+    const { subject, html, text } = buildCustomerAssignmentNotice({ job: jr, driverName, driverPhone, driverEmail: fp.email, zeitraum, einsatzort });
 
     const result = await resend.emails.send({
       from: "Fahrerexpress <info@kraftfahrer-mieten.com>",

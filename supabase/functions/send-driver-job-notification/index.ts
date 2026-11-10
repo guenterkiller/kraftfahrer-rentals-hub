@@ -131,13 +131,6 @@ const handler = async (req: Request): Promise<Response> => {
     const innerHtml = `
       <h2 class="body-text" style="margin:0 0 14px 0;font-size:20px;line-height:1.25;color:#0d2340;font-weight:700;">Neuer Fahrerauftrag verfügbar</h2>
 
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f8fafc" style="background-color:#f8fafc;border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
-        <tr><td style="padding:16px 18px;">
-          <h3 class="body-text" style="margin:0 0 8px 0;font-size:16px;color:#0d2340;font-weight:700;">Agenturabrechnung – Vertrag mit Fahrerexpress</h3>
-          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">Dieser Auftrag wird über Fahrerexpress abgerechnet. Sie erbringen die Leistung als selbstständiger Fahrer im Vertragsverhältnis mit Fahrerexpress.</p>
-        </td></tr>
-      </table>
-
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e5e7eb;border-collapse:separate;border-radius:6px;margin:0 0 18px 0;">
         <tr><td style="padding:18px 20px;">
           <h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:#0d2340;font-weight:700;">Auftragsdetails</h3>
@@ -149,7 +142,6 @@ const handler = async (req: Request): Promise<Response> => {
           <p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Führerscheinklasse:</strong> ${job.fuehrerscheinklasse}</p>
           ${job.besonderheiten ? `<p class="body-text" style="margin:4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Besonderheiten:</strong> ${job.besonderheiten}</p>` : ''}
           <p class="body-text" style="margin:12px 0 4px 0;font-size:15px;line-height:1.55;color:#374151;"><strong>Einsatztätigkeiten und Anforderungen:</strong><br>${job.nachricht}</p>
-          <p class="body-text" style="margin:4px 0 0 0;font-size:13px;line-height:1.5;color:#6b7280;font-style:italic;">Die nachfolgende Auftragsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.</p>
         </td></tr>
       </table>
 
@@ -159,7 +151,7 @@ const handler = async (req: Request): Promise<Response> => {
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fffbeb" style="background-color:#fffbeb;border:1px solid #f59e0b;border-collapse:separate;border-radius:6px;margin:0 0 14px 0;">
             <tr><td style="padding:12px 14px;text-align:left;">
               <p class="body-text" style="margin:0;font-size:14px;line-height:1.55;color:#78350f;">
-                <strong>Hinweis:</strong> Bei der Vergabe dieses Fahrauftrags werden vorrangig selbstständige Fahrer aus der Nähe des Einsatzortes berücksichtigt. Erst wenn sich keine geeigneten regionalen Fahrer melden, werden Interessenbekundungen aus anderen Regionen berücksichtigt. Bitte bekunden Sie Ihr Interesse nur, wenn Sie den Einsatzort wirtschaftlich erreichen können.
+                <strong>Hinweis:</strong> Fahrer aus der Nähe des Einsatzortes werden bevorzugt.
               </p>
             </td></tr>
           </table>
@@ -173,15 +165,7 @@ const handler = async (req: Request): Promise<Response> => {
         </td></tr>
       </table>
 
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e5e7eb;border-collapse:separate;border-radius:6px;margin:0 0 14px 0;">
-        <tr><td style="padding:16px 18px;">
-          <p class="body-text" style="margin:0 0 6px 0;font-size:15px;line-height:1.55;color:#0d2340;"><strong>Vergütung &amp; Vermittlungsanteil</strong></p>
-          <p class="body-text" style="margin:0;font-size:15px;line-height:1.6;color:#374151;">
-            Vergütung und Vermittlungsanteil ergeben sich aus dem konkreten Auftragsangebot vor Einsatzbeginn.
-            Die geltenden Fahrer-Vermittlungsbedingungen wurden Ihnen per E-Mail übermittelt.
-          </p>
-        </td></tr>
-      </table>
+      <p class="body-text" style="margin:0 0 10px 0;font-size:14px;line-height:1.55;color:#374151;">Ihre Nettovergütung und die Vertragsbedingungen erhalten Sie mit dem persönlichen Auftragsangebot vor Einsatzbeginn.</p>
 
       <p class="body-text" style="margin:8px 0 0 0;font-size:12px;color:#6b7280;">
         Diese E-Mail wurde automatisch generiert. Bei Fragen: info@kraftfahrer-mieten.com
@@ -189,8 +173,8 @@ const handler = async (req: Request): Promise<Response> => {
     `;
 
     const emailHtml = wrapDriverEmailHtml(innerHtml, {
-      subject: `Neuer Auftrag: ${job.fahrzeugtyp} - Agenturabrechnung`,
-      previewText: `Neuer Auftrag in ${job.einsatzort} – Agenturabrechnung über Fahrerexpress`,
+      subject: `Neuer Auftrag: ${job.fahrzeugtyp} – ${job.einsatzort}`,
+      previewText: `Neuer Auftrag in ${job.einsatzort}`,
       unsubscribeUrl,
       showUnsubscribe: !!unsubscribeUrl,
     });
@@ -199,7 +183,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResult = await resend.emails.send({
       from: 'Fahrerexpress <info@kraftfahrer-mieten.com>',
       to: [driver.email],
-      subject: `🚛 Neuer Auftrag: ${job.fahrzeugtyp} - Agenturabrechnung`,
+      subject: `Neuer Auftrag: ${job.fahrzeugtyp} – ${job.einsatzort}`,
       html: emailHtml
     });
 
