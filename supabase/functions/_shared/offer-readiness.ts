@@ -18,6 +18,7 @@ export function concretePlace(value: unknown): boolean {
   if (typeof value !== 'string') return false;
   const place = value.trim();
   return place.length >= 12 && /\d/.test(place) && /[a-zäöüß]{3}/i.test(place)
+    && (/[a-zäöüß]{3,}\s+\d{1,4}\b/i.test(place) || /(?:tor|ladepunkt|zufahrt|halle|terminal)\s*[a-z]?\d+/i.test(place))
     && !/nicht (erfasst|bestätigt|bekannt)|unbestätigt|nachzutragen|nach (absprache|vereinbarung)|wird .*bekannt|siehe |^[-—–]+$|bitte wählen|noch (offen|zu klären)/i.test(place);
 }
 
