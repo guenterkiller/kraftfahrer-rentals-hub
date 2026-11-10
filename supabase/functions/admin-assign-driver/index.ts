@@ -1,5 +1,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { commissionPctForTarif } from '../_shared/driver-offer-remuneration.ts';
+import { agreementErrors } from '../_shared/offer-readiness.ts';
+import { buildDriverOfferView, commissionPctForTarif } from '../_shared/driver-offer-remuneration.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,9 +37,10 @@ Deno.serve(async (req) => {
 
     // JWT is already validated by Supabase (verify_jwt = true in config.toml)
     const token = authHeader.replace('Bearer ', '');
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     
+    if (!supabaseUrl || !supabaseServiceKey) throw new Error('Serverkonfiguration fehlt');
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get user from the JWT
@@ -74,7 +76,7 @@ Deno.serve(async (req) => {
     // Check if job exists
     const { data: job, error: jobError } = await supabase
       .from('job_requests')
-      .select('id, status, tarif_type')
+      .select('id, status, tarif_type, tarif_needs_review, einsatzort')
       .eq('id', jobId)
       .single();
     
@@ -127,6 +129,12 @@ Deno.serve(async (req) => {
         }
       );
     }
+
+    const candidate = { rate_type: rateType, rate_value: rateValue, start_date: startDate, end_date: endDate, admin_note: note };
+    const issues = [...new Set([...agreementErrors(job, candidate), ...buildDriverOfferView(job, candidate).missing])];
+    if (issues.length) return new Response(JSON.stringify({ error: 'Versand gesperrt: ' + issues.join(' '), missing: issues }), {
+      status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
 
     // Create assignment
     const assignmentId = crypto.randomUUID();

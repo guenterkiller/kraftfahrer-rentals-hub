@@ -5,6 +5,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { FunctionsHttpError } from "@supabase/supabase-js";
+import { agreementNote, agreementErrors } from "@/lib/offerReadiness";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -33,6 +36,9 @@ export function AdminAssignmentDialog({
   const [billingPreset, setBillingPreset] = useState<string>("hourly_custom");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [paidCount, setPaidCount] = useState("");
+  const [payConfirmed, setPayConfirmed] = useState(false);
+  const [placeConfirmed, setPlaceConfirmed] = useState(false);
   const [note, setNote] = useState("");
   const [attachPdf, setAttachPdf] = useState(false);
   const [commissionPct, setCommissionPct] = useState<"20" | "25">("20");
@@ -57,6 +63,9 @@ export function AdminAssignmentDialog({
   // Load drivers and job data when dialog opens
   useEffect(() => {
     if (open) {
+      setPaidCount("");
+      setPayConfirmed(false);
+      setPlaceConfirmed(false);
       loadDrivers();
       loadJobData();
     }
@@ -227,7 +236,28 @@ export function AdminAssignmentDialog({
     }
   };
 
+  const previewAssignment = {
+    rate_type: rateType, rate_value: Number(rateValue),
+    start_date: startDate ? `${startDate}T00:00:00.000Z` : null,
+    end_date: endDate ? `${endDate}T00:00:00.000Z` : null,
+    admin_note: agreementNote(note, { rate: Number(rateValue), unit: rateType, units: Number(paidCount), place: einsatzort.trim(), remunerationConfirmed: payConfirmed, placeConfirmed }),
+  };
+  const previewJob = { ...(jobData ?? {}), einsatzort };
+  const offerView = buildDriverOfferView(previewJob, previewAssignment);
+  const offerErrors = [...new Set([...agreementErrors(previewJob, previewAssignment), ...offerView.missing])];
+  const functionError = async (error: any, fallback: string) => {
+    if (error instanceof FunctionsHttpError) {
+      const details = await error.context.json().catch(() => null);
+      return details?.error || details?.message || fallback;
+    }
+    return error?.message || fallback;
+  };
+
   const handleAssignAndSend = async () => {
+    if (offerErrors.length) {
+      toast({ title: "Versand gesperrt", description: offerErrors.join(" "), variant: "destructive" });
+      return;
+    }
     if (!selectedDriverId || !rateValue) {
       toast({
         title: "Eingabefehler",
@@ -283,12 +313,12 @@ export function AdminAssignmentDialog({
           startDate: startIso,
           endDate: endIso,
           timesEntered: false,
-          note: note || null
+          note: previewAssignment.admin_note
         }
       });
       
       if (assignError || !assignResult?.success) {
-        throw new Error(assignError?.message || assignResult?.error || 'Zuweisung fehlgeschlagen');
+        throw new Error(await functionError(assignError, assignResult?.error || 'Zuweisung fehlgeschlagen'));
       }
 
       const assignmentId = assignResult.assignmentId;
@@ -311,7 +341,8 @@ export function AdminAssignmentDialog({
           }
         });
         
-        if (error) throw error;
+        if (error) throw new Error(await functionError(error, 'Fahrerangebot nicht versendet'));
+        if (data?.ok !== true || data?.skipped) throw new Error(data?.message || 'Kein neuer Fahrer-Versand bestätigt');
 
         // 4) Kundenmail zur Fahrerzuteilung
         try {
@@ -499,14 +530,18 @@ export function AdminAssignmentDialog({
               </div>
               
               <div>
-                <Label htmlFor="einsatzort" className="text-sm">Einsatzort / Treffpunkt</Label>
+                <Label htmlFor="einsatzort" className="text-sm">Tatsächliche Einsatzanschrift / Treffpunkt *</Label>
                 <Input
                   id="einsatzort"
                   value={einsatzort}
-                  onChange={(e) => setEinsatzort(e.target.value)}
+                  onChange={(e) => { setEinsatzort(e.target.value); setPlaceConfirmed(false); }}
                   placeholder="Arbeitsort oder Treffpunkt eingeben"
                   className="mt-1"
                 />
+                <div className="flex items-start gap-2 mt-2">
+                  <Checkbox id="place-confirmed" checked={placeConfirmed} onCheckedChange={(v) => setPlaceConfirmed(v === true)} />
+                  <Label htmlFor="place-confirmed">Mit dem Auftraggeber geprüft und als tatsächlicher Einsatzort bestätigt (nicht ungeprüft die Firmenanschrift).</Label>
+                </div>
               </div>
               
               {!hasContactWay && (
@@ -577,6 +612,8 @@ export function AdminAssignmentDialog({
                 value={billingPreset}
                 onValueChange={(value) => {
                   setBillingPreset(value);
+                  setPayConfirmed(false);
+                  setPaidCount("");
                   switch (value) {
                     case "hourly_custom":
                       setRateType("hourly");
@@ -629,9 +666,9 @@ export function AdminAssignmentDialog({
               <Input
                 type="number"
                 value={rateValue}
-                onChange={(e) => setRateValue(e.target.value)}
+                onChange={(e) => { setRateValue(e.target.value); setPayConfirmed(false); }}
                 placeholder={rateType === "daily" ? "349.00" : rateType === "weekly" ? "1645.00" : "25.00"}
-                step="0.50"
+                step="0.01"
                 min="0"
                 id="driver-rate"
               />
@@ -675,26 +712,20 @@ export function AdminAssignmentDialog({
             </p>
           </div>
 
-          {(() => {
-            const dateRe = /^\d{4}-\d{2}-\d{2}$/;
-            const view = buildDriverOfferView(jobData ?? {}, {
-              rate_type: rateType, rate_value: parseFloat(rateValue),
-              start_date: dateRe.test(startDate) ? `${startDate}T00:00:00.000Z` : null,
-              end_date: dateRe.test(endDate) ? `${endDate}T00:00:00.000Z` : null,
-            });
-            const pick = (prefix: string) => view.lines.find(([l]) => l.startsWith(prefix))?.[1] ?? '';
-            return (
-              <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-1" aria-live="polite" data-testid="driver-net-preview">
-                <p className="font-semibold">Vorschau Fahrerangebot (wird beim Versand unveränderlich gespeichert)</p>
-                <p><span className="text-muted-foreground">Vergütete Einheiten:</span> {pick('Vergütete Einheiten')}</p>
-                <p><span className="text-muted-foreground">Honorar vor Provision:</span> {pick('Fahrerhonorar netto')}</p>
-                <p><span className="text-muted-foreground">Provision (automatisch nach Tarifart):</span> {pick('Vermittlungsprovision')}</p>
-                <p className="font-semibold">Fahrer-Nettovergütung gesamter Auftrag nach Provision: {view.mode === 'binding' ? pick('Verbleibende Nettovergütung') : '– kein Betrag –'}</p>
-                {view.mode !== 'binding' && <p className="text-destructive">Keine verbindliche Annahme möglich, nur Interessenbekundung. Fehlend: {view.missing.join('; ')}</p>}
-                <p className="text-xs text-muted-foreground">Bereits versendete oder angenommene Angebote bleiben unverändert. Eine Änderung danach erfordert eine neue Zuteilung mit neuem Angebot und erneuter Bestätigung durch den Fahrer.</p>
-              </div>
-            );
-          })()}
+          <div className="space-y-2">
+            <Label htmlFor="paid-units">Tatsächlich vereinbarte vergütete {rateType === 'daily' ? 'Einsatztage' : rateType === 'weekly' ? 'Wochen' : 'Stunden'} *</Label>
+            <Input id="paid-units" type="number" min="0" step={rateType === 'hourly' ? '0.25' : '1'} value={paidCount} onChange={(e) => { setPaidCount(e.target.value); setPayConfirmed(false); }} />
+            <div className="flex items-start gap-2">
+              <Checkbox id="pay-confirmed" checked={payConfirmed} onCheckedChange={(v) => setPayConfirmed(v === true)} />
+              <Label htmlFor="pay-confirmed">Fahrerhonorar, Einheit und Anzahl sind ausdrücklich mit dem Fahrer vereinbart. Kalendertage sind nicht automatisch vergütete Tage.</Label>
+            </div>
+          </div>
+          <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-1" aria-live="polite" data-testid="driver-net-preview">
+            <p className="font-semibold">Vorschau Fahrerangebot</p>
+            {offerView.lines.filter(([label]) => /^(Vergütete Einheiten|Fahrerhonorar netto|Vermittlungsprovision|Verbleibende Nettovergütung)/.test(label)).map(([label, value]) => <p key={label}><span className="text-muted-foreground">{label}:</span> {value}</p>)}
+            {offerErrors.length > 0 && <div role="alert" className="text-destructive"><p className="font-semibold">Versand gesperrt – bitte ergänzen:</p><ul className="list-disc pl-5">{offerErrors.map((issue) => <li key={issue}>{issue}</li>)}</ul></div>}
+            <p className="text-xs text-muted-foreground">Bereits versendete oder angenommene Angebote bleiben unverändert. Eine Änderung danach erfordert eine bewusste neue Zuteilung mit neuem Angebot und erneuter Bestätigung durch den Fahrer.</p>
+          </div>
 
           <div>
             <Label>Notiz (optional)</Label>
@@ -721,7 +752,7 @@ export function AdminAssignmentDialog({
             </Button>
             <Button 
               onClick={handleAssignAndSend} 
-              disabled={isAssigning || !selectedDriverId || !rateValue || filteredDrivers.length === 0 || !allDataComplete}
+              disabled={isAssigning || !selectedDriverId || offerErrors.length > 0 || filteredDrivers.length === 0 || !allDataComplete}
               className="flex-1"
             >
               {isAssigning ? "Zuweisen..." : "Zuweisen & Bestätigung senden"}

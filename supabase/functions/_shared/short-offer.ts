@@ -24,7 +24,7 @@ export function shortOfferLines(lines: [string, string][], bindingAllowed: boole
     ['Auftraggeber / Firma', pick(lines, 'Auftraggeber / Firma')],
     ['Ansprechpartner', pick(lines, 'Ansprechpartner')],
     ['Telefon', pick(lines, 'Telefon')],
-    ['Einsatzort / Treffpunkt (nicht bestätigt – genaue Einsatzanschrift vor Einsatz mit dem Auftraggeber abstimmen)', place && !MISSING.test(place) ? place : 'Nicht erfasst – vor Einsatz abstimmen'],
+    [lines.some(([label]) => label === 'Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)') ? 'Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)' : 'Einsatzort / Treffpunkt (nicht bestätigt – genaue Einsatzanschrift vor Einsatz mit dem Auftraggeber abstimmen)', place && !MISSING.test(place) ? place : 'Nicht erfasst – vor Einsatz abstimmen'],
     ['Einsatzzeitraum', period],
     ['Fahrzeugart', pick(lines, 'Fahrzeugart')],
     ['Aufgabe', shorten(pick(lines, 'Einsatzbeschreibung'))],
