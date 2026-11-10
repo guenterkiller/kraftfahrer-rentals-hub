@@ -35,7 +35,7 @@ async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie
   const k = tarifKey === 'ueberfuehrung' ? null : berechneKostenUebersicht(tarif.tarif as any, '2026-11-16', '2026-11-20');
   const html = await renderAsync(React.createElement(CustomerBookingConfirmation as any, {
     customerName: KUNDE.customer_name, companyName: KUNDE.company, driverType: kategorie, timeframe: '16.11.2026 – 20.11.2026', location: 'TEST-Ort 12345 Musterstadt',
-    message: 'TEST – Auslieferung mit Sattelzug', tarif, isFernfahrerTarif: tarif.tarif === 'fernfahrer', kostenUebersicht: k, isUeberfuehrung: tarifKey === 'ueberfuehrung', ...extra,
+    message: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[1], selectedActivity: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[0], tarif, isFernfahrerTarif: tarif.tarif === 'fernfahrer', kostenUebersicht: k, isUeberfuehrung: tarifKey === 'ueberfuehrung', ...extra,
   }));
   mails.push({ nr, titel, empfaenger: 'Auftraggeber', ausloeser: 'Absenden des Buchungsformulars', betreff: 'Ihre Fahrerbuchung bei der Fahrerexpress-Agentur', html });
   return { tarif, t: text(html) };
