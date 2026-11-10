@@ -3,7 +3,6 @@ import * as React from 'npm:react@18.3.1';
 import { BaseEmail, colors, boxStyles, textStyles, getBoxProps, getTextProps } from './base-email.tsx';
 import { TARIF_TEXTE, tarifTextByKey } from './tarif-text-helper.ts';
 import { TRAVEL_COSTS } from '../overnight-costs.ts';
-import { OvernightCostNotice, ZUSATZKOSTEN_BOX, ZUSATZKOSTEN_HEADING } from './overnight-cost-notice.tsx';
 import {
   UNTERKUNFT_OPTIONEN,
   VORKALKULATION_TITEL,
@@ -20,15 +19,7 @@ import {
 } from '../kosten-uebersicht.ts';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
-
-const ROLLENBESCHREIBUNG =
-  'Die Fahrerexpress-Agentur vermittelt und koordiniert Fahrerdienstleistungen mit selbstständigen Unternehmern mit eigenem Gewerbe. Vertragspartner des Auftraggebers ist die Fahrerexpress-Agentur; die Rechnungsstellung erfolgt nach Einsatzende durch Fahrerexpress. Fahrzeuge werden nicht gestellt.';
-
-const ABRECHNUNGSTEXT =
-  'Der angefragte Zeitraum dient der Einsatzplanung. Die Rechnungsstellung erfolgt nach Einsatzende auf Grundlage der tatsächlich geleisteten Einsatztage, angefangenen Mehrstunden, berechnungsfähigen Fahrtkilometer und zutreffenden Zuschläge. Verlängerungen und Änderungen werden entsprechend den veröffentlichten Preisen und Konditionen berücksichtigt.';
-
-const MEHRSTUNDENREGEL =
-  'Jede über die im gewählten Tarif enthaltene Einsatzzeit hinaus tatsächlich angefallene Einsatzzeit wird nach der veröffentlichten Preisliste je angefangene Stunde zusätzlich berechnet. Eine gesonderte Vereinbarung oder Bestätigung ist nicht erforderlich.';
+const BEDINGUNGEN_URL = 'https://www.kraftfahrer-mieten.com/vermittlungsbedingungen';
 
 interface CustomerBookingConfirmationProps {
   customerName: string;
@@ -116,334 +107,122 @@ export const CustomerBookingConfirmation = ({
   timeframe,
   location,
   message,
-  isFernfahrerTarif = false,
   weekendHolidayAffected = false,
-  weekendHolidayAcknowledged = false,
   tarif,
   isUeberfuehrung = false,
   unterkunftOption = null,
   unterkunftObergrenze = null,
   kostenUebersicht = null,
 }: CustomerBookingConfirmationProps) => {
+  // Kurzfassung: nur wichtigste Daten, Kundenpreis und Status; alle weiteren Konditionen über Links.
   const ueberfuehrung = isUeberfuehrung || tarif?.tarif === 'ueberfuehrung';
   const tarifText = tarif && !tarif.needsReview ? tarifTextByKey(tarif.tarif) : undefined;
-  const istWochenpreis = tarif?.tarif === 'lkw_ce_woche';
-  // Event-Tourneepauschale: keine Mehrstunden- und keine Wochenend-/Feiertagszuschlagsabschnitte.
-  const istEvent = tarif?.tarif === 'event';
-  // Fernfahrer-Pauschale: ebenfalls ohne Mehrstunden- und Wochenend-/Feiertagszuschläge.
   const istFernfahrer = tarif?.tarif === 'fernfahrer';
-  const ohneZuschlaege = istEvent || istFernfahrer;
+  const ohneZuschlaege = tarif?.tarif === 'event' || istFernfahrer;
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
   const spezialanforderungen = eigenstaendigeAnforderungen(requirements, message);
+  const cell = { padding: '4px 0', fontSize: '14px', verticalAlign: 'top' as const };
+  const row = (k: string, v: React.ReactNode) => (
+    <tr key={k}><td style={{ ...cell, width: '40%' }} className="mobile-text"><strong>{k}:</strong></td><td style={cell} className="mobile-text">{v}</td></tr>
+  );
+  const unterkunft = unterkunftOption
+    ? `${UNTERKUNFT_OPTIONEN[unterkunftOption]}${unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' ? ` ${OBERGRENZE_LABEL}: ${formatEuroKosten(unterkunftObergrenze)}` : ''}`
+    : '';
 
   return (
     <BaseEmail previewText="Eingangsbestätigung Ihrer Fahreranfrage – Fahrerexpress-Agentur">
       <Heading {...getTextProps(textStyles.heading2, 'heading')}>
         {buildSalutation(customerName, companyName)}
       </Heading>
-
       <Text {...getTextProps(textStyles.paragraph)}>
-        Vielen Dank für Ihre Anfrage über unser Buchungsformular.
-      </Text>
-      <Text {...getTextProps(textStyles.paragraph)}>
-        Ihre Anfrage ist bei uns eingegangen. Fahrerexpress prüft nun die Verfügbarkeit passender selbstständiger Fahrer. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Nach Mitteilung der Fahrerzuteilung haben Sie die Möglichkeit, der Zuteilung unverzüglich zu widersprechen, sofern die mitgeteilten Daten nicht passen.
+        vielen Dank für Ihre Anfrage über unser Buchungsformular. Ihre verbindliche Anfrage zur Fahrerdisposition ist eingegangen.
       </Text>
 
       <Section {...getBoxProps(boxStyles.warningBox)}>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-          <strong>Wichtiger Hinweis:</strong> Die tatsächliche Durchführung des Einsatzes steht unter dem Vorbehalt, dass ein geeigneter selbstständiger Unternehmer verfügbar ist und den Auftrag annimmt.
-        </Text>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          Sollte kein passender Fahrer verfügbar sein, kommt kein Einsatz zustande und es entstehen Ihnen keinerlei Kosten.
+          <strong>Status: Anfrage – noch keine Einsatzbestätigung.</strong> Wir prüfen jetzt die Verfügbarkeit passender selbstständiger Fahrer. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Ist kein passender Fahrer verfügbar, entstehen Ihnen keine Kosten.
         </Text>
       </Section>
 
       <Section {...getBoxProps(boxStyles.infoBox)}>
-        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihre Anfrage im Überblick</Heading>
+        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihre Anfrage</Heading>
         <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px', width: '45%' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
-              {tarif
-                ? (tarif.needsReview ? 'wird dem passenden veröffentlichten Tarif zugeordnet' : tarif.label)
-                : driverType}
-            </td>
-          </tr>
-        {selectedActivity && selectedActivity !== driverType && (
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}><strong>Gewählte Spezialtätigkeit / Fahrzeugart:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }}>{selectedActivity}</td>
-          </tr>
-        )}
-          {spezialanforderungen.length > 0 && (
-            <tr>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Spezialanforderungen:</strong></td>
-              <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{spezialanforderungen.join(', ')}</td>
-            </tr>
-          )}
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Zeitraum:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{timeframe}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Einsatzort:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{location}</td>
-          </tr>
-          <tr>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Einsatztätigkeiten und Anforderungen:</strong></td>
-            <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">{message}</td>
-          </tr>
+          {companyName ? row('Auftraggeber', companyName) : null}
+          {customerName ? row('Kontakt', customerName) : null}
+          {row('Einsatzort', location)}
+          {row('Zeitraum', timeframe)}
+          {row('Fahrertyp', tarif ? (tarif.needsReview ? 'wird dem passenden veröffentlichten Tarif zugeordnet' : tarif.label) : driverType)}
+          {selectedActivity && selectedActivity !== driverType ? row('Tätigkeit / Fahrzeugart', selectedActivity) : null}
+          {spezialanforderungen.length > 0 ? row('Anforderungen', spezialanforderungen.join(', ')) : null}
+          {row('Aufgabe', message)}
+          {unterkunft ? row('Unterkunft', unterkunft) : null}
         </table>
-        <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', fontStyle: 'italic', margin: '12px 0 0 0' })}>
-          Der Besteller hat bestätigt, dass die beschriebenen Einsatztätigkeiten und Anforderungen vollständig und richtig sind. Diese Angaben bilden die Grundlage der Einsatzabstimmung und der Auftragsannahme durch den selbstständigen Fahrer.
-        </Text>
       </Section>
 
-      {unterkunftOption && (
+      {ueberfuehrung ? (
         <Section {...getBoxProps(boxStyles.infoBox)}>
-          <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihre Angaben zur Unterkunft</Heading>
           <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-            {UNTERKUNFT_OPTIONEN[unterkunftOption]}
-          </Text>
-          {unterkunftOption === 'fahrer_organisiert' && typeof unterkunftObergrenze === 'number' && (
-            <Text {...getTextProps({ ...textStyles.paragraph, margin: '8px 0 0 0' })}>
-              <strong>{OBERGRENZE_LABEL}:</strong> {formatEuroKosten(unterkunftObergrenze)}
-            </Text>
-          )}
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '8px 0 0 0' })}>
-            {UNTERKUNFT_GRUNDSATZ}
+            <strong>Preis:</strong> LKW-Überführung – individuelles Angebot nach Fahrzeug, Strecke und Aufwand.
           </Text>
         </Section>
-      )}
-
-      {!ueberfuehrung && kostenUebersicht && (
+      ) : (
         <Section {...getBoxProps(boxStyles.infoBox)}>
-          <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>{VORKALKULATION_TITEL}</Heading>
-          <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '0 0 10px 0' })}>
-            {VORKALKULATION_HINWEIS}
-          </Text>
-          {istFernfahrer && (
+          <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Preis</Heading>
+          {tarifText ? (
+            <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
+              {row('Tarif', `${tarifText.priceLine}${tarifDetails[0] ? ` – ${tarifDetails[0].charAt(0).toLowerCase()}${tarifDetails[0].slice(1)}` : ''}`)}
+              {typeof tarif?.mehrstunde === 'number' && !ohneZuschlaege ? row('Mehrarbeit', `${formatEuro(tarif.mehrstunde)} netto je angefangene Stunde`) : null}
+              {row('Zuschläge', ohneZuschlaege ? 'Keine Samstags-, Sonntags- oder Feiertagszuschläge' : 'Samstag 25 %, Sonntag und gesetzliche Feiertage 50 %')}
+              {row('An- und Abfahrt', TRAVEL_COSTS.short)}
+            </table>
+          ) : (
+            <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
+              Der passende veröffentlichte Tarif wird vor der verbindlichen Einsatzbestätigung zugeordnet.
+            </Text>
+          )}
+          {!ohneZuschlaege && weekendHolidayAffected && (
+            <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '8px 0 0 0' })}>
+              Ihr Zeitraum enthält einen Samstag, Sonntag oder gesetzlichen Feiertag.
+            </Text>
+          )}
+          {kostenUebersicht && (
             <>
-              <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', fontWeight: 'bold', margin: '0 0 6px 0' })}>{FERNFAHRER_PREIS_HINWEIS}</Text>
-              <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '0 0 10px 0' })}>{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</Text>
+              <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', margin: '12px 0 4px 0' })}>{VORKALKULATION_TITEL}</Text>
+              <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
+                {kostenUebersicht.positionen.map((p) => (
+                  <tr key={p.label}>
+                    <td style={cell} className="mobile-text">{p.label}</td>
+                    <td style={{ ...cell, textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">{formatEuroKosten(p.betrag)}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <td style={{ ...cell, fontWeight: 'bold', borderTop: '1px solid #e5e7eb' }} className="mobile-text">Summe netto</td>
+                  <td style={{ ...cell, fontWeight: 'bold', textAlign: 'right', whiteSpace: 'nowrap', borderTop: '1px solid #e5e7eb' }} className="mobile-text">{formatEuroKosten(kostenUebersicht.netto)}</td>
+                </tr>
+                <tr>
+                  <td style={cell} className="mobile-text">zzgl. 19 % USt. / brutto</td>
+                  <td style={{ ...cell, textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">{formatEuroKosten(kostenUebersicht.ust)} / {formatEuroKosten(kostenUebersicht.brutto)}</td>
+                </tr>
+              </table>
+              <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '8px 0 0 0' })}>
+                Unverbindlich; abgerechnet werden die tatsächlich geleisteten Einsatztage. {OFFENE_KOSTEN_HINWEIS}
+              </Text>
+              {istFernfahrer && (
+                <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '6px 0 0 0' })}>{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</Text>
+              )}
             </>
           )}
-          <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-            {kostenUebersicht.positionen.map((p) => (
-              <tr key={p.label}>
-                <td style={{ padding: '4px 0', fontSize: '14px' }} className="mobile-text">{p.label}</td>
-                <td style={{ padding: '4px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">
-                  {formatEuroKosten(p.betrag)}
-                </td>
-              </tr>
-            ))}
-            <tr>
-              <td style={{ padding: '6px 0 2px 0', fontSize: '14px', fontWeight: 'bold', borderTop: '1px solid #e5e7eb' }} className="mobile-text">Zwischensumme netto</td>
-              <td style={{ padding: '6px 0 2px 0', fontSize: '14px', fontWeight: 'bold', textAlign: 'right', whiteSpace: 'nowrap', borderTop: '1px solid #e5e7eb' }} className="mobile-text">
-                {formatEuroKosten(kostenUebersicht.netto)}
-              </td>
-            </tr>
-            <tr>
-              <td style={{ padding: '2px 0', fontSize: '14px' }} className="mobile-text">zzgl. 19 % Umsatzsteuer</td>
-              <td style={{ padding: '2px 0', fontSize: '14px', textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">
-                {formatEuroKosten(kostenUebersicht.ust)}
-              </td>
-            </tr>
-            <tr>
-              <td style={{ padding: '2px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">Bruttosumme</td>
-              <td style={{ padding: '2px 0', fontSize: '14px', fontWeight: 'bold', textAlign: 'right', whiteSpace: 'nowrap' }} className="mobile-text">
-                {formatEuroKosten(kostenUebersicht.brutto)}
-              </td>
-            </tr>
-          </table>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-            <strong>Noch offene Zusatzkosten (nicht in der Vorkalkulation enthalten):</strong>
-          </Text>
-          <ul style={listStyle} className="mobile-text">
-            {offenePositionen(unterkunftOption ?? '', unterkunftObergrenze).map((o) => (
-              <li key={o}>{o}</li>
-            ))}
-          </ul>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-            {OFFENE_KOSTEN_HINWEIS}
-          </Text>
         </Section>
       )}
 
-      <Section {...getBoxProps(boxStyles.infoBox)}>
-        <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Ihr Vertragspartner</Heading>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>{ROLLENBESCHREIBUNG}</Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-          Fahrerexpress vermittelt den benannten selbstständigen Fahrer für den angefragten Einsatz. Die Durchführung erfolgt eigenverantwortlich durch den selbstständigen Fahrer. Fahrerexpress erbringt keine Arbeitnehmerüberlassung und stellt keine eigenen Arbeitnehmer zur Verfügung.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-          Sollte der Fahrer aus Krankheit, höherer Gewalt oder sonstigen unvorhersehbaren Gründen ausfallen, bemüht sich Fahrerexpress nach Möglichkeit um eine Ersatzlösung. Eine jederzeitige Ersatzgestellung wird nicht zugesagt.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-          Fahrerexpress haftet nicht für mittelbare Schäden, entgangenen Gewinn, Produktionsausfall, Vertragsstrafen oder Folgeschäden des Auftraggebers, soweit diese nicht auf Vorsatz oder grober Fahrlässigkeit von Fahrerexpress beruhen. Die Haftung für Vorsatz sowie für Schäden aus der Verletzung von Leben, Körper oder Gesundheit bleibt unberührt.
-        </Text>
-      </Section>
-
-
-      {ueberfuehrung && (
-        <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderLeftColor: '#16a34a' })}>
-          <Heading {...getTextProps({ ...textStyles.heading3, color: '#15803d' }, 'small-heading')}>
-            LKW-Überführung – individuelles Angebot
-          </Heading>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-            Kosten nach Fahrzeug, Strecke und Aufwand – individuelles Angebot.
-          </Text>
-        </Section>
-      )}
-
-      {!ueberfuehrung && tarif && !tarif.needsReview && (
-        <Section {...getBoxProps({ ...boxStyles.highlightBox, backgroundColor: '#f0fdf4', borderLeftColor: '#16a34a' })}>
-          <Heading {...getTextProps({ ...textStyles.heading3, color: '#15803d' }, 'small-heading')}>
-            Für Ihren Einsatz maßgeblicher Tarif
-          </Heading>
-          <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-            <tr>
-              <td style={{ padding: '5px 0', fontSize: '14px', width: '45%' }} className="mobile-text"><strong>Fahrertyp:</strong></td>
-              <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">{tarif.label}</td>
-            </tr>
-            {tarifText && (
-              <tr>
-                <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Preis:</strong></td>
-                <td style={{ padding: '5px 0', fontSize: '14px', fontWeight: 'bold' }} className="mobile-text">
-                  {tarifText.priceLine}
-                  {tarifDetails[0] ? ` – ${tarifDetails[0].charAt(0).toLowerCase()}${tarifDetails[0].slice(1)}` : ''}
-                </td>
-              </tr>
-            )}
-            {typeof tarif.mehrstunde === 'number' && (
-              <tr>
-                <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text"><strong>Mehrarbeit:</strong></td>
-                <td style={{ padding: '5px 0', fontSize: '14px' }} className="mobile-text">
-                  {formatEuro(tarif.mehrstunde)} netto je angefangene Stunde
-                </td>
-              </tr>
-            )}
-            <tr style={{ backgroundColor: ZUSATZKOSTEN_BOX.backgroundColor }}>
-              <td style={{ padding: '5px 6px', fontSize: '14px', color: ZUSATZKOSTEN_HEADING }} className="mobile-text"><strong>An- und Abfahrt:</strong></td>
-              <td style={{ padding: '5px 6px', fontSize: '14px' }} className="mobile-text">
-                {TRAVEL_COSTS.short}
-              </td>
-            </tr>
-          </table>
-          {tarifDetails.length > 1 && (
-            <ul style={listStyle} className="mobile-text">
-              {tarifDetails.slice(1).map((d) => (
-                <li key={d}>{d}</li>
-              ))}
-            </ul>
-          )}
-          {istWochenpreis && TARIF_TEXTE.lkw_ce_woche.notes?.map((n) => (
-            <Text key={n} {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>{n}</Text>
-          ))}
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '12px 0 0 0' })}>
-            Alle weiteren Preise und Konditionen finden Sie in unserer zum Zeitpunkt der Buchungsanfrage veröffentlichten{' '}
-            <Link href={PREISE_URL} style={{ color: colors.primary }}>Preisliste</Link>.
-          </Text>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>{ABRECHNUNGSTEXT}</Text>
-          <Text {...getTextProps({ ...textStyles.muted, fontSize: '13px', margin: '12px 0 0 0' })}>
-            <strong>Alle Preise netto zzgl. gesetzlicher MwSt.</strong> Zahlungsziel: 7 Kalendertage netto ab Rechnungsdatum.
-          </Text>
-        </Section>
-      )}
-
-      {!ueberfuehrung && (!tarif || tarif.needsReview) && (
-        <Section {...getBoxProps({ ...boxStyles.infoBox, backgroundColor: '#fef3c7', borderLeftColor: '#d97706' })}>
-          <Heading {...getTextProps({ ...textStyles.heading3, color: '#92400e' }, 'small-heading')}>
-            Zuordnung zum passenden veröffentlichten Tarif
-          </Heading>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-            Die veröffentlichten Preise und Konditionen sind eindeutig. Aufgrund unvollständiger Angaben zur konkreten Tätigkeit konnte der passende Tarif noch nicht automatisch zugeordnet werden. Die Zuordnung erfolgt vor der verbindlichen Einsatzbestätigung.
-          </Text>
-          {isFernfahrerTarif && (
-            <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-              {TARIF_TEXTE.fernfahrer.name}: {TARIF_TEXTE.fernfahrer.priceLine}.
-            </Text>
-          )}
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-            Alle Preise und Konditionen finden Sie in unserer zum Zeitpunkt der Buchungsanfrage veröffentlichten{' '}
-            <Link href={PREISE_URL} style={{ color: colors.primary }}>Preisliste</Link>.
-          </Text>
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>{ABRECHNUNGSTEXT}</Text>
-          <Text {...getTextProps({ ...textStyles.muted, fontSize: '13px', margin: '12px 0 0 0' })}>
-            <strong>Alle Preise netto zzgl. gesetzlicher MwSt.</strong> Zahlungsziel: 7 Kalendertage netto ab Rechnungsdatum.
-          </Text>
-        </Section>
-      )}
-
-      {!ueberfuehrung && !ohneZuschlaege && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Einsatzzeit und Mehrstunden</Heading>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>
-          Der Tagessatz gilt für die gesamte Einsatzzeit und nicht ausschließlich für die reine Fahrzeit. Zur Einsatzzeit zählen unter anderem gesetzliche Pausen, Fahrzeugübernahme, Wartezeiten, Dokumentation sowie organisatorische Tätigkeiten rund um den Einsatz.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 10px 0' })}>{MEHRSTUNDENREGEL}</Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-          Einsätze, die erheblich über die vereinbarte Einsatzzeit hinausgehen oder in den nächsten Kalendertag hineinreichen, können als zusätzlicher Einsatztag oder Fernverkehrseinsatz berechnet werden.
-        </Text>
-      </Section>)}
-
-      {!ueberfuehrung && !ohneZuschlaege && (<Section {...getBoxProps({ ...boxStyles.infoBox, ...ZUSATZKOSTEN_BOX })}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Wochenend- und Feiertagszuschläge</Heading>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird der Zuschlag automatisch auf den jeweiligen Tagessatz berechnet. Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
-        </Text>
-        <ul style={listStyle} className="mobile-text">
-          <li>Samstag: 25 %</li>
-          <li>Sonntag und gesetzliche Feiertage: 50 %</li>
-        </ul>
-        {weekendHolidayAffected && (
-          <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-            <strong>Ihr angefragter Einsatzzeitraum enthält einen Samstag, Sonntag oder gesetzlichen Feiertag.</strong>
-          </Text>
-        )}
-        {weekendHolidayAcknowledged && (
-          <Text {...getTextProps({ ...textStyles.paragraph, fontStyle: 'italic', margin: '6px 0 0 0' })}>
-            Der Besteller hat diesen Hinweis vor Absenden der Anfrage bestätigt.
-          </Text>
-        )}
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '10px 0 0 0' })}>
-          Nachtarbeit, besondere Zusatzleistungen oder außergewöhnliche Anforderungen werden gesondert abgestimmt.
-        </Text>
-      </Section>)}
-
-      <OvernightCostNotice tarifKey={ueberfuehrung ? 'ueberfuehrung' : tarif?.tarif} isFernfahrerTarif={isFernfahrerTarif} highlight showMultiWeek={!ueberfuehrung && (tarif?.tarif === 'lkw_ce_woche' || tarif?.tarif === 'fernfahrer')} />
-
-      <Section {...getBoxProps({ ...boxStyles.warningBox, ...ZUSATZKOSTEN_BOX })}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: ZUSATZKOSTEN_HEADING }, 'small-heading')}>Stornierungsregelung nach Einsatzbestätigung</Heading>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Die nachfolgenden Stornokosten gelten ab der verbindlichen Einsatzbestätigung, also nachdem ein selbstständiger Fahrer den Auftrag angenommen hat und Ihnen der Einsatz bestätigt wurde.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Eine kostenfreie Stornierung ist bis 24 Stunden vor Einsatzbeginn möglich.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Bei einer Stornierung unter 24 Stunden vor Einsatzbeginn behält sich Fahrerexpress vor, den entgangenen Aufwand pauschal mit 80 % des vereinbarten Tagessatzes zu berechnen, sofern der Auftraggeber keinen oder einen geringeren Schaden nachweist.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Bei Absage am Einsatztag oder Nichterscheinen des Auftraggebers können 100 % des vereinbarten Tagessatzes berechnet werden, sofern der Auftraggeber keinen oder einen geringeren Schaden nachweist.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.paragraph, margin: '0 0 8px 0' })}>
-          Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren.
-        </Text>
-        <Text {...getTextProps({ ...textStyles.muted, fontSize: '12px', margin: '10px 0 0 0' })}>
-          Es gelten die auf unserer Webseite veröffentlichten Vermittlungsbedingungen.
-        </Text>
-      </Section>
-
-      <Section {...getBoxProps(boxStyles.successBox)}>
-        <Heading {...getTextProps({ ...textStyles.heading3, color: colors.success }, 'small-heading')}>Wie es jetzt weitergeht</Heading>
-        <ol style={{ margin: '0', paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }} className="mobile-text">
-          <li>Wir prüfen verfügbare selbstständige Unternehmer in Ihrer Region</li>
-          <li>Sie erhalten eine Rückmeldung zur Verfügbarkeit</li>
-          <li>Bei Verfügbarkeit vermitteln wir einen passenden selbstständigen Fahrer</li>
-          <li>Nach Annahme des Auftrags erhalten Sie die verbindliche Einsatzbestätigung mit den organisatorischen Details (Fahrer, Zeiten, Ablauf)</li>
-        </ol>
-      </Section>
-
+      <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px' })}>
+        Fahrerexpress vermittelt selbstständige Fahrer (keine Arbeitnehmerüberlassung, keine Fahrzeuge). Alle Preise netto zzgl. MwSt. Es gelten unsere{' '}
+        <Link href={BEDINGUNGEN_URL} style={{ color: colors.primary }}>Vermittlungsbedingungen</Link> und die{' '}
+        <Link href={PREISE_URL} style={{ color: colors.primary }}>Preisliste</Link> (u. a. Mehrstunden, Zuschläge, Übernachtung, Stornierung, Haftung).
+      </Text>
+      <Text {...getTextProps(textStyles.paragraph)}>
+        Sie erhalten eine Rückmeldung zur Verfügbarkeit. Nach Annahme durch einen Fahrer folgt die Einsatzbestätigung mit Fahrer und Kontakt.
+      </Text>
     </BaseEmail>
   );
 };
