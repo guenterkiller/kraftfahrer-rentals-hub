@@ -8,7 +8,6 @@ import {
   logAdminAction 
 } from "../_shared/admin-auth.ts";
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
-import { normalizeCommissionPct } from "../_shared/driver-contract-terms.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
 import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
@@ -164,7 +163,6 @@ serve(async (req) => {
       } else return createErrorResponse('Angebotsfrist bereits abgelaufen; kein Versand', 400, corsHeaders);
     } else return createErrorResponse('Zuteilung ist nicht für ein neues Angebot verfügbar', 400, corsHeaders);
 
-    const commissionPct = normalizeCommissionPct(offerAssignment.commission_pct);
     const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
     const location = job?.einsatzort || 'wird noch bekannt gegeben';
     const dateRange = formatAssignmentPeriod(offerAssignment.start_date, offerAssignment.end_date, offerAssignment.times_entered) || job?.zeitraum || 'nach Absprache';
