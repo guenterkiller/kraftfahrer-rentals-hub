@@ -7,6 +7,7 @@ import {
   DRIVER_ACCEPT_LEGAL_HINT,
 } from "@/lib/driverConsentText";
 import { BINDING_CONSENT_TEXT } from "@/lib/driverContractTerms";
+import { acceptancePageLines } from "@/lib/driverAcceptanceNet";
 
 type BindingData = {
   commission_pct: number;
@@ -211,7 +212,7 @@ export default function FahrerAntwortBestaetigen() {
           </p>
           {result === "remuneration_incomplete" && interestLines && (
             <dl className="mt-4 grid grid-cols-1 gap-y-1 rounded-md border border-border bg-muted/40 p-4 text-sm text-foreground md:grid-cols-3 md:gap-x-4">
-              {interestLines.map(([k, v]) => (
+              {acceptancePageLines(interestLines, false).map(([k, v]) => (
                 <div key={k} className="contents">
                   <dt className="font-medium">{k}</dt>
                   <dd className="md:col-span-2 whitespace-pre-line break-words">{v}</dd>
@@ -230,7 +231,7 @@ export default function FahrerAntwortBestaetigen() {
                 <div className="rounded-md border border-border bg-muted/40 p-4">
                   <h2 className="mb-2 font-semibold">Auftragsdaten</h2>
                   <dl className="grid grid-cols-1 gap-y-1 md:grid-cols-3 md:gap-x-4">
-                    {binding.job_lines.map(([k, v]) => (
+                    {acceptancePageLines(binding.job_lines, true).map(([k, v]) => (
                       <div key={k} className="contents">
                         <dt className="font-medium">{k}</dt>
                         <dd className="md:col-span-2 whitespace-pre-line break-words">{v}</dd>
