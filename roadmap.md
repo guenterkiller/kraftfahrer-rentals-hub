@@ -119,3 +119,10 @@
 - [x] Angebotsmail angepasst; Registrierungshäkchen; Adminstatus + Linkerzeugung ohne Mail; Stichtagsschalter aus.
 - [ ] Einspielen der Serverfunktionen und Live-Durchlauf: wartet auf Freigabe.
 - [ ] Versand der Vertragslinks an die 41 Fahrer: wartet auf Freigabe.
+
+# Build-Ursachenanalyse Windows (lesend)
+- [x] GitHub main = Projektstand d945567d; Annahmeseiten-Änderung enthalten.
+- [ ] Sauberer Testbuild aus frischem Klon: wartet auf Freigabe; erste Windows-Fehlermeldung von `npm run build` fehlt noch.
+
+# Kurzes Fahrer-Angebot MIAG/Scholz
+- [ ] Kurzmail + Annahmeseite nur mit Endbetrag nach Provision (450 € Fahrersatz, 20 %, 360 €/vergüteter Tag); Konflikt 8 Tage vs. CE-Woche/Wochenende markieren, Bestand unverändert: wartet auf Klärung (vorheriger Auftrag liegt mir nicht vor).
