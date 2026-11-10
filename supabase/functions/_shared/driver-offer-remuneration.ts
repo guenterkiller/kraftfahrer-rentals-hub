@@ -102,6 +102,7 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   const rateCents = Number.isFinite(rate) && rate > 0 ? Math.round(rate * 100) : null;
   const pct = commissionPctForTarif(job?.tarif_type);
   const units = paidUnits(job, assignment);
+  const agreed = readAgreement(assignment);
   const missing: string[] = [];
   if (rateCents === null) missing.push('Auftragsbezogen vereinbarter Fahrersatz');
   if (periodDays(assignment) === null) missing.push('Einsatzzeitraum (Kalenderdaten)');
@@ -118,7 +119,7 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   const none = 'Nicht bestimmt – keine Zahl angegeben';
   const lines: [string, string][] = [
     ['Vergütete Einheiten', complete ? `${units?.units} ${units?.label} (${agreed ? 'aus ausdrücklich gespeicherten vergüteten Einheiten' : 'aus dem vereinbarten Zeitraum'}${!agreed && job?.tarif_type === 'fernfahrer' && assignment?.rate_type === 'daily' && hasWeekend(assignment) ? '; enthaltene Samstage/Sonntage sind als vergütete Fernverkehrs-Einsatztage angesetzt – nur so versenden, wenn vereinbart, sonst Zeitraum anpassen' : ''})` : 'Nicht eindeutig bestimmt'],
-    ['Stand-/Ruhetage', complete && job?.tarif_type === 'lkw_ce_woche' && units?.units > 1
+    ['Stand-/Ruhetage', complete && job?.tarif_type === 'lkw_ce_woche' && (units?.units ?? 0) > 1
       ? 'Dazwischenliegende Samstage/Sonntage sind nicht im Wochensatz enthalten; kein Fahrer-Tagessatz vereinbart – ein Wochenendeinsatz ist nicht Gegenstand dieses Angebots und vorab gesondert zu vereinbaren'
       : 'Nicht gesondert vereinbart – keine zusätzlichen Tage angesetzt'],
     ['Fahrerhonorar netto vor Provision (gesamter Auftrag)', complete ? `${formatEuro((rateCents ?? 0) / 100)} je ${units?.unit} × ${units?.units} = ${formatEuro((feeCents ?? 0) / 100)}` : none],

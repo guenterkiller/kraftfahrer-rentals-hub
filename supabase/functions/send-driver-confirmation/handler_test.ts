@@ -1,21 +1,26 @@
 // Original handler, all external dependencies replaced locally. No real sends/writes.
 import { assertEquals, assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
+import { agreementNote } from '../_shared/offer-readiness.ts';
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
 
-for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-error', 'retry', 'retry-error', 'throw', 'expired', 'declined']) {
+for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-error', 'retry', 'retry-error', 'throw', 'expired', 'declined', 'missing-rate', 'missing-units', 'missing-place', 'unconfirmed-place', 'legacy-retry']) {
   Deno.test(`Fahrerangebot: isolierter Original-Versandablauf ${scenario}`, async () => {
     const sends: any[] = [], inserts: { table: string; value: any }[] = [];
     const start = new Date(Date.now() + 10 * 86400000).toISOString().slice(0,10);
     const end = new Date(Date.parse(start) + 86400000).toISOString().slice(0,10);
     const de = (d: string) => d.split('-').reverse().join('.');
-    const job = { id: 'TEST-JOB', einsatzort: 'TEST-Ort', company: 'TEST GmbH', customer_name: 'TEST Kontakt', nachricht: 'Schubboden Scania', fahrzeugtyp: 'LKW CE', zeitraum: `${de(start)} bis ${de(end)}`, tarif_type: 'lkw_ce', tarif_netto: 349, tarif_unit: 'je Einsatztag bis 9 Stunden', tarif_mehrstunde_netto: 45, kosten_uebersicht: { netto: 698, positionen: [{ label: '2 Tage × 349 €', betrag: 698 }] }, unterkunft_option: 'keine' };
-    const assignment = { id: 'TEST-ASSIGNMENT', job_id: job.id, driver_id: 'TEST-DRIVER', status: 'assigned', rate_type: 'daily', rate_value: 349, commission_pct: 20, start_date: `${start}T00:00:00Z`, end_date: `${end}T00:00:00Z`, times_entered: null, job_requests: job, fahrer_profile: { email: 'driver@example.invalid', vorname: 'TEST', nachname: 'Fahrer' } };
+    const job = { id: 'TEST-JOB', einsatzort: 'TEST Hafenstraße 12, Tor 3, 12345 Musterstadt', company: 'TEST GmbH', customer_name: 'TEST Kontakt', nachricht: 'Schubboden Scania', fahrzeugtyp: 'LKW CE', zeitraum: `${de(start)} bis ${de(end)}`, tarif_type: 'lkw_ce', tarif_netto: 349, tarif_unit: 'je Einsatztag bis 9 Stunden', tarif_mehrstunde_netto: 45, kosten_uebersicht: { netto: 698, positionen: [{ label: '2 Tage × 349 €', betrag: 698 }] }, unterkunft_option: 'keine' };
+    const assignment: any = { id: 'TEST-ASSIGNMENT', job_id: job.id, driver_id: 'TEST-DRIVER', status: 'assigned', rate_type: 'daily', rate_value: 349, commission_pct: 20, start_date: `${start}T00:00:00Z`, end_date: `${end}T00:00:00Z`, times_entered: null, job_requests: job, fahrer_profile: { email: 'driver@example.invalid', vorname: 'TEST', nachname: 'Fahrer' } };
+    assignment.admin_note = agreementNote('TEST', { rate: 349, unit: 'daily', units: scenario === 'missing-units' ? 0 : 2, place: job.einsatzort, remunerationConfirmed: true, placeConfirmed: scenario !== 'unconfirmed-place' });
+    if (scenario === 'missing-rate') assignment.rate_value = 0;
+    if (scenario === 'missing-place') job.einsatzort = '';
     const oldSnapshot = createOfferSnapshot({ ...job, company: 'FROZEN COMPANY' }, assignment);
+    if (scenario === 'legacy-retry') oldSnapshot.assignment.admin_note = '';
     const oldInvite = { id: 'OLD-INVITE', token: 'UNCHANGED-TOKEN', status: scenario === 'declined' ? 'declined' : 'pending', created_at: '2026-10-30T12:00:00Z', token_expires_at: new Date(Date.now() + (scenario === 'expired' ? -1 : 1) * 86400000).toISOString(), offer_snapshot: oldSnapshot };
     const fakeClient = { from(table: string) {
       const q = { select() { return q; }, eq() { return q; }, order() { return q; }, not() { return q; }, gte() { return q; },
         maybeSingle() { return Promise.resolve({ data: table === 'job_assignments' ? assignment : scenario === 'accepted' ? { id: 'TEST-ACCEPTANCE' } : null, error: null }); },
-        limit() { return Promise.resolve({ data: table === 'assignment_invites' && ['sent','retry','retry-error','expired','declined'].includes(scenario) ? [oldInvite] : table === 'email_log' && scenario === 'sent' ? [{ id: 'SUCCESS' }] : [], error: null }); },
+        limit() { return Promise.resolve({ data: table === 'assignment_invites' && ['sent','retry','retry-error','expired','declined','legacy-retry'].includes(scenario) ? [oldInvite] : table === 'email_log' && scenario === 'sent' ? [{ id: 'SUCCESS' }] : [], error: null }); },
         insert(value: any) { inserts.push({ table,value }); return Promise.resolve({ error: table === 'assignment_invites' && scenario === 'snapshot-error' ? { message: 'TEST snapshot error' } : null }); },
       }; return q;
     } };
@@ -39,9 +44,9 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
       const { handler } = await import(`data:application/typescript;base64,${btoa(unescape(encodeURIComponent(source)))}#${scenario}`);
       const response = await handler(new Request('https://test.invalid', { method:'POST', body:JSON.stringify({ assignment_id: assignment.id }) }));
       await response.text();
-      assertEquals(response.status, scenario === 'expired' ? 400 : ['error','no-id','snapshot-error','retry-error','throw'].includes(scenario) ? 500 : 200);
-      assertEquals(sends.length, ['sent','accepted','snapshot-error','expired','declined'].includes(scenario) ? 0 : 1);
-      assertEquals(inserts.filter(i => i.table === 'assignment_invites').length, ['sent','accepted','retry','retry-error','expired','declined'].includes(scenario) ? 0 : 1);
+      assertEquals(response.status, ['missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario) ? 422 : scenario === 'expired' ? 400 : ['error','no-id','snapshot-error','retry-error','throw'].includes(scenario) ? 500 : 200);
+      assertEquals(sends.length, ['sent','accepted','snapshot-error','expired','declined','missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario) ? 0 : 1);
+      assertEquals(inserts.filter(i => i.table === 'assignment_invites').length, ['sent','accepted','retry','retry-error','expired','declined','missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario) ? 0 : 1);
       if (sends.length) {
         assertEquals(sends[0].to, ['driver@example.invalid']);
         const snapshot = inserts.find(i => i.table === 'assignment_invites')?.value.offer_snapshot;

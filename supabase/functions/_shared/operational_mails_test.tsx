@@ -7,6 +7,8 @@ import { CustomerBookingConfirmation } from './email-templates/customer-booking-
 import { NoShowNotice } from './email-templates/no-show-notice.tsx';
 import { berechneKostenUebersicht } from './kosten-uebersicht.ts';
 import { resolveTarif } from './tarif-zuordnung.ts';
+import { agreementNote, agreementErrors } from './offer-readiness.ts';
+import { buildDriverOfferView } from './driver-offer-remuneration.ts';
 import { createOfferSnapshot } from './binding-offer.ts';
 import { shortOfferLines, renderShortOffer, NET_LABEL } from './short-offer.ts';
 import { wrapDriverEmailHtml } from './email-templates/driver-html-shell.ts';
@@ -27,7 +29,7 @@ const JOBART: Record<string, [string, string]> = {
   lkw_ce: ['LKW CE', 'TEST – Nahverkehr Auslieferung mit Sattelzug'],
   baumaschine: ['Baumaschinenführer', 'TEST – Bedienung Mobilbagger auf Baustelle'],
 };
-const job = (tarif_type: string, o: Record<string, unknown> = {}) => ({ ...KUNDE, customer_phone: '+49 000 TEST', einsatzort: 'TEST-Ort 12345 Musterstadt', fahrzeugtyp: (JOBART[tarif_type] ?? JOBART.lkw_ce)[0], nachricht: (JOBART[tarif_type] ?? JOBART.lkw_ce)[1], tarif_type, kosten_uebersicht: { netto: 9999 }, ...o });
+const job = (tarif_type: string, o: Record<string, unknown> = {}) => ({ ...KUNDE, customer_phone: '+49 000 TEST', einsatzort: 'TEST Hafenstraße 12, Tor 3, 12345 Musterstadt', fahrzeugtyp: (JOBART[tarif_type] ?? JOBART.lkw_ce)[0], nachricht: (JOBART[tarif_type] ?? JOBART.lkw_ce)[1], tarif_type, kosten_uebersicht: { netto: 9999 }, ...o });
 const asg = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_value: 450, start_date: '2026-11-16T00:00:00Z', end_date: '2026-11-20T00:00:00Z', times_entered: null, ...o });
 
 async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie: string, longDistance: boolean, extra: Record<string, unknown> = {}, von = '2026-11-16', bis = '2026-11-20') {
@@ -108,10 +110,17 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
   ];
   const expected: Record<string, string> = { '4a': '1.800,00 €', '4b': '1.200,00 €', '4c': '630,00 €', '4d': '2.880,00 €' };
   for (const [nr, titel, j, a] of variants) {
+    a.admin_note = agreementNote('TEST', { rate: Number(a.rate_value), unit: a.rate_type, units: nr === '4c' ? 2 : nr === '4d' ? 8 : 5, place: j.einsatzort ?? '', remunerationConfirmed: true, placeConfirmed: true });
+    const issues = [...agreementErrors(j, a), ...buildDriverOfferView(j, a).missing];
+    if (issues.length) {
+      mails.push({ nr, titel: nr === '4e' ? 'VERWALTUNG – Versand gesperrt: fehlender Fahrerhonorarsatz' : 'VERWALTUNG – Versand gesperrt: fehlender Einsatzort', empfaenger: 'Nur Verwaltung – KEINE Fahrer-Mail', ausloeser: 'Unvollständige Zuteilung', betreff: 'Kein Versand / kein Annahmelink', html: `<h2>Versand gesperrt</h2><ul>${issues.map((i) => `<li>${i}</li>`).join('')}</ul><p>Kein Ersatzangebot, keine Fahrer-Mail, kein persönlicher Link. Bestehende Angebote bleiben unverändert.</p>` });
+      assert(nr === '4e' || nr === '4f');
+      continue;
+    }
     const s = createOfferSnapshot(j, a);
     const binding = s.binding_allowed === true;
     const zr = nr === '4d' ? '16.11.2026 – 23.11.2026' : nr === '4c' ? '16.11.2026 – 17.11.2026' : '16.11.2026 – 20.11.2026';
-    const lines = shortOfferLines(s.job_lines!, binding, zr);
+    const lines = shortOfferLines((s.job_lines ?? []), binding, zr);
     const fa = lines.find(([k]) => k === 'Fahrzeugart')?.[1];
     assert(fa === j.fahrzeugtyp, `${nr}: Fahrzeugart ${fa}`);
     if (nr === '4c') assert(fa === 'Baumaschinenführer' && !lines.some(([, v]) => /Sattelzug|Fernverkehr/.test(v)), '4c: falsche Tätigkeit');
@@ -144,7 +153,7 @@ Deno.test('Kunden-Zuteilungsmitteilung: CE Tag und CE Woche zeigen nur den gewä
 Deno.test('Fahrer-Endbetrag stammt nur aus dem manuell eingegebenen Fahrersatz, nie aus dem Kundenpreis', () => {
   const net = (j: any, a: any) => {
     const s = createOfferSnapshot(j, a);
-    return (shortOfferLines(s.job_lines!, s.binding_allowed === true, 'x').map(([, v]) => v).join(' ').match(/[\d.]+,\d{2} €/g) ?? []);
+    return (shortOfferLines((s.job_lines ?? []), s.binding_allowed === true, 'x').map(([, v]) => v).join(' ').match(/[\d.]+,\d{2} €/g) ?? []);
   };
   // Gleicher Fahrersatz, völlig andere Kundenkalkulation → identischer Fahrerbetrag.
   const a1 = net(job('fernfahrer', { kosten_uebersicht: { netto: 2121.06 } }), asg());
@@ -166,7 +175,7 @@ Deno.test('Kopplungsprüfung: Fahrerbetrag = Fahrersatz × Einheiten × (1 − P
     const end = tage === 5 ? '2026-11-20T00:00:00Z' : '2026-11-17T00:00:00Z';
     const outs = [{ netto: 1 }, { netto: 99999, positionen: [{ label: 'x', betrag: 99999 }] }].map((k) => {
       const s = createOfferSnapshot(job(tarif, { kosten_uebersicht: k, tarif_netto: 12345 }), asg({ rate_value: rate, end_date: end }));
-      return { b: s.binding_allowed, net: shortOfferLines(s.job_lines!, true, 'x').find(([k2]) => k2.startsWith('Ihre Nettovergütung'))?.[1] };
+      return { b: s.binding_allowed, net: shortOfferLines((s.job_lines ?? []), true, 'x').find(([k2]) => k2.startsWith('Ihre Nettovergütung'))?.[1] };
     });
     const exp = Math.round(rate * 100 * tage) - Math.round(Math.round(rate * 100 * tage) * (1 - f));
     const want = `${(exp / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
@@ -186,5 +195,5 @@ Deno.test('Stornierung an Fahrer: freigegebene Kurztexte', () => {
 Deno.test({ name: 'Kurzübersicht schreiben (nur mit OVERVIEW_OUT)', ignore: !Deno.env.get('OVERVIEW_OUT'), fn: async () => {
   const esc = (v: string) => v.replace(/&/g, '&amp;').replace(/</g, '&lt;');
   const body = mails.sort((a, b) => a.nr.localeCompare(b.nr, 'de', { numeric: true })).map((m) => `<section><h2>${esc(m.nr)}. ${esc(m.titel)}</h2><p class="meta"><b>Empfänger:</b> ${esc(m.empfaenger)} · <b>Auslöser:</b> ${esc(m.ausloeser)}<br/><b>Betreff:</b> ${esc(m.betreff)}</p><iframe srcdoc="${m.html.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"></iframe></section>`).join('');
-  await Deno.writeTextFile(Deno.env.get('OVERVIEW_OUT')!, `<!doctype html><html lang="de"><meta charset="utf-8"><title>Fahrerexpress – Kurzübersicht operative E-Mails</title><style>@page{size:A4;margin:12mm}body{font:10pt Arial,sans-serif;color:#182b3b}section{break-before:page;break-inside:avoid}h2{font-size:14pt;margin:0 0 6px}.meta{background:#edf2f5;padding:8px;border-left:4px solid #276176}iframe{width:100%;height:900px;border:1px solid #cbd5df}</style><body><h1>Fahrerexpress – Kurzübersicht operative E-Mails</h1><p>Prüfexemplar · TEST-Daten · nicht versendet · Stand 10.11.2026 (aktualisiert). Alle Beispiele sind mit dem tatsächlichen Vorlagencode gerendert.</p><p><b>Regeln:</b> Kundenmails zeigen nur Kundenpreise (LKW CE 349 €/Tag bis 9 h · CE-Woche 1.645 € Mo–Fr · Fernfahrer Einzeltag 450 € je Fernverkehrs-Einsatztag oder vergünstigter Wochenpreis 2.121,06 € je 5 vergütete Einsatztage · CE-Woche und Fernverkehr-Woche bewusst günstiger als Einzeltage · Baumaschine/Spezial 489 €/Tag bis 8 h), nie Fahrerhonorar oder Provision. Fahrermails zeigen als einzigen Preis die Nettovergütung nach Provision. Weitere Konditionen über Links auf die Vermittlungsbedingungen bzw. die Bestätigungsseite.</p>${body}</body></html>`);
+  await Deno.writeTextFile((Deno.env.get('OVERVIEW_OUT') ?? ''), `<!doctype html><html lang="de"><meta charset="utf-8"><title>Fahrerexpress – Kurzübersicht operative E-Mails</title><style>@page{size:A4;margin:12mm}body{font:10pt Arial,sans-serif;color:#182b3b}section{break-before:page;break-inside:avoid}h2{font-size:14pt;margin:0 0 6px}.meta{background:#edf2f5;padding:8px;border-left:4px solid #276176}iframe{width:100%;height:900px;border:1px solid #cbd5df}</style><body><h1>Fahrerexpress – Kurzübersicht operative E-Mails</h1><p>Prüfexemplar · TEST-Daten · nicht versendet · Stand 10.11.2026 (aktualisiert). Alle Beispiele sind mit dem tatsächlichen Vorlagencode gerendert.</p><p><b>Regeln:</b> Kundenmails zeigen nur Kundenpreise (LKW CE 349 €/Tag bis 9 h · CE-Woche 1.645 € Mo–Fr · Fernfahrer Einzeltag 450 € je Fernverkehrs-Einsatztag oder vergünstigter Wochenpreis 2.121,06 € je 5 vergütete Einsatztage · CE-Woche und Fernverkehr-Woche bewusst günstiger als Einzeltage · Baumaschine/Spezial 489 €/Tag bis 8 h), nie Fahrerhonorar oder Provision. Fahrermails zeigen als einzigen Preis die Nettovergütung nach Provision. Weitere Konditionen über Links auf die Vermittlungsbedingungen bzw. die Bestätigungsseite.</p>${body}</body></html>`);
 }});
