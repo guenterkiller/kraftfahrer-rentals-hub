@@ -14,7 +14,7 @@ export function buildCustomerAssignmentNotice({ job, driverName, driverPhone, dr
       const ansprech = [job?.company, job?.customer_name].filter(Boolean).join(" – ");
       const rows: [string, string][] = [
         ...(ansprech ? [["Auftraggeber", ansprech] as [string, string]] : []),
-        ["Einsatzort", einsatzort],
+        ["Einsatzort", einsatzort && einsatzort.trim() && einsatzort.trim() !== "—" ? einsatzort : "Nicht erfasst – wird vor Einsatz mit Ihnen abgestimmt"],
         ["Zeitraum", zeitraum],
         ["Fahrer", driverName],
         ["Telefon Fahrer", driverPhone],
@@ -32,7 +32,7 @@ export function buildCustomerAssignmentNotice({ job, driverName, driverPhone, dr
             ${rows.map(([k, v]) => `<strong>${escHtml(k)}:</strong> ${escHtml(v)}`).join("<br/>")}
           </td></tr>
         </table>
-        <p ${p}>Bitte prüfen Sie die Angaben. Stimmt etwas nicht, widersprechen Sie bitte unverzüglich; ohne unverzüglichen Widerspruch gilt die Zuteilung als bestätigt.</p>
+        <p ${p}>Bitte prüfen Sie die Angaben und teilen Sie uns Abweichungen umgehend mit. Maßgeblich sind die vereinbarten Auftragsdaten und unsere Vermittlungsbedingungen.</p>
         <p ${p}>Es gelten unsere <a href="${BEDINGUNGEN_URL}" style="color:#0d2340;">Vermittlungsbedingungen</a>.</p>
         <p style="margin:0;font-size:15px;line-height:1.6;" class="body-text">Mit freundlichen Grüßen<br/>Fahrerexpress-Agentur – Günter Killer</p>
       `;
@@ -48,7 +48,7 @@ export function buildCustomerAssignmentNotice({ job, driverName, driverPhone, dr
 
   ${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}
 
-  Bitte prüfen Sie die Angaben. Stimmt etwas nicht, widersprechen Sie bitte unverzüglich; ohne unverzüglichen Widerspruch gilt die Zuteilung als bestätigt.
+  Bitte prüfen Sie die Angaben und teilen Sie uns Abweichungen umgehend mit. Maßgeblich sind die vereinbarten Auftragsdaten und unsere Vermittlungsbedingungen.
 
   Es gelten unsere Vermittlungsbedingungen: ${BEDINGUNGEN_URL}
 

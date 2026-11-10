@@ -54,8 +54,8 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
   if (assignment?.rate_type === 'daily') {
     // CE-Wochentarif schließt Wochenenden aus: Kalendertage inkl. Sa/So sind dann nicht automatisch vergütete Tage.
     if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
-    // Fernverkehr: nur vereinbarte vergütete Einsatztage; Kalendertage inkl. Sa/So sind nicht automatisch vergütet.
-    if (job?.tarif_type === 'fernfahrer' && hasWeekend(assignment)) return null;
+    // Fernverkehr: Pauschale unabhängig vom Wochentag – der vom Administrator eingetragene Zeitraum ist die vereinbarte Zahl vergüteter Einsatztage;
+    // Sa/So sperren nicht pauschal, werden aber in der Vorschau ausdrücklich als vergütet angesetzt ausgewiesen.
     return { units: days, label: days === 1 ? 'Einsatztag' : 'Einsatztage', unit: 'Einsatztag' };
   }
   if (assignment?.rate_type === 'weekly') {
@@ -91,7 +91,6 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   if (periodDays(assignment) === null) missing.push('Einsatzzeitraum (Kalenderdaten)');
   else if (units === null) missing.push('Vergütete Einheiten (Tage/Wochen/Stunden) nicht eindeutig bestimmbar');
   if (units === null && assignment?.rate_type === 'daily' && job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) missing.push('Widerspruch: CE-Wochentarif ohne Wochenenden, Tagessatz-Zeitraum enthält Samstag/Sonntag – vergütete Tage nicht eindeutig');
-  if (units === null && assignment?.rate_type === 'daily' && job?.tarif_type === 'fernfahrer' && hasWeekend(assignment)) missing.push('Fernverkehr: Zeitraum enthält Samstag/Sonntag – Zahl der vereinbarten vergüteten Einsatztage nicht eindeutig (Kalendertage werden nicht automatisch vergütet)');
   if (fernverkehrRateOnCeTarif(job, assignment)) missing.push('Tarifkonflikt: 450 € je Einsatztag ist der Fernverkehr-Fahrersatz; dieser Auftrag ist als CE-Tages-/Wochentarif gespeichert – Tarifart Fernfahrer prüfen, CE-Sätze bleiben getrennt');
   if (job?.tarif_needs_review) missing.push('Tarifzuordnung noch zu prüfen');
   if (pct === null) missing.push('Tarifart ohne festgelegte Provisionsregel');
@@ -101,7 +100,7 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   const commissionCents = complete ? Math.round(feeCents! * pct! / 100) : null;
   const none = 'Nicht bestimmt – keine Zahl angegeben';
   const lines: [string, string][] = [
-    ['Vergütete Einheiten', complete ? `${units!.units} ${units!.label} (aus dem vereinbarten Zeitraum)` : 'Nicht eindeutig bestimmt'],
+    ['Vergütete Einheiten', complete ? `${units!.units} ${units!.label} (aus dem vereinbarten Zeitraum${job?.tarif_type === 'fernfahrer' && assignment?.rate_type === 'daily' && hasWeekend(assignment) ? '; enthaltene Samstage/Sonntage sind als vergütete Fernverkehrs-Einsatztage angesetzt – nur so versenden, wenn vereinbart, sonst Zeitraum anpassen' : ''})` : 'Nicht eindeutig bestimmt'],
     ['Stand-/Ruhetage', complete && job?.tarif_type === 'lkw_ce_woche' && units!.units > 1
       ? 'Dazwischenliegende Samstage/Sonntage sind nicht im Wochensatz enthalten; kein Fahrer-Tagessatz vereinbart – ein Wochenendeinsatz ist nicht Gegenstand dieses Angebots und vorab gesondert zu vereinbaren'
       : 'Nicht gesondert vereinbart – keine zusätzlichen Tage angesetzt'],

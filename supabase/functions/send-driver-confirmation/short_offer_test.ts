@@ -20,10 +20,21 @@ Deno.test('MIAG-Konstellation: CE-Wochentarif + Tagessatz über Wochenende → k
   const out = renderShortOffer(shortOfferLines(s.job_lines!, false, 'x'));
   assert(!out.includes('€'));
 });
-Deno.test('Fernverkehr 8 Kalendertage inkl. Wochenende (MIAG Mailand): Kalendertage nicht automatisch vergütet → kein Betrag', () => {
+Deno.test('Fernverkehr 8 vereinbarte Tage inkl. Wochenende: verbindlich, einziger Preis 2.880,00 €', () => {
   const s = createOfferSnapshot(job, a());
+  assertEquals(s.binding_allowed, true);
+  const out = renderShortOffer(shortOfferLines(s.job_lines!, true, 'x'));
+  assert(out.includes(`${NET_LABEL}:</strong> 2.880,00 €`)); assertEquals((out.match(/€/g) ?? []).length, 1);
+});
+Deno.test('Fernverkehr ohne Fahrersatz: Endbetrag ungeklärt → kein Betrag, nicht verbindlich', () => {
+  const s = createOfferSnapshot(job, a({ rate_value: null }));
   assertEquals(s.binding_allowed, false);
   assert(!renderShortOffer(shortOfferLines(s.job_lines!, false, 'x')).includes('€'));
+});
+Deno.test('Fehlende Einsatzanschrift wird nicht erfunden', () => {
+  const s = createOfferSnapshot({ ...job, einsatzort: null }, a());
+  const l = shortOfferLines(s.job_lines!, true, 'x').find(([k]) => k.startsWith('Einsatzort'));
+  assertEquals(l?.[1], 'Nicht erfasst – vor Einsatz abstimmen');
 });
 Deno.test('450 € Fernverkehrssatz auf CE-Wochentarif Mo–Fr: Tarifkonflikt → nicht verbindlich', () => {
   const s = createOfferSnapshot({ ...job, tarif_type: 'lkw_ce_woche' }, a({ end_date: '2026-11-20T00:00:00Z' }));

@@ -141,3 +141,7 @@
 - [x] Kunden-Eingangsbestätigung, Zuteilung, No-Show, Fahrerangebot, Annahmebestätigung, Auftragsbenachrichtigung gekürzt; Tests + Kurzübersicht; Funktionen live.
 - [x] Windows-Build-Ursache (veraltete package-lock, Peer-Konflikt) behoben; Paket v4.
 - [ ] Upload IONOS durch Inhaber.
+# Abschlussauftrag Kurzmails (10.11.2026)
+- [x] Kunden-Fernverkehrsmail: Einzeltag und vergünstigte Woche als getrennte Tarifoptionen; Tarife unverändert.
+- [x] Baumaschinen-Testdaten passend; Fernverkehr-Wochenende nicht pauschal gesperrt; Zuteilungsmail ohne Schweigen-gilt-als-bestätigt; keine erfundene Adresse.
+- [x] Tests, PDF v2, IONOS v5. GitHub-Abgleich nach Rundenende durch Nutzer zu prüfen.
