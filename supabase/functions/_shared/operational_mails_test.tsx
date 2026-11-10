@@ -17,7 +17,7 @@ import { confirmationHtml } from '../respond-invite/binding.ts';
 type Mail = { nr: string; titel: string; empfaenger: string; ausloeser: string; betreff: string; html: string };
 const mails: Mail[] = [];
 const text = (h: string) => h.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
-const INTERN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|nettovergütung|rate_value|\b20 %|\b25 % (?!netto)/i;
+const INTERN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|nettovergütung|rate_value|\b20 %|\b25 % (?!netto|Zuschlag)/i;
 const LANG = /Haftung für mittelbare|Folgeschäden|entgangenen Gewinn|Arbeitnehmerüberlassung und stellt|Stornierung unter 24 Stunden|Ersatzgestellung/;
 const KUNDE = { company: 'TEST-Firma Muster GmbH', customer_name: 'TEST Erika Beispiel' };
 
@@ -30,11 +30,11 @@ const JOBART: Record<string, [string, string]> = {
 const job = (tarif_type: string, o: Record<string, unknown> = {}) => ({ ...KUNDE, customer_phone: '+49 000 TEST', einsatzort: 'TEST-Ort 12345 Musterstadt', fahrzeugtyp: (JOBART[tarif_type] ?? JOBART.lkw_ce)[0], nachricht: (JOBART[tarif_type] ?? JOBART.lkw_ce)[1], tarif_type, kosten_uebersicht: { netto: 9999 }, ...o });
 const asg = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_value: 450, start_date: '2026-11-16T00:00:00Z', end_date: '2026-11-20T00:00:00Z', times_entered: null, ...o });
 
-async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie: string, longDistance: boolean, extra: Record<string, unknown> = {}) {
+async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie: string, longDistance: boolean, extra: Record<string, unknown> = {}, von = '2026-11-16', bis = '2026-11-20') {
   const tarif = tarifKey === 'ueberfuehrung' ? { tarif: 'ueberfuehrung', label: 'LKW-Überführung', netto: null, einheit: '', mehrstunde: null, needsReview: false, reason: '' } : resolveTarif({ kategorie, maschinenbedienung: '', longDistance });
-  const k = tarifKey === 'ueberfuehrung' ? null : berechneKostenUebersicht(tarif.tarif as any, '2026-11-16', '2026-11-20');
+  const k = tarifKey === 'ueberfuehrung' ? null : berechneKostenUebersicht(tarif.tarif as any, von, bis);
   const html = await renderAsync(React.createElement(CustomerBookingConfirmation as any, {
-    customerName: KUNDE.customer_name, companyName: KUNDE.company, driverType: kategorie, timeframe: '16.11.2026 – 20.11.2026', location: 'TEST-Ort 12345 Musterstadt',
+    customerName: KUNDE.customer_name, companyName: KUNDE.company, driverType: kategorie, timeframe: `${von.split('-').reverse().join('.')} – ${bis.split('-').reverse().join('.')}`, location: 'TEST-Ort 12345 Musterstadt',
     message: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[1], selectedActivity: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[0], tarif, isFernfahrerTarif: tarif.tarif === 'fernfahrer', kostenUebersicht: k, isUeberfuehrung: tarifKey === 'ueberfuehrung', ...extra,
   }));
   mails.push({ nr, titel, empfaenger: 'Auftraggeber', ausloeser: 'Absenden des Buchungsformulars', betreff: 'Ihre Fahrerbuchung bei der Fahrerexpress-Agentur', html });
@@ -42,27 +42,33 @@ async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie
 }
 
 Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine internen Daten', async () => {
-  const ce = await kundenmail('1a', 'Eingangsbestätigung – LKW CE Tag', 'lkw_ce', 'LKW CE', false, { weekendHolidayAffected: true });
-  assert(ce.t.includes('349,00 € netto je tatsächlichem Einsatztag') && ce.t.includes('Samstag 25 %'));
+  const ce = await kundenmail('1a', 'Eingangsbestätigung – LKW CE Tag (Mo–Fr)', 'lkw_ce', 'LKW CE', false);
+  assert(ce.t.includes('349,00 € netto je tatsächlichem Einsatztag') && ce.t.includes('Samstag 25 %') && !ce.t.includes('Ihr Zeitraum enthält einen Samstag'));
+  assert(ce.t.includes('1.745,00 €') && ce.t.includes('331,55 € / 2.076,55 €'), 'CE 5 × 349 + 19 % USt');
+  const cesa = await kundenmail('1a2', 'Eingangsbestätigung – LKW CE Tag mit Samstag (25 % Zuschlag)', 'lkw_ce', 'LKW CE', false, { weekendHolidayAffected: true }, '2026-11-16', '2026-11-21');
+  assert(cesa.t.includes('436,25 €') && cesa.t.includes('2.181,25 €') && cesa.t.includes('414,44 € / 2.595,69 €') && cesa.t.includes('Ihr Zeitraum enthält einen Samstag'), 'CE Samstag: 349 × 1,25');
   const wo = await kundenmail('1b', 'Eingangsbestätigung – CE Wochenpreis', 'lkw_ce_woche', 'LKW CE Wochenpreis', false);
-  assert(wo.t.includes('1.645,00 € netto für 5 Einsatztage von Montag bis Freitag'));
+  assert(wo.t.includes('1.645,00 € netto für 5 Einsatztage von Montag bis Freitag') && wo.t.includes('312,55 € / 1.957,55 €'));
   const ff = await kundenmail('1c', 'Eingangsbestätigung – Fernfahrer (Fernverkehr)', 'fernfahrer', 'LKW CE', true, { unterkunftOption: 'keine' });
   assert(ff.t.includes('450,00 € netto je tatsächlichem Fernverkehrs-Einsatztag') && ff.t.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge') && !ff.t.includes('Samstag 25 %'));
   assert(ff.t.includes('Tarifoption Einzeltag') && ff.t.includes('Tarifoption Woche (vergünstigt)') && ff.t.includes('2.121,06 € netto für je 5 abrechenbare Einsatztage') && !ff.t.includes('2.250'), 'Fernverkehr-Tarifoptionen');
   assert(wo.t.includes('1.645,00 €') && !wo.t.includes('1.745'));
   // Fernverkehr: Übernachtung im Führerhaus/LKW, kein Widerspruch, keine Hotelkosten.
-  assert(ff.t.includes('Übernachtung im Führerhaus/LKW (vorbehaltlich der gesetzlich vorgeschriebenen Ruhezeiten); keine Hotelkosten') && !ff.t.includes('Keine Übernachtung erforderlich') && !/Hotelbudget|Hotelkosten:/.test(ff.t), 'Fernverkehr-Unterkunft');
+  assert(ff.t.includes('regelmäßige wöchentliche Ruhezeit (mind. 45 Std.) darf nicht im Fahrzeug') && ff.t.includes('keine Hotelkosten automatisch') && !ff.t.includes('Keine Übernachtung erforderlich') && !/Hotelbudget/.test(ff.t), 'Fernverkehr-Unterkunft');
+  assert(ff.t.includes('2.121,06 €') && ff.t.includes('403,00 € / 2.524,06 €') && ff.t.includes('alle Werktage des Zeitraums sind Einsatztage') && !ff.t.includes('zählt jeden Kalendertag'), 'Fernverkehr Mo–Fr');
+  const ffwe = await kundenmail('1c2', 'Eingangsbestätigung – Fernverkehr mit Wochenende (kein Gesamtbetrag, Ruhetage offen)', 'fernfahrer', 'LKW CE', true, { unterkunftOption: 'keine', zeitraumMitRuhetagen: true }, '2026-11-16', '2026-11-23');
+  assert(!ffwe.t.includes('Summe netto') && !ffwe.t.includes('3.471,06') && ffwe.t.includes('deshalb nennen wir noch keinen Gesamtbetrag') && ffwe.t.includes('2.121,06 €') && ffwe.t.includes('450,00 €'), 'Fernverkehr Wochenende ohne erfundenen Gesamtpreis');
   // CE Tag vs. CE Woche: jeweils nur der gewählte Tarif.
   assert(ce.t.includes('349,00 €') && !ce.t.includes('1.645'), 'CE Tag zeigt keinen Wochenpreis');
   assert(wo.t.includes('1.645,00 €') && !wo.t.includes('349,00 € netto je tatsächlichem Einsatztag'), 'CE Woche zeigt keinen Tagespreis');
   const bm = await kundenmail('1d', 'Eingangsbestätigung – Baumaschinenführer/Spezialfahrzeuge, Hotelbudget 75 €', 'baumaschine', 'Baumaschinenführer', false, { unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: 75 });
-  assert(bm.t.includes('489,00 € netto je tatsächlichem Einsatztag') && bm.t.includes('75,00 €') && !bm.t.includes('90,00'));
+  assert(bm.t.includes('489,00 € netto je tatsächlichem Einsatztag') && bm.t.includes('75,00 €') && !bm.t.includes('90,00') && bm.t.includes('2.445,00 €') && bm.t.includes('464,55 € / 2.909,55 €'));
   const ue = await kundenmail('1e', 'Eingangsbestätigung – LKW-Überführung', 'ueberfuehrung', 'LKW-Überführung', false);
-  for (const m of [ce, wo, ff, bm, ue]) {
+  for (const m of [ce, cesa, wo, ff, ffwe, bm, ue]) {
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
     assert(m.t.includes('noch keine Einsatzbestätigung') && m.t.includes('Vermittlungsbedingungen'));
-    assert(m.t.length < (m === ff ? 2900 : 2600), `zu lang: ${m.t.length}`);
+    assert(m.t.length < (m === ff || m === ffwe ? 3000 : 2600), `zu lang: ${m.t.length}`);
   }
 });
 
@@ -73,6 +79,7 @@ Deno.test('Kunden-Zuteilungsmitteilung: Fahrer, Einsatz, Kundenpreis, kurz', () 
     const x = text(m.html);
     assert(!/gilt die Zuteilung als bestätigt|ohne .*Widerspruch/.test(x), 'Schweigen als Bestätigung');
     assert(!INTERN.test(x) && !LANG.test(x) && x.includes('TEST Max Mustermann') && x.includes(t === 'fernfahrer' ? '450,00 €' : '349,00 €'));
+    if (t === 'fernfahrer') assert(x.includes('vergünstigt 2.121,06 €'), 'Zuteilung Fernverkehr nennt Wochenpreis');
     assert(!x.includes('9.999'));
   }
 });
@@ -93,13 +100,13 @@ Deno.test('No-Show-Mitteilung: an Auftraggeber, ohne Betrag und ohne leere Platz
 Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergütung nach Provision', () => {
   const variants: [string, string, any, any][] = [
     ['4a', 'Fahrerangebot – Fernverkehr Mo–Fr (verbindlich)', job('fernfahrer'), asg()],
-    ['4b', 'Fahrerangebot – CE Tag 349 € (verbindlich)', job('lkw_ce'), asg({ rate_value: 349 })],
-    ['4c', 'Fahrerangebot – Baumaschine 489 € (25 %, verbindlich)', job('baumaschine'), asg({ rate_value: 489, end_date: '2026-11-17T00:00:00Z' })],
+    ['4b', 'Fahrerangebot – CE Tag, vereinbarter Fahrersatz 300 € (verbindlich)', job('lkw_ce'), asg({ rate_value: 300 })],
+    ['4c', 'Fahrerangebot – Baumaschine, vereinbarter Fahrersatz 420 € (25 %, verbindlich)', job('baumaschine'), asg({ rate_value: 420, end_date: '2026-11-17T00:00:00Z' })],
     ['4d', 'Fahrerangebot – Fernverkehr 8 vereinbarte Tage inkl. Wochenende (verbindlich)', job('fernfahrer'), asg({ end_date: '2026-11-23T00:00:00Z' })],
     ['4e', 'Fahrerangebot – Fernverkehr ohne vereinbarten Fahrersatz (unverbindlich, kein Betrag)', job('fernfahrer'), asg({ rate_value: null })],
-    ['4f', 'Fahrerangebot – Einsatzanschrift nicht erfasst (verbindlich, keine erfundene Adresse)', job('lkw_ce', { einsatzort: null }), asg({ rate_value: 349 })],
+    ['4f', 'Fahrerangebot – Einsatzort nicht erfasst (gesperrt: unverbindlich, kein Betrag)', job('lkw_ce', { einsatzort: null }), asg({ rate_value: 300 })],
   ];
-  const expected: Record<string, string> = { '4a': '1.800,00 €', '4b': '1.396,00 €', '4c': '733,50 €', '4d': '2.880,00 €', '4f': '1.396,00 €' };
+  const expected: Record<string, string> = { '4a': '1.800,00 €', '4b': '1.200,00 €', '4c': '630,00 €', '4d': '2.880,00 €' };
   for (const [nr, titel, j, a] of variants) {
     const s = createOfferSnapshot(j, a);
     const binding = s.binding_allowed === true;
@@ -116,7 +123,8 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
     const euros = x.match(/[\d.]+,\d{2} €/g) ?? [];
     if (expected[nr]) { assert(binding && euros.length === 1 && euros[0] === expected[nr], `${nr}: ${euros}`); }
     else assert(!binding && euros.length === 0, `${nr}: ${euros}`);
-    assert(!/450,00|349,00|489,00|9\.999|\b20 %|\b25 %|vor Provision/.test(x), `${nr}: interner Wert sichtbar`);
+    assert(!/450,00|349,00|489,00|300,00|420,00|1\.645|2\.121|9\.999|\b20 %|\b25 %|vor Provision/.test(x), `${nr}: interner Wert sichtbar`);
+    if (nr === '4f') assert(!binding && x.includes('Noch keine verbindliche Annahme möglich'), '4f: fehlender Einsatzort sperrt Annahme');
     if (nr === '4a') {
       const c = confirmationHtml('TEST Max Mustermann', '16.11.2026, 08:00:00', lines, 'TEST-HASH');
       mails.push({ nr: '5', titel: 'Annahmebestätigung an Fahrer (mit PDF-Anhang)', empfaenger: 'Fahrer (Kopie Verwaltung)', ausloeser: 'Fahrer bestätigt auf der Bestätigungsseite', betreff: 'Annahmebestätigung – verbindliche Auftragsannahme – TEST-Ort 12345 Musterstadt', html: c });
@@ -150,6 +158,20 @@ Deno.test('Fahrer-Endbetrag stammt nur aus dem manuell eingegebenen Fahrersatz, 
   // CE-Woche-Kundenpreis 1.645 € wird nicht zum Fahrerbetrag (1.645 × 0,8 = 1.316,00 €).
   const w = net(job('lkw_ce_woche', { kosten_uebersicht: { netto: 1645 } }), asg({ rate_type: 'weekly', rate_value: 1500 }));
   assert(!w.includes('1.316,00 €'), `${w}`);
+});
+
+Deno.test('Kopplungsprüfung: Fahrerbetrag = Fahrersatz × Einheiten × (1 − Provision), unabhängig von Kundentarif/Kundenkalkulation', () => {
+  const cases: [string, number, number, number][] = [['lkw_ce', 0.8, 5, 20], ['fernfahrer', 0.8, 5, 20], ['baumaschine', 0.75, 2, 25], ['event', 0.75, 2, 25]];
+  for (const [tarif, f, tage] of cases) for (const rate of [1, 299.5, 349, 377.77, 489, 612]) {
+    const end = tage === 5 ? '2026-11-20T00:00:00Z' : '2026-11-17T00:00:00Z';
+    const outs = [{ netto: 1 }, { netto: 99999, positionen: [{ label: 'x', betrag: 99999 }] }].map((k) => {
+      const s = createOfferSnapshot(job(tarif, { kosten_uebersicht: k, tarif_netto: 12345 }), asg({ rate_value: rate, end_date: end }));
+      return { b: s.binding_allowed, net: shortOfferLines(s.job_lines!, true, 'x').find(([k2]) => k2.startsWith('Ihre Nettovergütung'))?.[1] };
+    });
+    const exp = Math.round(rate * 100 * tage) - Math.round(Math.round(rate * 100 * tage) * (1 - f));
+    const want = `${(exp / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
+    assert(outs[0].b === true && outs[0].net === want && outs[1].net === want, `${tarif} ${rate}: ${outs[0].net} / ${outs[1].net} ≠ ${want}`);
+  }
 });
 
 Deno.test('Stornierung an Fahrer: freigegebene Kurztexte', () => {

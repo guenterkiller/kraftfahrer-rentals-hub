@@ -1,6 +1,6 @@
 import { renderAsync } from './render-email.ts';
 import * as React from 'npm:react@18.3.1';
-import { CustomerBookingConfirmation } from './email-templates/customer-booking-confirmation.tsx';
+import { CustomerBookingConfirmation, FERNVERKEHR_OHNE_GESAMTPREIS } from './email-templates/customer-booking-confirmation.tsx';
 import { AdminBookingNotification } from './email-templates/admin-booking-notification.tsx';
 import { resolveTarif } from './tarif-zuordnung.ts';
 import { berechneKostenUebersicht, FERNFAHRER_PREIS_HINWEIS, FERNFAHRER_WOCHENENDRUHE_HINWEIS } from './kosten-uebersicht.ts';
@@ -24,10 +24,11 @@ Deno.test('Kunden-/Adminmail Fernfahrer: Preis-/Ruhetagshinweis, kein Zuschlags-
   const admin = decode(await renderAsync(React.createElement(AdminBookingNotification, { ...common, address: 'Testort', email: 'test@example.invalid', phone: '000', billingModel: 'agency', jobId: 'test' })));
   assert(customer.includes('450,00 € netto je tatsächlichem Fernverkehrs-Einsatztag'), 'Kundenpreis fehlt');
   assert(customer.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge'), 'Zuschlagsausschluss fehlt');
-  for (const text of [customer, admin]) {
-    assert(text.includes(FERNFAHRER_WOCHENENDRUHE_HINWEIS), 'Ruhetagshinweis fehlt');
-    assert(text.includes('3.471,06 €') && text.includes('4.130,56 €'), 'Summen fehlen');
-  }
+  // Interne Adminmail: vollständige Vorkalkulation mit Ruhetagshinweis.
+  assert(admin.includes(FERNFAHRER_WOCHENENDRUHE_HINWEIS), 'Ruhetagshinweis fehlt');
+  assert(admin.includes('3.471,06 €') && admin.includes('4.130,56 €'), 'Summen fehlen');
+  // Kundenmail: Ruhetage offen → kein aus Kalendertagen erfundener Gesamtbetrag.
+  assert(customer.includes(FERNVERKEHR_OHNE_GESAMTPREIS) && !customer.includes('3.471,06 €'), 'Kundenmail darf ohne geklärte Ruhetage keinen Gesamtbetrag nennen');
   for (const text of [admin]) {
     assert(text.includes(FERNFAHRER_PREIS_HINWEIS), 'Preishinweis fehlt');
     assert(!text.includes('1.645'), 'Wochenpreis darf nicht erscheinen');

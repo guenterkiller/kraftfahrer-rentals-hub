@@ -147,3 +147,6 @@
 - [x] Tests, PDF v2, IONOS v5. GitHub-Abgleich nach Rundenende durch Nutzer zu prüfen.
 # Abschlussprüfung Fernverkehr-Unterkunft (10.11.2026)
 - [x] Kunden-Eingangsbestätigung Fernverkehr: Unterkunft „Übernachtung im Führerhaus/LKW (vorbehaltlich gesetzlicher Ruhezeiten); keine Hotelkosten" statt „Keine Übernachtung erforderlich"; nur Anzeige, keine Kosten. Tests CE Tag/Woche und Fahrerbetrag unabhängig vom Kundenpreis ergänzt; 152 Deno + 126 Vitest bestanden; Kurzübersicht v3 und IONOS-Paket v6.
+# QS operative E-Mails (10.11.2026)
+- [x] Fernverkehr-Kundenmail ohne erfundenen Gesamtbetrag bei offenen Ruhetagen, 45-Std.-Wochenruhe-Hinweis, Zuteilungsmail mit Wochenpreis, Fahrerangebot ohne Einsatzort gesperrt; 153 Deno + 126 Vitest bestanden; Kurzübersicht v4, Prüfbericht, IONOS v7.
+- [ ] Buchungsformular-Vorschau Fernverkehr zählt Kalendertage (wartet auf Freigabe, Bestandsschutz).

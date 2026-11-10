@@ -19,7 +19,22 @@ import {
 } from '../kosten-uebersicht.ts';
 
 export const FERNVERKEHR_UEBERNACHTUNG =
-  'Übernachtung im Führerhaus/LKW (vorbehaltlich der gesetzlich vorgeschriebenen Ruhezeiten); keine Hotelkosten.';
+  'Fernverkehr: tägliche und reduzierte wöchentliche Ruhezeiten im Führerhaus mit geeigneter Schlafmöglichkeit; die regelmäßige wöchentliche Ruhezeit (mind. 45 Std.) darf nicht im Fahrzeug verbracht werden – eine dafür erforderliche Unterkunft oder Heimfahrt wird vorab mit Ihnen abgestimmt. Es werden keine Hotelkosten automatisch berechnet.';
+
+/** Fernverkehr: Kalendertage mit Samstag/Sonntag im angefragten Zeitraum (Ruhetage noch nicht geklärt). */
+export const fernverkehrZeitraumMitWochenende = (timeframe: string): boolean | null => {
+  const d = String(timeframe ?? '').match(/\d{2}\.\d{2}\.\d{4}/g) ?? [];
+  if (d.length === 0) return null;
+  const iso = (x: string) => Date.parse(`${x.split('.').reverse().join('-')}T00:00:00Z`);
+  const start = iso(d[0]), end = iso(d[d.length - 1]);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
+  for (let t = start; t <= end; t += 86400000) { const w = new Date(t).getUTCDay(); if (w === 0 || w === 6) return true; }
+  return false;
+};
+export const FERNVERKEHR_OHNE_GESAMTPREIS =
+  'Ihr Zeitraum enthält Samstage, Sonntage oder Feiertage bzw. ist nicht eindeutig angegeben. Welche Tage Einsatz- bzw. Ruhetage sind, wird vor verbindlicher Auftragserteilung mit Ihnen festgelegt; deshalb nennen wir noch keinen Gesamtbetrag. Abgerechnet werden nur vereinbarte, tatsächlich geleistete Einsatztage zu den oben genannten Tarifoptionen.';
+export const FERNVERKEHR_WERKTAGE_HINWEIS =
+  'Annahme der Vorkalkulation: alle Werktage des Zeitraums sind Einsatztage. Abgerechnet werden nur tatsächlich geleistete Einsatztage.';
 
 const PREISE_URL = 'https://www.kraftfahrer-mieten.com/preise-und-ablauf';
 const BEDINGUNGEN_URL = 'https://www.kraftfahrer-mieten.com/vermittlungsbedingungen';
@@ -48,6 +63,8 @@ interface CustomerBookingConfirmationProps {
   };
   /** Wird bewusst nicht mehr mit konkreten Datumsangaben ausgegeben. */
   surchargeDays?: Array<{ label: string; percent: number }>;
+  /** Fernverkehr: Zeitraum enthält Samstag/Sonntag/Feiertag (serverseitig aus ISO-Daten); null = unbekannt. */
+  zeitraumMitRuhetagen?: boolean | null;
   /** Gewählte Unterkunftsregelung (nur bei relevanten Tarifen). */
   unterkunftOption?: UnterkunftOption | null;
   /** Vereinbarte Kostenobergrenze netto (nur bei Option fahrer_organisiert). */
@@ -116,6 +133,7 @@ export const CustomerBookingConfirmation = ({
   unterkunftOption = null,
   unterkunftObergrenze = null,
   kostenUebersicht = null,
+  zeitraumMitRuhetagen = null,
 }: CustomerBookingConfirmationProps) => {
   // Kurzfassung: nur wichtigste Daten, Kundenpreis und Status; alle weiteren Konditionen über Links.
   const ueberfuehrung = isUeberfuehrung || tarif?.tarif === 'ueberfuehrung';
@@ -200,7 +218,11 @@ export const CustomerBookingConfirmation = ({
               Ihr Zeitraum enthält einen Samstag, Sonntag oder gesetzlichen Feiertag.
             </Text>
           )}
-          {kostenUebersicht && (
+          {istFernfahrer && kostenUebersicht && (typeof zeitraumMitRuhetagen === 'boolean' ? zeitraumMitRuhetagen : fernverkehrZeitraumMitWochenende(timeframe)) !== false ? (
+            <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '8px 0 0 0' })}>
+              <strong>{VORKALKULATION_TITEL}:</strong> {FERNVERKEHR_OHNE_GESAMTPREIS} {OFFENE_KOSTEN_HINWEIS}
+            </Text>
+          ) : kostenUebersicht && (
             <>
               <Text {...getTextProps({ ...textStyles.paragraph, fontWeight: 'bold', margin: '12px 0 4px 0' })}>{VORKALKULATION_TITEL}</Text>
               <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
@@ -223,7 +245,7 @@ export const CustomerBookingConfirmation = ({
                 Unverbindlich; abgerechnet werden die tatsächlich geleisteten Einsatztage. {OFFENE_KOSTEN_HINWEIS}
               </Text>
               {istFernfahrer && (
-                <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '6px 0 0 0' })}>{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</Text>
+                <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '6px 0 0 0' })}>{FERNVERKEHR_WERKTAGE_HINWEIS}</Text>
               )}
             </>
           )}
