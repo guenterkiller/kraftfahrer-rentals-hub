@@ -31,7 +31,7 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
       createCorsHeaders: () => ({}), handleCorsPreflightRequest: () => new Response(),
       createErrorResponse: (message: string, status: number) => new Response(JSON.stringify({ message }), { status }),
       logAdminAction: async () => {},
-      Resend: class { headers = new Headers(); emails = { send(payload: any) { sends.push(payload); if (scenario === 'throw') throw new Error('TEST network failure'); return Promise.resolve(['error','retry-error'].includes(scenario) ? { error: { message: 'TEST failure' }, data: null } : scenario === 'no-id' ? { error: null, data: {} } : { error: null, data: { id: 'TEST-MAIL' } }); } }; },
+      Resend: class { fetchRequest(_path: string, options: any) { return this.emails.send(JSON.parse(options.body)); } headers = new Headers(); emails = { send(payload: any) { sends.push(payload); if (scenario === 'throw') throw new Error('TEST network failure'); return Promise.resolve(['error','retry-error'].includes(scenario) ? { error: { message: 'TEST failure' }, data: null } : scenario === 'no-id' ? { error: null, data: {} } : { error: null, data: { id: 'TEST-MAIL' } }); } }; },
     });
     try {
       const original = await Deno.readTextFile(new URL('./index.ts', import.meta.url));

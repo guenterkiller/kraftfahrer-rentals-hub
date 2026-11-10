@@ -202,15 +202,18 @@ serve(async (req) => {
     // Send email using Resend
     let delivery: ReturnType<typeof interpretSendResult>;
     try {
-    const headers = new Headers(resend.headers);
+    const apiKey = Deno.env.get('RESEND_API_KEY');
+    if (!apiKey) throw new Error('E-Mail-Dienst nicht konfiguriert');
+    const headers = new Headers({ Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' });
     headers.set('Idempotency-Key', sendKey);
-    const emailResult = await resend.emails.send({
+    const payload = {
       from: 'Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>',
       to: [driver.email],
       bcc: ['info@kraftfahrer-mieten.com'],
       subject: emailSubject,
       html: emailContent,
-    }, { headers });
+    };
+    const emailResult = await resend.fetchRequest<{ id: string }>('/emails', { method: 'POST', headers, body: JSON.stringify(payload) });
     delivery = interpretSendResult(emailResult);
     } catch (error) {
       delivery = { ok: false, error: error instanceof Error ? error.message : String(error) };
