@@ -143,6 +143,7 @@ serve(async (req) => {
         ...buildDriverOfferView(offerSnapshot.job, offerSnapshot.assignment).missing,
       ])];
       if (offerSnapshot.binding_allowed !== true || !shortOfferNet(offerSnapshot.job_lines ?? [], true)) issues.push('Gespeicherte endgültige Netto-Gesamtvergütung fehlt.');
+      if (!(offerSnapshot.job_lines ?? []).some(([label]: [string, string]) => label === 'Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)')) issues.push('Bestätigter tatsächlicher Einsatzort fehlt in der Angebotskopie; ein unbestätigter Treffpunkt wird nicht verbindlich angeboten.');
       if (issues.length) return createErrorResponse('Versand gesperrt: ' + issues.join(' ') + (previous ? ' Das alte Angebot bleibt unverändert; eine bewusste neue Zuteilung ist erforderlich.' : ''), 422, corsHeaders);
       if (expiresAt.getTime() > Date.now()) {
         if (!previous) {

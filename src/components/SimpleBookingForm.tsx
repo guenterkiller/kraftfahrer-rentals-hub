@@ -22,7 +22,9 @@ import {
   berechneKostenUebersicht,
   tarifOhneZuschlaege,
   FERNFAHRER_PREIS_HINWEIS,
-  FERNFAHRER_WOCHENENDRUHE_HINWEIS,
+  fernverkehrMitWochenende,
+  FERNVERKEHR_OHNE_GESAMTPREIS,
+  FERNVERKEHR_WERKTAGE_HINWEIS,
   offenePositionen,
   formatEuro,
   UNTERKUNFT_OPTIONEN,
@@ -114,6 +116,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
 
   // Unverbindliche Vorkalkulation aus Tarif und Einsatzzeitraum
   const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende);
+  // Fernverkehr mit Samstag/Sonntag: Ruhetage ungeklärt – wie in der Kundenmail kein Gesamtbetrag.
+  const fernverkehrOhneGesamt = showFernfahrerHinweis && !!kostenUebersicht && fernverkehrMitWochenende(einsatzbeginn, einsatzende);
 
   // Hinweis, wenn Rechnungsempfänger identisch mit Ansprechpartner ist
   const norm = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -1123,9 +1127,10 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                     {showFernfahrerHinweis && (
                       <div className="mb-3 space-y-1" data-testid="fernfahrer-preis-hinweis">
                         <p className="text-sm font-medium">{FERNFAHRER_PREIS_HINWEIS}</p>
-                        <p className="text-xs text-muted-foreground">{FERNFAHRER_WOCHENENDRUHE_HINWEIS}</p>
+                        <p className="text-xs text-muted-foreground" data-testid="fernverkehr-vorkalkulation-hinweis">{fernverkehrOhneGesamt ? FERNVERKEHR_OHNE_GESAMTPREIS : FERNVERKEHR_WERKTAGE_HINWEIS}</p>
                       </div>
                     )}
+                    {!fernverkehrOhneGesamt && (
                     <table className="w-full text-sm">
                       <tbody>
                         {kostenUebersicht.positionen.map((p) => (
@@ -1148,6 +1153,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                         </tr>
                       </tbody>
                     </table>
+                    )}
                     <div className="mt-3 border-t border-border pt-3">
                       <p className="text-sm font-medium mb-1">Noch offene Zusatzkosten (nicht in der Vorkalkulation enthalten):</p>
                       <ul className="text-sm text-muted-foreground space-y-1">
