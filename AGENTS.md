@@ -27,4 +27,4 @@
 - supabase/functions has its own AGENTS.md; read it before changing files there.
 - `src/lib/driverOfferRemuneration.ts` mirrors `_shared/driver-offer-remuneration.ts` (tested). Why: preview = stored v3.
 
-- Keep `.npmrc` legacy-peer-deps and package-lock synced. Why: clean npm ci.
+- Keep `.npmrc` + synced lock. Why: npm ci.
