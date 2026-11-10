@@ -25,3 +25,4 @@
 - Test-data purge only touches rows with the insert-time immutable `is_test` flag (email in `test_identities`) via `admin-purge-test-data` and service-role SQL functions whose transaction-local bypass the protection triggers honour only for flagged rows; jobs touching real drivers can only be archived silently. Why: real evidence stays protected.
 - Event tariff (`tarif_type='event'`) comes only from the four exact event labels: no overtime/surcharges, forced client accommodation, server-forced 25 %, binding acceptance only with fully computed pay (`bindingAcceptanceAllowed`). Why: other tariffs unchanged.
 - supabase/functions has its own AGENTS.md; read it before changing files there.
+- Admin assignment dialog previews driver net pay via `src/lib/driverOfferRemuneration.ts`, an equality-tested mirror of `_shared/driver-offer-remuneration.ts`. Why: the admin preview must show exactly the amount the server stores in the v3 snapshot.
