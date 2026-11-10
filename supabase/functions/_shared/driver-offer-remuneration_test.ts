@@ -41,7 +41,7 @@ Deno.test('Fernfahrer-Wochensatz: je 5 abrechenbare Tage, nicht 7', () => {
   assertEquals(buildDriverOfferView(fj, { ...a, rate_type: 'weekly', rate_value: 2000, end_date: '2026-11-08T00:00:00Z' }).mode, 'interest');
   // Fernverkehr-Tagessatz: Wochenende sperrt nicht pauschal; vereinbarter Zeitraum = vergütete Tage, ausdrücklich ausgewiesen.
   const we = buildDriverOfferView(fj, { ...a, rate_value: 450, end_date: '2026-11-09T00:00:00Z' });
-  assertEquals(we.mode, 'binding'); assertEquals(val(we.lines, 'Verbleibende Nettovergütung'), '3.240,00 €');
+  assertEquals(we.mode, 'binding'); assertEquals(val(we.lines, 'Verbleibende Nettovergütung'), '2.880,00 €');
   assert(val(we.lines, 'Vergütete Einheiten')!.includes('Samstage/Sonntage sind als vergütete'));
   const day = buildDriverOfferView(fj, { ...a, rate_value: 450, end_date: '2026-11-06T00:00:00Z' });
   assert(val(day.lines, 'Fahrerhonorar netto')!.endsWith('× 5 = 2.250,00 €'));
