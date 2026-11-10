@@ -32,7 +32,7 @@ export const fernverkehrZeitraumMitWochenende = (timeframe: string): boolean | n
   return false;
 };
 export const FERNVERKEHR_OHNE_GESAMTPREIS =
-  'Ihr Zeitraum enthält Samstage/Sonntage. Welche Tage Einsatz- bzw. Ruhetage sind, wird vor verbindlicher Auftragserteilung mit Ihnen festgelegt; deshalb nennen wir noch keinen Gesamtbetrag. Abgerechnet werden nur vereinbarte, tatsächlich geleistete Einsatztage zu den oben genannten Tarifoptionen.';
+  'Ihr Zeitraum enthält Samstage, Sonntage oder Feiertage bzw. ist nicht eindeutig angegeben. Welche Tage Einsatz- bzw. Ruhetage sind, wird vor verbindlicher Auftragserteilung mit Ihnen festgelegt; deshalb nennen wir noch keinen Gesamtbetrag. Abgerechnet werden nur vereinbarte, tatsächlich geleistete Einsatztage zu den oben genannten Tarifoptionen.';
 export const FERNVERKEHR_WERKTAGE_HINWEIS =
   'Annahme der Vorkalkulation: alle Werktage des Zeitraums sind Einsatztage. Abgerechnet werden nur tatsächlich geleistete Einsatztage.';
 
@@ -63,6 +63,8 @@ interface CustomerBookingConfirmationProps {
   };
   /** Wird bewusst nicht mehr mit konkreten Datumsangaben ausgegeben. */
   surchargeDays?: Array<{ label: string; percent: number }>;
+  /** Fernverkehr: Zeitraum enthält Samstag/Sonntag/Feiertag (serverseitig aus ISO-Daten); null = unbekannt. */
+  zeitraumMitRuhetagen?: boolean | null;
   /** Gewählte Unterkunftsregelung (nur bei relevanten Tarifen). */
   unterkunftOption?: UnterkunftOption | null;
   /** Vereinbarte Kostenobergrenze netto (nur bei Option fahrer_organisiert). */
@@ -131,6 +133,7 @@ export const CustomerBookingConfirmation = ({
   unterkunftOption = null,
   unterkunftObergrenze = null,
   kostenUebersicht = null,
+  zeitraumMitRuhetagen = null,
 }: CustomerBookingConfirmationProps) => {
   // Kurzfassung: nur wichtigste Daten, Kundenpreis und Status; alle weiteren Konditionen über Links.
   const ueberfuehrung = isUeberfuehrung || tarif?.tarif === 'ueberfuehrung';
@@ -215,7 +218,7 @@ export const CustomerBookingConfirmation = ({
               Ihr Zeitraum enthält einen Samstag, Sonntag oder gesetzlichen Feiertag.
             </Text>
           )}
-          {istFernfahrer && kostenUebersicht && fernverkehrZeitraumMitWochenende(timeframe) !== false ? (
+          {istFernfahrer && kostenUebersicht && (typeof zeitraumMitRuhetagen === 'boolean' ? zeitraumMitRuhetagen : fernverkehrZeitraumMitWochenende(timeframe)) !== false ? (
             <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '8px 0 0 0' })}>
               <strong>{VORKALKULATION_TITEL}:</strong> {FERNVERKEHR_OHNE_GESAMTPREIS} {OFFENE_KOSTEN_HINWEIS}
             </Text>

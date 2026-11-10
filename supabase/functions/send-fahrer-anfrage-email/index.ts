@@ -162,6 +162,7 @@ const handler = async (req: Request): Promise<Response> => {
         unterkunftOption: unterkunft_option,
         unterkunftObergrenze: unterkunft_obergrenze,
         kostenUebersicht: kosten_uebersicht,
+        zeitraumMitRuhetagen: computed ? computed.affected : null,
       })
     );
 
