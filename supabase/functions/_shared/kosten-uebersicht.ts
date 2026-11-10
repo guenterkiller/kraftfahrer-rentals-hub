@@ -119,6 +119,20 @@ export const FERNFAHRER_PREIS_HINWEIS =
 export const FERNFAHRER_WOCHENENDRUHE_HINWEIS =
   'Die Vorkalkulation zählt jeden Kalendertag des angefragten Zeitraums als Einsatztag. Ob Wochenenden oder einzelne Tage als Ruhetage (z. B. Wochenendruhe) nicht abgerechnet werden, wird vor verbindlicher Auftragserteilung mit Ihnen geklärt; abgerechnet werden nur tatsächlich geleistete Einsatztage.';
 
+/** Fernverkehr: Zeitraum enthält Samstag/Sonntag – Ruhetage noch ungeklärt, daher kein Gesamtbetrag (wie Kundenmail). */
+export const fernverkehrMitWochenende = (startISO: string, endISO: string): boolean => {
+  const start = Date.parse(`${startISO}T00:00:00Z`);
+  const end = Date.parse(`${(endISO || startISO)}T00:00:00Z`);
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return false;
+  for (let t = start; t <= end; t += 86400000) { const w = new Date(t).getUTCDay(); if (w === 0 || w === 6) return true; }
+  return false;
+};
+/** Wortgleich mit der Kunden-Eingangsbestätigung (Test prüft Gleichheit). */
+export const FERNVERKEHR_OHNE_GESAMTPREIS =
+  'Ihr Zeitraum enthält Samstage, Sonntage oder Feiertage bzw. ist nicht eindeutig angegeben. Welche Tage Einsatz- bzw. Ruhetage sind, wird vor verbindlicher Auftragserteilung mit Ihnen festgelegt; deshalb nennen wir noch keinen Gesamtbetrag. Abgerechnet werden nur vereinbarte, tatsächlich geleistete Einsatztage zu den oben genannten Tarifoptionen.';
+export const FERNVERKEHR_WERKTAGE_HINWEIS =
+  'Annahme der Vorkalkulation: alle Werktage des Zeitraums sind Einsatztage. Abgerechnet werden nur tatsächlich geleistete Einsatztage.';
+
 const round2 = (v: number) => Math.round(v * 100) / 100;
 
 export const formatEuro = (v: number): string =>
