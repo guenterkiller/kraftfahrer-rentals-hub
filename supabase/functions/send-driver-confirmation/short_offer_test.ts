@@ -7,9 +7,9 @@ const a = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_value
 const html = (j: any, as: any) => { const s = createOfferSnapshot(j, as); return renderShortOffer(shortOfferLines(s.job_lines!, s.binding_allowed === true, '16.11.2026 – 23.11.2026')); };
 const FORBIDDEN = /Provision\b(?! \))|Vermittlungsanteil|vor Provision|je Einsatztag|450,00|9\.999|Kundenpreis|20 %|25 %/;
 
-Deno.test('Kurzmail: einziger Preis ist die Nettovergütung 2.880,00 € (450 € × 8 vergütete Tage − 20 %)', () => {
-  const out = html(job, a());
-  assert(out.includes(`${NET_LABEL}:</strong> 2.880,00 €`));
+Deno.test('Kurzmail Fernverkehr: einziger Preis ist die Nettovergütung 1.800,00 € (450 € × 5 vergütete Tage − 20 %)', () => {
+  const out = html(job, a({ end_date: '2026-11-20T00:00:00Z' }));
+  assert(out.includes(`${NET_LABEL}:</strong> 1.800,00 €`));
   assertEquals((out.match(/€/g) ?? []).length, 1);
   assert(!FORBIDDEN.test(out.replace(NET_LABEL, '')), out);
   assert(out.includes('nicht bestätigt'));
@@ -20,8 +20,17 @@ Deno.test('MIAG-Konstellation: CE-Wochentarif + Tagessatz über Wochenende → k
   const out = renderShortOffer(shortOfferLines(s.job_lines!, false, 'x'));
   assert(!out.includes('€'));
 });
-Deno.test('CE-Wochentarif mit Tagessatz Mo–Fr ohne Wochenende bleibt berechenbar', () => {
+Deno.test('Fernverkehr 8 Kalendertage inkl. Wochenende (MIAG Mailand): Kalendertage nicht automatisch vergütet → kein Betrag', () => {
+  const s = createOfferSnapshot(job, a());
+  assertEquals(s.binding_allowed, false);
+  assert(!renderShortOffer(shortOfferLines(s.job_lines!, false, 'x')).includes('€'));
+});
+Deno.test('450 € Fernverkehrssatz auf CE-Wochentarif Mo–Fr: Tarifkonflikt → nicht verbindlich', () => {
   const s = createOfferSnapshot({ ...job, tarif_type: 'lkw_ce_woche' }, a({ end_date: '2026-11-20T00:00:00Z' }));
+  assertEquals(s.binding_allowed, false);
+});
+Deno.test('CE-Tagestarif 349 € bleibt separat berechenbar (5 Tage → 1.396,00 €)', () => {
+  const s = createOfferSnapshot({ ...job, tarif_type: 'lkw_ce' }, a({ rate_value: 349, end_date: '2026-11-20T00:00:00Z' }));
   assertEquals(s.binding_allowed, true);
-  assert(renderShortOffer(shortOfferLines(s.job_lines!, true, 'x')).includes('1.800,00 €'));
+  assert(renderShortOffer(shortOfferLines(s.job_lines!, true, 'x')).includes('1.396,00 €'));
 });

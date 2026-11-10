@@ -55,6 +55,8 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
   if (assignment?.rate_type === 'daily') {
     // CE-Wochentarif schließt Wochenenden aus: Kalendertage inkl. Sa/So sind dann nicht automatisch vergütete Tage.
     if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
+    // Fernverkehr: nur vereinbarte vergütete Einsatztage; Kalendertage inkl. Sa/So sind nicht automatisch vergütet.
+    if (job?.tarif_type === 'fernfahrer' && hasWeekend(assignment)) return null;
     return { units: days, label: days === 1 ? 'Einsatztag' : 'Einsatztage', unit: 'Einsatztag' };
   }
   if (assignment?.rate_type === 'weekly') {
@@ -74,6 +76,12 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
   return null;
 }
 
+/** Fernverkehr-Fahrersatz (450 € je Tag) gilt nur für Tarif Fernfahrer, nie für CE-Tages-/Wochentarife. */
+export function fernverkehrRateOnCeTarif(job: Data, assignment: Data): boolean {
+  return assignment?.rate_type === 'daily' && Number(assignment?.rate_value) === 450
+    && (job?.tarif_type === 'lkw_ce' || job?.tarif_type === 'lkw_ce_woche');
+}
+
 export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferView {
   const rate = Number(assignment?.rate_value);
   const rateCents = Number.isFinite(rate) && rate > 0 ? Math.round(rate * 100) : null;
@@ -84,6 +92,8 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   if (periodDays(assignment) === null) missing.push('Einsatzzeitraum (Kalenderdaten)');
   else if (units === null) missing.push('Vergütete Einheiten (Tage/Wochen/Stunden) nicht eindeutig bestimmbar');
   if (units === null && assignment?.rate_type === 'daily' && job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) missing.push('Widerspruch: CE-Wochentarif ohne Wochenenden, Tagessatz-Zeitraum enthält Samstag/Sonntag – vergütete Tage nicht eindeutig');
+  if (units === null && assignment?.rate_type === 'daily' && job?.tarif_type === 'fernfahrer' && hasWeekend(assignment)) missing.push('Fernverkehr: Zeitraum enthält Samstag/Sonntag – Zahl der vereinbarten vergüteten Einsatztage nicht eindeutig (Kalendertage werden nicht automatisch vergütet)');
+  if (fernverkehrRateOnCeTarif(job, assignment)) missing.push('Tarifkonflikt: 450 € je Einsatztag ist der Fernverkehr-Fahrersatz; dieser Auftrag ist als CE-Tages-/Wochentarif gespeichert – Tarifart Fernfahrer prüfen, CE-Sätze bleiben getrennt');
   if (job?.tarif_needs_review) missing.push('Tarifzuordnung noch zu prüfen');
   if (pct === null) missing.push('Tarifart ohne festgelegte Provisionsregel');
 
