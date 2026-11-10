@@ -120,6 +120,8 @@ export const CustomerBookingConfirmation = ({
   const istFernfahrer = tarif?.tarif === 'fernfahrer';
   const ohneZuschlaege = tarif?.tarif === 'event' || istFernfahrer;
   const tarifDetails = tarifText ? withoutRedundantDetails(tarifText.details) : [];
+  // Fernverkehr: Einzeltag und vergünstigter Wochenpreis als getrennte Tarifoptionen (Werte unverändert aus den Tariftexten).
+  const fernfahrerWochenpreis = istFernfahrer ? tarifText?.details.find((d) => d.startsWith('Wochenpreis:')) : undefined;
   const spezialanforderungen = eigenstaendigeAnforderungen(requirements, message);
   const cell = { padding: '4px 0', fontSize: '14px', verticalAlign: 'top' as const };
   const row = (k: string, v: React.ReactNode) => (
@@ -170,7 +172,13 @@ export const CustomerBookingConfirmation = ({
           <Heading {...getTextProps(textStyles.heading3, 'small-heading')}>Preis</Heading>
           {tarifText ? (
             <table width="100%" cellPadding="0" cellSpacing="0" className="mobile-table">
-              {row('Tarif', `${tarifText.priceLine}${tarifDetails[0] ? ` – ${tarifDetails[0].charAt(0).toLowerCase()}${tarifDetails[0].slice(1)}` : ''}`)}
+              {istFernfahrer && fernfahrerWochenpreis ? (
+                <>
+                  {row('Tarifoption Einzeltag', `${tarifText.priceLine}`)}
+                  {row('Tarifoption Woche (vergünstigt)', fernfahrerWochenpreis.replace(/^Wochenpreis:\s*/, ''))}
+                  {row('Anwendung', 'Je volle 5 vergütete Fernverkehrs-Einsatztage gilt der vergünstigte Wochenpreis, übrige Einsatztage der Einzeltagespreis')}
+                </>
+              ) : row('Tarif', `${tarifText.priceLine}${tarifDetails[0] ? ` – ${tarifDetails[0].charAt(0).toLowerCase()}${tarifDetails[0].slice(1)}` : ''}`)}
               {typeof tarif?.mehrstunde === 'number' && !ohneZuschlaege ? row('Mehrarbeit', `${formatEuro(tarif.mehrstunde)} netto je angefangene Stunde`) : null}
               {row('Zuschläge', ohneZuschlaege ? 'Keine Samstags-, Sonntags- oder Feiertagszuschläge' : 'Samstag 25 %, Sonntag und gesetzliche Feiertage 50 %')}
               {row('An- und Abfahrt', TRAVEL_COSTS.short)}
