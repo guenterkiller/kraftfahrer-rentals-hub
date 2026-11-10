@@ -245,33 +245,18 @@ const handler = async (req: Request): Promise<Response> => {
         const resend = new Resend(resendApiKey);
         const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
         
-        const emailSubject = "Dienst-/Werkvertrag angenommen - Subunternehmer-Einsatz";
-        const emailContent = `
-          <h2>✅ Dienst-/Werkvertrag erfolgreich angenommen!</h2>
-          <div style="background: #f0f9ff; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #1e40af;">Agenturabrechnung - Subunternehmer-Modell</h3>
-            <p><strong>Sie haben den Einsatz als selbstständiger Subunternehmer angenommen.</strong></p>
-            <p>Sie stellen Ihre Rechnung nach Einsatzende direkt an Fahrerexpress – bereits nach Abzug des im Auftragsangebot vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich von einer vollen Fahrerrechnung einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Ausschließlich die vereinbarten An- und Abfahrtskosten sind provisionsfrei. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung. Es handelt sich um eine Dienst-/Werkleistung, keine Arbeitnehmerüberlassung und kein Arbeitsverhältnis.</p>
-          </div>
-        `;
-
+        const emailSubject = `Auftragsannahme bestätigt – ${job.einsatzort}`;
+        const e = (v: unknown) => String(v ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' } as Record<string, string>)[c]);
         const emailHtml = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            ${emailContent}
-            
-            <div style="background: #fff; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <h3>Auftragsdetails:</h3>
-              <p><strong>Kunde:</strong> ${job.customer_name}</p>
-              <p><strong>Einsatzort:</strong> ${job.einsatzort}</p>
-              <p><strong>Zeitraum:</strong> ${job.zeitraum}</p>
-              <p><strong>Fahrzeugtyp:</strong> ${job.fahrzeugtyp}</p>
-              <p><strong>Einsatztätigkeiten und Anforderungen:</strong><br>${job.nachricht}</p>
-              <p style="font-size:13px;color:#6b7280;font-style:italic;margin-top:4px;">Die nachfolgende Auftragsbeschreibung wurde vom Auftraggeber übermittelt. Fahrerexpress gibt diese im Rahmen der Auftragsvermittlung unverändert weiter.</p>
-              <p style="margin-top:16px;font-weight:600;">Bestätigung Ihrer Auftragsannahme: „Ich nehme diesen Auftrag zu den in diesem Auftragsangebot beschriebenen Bedingungen an."</p>
-            </div>
-
-            <p>Sie erhalten in Kürze weitere Details und Kontaktinformationen.</p>
-            <p>Bei Fragen erreichen Sie uns unter: <strong>info@kraftfahrer-mieten.com</strong></p>
+            <h2 style="color:#0d2340;">Auftragsannahme bestätigt</h2>
+            <p>Sie haben diesen Einsatz als selbstständiger Fahrer angenommen.</p>
+            <p><strong>Auftraggeber:</strong> ${e(job.company || job.customer_name)}</p>
+            <p><strong>Einsatzort:</strong> ${e(job.einsatzort)}</p>
+            <p><strong>Zeitraum:</strong> ${e(job.zeitraum)}</p>
+            <p><strong>Fahrzeug:</strong> ${e(job.fahrzeugtyp)}</p>
+            <p><strong>Aufgabe:</strong> ${e(String(job.nachricht ?? '').slice(0, 300))}</p>
+            <p>Weitere Details und Kontaktdaten erhalten Sie in Kürze. Fragen: info@kraftfahrer-mieten.com</p>
           </div>
         `;
 
