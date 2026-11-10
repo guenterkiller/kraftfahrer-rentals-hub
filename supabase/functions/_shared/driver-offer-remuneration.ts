@@ -92,6 +92,7 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   else if (units === null) missing.push('Vergütete Einheiten (Tage/Wochen/Stunden) nicht eindeutig bestimmbar');
   if (units === null && assignment?.rate_type === 'daily' && job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) missing.push('Widerspruch: CE-Wochentarif ohne Wochenenden, Tagessatz-Zeitraum enthält Samstag/Sonntag – vergütete Tage nicht eindeutig');
   if (fernverkehrRateOnCeTarif(job, assignment)) missing.push('Tarifkonflikt: 450 € je Einsatztag ist der Fernverkehr-Fahrersatz; dieser Auftrag ist als CE-Tages-/Wochentarif gespeichert – Tarifart Fernfahrer prüfen, CE-Sätze bleiben getrennt');
+  if (!String(job?.einsatzort ?? '').trim()) missing.push('Einsatzort / Treffpunkt nicht erfasst – vor verbindlichem Angebot mit dem Auftraggeber klären');
   if (job?.tarif_needs_review) missing.push('Tarifzuordnung noch zu prüfen');
   if (pct === null) missing.push('Tarifart ohne festgelegte Provisionsregel');
 

@@ -10,7 +10,9 @@ export function buildCustomerAssignmentNotice({ job, driverName, driverPhone, dr
   job: any; driverName: string; driverPhone: string; driverEmail?: string | null; zeitraum: string; einsatzort: string;
 }) {
       const tarifText = job?.tarif_needs_review ? undefined : tarifTextByKey(job?.tarif_type);
-      const preis = tarifText ? `${tarifText.priceLine} (gemäß Ihrer Anfrage und Preisliste)` : "gemäß Ihrer Anfrage und Preisliste";
+      // Fernverkehr: vergünstigter Wochenpreis wie in der Eingangsbestätigung mit nennen (Werte unverändert aus den Tariftexten).
+      const woche = job?.tarif_type === "fernfahrer" ? tarifText?.details.find((d: string) => d.startsWith("Wochenpreis:")) : undefined;
+      const preis = tarifText ? `${tarifText.priceLine}${woche ? `; ${woche.replace(/^Wochenpreis:\s*/, "vergünstigt ")}` : ""} (gemäß Ihrer Anfrage und Preisliste)` : "gemäß Ihrer Anfrage und Preisliste";
       const ansprech = [job?.company, job?.customer_name].filter(Boolean).join(" – ");
       const rows: [string, string][] = [
         ...(ansprech ? [["Auftraggeber", ansprech] as [string, string]] : []),
