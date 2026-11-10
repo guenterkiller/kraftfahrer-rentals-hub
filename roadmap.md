@@ -150,3 +150,8 @@
 # QS operative E-Mails (10.11.2026)
 - [x] Fernverkehr-Kundenmail ohne erfundenen Gesamtbetrag bei offenen Ruhetagen, 45-Std.-Wochenruhe-Hinweis, Zuteilungsmail mit Wochenpreis, Fahrerangebot ohne Einsatzort gesperrt; 153 Deno + 126 Vitest bestanden; Kurzübersicht v4, Prüfbericht, IONOS v7.
 - [ ] Buchungsformular-Vorschau Fernverkehr zählt Kalendertage (wartet auf Freigabe, Bestandsschutz).
+
+# Versandsperre unvollständiger Fahrerangebote (10.11.2026)
+- [ ] Gemeinsame UI-/Serverprüfung für ausdrücklich vereinbarte Vergütungseinheiten und bestätigten konkreten Einsatzort; keine Ersatzanfrage, Bestand unverändert.
+- [ ] Isolierte Versand-, Wiederholungs- und Vergütungstests sowie gerenderte Druckübersicht aktualisieren.
+- [ ] GitHub-Abgleich und vollständiges IONOS-Paket prüfen; keine Veröffentlichung oder echten Daten-/Mailtests.
