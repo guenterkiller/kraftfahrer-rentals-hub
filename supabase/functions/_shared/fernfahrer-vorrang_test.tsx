@@ -33,5 +33,6 @@ Deno.test('Kunden-/Adminmail Fernfahrer: Preis-/Ruhetagshinweis, kein Zuschlags-
     assert(!text.includes('1.645'), 'Wochenpreis darf nicht erscheinen');
   }
   assert(!customer.includes('Wochenend- und Feiertagszuschläge'), 'Zuschlagsabschnitt darf nicht erscheinen');
+  assert(!customer.includes('1.645'), 'CE-Wochenpreis darf nicht erscheinen');
   assert(!customer.includes('Einsatzzeit und Mehrstunden'), 'Mehrstundenabschnitt darf nicht erscheinen');
 });
