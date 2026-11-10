@@ -182,7 +182,7 @@ serve(async (req) => {
         ${renderShortOffer(shortOfferLines(offerSnapshot.job_lines ?? [], bindingAllowed, dateRange))}
       ${sectionEnd}
       ${bindingButtonHtml}
-      <p class="body-text" style="margin:0 0 12px 0;font-size:13px;color:#374151;">Vertragsbedingungen: <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen" style="color:#0d2340;">Fahrer-Vermittlungsbedingungen ansehen</a> – der vollständige Vertragstext wird zusätzlich vor der Annahme auf der Bestätigungsseite angezeigt.</p>
+      ${bindingAllowed ? `<p class="body-text" style="margin:0 0 12px 0;font-size:13px;color:#374151;">Vertragsbedingungen: Die vollständigen Vertragsbedingungen werden Ihnen über den Button auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>` : ''}
       <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
       <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Auftragsangebot erstellt am: ${new Date(inviteCreatedAt).toLocaleDateString('de-DE')}</p>
     `;
