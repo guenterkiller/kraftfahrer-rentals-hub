@@ -8,10 +8,11 @@ import {
   logAdminAction 
 } from "../_shared/admin-auth.ts";
 import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
-import { normalizeCommissionPct } from "../_shared/driver-contract-terms.ts";
 import { computeBindingExpiry, generateToken } from "../_shared/binding-acceptance.ts";
 import { formatAssignmentPeriod, deadlineStartIso } from "../_shared/berlin-time.ts";
-import { createOfferSnapshot, renderOfferLines } from '../_shared/binding-offer.ts';
+import { createOfferSnapshot } from '../_shared/binding-offer.ts';
+import { escapeOffer } from '../_shared/binding-offer.ts';
+import { shortOfferLines, renderShortOffer } from './short-offer.ts';
 import { interpretSendResult } from '../_shared/mail-delivery.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -154,7 +155,7 @@ serve(async (req) => {
         const until = expiresAt.toLocaleString('de-DE', { timeZone: 'Europe/Berlin', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         const interestOnly = offerSnapshot.version === 3 && offerSnapshot.binding_allowed !== true;
         bindingButtonHtml = interestOnly ? `
-          <p class="body-text" style="margin:4px 0 18px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>Noch keine verbindliche Annahme möglich:</strong> Die Vergütung ist noch nicht vollständig bestimmt (siehe „Antwortart“). Bei Interesse melden Sie sich bitte telefonisch oder per WhatsApp bei Fahrerexpress; Sie erhalten danach ein vollständiges Angebot.</p>` : `
+          <p class="body-text" style="margin:4px 0 18px 0;font-size:14px;line-height:1.55;color:#374151;"><strong>Noch keine verbindliche Annahme möglich:</strong> Die Vergütung oder wesentliche Auftragsdaten sind noch nicht eindeutig bestimmt. Bei Interesse melden Sie sich bitte telefonisch oder per WhatsApp bei Fahrerexpress; Sie erhalten danach ein vollständiges Angebot.</p>` : `
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 8px 0;"><tr><td bgcolor="#16a34a" style="border-radius:6px;">
             <a href="${url}" style="display:inline-block;padding:13px 22px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:6px;">Auftrag verbindlich annehmen</a>
           </td></tr></table>
@@ -162,7 +163,6 @@ serve(async (req) => {
       } else return createErrorResponse('Angebotsfrist bereits abgelaufen; kein Versand', 400, corsHeaders);
     } else return createErrorResponse('Zuteilung ist nicht für ein neues Angebot verfügbar', 400, corsHeaders);
 
-    const commissionPct = normalizeCommissionPct(offerAssignment.commission_pct);
     const jobTitle = job?.fahrzeugtyp || 'Fahrauftrag';
     const location = job?.einsatzort || 'wird noch bekannt gegeben';
     const dateRange = formatAssignmentPeriod(offerAssignment.start_date, offerAssignment.end_date, offerAssignment.times_entered) || job?.zeitraum || 'nach Absprache';
@@ -174,38 +174,15 @@ serve(async (req) => {
     const h3 = (txt: string, color = '#0d2340') =>
       `<h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:${color};font-weight:700;">${txt}</h3>`;
 
+    const bindingAllowed = !(offerSnapshot.version === 3 && offerSnapshot.binding_allowed !== true);
     const innerHtml = `
-      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;letter-spacing:.3px;">VERBINDLICHES AUFTRAGSANGEBOT</h2>
-      <p class="body-text" style="margin:0 0 18px 0;font-size:14px;color:#6b7280;">Fahrerexpress | kraftfahrer-mieten.com</p>
-
-      <p class="body-text" style="margin:0 0 8px 0;font-size:15px;color:#374151;">Hallo ${driver.vorname} ${driver.nachname},</p>
-      <p class="body-text" style="margin:0 0 20px 0;font-size:15px;line-height:1.6;color:#374151;">Sie wurden für den nachfolgend beschriebenen Einsatz ausgewählt. Bitte prüfen und bestätigen Sie das verbindliche Auftragsangebot.</p>
-
+      <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;">${bindingAllowed ? 'VERBINDLICHES AUFTRAGSANGEBOT' : 'AUFTRAGSANFRAGE (UNVERBINDLICH)'}</h2>
+      <p class="body-text" style="margin:0 0 16px 0;font-size:15px;color:#374151;">Hallo ${escapeOffer(driver.vorname)} ${escapeOffer(driver.nachname)},<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>
+      ${sectionStart('#f8fafc')}
+        ${renderShortOffer(shortOfferLines(offerSnapshot.job_lines ?? [], bindingAllowed, dateRange))}
+      ${sectionEnd}
       ${bindingButtonHtml}
-
-      ${sectionStart('#f8fafc')}
-        ${h3('AUFTRAGSDATEN UND FAHRERABRECHNUNG')}
-        ${renderOfferLines(offerSnapshot.job_lines ?? [])}
-      ${sectionEnd}
-
-      ${sectionStart('#ffffff')}
-        ${h3('VEREINBARUNGEN (Fahrerexpress)')}
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>1) Vermittlungsanteil:</strong> Für diesen Auftrag gilt ein Provisionssatz von ${commissionPct} %. Berechnungsgrundlage, Zahlungsbedingungen und Leistungsbericht ergeben sich aus den Vertragsbedingungen auf der persönlichen Bestätigungsseite (Button oben). An- und Abfahrtskosten sind provisionsfrei.</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>2) Abrechnung/Zahlung:</strong> Der Fahrer stellt seine Rechnung nach Einsatzende an Fahrerexpress, sofern nicht für einen längerfristigen Auftrag ausdrücklich eine wöchentliche Abrechnung vereinbart wurde – bereits nach Abzug des vereinbarten Vermittlungsanteils. Der Vermittlungsanteil wird also nicht nachträglich einbehalten, sondern vor Rechnungsstellung vom Netto-Auftragswert der reinen Fahrerdienstleistung abgezogen. Fahrerexpress stellt dem Auftraggeber eine Gesamtrechnung.</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>3) Folgeaufträge:</strong> Für Folgeaufträge mit demselben Auftraggeber, die auf die Vermittlung durch Fahrerexpress zurückgehen, ist die Provision für einen Zeitraum von 12 Monaten nach Ende des vermittelten Einsatzes ebenfalls fällig – unabhängig davon, ob die Beauftragung direkt oder über Fahrerexpress erfolgt (§ 6 Nr. 2 Vermittlungsvertrag).</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>4) Informationspflicht:</strong> Direkt vereinbarte Folgeaufträge sind Fahrerexpress unaufgefordert mitzuteilen.</p>
-                <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>5) Rechtsverhältnis:</strong> Einsatz als selbstständiger Unternehmer (keine Arbeitnehmerüberlassung).</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>6) Verbindliche Annahme:</strong> Der Auftrag wird durch Ihre ausdrückliche Annahme über den persönlichen Bestätigungslink verbindlich vereinbart.</p>
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;"><strong>7) Mitteilungspflicht:</strong> Der Fahrer verpflichtet sich, Fahrerexpress unverzüglich zu informieren, wenn absehbar ist, dass er den Einsatz nicht, nicht rechtzeitig oder nicht vollständig durchführen kann.</p>
-      ${sectionEnd}
-
-      ${sectionStart('#f8fafc')}
-        ${h3('Nichterscheinen / kurzfristige Absage (No-Show)', '#bb2c29')}
-        <p class="body-text" style="margin:8px 0;font-size:13px;line-height:1.6;color:#374151;">Bei Nichterscheinen oder Absage weniger als 24 Stunden vor Einsatzbeginn schuldet der Fahrer, sofern er das Nichterscheinen oder die kurzfristige Absage zu vertreten hat, Fahrerexpress einen pauschalierten Schadensersatz in Höhe von 150,00 €, sofern er nicht nachweist, dass kein oder ein wesentlich geringerer Schaden entstanden ist. Weitergehende Schäden sind nur nach § 7a des Vermittlungsvertrags ersatzfähig; die Pauschale wird darauf angerechnet.</p>
-      ${sectionEnd}
-
-
-      <p class="body-text" style="margin:18px 0 8px 0;font-size:14px;color:#374151;">Bitte prüfen Sie die Angaben. Abweichungen bitte umgehend melden.</p>
+      ${bindingAllowed ? `<p class="body-text" style="margin:0 0 12px 0;font-size:13px;color:#374151;">Vertragsbedingungen: Die vollständigen Vertragsbedingungen werden Ihnen über den Button auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>` : ''}
       <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
       <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Auftragsangebot erstellt am: ${new Date(inviteCreatedAt).toLocaleDateString('de-DE')}</p>
     `;

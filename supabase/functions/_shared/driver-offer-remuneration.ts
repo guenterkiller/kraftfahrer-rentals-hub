@@ -40,10 +40,22 @@ export function periodDays(assignment: Data): number | null {
  *   (Wochenendtage und Resttage haben keinen gespeicherten Fahrer-Tagessatz).
  * - Stunden: keine gespeicherte Stundenzahl → unbestimmt.
  */
+/** Enthält der vereinbarte Zeitraum einen Samstag oder Sonntag? */
+export function hasWeekend(assignment: Data): boolean {
+  const s = day(assignment?.start_date), e = day(assignment?.end_date);
+  if (!s || !e) return false;
+  for (let t = Date.parse(s); t <= Date.parse(e); t += 86400000) { const wd = new Date(t).getUTCDay(); if (wd === 0 || wd === 6) return true; }
+  return false;
+}
+
 export function paidUnits(job: Data, assignment: Data): { units: number; label: string; unit: string } | null {
   const days = periodDays(assignment);
   if (!days) return null;
-  if (assignment?.rate_type === 'daily') return { units: days, label: days === 1 ? 'Einsatztag' : 'Einsatztage', unit: 'Einsatztag' };
+  if (assignment?.rate_type === 'daily') {
+    // CE-Wochentarif schließt Wochenenden aus: Kalendertage inkl. Sa/So sind dann nicht automatisch vergütete Tage.
+    if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
+    return { units: days, label: days === 1 ? 'Einsatztag' : 'Einsatztage', unit: 'Einsatztag' };
+  }
   if (assignment?.rate_type === 'weekly') {
     if (job?.tarif_type === 'fernfahrer') return days % 5 === 0 ? { units: days / 5, label: days === 5 ? 'Woche (5 abrechenbare Tage)' : 'Wochen (je 5 abrechenbare Tage)', unit: 'Woche' } : null;
     if (job?.tarif_type === 'lkw_ce_woche') {
@@ -70,6 +82,7 @@ export function buildDriverOfferView(job: Data, assignment: Data): DriverOfferVi
   if (rateCents === null) missing.push('Auftragsbezogen vereinbarter Fahrersatz');
   if (periodDays(assignment) === null) missing.push('Einsatzzeitraum (Kalenderdaten)');
   else if (units === null) missing.push('Vergütete Einheiten (Tage/Wochen/Stunden) nicht eindeutig bestimmbar');
+  if (units === null && assignment?.rate_type === 'daily' && job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) missing.push('Widerspruch: CE-Wochentarif ohne Wochenenden, Tagessatz-Zeitraum enthält Samstag/Sonntag – vergütete Tage nicht eindeutig');
   if (job?.tarif_needs_review) missing.push('Tarifzuordnung noch zu prüfen');
   if (pct === null) missing.push('Tarifart ohne festgelegte Provisionsregel');
 

@@ -126,3 +126,8 @@
 
 # Kurzes Fahrer-Angebot MIAG/Scholz
 - [ ] Kurzmail + Annahmeseite nur mit Endbetrag nach Provision (450 € Fahrersatz, 20 %, 360 €/vergüteter Tag); Konflikt 8 Tage vs. CE-Woche/Wochenende markieren, Bestand unverändert: wartet auf Klärung (vorheriger Auftrag liegt mir nicht vor).
+# Kurze Fahrerangebotsmail, Vertraulichkeit, IONOS v3 (10.11.2026)
+- [x] Kurzmail als Standard (send-driver-confirmation), CE-Woche/Wochenende-Widerspruch sperrt Betrag; respond-invite, admin-assign-driver, send-driver-confirmation bereitgestellt.
+- [x] Kundenmails automatisiert geprüft: keine Verstöße. 140 Deno- + 125 Vitest-Prüfungen bestanden.
+- [x] Druckübersicht v2 (164 S.) und ionos-upload-fahrerexpress_v3.zip (113 Dateien, 22/22 Seiten).
+- [ ] GitHub main (13f3b35) ≠ Projektstand vor dieser Runde (8cd9681); Abgleich nach Rundenende durch Nutzer prüfen.
