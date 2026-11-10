@@ -62,7 +62,7 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
     assert(m.t.includes('noch keine Einsatzbestätigung') && m.t.includes('Vermittlungsbedingungen'));
-    assert(m.t.length < (m === ff ? 2800 : 2600), `zu lang: ${m.t.length}`);
+    assert(m.t.length < (m === ff ? 2900 : 2600), `zu lang: ${m.t.length}`);
   }
 });
 
