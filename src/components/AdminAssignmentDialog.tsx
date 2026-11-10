@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { loadAdminContact } from '@/lib/adminContact';
 import { commissionPctForTarif } from '@/lib/driverOfferCommission';
+import { buildDriverOfferView } from '@/lib/driverOfferRemuneration';
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -230,7 +231,7 @@ export function AdminAssignmentDialog({
     if (!selectedDriverId || !rateValue) {
       toast({
         title: "Eingabefehler",
-        description: "Bitte wählen Sie einen Fahrer und geben Sie einen Stundensatz ein.",
+        description: "Bitte wählen Sie einen Fahrer und geben Sie einen Fahrer-Honorarsatz ein.",
         variant: "destructive"
       });
       return;
@@ -624,15 +625,17 @@ export function AdminAssignmentDialog({
             </div>
 
             <div>
-              <Label>{rateType === "daily" ? "Tagessatz netto (€)" : rateType === "weekly" ? "Wochenpreis netto (€)" : "Stundensatz netto (€)"}</Label>
+              <Label htmlFor="driver-rate">Fahrer-Honorarsatz netto vor Provision (€ {rateType === "daily" ? "je Einsatztag" : rateType === "weekly" ? "je Woche" : "je Stunde"})</Label>
               <Input
                 type="number"
                 value={rateValue}
                 onChange={(e) => setRateValue(e.target.value)}
                 placeholder={rateType === "daily" ? "349.00" : rateType === "weekly" ? "1645.00" : "25.00"}
                 step="0.50"
-                readOnly={!billingPreset.endsWith("_custom")}
+                min="0"
+                id="driver-rate"
               />
+              <p className="mt-1 text-xs text-muted-foreground">Auftragsbezogen frei änderbar. Kundenpreis bleibt unverändert; Vorgabewert wird nicht aus dem Kundenpreis abgeleitet.</p>
             </div>
           </div>
 
@@ -671,6 +674,27 @@ export function AdminAssignmentDialog({
                 : ""}Wird dem Fahrer im Vertragstext zur verbindlichen Annahme angezeigt.
             </p>
           </div>
+
+          {(() => {
+            const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+            const view = buildDriverOfferView(jobData ?? {}, {
+              rate_type: rateType, rate_value: parseFloat(rateValue),
+              start_date: dateRe.test(startDate) ? `${startDate}T00:00:00.000Z` : null,
+              end_date: dateRe.test(endDate) ? `${endDate}T00:00:00.000Z` : null,
+            });
+            const pick = (prefix: string) => view.lines.find(([l]) => l.startsWith(prefix))?.[1] ?? '';
+            return (
+              <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-1" aria-live="polite" data-testid="driver-net-preview">
+                <p className="font-semibold">Vorschau Fahrerangebot (wird beim Versand unveränderlich gespeichert)</p>
+                <p><span className="text-muted-foreground">Vergütete Einheiten:</span> {pick('Vergütete Einheiten')}</p>
+                <p><span className="text-muted-foreground">Honorar vor Provision:</span> {pick('Fahrerhonorar netto')}</p>
+                <p><span className="text-muted-foreground">Provision (automatisch nach Tarifart):</span> {pick('Vermittlungsprovision')}</p>
+                <p className="font-semibold">Fahrer-Nettovergütung gesamter Auftrag nach Provision: {view.mode === 'binding' ? pick('Verbleibende Nettovergütung') : '– kein Betrag –'}</p>
+                {view.mode !== 'binding' && <p className="text-destructive">Keine verbindliche Annahme möglich, nur Interessenbekundung. Fehlend: {view.missing.join('; ')}</p>}
+                <p className="text-xs text-muted-foreground">Bereits versendete oder angenommene Angebote bleiben unverändert. Eine Änderung danach erfordert eine neue Zuteilung mit neuem Angebot und erneuter Bestätigung durch den Fahrer.</p>
+              </div>
+            );
+          })()}
 
           <div>
             <Label>Notiz (optional)</Label>
