@@ -183,7 +183,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResult = await resend.emails.send({
       from: 'Fahrerexpress <info@kraftfahrer-mieten.com>',
       to: [driver.email],
-      subject: `🚛 Neuer Auftrag: ${job.fahrzeugtyp} - Agenturabrechnung`,
+      subject: `Neuer Auftrag: ${job.fahrzeugtyp} – ${job.einsatzort}`,
       html: emailHtml
     });
 
