@@ -1,1 +1,2 @@
 - Booking emails render via `_shared/render-email.ts` (sync `render`), not react-email `renderAsync`. Why: renderAsync can corrupt umlauts at stream chunk boundaries.
+- Operational mails stay short: customer mails show only customer prices/status plus a terms link; driver offer and binding-acceptance mails share `_shared/short-offer.ts` and show only the stored net payout. `_shared/operational_mails_test.tsx` renders all variants (OVERVIEW_OUT writes the print overview). Why: one verifiable rule set without sending mail.
