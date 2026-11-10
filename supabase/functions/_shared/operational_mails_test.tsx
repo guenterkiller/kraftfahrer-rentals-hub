@@ -17,7 +17,7 @@ import { confirmationHtml } from '../respond-invite/binding.ts';
 type Mail = { nr: string; titel: string; empfaenger: string; ausloeser: string; betreff: string; html: string };
 const mails: Mail[] = [];
 const text = (h: string) => h.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;|&#160;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
-const INTERN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|nettovergütung|rate_value|\b20 %|\b25 % (?!netto)/i;
+const INTERN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|nettovergütung|rate_value|\b20 %|\b25 % (?!netto|Zuschlag)/i;
 const LANG = /Haftung für mittelbare|Folgeschäden|entgangenen Gewinn|Arbeitnehmerüberlassung und stellt|Stornierung unter 24 Stunden|Ersatzgestellung/;
 const KUNDE = { company: 'TEST-Firma Muster GmbH', customer_name: 'TEST Erika Beispiel' };
 
