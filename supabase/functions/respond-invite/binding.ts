@@ -19,6 +19,7 @@ import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts"
 import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
+import { shortOfferLines, renderShortOffer } from "../_shared/short-offer.ts";
 import { type OfferSnapshot, bindingAcceptanceAllowed } from '../_shared/binding-offer.ts';
 
 const esc = (s: unknown) =>
@@ -192,7 +193,8 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
     else console.error("PDF upload failed:", upErr);
 
     const b64 = btoa(Array.from(pdf, (b) => String.fromCharCode(b)).join(""));
-    const html = confirmationHtml(driverName, acceptedAtLocal, jobLines, contractText, contentHash, commission);
+    const period = formatAssignmentPeriod(offerAssignment.start_date, offerAssignment.end_date, offerAssignment.times_entered) || "";
+    const html = confirmationHtml(driverName, acceptedAtLocal, shortOfferLines(jobLines, true, period), contentHash);
     const subject = `Annahmebestätigung – verbindliche Auftragsannahme – ${job?.einsatzort ?? "Auftrag"}`;
     const key = Deno.env.get("RESEND_API_KEY");
     if (key && driver?.email) {
@@ -216,19 +218,14 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   return json({ status: "accepted", mode: "binding", accepted_at: respondedAt, content_hash: contentHash });
 }
 
-function confirmationHtml(name: string, at: string, lines: [string, string][], contract: string, hash: string, pct: number) {
-  const rows = lines.map(([k, v]) => `<p style="margin:3px 0;font-size:14px;"><strong>${esc(k)}:</strong> ${esc(v)}</p>`).join("");
-  const contractHtml = contract.split("\n\n").map((b) => {
-    const [t, ...r] = b.split("\n");
-    return `<p style="margin:12px 0 4px;font-size:14px;"><strong>${esc(t)}</strong></p>${r.map((p) => `<p style="margin:2px 0;font-size:13px;line-height:1.55;">${esc(p)}</p>`).join("")}`;
-  }).join("");
+/** Kurze Annahmebestätigung: nur Einsatzdaten und Nettovergütung; vollständige Bedingungen im beigefügten PDF. */
+export function confirmationHtml(name: string, at: string, lines: [string, string][], hash: string) {
   return `<div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#1f2937;">
     <h2 style="color:#0d2340;margin:0 0 8px;">Annahmebestätigung</h2>
     <p>Hallo ${esc(name)},</p>
-    <p>Sie haben den folgenden Auftrag am <strong>${esc(at)}</strong> über Ihren persönlichen Bestätigungslink zu den unten aufgeführten Bedingungen verbindlich angenommen (Provisionssatz ${pct} %).</p>
-    <h3 style="color:#0d2340;">Auftragsdaten</h3>${rows}
-    <h3 style="color:#0d2340;">Vertragsbedingungen</h3>${contractHtml}
-    <h3 style="color:#0d2340;">Zustimmungserklärung</h3><p style="font-size:13px;">${esc(BINDING_CONSENT_TEXT)}</p>
-    <p style="font-size:12px;color:#6b7280;margin-top:16px;">Die vollständige Bestätigung liegt als PDF bei. Digitaler Fingerabdruck: ${esc(hash)}</p>
+    <p>Sie haben diesen Auftrag am <strong>${esc(at)}</strong> verbindlich angenommen.</p>
+    ${renderShortOffer(lines)}
+    <p style="font-size:14px;">Die vollständigen Vertragsbedingungen und Ihre Zustimmung finden Sie im beigefügten PDF sowie unter <a href="https://www.kraftfahrer-mieten.com/fahrer-vermittlungsbedingungen">Fahrer-Vermittlungsbedingungen</a>.</p>
+    <p style="font-size:12px;color:#6b7280;">Digitaler Fingerabdruck: ${esc(hash)}</p>
     <p style="font-size:14px;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p></div>`;
 }
