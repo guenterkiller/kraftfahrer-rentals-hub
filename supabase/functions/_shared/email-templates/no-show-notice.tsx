@@ -31,7 +31,7 @@ export const NoShowNotice = ({ customerName, company, einsatzort, zeitraum, fahr
         <Text style={textStyles.paragraph}><strong>Fahrzeug:</strong> {fahrzeugtyp || 'Nicht angegeben'}</Text>
       </Section>
       <Text style={textStyles.muted}>
-        Für diesen Einsatz entstehen Ihnen keine Kosten für nicht erbrachte Einsatztage. Weitere Regelungen: <Link href={BEDINGUNGEN_URL}>Vermittlungsbedingungen</Link>.
+        Es gelten unsere <Link href={BEDINGUNGEN_URL}>Vermittlungsbedingungen</Link>. Bei Fragen antworten Sie einfach auf diese E-Mail.
       </Text>
     </BaseEmail>
   );
