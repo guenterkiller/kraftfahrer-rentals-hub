@@ -19,7 +19,7 @@ async function run(job: any, assignment: any, intent: string | null, action: str
 
 Deno.test('Fernfahrer: Mail, Seite und Annahme ohne Sa-/So-/Feiertagszuschlag', async () => {
   const job = { tarif_type: 'fernfahrer', fahrzeugtyp: 'TEST Sattelzug', einsatzort: 'TEST' };
-  const a = { ...base, rate_type: 'daily', rate_value: 360, start_date: '2099-11-06T00:00:00Z', end_date: '2099-11-08T00:00:00Z', commission_pct: 20 };
+  const a = { ...base, rate_type: 'daily', rate_value: 360, start_date: '2099-11-16T00:00:00Z', end_date: '2099-11-18T00:00:00Z', commission_pct: 20 };
   const { snapshot, data } = await run(job, a, 'load', null);
   const html = renderOfferLines(snapshot.job_lines!);
   assert(!html.includes('Samstag 25') && !JSON.stringify(data.job_lines).includes('Samstag 25'));

@@ -39,8 +39,11 @@ Deno.test('Fernfahrer-Wochensatz: je 5 abrechenbare Tage, nicht 7', () => {
   assertEquals(ten.mode, 'binding');
   assert(val(ten.lines, 'Fahrerhonorar netto')!.endsWith('× 2 = 4.000,00 €'));
   assertEquals(buildDriverOfferView(fj, { ...a, rate_type: 'weekly', rate_value: 2000, end_date: '2026-11-08T00:00:00Z' }).mode, 'interest');
-  const day = buildDriverOfferView(fj, { ...a, rate_value: 400, end_date: '2026-11-09T00:00:00Z' });
-  assert(val(day.lines, 'Fahrerhonorar netto')!.endsWith('× 8 = 3.200,00 €'));
+  // Fernverkehr-Tagessatz: nur vereinbarte vergütete Tage; Zeitraum mit Sa/So wird nicht automatisch als vergütet gezählt.
+  assertEquals(buildDriverOfferView(fj, { ...a, rate_value: 450, end_date: '2026-11-09T00:00:00Z' }).mode, 'interest');
+  const day = buildDriverOfferView(fj, { ...a, rate_value: 450, end_date: '2026-11-06T00:00:00Z' });
+  assert(val(day.lines, 'Fahrerhonorar netto')!.endsWith('× 5 = 2.250,00 €'));
+  assertEquals(val(day.lines, 'Verbleibende Nettovergütung'), '1.800,00 €');
 });
 Deno.test('CE-Wochensatz nur Montag–Freitag eindeutig', () => {
   const cj = { ...job, tarif_type: 'lkw_ce_woche' };
