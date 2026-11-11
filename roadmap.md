@@ -1,7 +1,7 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # GitHub-/PowerShell-Abschlussprüfung (11.11.2026)
 - [x] Frischer öffentlicher GitHub-Klon von main: 33f4adf6e7907452bc6aa88107f70fe42776d640, alle 671 versionierten Dateien identisch; npm ci --legacy-peer-deps und npm run build einschließlich 22/22 Seiten erfolgreich.
-- [ ] PowerShell-Ziel kraftfahrer-fertig, reproduzierbare Installation und vollständige Dateikopie korrigieren und prüfen.
+- [x] PowerShell-Ziel kraftfahrer-fertig, npm ci --legacy-peer-deps und unveränderte dist-Kopie inklusive versteckter Dateien korrigiert; echter PowerShell-Parser sowie Kopier-/Hashprüfung und finale 22/22-Seitenvalidierung bestanden. 140 Website-, 45 isolierte Server-Laufzeittests und 6 Pakettests bestanden; separate Deno-Typprüfung meldet bestehenden optionalen Arraywert in customer-booking-confirmation.tsx:29, keine Serveränderung im reinen Exportauftrag.
 - [ ] Abschließenden Remote-Commit mit korrigiertem Skript nachweisen; kein direkter Git-Push oder zugänglicher GitHub-Schreibconnector verfügbar, automatische Synchronisierung erst nach Rundenende prüfbar.
 # Fernfahrer-Wochenpreis (09.11.2026, ausschließlich Vorschau)
 - [x] Exklusive Fernverkehr-Auswahl erhalten; je 5 abrechenbare Einsatztage exakt 2.121,06 € netto, zusätzliche Tage 450 €, keine Zuschläge oder Admin-/DB-Einstellung; vorbereitete Mailquellen angeglichen.
