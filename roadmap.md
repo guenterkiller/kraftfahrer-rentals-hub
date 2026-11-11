@@ -1,4 +1,9 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# SEO-/Sicherheitsabschluss (11.11.2026)
+- [ ] Fahrerinfos-H1 ohne Text-/Darstellungsänderung und Datumszugriff typsicher korrigieren.
+- [ ] npm-Audit vor/nachher, kompatible Aktualisierungen und verbleibende Runtime-/Werkzeugrisiken dokumentieren.
+- [ ] 22/22 exportierte Seiten, tatsächliche Apache-Auslieferung und öffentliche Live-Auslieferung prüfen; Website-/Server-Tests und Typprüfungen ausführen.
+- [ ] GitHub-main-Commit der getesteten Änderungen nachweisen; falls automatische Synchronisierung noch aussteht, ausdrücklich melden. Kein IONOS-Upload.
 # GitHub-/PowerShell-Abschlussprüfung (11.11.2026)
 - [x] Frischer öffentlicher GitHub-Klon von main: 33f4adf6e7907452bc6aa88107f70fe42776d640, alle 671 versionierten Dateien identisch; npm ci --legacy-peer-deps und npm run build einschließlich 22/22 Seiten erfolgreich.
 - [x] PowerShell-Ziel kraftfahrer-fertig, npm ci --legacy-peer-deps und unveränderte dist-Kopie inklusive versteckter Dateien korrigiert; echter PowerShell-Parser sowie Kopier-/Hashprüfung und finale 22/22-Seitenvalidierung bestanden. 140 Website-, 45 isolierte Server-Laufzeittests und 6 Pakettests bestanden; separate Deno-Typprüfung meldet bestehenden optionalen Arraywert in customer-booking-confirmation.tsx:29, keine Serveränderung im reinen Exportauftrag.
