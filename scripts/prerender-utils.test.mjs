@@ -40,3 +40,21 @@ test('Apache copies match and packaging cannot regenerate or silently continue f
   assert.ok(packaging.includes('node scripts/validate-prerender.mjs $distDir'));
   assert.match(packaging, /npm run build\s+if \(\$LASTEXITCODE -ne 0\)/);
 });
+
+test('Desktop export uses kraftfahrer-fertig and installs the exact lockfile', () => {
+  const packaging = readFileSync(new URL('../build-complete-dist.ps1', import.meta.url), 'utf8');
+  assert.ok(packaging.includes('[Environment]::GetFolderPath("Desktop")'));
+  assert.ok(packaging.includes('Join-Path $desktop "kraftfahrer-fertig"'));
+  assert.match(packaging, /npm ci --legacy-peer-deps\s+if \(\$LASTEXITCODE -ne 0\)/);
+  assert.ok(!packaging.includes('npm install'));
+});
+
+test('export copies hidden build files without stale public overlays and fails on missing output', () => {
+  const packaging = readFileSync(new URL('../build-complete-dist.ps1', import.meta.url), 'utf8');
+  assert.ok(packaging.includes('Get-ChildItem -LiteralPath "dist" -Force'));
+  assert.ok(packaging.includes('Get-FileHash -LiteralPath $copiedFile'));
+  assert.ok(!packaging.includes('Copy-Item "public\\*"'));
+  assert.ok(packaging.includes('"sw.js"'));
+  assert.ok(packaging.includes('@("assets", "prerender")'));
+  assert.match(packaging, /if \(\$missingFiles.Count -gt 0\) \{\s+throw/);
+});

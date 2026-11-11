@@ -6,8 +6,11 @@ $ErrorActionPreference = "Stop"
 Write-Host "=== Kraftfahrer-Mieten.com - Kompletter Build ===" -ForegroundColor Green
 
 # Arbeitsverzeichnis erstellen
-$workDir = "C:\Users\brasi\Desktop\kraftfahrer-build-temp"
-$distDir = "C:\Users\brasi\Desktop\website-dist-komplett"
+$desktop = [Environment]::GetFolderPath("Desktop")
+if ([string]::IsNullOrWhiteSpace($desktop)) { throw "Desktop-Ordner konnte nicht ermittelt werden." }
+$workDir = Join-Path $desktop "kraftfahrer-build-temp"
+$distDir = Join-Path $desktop "kraftfahrer-fertig"
+$originalDir = Get-Location
 
 # Aufräumen falls vorhanden
 if (Test-Path $workDir) { Remove-Item $workDir -Recurse -Force }
@@ -25,58 +28,33 @@ if ($LASTEXITCODE -ne 0) { throw "Quellstand konnte nicht ermittelt werden." }
 Write-Host "Quellstand: guenterkiller/kraftfahrer-rentals-hub / main / $sourceCommit" -ForegroundColor Cyan
 
 Write-Host "2. Dependencies installieren..." -ForegroundColor Yellow
-npm install
+npm ci --legacy-peer-deps
 if ($LASTEXITCODE -ne 0) { throw "Dependency-Installation fehlgeschlagen." }
 
 Write-Host "3. Production Build erstellen..." -ForegroundColor Yellow
 npm run build
 if ($LASTEXITCODE -ne 0) { throw "Build oder Prerendering fehlgeschlagen; kein Upload-Paket erstellen." }
+node scripts/validate-prerender.mjs dist
+if ($LASTEXITCODE -ne 0) { throw "Build enthält unvollständige Prerender-Dateien." }
 
 Write-Host "4. Dist-Ordner vorbereiten..." -ForegroundColor Yellow
 New-Item -ItemType Directory -Path $distDir -Force
 
 Write-Host "5. Build-Dateien kopieren..." -ForegroundColor Yellow
 # Hauptbuild-Ordner (dist) kopieren
-Copy-Item "dist\*" $distDir -Recurse -Force
-
-Write-Host "6. Public-Dateien hinzufügen/überschreiben..." -ForegroundColor Yellow
-# Alle statischen Dateien aus public
-Copy-Item "public\*" $distDir -Recurse -Force
-
-Write-Host "7. Spezielle Dateien sicherstellen..." -ForegroundColor Yellow
-
-# Wichtige Dateien einzeln kopieren falls nicht vorhanden
-$criticalFiles = @(
-    "public\.htaccess",
-    "public\admin-check.html", 
-    "public\cookies.html",
-    "public\datenschutz.html",
-    "public\manifest.webmanifest",
-    "public\robots.txt",
-    "public\sitemap.xml",
-    "public\version.txt",
-    "public\favicon.ico",
-    "public\favicon.png",
-    "public\placeholder.svg"
-)
-
-foreach ($file in $criticalFiles) {
-    if (Test-Path $file) {
-        $destFile = $file -replace "^public\\", ""
-        $destPath = Join-Path $distDir $destFile
-        Copy-Item $file $destPath -Force
-        Write-Host "  ✓ $destFile" -ForegroundColor Green
-    }
+Get-ChildItem -LiteralPath "dist" -Force | ForEach-Object {
+    Copy-Item -LiteralPath $_.FullName -Destination $distDir -Recurse -Force
 }
-
-# Ordner sicherstellen
-$criticalDirs = @("assets", "lovable-uploads", "styles", "uploads")
-foreach ($dir in $criticalDirs) {
-    $srcPath = "public\$dir"
-    $destPath = Join-Path $distDir $dir
-    if (Test-Path $srcPath) {
-        Copy-Item $srcPath $destPath -Recurse -Force
-        Write-Host "  ✓ Ordner: $dir" -ForegroundColor Green
+# Jede Build-Datei inklusive versteckter Dateien muss unverändert im Ziel stehen.
+$builtRoot = (Resolve-Path "dist").Path
+foreach ($builtFile in (Get-ChildItem -LiteralPath $builtRoot -Recurse -File -Force)) {
+    $relative = $builtFile.FullName.Substring($builtRoot.Length + 1)
+    $copiedFile = Join-Path $distDir $relative
+    if (!(Test-Path -LiteralPath $copiedFile -PathType Leaf)) {
+        throw "Build-Datei fehlt im Ziel: $relative"
+    }
+    if ((Get-FileHash -LiteralPath $builtFile.FullName).Hash -ne (Get-FileHash -LiteralPath $copiedFile).Hash) {
+        throw "Build-Datei wurde beim Kopieren verändert: $relative"
     }
 }
 
@@ -96,12 +74,12 @@ if ($LASTEXITCODE -ne 0) { throw "Finales Upload-Paket enthält unvollständige 
 
 Write-Host "9. Version-Datei aktualisieren..." -ForegroundColor Yellow
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-$buildVersion = "Build: $timestamp - Complete IONOS Distribution"
+$buildVersion = "Build: $timestamp - Complete IONOS Distribution - guenterkiller/kraftfahrer-rentals-hub / main / $sourceCommit"
 Set-Content -Path "$distDir\version.txt" -Value $buildVersion -Encoding UTF8
 
 Write-Host "10. Validierung..." -ForegroundColor Yellow
 $expectedFiles = @(
-    "index.html", ".htaccess", "robots.txt", "sitemap.xml", "manifest.webmanifest",
+    "index.html", ".htaccess", "robots.txt", "sitemap.xml", "sw.js", "manifest.webmanifest",
     "admin-check.html", "cookies.html", "datenschutz.html", "version.txt"
 )
 
@@ -113,10 +91,16 @@ foreach ($file in $expectedFiles) {
 }
 
 if ($missingFiles.Count -gt 0) {
-    Write-Host "WARNUNG: Fehlende Dateien:" -ForegroundColor Red
-    $missingFiles | ForEach-Object { Write-Host "  - $_" -ForegroundColor Red }
+    throw "Fehlende Dateien: $($missingFiles -join ', ')"
 } else {
     Write-Host "✓ Alle kritischen Dateien vorhanden" -ForegroundColor Green
+}
+foreach ($requiredDir in @("assets", "prerender")) {
+    $requiredPath = Join-Path $distDir $requiredDir
+    if (!(Test-Path -LiteralPath $requiredPath -PathType Container) -or
+        !(Get-ChildItem -LiteralPath $requiredPath -File -Recurse -Force)) {
+        throw "Erforderlicher Build-Ordner fehlt oder ist leer: $requiredDir"
+    }
 }
 
 # Statistiken
@@ -136,7 +120,7 @@ Write-Host "3. SSL-Zertifikat bei IONOS aktivieren" -ForegroundColor White
 Write-Host ""
 
 # Aufräumen
-Set-Location "C:\"
+Set-Location $originalDir
 Remove-Item $workDir -Recurse -Force
 
 Write-Host "Temp-Dateien bereinigt. Build fertig!" -ForegroundColor Green
