@@ -1,13 +1,13 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
 # SEO-/Sicherheitsabschluss (11.11.2026)
-- [ ] Fahrerinfos-H1 ohne Text-/Darstellungsänderung und Datumszugriff typsicher korrigieren.
-- [ ] npm-Audit vor/nachher, kompatible Aktualisierungen und verbleibende Runtime-/Werkzeugrisiken dokumentieren.
-- [ ] 22/22 exportierte Seiten, tatsächliche Apache-Auslieferung und öffentliche Live-Auslieferung prüfen; Website-/Server-Tests und Typprüfungen ausführen.
-- [ ] GitHub-main-Commit der getesteten Änderungen nachweisen; falls automatische Synchronisierung noch aussteht, ausdrücklich melden. Kein IONOS-Upload.
+- [x] Fahrerinfos-H1 und Datumszugriff korrigiert; Desktop-/Mobilabmessungen und Texte unverändert, Kundenmail-Typprüfung bestanden.
+- [x] npm-Audit 23→15 (high 3→2), gezielte kompatible Updates; beide aktuellen Locks angeglichen, veraltetes binäres Lock entfernt. Risiken in docs/seo-sicherheitspruefung-2026-11-11.md dokumentiert.
+- [x] Frisches npm ci und Build, 22/22 Validator und echte Apache-/Live-HTTP-Prüfung; 140 Website-, 160 isolierte Server- und 6 Exporttests bestanden. Website-Typprüfung grün; übrige Serverprüfung meldet drei bestehende Resend-SDK-Typfehler, dokumentiert und operativer Versand unverändert.
+- [ ] Getesteten GitHub-main-Commit nachweisen: zuletzt bbaec53236a212d970f1d01b47b25541d7905236, neue Dateien noch nicht bytegleich; kein zugänglicher Schreibconnector, automatische Synchronisierung wartet auf Antwortende. Danach lokal neu bauen; kein IONOS-Upload.
 # GitHub-/PowerShell-Abschlussprüfung (11.11.2026)
 - [x] Frischer öffentlicher GitHub-Klon von main: 33f4adf6e7907452bc6aa88107f70fe42776d640, alle 671 versionierten Dateien identisch; npm ci --legacy-peer-deps und npm run build einschließlich 22/22 Seiten erfolgreich.
 - [x] PowerShell-Ziel kraftfahrer-fertig, npm ci --legacy-peer-deps und unveränderte dist-Kopie inklusive versteckter Dateien korrigiert; echter PowerShell-Parser sowie Kopier-/Hashprüfung und finale 22/22-Seitenvalidierung bestanden. 140 Website-, 45 isolierte Server-Laufzeittests und 6 Pakettests bestanden; separate Deno-Typprüfung meldet bestehenden optionalen Arraywert in customer-booking-confirmation.tsx:29, keine Serveränderung im reinen Exportauftrag.
-- [ ] Abschließenden Remote-Commit mit korrigiertem Skript nachweisen; kein direkter Git-Push oder zugänglicher GitHub-Schreibconnector verfügbar, automatische Synchronisierung erst nach Rundenende prüfbar.
+- [x] Vorherigen Skriptabschluss nachgewiesen: d1e6407b8d60fd079e989be4707bfab8683683ba (siehe abgeschlossenen Bericht); aktueller SEO-Abschluss separat oben.
 # Fernfahrer-Wochenpreis (09.11.2026, ausschließlich Vorschau)
 - [x] Exklusive Fernverkehr-Auswahl erhalten; je 5 abrechenbare Einsatztage exakt 2.121,06 € netto, zusätzliche Tage 450 €, keine Zuschläge oder Admin-/DB-Einstellung; vorbereitete Mailquellen angeglichen.
 - [x] 113 Frontend-Regeltests und 2 isolierte Bestätigungstests bestanden; Formular bei 1280/390 px: 8 Tage 3.471,06 € netto / 4.130,56 € brutto, Rückwechsel CE 2.933,75 €. Automatische Prüfung OK; keine echte Buchung/Mail oder Bereitstellung/Veröffentlichung. Bestehende ältere IONOS-/Admin-Liveabnahmen bleiben separat blockiert.
