@@ -1,4 +1,8 @@
 # Technischer Optimierungsplan mit Desktop-Schutz
+# GitHub-/PowerShell-Abschlussprüfung (11.11.2026)
+- [x] Frischer öffentlicher GitHub-Klon von main: 33f4adf6e7907452bc6aa88107f70fe42776d640, alle 671 versionierten Dateien identisch; npm ci --legacy-peer-deps und npm run build einschließlich 22/22 Seiten erfolgreich.
+- [ ] PowerShell-Ziel kraftfahrer-fertig, reproduzierbare Installation und vollständige Dateikopie korrigieren und prüfen.
+- [ ] Abschließenden Remote-Commit mit korrigiertem Skript nachweisen; kein direkter Git-Push oder zugänglicher GitHub-Schreibconnector verfügbar, automatische Synchronisierung erst nach Rundenende prüfbar.
 # Fernfahrer-Wochenpreis (09.11.2026, ausschließlich Vorschau)
 - [x] Exklusive Fernverkehr-Auswahl erhalten; je 5 abrechenbare Einsatztage exakt 2.121,06 € netto, zusätzliche Tage 450 €, keine Zuschläge oder Admin-/DB-Einstellung; vorbereitete Mailquellen angeglichen.
 - [x] 113 Frontend-Regeltests und 2 isolierte Bestätigungstests bestanden; Formular bei 1280/390 px: 8 Tage 3.471,06 € netto / 4.130,56 € brutto, Rückwechsel CE 2.933,75 €. Automatische Prüfung OK; keine echte Buchung/Mail oder Bereitstellung/Veröffentlichung. Bestehende ältere IONOS-/Admin-Liveabnahmen bleiben separat blockiert.
