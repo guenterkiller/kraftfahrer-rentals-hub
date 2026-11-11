@@ -26,10 +26,10 @@ const FahrerInfos = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-3xl text-center flex items-center justify-center gap-2">
+              <h1 className="text-3xl font-semibold tracking-tight text-center flex items-center justify-center gap-2">
                 <Lock className="h-8 w-8" />
                 Interner Informationsbereich
-              </CardTitle>
+              </h1>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="bg-primary/10 border border-primary/20 rounded-lg p-6 text-center">

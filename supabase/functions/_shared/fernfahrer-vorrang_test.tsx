@@ -1,12 +1,21 @@
 import { renderAsync } from './render-email.ts';
 import * as React from 'npm:react@18.3.1';
-import { CustomerBookingConfirmation, FERNVERKEHR_OHNE_GESAMTPREIS } from './email-templates/customer-booking-confirmation.tsx';
+import { CustomerBookingConfirmation, FERNVERKEHR_OHNE_GESAMTPREIS, fernverkehrZeitraumMitWochenende } from './email-templates/customer-booking-confirmation.tsx';
 import { AdminBookingNotification } from './email-templates/admin-booking-notification.tsx';
 import { resolveTarif } from './tarif-zuordnung.ts';
 import { berechneKostenUebersicht, FERNFAHRER_PREIS_HINWEIS, FERNFAHRER_WOCHENENDRUHE_HINWEIS } from './kosten-uebersicht.ts';
 
 const assert = (c: boolean, m: string) => { if (!c) throw new Error(m); };
 const decode = (h: string) => h.replace(/<[^>]*>/g, '').replace(/&#x27;|&#39;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+
+Deno.test('Datumszugriff bleibt bei leeren, einzelnen und mehreren Datumswerten unverändert', () => {
+  assert(fernverkehrZeitraumMitWochenende('') === null, 'kein Datum');
+  assert(fernverkehrZeitraumMitWochenende('16.11.2026') === false, 'ein Werktag');
+  assert(fernverkehrZeitraumMitWochenende('21.11.2026') === true, 'ein Samstag');
+  assert(fernverkehrZeitraumMitWochenende('16.11.2026 – 20.11.2026') === false, 'Mo–Fr');
+  assert(fernverkehrZeitraumMitWochenende('16.11.2026 – 23.11.2026') === true, 'Wochenende');
+  assert(fernverkehrZeitraumMitWochenende('23.11.2026 – 16.11.2026') === null, 'umgekehrt');
+});
 
 Deno.test('Server: CE-Wochenpreis + Fernverkehr wird Fernfahrer-Pauschale, 8 Tage mit rabattiertem Wochenpreis', () => {
   const tarif = resolveTarif({ kategorie: 'LKW CE Wochenpreis', maschinenbedienung: '', longDistance: true });

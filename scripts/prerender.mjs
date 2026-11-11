@@ -19,9 +19,6 @@ import { validatePrerender } from "./validate-prerender.mjs";
 
 export const PRERENDER_ROUTES = readRoutes(new URL('../public/sitemap.xml', import.meta.url));
 
-// Bestehende Seite ohne H1: Inhalt und Überschriften ausdrücklich unverändert.
-const NO_H1 = new Set(['/fahrer-infos']);
-
 // Pflichtprüfung: bekannter H1-Text muss im HTML stehen
 const MUST_CONTAIN = {
   "/ersatzfahrer-lkw": "Ersatzfahrer LKW – wenn Ihr Fahrer krank ist oder ausfällt",
@@ -104,7 +101,7 @@ async function main() {
       });
 
       await page.goto(origin + route, { waitUntil: "networkidle0", timeout: 60000 });
-      await page.waitForSelector(NO_H1.has(route) ? "#root h3" : "#root h1", { timeout: 30000 });
+      await page.waitForSelector("#root h1", { timeout: 30000 });
       await page.waitForSelector('script[type="application/ld+json"][data-seo]', { timeout: 30000 });
       // Nach unten scrollen, damit ggf. verzögert geladene Abschnitte erscheinen
       await page.evaluate(async () => {
@@ -132,7 +129,7 @@ async function main() {
         };
       });
 
-      if (!data.title || (!data.h1 && !NO_H1.has(route)) || !data.canonical || !data.description) fail(`Unvollständige Daten für ${route}: ${JSON.stringify({ title: data.title, h1: data.h1, canonical: data.canonical, description: !!data.description })}`);
+      if (!data.title || !data.h1 || !data.canonical || !data.description) fail(`Unvollständige Daten für ${route}: ${JSON.stringify({ title: data.title, h1: data.h1, canonical: data.canonical, description: !!data.description })}`);
       if (data.canonical !== `https://www.kraftfahrer-mieten.com${route}`) fail(`Canonical für ${route} unerwartet: ${data.canonical}`);
 
       const html = mergeHead(template, data);
@@ -143,7 +140,7 @@ async function main() {
 
       const must = MUST_CONTAIN[route];
       if (must && !html.includes(must)) fail(`${route}: Pflichttext „${must}“ fehlt im HTML.`);
-      if (!NO_H1.has(route) && !html.includes("<h1")) fail(`${route}: keine H1 im HTML.`);
+      if (!html.includes("<h1")) fail(`${route}: keine H1 im HTML.`);
       if ((html.match(/GTM-53BTCC64/g) || []).length !== (template.match(/GTM-53BTCC64/g) || []).length) fail(`${route}: GTM-Anzahl weicht ab.`);
       if ((html.match(/bzrcdn\.openai\.com/g) || []).length !== (template.match(/bzrcdn\.openai\.com/g) || []).length) fail(`${route}: OpenAI-Pixel-Anzahl weicht ab.`);
 

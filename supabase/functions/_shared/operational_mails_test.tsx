@@ -150,7 +150,7 @@ Deno.test('Kunden-Zuteilungsmitteilung: CE Tag und CE Woche zeigen nur den gewä
 });
 
 Deno.test('Fahrer-Endbetrag stammt nur aus dem manuell eingegebenen Fahrersatz, nie aus dem Kundenpreis', () => {
-  const net = (j: any, a: any) => {
+  const net = (j: any, a: any): string[] => {
     const s = createOfferSnapshot(j, a);
     return (shortOfferLines((s.job_lines ?? []), s.binding_allowed === true, 'x').map(([, v]) => v).join(' ').match(/[\d.]+,\d{2} €/g) ?? []);
   };

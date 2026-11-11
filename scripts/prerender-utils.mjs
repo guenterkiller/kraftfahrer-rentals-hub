@@ -74,7 +74,6 @@ export function assertPage(document, route, baseUrl = 'https://www.kraftfahrer-m
   if (exactlyOne('meta[property="og:url"]').getAttribute('content') !== canonical || exactlyOne('meta[name="twitter:url"]').getAttribute('content') !== canonical) throw new Error(`${route}: falsche Share-URL.`);
   if (/noindex|nofollow/i.test(exactlyOne('meta[name="robots"]').getAttribute('content'))) throw new Error(`${route}: Indexierung gesperrt.`);
   if (!document.querySelector('#root')?.textContent.trim()) throw new Error(`${route}: leere SPA-Hülle.`);
-  // /fahrer-infos has existing card headings, not an H1; preserve that content.
-  if (route !== '/fahrer-infos') exactlyOne('#root h1');
+  exactlyOne('#root h1');
   document.querySelectorAll('script[type="application/ld+json"]').forEach((script) => JSON.parse(script.textContent));
 }

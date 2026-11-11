@@ -24,9 +24,10 @@ export const FERNVERKEHR_UEBERNACHTUNG =
 /** Fernverkehr: Kalendertage mit Samstag/Sonntag im angefragten Zeitraum (Ruhetage noch nicht geklärt). */
 export const fernverkehrZeitraumMitWochenende = (timeframe: string): boolean | null => {
   const d = String(timeframe ?? '').match(/\d{2}\.\d{2}\.\d{4}/g) ?? [];
-  if (d.length === 0) return null;
+  const first = d[0], last = d[d.length - 1];
+  if (first === undefined || last === undefined) return null;
   const iso = (x: string) => Date.parse(`${x.split('.').reverse().join('-')}T00:00:00Z`);
-  const start = iso(d[0]), end = iso(d[d.length - 1]);
+  const start = iso(first), end = iso(last);
   if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return null;
   for (let t = start; t <= end; t += 86400000) { const w = new Date(t).getUTCDay(); if (w === 0 || w === 6) return true; }
   return false;
