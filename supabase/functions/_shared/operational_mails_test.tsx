@@ -34,7 +34,7 @@ const asg = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_val
 
 async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie: string, longDistance: boolean, extra: Record<string, unknown> = {}, von = '2026-11-16', bis = '2026-11-20') {
   const tarif = tarifKey === 'ueberfuehrung' ? { tarif: 'ueberfuehrung', label: 'LKW-Überführung', netto: null, einheit: '', mehrstunde: null, needsReview: false, reason: '' } : resolveTarif({ kategorie, maschinenbedienung: '', longDistance });
-  const k = tarifKey === 'ueberfuehrung' ? null : berechneKostenUebersicht(tarif.tarif as any, von, bis);
+  const k = tarifKey === 'ueberfuehrung' ? null : berechneKostenUebersicht(tarif.tarif as any, von, bis, { wochenendarbeit: extra.weekendHolidayAffected === true });
   const html = await renderAsync(React.createElement(CustomerBookingConfirmation as any, {
     customerName: KUNDE.customer_name, companyName: KUNDE.company, driverType: kategorie, timeframe: `${von.split('-').reverse().join('.')} – ${bis.split('-').reverse().join('.')}`, location: 'TEST-Ort 12345 Musterstadt',
     message: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[1], selectedActivity: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[0], tarif, isFernfahrerTarif: tarif.tarif === 'fernfahrer', kostenUebersicht: k, isUeberfuehrung: tarifKey === 'ueberfuehrung', ...extra,

@@ -54,7 +54,7 @@ describe('Kostenübersicht – Berechnung', () => {
 
   it('LKW CE: Samstag +25 %, Sonntag +50 %', () => {
     // 24.10.2026 = Samstag, 25.10.2026 = Sonntag
-    const k = berechneKostenUebersicht('lkw_ce', '2026-10-24', '2026-10-25');
+    const k = berechneKostenUebersicht('lkw_ce', '2026-10-24', '2026-10-25', { wochenendarbeit: true });
     expect(k!.netto).toBeCloseTo(349 * 1.25 + 349 * 1.5, 2);
   });
 
@@ -65,7 +65,7 @@ describe('Kostenübersicht – Berechnung', () => {
 
   it('Wochenpreis: Woche + Resttag + Samstag', () => {
     // 19.10.–24.10.2026: 5 Werktage (1.645) + Samstag 349 × 1,25
-    const k = berechneKostenUebersicht('lkw_ce_woche', '2026-10-19', '2026-10-24');
+    const k = berechneKostenUebersicht('lkw_ce_woche', '2026-10-19', '2026-10-24', { wochenendarbeit: true });
     expect(k!.netto).toBeCloseTo(1645 + 349 * 1.25, 2);
   });
 

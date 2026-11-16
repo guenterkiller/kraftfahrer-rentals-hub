@@ -22,7 +22,7 @@ Deno.test('Server: CE-Wochenpreis + Fernverkehr wird Fernfahrer-Pauschale, 8 Tag
   assert(tarif.tarif === 'fernfahrer' && tarif.netto === 450, 'Fernfahrer-Vorrang fehlt');
   const k = berechneKostenUebersicht('fernfahrer', '2026-11-16', '2026-11-23');
   assert(k?.netto === 3471.06 && k?.brutto === 4130.56, `falsche Summe ${k?.netto}/${k?.brutto}`);
-  assert(berechneKostenUebersicht('lkw_ce_woche', '2026-11-16', '2026-11-23')?.netto === 2933.75, 'Wochenpreis verändert');
+  assert(berechneKostenUebersicht('lkw_ce_woche', '2026-11-16', '2026-11-23', { wochenendarbeit: true })?.netto === 2933.75 && berechneKostenUebersicht('lkw_ce_woche', '2026-11-16', '2026-11-23')?.netto === 1974, 'Wochenpreis verändert');
 });
 
 Deno.test('Kunden-/Adminmail Fernfahrer: Preis-/Ruhetagshinweis, kein Zuschlags- oder Mehrstundenabschnitt', async () => {

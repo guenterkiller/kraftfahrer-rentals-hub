@@ -13,6 +13,8 @@ import {
   UNTERKUNFT_OPTIONSWERTE,
   type UnterkunftOption,
   tarifOhneZuschlaege,
+  wochenendarbeitGebucht,
+  gebuchteZuschlagstage,
 } from '../_shared/kosten-uebersicht.ts';
 
 const jsonCors = { ...corsHeaders, 'Content-Type': 'application/json' };
@@ -208,20 +210,23 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Unverbindliche Vorkalkulation serverseitig berechnen (Client-Werte sind nicht maßgeblich)
+    // Sa/So nur bei ausdrücklich angeforderter Wochenendarbeit – nie aus dem bloßen Kalenderzeitraum.
+    const wochenendarbeit = wochenendarbeitGebucht(anforderungen);
     const kostenUebersicht = berechneKostenUebersicht(
       tarif.tarif,
       String(requestData.einsatzbeginn || ''),
-      String(requestData.einsatzende || requestData.einsatzbeginn || '')
+      String(requestData.einsatzende || requestData.einsatzbeginn || ''),
+      { wochenendarbeit }
     );
 
     // Wochenend-/Feiertage im Einsatzzeitraum
     // Event-Tourneepauschale: keine Wochenend-/Feiertagszuschläge.
     // Fernfahrer-Pauschale: ebenfalls keine Wochenend-/Feiertagszuschläge.
     const ohneZuschlaege = tarifOhneZuschlaege(tarif.tarif);
-    const surchargeDays = ohneZuschlaege ? [] : listSurchargeDays(
+    const surchargeDays = ohneZuschlaege ? [] : gebuchteZuschlagstage(listSurchargeDays(
       String(requestData.einsatzbeginn || ''),
       String(requestData.einsatzende || requestData.einsatzbeginn || '')
-    );
+    ), wochenendarbeit);
     const weekendDays = surchargeDays.filter((d) => d.kind !== 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
     const holidayDays = surchargeDays.filter((d) => d.kind === 'feiertag').map((d) => `${d.label} – ${d.percent} %`);
     
@@ -231,7 +236,7 @@ const handler = async (req: Request): Promise<Response> => {
     const confirmation = validateCustomerConfirmation(requestData);
     const newsletter = Boolean(requestData.newsletter);
     const billing_model = String(requestData.billing_model || 'agency');
-    const weekend_holiday_affected = ohneZuschlaege ? false : Boolean(requestData.weekend_holiday_affected);
+    const weekend_holiday_affected = ohneZuschlaege || surchargeDays.length === 0 ? false : Boolean(requestData.weekend_holiday_affected);
     const weekend_holiday_acknowledged = ohneZuschlaege ? false : Boolean(requestData.weekend_holiday_acknowledged);
     
     // Validate required fields
@@ -430,7 +435,8 @@ const handler = async (req: Request): Promise<Response> => {
           surcharge_days: surchargeDays,
           unterkunft_option: unterkunftOption,
           unterkunft_obergrenze: unterkunftObergrenze,
-          kosten_uebersicht: kostenUebersicht
+          kosten_uebersicht: kostenUebersicht,
+          job_id: jobRequest.id
         }
       });
 

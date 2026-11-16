@@ -29,10 +29,10 @@ describe('Fernfahrer-Pauschale ohne Wochenend-/Feiertagszuschläge', () => {
     expect(tarifOhneZuschlaege('fernfahrer')).toBe(true);
     expect(tarifOhneZuschlaege('lkw_ce')).toBe(false);
     // Sa 21.11. + So 22.11.2026 bei 349 €: 436,25 + 523,50
-    expect(berechneKostenUebersicht('lkw_ce', '2026-11-21', '2026-11-22')?.netto).toBe(959.75);
+    expect(berechneKostenUebersicht('lkw_ce', '2026-11-21', '2026-11-22', { wochenendarbeit: true })?.netto).toBe(959.75);
     // Wochenpreis MIAG-Zeitraum unverändert 2.933,75 € netto
-    expect(berechneKostenUebersicht('lkw_ce_woche', '2026-11-16', '2026-11-23').netto).toBe(2933.75);
-    expect(berechneKostenUebersicht('baumaschine', '2026-11-21', '2026-11-21')?.netto).toBe(611.25);
+    expect(berechneKostenUebersicht('lkw_ce_woche', '2026-11-16', '2026-11-23', { wochenendarbeit: true }).netto).toBe(2933.75);
+    expect(berechneKostenUebersicht('baumaschine', '2026-11-21', '2026-11-21', { wochenendarbeit: true })?.netto).toBe(611.25);
   });
   it('5 Einsatztage kosten exakt 2.121,06 € statt 2.250 € oder 2.120 €', () => {
     expect(berechneKostenUebersicht('fernfahrer', '2026-11-19', '2026-11-23')?.netto).toBe(2121.06);

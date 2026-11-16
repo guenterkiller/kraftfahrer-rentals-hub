@@ -135,6 +135,41 @@ export const FERNVERKEHR_WERKTAGE_HINWEIS =
 
 const round2 = (v: number) => Math.round(v * 100) / 100;
 
+/** Exakte Anforderungsbezeichnung der Formular-Checkbox „Wochenendarbeit erforderlich“. */
+export const WOCHENENDARBEIT_ANFORDERUNG = 'Wochenendarbeit';
+
+/** Wochenendarbeit gilt nur als gebucht, wenn der Besteller sie ausdrücklich angefordert hat. */
+export const wochenendarbeitGebucht = (anforderungen: unknown): boolean =>
+  Array.isArray(anforderungen) && anforderungen.some((a) => String(a ?? '').trim() === WOCHENENDARBEIT_ANFORDERUNG);
+
+/** Samstag oder Sonntag (ISO-Datum, UTC). */
+export const istWochenendDatum = (iso: string): boolean => {
+  const t = Date.parse(`${iso}T00:00:00Z`);
+  if (!Number.isFinite(t)) return false;
+  const w = new Date(t).getUTCDay();
+  return w === 0 || w === 6;
+};
+
+/** Zuschlagstage nur für ausdrücklich gebuchte Wochenendarbeit; ohne Buchung entfallen Sa/So vollständig. */
+export const gebuchteZuschlagstage = <T extends { date: string }>(tage: T[], wochenendarbeit: boolean): T[] =>
+  wochenendarbeit ? tage : tage.filter((t) => !istWochenendDatum(t.date));
+
+/** Altbestand: gespeicherte Vorkalkulation mit Sa/So-Positionen ohne angeforderte Wochenendarbeit (nur Hinweis, nie Neuberechnung). */
+export const altbestandWochenendeOhneBuchung = (
+  kosten: { positionen?: { label: string }[] } | null | undefined,
+  besonderheiten: string | null | undefined,
+): boolean => {
+  const pos = kosten?.positionen ?? [];
+  const hatWochenende = pos.some((p) => /^(Sa|So),/.test(p.label));
+  const gebucht = String(besonderheiten ?? '').split(',').some((a) => a.trim() === WOCHENENDARBEIT_ANFORDERUNG);
+  return hatWochenende && !gebucht;
+};
+
+export interface KostenOptionen {
+  /** Nur true, wenn „Wochenendarbeit erforderlich“ ausdrücklich gewählt wurde. */
+  wochenendarbeit?: boolean;
+}
+
 export const formatEuro = (v: number): string =>
   `${v.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
 
@@ -149,6 +184,7 @@ export const berechneKostenUebersicht = (
   tarifKey: string,
   startISO: string,
   endISO: string,
+  optionen: KostenOptionen = {},
 ): KostenUebersicht | null => {
   if (!startISO) return null;
   const start = new Date(`${startISO}T00:00:00Z`);
@@ -160,7 +196,11 @@ export const berechneKostenUebersicht = (
   if (!isWoche && !tagessatz) return null;
 
   // Event-Tourneepauschale und Fernfahrer-Pauschale: keine Samstags-, Sonntags- oder Feiertagszuschläge.
-  const surchargeDays = tarifOhneZuschlaege(tarifKey) ? [] : listSurchargeDays(startISO, endISO || startISO);
+  const wochenendarbeit = optionen.wochenendarbeit === true;
+  // Sa/So werden nie aus dem bloßen Kalenderzeitraum abgeleitet: ohne gebuchte Wochenendarbeit
+  // sind sie keine Einsatztage (gilt für CE-Tag, CE-Woche und Baumaschinen; Event/Fernfahrer unverändert).
+  const ohneWochenende = !wochenendarbeit && !tarifOhneZuschlaege(tarifKey);
+  const surchargeDays = tarifOhneZuschlaege(tarifKey) ? [] : gebuchteZuschlagstage(listSurchargeDays(startISO, endISO || startISO), wochenendarbeit);
   const surchargeByDate = new Map(surchargeDays.map((d) => [d.date, d]));
 
   const positionen: KostenPosition[] = [];
@@ -192,6 +232,7 @@ export const berechneKostenUebersicht = (
       const y = d.getUTCFullYear();
       holidayCache[y] = holidayCache[y] || germanHolidays(y);
       const dateISO = isoOf(d);
+      if (ohneWochenende && istWochenendDatum(dateISO)) continue;
       const surcharge = surchargeByDate.get(dateISO);
       if (surcharge) {
         sonderPositionen.push({
@@ -223,6 +264,7 @@ export const berechneKostenUebersicht = (
     const sonderPositionen: KostenPosition[] = [];
     for (let d = start; d <= end; d = new Date(d.getTime() + 86400000)) {
       const dateISO = isoOf(d);
+      if (ohneWochenende && istWochenendDatum(dateISO)) continue;
       const surcharge = surchargeByDate.get(dateISO);
       if (surcharge) {
         sonderPositionen.push({

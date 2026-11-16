@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { storeCustomerMailSnapshot } from '../_shared/customer-mail-snapshot.ts';
 import { renderAsync } from '../_shared/render-email.ts';
 import { formatAssignmentPeriod } from '../_shared/berlin-time.ts';
 import * as React from 'npm:react@18.3.1';
@@ -119,6 +120,16 @@ const handler = async (req: Request): Promise<Response> => {
       reply_to: 'info@kraftfahrer-mieten.com',
       subject,
       html: emailHtml,
+    });
+
+    await storeCustomerMailSnapshot(supabase, {
+      jobId: job.id,
+      assignmentId: assignment_id,
+      template: 'no_show_notice',
+      payload: { from: MAIL_FROM, to: job.customer_email, bcc: [adminEmail], replyTo: 'info@kraftfahrer-mieten.com', subject, html: emailHtml },
+      result: emailResponse.error
+        ? { ok: false, error: String(emailResponse.error.message || emailResponse.error) }
+        : { ok: true, messageId: emailResponse.data?.id ?? null },
     });
 
     if (emailResponse.error) {

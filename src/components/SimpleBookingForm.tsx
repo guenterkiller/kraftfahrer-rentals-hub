@@ -88,7 +88,11 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const { toast } = useToast();
 
   // Wochenend-/Feiertagsprüfung für den gewählten Einsatzzeitraum
-  const weekendHolidayRaw = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+  // Sa/So zählen nur bei ausdrücklich gewählter Wochenendarbeit (nie aus dem bloßen Zeitraum).
+  const weekendHolidayKalender = analyzeWeekendHoliday(einsatzbeginn, einsatzende);
+  const weekendHolidayRaw = weekendWork
+    ? weekendHolidayKalender
+    : { ...weekendHolidayKalender, hasSaturday: false, hasSunday: false, affected: weekendHolidayKalender.holidays.length > 0 };
 
   // Tarifzuordnung ausschließlich anhand der vom Besteller gewählten Tarifkarte
   const tarif = resolveTarif({
@@ -115,7 +119,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const obergrenzeFehler = unterkunftObergrenze.trim() !== '' && !obergrenzeValid;
 
   // Unverbindliche Vorkalkulation aus Tarif und Einsatzzeitraum
-  const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende);
+  const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende, { wochenendarbeit: weekendWork });
   // Fernverkehr mit Samstag/Sonntag: Ruhetage ungeklärt – wie in der Kundenmail kein Gesamtbetrag.
   const fernverkehrOhneGesamt = showFernfahrerHinweis && !!kostenUebersicht && fernverkehrMitWochenende(einsatzbeginn, einsatzende);
 

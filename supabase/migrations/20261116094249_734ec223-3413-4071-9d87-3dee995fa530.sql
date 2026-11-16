@@ -1,0 +1,1 @@
+ALTER FUNCTION public.admin_job_customer_mails(uuid) SECURITY INVOKER;

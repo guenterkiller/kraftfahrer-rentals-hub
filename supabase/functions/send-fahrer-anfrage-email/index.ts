@@ -4,7 +4,8 @@ import { renderAsync } from '../_shared/render-email.ts';
 import React from 'npm:react@18.3.1';
 import { CustomerBookingConfirmation } from '../_shared/email-templates/customer-booking-confirmation.tsx';
 import { analyzeWeekendHoliday } from '../_shared/german-holidays.ts';
-import { tarifOhneZuschlaege } from '../_shared/kosten-uebersicht.ts';
+import { tarifOhneZuschlaege, wochenendarbeitGebucht } from '../_shared/kosten-uebersicht.ts';
+import { storeCustomerMailSnapshot } from '../_shared/customer-mail-snapshot.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
@@ -25,6 +26,7 @@ interface FahrerAnfrageEmailRequest {
   einsatzende?: string;
   fahrzeugtyp: string;
   anforderungen?: string[];
+  job_id?: string | null;
   customer_street?: string;
   customer_house_number?: string;
   customer_postal_code?: string;
@@ -95,14 +97,19 @@ const handler = async (req: Request): Promise<Response> => {
       surcharge_days = [],
       unterkunft_option = null,
       unterkunft_obergrenze = null,
-      kosten_uebersicht = null
+      kosten_uebersicht = null,
+      job_id = null
     } = requestData;
 
     const kundenname = `${vorname} ${nachname}`.trim();
 
     // Maßgeblich ist der tatsächliche Einsatzzeitraum: wenn ISO-Daten vorliegen,
     // wird die Wochenend-/Feiertagserkennung serverseitig neu berechnet.
-    const computed = einsatzbeginn ? analyzeWeekendHoliday(einsatzbeginn, einsatzende || einsatzbeginn) : undefined;
+    const kalender = einsatzbeginn ? analyzeWeekendHoliday(einsatzbeginn, einsatzende || einsatzbeginn) : undefined;
+    // Sa/So nur bei ausdrücklich angeforderter Wochenendarbeit (nie aus dem bloßen Zeitraum).
+    const computed = kalender && !wochenendarbeitGebucht(anforderungen)
+      ? { ...kalender, hasSaturday: false, hasSunday: false, affected: kalender.holidays.length > 0 }
+      : kalender;
     // Event- und Fernfahrer-Pauschale: keine Wochenend-/Feiertagszuschläge.
     const affected = tarifOhneZuschlaege(tarif?.tarif) ? false : computed ? computed.affected : Boolean(weekend_holiday_affected);
     const acknowledged = affected && Boolean(weekend_holiday_acknowledged);
@@ -162,16 +169,17 @@ const handler = async (req: Request): Promise<Response> => {
         unterkunftOption: unterkunft_option,
         unterkunftObergrenze: unterkunft_obergrenze,
         kostenUebersicht: kosten_uebersicht,
-        zeitraumMitRuhetagen: computed ? computed.affected : null,
+        zeitraumMitRuhetagen: kalender ? kalender.affected : null,
       })
     );
 
-    const emailResponse = await resend.emails.send({
+    const mailPayload = {
       from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
-      to: [email],
+      to: email,
       subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
       html: emailHtml,
-    });
+    };
+    const emailResponse = await resend.emails.send({ ...mailPayload, to: [email] });
 
     // Create Supabase client for logging
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -181,6 +189,15 @@ const handler = async (req: Request): Promise<Response> => {
       const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.52.0");
       const supabase = createClient(supabaseUrl, supabaseKey);
       
+      await storeCustomerMailSnapshot(supabase, {
+        jobId: typeof job_id === 'string' ? job_id : null,
+        template: 'customer_booking_confirmation',
+        payload: mailPayload,
+        result: emailResponse.error
+          ? { ok: false, error: emailResponse.error.message || String(emailResponse.error) }
+          : { ok: true, messageId: emailResponse.data?.id ?? null },
+      });
+
       // Log email sending
       if (emailResponse.error) {
         console.error("Failed to send customer confirmation:", emailResponse.error);
@@ -189,6 +206,7 @@ const handler = async (req: Request): Promise<Response> => {
           recipient: email,
           subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
           template: 'customer_booking_confirmation',
+          job_id: typeof job_id === 'string' ? job_id : null,
           status: 'failed',
           error_message: emailResponse.error.message || String(emailResponse.error),
         });
@@ -199,6 +217,7 @@ const handler = async (req: Request): Promise<Response> => {
           recipient: email,
           subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
           template: 'customer_booking_confirmation',
+          job_id: typeof job_id === 'string' ? job_id : null,
           status: 'sent',
           sent_at: new Date().toISOString(),
           message_id: emailResponse.data?.id,

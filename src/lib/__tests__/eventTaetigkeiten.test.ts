@@ -29,7 +29,7 @@ describe('Event-Tourneepauschale (nur vier Eventtätigkeiten)', () => {
     const tarif = resolveTarif({ kategorie: 'Baumaschinenführer / Mischmeister – Betonpumpe', maschinenbedienung: '', taetigkeit: 'Betonpumpe' });
     expect(tarif).toMatchObject({ tarif: 'baumaschine', netto: 489, mehrstunde: 60 });
     // Samstag 25 %: 489 + 611,25
-    expect(berechneKostenUebersicht('baumaschine', '2026-11-06', '2026-11-07')?.netto).toBe(1100.25);
+    expect(berechneKostenUebersicht('baumaschine', '2026-11-06', '2026-11-07', { wochenendarbeit: true })?.netto).toBe(1100.25);
   });
   it('LKW CE und Fernfahrer unverändert', () => {
     expect(resolveTarif({ kategorie: 'LKW-Fahrer CE', maschinenbedienung: '' })).toMatchObject({ tarif: 'lkw_ce', netto: 349, mehrstunde: 45 });

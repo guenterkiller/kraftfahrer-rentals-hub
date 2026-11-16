@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { storeCustomerMailSnapshot } from "../_shared/customer-mail-snapshot.ts";
 import {
   verifyAdminAuth,
   createCorsHeaders,
@@ -76,12 +77,16 @@ serve(async (req) => {
 
     const { subject, html, text } = buildCustomerAssignmentNotice({ job: jr, driverName, driverPhone, driverEmail: fp.email, zeitraum, einsatzort });
 
-    const result = await resend.emails.send({
-      from: "Fahrerexpress <info@kraftfahrer-mieten.com>",
-      to: [customerEmail],
-      subject,
-      html,
-      text,
+    const mailPayload = { from: "Fahrerexpress <info@kraftfahrer-mieten.com>", to: customerEmail, subject, html, text };
+    const result = await resend.emails.send({ ...mailPayload, to: [customerEmail] });
+    await storeCustomerMailSnapshot(supabase, {
+      jobId: assignment.job_id,
+      assignmentId: assignment.id,
+      template: "customer_assignment_notice",
+      payload: mailPayload,
+      result: result.error
+        ? { ok: false, error: String(result.error?.message || result.error) }
+        : { ok: true, messageId: result.data?.id ?? null },
     });
 
     if (result.error) {

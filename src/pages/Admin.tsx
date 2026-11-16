@@ -36,7 +36,8 @@ import { AdminAnalyticsDashboard } from "@/components/AdminAnalyticsDashboard";
 import PerformanceMonitor from "@/components/PerformanceMonitor";
 import type { User } from "@supabase/supabase-js";
 import { useSEO } from "@/hooks/useSEO";
-import { UNTERKUNFT_OPTIONEN, OBERGRENZE_LABEL, formatEuro, zuweisungsHinweis, type UnterkunftOption } from "@/lib/kostenUebersicht";
+import { UNTERKUNFT_OPTIONEN, OBERGRENZE_LABEL, formatEuro, zuweisungsHinweis, altbestandWochenendeOhneBuchung, type UnterkunftOption } from "@/lib/kostenUebersicht";
+import { CustomerMailSnapshots } from "@/components/admin/CustomerMailSnapshots";
 
 interface FahrerProfile {
   id: string;
@@ -2143,8 +2144,14 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                   <p className="text-sm text-gray-900 mt-1">
                                     Netto {formatEuro((req as any).kosten_uebersicht.netto)} · USt {formatEuro((req as any).kosten_uebersicht.ust)} · <strong>Brutto {formatEuro((req as any).kosten_uebersicht.brutto)}</strong>
                                   </p>
+                                  {altbestandWochenendeOhneBuchung((req as any).kosten_uebersicht, req.besonderheiten) && (
+                                    <p className="text-xs text-amber-800 mt-1">
+                                      Hinweis: Diese gespeicherte Vorkalkulation enthält Samstage/Sonntage, obwohl „Wochenendarbeit“ nicht angefordert wurde (Berechnungsfehler vor der Korrektur). Der Nachweis bleibt unverändert; tatsächliche Einsatztage mit dem Kunden klären.
+                                    </p>
+                                  )}
                                 </div>
                               )}
+                              <CustomerMailSnapshots jobId={req.id} />
                             </div>
                             {!req.nachricht && !req.besonderheiten && !req.einsatzort && (
                               <p className="text-sm text-gray-500 italic">Keine weiteren Details vorhanden.</p>

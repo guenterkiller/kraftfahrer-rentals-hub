@@ -174,6 +174,87 @@ export type Database = {
           },
         ]
       }
+      customer_email_snapshots: {
+        Row: {
+          assignment_id: string | null
+          bcc: string[] | null
+          content_sha256: string
+          created_at: string
+          error_message: string | null
+          from_address: string
+          html: string | null
+          id: string
+          job_id: string | null
+          provider: string
+          provider_message_id: string | null
+          recipient: string
+          reply_to: string | null
+          retention_until: string
+          sent_at: string | null
+          status: string
+          subject: string
+          template: string
+          text_body: string | null
+        }
+        Insert: {
+          assignment_id?: string | null
+          bcc?: string[] | null
+          content_sha256: string
+          created_at?: string
+          error_message?: string | null
+          from_address: string
+          html?: string | null
+          id?: string
+          job_id?: string | null
+          provider?: string
+          provider_message_id?: string | null
+          recipient: string
+          reply_to?: string | null
+          retention_until?: string
+          sent_at?: string | null
+          status: string
+          subject: string
+          template: string
+          text_body?: string | null
+        }
+        Update: {
+          assignment_id?: string | null
+          bcc?: string[] | null
+          content_sha256?: string
+          created_at?: string
+          error_message?: string | null
+          from_address?: string
+          html?: string | null
+          id?: string
+          job_id?: string | null
+          provider?: string
+          provider_message_id?: string | null
+          recipient?: string
+          reply_to?: string | null
+          retention_until?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          template?: string
+          text_body?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_email_snapshots_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "job_assignments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_email_snapshots_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customer_newsletter_optout: {
         Row: {
           email: string
@@ -1239,6 +1320,22 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      admin_job_customer_mails: {
+        Args: { _job_id: string }
+        Returns: {
+          content_sha256: string
+          html: string
+          id: string
+          provider_message_id: string
+          recipient: string
+          sent_at: string
+          source: string
+          status: string
+          subject: string
+          template: string
+          text_body: string
+        }[]
       }
       admin_mark_no_show:
         | {
