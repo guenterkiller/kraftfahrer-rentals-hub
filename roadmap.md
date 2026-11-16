@@ -188,8 +188,9 @@
 
 ## Fahrer-Auftragsangebot mit gespeicherter Vergütung (2026-11-16)
 - [x] Speier/Völklingen nur lesend zugeordnet: allgemeine `job-broadcast`-Interessenmail, `purpose=interest`, keine Zuteilung, kein Fahrersatz und kein Angebots-Snapshot; kein Betrag rekonstruieren
-- [ ] Persönliches verbindliches Angebot: Vergütungsbox aus unveränderlicher Angebotskopie, Einheit/Zeitraum/CE/Tätigkeit/Ort und motivierende Handlungsaufforderung
-- [ ] Annahmeseite: Vergütung und vollständige Bedingungen vor Annahme; fehlende Vergütung serverseitig sperren, allgemeines Interesse nicht als verbindliche Annahme darstellen
-- [ ] Tests mit fehlender/vorhandener Vergütung, Unabhängigkeit vom Kundenpreis, Vertraulichkeit und Mock-Versand ohne reale Schreibzugriffe
-- [ ] Vollständige HTML-/Screenshot-Nachweise aus Originalversand und echter Annahmeseite, produktive Buchungen unverändert nachweisen, Commit nennen; Betreiberfreigabe abwarten
-- [ ] Keine echten E-Mails, Bestandsänderungen, Veröffentlichung oder IONOS-Uploads
+- [x] Persönliches verbindliches Angebot: Vergütungsbox aus unveränderlicher Angebotskopie, Einheit/Zeitraum/CE/Tätigkeit/Ort und motivierende Handlungsaufforderung
+- [x] Annahmeseite: Vergütung und vollständige Bedingungen vor Annahme; fehlende Vergütung serverseitig sperren, allgemeines Interesse nicht als verbindliche Annahme darstellen
+- [x] Tests mit fehlender/vorhandener Vergütung, Unabhängigkeit vom Kundenpreis, Vertraulichkeit und Mock-Versand ohne reale Schreibzugriffe: 167 Website-, 166 Server-, 6 Skripttests
+- [x] Vollständige HTML-/Screenshot-Nachweise aus Originalversand und echter Annahmeseite, produktive Buchungen unverändert nachgewiesen; Betreiberfreigabe abwarten
+- [x] Keine echten E-Mails, Bestandsänderungen, Veröffentlichung oder IONOS-Uploads
+- [ ] Produktive Freigabe und etwaige Veröffentlichung: wartet ausdrücklich auf Betreiber nach Sichtung der Nachweise

@@ -178,8 +178,6 @@ serve(async (req) => {
     const sectionStart = (bg: string) =>
       `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background-color:${bg};border:1px solid #e5e7eb;border-left:4px solid #bb2c29;border-collapse:separate;border-radius:6px;margin:0 0 16px 0;"><tr><td style="padding:16px 18px;">`;
     const sectionEnd = `</td></tr></table>`;
-    const h3 = (txt: string, color = '#0d2340') =>
-      `<h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:${color};font-weight:700;">${txt}</h3>`;
 
     const bindingAllowed = true;
     const storedOfferLines = offerSnapshot.job_lines ?? [];
