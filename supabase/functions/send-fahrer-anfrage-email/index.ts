@@ -4,7 +4,7 @@ import { renderAsync } from '../_shared/render-email.ts';
 import React from 'npm:react@18.3.1';
 import { CustomerBookingConfirmation } from '../_shared/email-templates/customer-booking-confirmation.tsx';
 import { analyzeWeekendHoliday } from '../_shared/german-holidays.ts';
-import { tarifOhneZuschlaege, wochenendarbeitGebucht } from '../_shared/kosten-uebersicht.ts';
+import { tarifOhneZuschlaege, wochenendarbeitGebucht, gebuchteFeiertage } from '../_shared/kosten-uebersicht.ts';
 import { storeCustomerMailSnapshot } from '../_shared/customer-mail-snapshot.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -163,6 +163,8 @@ const handler = async (req: Request): Promise<Response> => {
         isFernfahrerTarif: isFernfahrerTarif && tarif?.tarif === 'fernfahrer',
         isUeberfuehrung: tarif?.tarif === 'ueberfuehrung',
         weekendHolidayAffected: affected,
+        wochenendarbeit: !tarifOhneZuschlaege(tarif?.tarif) && wochenendarbeitGebucht(anforderungen),
+        feiertage: tarifOhneZuschlaege(tarif?.tarif) || !einsatzbeginn ? [] : gebuchteFeiertage(einsatzbeginn, einsatzende || einsatzbeginn, wochenendarbeitGebucht(anforderungen)),
         weekendHolidayAcknowledged: acknowledged,
         tarif: tarif,
         surchargeDays: surcharge_days,

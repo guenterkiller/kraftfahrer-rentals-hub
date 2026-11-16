@@ -45,10 +45,10 @@ async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie
 
 Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine internen Daten', async () => {
   const ce = await kundenmail('1a', 'Eingangsbestätigung – LKW CE Tag (Mo–Fr)', 'lkw_ce', 'LKW CE', false);
-  assert(ce.t.includes('349,00 € netto je tatsächlichem Einsatztag') && ce.t.includes('Samstag 25 %') && !ce.t.includes('Ihr Zeitraum enthält einen Samstag'));
+  assert(ce.t.includes('349,00 € netto je tatsächlichem Einsatztag') && ce.t.includes('Samstag 25 %') && !ce.t.includes('Wochenendarbeit angefragt') && !ce.t.includes('Feiertag ('));
   assert(ce.t.includes('1.745,00 €') && ce.t.includes('331,55 € / 2.076,55 €'), 'CE 5 × 349 + 19 % USt');
-  const cesa = await kundenmail('1a2', 'Eingangsbestätigung – LKW CE Tag mit Samstag (25 % Zuschlag)', 'lkw_ce', 'LKW CE', false, { weekendHolidayAffected: true }, '2026-11-16', '2026-11-21');
-  assert(cesa.t.includes('436,25 €') && cesa.t.includes('2.181,25 €') && cesa.t.includes('414,44 € / 2.595,69 €') && cesa.t.includes('Ihr Zeitraum enthält einen Samstag'), 'CE Samstag: 349 × 1,25');
+  const cesa = await kundenmail('1a2', 'Eingangsbestätigung – LKW CE Tag mit Samstag (25 % Zuschlag)', 'lkw_ce', 'LKW CE', false, { weekendHolidayAffected: true, wochenendarbeit: true }, '2026-11-16', '2026-11-21');
+  assert(cesa.t.includes('436,25 €') && cesa.t.includes('2.181,25 €') && cesa.t.includes('414,44 € / 2.595,69 €') && cesa.t.includes('Sie haben Wochenendarbeit angefragt'), 'CE Samstag: 349 × 1,25');
   const wo = await kundenmail('1b', 'Eingangsbestätigung – CE Wochenpreis', 'lkw_ce_woche', 'LKW CE Wochenpreis', false);
   assert(wo.t.includes('1.645,00 € netto für 5 Einsatztage von Montag bis Freitag') && wo.t.includes('312,55 € / 1.957,55 €'));
   const ff = await kundenmail('1c', 'Eingangsbestätigung – Fernfahrer (Fernverkehr)', 'fernfahrer', 'LKW CE', true, { unterkunftOption: 'keine' });
@@ -69,8 +69,8 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
   for (const m of [ce, cesa, wo, ff, ffwe, bm, ue]) {
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
-    assert(m.t.includes('noch keine Einsatzbestätigung') && m.t.includes('Vermittlungsbedingungen'));
-    assert(m.t.length < (m === ff || m === ffwe ? 3000 : 2600), `zu lang: ${m.t.length}`);
+    assert(m.t.includes('Ihre unverbindliche Fahreranfrage ist eingegangen') && m.t.includes('noch keine Auftrags- oder Einsatzbestätigung') && !/(?<![Uu]n)verbindliche Anfrage/.test(m.t) && m.t.includes('Vermittlungsbedingungen'));
+    assert(m.t.length < (m === ff || m === ffwe ? 3200 : 2800), `zu lang: ${m.t.length}`);
   }
 });
 

@@ -37,6 +37,9 @@ import {
   OBERGRENZE_LABEL,
   OBERGRENZE_ERKLAERUNG,
   OBERGRENZE_FEHLER,
+  ANFRAGE_FORMULAR_TEXT,
+  zuschlagHinweis,
+  gebuchteFeiertage,
 } from "@/lib/kostenUebersicht";
 import { OVERNIGHT_COSTS } from "@/lib/overnightCosts";
 import {
@@ -119,6 +122,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
   const obergrenzeFehler = unterkunftObergrenze.trim() !== '' && !obergrenzeValid;
 
   // Unverbindliche Vorkalkulation aus Tarif und Einsatzzeitraum
+  const zuschlagHinweisText = zuschlagHinweis(weekendWork, gebuchteFeiertage(einsatzbeginn, einsatzende, weekendWork));
   const kostenUebersicht = berechneKostenUebersicht(tarif.tarif, einsatzbeginn, einsatzende, { wochenendarbeit: weekendWork });
   // Fernverkehr mit Samstag/Sonntag: Ruhetage ungeklärt – wie in der Kundenmail kein Gesamtbetrag.
   const fernverkehrOhneGesamt = showFernfahrerHinweis && !!kostenUebersicht && fernverkehrMitWochenende(einsatzbeginn, einsatzende);
@@ -317,7 +321,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       }
 
       toast({
-        title: "Bestellung erfolgreich gesendet!",
+        title: "Anfrage erfolgreich gesendet!",
         description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
       });
 
@@ -402,12 +406,12 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
                 <CardTitle className="text-2xl">
-                   Fahreranfrage – verbindliche Bestellung
+                   Fahreranfrage
                 </CardTitle>
                 <PWAInstallButton />
               </div>
               <p className="text-center sm:text-left text-muted-foreground mb-4">
-                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage zur Fahrerdisposition. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung.
+                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. {ANFRAGE_FORMULAR_TEXT}
               </p>
               
               {/* Quick Benefits */}
@@ -526,7 +530,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
 
               <form onSubmit={handleSubmit} className="space-y-6" aria-label="Fahrer-Bestellformular">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Ihre Bestellung</h3>
+                  <h3 className="text-lg font-semibold mb-4">Ihre Anfrage</h3>
                   <p id="form-description" className="text-sm text-muted-foreground mb-4">
                     Bitte geben Sie Ihre Kontaktdaten und Details zu Ihrem Fahrbedarf an
                   </p>
@@ -1186,26 +1190,10 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
 
                 {/* Consents */}
                 <div className="space-y-3">
-                  {weekendHoliday.affected && (
+                  {weekendHoliday.affected && zuschlagHinweisText && (
                     <div className="bg-amber-50 border-2 border-amber-300 rounded-lg p-4" role="alert">
-                      <h4 className="font-semibold text-amber-900 mb-2">Hinweis zu Wochenend- und Feiertagseinsätzen:</h4>
-                      <p className="text-sm text-amber-900">
-                        Fällt ein Einsatz auf einen Samstag, Sonntag oder gesetzlichen Feiertag, wird automatisch ein Zuschlag auf den jeweiligen Tagessatz berechnet.
-                      </p>
-                      <ul className="text-sm text-amber-900 mt-2 space-y-1">
-                        <li>• Samstag: 25 %</li>
-                        <li>• Sonntag / gesetzlicher Feiertag: 50 %</li>
-                      </ul>
-                      <p className="text-sm text-amber-900 mt-2">
-                        Eine gesonderte vorherige Vereinbarung ist hierfür nicht erforderlich.
-                      </p>
-                      <p className="text-xs text-amber-800 mt-2">
-                        Betroffen in Ihrem Einsatzzeitraum: {[
-                          weekendHoliday.hasSaturday && 'Samstag',
-                          weekendHoliday.hasSunday && 'Sonntag',
-                          ...weekendHoliday.holidays
-                        ].filter(Boolean).join(', ')}
-                      </p>
+                      <h4 className="font-semibold text-amber-900 mb-2">Hinweis zu Wochenend- und Feiertagszuschlägen:</h4>
+                      <p className="text-sm text-amber-900">{zuschlagHinweisText}</p>
                     </div>
                   )}
                   
@@ -1240,7 +1228,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 >
                    {loading ? "Wird gesendet..." : (
                     <div className="text-center">
-                      <div>Verbindliche Anfrage senden</div>
+                      <div>Fahreranfrage senden</div>
                       <div className="text-sm opacity-90">{
                         isUeberfuehrung
                           ? UEBERFUEHRUNG_KOSTEN_HINWEIS
@@ -1255,7 +1243,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-3">
-                  Hinweis: Mit Absenden stellen Sie eine verbindliche Anfrage zur Fahrerdisposition. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Nach Mitteilung der Fahrerzuteilung können Sie der Zuteilung unverzüglich widersprechen, wenn die Angaben nicht passen.
+                  Hinweis: {ANFRAGE_FORMULAR_TEXT} Nach Mitteilung der Fahrerzuteilung können Sie der Zuteilung unverzüglich widersprechen, wenn die Angaben nicht passen.
                 </p>
               </form>
 

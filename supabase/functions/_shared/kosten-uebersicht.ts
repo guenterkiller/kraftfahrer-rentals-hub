@@ -313,3 +313,31 @@ export const offenePositionen = (
   }
   return offen;
 };
+
+/** Gemeinsamer Statustext der Kundenanfrage (Formular, Eingangsmail). */
+export const ANFRAGE_EINGANG_TEXT =
+  'Ihre unverbindliche Fahreranfrage ist eingegangen. Dies ist noch keine Auftrags- oder Einsatzbestätigung.';
+export const ANFRAGE_STATUS_TEXT = 'Status: Unverbindliche Anfrage – noch keine Auftrags- oder Einsatzbestätigung.';
+export const ANFRAGE_AUFTRAG_ENTSTEHUNG =
+  'Ein kostenpflichtiger Auftrag entsteht erst, wenn Fahrerexpress Ihnen einen passenden selbstständigen Fahrer zuteilt und den Einsatz in Textform (z. B. per E-Mail) bestätigt. Es gelten die Vermittlungsbedingungen. Ist kein passender Fahrer verfügbar, entstehen Ihnen keine Kosten.';
+export const ANFRAGE_FORMULAR_TEXT =
+  'Mit Absenden des Formulars senden Sie eine unverbindliche Fahreranfrage; dies ist noch keine Auftrags- oder Einsatzbestätigung. ' + ANFRAGE_AUFTRAG_ENTSTEHUNG;
+
+/** Bundesweite Feiertage, die auf tatsächlich angefragte Einsatztage fallen (Sa/So nur mit Wochenendarbeit). */
+export const gebuchteFeiertage = (startISO: string, endISO: string, wochenendarbeit: boolean): string[] =>
+  startISO
+    ? gebuchteZuschlagstage(listSurchargeDays(startISO, endISO || startISO), wochenendarbeit)
+        .filter((t) => t.kind === 'feiertag').map((t) => t.label)
+    : [];
+
+/** Zuschlagshinweis nur bei angefragter Wochenendarbeit oder Feiertag an einem angefragten Einsatztag; sonst null. */
+export const zuschlagHinweis = (wochenendarbeit: boolean, feiertage: string[]): string | null => {
+  const ft = feiertage.length ? ` Gesetzliche Feiertage an angefragten Einsatztagen: ${feiertage.join(', ')}.` : '';
+  if (wochenendarbeit) {
+    return `Sie haben Wochenendarbeit angefragt. Für tatsächlich geleistete Einsätze gilt an Samstagen ein Zuschlag von 25 %, an Sonntagen und gesetzlichen Feiertagen von 50 %.${ft}`;
+  }
+  if (feiertage.length) {
+    return `Auf einen angefragten Werktag fällt ein bundesweiter gesetzlicher Feiertag (${feiertage.join(', ')}). Nur wenn an diesem Tag tatsächlich ein Einsatz stattfindet, gilt ein Zuschlag von 50 %. Samstage und Sonntage sind ohne angefragte Wochenendarbeit nicht berücksichtigt.`;
+  }
+  return null;
+};

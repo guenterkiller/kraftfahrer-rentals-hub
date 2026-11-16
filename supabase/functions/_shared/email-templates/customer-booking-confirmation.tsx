@@ -16,6 +16,10 @@ import {
   UNTERKUNFT_GRUNDSATZ,
   FERNFAHRER_PREIS_HINWEIS,
   FERNFAHRER_WOCHENENDRUHE_HINWEIS,
+  ANFRAGE_EINGANG_TEXT,
+  ANFRAGE_STATUS_TEXT,
+  ANFRAGE_AUFTRAG_ENTSTEHUNG,
+  zuschlagHinweis,
 } from '../kosten-uebersicht.ts';
 
 export const FERNVERKEHR_UEBERNACHTUNG =
@@ -53,6 +57,10 @@ interface CustomerBookingConfirmationProps {
   isUeberfuehrung?: boolean;
   weekendHolidayAffected?: boolean;
   weekendHolidayAcknowledged?: boolean;
+  /** Nur true bei ausdrücklich angefragter Wochenendarbeit. */
+  wochenendarbeit?: boolean;
+  /** Feiertage an tatsächlich angefragten Einsatztagen. */
+  feiertage?: string[];
   tarif?: {
     tarif: string;
     label: string;
@@ -128,7 +136,8 @@ export const CustomerBookingConfirmation = ({
   timeframe,
   location,
   message,
-  weekendHolidayAffected = false,
+  wochenendarbeit = false,
+  feiertage = [],
   tarif,
   isUeberfuehrung = false,
   unterkunftOption = null,
@@ -163,12 +172,12 @@ export const CustomerBookingConfirmation = ({
         {buildSalutation(customerName, companyName)}
       </Heading>
       <Text {...getTextProps(textStyles.paragraph)}>
-        vielen Dank für Ihre Anfrage über unser Buchungsformular. Ihre verbindliche Anfrage zur Fahrerdisposition ist eingegangen.
+        vielen Dank für Ihre Anfrage über unser Buchungsformular. {ANFRAGE_EINGANG_TEXT}
       </Text>
 
       <Section {...getBoxProps(boxStyles.warningBox)}>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          <strong>Status: Anfrage – noch keine Einsatzbestätigung.</strong> Wir prüfen jetzt die Verfügbarkeit passender selbstständiger Fahrer. Ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung. Ist kein passender Fahrer verfügbar, entstehen Ihnen keine Kosten.
+          <strong>{ANFRAGE_STATUS_TEXT}</strong> Wir prüfen jetzt die Verfügbarkeit passender selbstständiger Fahrer. {ANFRAGE_AUFTRAG_ENTSTEHUNG}
         </Text>
       </Section>
 
@@ -214,9 +223,9 @@ export const CustomerBookingConfirmation = ({
               Der passende veröffentlichte Tarif wird vor der verbindlichen Einsatzbestätigung zugeordnet.
             </Text>
           )}
-          {!ohneZuschlaege && weekendHolidayAffected && (
+          {!ohneZuschlaege && zuschlagHinweis(wochenendarbeit, feiertage) && (
             <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '8px 0 0 0' })}>
-              Ihr Zeitraum enthält einen Samstag, Sonntag oder gesetzlichen Feiertag.
+              {zuschlagHinweis(wochenendarbeit, feiertage)}
             </Text>
           )}
           {istFernfahrer && kostenUebersicht && (typeof zeitraumMitRuhetagen === 'boolean' ? zeitraumMitRuhetagen : fernverkehrZeitraumMitWochenende(timeframe)) !== false ? (

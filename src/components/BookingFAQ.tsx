@@ -16,8 +16,8 @@ const BookingFAQ = () => {
   const faqItems = [
     {
       id: "verbindlich",
-      question: "Ist die Buchung verbindlich?",
-      answer: "Ihre Angaben werden erfasst, passende Fahrer informiert und der Einsatz bestätigt. Sie erhalten eine Einsatzbestätigung per E-Mail."
+      question: "Ist die Anfrage verbindlich?",
+      answer: "Nein. Ihre Fahreranfrage ist unverbindlich und noch keine Auftrags- oder Einsatzbestätigung. Ein kostenpflichtiger Auftrag entsteht erst, wenn Fahrerexpress Ihnen einen passenden selbstständigen Fahrer zuteilt und den Einsatz in Textform (z. B. per E-Mail) bestätigt."
     },
     {
       id: "email",

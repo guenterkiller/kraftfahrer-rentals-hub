@@ -65,7 +65,7 @@ const Index = () => {
       },
       {
         question: "Wie schnell können Fahrer verfügbar sein?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren. Mit Absenden des Formulars stellen Sie eine verbindliche Anfrage – ein kostenpflichtiger Auftrag entsteht erst nach Bestätigung durch Fahrerexpress und erfolgreicher Fahrerzuteilung."
+        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren. Mit Absenden des Formulars senden Sie eine unverbindliche Fahreranfrage; dies ist noch keine Auftrags- oder Einsatzbestätigung. Ein kostenpflichtiger Auftrag entsteht erst, wenn Fahrerexpress Ihnen einen passenden selbstständigen Fahrer zuteilt und den Einsatz in Textform (z. B. per E-Mail) bestätigt."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
