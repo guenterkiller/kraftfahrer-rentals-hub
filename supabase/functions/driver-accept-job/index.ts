@@ -104,6 +104,14 @@ const handler = async (req: Request): Promise<Response> => {
 
     const { jobId, driverId, action, termsAccepted, checkboxText, ip, userAgent } = requestData;
 
+    // Dieser Altweg enthielt einen festen Standardsatz statt einer individuellen Vereinbarung.
+    // Verbindliche Annahmen nur noch über ein vollständiges persönliches Angebot mit gespeicherter Vergütung.
+    if (action === 'accept') {
+      return new Response(JSON.stringify({
+        error: 'Dieser alte Annahmeweg ist deaktiviert. Bitte verwenden Sie das persönliche Auftragsangebot mit ausgewiesener Vergütung.'
+      }), { status: 410, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
     // Validate required fields
     if (!jobId || !driverId || !action) {
       return new Response(JSON.stringify({ error: 'Missing required fields' }), {

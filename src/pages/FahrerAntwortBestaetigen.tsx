@@ -2,12 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { useSEO } from "@/hooks/useSEO";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  DRIVER_ACCEPT_CHECKBOX_TEXT,
-  DRIVER_ACCEPT_LEGAL_HINT,
-} from "@/lib/driverConsentText";
+import { DRIVER_ACCEPT_LEGAL_HINT } from "@/lib/driverConsentText";
 import { BINDING_CONSENT_TEXT } from "@/lib/driverContractTerms";
-import { acceptancePageLines } from "@/lib/driverAcceptanceNet";
+import { acceptancePageLines, NET_LABEL } from "@/lib/driverAcceptanceNet";
+import { getDriverCompensation } from "@/lib/driverCompensation";
+import { DriverCompensationCard } from "@/components/DriverCompensationCard";
 
 type BindingData = {
   commission_pct: number;
@@ -17,7 +16,7 @@ type BindingData = {
   expires_at: string;
 };
 
-const CHECKBOX_TEXT = DRIVER_ACCEPT_CHECKBOX_TEXT;
+const INTEREST_CHECKBOX_TEXT = "Ich habe die Einsatztätigkeiten, Anforderungen und Einsatzdaten gelesen und bekunde ausdrücklich mein unverbindliches Interesse. Dies ist keine verbindliche Auftragsannahme; ein persönliches Angebot mit Vergütung und vollständigen Bedingungen folgt erst nach einer Zuweisung durch Fahrerexpress.";
 
 type ServerStatus =
   | "accepted"
@@ -83,7 +82,7 @@ export default function FahrerAntwortBestaetigen() {
 
   const heading = useMemo(() => {
     if (action === "accept" && binding) return "Auftrag prüfen und verbindlich annehmen";
-    if (action === "accept") return "Auftragsangebot – bitte prüfen und verbindlich bestätigen";
+    if (action === "accept") return "Interesse am Auftrag unverbindlich bestätigen";
     if (action === "decline") return "Möchten Sie diesen Auftrag wirklich ablehnen?";
     return "Rückmeldung bestätigen";
   }, [action, binding]);
@@ -92,7 +91,7 @@ export default function FahrerAntwortBestaetigen() {
     action === "accept" && binding
       ? "Auftrag und Bedingungen verbindlich annehmen"
       : action === "accept"
-      ? "Auftrag zu diesen Bedingungen annehmen"
+      ? "Interesse unverbindlich bestätigen"
       : "Ja, Auftrag ablehnen";
 
   async function submit() {
@@ -107,7 +106,7 @@ export default function FahrerAntwortBestaetigen() {
       const { data, error } = await supabase.functions.invoke("respond-invite", {
         body:
           action === "accept"
-            ? { action, token, consent_confirmed: true, checkbox_text: binding ? BINDING_CONSENT_TEXT : CHECKBOX_TEXT }
+            ? { action, token, consent_confirmed: true, checkbox_text: binding ? BINDING_CONSENT_TEXT : INTEREST_CHECKBOX_TEXT }
             : { action, token },
       });
       if (error) {
@@ -187,6 +186,11 @@ export default function FahrerAntwortBestaetigen() {
     };
   }, [action, token]);
 
+  const compensation = binding ? getDriverCompensation(binding.job_lines, true) : null;
+  const bindingDetailLines = binding
+    ? acceptancePageLines(binding.job_lines, true).filter(([label]) => label !== NET_LABEL)
+    : [];
+
   return (
     <main className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl bg-card border border-border rounded-lg shadow-sm p-6 md:p-8">
@@ -206,6 +210,8 @@ export default function FahrerAntwortBestaetigen() {
               ? `Sie haben den Auftrag am ${new Date(bindingAcceptedAt ?? Date.now()).toLocaleString("de-DE")} zu den angezeigten Bedingungen verbindlich angenommen. Die Annahmebestätigung mit dem vollständigen Vertragstext erhalten Sie per E-Mail als PDF.`
               : binding && result === "declined"
               ? "Sie haben die verbindliche Annahme abgelehnt. Fahrerexpress wurde informiert."
+              : !binding && result === "accepted"
+              ? "Ihr unverbindliches Interesse wurde übermittelt. Dies ist keine verbindliche Auftragsannahme. Ein persönliches Angebot mit Vergütung und vollständigen Bedingungen folgt erst nach einer Zuweisung durch Fahrerexpress."
               : result === "remuneration_incomplete" && interestLines
               ? "Dieser Auftrag kann noch nicht verbindlich angenommen werden, weil die Vergütung noch nicht vollständig bestimmt ist. Bei Interesse melden Sie sich bitte bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285."
               : STATUS_TEXT[result]}
@@ -228,10 +234,11 @@ export default function FahrerAntwortBestaetigen() {
             {action === "accept" && binding && (
               <section aria-label="Auftragsdaten und Vertragsbedingungen" className="mb-6 space-y-4 text-sm text-foreground">
                 {driverName && <p><strong>Fahrer:</strong> {driverName}</p>}
+                {compensation && <DriverCompensationCard compensation={compensation} />}
                 <div className="rounded-md border border-border bg-muted/40 p-4">
                   <h2 className="mb-2 font-semibold">Auftragsdaten</h2>
                   <dl className="grid grid-cols-1 gap-y-1 md:grid-cols-3 md:gap-x-4">
-                    {acceptancePageLines(binding.job_lines, true).map(([k, v]) => (
+                    {bindingDetailLines.map(([k, v]) => (
                       <div key={k} className="contents">
                         <dt className="font-medium">{k}</dt>
                         <dd className="md:col-span-2 whitespace-pre-line break-words">{v}</dd>
@@ -299,6 +306,7 @@ export default function FahrerAntwortBestaetigen() {
                   </p>
                 </div>
                 <div className="mt-3 rounded border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
+                  <p className="mb-2 font-semibold">Diese Seite dient nur der unverbindlichen Interessenbekundung und enthält noch kein persönliches Vergütungsangebot.</p>
                   <strong>Konditionen:</strong>{" "}
                   {job.tarif_type === "fernfahrer"
                     ? "Fernfahrerpauschale ohne Samstags-, Sonntags- oder Feiertagszuschläge und ohne Mehrstundenabrechnung."
@@ -326,7 +334,7 @@ export default function FahrerAntwortBestaetigen() {
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
                   />
-                  <span>{binding ? BINDING_CONSENT_TEXT : CHECKBOX_TEXT}</span>
+                  <span>{binding ? BINDING_CONSENT_TEXT : INTEREST_CHECKBOX_TEXT}</span>
                 </label>
               </div>
             ) : (

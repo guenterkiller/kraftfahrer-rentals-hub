@@ -1,6 +1,6 @@
 import { assert, assertEquals } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
-import { shortOfferLines, renderShortOffer, NET_LABEL } from './short-offer.ts';
+import { shortOfferLines, renderShortOffer, renderDriverCompensationBox, NET_LABEL } from './short-offer.ts';
 
 const job = { company: 'TEST-Firma Muster GmbH', customer_name: 'TEST Kontakt', customer_phone: '0000 TEST', einsatzort: 'TEST-Ort 12345', fahrzeugtyp: 'LKW CE', nachricht: 'TEST Aufgabe', tarif_type: 'fernfahrer', tarif_netto: 450, kosten_uebersicht: { netto: 9999, positionen: [{ label: 'Kundenpreis', betrag: 9999 }] } };
 const a = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_value: 450, commission_pct: 20, start_date: '2026-11-16T00:00:00Z', end_date: '2026-11-23T00:00:00Z', times_entered: null, ...o });
@@ -44,4 +44,27 @@ Deno.test('CE-Tagestarif 349 € bleibt separat berechenbar (5 Tage → 1.396,00
   const s = createOfferSnapshot({ ...job, tarif_type: 'lkw_ce' }, a({ rate_value: 349, end_date: '2026-11-20T00:00:00Z' }));
   assertEquals(s.binding_allowed, true);
   assert(renderShortOffer(shortOfferLines(s.job_lines!, true, 'x')).includes('1.396,00 €'));
+});
+
+Deno.test('Vergütungsbox CE-Woche: gespeicherter Fahrersatz 1.400 €, niemals Kundenpreis 1.645 € oder Beispiel 1.316 €', () => {
+  const weeklyJob = {
+    ...job,
+    tarif_type: 'lkw_ce_woche', tarif_netto: 1645, tarif_label: 'LKW CE Wochenpreis',
+    fahrzeugtyp: 'TEST LKW CE', fuehrerscheinklasse: 'CE', nachricht: 'TEST Abrollkipper mit oder ohne Anhänger',
+    einsatzort: 'TEST Hafenstraße 12, 66333 Völklingen',
+    kosten_uebersicht: { netto: 8225, positionen: [{ label: '5 Kundenwochen', betrag: 8225 }] },
+  };
+  const s = createOfferSnapshot(weeklyJob, a({
+    rate_type: 'weekly', rate_value: 1400,
+    start_date: '2026-11-16T00:00:00Z', end_date: '2026-12-18T00:00:00Z',
+  }));
+  const box = renderDriverCompensationBox(s.job_lines!, true);
+  assertEquals(s.binding_allowed, true);
+  for (const expected of ['Ihre Vergütung für diesen Auftrag', '5.600,00 €', '1.120,00 €', '5 Wochen à 5 Einsatztage (Montag bis Freitag)', 'netto je Woche (5 Einsatztage, Mo–Fr)', '16.11.2026 – 18.12.2026', 'CE', 'TEST Abrollkipper mit oder ohne Anhänger', 'TEST Hafenstraße 12, 66333 Völklingen']) assert(box.includes(expected), expected);
+  assert(!/1\.645|8\.225|1\.316|1\.400,00|7\.000|20 %|25 %|Kundenpreis|Vermittlungsprovision/.test(box), box);
+});
+
+Deno.test('Vergütungsbox fehlt vollständig, wenn kein gespeicherter Endbetrag vorliegt', () => {
+  const s = createOfferSnapshot(job, a({ rate_value: null }));
+  assertEquals(renderDriverCompensationBox(s.job_lines!, s.binding_allowed === true), '');
 });

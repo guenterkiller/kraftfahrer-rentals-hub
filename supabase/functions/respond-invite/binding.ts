@@ -20,6 +20,7 @@ import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
 import { shortOfferLines, renderShortOffer } from "../_shared/short-offer.ts";
+import { getDriverCompensation } from "../_shared/driver-compensation.ts";
 import { type OfferSnapshot, bindingAcceptanceAllowed } from '../_shared/binding-offer.ts';
 
 const esc = (s: unknown) =>
@@ -87,8 +88,9 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
   // Eventaufträge: ohne vollständig ausgewiesene Vergütung (Auftragswert, 25 % Provision, Netto) keine Annahme.
   // v3: nur vollständig bestimmte Konditionen erlauben eine verbindliche Annahme (sonst Interessenbekundung).
   const allowed = isV3 ? frozen.binding_allowed === true : bindingAcceptanceAllowed(job, offerAssignment);
-  if (!allowed && (ctx.intent === "load" || ctx.action === "accept")) {
-    return json({ status: "remuneration_incomplete", mode: "binding", ...(isV3 ? { job_lines: jobLines } : {}) }, ctx.intent === "load" ? 200 : 409);
+  const compensation = getDriverCompensation(jobLines, allowed);
+  if ((!allowed || !compensation) && (ctx.intent === "load" || ctx.action === "accept")) {
+    return json({ status: "remuneration_incomplete", mode: "binding", job_lines: jobLines }, ctx.intent === "load" ? 200 : 409);
   }
 
   if (ctx.intent === "load") {

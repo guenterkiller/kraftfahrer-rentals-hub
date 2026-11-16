@@ -135,7 +135,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div style="margin-top: 20px;">
                 <a href="${acceptLink1}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-right: 10px;">
-                  ✅ Auftrag zu diesen Bedingungen annehmen
+                  ✅ Interesse unverbindlich bestätigen
                 </a>
                 <a href="${declineLink1}" style="background: #ef4444; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                   ❌ Ablehnen
@@ -156,7 +156,7 @@ const handler = async (req: Request): Promise<Response> => {
               
               <div style="margin-top: 20px;">
                 <a href="${acceptLink2}" style="background: #10b981; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin-right: 10px;">
-                  ✅ Auftrag zu diesen Bedingungen annehmen
+                  ✅ Interesse unverbindlich bestätigen
                 </a>
                 <a href="${declineLink2}" style="background: #ef4444; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
                   ❌ Ablehnen
@@ -166,7 +166,7 @@ const handler = async (req: Request): Promise<Response> => {
             ` : ''}
 
             <p style="background:#fffbeb;border:1px solid #f59e0b;padding:12px;border-radius:8px;color:#78350f;font-size:14px;line-height:1.55;">
-              <strong>Hinweis:</strong> Bitte prüfen Sie die oben genannten Einsatztätigkeiten und Anforderungen sorgfältig. Mit Annahme des Auftrags bestätigen Sie, dass Sie den Auftrag zu den dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen als selbstständiger Unternehmer übernehmen. Auf der Bestätigungsseite werden die Auftragsdaten erneut angezeigt und müssen aktiv bestätigt werden, bevor die Annahme wirksam wird.
+              <strong>Hinweis:</strong> Bitte prüfen Sie die Einsatztätigkeiten und Anforderungen. Ihre Rückmeldung ist ausschließlich eine unverbindliche Interessenbekundung. Ein persönliches Angebot mit Ihrer konkreten Vergütung und den vollständigen Bedingungen erhalten Sie erst nach einer Zuweisung durch Fahrerexpress; erst dort ist eine verbindliche Annahme möglich.
             </p>
             <p style="color: #666; font-size: 14px; margin-top: 20px;">
               Diese Links sind 48 Stunden gültig.<br>

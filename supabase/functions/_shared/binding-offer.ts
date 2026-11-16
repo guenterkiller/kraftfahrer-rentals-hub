@@ -59,7 +59,7 @@ export function buildCompleteOfferLines(job: OfferData, assignment: OfferData): 
     ['Einsatzort / Treffpunkt (gespeicherte Angabe)', known(job.einsatzort)],
     ['Einsatzanschrift', 'Nicht gesondert erfasst – genauen Treffpunkt vor Einsatz abstimmen; Auftraggeberanschrift nicht als Einsatzanschrift vorausgesetzt'],
     ['Einsatzzeitraum', formatAssignmentPeriod(assignment.start_date, assignment.end_date, assignment.times_entered) || known(job.zeitraum)],
-    ['Einsatztage im vereinbarten Zeitraum', pay.days === null ? 'Nicht eindeutig erfasst' : String(pay.days)],
+    ['Kalendertage im vereinbarten Zeitraum', pay.days === null ? 'Nicht eindeutig erfasst' : String(pay.days)],
     ['Konkrete tägliche Einsatzzeiten', assignment.times_entered === true ? 'Erfasste Beginn-/Endzeiten siehe Einsatzzeitraum' : 'Nicht erfasst – zwischen Auftraggeber und Fahrer abstimmen'],
     ['Fahrzeugart', known(job.fahrzeugtyp)], ['Führerscheinklasse', known(job.fuehrerscheinklasse)],
     ['Einsatzbeschreibung / Kundenanforderungen', known(job.nachricht)],

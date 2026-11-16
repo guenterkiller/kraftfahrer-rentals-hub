@@ -157,10 +157,10 @@ export const JobNotificationEmail = ({
             </Text>
           </Section>
           <Heading style={{ ...textStyles.h3, marginTop: 0, color: '#166534' }}>
-            Können Sie diesen Auftrag übernehmen?
+            Interesse an diesem Auftrag?
           </Heading>
           <Text style={{ ...textStyles.paragraph, fontSize: '14px', color: '#0f172a', textAlign: 'left' as const, marginTop: 8 }}>
-            Bitte prüfen Sie die oben genannten Einsatztätigkeiten und Anforderungen sorgfältig. Mit Annahme des Auftrags bestätigen Sie, dass Sie den Auftrag zu den dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen als selbstständiger Unternehmer übernehmen. Sie werden auf der Bestätigungsseite gebeten, die Auftragsbeschreibung erneut zu bestätigen, bevor die Annahme wirksam wird.
+            Bitte prüfen Sie die oben genannten Einsatztätigkeiten und Anforderungen. Ihre Rückmeldung ist ausschließlich eine unverbindliche Interessenbekundung. Ein persönliches Angebot mit Ihrer konkreten Vergütung und den vollständigen Bedingungen erhalten Sie erst nach einer Zuweisung durch Fahrerexpress; erst dort ist eine verbindliche Annahme möglich.
           </Text>
           <table role="presentation" cellPadding={0} cellSpacing={0} style={{ margin: '16px auto' }}>
             <tr>
@@ -179,7 +179,7 @@ export const JobNotificationEmail = ({
                       display: 'inline-block',
                     }}
                   >
-                    Auftrag zu diesen Bedingungen annehmen
+                    Interesse unverbindlich bestätigen
                   </Button>
                 )}
               </td>
@@ -205,7 +205,7 @@ export const JobNotificationEmail = ({
             </tr>
           </table>
           <Text style={{ ...textStyles.paragraph, fontSize: '13px', color: '#166534', marginTop: '12px' }}>
-            Die Annahme wird von Fahrerexpress geprüft und organisatorisch bestätigt. Maßgeblich bleiben die im Auftragsangebot dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen.
+            Ihre Interessenbekundung wird von Fahrerexpress geprüft. Sie ist noch keine verbindliche Auftragsannahme und löst keine Kundenmitteilung aus.
           </Text>
         </Section>
       )}

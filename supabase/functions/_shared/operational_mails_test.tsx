@@ -10,7 +10,7 @@ import { resolveTarif } from './tarif-zuordnung.ts';
 import { agreementNote, agreementErrors } from './offer-readiness.ts';
 import { buildDriverOfferView } from './driver-offer-remuneration.ts';
 import { createOfferSnapshot } from './binding-offer.ts';
-import { shortOfferLines, renderShortOffer, NET_LABEL } from './short-offer.ts';
+import { shortOfferLines, renderShortOffer, renderDriverCompensationBox, NET_LABEL } from './short-offer.ts';
 import { wrapDriverEmailHtml } from './email-templates/driver-html-shell.ts';
 import { buildCustomerAssignmentNotice } from '../send-customer-assignment-notice/notice.ts';
 import { cancellationMail } from '../admin-cancel-job/cancellation.ts';
@@ -131,11 +131,12 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
     if (nr === '4c') assert(fa === 'Baumaschinenführer' && !lines.some(([, v]) => /Sattelzug|Fernverkehr/.test(v)), '4c: falsche Tätigkeit');
     assert(binding && lines.some(([k]) => k === 'Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)') && !lines.some(([k, v]) => /nicht bestätigt|Nicht erfasst/.test(k + v)), `${nr}: Einsatzort nicht bestätigt`);
     const button = '<p><a href="https://www.kraftfahrer-mieten.com/fahrer-antwort-bestaetigen?action=accept&token=TEST-TOKEN" style="display:inline-block;padding:12px 20px;background:#16a34a;color:#fff;font-weight:700;border-radius:6px;text-decoration:none;">Auftrag verbindlich annehmen</a></p><p style="font-size:13px;">Die vollständigen Vertragsbedingungen werden auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>';
-    const html = wrapDriverEmailHtml(`<h2>VERBINDLICHES AUFTRAGSANGEBOT</h2><p>Hallo TEST Max Mustermann,<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>${renderShortOffer(lines)}${button}`, { subject: 'x', previewText: 'x', showUnsubscribe: false });
+    const contacts = lines.filter(([label]) => ['Auftraggeber / Firma', 'Ansprechpartner', 'Telefon'].includes(label));
+    const html = wrapDriverEmailHtml(`<h2>VERBINDLICHES AUFTRAGSANGEBOT</h2><p>Hallo TEST Max Mustermann,<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>${renderDriverCompensationBox(s.job_lines ?? [], binding)}<p><strong>Bitte prüfen Sie jetzt die vollständigen Einsatzdaten und Vertragsbedingungen.</strong></p>${button}${renderShortOffer(contacts)}`, { subject: 'x', previewText: 'x', showUnsubscribe: false });
     mails.push({ nr, titel, empfaenger: 'Fahrer (Kopie Verwaltung)', ausloeser: 'Verwaltung → Zuteilen → Zuweisen & Bestätigung senden', betreff: `Auftragsangebot – ${j.fahrzeugtyp} – ${j.einsatzort ?? 'Einsatzort nicht erfasst'} am …`, html });
     const x = text(html).replace(NET_LABEL, '');
     const euros = x.match(/[\d.]+,\d{2} €/g) ?? [];
-    assert(euros.length === 1 && euros[0] === expected[nr], `${nr}: ${euros}`);
+    assert(euros.length === 2 && euros[0] === expected[nr], `${nr}: ${euros}`);
     assert(!/450,00|349,00|489,00|300,00|420,00|1\.645|2\.121|9\.999|\b20 %|\b25 %|vor Provision/.test(x), `${nr}: interner Wert sichtbar`);
     if (nr === '4a') {
       const c = confirmationHtml('TEST Max Mustermann', '16.11.2026, 08:00:00', lines, 'TEST-HASH');

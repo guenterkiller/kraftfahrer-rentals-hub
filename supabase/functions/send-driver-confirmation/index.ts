@@ -14,7 +14,7 @@ import { agreementErrors } from '../_shared/offer-readiness.ts';
 import { buildDriverOfferView } from '../_shared/driver-offer-remuneration.ts';
 import { createOfferSnapshot } from '../_shared/binding-offer.ts';
 import { escapeOffer } from '../_shared/binding-offer.ts';
-import { shortOfferLines, renderShortOffer, shortOfferNet } from './short-offer.ts';
+import { shortOfferLines, renderShortOffer, shortOfferNet, renderDriverCompensationBox } from './short-offer.ts';
 import { interpretSendResult } from '../_shared/mail-delivery.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -182,21 +182,26 @@ serve(async (req) => {
       `<h3 class="body-text" style="margin:0 0 10px 0;font-size:16px;color:${color};font-weight:700;">${txt}</h3>`;
 
     const bindingAllowed = true;
+    const storedOfferLines = offerSnapshot.job_lines ?? [];
+    const contactLines = shortOfferLines(storedOfferLines, bindingAllowed, dateRange)
+      .filter(([label]) => ['Auftraggeber / Firma', 'Ansprechpartner', 'Telefon'].includes(label));
     const innerHtml = `
       <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;">VERBINDLICHES AUFTRAGSANGEBOT</h2>
       <p class="body-text" style="margin:0 0 16px 0;font-size:15px;color:#374151;">Hallo ${escapeOffer(driver.vorname)} ${escapeOffer(driver.nachname)},<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>
-      ${sectionStart('#f8fafc')}
-        ${renderShortOffer(shortOfferLines(offerSnapshot.job_lines ?? [], bindingAllowed, dateRange))}
-      ${sectionEnd}
+      ${renderDriverCompensationBox(storedOfferLines, bindingAllowed)}
+      <p class="body-text" style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#0d2340;"><strong>Bitte prüfen Sie jetzt die vollständigen Einsatzdaten und Vertragsbedingungen.</strong> Wenn alles für Sie passt, freuen wir uns, wenn Sie diesen Auftrag über Ihren persönlichen Link verbindlich übernehmen.</p>
       ${bindingButtonHtml}
-      ${bindingAllowed ? `<p class="body-text" style="margin:0 0 12px 0;font-size:13px;color:#374151;">Vertragsbedingungen: Die vollständigen Vertragsbedingungen werden Ihnen über den Button auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>` : ''}
+      ${sectionStart('#f8fafc')}
+        ${renderShortOffer(contactLines)}
+      ${sectionEnd}
+      <p class="body-text" style="margin:0 0 12px 0;font-size:13px;color:#374151;">Vertragsbedingungen: Die vollständigen Vertragsbedingungen werden Ihnen über den Button auf Ihrer persönlichen Bestätigungsseite vor der verbindlichen Annahme angezeigt.</p>
       <p class="body-text" style="margin:0 0 4px 0;font-size:14px;color:#0d2340;font-weight:600;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>
       <p class="body-text" style="margin:14px 0 0 0;font-size:12px;color:#6b7280;">Auftragsangebot erstellt am: ${new Date(inviteCreatedAt).toLocaleDateString('de-DE')}</p>
     `;
 
     const emailContent = wrapDriverEmailHtml(innerHtml, {
       subject: emailSubject,
-      previewText: `Einsatzbestätigung – ${jobTitle} – ${location}`,
+      previewText: `Ihre Vergütung: ${shortOfferNet(storedOfferLines, true) ?? 'siehe persönliches Angebot'} – ${jobTitle} – ${location}`,
       showUnsubscribe: false,
     });
 

@@ -22,7 +22,7 @@ type ResponseStatus =
 
 const MESSAGES: Record<ResponseStatus, string> = {
   accepted:
-    "Sie haben den Auftrag zu den dargestellten Einsatzdaten, Einsatztätigkeiten, Anforderungen und Konditionen als selbstständiger Unternehmer angenommen. Fahrerexpress meldet sich zur organisatorischen Bestätigung.",
+    "Ihr unverbindliches Interesse wurde übermittelt. Dies ist keine verbindliche Auftragsannahme. Ein persönliches Angebot mit Vergütung und vollständigen Bedingungen folgt erst nach einer Zuweisung durch Fahrerexpress.",
   declined: "Vielen Dank. Ihre Rückmeldung wurde übermittelt.",
   already_answered: "Ihre Rückmeldung wurde bereits erfasst.",
   expired: "Dieser Link ist abgelaufen.",

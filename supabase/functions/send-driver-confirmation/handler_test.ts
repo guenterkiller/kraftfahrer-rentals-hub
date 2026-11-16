@@ -43,7 +43,8 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
         .replace('serve(async (req) => {','export const handler = async (req: Request) => {').replace(/\}\);\s*$/, '};');
       const { handler } = await import(`data:application/typescript;base64,${btoa(unescape(encodeURIComponent(source)))}#${scenario}`);
       const response = await handler(new Request('https://test.invalid', { method:'POST', body:JSON.stringify({ assignment_id: assignment.id }) }));
-      await response.text();
+      const responseText = await response.text();
+      if (['missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario)) assert(responseText.includes('Versand gesperrt'));
       assertEquals(response.status, ['missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario) ? 422 : scenario === 'expired' ? 400 : ['error','no-id','snapshot-error','retry-error','throw'].includes(scenario) ? 500 : 200);
       assertEquals(sends.length, ['sent','accepted','snapshot-error','expired','declined','missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario) ? 0 : 1);
       assertEquals(inserts.filter(i => i.table === 'assignment_invites').length, ['sent','accepted','retry','retry-error','expired','declined','missing-rate','missing-units','missing-place','unconfirmed-place','legacy-retry'].includes(scenario) ? 0 : 1);
@@ -55,7 +56,12 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
           assert(sends[0].html.includes('FROZEN COMPANY'));
           assertEquals(oldInvite.offer_snapshot, oldSnapshot);
         } else assertEquals(snapshot.job_lines, createOfferSnapshot(job, assignment).job_lines);
+        assert(sends[0].html.includes('data-testid="driver-compensation-box"'));
+        assert(sends[0].html.includes('Ihre Vergütung für diesen Auftrag'));
         assert(sends[0].html.includes('558,40'));
+        assert(sends[0].html.includes('279,20'));
+        assert(sends[0].html.includes('Bitte prüfen Sie jetzt die vollständigen Einsatzdaten und Vertragsbedingungen.'));
+        assert(!/Kundenpreis|20 %|25 %|Fahrerhonorar netto vor Provision/.test(sends[0].html));
         assertEquals(inserts.find(i => i.table === 'email_log')?.value.status, ['error','no-id','retry-error','throw'].includes(scenario) ? 'error' : 'sent');
       }
     } finally { Reflect.deleteProperty(globalThis,key); }

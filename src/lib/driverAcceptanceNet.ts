@@ -3,8 +3,7 @@
  * Nettobetrag nach Provision. Honorar vor Provision, Satz, Provision und
  * Kunden-/Tarifpreise werden ausgeblendet. Der Betrag wird nie neu berechnet.
  */
-export const NET_LABEL =
-  "Ihre Nettovergütung für diesen Auftrag (nach Abzug der Vermittlungsprovision)";
+export const NET_LABEL = "Ihre Nettovergütung für diesen Auftrag";
 
 const HIDDEN =
   /^(Fahrleistung:|Nettoauftragswert|Gesamtwert Fahrerdienstleistung|Agenturprovision|Vermittlungsanteil|Vermittlungsprovision|Fahrerhonorar netto vor Provision|Vereinbarter Satz netto|Mehrstundenpreis netto)/;
