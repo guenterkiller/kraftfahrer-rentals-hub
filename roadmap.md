@@ -170,3 +170,10 @@
 - [x] Fehlender Fahrersatz/vergütete Einheiten/Einsatzort: nur Verwaltungsfehler, 0 Fahrer-Mails (Servertests); Versand zusätzlich gesperrt, wenn Angebotskopie keinen bestätigten Einsatzort enthält; send-driver-confirmation bereitgestellt.
 - [x] Buchungsformular Fernverkehr mit Wochenende ohne Gesamtbetrag wie Kundenmail; Kundentarife unverändert.
 - [x] Prüfübersicht v6 und IONOS-Paket v8 (22/22 Seiten) erstellt; GitHub-Abgleich der heutigen Änderung erst nach Rundenende.
+
+## Wochenend-Vorkalkulation & Kundenmail-Versandkopien (2026-11-16)
+- [x] Sa/So nur bei gebuchter Wochenendarbeit (Formular, Server, Kundenmail, Admin-Mail); Tests 8.883 € / 13.681,75 €
+- [x] Altbestand Völklingen nur mit Admin-Hinweis, unverändert
+- [x] Unveränderliche Kunden-Versandkopien + Admin-Ansicht, alte Mails „nicht verfügbar“
+- [ ] Admin-Ansicht angemeldet prüfen (externes Backend: kein Test-Login möglich)
+- [ ] Aufbewahrungsfrist 6 Jahre rechtlich bestätigen
