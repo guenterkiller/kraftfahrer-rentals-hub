@@ -40,3 +40,18 @@ Ergebnis: Die 10 Wochenendtage (4.798,75 €) sind ein **Systemfehler**, keine K
 2. **Rechenlogik korrigieren (Formular und Server gleich):** Samstag, Sonntag und Feiertag nur berechnen, wenn „Wochenendarbeit erforderlich“ angekreuzt ist. Sonst diese Tage nicht berechnen und als „nicht gebucht“ ausweisen. Bei angekreuzter Wochenendarbeit bisheriges Verhalten. Tagessätze und Wochenpreis bleiben unverändert. Dazu Tests mit genau diesem Zeitraum: ohne Häkchen 8.883,00 € netto, mit Häkchen 13.681,75 € netto.
 3. **Bestandsschutz:** Die gespeicherte Vorkalkulation dieses Auftrags bleibt unverändert als Nachweis. Im Admin bekommt sie einen Hinweis „Wochenendpositionen ohne Kundenauswahl berechnet“. Ob der Wert korrigiert wird, entscheiden Sie gesondert.
 4. Keine Mails, keine Änderungen am Auftrag, kein GitHub- oder IONOS-Schritt ohne Ihre Freigabe.
+
+## Nachtrag: Die tatsächlich versandte Kundenmail (nur lesend geprüft)
+- **Versand belegt:** Eintrag im Mail-Protokoll `2c18988d-6a2e-404c-b8b7-26d0e1b44e77`
+  - Vorlage `customer_booking_confirmation`, Status „sent“
+  - Empfänger: die Kundenadresse dieses Auftrags (abgeglichen)
+  - Betreff „Ihre Fahrerbuchung bei der Fahrerexpress-Agentur“
+  - Versand 16.11.2026 08:51:11 (Berlin)
+  - Kennung beim Versanddienst Resend: `01a1e356-aede-7b53-b981-80fbe7b2fc65`
+- **Kein Inhalts-Snapshot gespeichert.** Das Protokoll enthält nur Metadaten, keinen Mailtext. Es ist außerdem nicht mit dem Auftrag verknüpft (Auftragsnummer leer). Den unveränderten Originaltext gibt es daher weder in der Datenbank noch in der Admin-Oberfläche.
+- **Admin-Klickpfad:** keiner. Die Admin-Oberfläche hat keine Ansicht für das Mail-Protokoll. Im Auftrag sieht man nur die gespeicherte Vorkalkulation, nicht die Mail.
+- **War die Übersicht mit 16.281,28 € in der Mail? Nach dem Code ja, höchstwahrscheinlich.** Die Server-Funktion übergibt der Mail-Vorlage genau die gespeicherte Vorkalkulation. Für den CE-Wochenpreis (kein Fernverkehr) gibt die Vorlage alle Positionen aus, dazu „Netto 13.681,75 €“ und „USt / Brutto 2.599,53 € / 16.281,28 €“. Das beruht auf Code und Daten. Mit eigenen Augen sehen lässt sich der Originaltext nur beim Versanddienst.
+- **Original einsehen:** im Resend-Konto, das die Absenderadresse info@kraftfahrer-mieten.com versendet, unter „Emails“ die Kennung oben suchen. Dort stehen Empfänger, Betreff, Zustellstatus und, solange noch gespeichert, der Inhalt. Wie lange Resend Mails aufbewahrt, hängt vom Tarif ab und ist oft nur wenige Tage. Ich konnte das nicht prüfen, weil mir der Zugang zum Resend-Konto fehlt. Bitte **heute** sichern, zum Beispiel als Screenshot oder PDF. Alternativ: die Kopie im Postfach des Kunden. Die Protokolle der Server-Funktion zu diesem Versand sind nicht mehr abrufbar.
+
+## Ergänzender Vorschlag (nach Freigabe)
+5. Künftig zu jeder Kundenmail die Auftragsnummer und eine unveränderliche Kopie des versandten Inhalts speichern. Im Admin beim Auftrag eine Ansicht „Versandte Mails“ ergänzen.
