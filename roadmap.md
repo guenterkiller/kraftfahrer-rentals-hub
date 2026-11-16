@@ -177,3 +177,11 @@
 - [x] Unveränderliche Kunden-Versandkopien + Admin-Ansicht, alte Mails „nicht verfügbar“
 - [ ] Admin-Ansicht angemeldet prüfen (externes Backend: kein Test-Login möglich)
 - [ ] Aufbewahrungsfrist 6 Jahre rechtlich bestätigen
+
+## Kundenprozess mit zwei Status (2026-11-16)
+- [x] Kundentexte und operative Kundenmails auf Eingangsunverbindlichkeit und Einsatzbestätigung durch Fahrerexpress angleichen; interne Fahrerstatus erhalten
+- [x] Kundenbestätigung serverseitig durch Zuweisung auslösen, von Fahrerpost trennen und stornierte Zuweisungen sperren
+- [x] Eingangs- und Einsatzmail vollständig über echte Produktionspfade mit Mock-Datenbank/Mock-Versand nachweisen; Triggerabweichungen berichten
+- [ ] Rechtliche „Bestellung“-Klauseln unverändert als separate Freigabeabweichung dokumentieren; Betreiber-/Rechtsfreigabe ausstehend
+- [x] Keine echten Mails, Bestandsänderungen, Veröffentlichung oder IONOS-Upload
+- [ ] Admin-Ablauf im externen Backend mit echtem Administratorkonto sichtbar prüfen (kein Test-Login verfügbar)

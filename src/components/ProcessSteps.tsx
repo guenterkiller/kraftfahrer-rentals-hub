@@ -10,13 +10,13 @@ const ProcessSteps = () => {
     },
     {
       icon: UserCheck,
-      title: "Passende Unternehmer vorgeschlagen bekommen",
-      description: "Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung."
+      title: "Einsatzbestätigung durch Fahrerexpress",
+      description: "Fahrerexpress weist einen Fahrer verbindlich zu. Sie erhalten die Einsatzbestätigung mit den vereinbarten Konditionen und Fahrerdaten in Textform."
     },
     {
       icon: Truck,
       title: "Einsatz starten",
-      description: "Der selbstständige Unternehmer stimmt die Details direkt mit Ihnen ab. Mit Bestätigung des Einsatzes entsteht ein verbindlicher Auftrag."
+      description: "Der selbstständige Unternehmer stimmt die Details direkt mit Ihnen ab. Mit der Einsatzbestätigung durch Fahrerexpress entsteht der kostenpflichtige Auftrag."
     }
   ];
 
@@ -57,7 +57,7 @@ const ProcessSteps = () => {
         {/* Hinweise */}
         <div className="text-center mb-8 max-w-3xl mx-auto space-y-3">
           <p className="text-muted-foreground leading-relaxed">
-            <strong>Kurz erklärt:</strong> Anfrage senden → passende selbstständige Unternehmer werden vorgeschlagen → Einsatz erfolgt nach Bestätigung. Keine Arbeitnehmerüberlassung (AÜG).
+            <strong>Kurz erklärt:</strong> Unverbindliche Fahreranfrage → Einsatzbestätigung durch Fahrerexpress nach verbindlicher Zuweisung → Einsatz. Keine Arbeitnehmerüberlassung (AÜG).
           </p>
           <p className="text-sm text-muted-foreground">
             {ANFRAGE_FORMULAR_TEXT}

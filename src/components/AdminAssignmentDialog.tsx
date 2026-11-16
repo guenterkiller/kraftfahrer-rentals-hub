@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { loadAdminContact } from '@/lib/adminContact';
 import { commissionPctForTarif } from '@/lib/driverOfferCommission';
 import { buildDriverOfferView } from '@/lib/driverOfferRemuneration';
+import { sendAssignmentNotifications } from '@/lib/assignmentNotifications';
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -324,52 +325,40 @@ export function AdminAssignmentDialog({
       const assignmentId = assignResult.assignmentId;
       console.log('✅ Assignment created with ID:', assignmentId);
 
-      // 2) Confirm assignment (sets status to 'confirmed' so button disappears)
-      const { error: confirmErr } = await supabase.rpc("admin_confirm_assignment", {
-        _assignment_id: assignmentId,
-      });
-      if (confirmErr) {
-        console.error('Confirm error (non-fatal):', confirmErr);
-      }
-
-      // 3) E-Mail versenden (Edge Function - JWT sent automatically)
-      try {
-        const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
-          body: { 
-            assignment_id: assignmentId, 
-            mode: attachPdf ? 'both' : 'inline' 
-          }
-        });
-        
-        if (error) throw new Error(await functionError(error, 'Fahrerangebot nicht versendet'));
-        if (data?.ok !== true || data?.skipped) throw new Error(data?.message || 'Kein neuer Fahrer-Versand bestätigt');
-
-        // 4) Kundenmail zur Fahrerzuteilung
-        try {
-          const { error: custErr } = await supabase.functions.invoke('send-customer-assignment-notice', {
+      // admin-assign-driver löst die Kundenbestätigung bereits serverseitig aus.
+      // Dieser Aufruf ist idempotent und dient als Wiederholung nach einem Versandfehler.
+      // Kein Warten auf eine Fahrerannahme; Fahrerangebot und Kundenmail blockieren sich nicht.
+      const notifications = await sendAssignmentNotifications({
+        confirmAdminAssignment: async () => {
+          const { error } = await supabase.rpc("admin_confirm_assignment", { _assignment_id: assignmentId });
+          if (error) throw error;
+        },
+        sendCustomerConfirmation: async () => {
+          const { data, error } = await supabase.functions.invoke('send-customer-assignment-notice', {
             body: { assignment_id: assignmentId }
           });
-          if (custErr) throw custErr;
+          if (error) throw new Error(await functionError(error, 'Kunden-Einsatzbestätigung nicht versendet'));
+          if (data?.success !== true) throw new Error(data?.error || 'Kunden-Einsatzbestätigung nicht bestätigt');
+        },
+        sendDriverOffer: async () => {
+          const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
+            body: { assignment_id: assignmentId, mode: attachPdf ? 'both' : 'inline' }
+          });
+          if (error) throw new Error(await functionError(error, 'Fahrerangebot nicht versendet'));
+          if (data?.ok !== true || data?.skipped) throw new Error(data?.message || 'Kein neuer Fahrer-Versand bestätigt');
+        },
+      });
 
-          toast({
-            title: "Erfolgreich zugewiesen",
-            description: "Fahrer- und Kundenbenachrichtigung versendet.",
-          });
-        } catch (custMailErr: any) {
-          console.error('Customer notice error:', custMailErr);
-          toast({
-            title: "Kundenmail fehlgeschlagen",
-            description: "Fahrer wurde informiert, aber die Kundenbenachrichtigung konnte nicht versendet werden: " + (custMailErr?.message || 'Unbekannter Fehler'),
-            variant: "destructive",
-          });
-        }
-        
-      } catch (emailErr: any) {
-        console.error('Email sending error:', emailErr);
+      if (notifications.customerConfirmation === 'sent' && notifications.driverOffer === 'sent') {
         toast({
-          title: "E-Mail-Versand fehlgeschlagen", 
-          description: "Fahrer zugewiesen, aber E-Mail konnte nicht versendet werden: " + emailErr.message,
-          variant: "destructive"
+          title: "Fahrer verbindlich zugewiesen",
+          description: "Einsatzbestätigung an den Kunden und Fahrerangebot versendet.",
+        });
+      } else {
+        toast({
+          title: "Zuweisung gespeichert – Versand prüfen",
+          description: notifications.errors.join(' · '),
+          variant: "destructive",
         });
       }
 

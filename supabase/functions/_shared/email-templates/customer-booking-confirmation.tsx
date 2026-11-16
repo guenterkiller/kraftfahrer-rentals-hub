@@ -19,6 +19,7 @@ import {
   ANFRAGE_EINGANG_TEXT,
   ANFRAGE_STATUS_TEXT,
   ANFRAGE_AUFTRAG_ENTSTEHUNG,
+  ANFRAGE_NAECHSTER_SCHRITT,
   zuschlagHinweis,
 } from '../kosten-uebersicht.ts';
 
@@ -177,7 +178,7 @@ export const CustomerBookingConfirmation = ({
 
       <Section {...getBoxProps(boxStyles.warningBox)}>
         <Text {...getTextProps({ ...textStyles.paragraph, margin: '0' })}>
-          <strong>{ANFRAGE_STATUS_TEXT}</strong> Wir prüfen jetzt die Verfügbarkeit passender selbstständiger Fahrer. {ANFRAGE_AUFTRAG_ENTSTEHUNG}
+          <strong>{ANFRAGE_STATUS_TEXT}</strong> {ANFRAGE_AUFTRAG_ENTSTEHUNG}
         </Text>
       </Section>
 
@@ -268,7 +269,7 @@ export const CustomerBookingConfirmation = ({
         <Link href={PREISE_URL} style={{ color: colors.primary }}>Preisliste</Link> (u. a. Mehrstunden, Zuschläge, Übernachtung, Stornierung, Haftung).
       </Text>
       <Text {...getTextProps(textStyles.paragraph)}>
-        Sie erhalten eine Rückmeldung zur Verfügbarkeit. Nach Annahme durch einen Fahrer folgt die Einsatzbestätigung mit Fahrer und Kontakt.
+        {ANFRAGE_NAECHSTER_SCHRITT}
       </Text>
     </BaseEmail>
   );

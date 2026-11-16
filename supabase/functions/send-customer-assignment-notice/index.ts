@@ -46,8 +46,8 @@ serve(async (req) => {
     const { data: assignment, error: aErr } = await supabase
       .from("job_assignments")
       .select(`
-        id, job_id, driver_id, start_date, end_date, times_entered,
-        job_requests:job_id ( id, customer_email, customer_name, company, einsatzort, tarif_type, tarif_needs_review ),
+        id, job_id, driver_id, status, start_date, end_date, times_entered,
+        job_requests:job_id ( id, status, customer_email, customer_name, company, einsatzort, tarif_type, tarif_needs_review ),
         fahrer_profile:driver_id ( id, vorname, nachname, email, telefon )
       `)
       .eq("id", assignment_id)
@@ -59,6 +59,15 @@ serve(async (req) => {
       ? (assignment as any).job_requests[0] : (assignment as any).job_requests;
     const fp: any = Array.isArray((assignment as any).fahrer_profile)
       ? (assignment as any).fahrer_profile[0] : (assignment as any).fahrer_profile;
+
+    // Auslöser ist ausschließlich die aktive Zuweisung durch Fahrerexpress.
+    // Eine Fahrerannahme oder ein Fahrer-Annahmenachweis wird nicht abgefragt und nicht benötigt.
+    if (!["assigned", "confirmed"].includes(String(assignment.status))) {
+      return createErrorResponse("Keine aktive Fahrerzuweisung – keine Einsatzbestätigung versendet", 409, corsHeaders);
+    }
+    if (jr?.status !== "assigned") {
+      return createErrorResponse("Auftrag ist nicht als zugewiesen markiert – keine Einsatzbestätigung versendet", 409, corsHeaders);
+    }
 
     const customerEmail = jr?.customer_email;
     if (!customerEmail) return createErrorResponse("Kunden-E-Mail fehlt", 400, corsHeaders);

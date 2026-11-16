@@ -397,10 +397,10 @@ const PreiseUndAblauf = () => {
                     <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
                       <span className="text-2xl font-bold text-primary">2</span>
                     </div>
-                    <CardTitle>Fahrer-Prüfung</CardTitle>
+                    <CardTitle>Einsatzbestätigung</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-2">Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung.</p>
+                    <p className="text-muted-foreground mb-2">Fahrerexpress weist einen Fahrer verbindlich zu. Sie erhalten die Einsatzbestätigung mit den vereinbarten Konditionen und Fahrerdaten in Textform.</p>
                   </CardContent>
                 </Card>
 
@@ -413,7 +413,7 @@ const PreiseUndAblauf = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-muted-foreground mb-2">Der selbstständige Unternehmer meldet sich direkt zur Abstimmung und erscheint pünktlich zum Termin. Sie erhalten eine übersichtliche Rechnung direkt von der Fahrerexpress-Agentur.</p>
-                    <p className="text-sm text-primary font-semibold">💼 Mit Bestätigung des Einsatzes entsteht ein verbindlicher Auftrag.</p>
+                    <p className="text-sm text-primary font-semibold">💼 Mit der Einsatzbestätigung durch Fahrerexpress entsteht der kostenpflichtige Auftrag.</p>
                   </CardContent>
                 </Card>
               </div>

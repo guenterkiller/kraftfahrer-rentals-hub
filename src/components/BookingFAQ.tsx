@@ -1,6 +1,7 @@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { ANFRAGE_EINGANG_TEXT, ANFRAGE_AUFTRAG_ENTSTEHUNG } from "@/lib/kostenUebersicht";
 
 const BookingFAQ = () => {
   const [openItems, setOpenItems] = useState<string[]>([]);
@@ -17,7 +18,7 @@ const BookingFAQ = () => {
     {
       id: "verbindlich",
       question: "Ist die Anfrage verbindlich?",
-      answer: "Nein. Ihre Fahreranfrage ist unverbindlich und noch keine Auftrags- oder Einsatzbestätigung. Ein kostenpflichtiger Auftrag entsteht erst, wenn Fahrerexpress Ihnen einen passenden selbstständigen Fahrer zuteilt und den Einsatz in Textform (z. B. per E-Mail) bestätigt."
+      answer: `${ANFRAGE_EINGANG_TEXT} ${ANFRAGE_AUFTRAG_ENTSTEHUNG}`
     },
     {
       id: "email",

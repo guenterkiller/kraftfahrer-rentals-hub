@@ -4,7 +4,7 @@ import { renderAsync } from '../_shared/render-email.ts';
 import React from 'npm:react@18.3.1';
 import { CustomerBookingConfirmation } from '../_shared/email-templates/customer-booking-confirmation.tsx';
 import { analyzeWeekendHoliday } from '../_shared/german-holidays.ts';
-import { tarifOhneZuschlaege, wochenendarbeitGebucht, gebuchteFeiertage } from '../_shared/kosten-uebersicht.ts';
+import { tarifOhneZuschlaege, wochenendarbeitGebucht, gebuchteFeiertage, ANFRAGE_BETREFF } from '../_shared/kosten-uebersicht.ts';
 import { storeCustomerMailSnapshot } from '../_shared/customer-mail-snapshot.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -178,7 +178,7 @@ const handler = async (req: Request): Promise<Response> => {
     const mailPayload = {
       from: "Fahrerexpress-Agentur <info@kraftfahrer-mieten.com>",
       to: email,
-      subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+      subject: ANFRAGE_BETREFF,
       html: emailHtml,
     };
     const emailResponse = await resend.emails.send({ ...mailPayload, to: [email] });
@@ -206,7 +206,7 @@ const handler = async (req: Request): Promise<Response> => {
         
         await supabase.from('email_log').insert({
           recipient: email,
-          subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+          subject: ANFRAGE_BETREFF,
           template: 'customer_booking_confirmation',
           job_id: typeof job_id === 'string' ? job_id : null,
           status: 'failed',
@@ -217,7 +217,7 @@ const handler = async (req: Request): Promise<Response> => {
         
         await supabase.from('email_log').insert({
           recipient: email,
-          subject: "Ihre Fahrerbuchung bei der Fahrerexpress-Agentur",
+          subject: ANFRAGE_BETREFF,
           template: 'customer_booking_confirmation',
           job_id: typeof job_id === 'string' ? job_id : null,
           status: 'sent',

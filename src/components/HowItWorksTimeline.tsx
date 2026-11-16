@@ -10,13 +10,13 @@ const HowItWorksTimeline = () => {
     },
     {
       icon: Settings,
-      title: "2. Vermittlung",
-      description: "Wir prüfen passende selbstständige Unternehmer und melden uns schnellstmöglich mit einer Rückmeldung."
+      title: "2. Zuweisung durch Fahrerexpress",
+      description: "Fahrerexpress weist einen Fahrer verbindlich zu. Interne Vermittlungsschritte bleiben bei Fahrerexpress."
     },
     {
       icon: CheckCircle,
       title: "3. Einsatzbestätigung",
-      description: "Sie erhalten die Bestätigung mit allen Details. Mit Bestätigung des Einsatzes entsteht ein verbindlicher Auftrag. Der selbstständige Unternehmer nimmt direkten Kontakt auf."
+      description: "Sie erhalten die Einsatzbestätigung durch Fahrerexpress mit Konditionen und Fahrerdaten. Erst damit entsteht der kostenpflichtige Auftrag. Der selbstständige Unternehmer nimmt direkten Kontakt auf."
     },
     {
       icon: Receipt,

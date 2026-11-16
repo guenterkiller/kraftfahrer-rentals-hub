@@ -38,6 +38,8 @@ import {
   OBERGRENZE_ERKLAERUNG,
   OBERGRENZE_FEHLER,
   ANFRAGE_FORMULAR_TEXT,
+  ANFRAGE_EINGANG_TEXT,
+  ANFRAGE_NAECHSTER_SCHRITT,
   zuschlagHinweis,
   gebuchteFeiertage,
 } from "@/lib/kostenUebersicht";
@@ -313,16 +315,16 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
       // Check for duplicate response (409)
       if (data?.error?.includes('Duplikat') || data?.existing_job_id) {
         toast({
-          title: "Anfrage bereits gesendet",
-          description: "Ihre Anfrage wurde bereits erfolgreich übermittelt. Wir melden uns bei Ihnen.",
+          title: "Ihre Fahreranfrage ist bereits eingegangen",
+          description: ANFRAGE_EINGANG_TEXT,
         });
         setFormSubmitted(true);
         return;
       }
 
       toast({
-        title: "Anfrage erfolgreich gesendet!",
-        description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
+        title: "Ihre Fahreranfrage ist eingegangen",
+        description: `${ANFRAGE_EINGANG_TEXT} ${ANFRAGE_NAECHSTER_SCHRITT}`,
       });
 
       // Google Ads Conversion: Lead-Formular senden (nur nach erfolgreichem Submit, einmal pro Anfrage)
@@ -411,19 +413,24 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 <PWAInstallButton />
               </div>
               <p className="text-center sm:text-left text-muted-foreground mb-4">
-                Beschreiben Sie Ihren Fahrbedarf – wir melden uns schnellstmöglich mit einer Rückmeldung. {ANFRAGE_FORMULAR_TEXT}
+                Beschreiben Sie Ihren Fahrbedarf. {ANFRAGE_FORMULAR_TEXT}
               </p>
+              <div className="mb-4 rounded-lg border border-border bg-muted/30 p-4 text-sm space-y-2">
+                <p className="font-medium">Nach dem Absenden gibt es genau zwei Kundenstatus:</p>
+                <p><strong>1. Ihre Fahreranfrage ist eingegangen</strong> – unverbindlich, noch kein bestätigter Einsatz und keine Kosten.</p>
+                <p><strong>2. Einsatzbestätigung durch Fahrerexpress</strong> – Fahrer verbindlich zugewiesen; vereinbarte Konditionen und Fahrerdaten werden bestätigt.</p>
+              </div>
               
               {/* Quick Benefits */}
               <div className="bg-muted/50 rounded-lg p-4 border border-border">
                 <div className="grid sm:grid-cols-3 gap-3 text-sm">
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Verbindlich</strong> – klare Storno- & Zahlungsbedingungen</span>
+                    <span><strong>Unverbindlich</strong> – keine Kosten vor der Einsatzbestätigung</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
-                    <span><strong>Schnell</strong> – zügige Rückmeldung</span>
+                    <span><strong>Eindeutig</strong> – zwei klare Kundenstatus</span>
                   </div>
                   <div className="flex items-start gap-2">
                     <span className="text-green-600 font-bold">✓</span>
@@ -1096,8 +1103,8 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                   </Label>
                   <p className="text-sm text-muted-foreground mt-1 mb-2">
                     Bitte beschreiben Sie möglichst genau, welche Tätigkeiten der Fahrer im Einsatz erledigen soll.
-                    Diese Angaben sind Grundlage der Einsatzabstimmung und werden dem selbstständigen Fahrer zur
-                    Annahme des Auftrags übermittelt.
+                    Diese Angaben sind Grundlage der Einsatzabstimmung. Nach verbindlicher Zuweisung erhalten Sie
+                    die Einsatzbestätigung durch Fahrerexpress mit den vereinbarten Konditionen und Fahrerdaten.
                   </p>
                   <Textarea
                     id="beschreibung"
@@ -1181,7 +1188,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
                   <h4 className="font-semibold text-amber-800 mb-2">Stornierungsregelung</h4>
                   <ul className="text-sm text-amber-900 space-y-1">
-                    <li>• Die Stornoregelung gilt nach bestätigter Fahrerzuteilung und Auftragsbestätigung.</li>
+                    <li>• Die Stornoregelung gilt nach der Einsatzbestätigung durch Fahrerexpress.</li>
                     <li>• Storno bis 24 Std. vorher → kostenlos</li>
                     <li>• Storno unter 24 Std. → 80 % des Tagessatzes, sofern kein geringerer Schaden nachgewiesen wird.</li>
                     <li>• Kurzfristiger Fahrerbedarf? Einsätze ab etwa 24 Stunden Vorlauf können je nach Fahrerverfügbarkeit möglich sein. Fragen Sie einfach an.</li>
@@ -1243,7 +1250,7 @@ const SimpleBookingForm = ({ variant = 'standard' }: SimpleBookingFormProps = {}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center mt-3">
-                  Hinweis: {ANFRAGE_FORMULAR_TEXT} Nach Mitteilung der Fahrerzuteilung können Sie der Zuteilung unverzüglich widersprechen, wenn die Angaben nicht passen.
+                  Hinweis: {ANFRAGE_FORMULAR_TEXT} Bei sachlichen Fehlern in der Einsatzbestätigung kontaktieren Sie Fahrerexpress bitte unverzüglich.
                 </p>
               </form>
 

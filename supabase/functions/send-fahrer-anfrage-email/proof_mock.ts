@@ -40,7 +40,10 @@ try {
   assert(a.t.includes('5 Wochen (Mo–Fr) × 1.645,00 €') && a.t.includes('2 Einsatztage (Mo–Fr) × 329,00 €') && a.t.includes('8.883,00 €') && a.t.includes('10.570,77 €'));
   assert(!/\b(Sa|So), \d{2}\.\d{2}\.2026/.test(a.t), 'keine Wochenendpositionen');
   assert(!a.t.includes('Wochenendarbeit angefragt') && !a.t.includes('Ihr Zeitraum enthält einen Samstag'), 'kein Wochenendhinweis');
-  assert(!/(?<![Uu]n)verbindliche Anfrage/.test(a.t) && a.t.includes('Ihre unverbindliche Fahreranfrage ist eingegangen'));
+  assert(!/(?<![Uu]n)verbindliche Anfrage/.test(a.t) && a.t.includes('Ihre Fahreranfrage ist eingegangen'));
+  assert(a.mail.subject === 'Ihre Fahreranfrage ist eingegangen – Fahrerexpress');
+  assert(a.t.includes('unverbindlich') && a.t.includes('keine Kosten') && a.t.includes('Nach der verbindlichen Zuweisung eines Fahrers'));
+  assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Verfügbarkeitsprüfung/.test(a.t));
   assert(a.snap.html === a.mail.html && a.snap.subject === a.mail.subject && a.snap.recipient === 'test-kunde@example.invalid' && a.snap.status === 'sent' && a.snap.provider_message_id === 'mock-resend-1' && a.snap.job_id === '00000000-0000-0000-0000-000000000001');
   const b = await run('mit-wochenendarbeit', ['Wochenendarbeit']);
   assert(b.k!.netto === 13681.75, `netto ${b.k!.netto}`);

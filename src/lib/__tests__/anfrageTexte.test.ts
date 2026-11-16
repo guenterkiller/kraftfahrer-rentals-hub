@@ -1,11 +1,23 @@
 import { describe, it, expect } from 'vitest';
-import { gebuchteFeiertage, zuschlagHinweis, ANFRAGE_FORMULAR_TEXT, ANFRAGE_EINGANG_TEXT } from '@/lib/kostenUebersicht';
+import { gebuchteFeiertage, zuschlagHinweis, ANFRAGE_FORMULAR_TEXT, ANFRAGE_EINGANG_TEXT, ANFRAGE_AUFTRAG_ENTSTEHUNG, ANFRAGE_NAECHSTER_SCHRITT, EINSATZBESTAETIGUNG_TITEL, EINSATZBESTAETIGUNG_TEXT } from '@/lib/kostenUebersicht';
 
 describe('Anfragetexte und Zuschlagshinweis', () => {
   it('Anfrage ist unverbindlich, keine „verbindliche Anfrage“', () => {
     for (const t of [ANFRAGE_FORMULAR_TEXT, ANFRAGE_EINGANG_TEXT]) {
-      expect(t).toContain('unverbindliche Fahreranfrage');
+      expect(t).toContain('unverbindlich');
       expect(t).not.toMatch(/(?<![Uu]n)verbindliche Anfrage/);
+    }
+  });
+  it('nur zwei externe Status; Zuweisung statt Fahrerannahme', () => {
+    expect(ANFRAGE_EINGANG_TEXT).toContain('Ihre Fahreranfrage ist eingegangen');
+    expect(ANFRAGE_EINGANG_TEXT).toContain('keine Kosten');
+    expect(ANFRAGE_AUFTRAG_ENTSTEHUNG).toContain('Einsatzbestätigung durch Fahrerexpress');
+    expect(ANFRAGE_AUFTRAG_ENTSTEHUNG).toContain('Fahrer verbindlich zugewiesen');
+    expect(ANFRAGE_NAECHSTER_SCHRITT).toContain('Nach der verbindlichen Zuweisung');
+    expect(EINSATZBESTAETIGUNG_TITEL).toBe('Einsatzbestätigung durch Fahrerexpress');
+    expect(EINSATZBESTAETIGUNG_TEXT).toContain('Fahrerexpress hat');
+    for (const t of [ANFRAGE_FORMULAR_TEXT, ANFRAGE_EINGANG_TEXT, ANFRAGE_AUFTRAG_ENTSTEHUNG, ANFRAGE_NAECHSTER_SCHRITT, EINSATZBESTAETIGUNG_TEXT]) {
+      expect(t).not.toMatch(/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Verfügbarkeitsprüfung/);
     }
   });
   it('Völklingen-Zeitraum ohne Wochenendarbeit: kein Hinweis', () => {

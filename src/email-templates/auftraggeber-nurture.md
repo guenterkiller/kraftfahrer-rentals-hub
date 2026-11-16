@@ -2,11 +2,11 @@
 
 ## E-Mail 1: Willkommen & Bestätigung (D+0)
 
-**Betreff:** Ihre Fahreranfrage bei Fahrerexpress – wir disponieren für Sie
+**Betreff:** Ihre Fahreranfrage ist eingegangen – Fahrerexpress
 
 Hallo {{contact_person}},
 
-vielen Dank für Ihre Anfrage über unsere Website! 
+Ihre Fahreranfrage ist eingegangen. Sie ist unverbindlich: Es gibt noch keinen bestätigten Einsatz und es entstehen keine Kosten.
 
 **Ihre Anfrage im Überblick:**
 - Fahrzeugtyp: {{vehicle_types}}
@@ -15,12 +15,10 @@ vielen Dank für Ihre Anfrage über unsere Website!
 - Dauer: {{duration}}
 
 **Wie es jetzt weitergeht:**
-1. Wir prüfen verfügbare Fahrer in Ihrer Region
-2. Sie erhalten spätestens am nächsten Werktag unsere Rückmeldung
-3. Bei Verfügbarkeit stellen wir den direkten Kontakt zum Fahrer her
+Nach der verbindlichen Zuweisung eines Fahrers erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit den vereinbarten Konditionen und Fahrerdaten. Erst diese Einsatzbestätigung macht den Einsatz kostenpflichtig.
 
 **Warum Fahrerexpress?**
-✅ Keine Kosten, falls kein Fahrer verfügbar ist
+✅ Keine Kosten vor der Einsatzbestätigung
 ✅ Eine Rechnung, transparente Abwicklung  
 ✅ Dienst-/Werkleistung – keine Arbeitnehmerüberlassung
 
@@ -32,27 +30,25 @@ Fahrerexpress-Agentur
 
 ---
 
-## E-Mail 2: Verfügbarkeit & Alternativen (D+2)
+## E-Mail 2: Planungshinweise (D+2)
 
-**Betreff:** {{vehicle_types}} für KW {{calendar_week}} – Verfügbarkeit & Optionen
+**Betreff:** Ihre Fahreranfrage – Planungshinweise für Ihren Einsatz
 
 Hallo {{contact_person}},
 
-ein kurzes Update zu Ihrer Fahreranfrage:
+ergänzende Planungshinweise zu Ihrer Fahreranfrage:
 
-**Aktuelle Situation:**
-Für Ihren gewünschten Starttermin ({{start_date}}) prüfen wir noch die finale Verfügbarkeit. 
+**Mögliche Planungsspielräume:**
+- Flexibler Starttermin
+- Einsatzort mit Anfahrt
+- Erforderliche Qualifikationen
 
-**Alternativ-Optionen:**
-- Flexibler Starttermin: oft bessere Verfügbarkeit ab der Folgewoche
-- Benachbarte Regionen: Fahrer mit Anfahrt möglich
-- Ähnliche Qualifikationen: falls Spezialscheine nicht zwingend erforderlich
+Diese Hinweise sind keine Statusmitteilung und keine Einsatzbestätigung. Maßgeblich sind ausschließlich unsere ausdrücklichen Nachrichten „Ihre Fahreranfrage ist eingegangen“ und nach verbindlicher Zuweisung „Einsatzbestätigung durch Fahrerexpress“.
 
 **Unser Mini-Preisrechner hilft bei der Planung:**
 [Link zum Rechner auf unserer Website]
 
-**Schnelle Verfügbarkeitsprüfung:**
-Rufen Sie uns gerne direkt an: 01577 1442285 (Mo-Fr 8-18 Uhr)
+Bei Fragen: 01577 1442285 (Mo-Fr 8-18 Uhr)
 
 Viele Grüße
 Günter Killer

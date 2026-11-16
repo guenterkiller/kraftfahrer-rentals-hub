@@ -453,7 +453,7 @@ const Wissenswertes = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren.
+                    Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können möglich sein; eine kurzfristige Vermittlung ist nicht garantiert. Sie erhalten zunächst die Bestätigung „Ihre Fahreranfrage ist eingegangen“ – unverbindlich und ohne Kosten. Nach der verbindlichen Zuweisung erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit Konditionen und Fahrerdaten.
                   </p>
                 </CardContent>
               </Card>

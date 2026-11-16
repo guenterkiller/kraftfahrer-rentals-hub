@@ -1,5 +1,6 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
 import { requireMailResult } from '@/lib/adminMailResult';
+import { sendAssignmentNotifications } from '@/lib/assignmentNotifications';
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
 import { TestDataCleanup } from "@/components/admin/TestDataCleanup";
 import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
@@ -845,8 +846,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
         });
       } else {
         toast({
-          title: "Kundenmail gesendet",
-          description: "Der Auftraggeber wurde über die Fahrerzuteilung informiert.",
+          title: "Einsatzbestätigung gesendet",
+          description: "Der Auftraggeber hat die Einsatzbestätigung durch Fahrerexpress erhalten.",
         });
       }
     } catch (e: any) {
@@ -933,25 +934,40 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
 
   const confirmAndSend = async (assignmentId: string) => {
     setConfirmingAssignment(assignmentId);
-    
+
     try {
-      // 1) DB-Status auf confirmed
-      const { error: rpcErr } = await supabase.rpc("admin_confirm_assignment", {
-        _assignment_id: assignmentId,
+      const notifications = await sendAssignmentNotifications({
+        confirmAdminAssignment: async () => {
+          const { error } = await supabase.rpc("admin_confirm_assignment", { _assignment_id: assignmentId });
+          if (error) throw error;
+        },
+        sendCustomerConfirmation: async () => {
+          const { data, error } = await supabase.functions.invoke("send-customer-assignment-notice", {
+            body: { assignment_id: assignmentId },
+          });
+          if (error) throw error;
+          if (data?.success !== true) throw new Error(data?.error || 'Kunden-Einsatzbestätigung nicht bestätigt');
+        },
+        sendDriverOffer: async () => {
+          const { data, error } = await supabase.functions.invoke("send-driver-confirmation", {
+            body: { assignment_id: assignmentId },
+          });
+          await requireMailResult(data, error);
+        },
       });
-      if (rpcErr) throw rpcErr;
 
-      // 2) E-Mail + PDF an Fahrer (BCC an Admin) - JWT sent automatically
-      const { data, error: fnErr } = await supabase.functions.invoke(
-        "send-driver-confirmation",
-        { body: { assignment_id: assignmentId } }
-      );
-      const result = await requireMailResult(data, fnErr);
-
-      toast({
-        title: result === 'sent' ? "Bestätigt & E-Mail versendet" : "Keine E-Mail versendet",
-        description: result === 'sent' ? "Bestätigung wurde an den Fahrer gesendet (Kopie an Admin)." : data.message
-      });
+      if (notifications.customerConfirmation === 'sent' && notifications.driverOffer === 'sent') {
+        toast({
+          title: "Einsatz bestätigt",
+          description: "Einsatzbestätigung an den Kunden und Fahrerangebot versendet.",
+        });
+      } else {
+        toast({
+          title: "Zuweisung bestätigt – Versand prüfen",
+          description: notifications.errors.join(' · '),
+          variant: "destructive",
+        });
+      }
       await loadJobRequests();
       await loadJobAssignments();
     } catch (err: any) {

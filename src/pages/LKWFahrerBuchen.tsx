@@ -28,7 +28,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
+        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können möglich sein; eine kurzfristige Vermittlung ist nicht garantiert. Sie erhalten zunächst die Bestätigung „Ihre Fahreranfrage ist eingegangen“ – unverbindlich und ohne Kosten. Nach der verbindlichen Zuweisung erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit Konditionen und Fahrerdaten."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",
@@ -125,7 +125,7 @@ const LKWFahrerBuchen = () => {
       },
       {
         question: "Wie schnell kann ein LKW-Fahrer starten?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
+        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können möglich sein; eine kurzfristige Vermittlung ist nicht garantiert. Sie erhalten zunächst die Bestätigung „Ihre Fahreranfrage ist eingegangen“ – unverbindlich und ohne Kosten. Nach der verbindlichen Zuweisung erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit Konditionen und Fahrerdaten."
       },
       {
         question: "Welche Führerscheinklassen sind verfügbar?",

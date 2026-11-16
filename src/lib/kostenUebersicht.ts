@@ -314,14 +314,23 @@ export const offenePositionen = (
   return offen;
 };
 
-/** Gemeinsamer Statustext der Kundenanfrage (Formular, Eingangsmail). */
+/** Genau zwei kundensichtbare Status: unverbindlicher Eingang und Einsatzbestätigung durch Fahrerexpress. */
+export const ANFRAGE_BETREFF = 'Ihre Fahreranfrage ist eingegangen – Fahrerexpress';
 export const ANFRAGE_EINGANG_TEXT =
-  'Ihre unverbindliche Fahreranfrage ist eingegangen. Dies ist noch keine Auftrags- oder Einsatzbestätigung.';
-export const ANFRAGE_STATUS_TEXT = 'Status: Unverbindliche Anfrage – noch keine Auftrags- oder Einsatzbestätigung.';
+  'Ihre Fahreranfrage ist eingegangen. Sie ist unverbindlich: Es gibt noch keinen bestätigten Einsatz und es entstehen keine Kosten.';
+export const ANFRAGE_STATUS_TEXT =
+  'Status: Ihre Fahreranfrage ist eingegangen – unverbindlich, noch kein bestätigter Einsatz und keine Kosten.';
 export const ANFRAGE_AUFTRAG_ENTSTEHUNG =
-  'Ein kostenpflichtiger Auftrag entsteht erst, wenn Fahrerexpress Ihnen einen passenden selbstständigen Fahrer zuteilt und den Einsatz in Textform (z. B. per E-Mail) bestätigt. Es gelten die Vermittlungsbedingungen. Ist kein passender Fahrer verfügbar, entstehen Ihnen keine Kosten.';
+  'Ein kostenpflichtiger Auftrag entsteht erst mit der Einsatzbestätigung durch Fahrerexpress, nachdem Fahrerexpress einen Fahrer verbindlich zugewiesen hat. Die Einsatzbestätigung enthält die vereinbarten Konditionen und Fahrerdaten und wird in Textform (z. B. per E-Mail) versendet. Es gelten die Vermittlungsbedingungen.';
 export const ANFRAGE_FORMULAR_TEXT =
-  'Mit Absenden des Formulars senden Sie eine unverbindliche Fahreranfrage; dies ist noch keine Auftrags- oder Einsatzbestätigung. ' + ANFRAGE_AUFTRAG_ENTSTEHUNG;
+  'Mit Absenden des Formulars senden Sie eine unverbindliche Fahreranfrage; dies ist noch kein bestätigter Einsatz und es entstehen keine Kosten. ' + ANFRAGE_AUFTRAG_ENTSTEHUNG;
+export const ANFRAGE_NAECHSTER_SCHRITT =
+  'Nach der verbindlichen Zuweisung eines Fahrers erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit den vereinbarten Konditionen und Fahrerdaten.';
+export const EINSATZBESTAETIGUNG_TITEL = 'Einsatzbestätigung durch Fahrerexpress';
+export const EINSATZBESTAETIGUNG_STATUS_TEXT =
+  'Status: Einsatzbestätigung durch Fahrerexpress – der Fahrer ist verbindlich zugewiesen.';
+export const EINSATZBESTAETIGUNG_TEXT =
+  'Fahrerexpress hat den folgenden selbstständigen Fahrer verbindlich zugewiesen. Hiermit werden der Einsatz, die vereinbarten Konditionen und die Fahrerdaten bestätigt.';
 
 /** Bundesweite Feiertage, die auf tatsächlich angefragte Einsatztage fallen (Sa/So nur mit Wochenendarbeit). */
 export const gebuchteFeiertage = (startISO: string, endISO: string, wochenendarbeit: boolean): string[] =>

@@ -77,7 +77,7 @@ const BegleitfahrzeugeBF3 = () => {
       },
       {
         question: "Wie schnell ist ein BF3-Fahrer verfügbar?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
+        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können möglich sein; eine kurzfristige Vermittlung ist nicht garantiert. Sie erhalten zunächst die Bestätigung „Ihre Fahreranfrage ist eingegangen“ – unverbindlich und ohne Kosten. Nach der verbindlichen Zuweisung erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit Konditionen und Fahrerdaten."
       },
       {
         question: "Was muss das Begleitfahrzeug haben?",

@@ -189,12 +189,43 @@ Deno.serve(async (req) => {
         note: `Driver ${driverId} assigned with ${rateType} rate ${rateValue}`
       });
 
-    console.log('✅ Assignment successful:', assignmentId);
+    // Die Zuweisung durch Fahrerexpress löst serverseitig die Kunden-Einsatzbestätigung aus.
+    // Keine Fahrerannahme ist erforderlich. Der Admin-Dialog kann bei einem Fehler idempotent wiederholen.
+    let customerNotice: { attempted: boolean; sent: boolean; skipped: boolean; error: string | null } = {
+      attempted: false, sent: false, skipped: false, error: null,
+    };
+    if (!updateError) {
+      customerNotice.attempted = true;
+      try {
+        const customerResponse = await fetch(`${supabaseUrl}/functions/v1/send-customer-assignment-notice`, {
+          method: 'POST',
+          headers: {
+            'Authorization': authHeader,
+            'apikey': supabaseServiceKey,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ assignment_id: assignmentId }),
+        });
+        const customerResult = await customerResponse.json().catch(() => ({}));
+        customerNotice.sent = customerResponse.ok && customerResult?.success === true && customerResult?.skipped !== true;
+        customerNotice.skipped = customerResponse.ok && customerResult?.skipped === true;
+        if (!customerResponse.ok || customerResult?.success !== true) {
+          customerNotice.error = customerResult?.error || `Kundenbestätigung HTTP ${customerResponse.status}`;
+        }
+      } catch (customerError) {
+        customerNotice.error = customerError instanceof Error ? customerError.message : String(customerError);
+      }
+    } else {
+      customerNotice.error = 'Auftragsstatus konnte nicht auf zugewiesen gesetzt werden';
+    }
+
+    console.log('✅ Assignment successful:', assignmentId, 'Kundenbestätigung:', customerNotice.sent ? 'sent' : customerNotice.skipped ? 'already sent' : 'retry required');
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         assignmentId: assignmentId,
+        customerNotice,
         message: 'Fahrer erfolgreich zugewiesen'
       }),
       { 

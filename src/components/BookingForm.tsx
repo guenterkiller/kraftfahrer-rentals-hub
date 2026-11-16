@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
+import { ANFRAGE_EINGANG_TEXT, ANFRAGE_NAECHSTER_SCHRITT } from "@/lib/kostenUebersicht";
 
 const BookingForm = () => {
   const [startDate, setStartDate] = useState<Date>();
@@ -138,8 +139,8 @@ const BookingForm = () => {
       if (response.error) throw response.error;
 
       toast({
-        title: "Anfrage erfolgreich gesendet!",
-        description: "Wir melden uns spätestens bis zum nächsten Werktag bei Ihnen.",
+        title: "Ihre Fahreranfrage ist eingegangen",
+        description: `${ANFRAGE_EINGANG_TEXT} ${ANFRAGE_NAECHSTER_SCHRITT}`,
       });
 
       // Google Ads Conversion: Lead-Formular senden (nur nach erfolgreichem Submit, einmal pro Anfrage)
@@ -454,7 +455,7 @@ const BookingForm = () => {
                   disabled={loading || vehicleTypes.length === 0 || !startDate}
                   aria-label="Jetzt Fahrer anfragen"
                 >
-                  {loading ? "Wird gesendet..." : (qualifications.includes('Fernverkehr / Übernachtung im LKW') && vehicleTypes.some(t => t.includes('LKW CE')) ? "Verbindliche Anfrage senden – Fernfahrer-Tarif 450 € netto" : "Jetzt Fahrer anfragen")}
+                  {loading ? "Wird gesendet..." : (qualifications.includes('Fernverkehr / Übernachtung im LKW') && vehicleTypes.some(t => t.includes('LKW CE')) ? "Unverbindliche Fahreranfrage senden – Fernfahrer-Tarif 450 € netto" : "Jetzt Fahrer anfragen")}
                 </Button>
               </form>
             </CardContent>

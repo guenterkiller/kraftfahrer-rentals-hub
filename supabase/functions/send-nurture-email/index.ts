@@ -18,10 +18,10 @@ const getEmailTemplate = (type: 'auftraggeber' | 'fahrer', day: 0 | 2 | 7) => {
   const templates = {
     auftraggeber: {
       0: {
-        subject: "Ihre Fahreranfrage bei Fahrerexpress – wir disponieren für Sie",
+        subject: "Ihre Fahreranfrage ist eingegangen – Fahrerexpress",
         content: `Hallo {{contact_person}},
 
-vielen Dank für Ihre Anfrage über unsere Website! 
+Ihre Fahreranfrage ist eingegangen. Sie ist unverbindlich: Es gibt noch keinen bestätigten Einsatz und es entstehen keine Kosten.
 
 **Ihre Anfrage im Überblick:**
 - Fahrzeugtyp: {{vehicle_types}}
@@ -30,12 +30,10 @@ vielen Dank für Ihre Anfrage über unsere Website!
 - Dauer: {{duration}}
 
 **Wie es jetzt weitergeht:**
-1. Wir prüfen verfügbare Fahrer in Ihrer Region
-2. Sie erhalten spätestens am nächsten Werktag unsere Rückmeldung
-3. Bei Verfügbarkeit stellen wir den direkten Kontakt zum Fahrer her
+Nach der verbindlichen Zuweisung eines Fahrers erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit den vereinbarten Konditionen und Fahrerdaten. Erst diese Einsatzbestätigung macht den Einsatz kostenpflichtig.
 
 **Warum Fahrerexpress?**
-✅ Keine Kosten, falls kein Fahrer verfügbar ist
+✅ Keine Kosten vor der Einsatzbestätigung
 ✅ Eine Rechnung, transparente Abwicklung  
 ✅ Dienst-/Werkleistung – keine Arbeitnehmerüberlassung
 
@@ -46,18 +44,17 @@ Günter Killer
 Fahrerexpress-Agentur`
       },
       2: {
-        subject: "{{vehicle_types}} für KW {{calendar_week}} – Verfügbarkeit & Optionen",
+        subject: "Ihre Fahreranfrage – Planungshinweise für Ihren Einsatz",
         content: `Hallo {{contact_person}},
 
-ein kurzes Update zu Ihrer Fahreranfrage:
+ergänzende Planungshinweise zu Ihrer Fahreranfrage:
 
-**Aktuelle Situation:**
-Für Ihren gewünschten Starttermin ({{start_date}}) prüfen wir noch die finale Verfügbarkeit. 
+**Mögliche Planungsspielräume:**
+- Flexibler Starttermin
+- Einsatzort mit Anfahrt
+- Erforderliche Qualifikationen
 
-**Alternativ-Optionen:**
-- Flexibler Starttermin: oft bessere Verfügbarkeit ab der Folgewoche
-- Benachbarte Regionen: Fahrer mit Anfahrt möglich
-- Ähnliche Qualifikationen: falls Spezialscheine nicht zwingend erforderlich
+Diese Hinweise sind keine Statusmitteilung und keine Einsatzbestätigung. Maßgeblich sind ausschließlich unsere ausdrücklichen Nachrichten „Ihre Fahreranfrage ist eingegangen“ und nach verbindlicher Zuweisung „Einsatzbestätigung durch Fahrerexpress“.
 
 Bei Fragen: 01577 1442285 (Mo-Fr 8-18 Uhr)
 

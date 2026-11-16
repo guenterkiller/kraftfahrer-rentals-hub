@@ -69,7 +69,7 @@ const LkwFahrerKurzfristig = () => {
     items: [
       {
         question: "Ich brauche dringend einen LKW-Fahrer für morgen – geht das?",
-        answer: "Fragen Sie an! Ob es klappt, hängt von der <strong>Verfügbarkeit</strong> passender Fahrer ab. Wir suchen schnellstmöglich und sagen Ihnen ehrlich, ob ein Fahrer frei ist. Ein Einsatz am selben Tag ist ausgeschlossen."
+        answer: "Fragen Sie an! Eine kurzfristige Vermittlung kann nicht garantiert werden. Sie erhalten zunächst die unverbindliche Eingangsbestätigung; erst nach verbindlicher Zuweisung folgt die <strong>Einsatzbestätigung durch Fahrerexpress</strong>. Ein Einsatz am selben Tag ist ausgeschlossen."
       },
       {
         question: "Ich habe eine zusätzliche Tour, aber keinen Fahrer – was tun?",
@@ -77,7 +77,7 @@ const LkwFahrerKurzfristig = () => {
       },
       {
         question: "Was bedeutet kurzfristig bei Ihnen?",
-        answer: "Wir melden uns schnellstmöglich mit einer Rückmeldung und vermitteln kurzfristig nach Verfügbarkeit. Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf sind je nach Fahrerverfügbarkeit möglich. Eine kurzfristige Vermittlung können wir jedoch nicht garantieren."
+        answer: "Kurzfristige Einsätze ab etwa 24 Stunden Vorlauf können möglich sein; eine kurzfristige Vermittlung ist nicht garantiert. Sie erhalten zunächst die Bestätigung „Ihre Fahreranfrage ist eingegangen“ – unverbindlich und ohne Kosten. Nach der verbindlichen Zuweisung erhalten Sie die Einsatzbestätigung durch Fahrerexpress mit Konditionen und Fahrerdaten."
       },
       {
         question: "Wie kurzfristig kann ein LKW-Fahrer vermittelt werden?",

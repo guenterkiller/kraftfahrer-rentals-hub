@@ -5,7 +5,7 @@ import { assert } from 'https://deno.land/std@0.224.0/assert/mod.ts';
 import { renderAsync } from './render-email.ts';
 import { CustomerBookingConfirmation } from './email-templates/customer-booking-confirmation.tsx';
 import { NoShowNotice } from './email-templates/no-show-notice.tsx';
-import { berechneKostenUebersicht } from './kosten-uebersicht.ts';
+import { berechneKostenUebersicht, ANFRAGE_BETREFF, ANFRAGE_EINGANG_TEXT, ANFRAGE_NAECHSTER_SCHRITT, EINSATZBESTAETIGUNG_TITEL, EINSATZBESTAETIGUNG_STATUS_TEXT } from './kosten-uebersicht.ts';
 import { resolveTarif } from './tarif-zuordnung.ts';
 import { agreementNote, agreementErrors } from './offer-readiness.ts';
 import { buildDriverOfferView } from './driver-offer-remuneration.ts';
@@ -39,7 +39,7 @@ async function kundenmail(nr: string, titel: string, tarifKey: string, kategorie
     customerName: KUNDE.customer_name, companyName: KUNDE.company, driverType: kategorie, timeframe: `${von.split('-').reverse().join('.')} – ${bis.split('-').reverse().join('.')}`, location: 'TEST-Ort 12345 Musterstadt',
     message: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[1], selectedActivity: (JOBART[tarif.tarif] ?? JOBART.lkw_ce)[0], tarif, isFernfahrerTarif: tarif.tarif === 'fernfahrer', kostenUebersicht: k, isUeberfuehrung: tarifKey === 'ueberfuehrung', ...extra,
   }));
-  mails.push({ nr, titel, empfaenger: 'Auftraggeber', ausloeser: 'Absenden des Buchungsformulars', betreff: 'Ihre Fahrerbuchung bei der Fahrerexpress-Agentur', html });
+  mails.push({ nr, titel, empfaenger: 'Auftraggeber', ausloeser: 'Absenden des Buchungsformulars', betreff: ANFRAGE_BETREFF, html });
   return { tarif, t: text(html) };
 }
 
@@ -69,19 +69,23 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
   for (const m of [ce, cesa, wo, ff, ffwe, bm, ue]) {
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
-    assert(m.t.includes('Ihre unverbindliche Fahreranfrage ist eingegangen') && m.t.includes('noch keine Auftrags- oder Einsatzbestätigung') && !/(?<![Uu]n)verbindliche Anfrage/.test(m.t) && m.t.includes('Vermittlungsbedingungen'));
+    assert(m.t.includes(ANFRAGE_EINGANG_TEXT) && m.t.includes(ANFRAGE_NAECHSTER_SCHRITT) && !/(?<![Uu]n)verbindliche Anfrage/.test(m.t) && m.t.includes('Vermittlungsbedingungen'));
+    assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Verfügbarkeitsprüfung/.test(m.t));
     assert(m.t.length < (m === ff || m === ffwe ? 3200 : 2800), `zu lang: ${m.t.length}`);
   }
 });
 
-Deno.test('Kunden-Zuteilungsmitteilung: Fahrer, Einsatz, Kundenpreis, kurz', () => {
+Deno.test('Kunden-Einsatzbestätigung: verbindliche Zuweisung, Fahrerdaten, Kundenpreis, keine internen Annahmen', () => {
   for (const [nr, t, label] of [['2a', 'fernfahrer', 'Fernfahrer'], ['2b', 'lkw_ce', 'LKW CE Tag']]) {
     const m = buildCustomerAssignmentNotice({ job: job(t), driverName: 'TEST Max Mustermann', driverPhone: '+49 000 FAHRER', driverEmail: 'fahrer@example.invalid', zeitraum: '16.11.2026 – 20.11.2026', einsatzort: 'TEST-Ort 12345 Musterstadt' });
-    mails.push({ nr, titel: `Zuteilungsmitteilung an Auftraggeber – ${label}`, empfaenger: 'Auftraggeber', ausloeser: 'Verwaltung → Fahrer zuteilen → Kunde informieren', betreff: m.subject, html: m.html });
+    mails.push({ nr, titel: `Einsatzbestätigung an Auftraggeber – ${label}`, empfaenger: 'Auftraggeber', ausloeser: 'Verwaltung → Fahrer verbindlich zuteilen → Einsatzbestätigung an Kunden', betreff: m.subject, html: m.html });
     const x = text(m.html);
+    assert(m.subject.startsWith(EINSATZBESTAETIGUNG_TITEL) && x.includes(EINSATZBESTAETIGUNG_STATUS_TEXT));
+    assert(x.includes('Fahrerexpress hat') && x.includes('verbindlich zugewiesen') && x.includes('vereinbarten Konditionen'));
     assert(!/gilt die Zuteilung als bestätigt|ohne .*Widerspruch/.test(x), 'Schweigen als Bestätigung');
+    assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Einsatzbereitschaft/.test(x), 'keine internen Fahrerinformationen');
     assert(!INTERN.test(x) && !LANG.test(x) && x.includes('TEST Max Mustermann') && x.includes(t === 'fernfahrer' ? '450,00 €' : '349,00 €'));
-    if (t === 'fernfahrer') assert(x.includes('vergünstigt 2.121,06 €'), 'Zuteilung Fernverkehr nennt Wochenpreis');
+    if (t === 'fernfahrer') assert(x.includes('vergünstigt 2.121,06 €'), 'Einsatzbestätigung Fernverkehr nennt Wochenpreis');
     assert(!x.includes('9.999'));
   }
 });
