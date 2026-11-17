@@ -194,3 +194,10 @@
 - [x] Vollständige HTML-/Screenshot-Nachweise aus Originalversand und echter Annahmeseite, produktive Buchungen unverändert nachgewiesen; Betreiberfreigabe abwarten
 - [x] Keine echten E-Mails, Bestandsänderungen, Veröffentlichung oder IONOS-Uploads
 - [ ] Produktive Freigabe und etwaige Veröffentlichung: wartet ausdrücklich auf Betreiber nach Sichtung der Nachweise
+
+## Automatische Jobangebote nach einmaliger Fahrerfreischaltung (2026-11-17)
+- [x] Bestehende Freischaltung, Vertragsannahme, Matching und Versand-/Wiederholungswege lesend geprüft; Peter Drees: aktuelle Annahme 17.11.2026, ein passender freigegebener Völklingen-Auftrag, keine Zuteilung und keine Auftragseinladung/-mail; kein Versand ausgelöst
+- [x] Gemeinsamer automatischer Abgleich nach dauerhaft gespeicherter aktueller Vertragsannahme sowie bei Freischaltung mit bereits angenommenem Vertrag; vorher nur Vertragseinladung, keine Angebote
+- [x] Atomare Einladungssperre über vorhandenen eindeutigen HMAC-Token, Provider-Idempotenz, gleiche Links bei Wiederholung, Fehlerprotokolle, aktive Zuteilungs-/Ablauf-/Sperr-/Opt-out-Regeln; 190 sichere Server- und 167 Website-Tests bestanden
+- [x] Keine echten E-Mails, produktiven Bestandsänderungen, Deployments, Veröffentlichung oder IONOS-Uploads; Originalrenderer-Mail HTML/Desktop/Mobil geprüft
+- [ ] Produktive Aktivierung und authentifizierte Liveabnahme nicht erfolgt (ausdrücklich kein Deploy); GitHub-Synchronisation nach lokalem Commit durch Plattform noch nicht verifiziert

@@ -29,6 +29,15 @@ Deno.test("abgelaufener Zeitraum und unklarer Zeitraum werden übersprungen", ()
   assertEquals(r.skippedExpired, 2);
 });
 
+Deno.test("einzelnes verstrichenes Einsatzdatum ist abgelaufen, heutiges Datum bleibt offen", () => {
+  const gestern = new Date(); gestern.setDate(gestern.getDate() - 1);
+  const heute = new Date();
+  const format = (d: Date) => `${String(d.getDate()).padStart(2, "0")}.${String(d.getMonth() + 1).padStart(2, "0")}.${d.getFullYear()}`;
+  const r = selectOfferableJobs(fahrer, [job("gestern", { zeitraum: format(gestern) }), job("heute", { zeitraum: format(heute) })]);
+  assertEquals(r.matchingJobs.map((j) => j.id), ["heute"]);
+  assertEquals(r.skippedExpired, 1);
+});
+
 Deno.test("Führerscheinklasse muss passen (CE deckt C ab, C deckt CE nicht ab)", () => {
   assertEquals(selectOfferableJobs(fahrer, [job("c", { fuehrerscheinklasse: "C" })]).matchingJobs.length, 1);
   const r = selectOfferableJobs({ fuehrerscheinklassen: ["C"] }, [job("ce")]);

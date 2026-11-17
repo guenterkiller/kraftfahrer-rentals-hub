@@ -11,6 +11,8 @@ import {
 } from "../_shared/driver-mediation-contract.ts";
 import { inviteState, inviteExpiry, rejectionProfileUpdate, sha256Hex } from "../_shared/driver-contract-gate.ts";
 import { verifyAdminAuth } from "../_shared/admin-auth.ts";
+import { dispatchDriverJobOffers } from "../_shared/driver-job-offers.ts";
+import { Resend } from "npm:resend@2.0.0";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -114,5 +116,43 @@ serve(async (req) => {
     await db.from("fahrer_profile").update(rejectionProfileUpdate(decidedAt)).eq("id", inv.driver_id);
   }
   await db.from("admin_actions").insert({ action: `driver_contract_${decision}`, note: `Fahrer ${inv.driver_id}, Fassung ${MEDIATION_CONTRACT_VERSION}, SHA-256 ${hash}` });
-  return json({ status: decision === "accept" ? "accepted" : "rejected", content_hash: hash, decided_at: decidedAt });
+
+  // Erst nach erfolgreichem, unveränderlichem Speichern der Annahme werden
+  // bestehende freigegebene Aufträge automatisch geprüft. Keine zweite
+  // Freischaltungs- oder interne Administrator-Mail auf diesem öffentlichen Weg.
+  let jobOffers: Record<string, unknown> | null = null;
+  if (decision === "accept") {
+    try {
+      const { data: driver, error: driverError } = await db.from("fahrer_profile")
+        .select("*").eq("id", inv.driver_id).single();
+      if (driverError || !driver) throw new Error("Fahrerprofil nach Vertragsannahme nicht lesbar");
+      const mailFrom = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+      const offers = await dispatchDriverJobOffers({
+        supabase: db,
+        resend: new Resend(Deno.env.get("RESEND_API_KEY")),
+        driver,
+        mailFrom,
+        mailReplyTo: Deno.env.get("MAIL_REPLY_TO") || "info@kraftfahrer-mieten.com",
+        tokenSecret: Deno.env.get("INTERNAL_FN_SECRET") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "",
+        siteBase: Deno.env.get("SITE_URL") || "https://www.kraftfahrer-mieten.com",
+      });
+      jobOffers = {
+        status: "checked", matching: offers.matchingJobs.length, sent: offers.invitesSent,
+        failed: offers.failed, skipped_duplicate: offers.skippedDuplicate,
+        skipped_assigned: offers.skippedAssigned,
+      };
+      await db.from("admin_actions").insert({
+        action: "driver_contract_accept_jobs_checked",
+        note: `Fahrer ${inv.driver_id}; passend=${offers.matchingJobs.length}, versandt=${offers.invitesSent}, fehlgeschlagen=${offers.failed}, Duplikate=${offers.skippedDuplicate}, zugeteilt=${offers.skippedAssigned}`,
+      });
+    } catch (error) {
+      console.error("automatic job offers after contract acceptance failed", error);
+      jobOffers = { status: "failed" };
+      await db.from("admin_actions").insert({
+        action: "driver_contract_accept_jobs_failed",
+        note: `Fahrer ${inv.driver_id}; automatischer Auftragsabgleich nach gespeicherter Annahme fehlgeschlagen: ${error instanceof Error ? error.message : String(error)}`,
+      });
+    }
+  }
+  return json({ status: decision === "accept" ? "accepted" : "rejected", content_hash: hash, decided_at: decidedAt, job_offers: jobOffers });
 });
