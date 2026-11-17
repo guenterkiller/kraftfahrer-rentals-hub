@@ -1,5 +1,5 @@
 import { assert, assertEquals, assertStringIncludes, assertRejects } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { dispatchDriverJobOffers } from "./driver-job-offers.ts";
+import { dispatchDriverJobOffers, dispatchReleasedJobToContractDrivers } from "./driver-job-offers.ts";
 
 const DRIVER_ID = "00000000-0000-4000-8000-000000000101";
 const JOB_ID = "00000000-0000-4000-8000-000000000201";
@@ -27,11 +27,14 @@ type WorldOptions = {
   logs?: any[];
   failFirstMail?: boolean;
   jobsError?: boolean;
+  drivers?: any[];
+  decisions?: any[];
 };
 
 function makeWorld(options: WorldOptions = {}) {
   const state = {
-    decisions: options.accepted === false ? [] : [{ id: "DECISION", driver_id: DRIVER_ID, decision: "accept", contract_version: "2026-10-25" }],
+    decisions: options.decisions ?? (options.accepted === false ? [] : [{ id: "DECISION", driver_id: DRIVER_ID, decision: "accept", contract_version: "2026-10-25" }]),
+    drivers: options.drivers ?? [options.driver ?? driver],
     jobs: options.jobs ?? [job()],
     assignments: options.assignments ?? [],
     invites: [...(options.invites ?? [])],
@@ -59,7 +62,8 @@ function makeWorld(options: WorldOptions = {}) {
         : this.table === "job_requests" ? state.jobs
         : this.table === "job_assignments" ? state.assignments
         : this.table === "assignment_invites" ? state.invites
-        : this.table === "email_log" ? state.logs : [];
+        : this.table === "email_log" ? state.logs
+        : this.table === "fahrer_profile" ? state.drivers : [];
       rows = rows.filter((row) => this.filters.every((filter) => {
         if (filter.kind === "eq") return row[filter.key] === filter.value;
         if (filter.kind === "in") return filter.value.includes(row[filter.key]);
@@ -119,7 +123,11 @@ function makeWorld(options: WorldOptions = {}) {
     mailFrom: "info@kraftfahrer-mieten.com", mailReplyTo: "info@kraftfahrer-mieten.com",
     tokenSecret: "TEST-ONLY-NOT-A-REAL-SECRET", siteBase: "https://test.invalid",
   });
-  return { state, mailAttempts, providerSuccesses, dispatch };
+  const release = (releasedJob: any = state.jobs[0]) => dispatchReleasedJobToContractDrivers({
+    supabase, resend, job: releasedJob, mailFrom: "info@kraftfahrer-mieten.com", mailReplyTo: "info@kraftfahrer-mieten.com",
+    tokenSecret: "TEST-ONLY-NOT-A-REAL-SECRET", siteBase: "https://test.invalid", pauseMs: 0,
+  });
+  return { state, mailAttempts, providerSuccesses, dispatch, release };
 }
 
 Deno.test("ohne gespeicherte aktuelle Vertragsannahme: keine Einladung und keine Mail", async () => {
@@ -331,4 +339,106 @@ Deno.test("Nachweis: vollständige Testmail aus dem echten Renderer", async () =
   await w.dispatch();
   const out = Deno.env.get("PROOF_OUT");
   if (out) await Deno.writeTextFile(out, w.mailAttempts[0].payload.html);
+});
+
+// ---- Automatischer Versand bei Auftragsfreigabe an Vertragsfahrer ----
+const D2 = "00000000-0000-4000-8000-000000000102";
+const DTEST = "00000000-0000-4000-8000-000000000103";
+const DNOCONTRACT = "00000000-0000-4000-8000-000000000104";
+const accept = (id: string) => ({ id: `DEC-${id}`, driver_id: id, decision: "accept", contract_version: "2026-10-25" });
+const releaseWorld = (extra: WorldOptions = {}) => makeWorld({
+  jobs: [ceWeeks()],
+  drivers: [
+    driver,
+    { ...driver, id: D2, email: "driver2@example.invalid" },
+    { ...driver, id: DTEST, email: "testfahrer@example.invalid", is_test: true },
+    { ...driver, id: DNOCONTRACT, email: "ohnevertrag@example.invalid" },
+  ],
+  decisions: [accept(DRIVER_ID), accept(D2), accept(DTEST), { ...accept(DNOCONTRACT), contract_version: "1999-01-01" }],
+  ...extra,
+});
+
+Deno.test("Freigabe: Angebot mit 7.106,40 € an alle echten Vertragsfahrer, Testfahrer und Fahrer ohne aktuelle Annahme ausgeschlossen", async () => {
+  const w = releaseWorld();
+  const r = await w.release();
+  assertEquals(r.skipped, null);
+  assertEquals(r.invitesSent, 2);
+  assertEquals(r.excludedTestDrivers, 1);
+  assertEquals(r.contractDrivers, 2);
+  assertEquals(w.mailAttempts.map((a) => a.payload.to[0]).sort(), ["driver2@example.invalid", "driver@example.invalid"]);
+  for (const a of w.mailAttempts) {
+    assertStringIncludes(a.payload.html, "7.106,40 €");
+    assertStringIncludes(a.payload.html, "Unverbindliches Auftragsangebot");
+    for (const leak of ["1.645", "8.883", "Provision"]) assert(!a.payload.html.includes(leak), leak);
+  }
+  assertEquals(w.state.logs.filter((l) => l.status === "sent" && l.template === "driver_job_invite_post_approval").length, 2);
+});
+
+Deno.test("Freigabe wiederholt (erneutes Senden): keine zweite Mail", async () => {
+  const w = releaseWorld();
+  const first = await w.release();
+  const second = await w.release();
+  assertEquals(first.invitesSent, 2);
+  assertEquals(second.invitesSent, 0);
+  assertEquals(second.skippedDuplicate, 2);
+  assertEquals(w.mailAttempts.length, 2);
+});
+
+Deno.test("Freigabe parallel doppelt ausgelöst: je Fahrer genau ein Token und eine Providerzustellung", async () => {
+  const w = releaseWorld();
+  await Promise.all([w.release(), w.release()]);
+  assertEquals(w.state.invites.length, 2);
+  assertEquals(w.providerSuccesses.size, 2);
+  assertEquals(new Set(w.mailAttempts.map((a) => a.key)).size, 2);
+});
+
+Deno.test("Freigabe ohne Kalkulation: keine Einladung, keine Mail, genau ein Sperrprotokoll", async () => {
+  const w = releaseWorld({ jobs: [ceWeeks({ kosten_uebersicht: null })] });
+  const r = await w.release();
+  assertEquals(r.skipped, "no_remuneration");
+  assertEquals(w.mailAttempts.length, 0);
+  assertEquals(w.state.invites.length, 0);
+  assertEquals(w.state.actions.length, 1);
+  assertEquals(w.state.actions[0].action, "driver_interest_offer_blocked");
+  assertStringIncludes(w.state.actions[0].note, "job_requests.kosten_uebersicht");
+});
+
+Deno.test("Freigabe mit falschen Wochenendposten (Völklingen-Original 13.681,75 €): gesperrt", async () => {
+  const sat = (d: string) => ({ label: `Sa, ${d}: 349,00 € + 25 % Zuschlag`, betrag: 436.25 });
+  const sun = (d: string) => ({ label: `So, ${d}: 349,00 € + 50 % Zuschlag`, betrag: 523.5 });
+  const w = releaseWorld({ jobs: [ceWeeks({ kosten_uebersicht: { netto: 13681.75, positionen: [
+    { label: "LKW-Fahrer CE – Wochenpreis: 5 Wochen (Mo–Fr) × 1.645,00 €", betrag: 8225 },
+    { label: "2 Einsatztage (Mo–Fr) × 329,00 €", betrag: 658 },
+    sat("21.11.2026"), sun("22.11.2026"), sat("28.11.2026"), sun("29.11.2026"), sat("05.12.2026"),
+    sun("06.12.2026"), sat("12.12.2026"), sun("13.12.2026"), sat("19.12.2026"), sun("20.12.2026"),
+  ] } })] });
+  const r = await w.release();
+  assertEquals(r.skipped, "no_remuneration");
+  assertStringIncludes(r.blockedReasons[0], "Wochenendarbeit");
+  assertEquals(w.mailAttempts.length, 0);
+});
+
+Deno.test("Freigabe eines Testauftrags oder nicht freigegebenen Auftrags: niemand erhält eine Mail", async () => {
+  for (const extra of [{ is_test: true }, { approved_at: null }, { status: "assigned" }]) {
+    const w = releaseWorld({ jobs: [ceWeeks(extra)] });
+    const r = await w.release();
+    assert(r.skipped === "test_job" || r.skipped === "not_released");
+    assertEquals(w.mailAttempts.length, 0);
+    assertEquals(w.state.invites.length, 0);
+  }
+});
+
+Deno.test("Freigabe: bereits abgelehnte Einladung aus alter Rundmail wird nicht erneut angeschrieben", async () => {
+  const w = releaseWorld({ invites: [{ job_id: JOB_ID, driver_id: D2, token: "OLD-BROADCAST", status: "declined",
+    token_expires_at: "2030-06-01T00:00:00Z", responded_at: "2026-11-16T09:00:00Z" }] });
+  const r = await w.release();
+  assertEquals(r.invitesSent, 1);
+  assertEquals(w.mailAttempts.map((a) => a.payload.to[0]), ["driver@example.invalid"]);
+});
+
+Deno.test("Testfahrer erhält auch beim Einzelabgleich kein automatisches Angebot", async () => {
+  const w = makeWorld({ driver: { ...driver, is_test: true } });
+  const r = await w.dispatch();
+  assertEquals(r.invitesSent, 0);
+  assertEquals(w.mailAttempts.length, 0);
 });

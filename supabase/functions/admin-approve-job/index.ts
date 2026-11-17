@@ -1,10 +1,43 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Resend } from "npm:resend@2.0.0";
+import { dispatchReleasedJobToContractDrivers, type ReleasedJobOfferSummary } from "../_shared/driver-job-offers.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Fahrer mit angenommener aktueller Vertragsfassung erhalten bei Freigabe das bestehende
+// Interessenangebot MIT Nettovergütung (dedupliziert); die Sammel-Rundmail schließt sie aus.
+async function offerToContractDrivers(supabase: any, jobId: string, adminEmail: string): Promise<ReleasedJobOfferSummary | { error: string }> {
+  try {
+    const { data: job, error } = await supabase.from("job_requests").select("*").eq("id", jobId).single();
+    if (error || !job) throw new Error("Auftrag konnte nach Freigabe nicht gelesen werden");
+    const summary = await dispatchReleasedJobToContractDrivers({
+      supabase,
+      resend: new Resend(Deno.env.get("RESEND_API_KEY")),
+      job,
+      mailFrom: Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com",
+      mailReplyTo: Deno.env.get("MAIL_REPLY_TO") || "info@kraftfahrer-mieten.com",
+      tokenSecret: Deno.env.get("INTERNAL_FN_SECRET") || Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "",
+      siteBase: Deno.env.get("SITE_URL") || "https://www.kraftfahrer-mieten.com",
+    });
+    await supabase.from("admin_actions").insert({
+      action: "job_contract_driver_offers",
+      job_id: jobId,
+      admin_email: adminEmail,
+      note: `Angebote mit Nettovergütung: gesendet=${summary.invitesSent}, bereits vorhanden=${summary.skippedDuplicate}, unpassend=${summary.skippedNoMatch}, ` +
+        `vergeben=${summary.skippedAssigned}, fehlgeschlagen=${summary.failed}, Vertragsfahrer=${summary.contractDrivers}, Testfahrer ausgeschlossen=${summary.excludedTestDrivers}` +
+        (summary.skipped ? `, übersprungen=${summary.skipped}` : ""),
+    });
+    return summary;
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    console.error("Angebote an Vertragsfahrer fehlgeschlagen:", message);
+    return { error: message };
+  }
+}
 
 interface ApproveJobRequest {
   jobId: string;
@@ -93,12 +126,16 @@ serve(async (req) => {
     // Idempotenz-Check: Bereits versendet?
     if (job.status === 'sent') {
       console.log("Job already sent, skipping duplicate broadcast");
+      // Keine zweite Sammel-Rundmail; nur der deduplizierte Abgleich für Vertragsfahrer (Nachholversand).
+      const contractOffers = action === 'approve' ? await offerToContractDrivers(supabase, jobId, adminEmail) : null;
+      const offered = contractOffers && "invitesSent" in contractOffers ? contractOffers.invitesSent : 0;
       return new Response(
         JSON.stringify({ 
           success: true, 
-          message: "Job wurde bereits an Fahrer gesendet",
+          message: `Job wurde bereits an Fahrer gesendet; neue Angebote mit Vergütung: ${offered}`,
           alreadySent: true,
-          sentAt: job.sent_at
+          sentAt: job.sent_at,
+          contractOffers,
         }),
         { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -164,6 +201,10 @@ serve(async (req) => {
 
       console.log(`Job ${jobId} approved by ${adminEmail}, now broadcasting...`);
 
+      // Schritt 1b: Vertragsfahrer erhalten das Interessenangebot mit Nettovergütung
+      const contractOffers = await offerToContractDrivers(supabase, jobId, adminEmail);
+      const offered = "invitesSent" in contractOffers ? contractOffers.invitesSent : 0;
+
       // Schritt 2: Broadcast an Fahrer auslösen
       const broadcastResponse = await fetch(`${supabaseUrl}/functions/v1/broadcast-job-to-drivers`, {
         method: "POST",
@@ -198,15 +239,16 @@ serve(async (req) => {
           action: "job_approved_and_sent",
           job_id: jobId,
           admin_email: adminEmail,
-          note: `Freigegeben und an ${broadcastResult.sentToCount || 0} Fahrer gesendet`,
+          note: `Freigegeben und an ${broadcastResult.sentToCount || 0} Fahrer (Rundmail) sowie ${offered} Vertragsfahrer (Angebot mit Vergütung) gesendet`,
         });
 
         return new Response(
           JSON.stringify({ 
             success: true, 
-            message: `Anfrage freigegeben und an ${broadcastResult.sentToCount || 0} Fahrer gesendet`,
+            message: `Anfrage freigegeben und an ${broadcastResult.sentToCount || 0} Fahrer sowie ${offered} Vertragsfahrer mit Vergütung gesendet`,
             status: 'sent',
             sentToCount: broadcastResult.sentToCount || 0,
+            contractOffers,
             sent: broadcastResult.sent || 0,
             failed: broadcastResult.failed || 0,
           }),
@@ -228,7 +270,8 @@ serve(async (req) => {
             success: false, 
             message: "Freigabe erfolgt, aber Versand fehlgeschlagen",
             error: broadcastResult.error,
-            status: 'approved'
+            status: 'approved',
+            contractOffers,
           }),
           { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );

@@ -1314,9 +1314,10 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
       
       toast({
         title: "Job erfolgreich versendet",
-        description: data?.broadcast?.sentToCount 
-          ? `Job wurde an ${data.broadcast.sentToCount} aktive Fahrer gesendet.`
-          : "Job wurde an alle aktiven Fahrer gesendet.",
+        description: data?.message
+          ?? (data?.broadcast?.sentToCount 
+            ? `Job wurde an ${data.broadcast.sentToCount} aktive Fahrer gesendet.`
+            : "Job wurde an alle aktiven Fahrer gesendet."),
       });
 
       // Refresh jobs list

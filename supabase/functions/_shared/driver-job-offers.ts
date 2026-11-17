@@ -2,7 +2,7 @@
 // Ausschließlich serverseitig verwenden: der stabile Token ist zugleich die atomare
 // Einladungssperre (vorhandener UNIQUE-Index) und der Idempotency-Key des Providers.
 import { selectOfferableJobs, MAX_INVITES } from "./driver-job-matching.ts";
-import { isDriverActive } from "./job-release.ts";
+import { isDriverActive, isJobReleased } from "./job-release.ts";
 import { MEDIATION_CONTRACT_VERSION } from "./driver-mediation-contract.ts";
 import { interpretSendResult } from "./mail-delivery.ts";
 import { commissionPctForTarif } from "./driver-offer-remuneration.ts";
@@ -163,6 +163,8 @@ export async function dispatchDriverJobOffers(input: {
   mailReplyTo: string;
   tokenSecret: string;
   siteBase?: string;
+  /** Nur diesen einen Auftrag prüfen (Auftragsfreigabe); ohne Angabe alle offenen freigegebenen Aufträge. */
+  onlyJobId?: string;
 }): Promise<DriverJobOfferResult> {
   const { supabase, resend, driver } = input;
   const fromAddress = input.mailFrom.split("<").pop()?.replace(/[<>]/g, "") ?? input.mailFrom;
@@ -174,7 +176,8 @@ export async function dispatchDriverJobOffers(input: {
     invitesSent: 0, skippedDuplicate: 0, skippedExpired: 0, skippedNoMatch: 0,
     skippedAssigned: 0, failed: 0, blockedNoRemuneration: [],
   };
-  if (!isDriverActive(driver) || driver.email_opt_out === true || !driver.email) return empty;
+  // Testfahrer erhalten nie automatische Auftragsangebote (Testdaten bleiben isoliert).
+  if (!isDriverActive(driver) || driver.email_opt_out === true || !driver.email || driver.is_test === true) return empty;
   if (!input.tokenSecret) throw new Error("Kein serverseitiges Token-Geheimnis konfiguriert; kein Versand");
 
   const { data: accepted, error: acceptedError } = await supabase
@@ -185,13 +188,16 @@ export async function dispatchDriverJobOffers(input: {
   if (!accepted) return empty;
 
   // Das Erfassungsalter ist kein Ablaufkriterium: der Einsatzzeitraum entscheidet.
-  const { data: jobs, error: jobsError } = await supabase.from("job_requests").select("*")
+  let jobsQuery = supabase.from("job_requests").select("*")
     .in("status", ["open", "sent", "pending", "approved"])
-    .not("approved_at", "is", null)
-    .order("created_at", { ascending: false }).limit(100);
+    .not("approved_at", "is", null);
+  if (input.onlyJobId) jobsQuery = jobsQuery.eq("id", input.onlyJobId);
+  const { data: jobRows, error: jobsError } = await jobsQuery.order("created_at", { ascending: false }).limit(100);
   if (jobsError) throw new Error(`Offene Aufträge konnten nicht gelesen werden: ${jobsError.message ?? jobsError}`);
+  // Testaufträge gehen nie an Fahrer.
+  const jobs = (jobRows ?? []).filter((job: Any) => job?.is_test !== true);
 
-  const selection = selectOfferableJobs(driver, jobs ?? []);
+  const selection = selectOfferableJobs(driver, jobs);
   let matchingJobs = selection.matchingJobs;
   let skippedAssigned = 0;
   if (matchingJobs.length > 0) {
@@ -205,7 +211,7 @@ export async function dispatchDriverJobOffers(input: {
   }
 
   const result: DriverJobOfferResult = {
-    ...empty, jobs: jobs ?? [], validJobs: selection.validJobs, matchingJobs,
+    ...empty, jobs, validJobs: selection.validJobs, matchingJobs,
     unclearJobs: selection.unclearJobs, skippedExpired: selection.skippedExpired,
     skippedNoMatch: selection.skippedNoMatch, skippedAssigned,
   };
@@ -303,4 +309,97 @@ export async function dispatchDriverJobOffers(input: {
     }
   }
   return result;
+}
+
+/** IDs der Fahrer mit gespeicherter Annahme der aktuellen Vertragsfassung (optional auf `ids` begrenzt). */
+export async function acceptedContractDriverIds(supabase: Any, ids?: string[]): Promise<Set<string>> {
+  let query = supabase.from("driver_contract_decisions").select("driver_id")
+    .eq("decision", "accept").eq("contract_version", MEDIATION_CONTRACT_VERSION);
+  if (ids) {
+    if (ids.length === 0) return new Set();
+    query = query.in("driver_id", ids);
+  }
+  const { data, error } = await query;
+  if (error) throw new Error(`Vertragsannahmen konnten nicht gelesen werden: ${error.message ?? error}`);
+  return new Set((data ?? []).map((row: Any) => row.driver_id));
+}
+
+export type ReleasedJobOfferSummary = {
+  jobId: string;
+  skipped: null | "not_released" | "test_job" | "no_remuneration";
+  blockedReasons: string[];
+  contractDrivers: number;
+  excludedTestDrivers: number;
+  invitesSent: number;
+  skippedDuplicate: number;
+  skippedNoMatch: number;
+  skippedAssigned: number;
+  skippedExpired: number;
+  failed: number;
+  perDriver: Array<{ driverId: string; invitesSent: number; skippedDuplicate: number; skippedNoMatch: number; skippedAssigned: number; failed: number; error?: string }>;
+};
+
+/**
+ * Bei Auftragsfreigabe (und erneutem „Senden“): dasselbe Interessenangebot mit Nettovergütung an alle
+ * freigeschalteten Nicht-Test-Fahrer mit angenommener aktueller Vertragsfassung. Nutzt je Fahrer
+ * `dispatchDriverJobOffers` (stabiler Token, Provider-Idempotenz, Versandprotokoll) nur für diesen Auftrag.
+ * Ohne belegbare Vergütung genau ein Sperrprotokoll und keine Einladung.
+ */
+export async function dispatchReleasedJobToContractDrivers(input: {
+  supabase: Any;
+  resend: Any;
+  job: Any;
+  mailFrom: string;
+  mailReplyTo: string;
+  tokenSecret: string;
+  siteBase?: string;
+  pauseMs?: number;
+}): Promise<ReleasedJobOfferSummary> {
+  const { supabase, job } = input;
+  const summary: ReleasedJobOfferSummary = {
+    jobId: job?.id, skipped: null, blockedReasons: [], contractDrivers: 0, excludedTestDrivers: 0,
+    invitesSent: 0, skippedDuplicate: 0, skippedNoMatch: 0, skippedAssigned: 0, skippedExpired: 0, failed: 0, perDriver: [],
+  };
+  if (!isJobReleased(job)) return { ...summary, skipped: "not_released" };
+  if (job.is_test === true) return { ...summary, skipped: "test_job" };
+  const pay = interestRemuneration(job);
+  if (!pay.ok) {
+    const { error } = await supabase.from("admin_actions").insert({
+      action: "driver_interest_offer_blocked", job_id: job.id,
+      note: `Kein Auftragsangebot bei Freigabe: ${pay.reasons.join(" | ")}`,
+    });
+    if (error) console.error("Sperrprotokoll fehlgeschlagen", error);
+    return { ...summary, skipped: "no_remuneration", blockedReasons: pay.reasons };
+  }
+
+  const accepted = [...await acceptedContractDriverIds(supabase)];
+  if (accepted.length === 0) return summary;
+  const { data: drivers, error: driversError } = await supabase.from("fahrer_profile").select("*").in("id", accepted);
+  if (driversError) throw new Error(`Fahrer konnten nicht gelesen werden: ${driversError.message ?? driversError}`);
+
+  for (const driver of drivers ?? []) {
+    if (driver.is_test === true) { summary.excludedTestDrivers++; continue; }
+    summary.contractDrivers++;
+    try {
+      const r = await dispatchDriverJobOffers({
+        supabase, resend: input.resend, driver, mailFrom: input.mailFrom, mailReplyTo: input.mailReplyTo,
+        tokenSecret: input.tokenSecret, siteBase: input.siteBase, onlyJobId: job.id,
+      });
+      summary.invitesSent += r.invitesSent;
+      summary.skippedDuplicate += r.skippedDuplicate;
+      summary.skippedNoMatch += r.skippedNoMatch;
+      summary.skippedAssigned += r.skippedAssigned;
+      summary.skippedExpired += r.skippedExpired;
+      summary.failed += r.failed;
+      summary.perDriver.push({ driverId: driver.id, invitesSent: r.invitesSent, skippedDuplicate: r.skippedDuplicate,
+        skippedNoMatch: r.skippedNoMatch, skippedAssigned: r.skippedAssigned, failed: r.failed });
+      // Provider-Ratenlimit schonen
+      if (r.invitesSent > 0 && (input.pauseMs ?? 600) > 0) await new Promise((res) => setTimeout(res, input.pauseMs ?? 600));
+    } catch (error) {
+      summary.failed++;
+      summary.perDriver.push({ driverId: driver.id, invitesSent: 0, skippedDuplicate: 0, skippedNoMatch: 0, skippedAssigned: 0, failed: 1,
+        error: error instanceof Error ? error.message : String(error) });
+    }
+  }
+  return summary;
 }

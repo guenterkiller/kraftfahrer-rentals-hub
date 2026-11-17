@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { isJobReleased } from "../_shared/job-release.ts";
 import { openContractDriverIds } from "../_shared/driver-contract-gate.ts";
+import { acceptedContractDriverIds } from "../_shared/driver-job-offers.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "npm:resend@4.0.0";
 import React from "npm:react@18.3.1";
@@ -112,7 +113,7 @@ serve(async (req) => {
     // Get all approved drivers with email addresses
     const { data: drivers, error: driversError } = await supabase
       .from("fahrer_profile")
-      .select("id, vorname, nachname, email, email_opt_out, is_blocked, is_inactive")
+      .select("id, vorname, nachname, email, email_opt_out, is_blocked, is_inactive, is_test")
       .eq("status", "approved")
       .eq("email_opt_out", false)
       .eq("is_blocked", false)
@@ -139,7 +140,10 @@ serve(async (req) => {
 
     // Fahrer mit offenem Vermittlungsvertrag erhalten keine Angebote
     const blockedContractIds = await openContractDriverIds(supabase, drivers.map((d: any) => d.id));
-    const eligibleDrivers = drivers.filter((d: any) => !blockedContractIds.has(d.id));
+    // Vertragsfahrer erhalten stattdessen das Interessenangebot mit Nettovergütung (admin-approve-job);
+    // Testfahrer erhalten keine Rundmail.
+    const contractDriverIds = await acceptedContractDriverIds(supabase, drivers.map((d: any) => d.id));
+    const eligibleDrivers = drivers.filter((d: any) => !blockedContractIds.has(d.id) && !contractDriverIds.has(d.id) && d.is_test !== true);
     if (eligibleDrivers.length === 0) {
       console.log("All approved drivers have an open contract – nothing to send");
       return new Response(
