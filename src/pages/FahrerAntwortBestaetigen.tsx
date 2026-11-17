@@ -16,7 +16,7 @@ type BindingData = {
   expires_at: string;
 };
 
-const INTEREST_CHECKBOX_TEXT = "Ich habe die Einsatztätigkeiten, Anforderungen und Einsatzdaten gelesen und bekunde ausdrücklich mein unverbindliches Interesse. Dies ist keine verbindliche Auftragsannahme; ein persönliches Angebot mit Vergütung und vollständigen Bedingungen folgt erst nach einer Zuweisung durch Fahrerexpress.";
+const INTEREST_CHECKBOX_TEXT = "Ich habe die Einsatztätigkeiten, Anforderungen, Einsatzdaten und die ausgewiesene unverbindliche Nettovergütung gelesen und bekunde ausdrücklich mein unverbindliches Interesse. Dies ist keine verbindliche Auftragsannahme; eine verbindliche Beauftragung erfolgt erst nach persönlicher Zuteilung durch Fahrerexpress.";
 
 type ServerStatus =
   | "accepted"
@@ -46,8 +46,6 @@ const STATUS_TEXT: Record<Exclude<ServerStatus, null>, string> = {
 
 type JobPreview = {
   id: string;
-  customer_name: string | null;
-  company: string | null;
   einsatzort: string | null;
   zeitraum: string | null;
   fahrzeugtyp: string | null;
@@ -55,6 +53,7 @@ type JobPreview = {
   besonderheiten: string | null;
   nachricht: string | null;
   tarif_type?: string | null;
+  surcharge_text?: string | null;
 };
 
 export default function FahrerAntwortBestaetigen() {
@@ -158,6 +157,7 @@ export default function FahrerAntwortBestaetigen() {
           }
         } else if (status === "ready") {
           setJob(data?.job ?? null);
+          setInterestLines(Array.isArray(data?.job_lines) ? data.job_lines : null);
           if (data?.driver?.vorname) {
             setDriverName(
               `${data.driver.vorname} ${data.driver.nachname ?? ""}`.trim(),
@@ -187,6 +187,7 @@ export default function FahrerAntwortBestaetigen() {
   }, [action, token]);
 
   const compensation = binding ? getDriverCompensation(binding.job_lines, true) : null;
+  const interestCompensation = !binding && interestLines ? getDriverCompensation(interestLines, true) : null;
   const bindingDetailLines = binding
     ? acceptancePageLines(binding.job_lines, true).filter(([label]) => label !== NET_LABEL)
     : [];
@@ -211,7 +212,7 @@ export default function FahrerAntwortBestaetigen() {
               : binding && result === "declined"
               ? "Sie haben die verbindliche Annahme abgelehnt. Fahrerexpress wurde informiert."
               : !binding && result === "accepted"
-              ? "Ihr unverbindliches Interesse wurde übermittelt. Dies ist keine verbindliche Auftragsannahme. Ein persönliches Angebot mit Vergütung und vollständigen Bedingungen folgt erst nach einer Zuweisung durch Fahrerexpress."
+              ? "Ihr unverbindliches Interesse wurde übermittelt. Dies ist keine verbindliche Auftragsannahme. Eine verbindliche Beauftragung erfolgt erst nach persönlicher Zuteilung durch Fahrerexpress."
               : result === "remuneration_incomplete" && interestLines
               ? "Dieser Auftrag kann noch nicht verbindlich angenommen werden, weil die Vergütung noch nicht vollständig bestimmt ist. Bei Interesse melden Sie sich bitte bei Fahrerexpress: info@kraftfahrer-mieten.com oder 01577 1442285."
               : STATUS_TEXT[result]}
@@ -275,11 +276,12 @@ export default function FahrerAntwortBestaetigen() {
                     <strong>Fahrer:</strong> {driverName}
                   </p>
                 )}
+                {interestCompensation && (
+                  <div className="mb-4">
+                    <DriverCompensationCard compensation={interestCompensation} />
+                  </div>
+                )}
                 <dl className="grid grid-cols-1 gap-y-1 md:grid-cols-3 md:gap-x-4">
-                  <dt className="font-medium">Auftraggeber</dt>
-                  <dd className="md:col-span-2">
-                    {job.company || job.customer_name || "–"}
-                  </dd>
                   <dt className="font-medium">Einsatzort</dt>
                   <dd className="md:col-span-2">{job.einsatzort || "–"}</dd>
                   <dt className="font-medium">Zeitraum</dt>
@@ -306,16 +308,10 @@ export default function FahrerAntwortBestaetigen() {
                   </p>
                 </div>
                 <div className="mt-3 rounded border border-amber-300 bg-amber-50 p-3 text-xs text-amber-900">
-                  <p className="mb-2 font-semibold">Diese Seite dient nur der unverbindlichen Interessenbekundung und enthält noch kein persönliches Vergütungsangebot.</p>
-                  <strong>Konditionen:</strong>{" "}
-                  {job.tarif_type === "fernfahrer"
-                    ? "Fernfahrerpauschale ohne Samstags-, Sonntags- oder Feiertagszuschläge und ohne Mehrstundenabrechnung."
-                    : job.tarif_type === "event"
-                      ? "Event-Tourneepauschale ohne Mehrstunden und ohne Wochenend-/Feiertagszuschläge."
-                      : "Wochenend- und Feiertagszuschläge gelten automatisch (Samstag 25 %, Sonn-/Feiertag 50 %)."}{" "}
-                  Details
-                  zu Vergütung und Vermittlungsanteil ergeben sich aus dem
-                  Auftragsangebot vor Einsatzbeginn.
+                  <p className="font-semibold">Ihre Rückmeldung ist eine unverbindliche Interessenbekundung. Eine verbindliche Beauftragung erfolgt erst nach persönlicher Zuteilung durch Fahrerexpress.</p>
+                  {job.surcharge_text && (
+                    <p className="mt-2"><strong>Zuschläge:</strong> {job.surcharge_text}</p>
+                  )}
                 </div>
               </section>
             )}

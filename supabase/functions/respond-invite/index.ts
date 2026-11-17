@@ -7,6 +7,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.52.0";
 import { Resend } from "https://esm.sh/resend@4.0.0";
 import { TERMS_VERSION_DRIVER } from "../_shared/terms-version.ts";
 import { handleBinding } from "./binding.ts";
+import { buildInterestOfferPreview } from "../_shared/interest-offer-preview.ts";
 
 const escape = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -22,7 +23,7 @@ type ResponseStatus =
 
 const MESSAGES: Record<ResponseStatus, string> = {
   accepted:
-    "Ihr unverbindliches Interesse wurde übermittelt. Dies ist keine verbindliche Auftragsannahme. Ein persönliches Angebot mit Vergütung und vollständigen Bedingungen folgt erst nach einer Zuweisung durch Fahrerexpress.",
+    "Ihr unverbindliches Interesse wurde übermittelt. Dies ist keine verbindliche Auftragsannahme. Eine verbindliche Beauftragung erfolgt erst nach persönlicher Zuteilung durch Fahrerexpress.",
   declined: "Vielen Dank. Ihre Rückmeldung wurde übermittelt.",
   already_answered: "Ihre Rückmeldung wurde bereits erfasst.",
   expired: "Dieser Link ist abgelaufen.",
@@ -236,23 +237,12 @@ const handler = async (req: Request): Promise<Response> => {
       // Nur wenn noch pending und nicht abgelaufen → sinnvolle Daten zurück
       if (invite.status !== "pending") return jsonReply({ status: "already_answered" });
       if (new Date(invite.token_expires_at) < new Date()) return jsonReply({ status: "expired" });
+      const preview = buildInterestOfferPreview(jobRow);
       return jsonReply({
         status: "ready",
         terms_version: TERMS_VERSION_DRIVER,
-        job: jobRow
-          ? {
-              id: jobRow.id,
-              customer_name: jobRow.customer_name,
-              company: jobRow.company,
-              einsatzort: jobRow.einsatzort,
-              zeitraum: jobRow.zeitraum,
-              fahrzeugtyp: jobRow.fahrzeugtyp,
-              fuehrerscheinklasse: jobRow.fuehrerscheinklasse,
-              besonderheiten: jobRow.besonderheiten,
-              nachricht: jobRow.nachricht,
-              tarif_type: jobRow.tarif_type ?? null,
-            }
-          : null,
+        job: preview.job,
+        job_lines: preview.job_lines,
         driver: driverRow
           ? { vorname: driverRow.vorname, nachname: driverRow.nachname }
           : null,

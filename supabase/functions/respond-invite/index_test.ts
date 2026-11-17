@@ -50,6 +50,9 @@ Deno.test("respond-invite: POST with invalid action returns invalid", async () =
   assertEquals(res.status, 200);
   const data = await res.json();
   assertEquals(data.status, "invalid");
+  assertEquals(data.job, undefined);
+  assertEquals(data.job_lines, undefined);
+  assertEquals(data.driver, undefined);
 });
 
 Deno.test("respond-invite: POST with missing params returns invalid", async () => {
@@ -59,7 +62,7 @@ Deno.test("respond-invite: POST with missing params returns invalid", async () =
   assertEquals(data.status, "invalid");
 });
 
-Deno.test("respond-invite: POST with unknown token returns invalid", async () => {
+Deno.test("respond-invite: POST with unknown token returns invalid and no private data", async () => {
   const res = await postCall({
     action: "accept",
     token: "this-token-does-not-exist-xyz-123",
@@ -67,6 +70,11 @@ Deno.test("respond-invite: POST with unknown token returns invalid", async () =>
   assertEquals(res.status, 200);
   const data = await res.json();
   assertEquals(data.status, "invalid");
+  assertEquals(data.job, undefined);
+  assertEquals(data.job_lines, undefined);
+  assertEquals(data.driver, undefined);
+  assertEquals(data.company, undefined);
+  assertEquals(data.customer_name, undefined);
 });
 
 Deno.test("respond-invite: PUT method is rejected with 405", async () => {

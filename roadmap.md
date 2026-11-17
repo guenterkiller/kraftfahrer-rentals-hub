@@ -201,3 +201,9 @@
 - [x] Atomare Einladungssperre über vorhandenen eindeutigen HMAC-Token, Provider-Idempotenz, gleiche Links bei Wiederholung, Fehlerprotokolle, aktive Zuteilungs-/Ablauf-/Sperr-/Opt-out-Regeln; 190 sichere Server- und 167 Website-Tests bestanden
 - [x] Keine echten E-Mails, produktiven Bestandsänderungen, Deployments, Veröffentlichung oder IONOS-Uploads; Originalrenderer-Mail HTML/Desktop/Mobil geprüft
 - [ ] Produktive Aktivierung und authentifizierte Liveabnahme nicht erfolgt (ausdrücklich kein Deploy); GitHub-Synchronisation nach lokalem Commit durch Plattform noch nicht verifiziert
+
+## Interessen-Antwortseite: Vergütung und Vertraulichkeit (2026-11-17)
+- [x] Gleiche Nettovergütung wie in der ersten Angebotsmail tokengebunden anzeigen; Kundenidentität aus der Serverantwort entfernen
+- [x] Zuschlagstext nur bei tatsächlich gebuchten Wochenend-/Feiertagstagen; Unverbindlichkeit bis zur persönlichen Zuteilung konsistent formulieren
+- [x] Token-/Datenschutz-/Preis-/Zuschlagstests und echte Seitenvorschau; nur respond-invite bereitstellen, kein Mailversand und keine Live-Datenänderung
+- [x] Commit und IONOS-Hinweis berichten; Webseiten-Upload durch Betreiber erforderlich
