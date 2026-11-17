@@ -12,7 +12,10 @@ const job = (id = JOB_ID, extra: Record<string, unknown> = {}) => ({
   id, status: "sent", approved_at: "2026-11-16T08:00:00Z", created_at: new Date().toISOString(),
   fuehrerscheinklasse: "C+E", zeitraum: "01.06.2030 bis 30.06.2030",
   fahrzeugtyp: "TEST LKW CE", einsatzort: "TEST-ORT", nachricht: "TEST-AUFGABE",
-  tarif_netto: 1645, ...extra,
+  tarif_type: "lkw_ce_woche", tarif_netto: 1645, tarif_unit: "je Woche (5 Einsatztage, bis 9 Stunden je Einsatztag)",
+  tarif_needs_review: false, besonderheiten: null,
+  kosten_uebersicht: { netto: 1645, positionen: [{ label: "LKW-Fahrer CE – Wochenpreis: 1 Woche (Mo–Fr) × 1.645,00 €", betrag: 1645 }] },
+  ...extra,
 });
 
 type WorldOptions = {
@@ -33,6 +36,7 @@ function makeWorld(options: WorldOptions = {}) {
     assignments: options.assignments ?? [],
     invites: [...(options.invites ?? [])],
     logs: [...(options.logs ?? [])],
+    actions: [] as any[],
   };
   const mailAttempts: any[] = [];
   const providerSuccesses = new Map<string, string>();
@@ -78,6 +82,8 @@ function makeWorld(options: WorldOptions = {}) {
         state.invites.push({ ...value, created_at: new Date().toISOString() });
       } else if (this.table === "email_log") {
         state.logs.push({ ...value, id: `LOG-${state.logs.length + 1}`, created_at: new Date().toISOString() });
+      } else if (this.table === "admin_actions") {
+        state.actions.push(value);
       }
       return Promise.resolve({ data: null, error: null });
     }
@@ -234,4 +240,95 @@ Deno.test("höchstens fünf Auftragsmails je automatischem Abgleich", async () =
   assertEquals(result.invitesSent, 5);
   assertEquals(w.state.invites.length, 5);
   assertEquals(w.providerSuccesses.size, 5);
+});
+
+// ---- Vergütungsbox im ersten Auftragsangebot (Testbuchungen, Kundenpreis nur als Eingangswert) ----
+const ceWeeks = (extra: Record<string, unknown> = {}) => job(JOB_ID, {
+  zeitraum: "vom 03.06.2030 bis 11.07.2030",
+  kosten_uebersicht: { netto: 8883, positionen: [
+    { label: "LKW-Fahrer CE – Wochenpreis: 5 Wochen (Mo–Fr) × 1.645,00 €", betrag: 8225 },
+    { label: "2 Einsatztage (Mo–Fr) × 329,00 €", betrag: 658 },
+  ] }, ...extra,
+});
+
+Deno.test("CE-Woche 1.645 € Kundenpreis, 1 Woche: Box 1.316,00 € gesamt und je Woche, kein Kundenpreis", async () => {
+  const w = makeWorld();
+  const result = await w.dispatch();
+  assertEquals(result.invitesSent, 1);
+  const html = w.mailAttempts[0].payload.html;
+  assertStringIncludes(html, 'data-testid="driver-compensation-box"');
+  assertStringIncludes(html, "Ihre Vergütung für diesen Auftrag");
+  assertStringIncludes(html, "1.316,00 €</p>");
+  assertStringIncludes(html, "<strong>1.316,00 €</strong> netto je Woche");
+  assert(html.indexOf("driver-compensation-box") < html.indexOf("Einsatzdetails"), "Box steht oben");
+  for (const leak of ["1.645", "Provision", "provision", "Vermittlungsanteil", "Marge"]) assert(!html.includes(leak), leak);
+});
+
+Deno.test("CE-Woche 5 Wochen + 2 Resttage ohne Wochenende: 8.883 € Fahrleistung → 7.106,40 € netto, Provision genau einmal", async () => {
+  const w = makeWorld({ jobs: [ceWeeks()] });
+  await w.dispatch();
+  const html = w.mailAttempts[0].payload.html;
+  assertStringIncludes(html, "7.106,40 €");
+  assertStringIncludes(html, "5 Wochen (Mo–Fr): 6.580,00 € netto");
+  assertStringIncludes(html, "2 Einsatztage (Mo–Fr): 526,40 € netto");
+  assertStringIncludes(html, "Grundsatz: 1.316,00 € netto je Woche");
+  for (const leak of ["1.645", "329,00", "8.883", "5.684"]) assert(!html.includes(leak), leak);
+});
+
+Deno.test("Event 2 Tage × 489 €: 25 % → 733,50 € netto", async () => {
+  const w = makeWorld({ jobs: [job(JOB_ID, { tarif_type: "event", tarif_netto: 489, tarif_unit: "je Einsatztag",
+    kosten_uebersicht: { netto: 978, positionen: [{ label: "Event-Tourneepauschale: 2 Einsatztage × 489,00 €", betrag: 978 }] } })] });
+  await w.dispatch();
+  const html = w.mailAttempts[0].payload.html;
+  assertStringIncludes(html, "733,50 €</p>");
+  assertStringIncludes(html, "<strong>366,75 €</strong> netto je Einsatztag");
+  assert(!html.includes("489"));
+});
+
+Deno.test("fehlende Tarifart oder Kalkulation: keine Einladung, keine Mail, genaues Protokoll", async () => {
+  for (const [extra, field] of [
+    [{ tarif_type: null }, "job_requests.tarif_type"],
+    [{ kosten_uebersicht: null }, "job_requests.kosten_uebersicht"],
+    [{ tarif_needs_review: true }, "job_requests.tarif_needs_review"],
+  ] as const) {
+    const w = makeWorld({ jobs: [job(JOB_ID, extra)] });
+    const result = await w.dispatch();
+    assertEquals(result.invitesSent, 0);
+    assertEquals(w.state.invites.length, 0);
+    assertEquals(w.mailAttempts.length, 0);
+    assertEquals(result.blockedNoRemuneration[0].jobId, JOB_ID);
+    assertStringIncludes(w.state.actions[0].note, field);
+    assertEquals(w.state.actions[0].action, "driver_interest_offer_blocked");
+  }
+});
+
+Deno.test("Altbestand mit nicht gebuchten Sa/So-Positionen (Völklingen-Muster): gesperrt statt falscher Betrag", async () => {
+  const w = makeWorld({ jobs: [ceWeeks({ kosten_uebersicht: { netto: 9319.25, positionen: [
+    { label: "LKW-Fahrer CE – Wochenpreis: 5 Wochen (Mo–Fr) × 1.645,00 €", betrag: 8225 },
+    { label: "2 Einsatztage (Mo–Fr) × 329,00 €", betrag: 658 },
+    { label: "Sa, 08.06.2030: 349,00 € + 25 % Zuschlag", betrag: 436.25 },
+  ] } })] });
+  const result = await w.dispatch();
+  assertEquals(w.mailAttempts.length, 0);
+  assertStringIncludes(result.blockedNoRemuneration[0].reasons[0], "Wochenendarbeit");
+});
+
+Deno.test("gebuchte Wochenendarbeit: Zuschlag als Fahrer-Nettobetrag ohne Kundenbetrag", async () => {
+  const w = makeWorld({ jobs: [ceWeeks({ besonderheiten: "Wochenendarbeit", kosten_uebersicht: { netto: 9319.25, positionen: [
+    { label: "LKW-Fahrer CE – Wochenpreis: 5 Wochen (Mo–Fr) × 1.645,00 €", betrag: 8225 },
+    { label: "2 Einsatztage (Mo–Fr) × 329,00 €", betrag: 658 },
+    { label: "Sa, 08.06.2030: 349,00 € + 25 % Zuschlag", betrag: 436.25 },
+  ] } })] });
+  await w.dispatch();
+  const html = w.mailAttempts[0].payload.html;
+  assertStringIncludes(html, "7.455,40 €");
+  assertStringIncludes(html, "Sa, 08.06.2030: Tagessatz + 25 % Zuschlag: 349,00 € netto");
+  assert(!html.includes("436,25"));
+});
+
+Deno.test("Nachweis: vollständige Testmail aus dem echten Renderer", async () => {
+  const w = makeWorld({ jobs: [ceWeeks({ einsatzort: "TEST – Völklingen, 66333", fahrzeugtyp: "TEST – LKW-Fahrer CE", nachricht: "TESTDATEN – Werksverkehr" })] });
+  await w.dispatch();
+  const out = Deno.env.get("PROOF_OUT");
+  if (out) await Deno.writeTextFile(out, w.mailAttempts[0].payload.html);
 });

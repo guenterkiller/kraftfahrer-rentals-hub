@@ -5,6 +5,9 @@ import { selectOfferableJobs, MAX_INVITES } from "./driver-job-matching.ts";
 import { isDriverActive } from "./job-release.ts";
 import { MEDIATION_CONTRACT_VERSION } from "./driver-mediation-contract.ts";
 import { interpretSendResult } from "./mail-delivery.ts";
+import { commissionPctForTarif } from "./driver-offer-remuneration.ts";
+import { renderDriverCompensationBox } from "./short-offer.ts";
+import { altbestandWochenendeOhneBuchung, formatEuro } from "./kosten-uebersicht.ts";
 
 // deno-lint-ignore no-explicit-any
 type Any = any;
@@ -21,7 +24,73 @@ export type DriverJobOfferResult = {
   skippedNoMatch: number;
   skippedAssigned: number;
   failed: number;
+  blockedNoRemuneration: Array<{ jobId: string; reasons: string[] }>;
 };
+
+export type InterestRemuneration =
+  | { ok: true; driverNetCents: number; lines: [string, string][] }
+  | { ok: false; reasons: string[] };
+
+const EURO_IN_TEXT = /\s*[\d.]+,\d{2}\s?€/g;
+/** Positionsbezeichnung ohne Kundenbeträge (z. B. „× 1.645,00 €“, „349,00 € + 25 % Zuschlag“). */
+function driverPositionLabel(label: string): string {
+  return label.replace(/\s*×\s*[\d.]+,\d{2}\s?€/g, "").replace(/:?\s*[\d.]+,\d{2}\s?€\s*\+\s*/g, ": Tagessatz + ")
+    .replace(EURO_IN_TEXT, "").trim();
+}
+
+/**
+ * Fahrer-Nettovergütung für das erste (unverbindliche) Auftragsangebot.
+ * Vereinbarte Formel (Vermittlungsvertrag § 3 Abs. 2, bisherige Angebotsberechnung `remuneration()` in binding-offer.ts):
+ * Bezugsgröße = serverseitig gespeicherte Vorkalkulation der reinen Fahrleistung (job_requests.kosten_uebersicht.netto,
+ * nur Tarif-/Zuschlagspositionen, ohne An-/Abfahrt und Unterkunft); Provision genau einmal nach Tarifart
+ * (commissionPctForTarif: 20 %/25 %); Fahrer-Netto = Bezugsgröße − Provision. Kein Betrag ohne vollständige Daten.
+ */
+export function interestRemuneration(job: Any): InterestRemuneration {
+  const reasons: string[] = [];
+  const pct = commissionPctForTarif(job?.tarif_type);
+  if (pct === null) reasons.push(`job_requests.tarif_type=${JSON.stringify(job?.tarif_type ?? null)}: keine Provisionsregel (commissionPctForTarif) – Tarifart fehlt oder ist unbekannt`);
+  if (job?.tarif_needs_review) reasons.push("job_requests.tarif_needs_review=true: Tarifzuordnung noch zu prüfen");
+  const costs = job?.kosten_uebersicht;
+  const positions = Array.isArray(costs?.positionen) ? costs.positionen : [];
+  const validCosts = costs && typeof costs.netto === "number" && Number.isFinite(costs.netto) && costs.netto > 0 &&
+    positions.length > 0 && positions.every((p: Any) => typeof p?.label === "string" && typeof p?.betrag === "number" && Number.isFinite(p.betrag)) &&
+    Math.round(positions.reduce((sum: number, p: Any) => sum + p.betrag * 100, 0)) === Math.round(costs.netto * 100);
+  if (!validCosts) reasons.push("job_requests.kosten_uebersicht: keine vollständige, in sich stimmige gespeicherte Vorkalkulation der Fahrleistung (netto/positionen)");
+  else if (altbestandWochenendeOhneBuchung(costs, job?.besonderheiten)) {
+    reasons.push("job_requests.kosten_uebersicht enthält Sa/So-Positionen, obwohl „Wochenendarbeit“ nicht gebucht ist (Altbestand vor Korrektur) – Fahrleistung nicht eindeutig");
+  }
+  if (reasons.length > 0 || pct === null) return { ok: false, reasons };
+
+  const serviceCents = Math.round(costs.netto * 100);
+  const driverNetCents = serviceCents - Math.round(serviceCents * pct / 100);
+  const net = (cents: number) => formatEuro(cents / 100);
+  const billing = positions.map((p: Any) => {
+    const cents = Math.round(p.betrag * 100);
+    return `${driverPositionLabel(p.label)}: ${net(cents - Math.round(cents * pct / 100))} netto`;
+  });
+  const rate = Number(job?.tarif_netto);
+  if (Number.isFinite(rate) && rate > 0 && String(job?.tarif_unit ?? "").trim()) {
+    const rateCents = Math.round(rate * 100);
+    billing.push(`Grundsatz: ${net(rateCents - Math.round(rateCents * pct / 100))} netto ${String(job.tarif_unit).trim()}`);
+  }
+  const lines: [string, string][] = [
+    ["Verbleibende Nettovergütung (gesamter Auftrag, zzgl. provisionsfreier An-/Abfahrt)", net(driverNetCents)],
+    ["Vergütete Einheiten", billing.join(" · ")],
+  ];
+  // Einzelbetrag je Woche/Einsatztag nur, wenn genau eine Grundposition vorliegt (exakt teilbar, sonst nicht angezeigt).
+  const single = positions.length === 1 ? String(positions[0].label).match(/(\d+)\s+(Wochen?|Einsatztage?)\b/) : null;
+  if (single && Number.isFinite(rate) && rate > 0) {
+    lines.push(["Fahrerhonorar netto vor Provision", `${formatEuro(rate)} je ${single[2].startsWith("Woche") ? "Woche" : "Einsatztag"} × ${single[1]} = ${net(serviceCents)}`]);
+  }
+  lines.push(
+    ["Einsatzzeitraum", String(job?.zeitraum ?? "").replace(/\s*Tag\(e\)\s*$/i, "").trim()],
+    ["Führerscheinklasse", String(job?.fuehrerscheinklasse ?? "")],
+    ["Fahrzeugart", String(job?.fahrzeugtyp ?? "")],
+    ["Einsatzbeschreibung", String(job?.nachricht ?? "").slice(0, 300)],
+    ["Einsatzort / Treffpunkt", String(job?.einsatzort ?? "")],
+  );
+  return { ok: true, driverNetCents, lines };
+}
 
 const INVITE_TEMPLATE = "driver_job_invite_post_approval";
 
@@ -45,7 +114,7 @@ function escapeHtml(value: unknown): string {
   return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function inviteHtml(driver: Any, job: Any, token: string, siteBase: string): { subject: string; html: string } {
+function inviteHtml(driver: Any, job: Any, token: string, siteBase: string, compensationBox: string): { subject: string; html: string } {
   const acceptLink = `${siteBase}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
   const declineLink = `${siteBase}/fahrer-antwort-bestaetigen?action=decline&token=${encodeURIComponent(token)}`;
   const subject = `Auftragsangebot: ${job.fahrzeugtyp} – ${job.einsatzort}`;
@@ -55,6 +124,7 @@ function inviteHtml(driver: Any, job: Any, token: string, siteBase: string): { s
       <h2 style="color:#1f2937;margin:0 0 16px 0;">Unverbindliches Auftragsangebot</h2>
       <p style="color:#111827;font-size:15px;">Hallo ${escapeHtml(driver.vorname || "")},</p>
       <p style="color:#111827;font-size:15px;">für Sie liegt ein passendes Fahrergesuch vor. Ihre Rückmeldung ist eine unverbindliche Interessenbekundung.</p>
+      ${compensationBox}
       <h3 style="color:#1f2937;font-size:16px;margin:24px 0 8px 0;">Einsatzdetails</h3>
       <table role="presentation" cellpadding="0" cellspacing="0" style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;width:100%;">
         <tr><td style="padding:6px 0;color:#374151;font-size:14px;"><strong>Einsatzort:</strong> ${escapeHtml(job.einsatzort || "-")}</td></tr>
@@ -68,7 +138,7 @@ function inviteHtml(driver: Any, job: Any, token: string, siteBase: string): { s
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 8px 0;"><tr>
         <td style="padding:6px 0;"><a href="${acceptLink}" style="background:#10b981;color:#ffffff;padding:14px 24px;text-decoration:none;border-radius:6px;display:inline-block;font-weight:600;font-size:15px;min-width:240px;text-align:center;">Ich habe Interesse an diesem Auftrag</a></td>
       </tr><tr><td style="padding:6px 0;"><a href="${declineLink}" style="background:#6b7280;color:#ffffff;padding:14px 24px;text-decoration:none;border-radius:6px;display:inline-block;font-weight:600;font-size:15px;min-width:240px;text-align:center;">Ich habe kein Interesse</a></td></tr></table>
-      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:12px 16px;margin:20px 0;color:#92400e;font-size:14px;"><strong>Hinweis:</strong> Ihre Rückmeldung dient ausschließlich der Verfügbarkeitsprüfung und ist keine verbindliche Auftragsannahme. Ein persönliches verbindliches Angebot mit vereinbarter Vergütung erhalten Sie erst nach einer Zuteilung durch Fahrerexpress.</div>
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:12px 16px;margin:20px 0;color:#92400e;font-size:14px;"><strong>Hinweis:</strong> Ihre Rückmeldung dient ausschließlich der Verfügbarkeitsprüfung und ist keine verbindliche Auftragsannahme. Die angegebene Vergütung ergibt sich aus der Buchung des Auftraggebers. Verbindlich wird der Einsatz erst mit dem persönlichen Angebot nach einer Zuteilung durch Fahrerexpress.</div>
       <p style="color:#6b7280;font-size:13px;margin:16px 0;">Diese Links sind 48 Stunden gültig.</p>
       <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0;"/>
       <p style="color:#374151;font-size:13px;margin:0;"><strong>Rückfragen:</strong><br/>Telefon: +49 1577 1442285<br/>E-Mail: info@kraftfahrer-mieten.com</p>
@@ -102,7 +172,7 @@ export async function dispatchDriverJobOffers(input: {
   const empty: DriverJobOfferResult = {
     jobs: [], validJobs: [], matchingJobs: [], unclearJobs: [], invitesCreated: 0,
     invitesSent: 0, skippedDuplicate: 0, skippedExpired: 0, skippedNoMatch: 0,
-    skippedAssigned: 0, failed: 0,
+    skippedAssigned: 0, failed: 0, blockedNoRemuneration: [],
   };
   if (!isDriverActive(driver) || driver.email_opt_out === true || !driver.email) return empty;
   if (!input.tokenSecret) throw new Error("Kein serverseitiges Token-Geheimnis konfiguriert; kein Versand");
@@ -143,6 +213,19 @@ export async function dispatchDriverJobOffers(input: {
 
   for (const job of matchingJobs) {
     if (attempted >= MAX_INVITES) break;
+    // Ohne belegbare Fahrer-Nettovergütung: keine Einladung, kein Link, keine preislose Mail.
+    const pay = interestRemuneration(job);
+    const compensationBox = pay.ok ? renderDriverCompensationBox(pay.lines, true) : "";
+    if (!pay.ok || !compensationBox) {
+      const reasons = pay.ok ? ["Vergütungsbox nicht darstellbar"] : pay.reasons;
+      result.blockedNoRemuneration.push({ jobId: job.id, reasons });
+      const { error: blockLogError } = await supabase.from("admin_actions").insert({
+        action: "driver_interest_offer_blocked", job_id: job.id,
+        note: `Kein Auftragsangebot an Fahrer ${driver.id}: ${reasons.join(" | ")}`,
+      });
+      if (blockLogError) console.error("Sperrprotokoll fehlgeschlagen", blockLogError);
+      continue;
+    }
     const { data: existing, error: existingError } = await supabase.from("assignment_invites")
       .select("id, token, status, token_expires_at, responded_at")
       .eq("job_id", job.id).eq("driver_id", driver.id)
@@ -195,7 +278,7 @@ export async function dispatchDriverJobOffers(input: {
     }
     if (sentLog) continue;
 
-    const { subject, html } = inviteHtml(driver, job, invite.token, input.siteBase ?? "https://www.kraftfahrer-mieten.com");
+    const { subject, html } = inviteHtml(driver, job, invite.token, input.siteBase ?? "https://www.kraftfahrer-mieten.com", compensationBox);
     let delivery;
     try {
       const headers = new Headers(resend.headers ?? undefined);

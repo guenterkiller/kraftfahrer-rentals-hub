@@ -28,3 +28,4 @@
 - `src/lib/driverOfferRemuneration.ts` mirrors `_shared/driver-offer-remuneration.ts` (tested). Why: preview = stored v3.
 
 - Keep `.npmrc` + synced lock. Why: npm ci.
+- The first automatic interest offer (`dispatchDriverJobOffers`) shows the driver net via `interestRemuneration`: stored `kosten_uebersicht` driving-service positions minus tariff commission (`commissionPctForTarif`) once, rendered with the shared `renderDriverCompensationBox`; incomplete/unknown tariff, review flag or unbooked weekend positions block the invite and log `admin_actions.driver_interest_offer_blocked`. Why: no priceless or invented offer, no customer prices in driver mail.
