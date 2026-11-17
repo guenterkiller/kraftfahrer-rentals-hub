@@ -115,6 +115,8 @@ function escapeHtml(value: unknown): string {
 }
 
 function inviteHtml(driver: Any, job: Any, token: string, siteBase: string, compensationBox: string): { subject: string; html: string } {
+  // Anrede mit Vor- und Nachname aus den vorhandenen Fahrerdaten; fehlt der Nachname, bleibt es beim Vornamen.
+  const driverName = [driver.vorname, driver.nachname].map((part: unknown) => String(part ?? "").trim()).filter(Boolean).join(" ");
   const acceptLink = `${siteBase}/fahrer-antwort-bestaetigen?action=accept&token=${encodeURIComponent(token)}`;
   const declineLink = `${siteBase}/fahrer-antwort-bestaetigen?action=decline&token=${encodeURIComponent(token)}`;
   const subject = `Auftragsangebot: ${job.fahrzeugtyp} – ${job.einsatzort}`;
@@ -122,7 +124,7 @@ function inviteHtml(driver: Any, job: Any, token: string, siteBase: string, comp
   const html = `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f3f4f6;">
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;max-width:600px;margin:0 auto;background:#ffffff;padding:24px;">
       <h2 style="color:#1f2937;margin:0 0 16px 0;">Unverbindliches Auftragsangebot</h2>
-      <p style="color:#111827;font-size:15px;">Hallo ${escapeHtml(driver.vorname || "")},</p>
+      <p style="color:#111827;font-size:15px;">Hallo ${escapeHtml(driverName)},</p>
       <p style="color:#111827;font-size:15px;">für Sie liegt ein passendes Fahrergesuch vor. Ihre Rückmeldung ist eine unverbindliche Interessenbekundung.</p>
       ${compensationBox}
       <h3 style="color:#1f2937;font-size:16px;margin:24px 0 8px 0;">Einsatzdetails</h3>

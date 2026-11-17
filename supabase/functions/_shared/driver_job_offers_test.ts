@@ -159,6 +159,24 @@ Deno.test("nur freigegebener, passender, nicht abgelaufener und nicht zugeteilte
   assert(!html.toLowerCase().includes("provision"));
 });
 
+Deno.test("Anrede enthält Vor- und Nachname aus den Fahrerdaten", async () => {
+  const w = makeWorld({ driver: { ...driver, vorname: "Peter", nachname: "Drees" } });
+  const result = await w.dispatch();
+  assertEquals(result.invitesSent, 1);
+  const html = w.mailAttempts[0].payload.html;
+  assertStringIncludes(html, "Hallo Peter Drees,");
+  assert(!html.includes("Hallo Peter,"), "keine Anrede nur mit Vornamen");
+});
+
+Deno.test("Anrede ohne Nachname bleibt beim Vornamen, ohne Lücke oder Kommafehler", async () => {
+  const w = makeWorld({ driver: { ...driver, vorname: "Peter", nachname: null } });
+  const result = await w.dispatch();
+  assertEquals(result.invitesSent, 1);
+  const html = w.mailAttempts[0].payload.html;
+  assertStringIncludes(html, "Hallo Peter,");
+  assert(!html.includes("Hallo Peter ,"), "keine Leermarke vor dem Komma");
+});
+
 Deno.test("alter Erfassungszeitpunkt schließt einen noch gültigen Auftrag nicht aus", async () => {
   const w = makeWorld({ jobs: [job(JOB_ID, { created_at: "2025-01-01T08:00:00Z" })] });
   const result = await w.dispatch();
