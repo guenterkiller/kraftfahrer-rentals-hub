@@ -22,13 +22,14 @@ const text = (h: string) => h.replace(/<style[\s\S]*?<\/style>/g, '').replace(/<
 const INTERN = /provision|commission|vermittlungsanteil|fahrerhonorar|fahrersatz|nettovergütung|rate_value|\b20 %|\b25 % (?!netto|Zuschlag)/i;
 const LANG = /Haftung für mittelbare|Folgeschäden|entgangenen Gewinn|Arbeitnehmerüberlassung und stellt|Stornierung unter 24 Stunden|Ersatzgestellung/;
 const KUNDE = { company: 'TEST-Firma Muster GmbH', customer_name: 'TEST Erika Beispiel' };
+const FAHRTKOSTEN_TEXT = 'Die An- und Abfahrtskosten des Fahrers werden zusätzlich zum vereinbarten Einsatzpreis separat berechnet.';
+const UNTERKUNFTSHINWEIS = 'Hinweis zur Unterkunft: Reist der Fahrer von weiter entfernt an, kann eine geeignete Unterkunft wirtschaftlicher sein als die täglich anfallenden An- und Abfahrtskosten. Die Unterkunftsregelung richtet sich nach der vom Auftraggeber bei der Buchung gewählten Option.';
 
 // Testdaten je Tarif passend zum produktiven Datenfluss (fahrzeugtyp = Formularkategorie, nachricht = Kundenaufgabe).
 const JOBART: Record<string, [string, string]> = {
   fernfahrer: ['LKW CE (Sattelzug)', 'TEST – Fernverkehr mit Sattelzug, Übernachtung im LKW'],
   lkw_ce: ['LKW CE', 'TEST – Nahverkehr Auslieferung mit Sattelzug'],
   baumaschine: ['Baumaschinenführer', 'TEST – Bedienung Mobilbagger auf Baustelle'],
-  event: ['Spezialfahrzeuge – Showtruck-Fahrer / Eventfahrer', 'TEST – Showtruck auf Messe'],
 };
 const job = (tarif_type: string, o: Record<string, unknown> = {}) => ({ ...KUNDE, customer_phone: '+49 000 TEST', einsatzort: 'TEST Hafenstraße 12, Tor 3, 12345 Musterstadt', fahrzeugtyp: (JOBART[tarif_type] ?? JOBART.lkw_ce)[0], nachricht: (JOBART[tarif_type] ?? JOBART.lkw_ce)[1], tarif_type, kosten_uebersicht: { netto: 9999 }, ...o });
 const asg = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_value: 450, start_date: '2026-11-16T00:00:00Z', end_date: '2026-11-20T00:00:00Z', times_entered: null, ...o });
@@ -67,19 +68,13 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
   const bm = await kundenmail('1d', 'Eingangsbestätigung – Baumaschinenführer/Spezialfahrzeuge, Hotelbudget 75 €', 'baumaschine', 'Baumaschinenführer', false, { unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: 75 });
   assert(bm.t.includes('489,00 € netto je tatsächlichem Einsatztag') && bm.t.includes('75,00 €') && !bm.t.includes('90,00') && bm.t.includes('2.445,00 €') && bm.t.includes('464,55 € / 2.909,55 €'));
   const ue = await kundenmail('1e', 'Eingangsbestätigung – LKW-Überführung', 'ueberfuehrung', 'LKW-Überführung', false);
-  const ev = await kundenmail('1f', 'Eingangsbestätigung – Event-Tourneepauschale, Unterkunft durch Auftraggeber', 'baumaschine', 'Spezialfahrzeuge – Showtruck-Fahrer / Eventfahrer', false);
-  assert(ev.t.includes('489,00 € netto pro tatsächlichem Einsatztag') && ev.t.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge'), 'Event-Tarif in der Kundenbestätigung');
-  for (const m of [ce, cesa, wo, ff, ffwe, bm, ue, ev]) {
+  for (const m of [ce, cesa, wo, ff, ffwe, bm, ue]) {
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
     assert(m.t.includes(ANFRAGE_EINGANG_TEXT) && m.t.includes(ANFRAGE_NAECHSTER_SCHRITT) && !/(?<![Uu]n)verbindliche Anfrage/.test(m.t) && m.t.includes('Vermittlungsbedingungen'));
     assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Verfügbarkeitsprüfung/.test(m.t));
-    assert(m.t.length < (m === ff || m === ffwe ? 3500 : 2950), `zu lang: ${m.t.length}`);
+    assert(m.t.length < (m === ff || m === ffwe ? 3200 : 2800), `zu lang: ${m.t.length}`);
   }
-  // Unterkunftstext ist ausdrücklich ein Hinweis, keine verbindliche Buchungsbedingung.
-  const UNTERKUNFTSHINWEIS = 'Hinweis zur Unterkunft: Reist der Fahrer von weiter entfernt an, kann eine geeignete Unterkunft wirtschaftlicher sein als die täglich anfallenden An- und Abfahrtskosten. Die Unterkunftsregelung richtet sich nach der vom Auftraggeber bei der Buchung gewählten Option.';
-  for (const m of [ff, ffwe, bm, ev]) assert(m.t.includes(UNTERKUNFTSHINWEIS), `Unterkunftshinweis fehlt: ${m.nr}`);
-  for (const m of [ce, cesa, wo, ue]) assert(!m.t.includes('Hinweis zur Unterkunft'), `Unterkunftshinweis ohne Unterkunft: ${m.nr}`);
 });
 
 Deno.test('Kunden-Einsatzbestätigung: verbindliche Zuweisung, Fahrerdaten, Kundenpreis, keine internen Annahmen', () => {
@@ -92,8 +87,37 @@ Deno.test('Kunden-Einsatzbestätigung: verbindliche Zuweisung, Fahrerdaten, Kund
     assert(!/gilt die Zuteilung als bestätigt|ohne .*Widerspruch/.test(x), 'Schweigen als Bestätigung');
     assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Einsatzbereitschaft/.test(x), 'keine internen Fahrerinformationen');
     assert(!INTERN.test(x) && !LANG.test(x) && x.includes('TEST Max Mustermann') && x.includes(t === 'fernfahrer' ? '450,00 €' : '349,00 €'));
+    assert(x.includes(FAHRTKOSTEN_TEXT) && x.includes(UNTERKUNFTSHINWEIS), 'Fahrtkosten- und Unterkunftshinweis in HTML');
+    assert(m.text.includes(FAHRTKOSTEN_TEXT) && m.text.includes(UNTERKUNFTSHINWEIS), 'Fahrtkosten- und Unterkunftshinweis in Textversion');
+    assert(!x.includes('Bei der Buchung gewählte Unterkunftsoption:'), 'ohne gespeicherte Option keine erfundene Optionsauswahl');
     if (t === 'fernfahrer') assert(x.includes('vergünstigt 2.121,06 €'), 'Einsatzbestätigung Fernverkehr nennt Wochenpreis');
     assert(!x.includes('9.999'));
+  }
+});
+
+Deno.test('Fahrtkosten-/Unterkunftshinweis nur in der Zuweisungsmail; gespeicherte Option ohne erfundene Zusage', async () => {
+  const formular = await kundenmail('1d2', 'Eingangsbestätigung – gespeicherte Unterkunftsoption, ohne Zuweisungshinweise', 'baumaschine', 'Baumaschinenführer', false, { unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: 75 });
+  assert(!formular.t.includes(FAHRTKOSTEN_TEXT) && !formular.t.includes(UNTERKUNFTSHINWEIS), 'Formular-Buchungsbestätigung bleibt ohne die neuen Zuweisungstexte');
+  assert(formular.t.includes('Unterkunft: Unterkunft wird vom Fahrer organisiert.') && formular.t.includes('75,00 €'), 'bisherige Optionszeile der Formularmail bleibt erhalten');
+
+  const faelle = [
+    ['gestellt', 'Unterkunft wird vom Auftraggeber gestellt und bezahlt.'],
+    ['fahrer_organisiert', 'Unterkunft wird vom Fahrer organisiert. Der Auftraggeber übernimmt die Kosten bis zu einer vorher vereinbarten Obergrenze. Hotelbudget je erforderlicher Übernachtung (€ netto): 75,00 €'],
+    ['keine', 'Keine Übernachtung erforderlich.'],
+  ] as const;
+  for (const [option, erwartet] of faelle) {
+    const m = buildCustomerAssignmentNotice({ job: job('baumaschine', { unterkunft_option: option, unterkunft_obergrenze: option === 'fahrer_organisiert' ? 75 : null }), driverName: 'TEST Max Mustermann', driverPhone: '+49 000 FAHRER', zeitraum: '16.11.2026 – 20.11.2026', einsatzort: 'TEST-Ort 12345 Musterstadt' });
+    const x = text(m.html);
+    assert(x.includes(FAHRTKOSTEN_TEXT) && x.includes(UNTERKUNFTSHINWEIS), `${option}: Pflichthinweise fehlen`);
+    assert(x.includes(`Bei der Buchung gewählte Unterkunftsoption: ${erwartet}`), `${option}: gespeicherte Option nicht korrekt wiedergegeben`);
+    assert(m.text.includes(`Bei der Buchung gewählte Unterkunftsoption: ${erwartet}`), `${option}: Textversion weicht ab`);
+  }
+
+  for (const gespeicherteOption of [undefined, 'unbekannt']) {
+    const m = buildCustomerAssignmentNotice({ job: job('lkw_ce_woche', { unterkunft_option: gespeicherteOption }), driverName: 'TEST Max Mustermann', driverPhone: '+49 000 FAHRER', zeitraum: '16.11.2026 – 20.11.2026', einsatzort: 'TEST-Ort 12345 Musterstadt' });
+    const x = text(m.html);
+    assert(x.includes(FAHRTKOSTEN_TEXT) && x.includes(UNTERKUNFTSHINWEIS), 'allgemeiner Hinweis auch ohne konkrete Option');
+    assert(!x.includes('Bei der Buchung gewählte Unterkunftsoption:') && !x.includes('Unterkunft wird vom') && !x.includes('Keine Übernachtung erforderlich.'), 'fehlende/unbekannte Option erzeugt keine Unterkunftszusage');
   }
 });
 

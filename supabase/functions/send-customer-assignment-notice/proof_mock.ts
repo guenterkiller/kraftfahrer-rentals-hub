@@ -29,6 +29,8 @@ const assignment = () => ({
     einsatzort: '66333 Völklingen',
     tarif_type: 'lkw_ce_woche',
     tarif_needs_review: false,
+    unterkunft_option: 'fahrer_organisiert',
+    unterkunft_obergrenze: 75,
   },
   fahrer_profile: {
     vorname: 'TEST Arlind',
@@ -101,6 +103,10 @@ try {
   assert(text.includes('Status: Einsatzbestätigung durch Fahrerexpress – der Fahrer ist verbindlich zugewiesen.'));
   assert(text.includes('Fahrerexpress hat') && text.includes('vereinbarten Konditionen'));
   assert(text.includes('TEST Arlind Beispielfahrer') && text.includes('1.645,00 €'));
+  assert(text.includes('Die An- und Abfahrtskosten des Fahrers werden zusätzlich zum vereinbarten Einsatzpreis separat berechnet.'));
+  assert(text.includes('Hinweis zur Unterkunft: Reist der Fahrer von weiter entfernt an, kann eine geeignete Unterkunft wirtschaftlicher sein als die täglich anfallenden An- und Abfahrtskosten. Die Unterkunftsregelung richtet sich nach der vom Auftraggeber bei der Buchung gewählten Option.'));
+  assert(text.includes('Bei der Buchung gewählte Unterkunftsoption: Unterkunft wird vom Fahrer organisiert. Der Auftraggeber übernimmt die Kosten bis zu einer vorher vereinbarten Obergrenze. Hotelbudget je erforderlicher Übernachtung (€ netto): 75,00 €'));
+  assert(mail.text.includes('Hinweis zur Unterkunft:') && mail.text.includes('75,00 €'), 'Textversion enthält dieselben Angaben');
   assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Einsatzbereitschaft|Provision|Fahrerhonorar/.test(text));
 
   const snapshotRow = captured.db.find((d) => d.url.includes('customer_email_snapshots'))?.body;
@@ -130,7 +136,7 @@ try {
   assert(cancelled.status === 409 && cancelledResult.success === false, JSON.stringify(cancelledResult));
   assert(captured.resend.length === 1, 'stornierte Zuweisung: keine weitere Mail');
 
-  console.log('EINGANG: aktive Admin-Zuweisung, keine Fahrerannahme | AUSGANG: HTTP 200, 1 simulierte Kundenmail, Snapshot exakt');
+  console.log('EINGANG: aktive Admin-Zuweisung, Unterkunft Fahrer organisiert mit 75,00 € Budget | AUSGANG: HTTP 200, 1 simulierte Kundenmail mit Fahrtkosten-, Unterkunftshinweis und gespeicherter Option, Snapshot exakt');
   console.log('EINGANG: stornierte Zuweisung | AUSGANG: HTTP 409, keine weitere Mail');
   console.log('ERGEBNIS: PASS – Zuweisung löst Bestätigung aus; Fahrerannahme irrelevant; Storno gesperrt');
   Deno.exit(0);

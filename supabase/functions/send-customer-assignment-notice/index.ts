@@ -47,7 +47,7 @@ serve(async (req) => {
       .from("job_assignments")
       .select(`
         id, job_id, driver_id, status, start_date, end_date, times_entered,
-        job_requests:job_id ( id, status, customer_email, customer_name, company, einsatzort, tarif_type, tarif_needs_review ),
+        job_requests:job_id ( id, status, customer_email, customer_name, company, einsatzort, tarif_type, tarif_needs_review, unterkunft_option, unterkunft_obergrenze ),
         fahrer_profile:driver_id ( id, vorname, nachname, email, telefon )
       `)
       .eq("id", assignment_id)

@@ -214,8 +214,8 @@
 - [x] 173 Website-Regeltests sowie isolierte Desktop-/Mobil-Dialogprüfung: 1 Woche = 1.316,00 €, 22 Tage = 5.790,40 €, Provision einmal; keine Zuweisung/Mail/Live-Datenänderung
 - [ ] Reale Zuweisung 24.11.–23.12.2026 bleibt durch die unveränderte Serverregel „CE-Wochentarif mit Tagessatz über Samstag/Sonntag“ gesperrt; Aufhebung erfordert separate ausdrückliche Backend-Freigabe außerhalb dieses Auftrags
 
-## Kundenbestätigung: Unterkunft als Hinweis (2026-11-19)
-- [x] Unterkunftstext in der bestehenden Kundenbestätigungs-E-Mail ausdrücklich als „Hinweis zur Unterkunft:" gekennzeichnet, wörtlich nach Betreiberformulierung; die bei der Buchung gewählte Option bleibt danach genannt
-- [x] Nur die Kundenbestätigungs-E-Mail geändert; Tarife, Preise, Buchungsformular, Fahrerseite, Daten und übrige Mails unberührt
-- [x] 225 Servertests bestanden (neue Prüfung: Hinweiswortlaut in Fernverkehr-, Budget- und Eventvariante, zwei Längenwerte dem längeren Text angepasst), 174 Website-Tests bestanden; gerenderte Mailvorschau aller Varianten unter /mnt/documents/nachweis-unterkunftshinweis-2026-11-19/
-- [ ] Kein Versand, kein Deployment, kein IONOS-Upload; Wirksamkeit im Liveversand erfordert Einspielen von send-fahrer-anfrage-email nach Betreiberfreigabe
+## Zuweisungs-Einsatzbestätigung: Fahrtkosten und Unterkunftshinweis (2026-11-19)
+- [x] Versehentliche Änderung an der Formular-Buchungsbestätigung aus Commit 223654e8 einschließlich der nur dafür angehobenen Längenprüfwerte gezielt zurückgenommen; Datei wieder bytegleich mit dem Stand vor 223654e8
+- [x] Ausschließlich `send-customer-assignment-notice`: freigegebene Fahrtkosten- und Unterkunftstexte ergänzt; vorhandene `unterkunft_option`/`unterkunft_obergrenze` aus dem Bestell-Datensatz korrekt wiedergegeben, ohne Option keine erfundene Zusage
+- [x] 226 Server-Regressionstests bestanden, 0 fehlgeschlagen; gezielt geprüft: Text nur in der Zuweisungs-Einsatzbestätigung, nicht in der Formular-Buchungsbestätigung, alle drei Optionsfälle sowie fehlende/unbekannte Option; produktiver Handler mit Mock-Versand und vollständiger HTML-/Screenshot-Vorschau unter /mnt/documents/nachweis-einsatzbestaetigung-unterkunft-2026-11-19/
+- [x] Kein Versand, keine Live-Datenänderung, kein Deployment und kein IONOS-Upload; späteres Backend ausschließlich `send-customer-assignment-notice` nach Betreiberfreigabe
