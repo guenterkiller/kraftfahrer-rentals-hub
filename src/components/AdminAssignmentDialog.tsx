@@ -5,9 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { FunctionsHttpError } from "@supabase/supabase-js";
-import { agreementNote, agreementErrors } from "@/lib/offerReadiness";
+import { agreementNote, agreementErrors, concretePlace } from "@/lib/offerReadiness";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -15,6 +14,12 @@ import { loadAdminContact } from '@/lib/adminContact';
 import { commissionPctForTarif } from '@/lib/driverOfferCommission';
 import { buildDriverOfferView } from '@/lib/driverOfferRemuneration';
 import { sendAssignmentNotifications } from '@/lib/assignmentNotifications';
+import { formatEuro } from '@/lib/kostenUebersicht';
+import {
+  automaticPaidUnits,
+  calculateCeAssignmentRemuneration,
+  parseAssignmentPeriod,
+} from '@/lib/adminAssignmentCalculation';
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -38,8 +43,6 @@ export function AdminAssignmentDialog({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [paidCount, setPaidCount] = useState("");
-  const [payConfirmed, setPayConfirmed] = useState(false);
-  const [placeConfirmed, setPlaceConfirmed] = useState(false);
   const [note, setNote] = useState("");
   const [attachPdf, setAttachPdf] = useState(false);
   const [commissionPct, setCommissionPct] = useState<"20" | "25">("20");
@@ -65,8 +68,8 @@ export function AdminAssignmentDialog({
   useEffect(() => {
     if (open) {
       setPaidCount("");
-      setPayConfirmed(false);
-      setPlaceConfirmed(false);
+      setStartDate("");
+      setEndDate("");
       loadDrivers();
       loadJobData();
     }
@@ -127,6 +130,24 @@ export function AdminAssignmentDialog({
         setPhone(cleanValue(job.customer_phone) || "");
         setEmail(cleanValue(job.customer_email) || "");
         setEinsatzort(cleanValue(job.einsatzort) || "");
+
+        const period = parseAssignmentPeriod(job.zeitraum);
+        setStartDate(period.startDate);
+        setEndDate(period.endDate);
+
+        const presetByTarif: Record<string, { preset: string; type: "daily" | "weekly"; rate: string }> = {
+          lkw_ce: { preset: "daily_349", type: "daily", rate: "349" },
+          lkw_ce_woche: { preset: "weekly_1645", type: "weekly", rate: "1645" },
+          fernfahrer: { preset: "daily_450", type: "daily", rate: "450" },
+          baumaschine: { preset: "daily_489", type: "daily", rate: "489" },
+          event: { preset: "daily_489", type: "daily", rate: "489" },
+        };
+        const preset = presetByTarif[String(job.tarif_type ?? "")];
+        if (preset) {
+          setBillingPreset(preset.preset);
+          setRateType(preset.type);
+          setRateValue(preset.rate);
+        }
       }
     } catch (error) {
       console.error('Error loading job data:', error);
@@ -237,15 +258,45 @@ export function AdminAssignmentDialog({
     }
   };
 
+  const isCeWeeklyTarif = jobData?.tarif_type === "lkw_ce_woche";
+  const ceCalculation = isCeWeeklyTarif ? calculateCeAssignmentRemuneration(startDate, endDate) : null;
+  const effectiveRateType = isCeWeeklyTarif ? (ceCalculation?.rateType ?? "weekly") : rateType;
+  const effectiveRateValue = isCeWeeklyTarif ? (ceCalculation ? String(ceCalculation.rateValue) : "") : rateValue;
+  const automaticUnits = automaticPaidUnits(jobData?.tarif_type, effectiveRateType, startDate, endDate);
+  const effectivePaidUnits = effectiveRateType === "hourly" ? Number(paidCount) : (automaticUnits ?? Number.NaN);
+  const rateCents = Number.isFinite(Number(effectiveRateValue)) && Number(effectiveRateValue) > 0
+    ? Math.round(Number(effectiveRateValue) * 100)
+    : null;
+  const grossCents = rateCents !== null && Number.isFinite(effectivePaidUnits) && effectivePaidUnits > 0
+    ? Math.round(rateCents * effectivePaidUnits)
+    : null;
+  const selectedCommissionPct = Number(commissionPct);
+  const calculatedCommissionCents = grossCents !== null ? Math.round(grossCents * selectedCommissionPct / 100) : null;
+  const totalNetCents = grossCents !== null && calculatedCommissionCents !== null
+    ? grossCents - calculatedCommissionCents
+    : null;
+  const unitNetCents = rateCents !== null ? Math.round(rateCents * (100 - selectedCommissionPct) / 100) : null;
+
   const previewAssignment = {
-    rate_type: rateType, rate_value: Number(rateValue),
+    rate_type: effectiveRateType,
+    rate_value: Number(effectiveRateValue),
     start_date: startDate ? `${startDate}T00:00:00.000Z` : null,
     end_date: endDate ? `${endDate}T00:00:00.000Z` : null,
-    admin_note: agreementNote(note, { rate: Number(rateValue), unit: rateType, units: Number(paidCount), place: einsatzort.trim(), remunerationConfirmed: payConfirmed, placeConfirmed }),
+    admin_note: agreementNote(note, {
+      rate: Number(effectiveRateValue),
+      unit: effectiveRateType,
+      units: effectivePaidUnits,
+      place: einsatzort.trim(),
+      remunerationConfirmed: true,
+      placeConfirmed: concretePlace(einsatzort),
+    }),
   };
   const previewJob = { ...(jobData ?? {}), einsatzort };
   const offerView = buildDriverOfferView(previewJob, previewAssignment);
   const offerErrors = [...new Set([...agreementErrors(previewJob, previewAssignment), ...offerView.missing])];
+  const visibleOfferErrors = ceCalculation
+    ? offerErrors.filter((issue) => issue !== 'Vergütete Einheiten (Tage/Wochen/Stunden) nicht eindeutig bestimmbar')
+    : offerErrors;
   const functionError = async (error: any, fallback: string) => {
     if (error instanceof FunctionsHttpError) {
       const details = await error.context.json().catch(() => null);
@@ -259,10 +310,10 @@ export function AdminAssignmentDialog({
       toast({ title: "Versand gesperrt", description: offerErrors.join(" "), variant: "destructive" });
       return;
     }
-    if (!selectedDriverId || !rateValue) {
+    if (!selectedDriverId || !effectiveRateValue) {
       toast({
         title: "Eingabefehler",
-        description: "Bitte wählen Sie einen Fahrer und geben Sie einen Fahrer-Honorarsatz ein.",
+        description: "Bitte wählen Sie einen Fahrer und einen gültigen Einsatzzeitraum.",
         variant: "destructive"
       });
       return;
@@ -308,8 +359,8 @@ export function AdminAssignmentDialog({
         body: {
           jobId: jobId,
           driverId: selectedDriverId,
-          rateType: rateType,
-          rateValue: parseFloat(rateValue),
+          rateType: effectiveRateType,
+          rateValue: parseFloat(effectiveRateValue),
           commissionPct: Number(commissionPct),
           startDate: startIso,
           endDate: endIso,
@@ -419,6 +470,7 @@ export function AdminAssignmentDialog({
                 <span className="text-sm text-green-600">Gespeichert • zuletzt um {lastSaved}</span>
               )}
             </div>
+              <p className="mb-3 text-sm">Auftraggeber: <strong>{cName || contact || "Noch nicht erfasst"}</strong></p>
               
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
@@ -523,14 +575,11 @@ export function AdminAssignmentDialog({
                 <Input
                   id="einsatzort"
                   value={einsatzort}
-                  onChange={(e) => { setEinsatzort(e.target.value); setPlaceConfirmed(false); }}
+                  onChange={(e) => setEinsatzort(e.target.value)}
                   placeholder="Arbeitsort oder Treffpunkt eingeben"
                   className="mt-1"
                 />
-                <div className="flex items-start gap-2 mt-2">
-                  <Checkbox id="place-confirmed" checked={placeConfirmed} onCheckedChange={(v) => setPlaceConfirmed(v === true)} />
-                  <Label htmlFor="place-confirmed">Mit dem Auftraggeber geprüft und als tatsächlicher Einsatzort bestätigt (nicht ungeprüft die Firmenanschrift).</Label>
-                </div>
+                <p className="mt-1 text-xs text-muted-foreground">Gespeicherte Angabe übernommen. Bitte prüfen und bei Bedarf konkret mit Straße/Hausnummer oder Tor-/Ladepunkt ergänzen. Mit dem Zuweisen bestätigen Sie die angezeigte Einsatzanschrift.</p>
               </div>
               
               {!hasContactWay && (
@@ -594,6 +643,12 @@ export function AdminAssignmentDialog({
             )}
           </div>
 
+          {isCeWeeklyTarif ? (
+            <div className="rounded-md border border-border bg-muted/40 p-3 text-sm">
+              <p className="font-medium">CE-Vergütung automatisch aus Tarif und Einsatzdaten</p>
+              <p className="mt-1 text-xs text-muted-foreground">Volle Mo–Fr-Wochen und reguläre Resttage werden ohne manuelle Wochenangabe berechnet. Der Fahrer-Nettobetrag erscheint unten.</p>
+            </div>
+          ) : (
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Abrechnungseinheit (pro Stunde / Tag / Woche)</Label>
@@ -601,7 +656,6 @@ export function AdminAssignmentDialog({
                 value={billingPreset}
                 onValueChange={(value) => {
                   setBillingPreset(value);
-                  setPayConfirmed(false);
                   setPaidCount("");
                   switch (value) {
                     case "hourly_custom":
@@ -651,19 +705,20 @@ export function AdminAssignmentDialog({
             </div>
 
             <div>
-              <Label htmlFor="driver-rate">Fahrer-Honorarsatz netto vor Provision (€ {rateType === "daily" ? "je Einsatztag" : rateType === "weekly" ? "je Woche" : "je Stunde"})</Label>
+              <Label htmlFor="driver-rate">Vergütungsgrundlage netto vor Provision (€ {rateType === "daily" ? "je Einsatztag" : rateType === "weekly" ? "je Woche" : "je Stunde"})</Label>
               <Input
                 type="number"
                 value={rateValue}
-                onChange={(e) => { setRateValue(e.target.value); setPayConfirmed(false); }}
+                onChange={(e) => setRateValue(e.target.value)}
                 placeholder={rateType === "daily" ? "349.00" : rateType === "weekly" ? "1645.00" : "25.00"}
                 step="0.01"
                 min="0"
                 id="driver-rate"
               />
-              <p className="mt-1 text-xs text-muted-foreground">Frei änderbar. Der Wert der Auswahl ist nur ein Vorschlag – bitte den mit dem Fahrer vereinbarten Satz eintragen. Der Kundenpreis bleibt unverändert.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Der Fahrer-Nettobetrag nach einmaligem Provisionsabzug wird unten ausgewiesen.</p>
             </div>
           </div>
+          )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -701,19 +756,35 @@ export function AdminAssignmentDialog({
             </p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="paid-units">Tatsächlich vereinbarte vergütete {rateType === 'daily' ? 'Einsatztage' : rateType === 'weekly' ? 'Wochen' : 'Stunden'} *</Label>
-            <Input id="paid-units" type="number" min="0" step={rateType === 'hourly' ? '0.25' : '1'} value={paidCount} onChange={(e) => { setPaidCount(e.target.value); setPayConfirmed(false); }} />
-            <div className="flex items-start gap-2">
-              <Checkbox id="pay-confirmed" checked={payConfirmed} onCheckedChange={(v) => setPayConfirmed(v === true)} />
-              <Label htmlFor="pay-confirmed">Fahrerhonorar, Einheit und Anzahl sind ausdrücklich mit dem Fahrer vereinbart. Kalendertage sind nicht automatisch vergütete Tage.</Label>
+          {!isCeWeeklyTarif && rateType === "hourly" && (
+            <div className="space-y-2">
+              <Label htmlFor="paid-units">Vergütete Stunden *</Label>
+              <Input id="paid-units" type="number" min="0" step="0.25" value={paidCount} onChange={(e) => setPaidCount(e.target.value)} />
             </div>
-          </div>
-          <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-1" aria-live="polite" data-testid="driver-net-preview">
-            <p className="font-semibold">Vorschau Fahrerangebot</p>
-            {offerView.lines.filter(([label]) => /^(Vergütete Einheiten|Fahrerhonorar netto|Vermittlungsprovision|Verbleibende Nettovergütung)/.test(label)).map(([label, value]) => <p key={label}><span className="text-muted-foreground">{label}:</span> {value}</p>)}
-            {offerErrors.length > 0 && <div role="alert" className="text-destructive"><p className="font-semibold">Versand gesperrt – bitte ergänzen:</p><ul className="list-disc pl-5">{offerErrors.map((issue) => <li key={issue}>{issue}</li>)}</ul></div>}
-            <p className="text-xs text-muted-foreground">Bereits versendete oder angenommene Angebote bleiben unverändert. Eine Änderung danach erfordert eine bewusste neue Zuteilung mit neuem Angebot und erneuter Bestätigung durch den Fahrer.</p>
+          )}
+
+          <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-2" aria-live="polite" data-testid="driver-net-preview">
+            <p className="font-semibold">Fahrer-Nettovergütung nach einmaligem Provisionsabzug</p>
+            {ceCalculation ? (
+              <>
+                <p><span className="text-muted-foreground">Reguläre Mo–Fr-Einsatztage:</span> <strong data-testid="regular-days">{ceCalculation.regularDays}</strong></p>
+                <p><span className="text-muted-foreground">Fahrer-Netto je volle Mo–Fr-Woche:</span> <strong data-testid="weekly-net">{formatEuro(ceCalculation.weeklyNetCents / 100)}</strong></p>
+                <p><span className="text-muted-foreground">Fahrer-Netto je regulärem Mo–Fr-Einsatztag:</span> <strong>{formatEuro(ceCalculation.dailyNetCents / 100)}</strong></p>
+                <p className="text-xs text-muted-foreground">Berechnung: {ceCalculation.paidUnits} × {formatEuro(ceCalculation.rateValue)} vor Provision − {selectedCommissionPct} % = {formatEuro(ceCalculation.totalNetCents / 100)}</p>
+                <p className="text-base"><span className="text-muted-foreground">Gesamtes Fahrerhonorar netto:</span> <strong data-testid="total-net">{formatEuro(ceCalculation.totalNetCents / 100)}</strong></p>
+              </>
+            ) : totalNetCents !== null && unitNetCents !== null ? (
+              <>
+                <p><span className="text-muted-foreground">Vergütete Einheiten:</span> {effectivePaidUnits} {effectiveRateType === "daily" ? "Einsatztage" : effectiveRateType === "weekly" ? "Wochen" : "Stunden"}</p>
+                <p><span className="text-muted-foreground">Fahrer-Netto je Einheit:</span> {formatEuro(unitNetCents / 100)}</p>
+                <p className="text-base"><span className="text-muted-foreground">Gesamtes Fahrerhonorar netto:</span> <strong data-testid="total-net">{formatEuro(totalNetCents / 100)}</strong></p>
+              </>
+            ) : (
+              <p className="text-muted-foreground">Bitte Fahrer, Tarif und gültigen Einsatzzeitraum auswählen.</p>
+            )}
+            <p className="text-xs text-muted-foreground">Ohne zusätzliche gesondert vereinbarte Zuschläge. Mit dem Zuweisen bestätigen Sie die ausgewiesene Vergütungsgrundlage, Einheit und Anzahl.</p>
+            {visibleOfferErrors.length > 0 && <div role="alert" className="text-destructive"><p className="font-semibold">Bestehende Prüfung sperrt die Zuweisung:</p><ul className="list-disc pl-5">{visibleOfferErrors.map((issue) => <li key={issue}>{issue}</li>)}</ul></div>}
+            <p className="text-xs text-muted-foreground">Bereits versendete oder angenommene Angebote bleiben unverändert.</p>
           </div>
 
           <div>

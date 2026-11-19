@@ -207,3 +207,9 @@
 - [x] Zuschlagstext nur bei tatsächlich gebuchten Wochenend-/Feiertagstagen; Unverbindlichkeit bis zur persönlichen Zuteilung konsistent formulieren
 - [x] Token-/Datenschutz-/Preis-/Zuschlagstests und echte Seitenvorschau; nur respond-invite bereitstellen, kein Mailversand und keine Live-Datenänderung
 - [x] Commit und IONOS-Hinweis berichten; Webseiten-Upload durch Betreiber erforderlich
+
+## Admin-Zuweisungsdialog: CE-Nettovergütung (2026-11-19)
+- [x] Bestehende Auftragsdaten und Zeitraum übernehmen; Einsatzanschrift korrigierbar und Kundenname nur im Admin-Dialog
+- [x] Beide Bestätigungs-Checkboxen und manuelle CE-Wochenanzahl entfernt; reguläre Mo–Fr-Tage sowie Wochen-/Tages-Netto und Gesamtbetrag automatisch berechnet
+- [x] 173 Website-Regeltests sowie isolierte Desktop-/Mobil-Dialogprüfung: 1 Woche = 1.316,00 €, 22 Tage = 5.790,40 €, Provision einmal; keine Zuweisung/Mail/Live-Datenänderung
+- [ ] Reale Zuweisung 24.11.–23.12.2026 bleibt durch die unveränderte Serverregel „CE-Wochentarif mit Tagessatz über Samstag/Sonntag“ gesperrt; Aufhebung erfordert separate ausdrückliche Backend-Freigabe außerhalb dieses Auftrags
