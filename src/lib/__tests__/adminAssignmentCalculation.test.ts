@@ -79,8 +79,14 @@ describe("CE-Honorar im vorhandenen Zuweisungsdialog", () => {
     });
   });
 
-  it("belegt die unveränderte Serversperre für 22 CE-Tagessatz-Tage über Wochenenden", () => {
+  it("22 CE-Mo–Fr-Tage über Wochenenden sind freigebbar (329 € je Tag, Wochenenden unbezahlt)", () => {
     const view = buildDriverOfferView(job, assignmentFor("2026-11-24", "2026-12-23"));
+    expect(view.missing).toEqual([]);
+    expect(view.mode).toBe("binding");
+  });
+
+  it("gebuchte Wochenendarbeit sperrt weiterhin", () => {
+    const view = buildDriverOfferView({ ...job, besonderheiten: "Wochenendarbeit" }, assignmentFor("2026-11-24", "2026-12-23"));
     expect(view.mode).toBe("interest");
     expect(view.missing.length).toBeGreaterThan(0);
   });

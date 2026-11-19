@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { FunctionsHttpError } from "@supabase/supabase-js";
-import { agreementNote, agreementErrors, concretePlace } from "@/lib/offerReadiness";
+import { agreementNote, agreementErrors, resolvedPlace } from "@/lib/offerReadiness";
 import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -277,6 +277,11 @@ export function AdminAssignmentDialog({
     : null;
   const unitNetCents = rateCents !== null ? Math.round(rateCents * (100 - selectedCommissionPct) / 100) : null;
 
+  const previewJob = {
+    ...(jobData ?? {}), einsatzort, company: cName, customer_name: contact,
+    customer_street: street, customer_house_number: house, customer_postal_code: postal, customer_city: city,
+  };
+  const assignmentPlace = resolvedPlace(previewJob, { admin_note: note });
   const previewAssignment = {
     rate_type: effectiveRateType,
     rate_value: Number(effectiveRateValue),
@@ -286,12 +291,11 @@ export function AdminAssignmentDialog({
       rate: Number(effectiveRateValue),
       unit: effectiveRateType,
       units: effectivePaidUnits,
-      place: einsatzort.trim(),
+      place: assignmentPlace?.place ?? "",
       remunerationConfirmed: true,
-      placeConfirmed: concretePlace(einsatzort),
+      placeConfirmed: assignmentPlace !== null,
     }),
   };
-  const previewJob = { ...(jobData ?? {}), einsatzort };
   const offerView = buildDriverOfferView(previewJob, previewAssignment);
   const offerErrors = [...new Set([...agreementErrors(previewJob, previewAssignment), ...offerView.missing])];
   const visibleOfferErrors = ceCalculation
@@ -571,7 +575,7 @@ export function AdminAssignmentDialog({
               </div>
               
               <div>
-                <Label htmlFor="einsatzort" className="text-sm">Tatsächliche Einsatzanschrift / Treffpunkt *</Label>
+                <Label htmlFor="einsatzort" className="text-sm">Tatsächliche Einsatzanschrift / Treffpunkt</Label>
                 <Input
                   id="einsatzort"
                   value={einsatzort}
@@ -579,7 +583,13 @@ export function AdminAssignmentDialog({
                   placeholder="Arbeitsort oder Treffpunkt eingeben"
                   className="mt-1"
                 />
-                <p className="mt-1 text-xs text-muted-foreground">Gespeicherte Angabe übernommen. Bitte prüfen und bei Bedarf konkret mit Straße/Hausnummer oder Tor-/Ladepunkt ergänzen. Mit dem Zuweisen bestätigen Sie die angezeigte Einsatzanschrift.</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Einsatz-/Treffpunkt für die Zuweisung:{" "}
+                  <strong data-testid="assignment-place">{assignmentPlace ? assignmentPlace.place : "nicht bestimmbar – vollständige Auftraggeberanschrift fehlt"}</strong>
+                  {assignmentPlace?.source === "customer" && " (vollständige Auftraggeberanschrift)"}
+                  {assignmentPlace?.source === "note" && " (abweichender Treffpunkt aus der Notiz)"}
+                  . Abweichenden Treffpunkt mit Straße/Hausnummer oder Tor/Ladepunkt und Ort bitte in die Notiz eintragen.
+                </p>
               </div>
               
               {!hasContactWay && (

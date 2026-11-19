@@ -91,11 +91,13 @@ export function createOfferSnapshot(job: OfferData, assignment: OfferData): Offe
   const view = buildDriverOfferView(copy.job, copy.assignment);
   const base = buildCompleteOfferLines(copy.job, copy.assignment).filter(([l]) =>
     !/^(Fahrleistung:|Nettoauftragswert|Gesamtwert Fahrerdienstleistung|Agenturprovision|Vermittlungsanteil|Nettovergütung des|Verbleibende Fahrervergütung)/.test(l));
-  if (readAgreement(copy.assignment)?.placeConfirmed === true) {
+  const agreedPlace = readAgreement(copy.assignment);
+  if (agreedPlace?.placeConfirmed === true) {
+    const place = String(agreedPlace.place || copy.job.einsatzort).trim();
     const placeIndex = base.findIndex(([label]) => label.startsWith('Einsatzort / Treffpunkt'));
-    if (placeIndex >= 0) base[placeIndex] = ['Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)', String(copy.job.einsatzort).trim()];
+    if (placeIndex >= 0) base[placeIndex] = ['Einsatzort / Treffpunkt (vom Auftraggeber bestätigt)', place];
     const addressIndex = base.findIndex(([label]) => label === 'Einsatzanschrift');
-    if (addressIndex >= 0) base[addressIndex] = ['Einsatzanschrift / Treffpunkt', String(copy.job.einsatzort).trim()];
+    if (addressIndex >= 0) base[addressIndex] = ['Einsatzanschrift / Treffpunkt', place];
   }
   copy.job_lines = [...base, ...view.lines];
   copy.binding_allowed = view.mode === 'binding';

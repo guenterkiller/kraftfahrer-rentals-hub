@@ -50,6 +50,27 @@ export function hasWeekend(assignment: Data): boolean {
   return false;
 }
 
+/** CE-Wochenpreis-Tagesanteil (1.645 € / 5) vor Provision. */
+export const CE_WEEK_DAY_RATE = 329;
+
+/**
+ * CE-Wochenbuchung über mehrere Wochen mit Tagesanteil 329 €: Anzahl der Mo–Fr-Einsatztage, wenn eindeutig.
+ * null (Sperre) bei anderem Satz, Beginn/Ende am Wochenende, Feiertag Mo–Fr im Zeitraum oder gebuchter Wochenend-/Feiertagsarbeit.
+ */
+export function ceWeekdaysAcrossWeekends(job: Data, assignment: Data): number | null {
+  if (job?.tarif_type !== 'lkw_ce_woche' || assignment?.rate_type !== 'daily' || Number(assignment?.rate_value) !== CE_WEEK_DAY_RATE) return null;
+  const s = day(assignment?.start_date), e = day(assignment?.end_date);
+  if (!s || !e || Date.parse(e) < Date.parse(s)) return null;
+  const wd = (d: string) => new Date(`${d}T00:00:00Z`).getUTCDay();
+  if ([0, 6].includes(wd(s)) || [0, 6].includes(wd(e))) return null;
+  const booked = (v: unknown) => Array.isArray(v) && v.length > 0;
+  if (booked(job?.weekend_days) || booked(job?.holiday_days) || /wochenend|samstag|sonntag|feiertag/i.test(String(job?.besonderheiten ?? ''))) return null;
+  if (listSurchargeDays(s, e).some((d: any) => { const w = wd(d.date); return w >= 1 && w <= 5; })) return null;
+  let n = 0;
+  for (let t = Date.parse(s); t <= Date.parse(e); t += 86400000) { const w = new Date(t).getUTCDay(); if (w >= 1 && w <= 5) n++; }
+  return n > 0 ? n : null;
+}
+
 export function paidUnits(job: Data, assignment: Data): { units: number; label: string; unit: string } | null {
   const days = periodDays(assignment);
   if (!days) return null;
@@ -58,7 +79,12 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
     if (!Number.isFinite(agreed.units) || agreed.units <= 0) return null;
     if (assignment.rate_type === 'daily') {
       if (!Number.isInteger(agreed.units) || agreed.units > days) return null;
-      if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
+      if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) {
+        const weekdays = ceWeekdaysAcrossWeekends(job, assignment);
+        return weekdays !== null && weekdays === agreed.units
+          ? { units: weekdays, label: 'vereinbarte vergütete Einsatztage (Montag–Freitag; dazwischenliegende Wochenenden nicht gebucht und nicht vergütet)', unit: 'Einsatztag' }
+          : null;
+      }
       return { units: agreed.units, label: 'vereinbarte vergütete Einsatztage', unit: 'Einsatztag' };
     }
     if (assignment.rate_type === 'hourly') return { units: agreed.units, label: 'vereinbarte vergütete Stunden', unit: 'Stunde' };

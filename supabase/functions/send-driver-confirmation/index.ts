@@ -60,7 +60,7 @@ serve(async (req) => {
           id, status, customer_name, company, customer_phone, customer_email,
           einsatzort, fahrzeugtyp, besonderheiten, nachricht, fuehrerscheinklasse, maschinenbedienung,
           zeitraum, tarif_type, tarif_label, tarif_netto, tarif_unit, tarif_mehrstunde_netto,
-          tarif_needs_review, kosten_uebersicht, unterkunft_option, unterkunft_obergrenze,
+          tarif_needs_review, kosten_uebersicht, unterkunft_option, unterkunft_obergrenze, weekend_days, holiday_days,
           customer_street, customer_house_number, customer_postal_code, customer_city
         ),
         fahrer_profile:driver_id (

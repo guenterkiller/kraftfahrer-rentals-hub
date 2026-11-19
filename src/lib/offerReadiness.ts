@@ -23,6 +23,34 @@ export function concretePlace(value: unknown): boolean {
     && !/nicht (erfasst|bestätigt|bekannt)|unbestätigt|nachzutragen|nach (absprache|vereinbarung)|wird .*bekannt|siehe |^[-—–]+$|bitte wählen|noch (offen|zu klären)/i.test(place);
 }
 
+/** Freitext der Notiz ohne die Vereinbarungszeile. */
+export function noteText(assignment: Data): string {
+  const lines = String(assignment?.admin_note ?? '').split('\n');
+  return (lines[0].startsWith(PREFIX) ? lines.slice(1) : lines).join('\n').trim();
+}
+
+/** Vollständige gespeicherte Auftraggeberanschrift (Straße, Hausnummer, PLZ, Ort) oder null; nie ergänzt/erfunden. */
+export function customerAddress(job: Data): string | null {
+  const v = (k: string) => String(job?.[k] ?? '').trim();
+  const street = v('customer_street'), house = v('customer_house_number'), postal = v('customer_postal_code'), city = v('customer_city');
+  if (!street || !house || !/^\d{5}$/.test(postal) || !city) return null;
+  const address = [v('company'), v('customer_name'), `${street} ${house}`, `${postal} ${city}`].filter(Boolean).join(', ');
+  return concretePlace(address) ? address : null;
+}
+
+/**
+ * Einsatz-/Treffpunkt für die Zuweisung: konkreter abweichender Treffpunkt aus der Notiz hat Vorrang,
+ * sonst konkret gespeicherter Einsatzort, sonst die vollständige Auftraggeberanschrift. Fehlt alles: null (Sperre).
+ */
+export function resolvedPlace(job: Data, assignment: Data): { place: string; source: 'note' | 'einsatzort' | 'customer' } | null {
+  const note = noteText(assignment);
+  if (concretePlace(note)) return { place: note, source: 'note' };
+  const stored = String(job?.einsatzort ?? '').trim();
+  if (concretePlace(stored)) return { place: stored, source: 'einsatzort' };
+  const address = customerAddress(job);
+  return address ? { place: address, source: 'customer' } : null;
+}
+
 export function agreementErrors(job: Data, assignment: Data): string[] {
   const a = readAgreement(assignment);
   const errors: string[] = [];
@@ -34,8 +62,9 @@ export function agreementErrors(job: Data, assignment: Data): string[] {
     errors.push('Fahrerhonorar und Abrechnungseinheit ausdrücklich als vereinbart bestätigen.');
   if (!a || !Number.isFinite(a.units) || a.units <= 0 || (assignment.rate_type !== 'hourly' && !Number.isInteger(a.units)))
     errors.push('Anzahl der tatsächlich vereinbarten vergüteten Einheiten ergänzen.');
-  if (!concretePlace(job.einsatzort)) errors.push('Konkrete Einsatzanschrift oder eindeutig bezeichneten Treffpunkt ergänzen (Straße/Hausnummer oder Tor/Ladepunkt und Ort).');
-  if (!a || a.placeConfirmed !== true || a.place !== String(job.einsatzort ?? '').trim())
-    errors.push('Tatsächlichen Einsatzort mit dem Auftraggeber prüfen und ausdrücklich bestätigen; Firmenanschrift nicht ungeprüft übernehmen.');
+  const place = resolvedPlace(job, assignment);
+  if (!place) errors.push('Konkrete Einsatzanschrift oder eindeutig bezeichneten Treffpunkt ergänzen (vollständige Auftraggeberanschrift fehlt; abweichenden Treffpunkt mit Straße/Hausnummer oder Tor/Ladepunkt und Ort in die Notiz eintragen).');
+  else if (!a || a.placeConfirmed !== true || a.place !== place.place)
+    errors.push('Einsatz-/Treffpunkt der Zuweisung stimmt nicht mit der gespeicherten Anschrift bzw. dem Notiz-Treffpunkt überein.');
   return errors;
 }

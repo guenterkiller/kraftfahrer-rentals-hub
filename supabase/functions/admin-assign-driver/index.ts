@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
     // Check if job exists
     const { data: job, error: jobError } = await supabase
       .from('job_requests')
-      .select('id, status, tarif_type, tarif_needs_review, einsatzort')
+      .select('id, status, tarif_type, tarif_needs_review, einsatzort, company, customer_name, customer_street, customer_house_number, customer_postal_code, customer_city, besonderheiten, weekend_days, holiday_days')
       .eq('id', jobId)
       .single();
     
