@@ -204,8 +204,9 @@
 
 ## Vereinfachte Fahrerzuweisung (2026-11-19)
 - [x] Dialog auf Fahrer, Nettohonorar, Beginn und Ende reduzieren; reguläre Mo–Fr-Einheiten automatisch aus bestehenden Buchungsdaten berechnen
-- [x] Keine Pflichtzahl „0“, keine Zusatz-Checkbox; vorhandene Vergütungs-/Ortsevidenz nutzen, keine Tarife erfinden und keine doppelte Provision
-- [x] Regel-, Sicherheits- und UI-Tests ohne echte Zuweisung, Mail oder Auftragsänderung bestanden; admin-assign-driver, send-driver-confirmation und respond-invite bereitgestellt; IONOS-Hinweis berichten
+- [x] Keine Pflichtzahl „0“, keine Zusatz-Checkbox; volle CE-Woche 1.645 € → 1.316 € netto, Resttage ausschließlich vorhandener Wochenpreis / 5, keine doppelte Provision
+- [x] Verbindliche Scope-Begrenzung: zusätzliche Hilfsmodule und Angebots-/Backendänderungen zurückgenommen; nur Dialog und eng begrenzte vorhandene CE-Resttagberechnung geändert, übrige Sicherheits- und Versandlogik unverändert
+- [x] Regel-, Bestands- und UI-Tests ohne echte Zuweisung, Mail oder Auftragsänderung bestanden; IONOS-Hinweis berichten
 
 ## Interessen-Antwortseite: Vergütung und Vertraulichkeit (2026-11-17)
 - [x] Gleiche Nettovergütung wie in der ersten Angebotsmail tokengebunden anzeigen; Kundenidentität aus der Serverantwort entfernen
