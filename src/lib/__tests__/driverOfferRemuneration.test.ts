@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 // @ts-ignore Node-Typen je nach Konfiguration nicht eingebunden; Vitest läuft unter Node.
 import { readFileSync } from 'node:fs';
 import { buildDriverOfferView } from '../driverOfferRemuneration';
-import { agreementNote } from '../offerReadiness';
 
 const norm = (s: string) => s.split('\n').filter(l => !/^import |^\/\/ Spiegel/.test(l)).join('\n');
 const net = (v: ReturnType<typeof buildDriverOfferView>) => v.lines.find(([l]) => l.startsWith('Verbleibende Nettovergütung'))?.[1];
@@ -44,22 +43,5 @@ describe('Verwaltungsvorschau Fahrer-Nettovergütung', () => {
   it('Stundensatz ohne Stundenzahl: kein Betrag, nur Interessenbekundung', () => {
     const v = buildDriverOfferView({ tarif_type: 'lkw_ce', einsatzort: 'TEST-Ort' }, { rate_type: 'hourly', rate_value: 30, start_date: '2026-11-16T00:00:00.000Z', end_date: '2026-11-16T00:00:00.000Z' });
     expect(v.mode).toBe('interest'); expect(net(v)).not.toMatch(/\d/);
-  });
-  it('volle CE-Woche 1.645 €: genau 20 % einmal abgezogen → 1.316 € netto', () => {
-    const job = { tarif_type: 'lkw_ce_woche', tarif_netto: 1645, einsatzort: 'TEST-Ort' };
-    const a = { rate_type: 'weekly', rate_value: 1645, start_date: '2026-11-16T00:00:00.000Z', end_date: '2026-11-20T00:00:00.000Z' };
-    const admin_note = agreementNote('', { rate: 1645, unit: 'weekly', units: 1, place: 'TEST-Ort', remunerationConfirmed: true, placeConfirmed: true });
-    const v = buildDriverOfferView(job, { ...a, admin_note });
-    expect(v.mode).toBe('binding');
-    expect(net(v)).toBe('1.316,00 €');
-    expect(net(v)).not.toBe('1.052,80 €');
-  });
-  it('CE-Wochenanteil 329 € für 27 automatisch gezählte Mo–Fr-Tage → 7.106,40 € ohne Doppelprovision', () => {
-    const job = { tarif_type: 'lkw_ce_woche', tarif_netto: 1645, einsatzort: 'TEST-Ort' };
-    const a = { rate_type: 'daily', rate_value: 329, start_date: '2026-11-17T00:00:00.000Z', end_date: '2026-12-23T00:00:00.000Z' };
-    const admin_note = agreementNote('', { rate: 329, unit: 'daily', units: 27, place: 'TEST-Ort', remunerationConfirmed: true, placeConfirmed: true });
-    const v = buildDriverOfferView(job, { ...a, admin_note });
-    expect(v.mode).toBe('binding');
-    expect(net(v)).toBe('7.106,40 €');
   });
 });

@@ -59,10 +59,7 @@ export function paidUnits(job: Data, assignment: Data): { units: number; label: 
     if (!Number.isFinite(agreed.units) || agreed.units <= 0) return null;
     if (assignment.rate_type === 'daily') {
       if (!Number.isInteger(agreed.units) || agreed.units > days) return null;
-      // Einzige Ausnahme: vorhandener CE-Wochenpreis / 5 für ausdrücklich gezählte Mo–Fr-Resttage.
-      // Andere Tagessätze über einem Zeitraum mit Wochenende bleiben wie bisher gesperrt.
-      const ceRestRate = Number(job?.tarif_netto) / 5;
-      if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment) && Number(assignment.rate_value) !== ceRestRate) return null;
+      if (job?.tarif_type === 'lkw_ce_woche' && hasWeekend(assignment)) return null;
       return { units: agreed.units, label: 'vereinbarte vergütete Einsatztage', unit: 'Einsatztag' };
     }
     if (assignment.rate_type === 'hourly') return { units: agreed.units, label: 'vereinbarte vergütete Stunden', unit: 'Stunde' };
