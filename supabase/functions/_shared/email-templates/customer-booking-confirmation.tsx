@@ -26,6 +26,14 @@ import {
 export const FERNVERKEHR_UEBERNACHTUNG =
   'Fernverkehr: tägliche und reduzierte wöchentliche Ruhezeiten im Führerhaus mit geeigneter Schlafmöglichkeit; die regelmäßige wöchentliche Ruhezeit (mind. 45 Std.) darf nicht im Fahrzeug verbracht werden – eine dafür erforderliche Unterkunft oder Heimfahrt wird vorab mit Ihnen abgestimmt. Es werden keine Hotelkosten automatisch berechnet.';
 
+/**
+ * Hinweis zur Unterkunft in der Kundenbestätigung.
+ * Ausdrücklich ein wirtschaftlicher Hinweis, keine verbindliche Buchungsbedingung;
+ * die Regelung folgt der vom Auftraggeber bei der Buchung gewählten Option.
+ */
+export const UNTERKUNFT_HINWEIS_TEXT =
+  'Reist der Fahrer von weiter entfernt an, kann eine geeignete Unterkunft wirtschaftlicher sein als die täglich anfallenden An- und Abfahrtskosten. Die Unterkunftsregelung richtet sich nach der vom Auftraggeber bei der Buchung gewählten Option.';
+
 /** Fernverkehr: Kalendertage mit Samstag/Sonntag im angefragten Zeitraum (Ruhetage noch nicht geklärt). */
 export const fernverkehrZeitraumMitWochenende = (timeframe: string): boolean | null => {
   const d = String(timeframe ?? '').match(/\d{2}\.\d{2}\.\d{4}/g) ?? [];
@@ -193,8 +201,12 @@ export const CustomerBookingConfirmation = ({
           {selectedActivity && selectedActivity !== driverType ? row('Tätigkeit / Fahrzeugart', selectedActivity) : null}
           {spezialanforderungen.length > 0 ? row('Anforderungen', spezialanforderungen.join(', ')) : null}
           {row('Aufgabe', message)}
-          {unterkunft ? row('Unterkunft', unterkunft) : null}
         </table>
+        {unterkunft ? (
+          <Text {...getTextProps({ ...textStyles.paragraph, fontSize: '13px', margin: '10px 0 0 0' })}>
+            <strong>Hinweis zur Unterkunft:</strong> {UNTERKUNFT_HINWEIS_TEXT} {unterkunft}
+          </Text>
+        ) : null}
       </Section>
 
       {ueberfuehrung ? (

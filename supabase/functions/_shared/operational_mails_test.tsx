@@ -28,6 +28,7 @@ const JOBART: Record<string, [string, string]> = {
   fernfahrer: ['LKW CE (Sattelzug)', 'TEST – Fernverkehr mit Sattelzug, Übernachtung im LKW'],
   lkw_ce: ['LKW CE', 'TEST – Nahverkehr Auslieferung mit Sattelzug'],
   baumaschine: ['Baumaschinenführer', 'TEST – Bedienung Mobilbagger auf Baustelle'],
+  event: ['Spezialfahrzeuge – Showtruck-Fahrer / Eventfahrer', 'TEST – Showtruck auf Messe'],
 };
 const job = (tarif_type: string, o: Record<string, unknown> = {}) => ({ ...KUNDE, customer_phone: '+49 000 TEST', einsatzort: 'TEST Hafenstraße 12, Tor 3, 12345 Musterstadt', fahrzeugtyp: (JOBART[tarif_type] ?? JOBART.lkw_ce)[0], nachricht: (JOBART[tarif_type] ?? JOBART.lkw_ce)[1], tarif_type, kosten_uebersicht: { netto: 9999 }, ...o });
 const asg = (o: Record<string, unknown> = {}) => ({ rate_type: 'daily', rate_value: 450, start_date: '2026-11-16T00:00:00Z', end_date: '2026-11-20T00:00:00Z', times_entered: null, ...o });
@@ -66,13 +67,19 @@ Deno.test('Kunden-Eingangsbestätigung: kurz, Kundenpreis, Status Anfrage, keine
   const bm = await kundenmail('1d', 'Eingangsbestätigung – Baumaschinenführer/Spezialfahrzeuge, Hotelbudget 75 €', 'baumaschine', 'Baumaschinenführer', false, { unterkunftOption: 'fahrer_organisiert', unterkunftObergrenze: 75 });
   assert(bm.t.includes('489,00 € netto je tatsächlichem Einsatztag') && bm.t.includes('75,00 €') && !bm.t.includes('90,00') && bm.t.includes('2.445,00 €') && bm.t.includes('464,55 € / 2.909,55 €'));
   const ue = await kundenmail('1e', 'Eingangsbestätigung – LKW-Überführung', 'ueberfuehrung', 'LKW-Überführung', false);
-  for (const m of [ce, cesa, wo, ff, ffwe, bm, ue]) {
+  const ev = await kundenmail('1f', 'Eingangsbestätigung – Event-Tourneepauschale, Unterkunft durch Auftraggeber', 'baumaschine', 'Spezialfahrzeuge – Showtruck-Fahrer / Eventfahrer', false);
+  assert(ev.t.includes('489,00 € netto pro tatsächlichem Einsatztag') && ev.t.includes('Keine Samstags-, Sonntags- oder Feiertagszuschläge'), 'Event-Tarif in der Kundenbestätigung');
+  for (const m of [ce, cesa, wo, ff, ffwe, bm, ue, ev]) {
     assert(!INTERN.test(m.t), `intern: ${m.t.match(INTERN)?.[0]}`);
     assert(!LANG.test(m.t), `lang: ${m.t.match(LANG)?.[0]}`);
     assert(m.t.includes(ANFRAGE_EINGANG_TEXT) && m.t.includes(ANFRAGE_NAECHSTER_SCHRITT) && !/(?<![Uu]n)verbindliche Anfrage/.test(m.t) && m.t.includes('Vermittlungsbedingungen'));
     assert(!/Annahme durch einen Fahrer|Fahrer (hat )?(angenommen|abgelehnt)|Interessenanfrage|Kandidaten|Verfügbarkeitsprüfung/.test(m.t));
-    assert(m.t.length < (m === ff || m === ffwe ? 3200 : 2800), `zu lang: ${m.t.length}`);
+    assert(m.t.length < (m === ff || m === ffwe ? 3500 : 2950), `zu lang: ${m.t.length}`);
   }
+  // Unterkunftstext ist ausdrücklich ein Hinweis, keine verbindliche Buchungsbedingung.
+  const UNTERKUNFTSHINWEIS = 'Hinweis zur Unterkunft: Reist der Fahrer von weiter entfernt an, kann eine geeignete Unterkunft wirtschaftlicher sein als die täglich anfallenden An- und Abfahrtskosten. Die Unterkunftsregelung richtet sich nach der vom Auftraggeber bei der Buchung gewählten Option.';
+  for (const m of [ff, ffwe, bm, ev]) assert(m.t.includes(UNTERKUNFTSHINWEIS), `Unterkunftshinweis fehlt: ${m.nr}`);
+  for (const m of [ce, cesa, wo, ue]) assert(!m.t.includes('Hinweis zur Unterkunft'), `Unterkunftshinweis ohne Unterkunft: ${m.nr}`);
 });
 
 Deno.test('Kunden-Einsatzbestätigung: verbindliche Zuweisung, Fahrerdaten, Kundenpreis, keine internen Annahmen', () => {
