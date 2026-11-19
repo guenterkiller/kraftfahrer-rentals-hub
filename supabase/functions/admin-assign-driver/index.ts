@@ -1,6 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { agreementErrors } from '../_shared/offer-readiness.ts';
+import { agreementErrors, agreementNote } from '../_shared/offer-readiness.ts';
 import { buildDriverOfferView, commissionPctForTarif } from '../_shared/driver-offer-remuneration.ts';
+import { buildAutomaticAssignment } from '../_shared/automatic-assignment.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -76,7 +77,7 @@ Deno.serve(async (req) => {
     // Check if job exists
     const { data: job, error: jobError } = await supabase
       .from('job_requests')
-      .select('id, status, tarif_type, tarif_needs_review, einsatzort')
+      .select('id, status, tarif_type, tarif_netto, tarif_needs_review, einsatzort, zeitraum, besonderheiten, weekend_days, kosten_uebersicht')
       .eq('id', jobId)
       .single();
     
@@ -130,9 +131,18 @@ Deno.serve(async (req) => {
       );
     }
 
-    const candidate = { rate_type: rateType, rate_value: rateValue, start_date: startDate, end_date: endDate, admin_note: note };
+    // Beträge und Einheiten nie aus dem Browser übernehmen: Server nutzt Auftragstarif,
+    // Kalenderdaten und ausdrücklich gebuchte Abweichungen erneut.
+    const automatic = buildAutomaticAssignment(job, String(startDate ?? '').slice(0, 10), String(endDate ?? '').slice(0, 10));
+    if (!automatic.agreement) return new Response(JSON.stringify({ error: 'Zuweisung nicht möglich: ' + automatic.errors.join(' '), missing: automatic.errors }), {
+      status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+    const derivedRateType = automatic.rateType;
+    const derivedRateValue = automatic.rateValue;
+    const derivedNote = agreementNote('', automatic.agreement);
+    const candidate = { rate_type: derivedRateType, rate_value: derivedRateValue, start_date: startDate, end_date: endDate, admin_note: derivedNote };
     const issues = [...new Set([...agreementErrors(job, candidate), ...buildDriverOfferView(job, candidate).missing])];
-    if (issues.length) return new Response(JSON.stringify({ error: 'Versand gesperrt: ' + issues.join(' '), missing: issues }), {
+    if (issues.length) return new Response(JSON.stringify({ error: 'Zuweisung nicht möglich: ' + issues.join(' '), missing: issues }), {
       status: 422, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
@@ -145,14 +155,14 @@ Deno.serve(async (req) => {
         job_id: jobId,
         driver_id: driverId,
         status: 'assigned',
-        rate_type: rateType,
-        rate_value: rateValue,
+        rate_type: derivedRateType,
+        rate_value: derivedRateValue,
         // Provision automatisch nach Tarifart (CE/Fernfahrer 20 %, Spezial/Bau/Event/Überführung 25 %); sonst Adminauswahl.
         commission_pct: commissionPctForTarif((job as { tarif_type?: string } | null)?.tarif_type) ?? (Number(commissionPct) === 25 ? 25 : 20),
         start_date: startDate || null,
         end_date: endDate || null,
         times_entered: timesEnteredFlag,
-        admin_note: note || null,
+        admin_note: derivedNote,
         assigned_at: new Date().toISOString()
       });
 
@@ -186,7 +196,7 @@ Deno.serve(async (req) => {
         job_id: jobId,
         assignment_id: assignmentId,
         admin_email: user.id,
-        note: `Driver ${driverId} assigned with ${rateType} rate ${rateValue}`
+        note: `Driver ${driverId} assigned automatically from booking calculation with ${derivedRateType} rate ${derivedRateValue}`
       });
 
     // Die Zuweisung durch Fahrerexpress löst serverseitig die Kunden-Einsatzbestätigung aus.

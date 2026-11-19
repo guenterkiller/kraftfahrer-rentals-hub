@@ -1,20 +1,17 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 import { agreementNote, agreementErrors } from "@/lib/offerReadiness";
-import { Switch } from "@/components/ui/switch";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { loadAdminContact } from '@/lib/adminContact';
-import { commissionPctForTarif } from '@/lib/driverOfferCommission';
-import { buildDriverOfferView } from '@/lib/driverOfferRemuneration';
-import { sendAssignmentNotifications } from '@/lib/assignmentNotifications';
+import { buildDriverOfferView } from "@/lib/driverOfferRemuneration";
+import { sendAssignmentNotifications } from "@/lib/assignmentNotifications";
+import { buildAutomaticAssignment, jobPeriod } from "@/lib/automaticAssignment";
+import { formatEuro } from "@/lib/kostenUebersicht";
 
 interface AdminAssignmentDialogProps {
   open: boolean;
@@ -23,229 +20,73 @@ interface AdminAssignmentDialogProps {
   onAssignmentComplete: () => void;
 }
 
-export function AdminAssignmentDialog({ 
-  open, 
-  onClose, 
-  jobId, 
-  onAssignmentComplete 
-}: AdminAssignmentDialogProps) {
-  const [drivers, setDrivers] = useState<Array<{ id: string; vorname: string; nachname: string; email: string; status: string }>>([]);
-  const [showOnlyApproved, setShowOnlyApproved] = useState(true);
+type Driver = { id: string; vorname: string; nachname: string; email: string; status: string };
+
+export function AdminAssignmentDialog({ open, onClose, jobId, onAssignmentComplete }: AdminAssignmentDialogProps) {
+  const [drivers, setDrivers] = useState<Driver[]>([]);
   const [selectedDriverId, setSelectedDriverId] = useState("");
-  const [rateType, setRateType] = useState<"hourly" | "daily" | "weekly">("hourly");
-  const [rateValue, setRateValue] = useState("");
-  const [billingPreset, setBillingPreset] = useState<string>("hourly_custom");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [paidCount, setPaidCount] = useState("");
-  const [payConfirmed, setPayConfirmed] = useState(false);
-  const [placeConfirmed, setPlaceConfirmed] = useState(false);
-  const [note, setNote] = useState("");
-  const [attachPdf, setAttachPdf] = useState(false);
-  const [commissionPct, setCommissionPct] = useState<"20" | "25">("20");
+  const [jobData, setJobData] = useState<any>(null);
   const [isAssigning, setIsAssigning] = useState(false);
   const [isLoadingDrivers, setIsLoadingDrivers] = useState(false);
-  
-  // Customer contact data state
-  const [jobData, setJobData] = useState<any>(null);
-  const [cName, setCName] = useState("");
-  const [contact, setContact] = useState("");
-  const [street, setStreet] = useState("");
-  const [house, setHouse] = useState("");
-  const [postal, setPostal] = useState("");
-  const [city, setCity] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [einsatzort, setEinsatzort] = useState("");
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
-  
   const { toast } = useToast();
 
-  // Load drivers and job data when dialog opens
   useEffect(() => {
-    if (open) {
-      setPaidCount("");
-      setPayConfirmed(false);
-      setPlaceConfirmed(false);
-      loadDrivers();
-      loadJobData();
-    }
+    if (!open) return;
+    setSelectedDriverId("");
+    setStartDate("");
+    setEndDate("");
+    setJobData(null);
+    void loadDrivers();
+    void loadJobData();
   }, [open, jobId]);
 
   const loadJobData = async () => {
     try {
-      // JWT sent automatically via Authorization header
-      const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
-        body: { dataType: 'jobs' }
-      });
-      
+      const { data, error } = await supabase.functions.invoke("admin-data-fetch", { body: { dataType: "jobs" } });
       if (error) throw error;
-      
-      // Find the specific job from the response
-      const job = data?.data?.find((j: any) => j.id === jobId);
-      
-      if (job) {
-        console.log('🔍 Raw job data loaded:', {
-          customer_name: job.customer_name,
-          company: job.company,
-          customer_email: job.customer_email,
-          customer_phone: job.customer_phone
-        });
-        
-        setJobData(job);
-        // Provision automatisch nach Tarifart (serverseitig ebenso erzwungen).
-        const autoPct = commissionPctForTarif(job.tarif_type);
-        if (autoPct) setCommissionPct(String(autoPct) as "20" | "25");
-        
-        // Helper function to clean placeholder values
-        const cleanValue = (value: string | null, fallback = "") => {
-          if (!value || value === 'Bitte wählen' || value === 'Siehe Nachricht' || 
-              value === 'nachzutragen' || value === 'Nachzutragen' ||
-              value.trim() === '') {
-            return fallback;
-          }
-          return value.trim();
-        };
-        
-        const loadedContact = loadAdminContact(job);
-        const cNameValue = cleanValue(loadedContact.company) || "";
-        const contactValue = cleanValue(loadedContact.contact) || "";
-        
-        console.log('🔍 Processed values:', {
-          cNameValue,
-          contactValue,
-          cleanedCustomerName: cleanValue(job.customer_name),
-          cleanedCompany: cleanValue(job.company)
-        });
-        
-        setCName(cNameValue);
-        setContact(contactValue);
-        setStreet(cleanValue(job.customer_street) || "");
-        setHouse(cleanValue(job.customer_house_number) || "");
-        setPostal(cleanValue(job.customer_postal_code) || "");
-        setCity(cleanValue(job.customer_city) || "");
-        setPhone(cleanValue(job.customer_phone) || "");
-        setEmail(cleanValue(job.customer_email) || "");
-        setEinsatzort(cleanValue(job.einsatzort) || "");
-      }
-    } catch (error) {
-      console.error('Error loading job data:', error);
+      const job = data?.data?.find((item: any) => item.id === jobId);
+      if (!job) throw new Error("Auftrag nicht gefunden");
+      setJobData(job);
+      const period = jobPeriod(job);
+      setStartDate(period.startDate);
+      setEndDate(period.endDate);
+    } catch (error: any) {
+      toast({ title: "Auftrag konnte nicht geladen werden", description: error?.message, variant: "destructive" });
     }
   };
 
   const loadDrivers = async () => {
     setIsLoadingDrivers(true);
     try {
-      // JWT sent automatically via Authorization header
-      const { data, error } = await supabase.functions.invoke('admin-data-fetch', {
-        body: { dataType: 'fahrer' }
-      });
-      
-      if (error) {
-        console.error("❌ Error loading drivers:", error);
-        toast({
-          title: "Fehler beim Laden der Fahrer",
-          description: error.message,
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      console.log("✅ Drivers loaded successfully:", data?.data?.length || 0);
-      setDrivers((data?.data as any[]) || []);
-      
-    } catch (error) {
-      console.error("❌ Unexpected error loading drivers:", error);
-      toast({
-        title: "Unerwarteter Fehler",
-        description: "Fahrer konnten nicht geladen werden.",
-        variant: "destructive"
-      });
+      const { data, error } = await supabase.functions.invoke("admin-data-fetch", { body: { dataType: "fahrer" } });
+      if (error) throw error;
+      const approved = ((data?.data as Driver[]) ?? []).filter((driver) => driver.status === "active" || driver.status === "approved");
+      setDrivers(approved);
+    } catch (error: any) {
+      toast({ title: "Fahrer konnten nicht geladen werden", description: error?.message, variant: "destructive" });
     } finally {
       setIsLoadingDrivers(false);
     }
   };
 
-  // Filter drivers based on toggle
-  const filteredDrivers = showOnlyApproved 
-    ? drivers.filter(d => d.status === 'active' || d.status === 'approved')
-    : drivers;
+  const automatic = buildAutomaticAssignment(jobData, startDate, endDate);
+  const previewAssignment = automatic.agreement ? {
+    rate_type: automatic.rateType,
+    rate_value: automatic.rateValue,
+    start_date: `${startDate}T00:00:00.000Z`,
+    end_date: `${endDate}T00:00:00.000Z`,
+    admin_note: agreementNote("", automatic.agreement),
+  } : null;
+  const offerView = previewAssignment && jobData ? buildDriverOfferView(jobData, previewAssignment) : null;
+  const offerErrors = [...new Set([
+    ...automatic.errors,
+    ...(previewAssignment && jobData ? agreementErrors(jobData, previewAssignment) : []),
+    ...(offerView?.missing ?? []),
+  ])];
+  const netLine = offerView?.lines.find(([label]) => label.startsWith("Verbleibende Nettovergütung"))?.[1];
 
-  // Validation logic
-  const postalOk = /^\d{5}$/.test(postal);
-  const hasContactWay = (phone?.trim()?.length || 0) > 0 || (email?.trim()?.length || 0) > 0;
-  const customerAddressComplete = street && house && postalOk && city;
-  
-  // Check if we have meaningful data (not placeholders)
-  const hasValidCompanyName = cName && cName !== 'Bitte wählen' && cName.trim() !== '';
-  const hasValidContact = contact && contact !== 'Bitte wählen' && contact.trim() !== '';
-  
-  console.log('🔍 Validation check:', {
-    cName, 
-    contact, 
-    hasValidCompanyName, 
-    hasValidContact, 
-    customerAddressComplete, 
-    hasContactWay
-  });
-  
-  const allDataComplete = customerAddressComplete && hasValidCompanyName && hasValidContact && hasContactWay;
-
-  const saveContactIfNeeded = async () => {
-    console.log('🔍 saveContactIfNeeded called, allDataComplete:', allDataComplete);
-    await saveContactData();
-  };
-
-  const saveContactData = async () => {
-    try {
-      console.log('🔍 Saving contact data via edge function:', {
-        jobId,
-        cName,
-        contact,
-        street,
-        house,
-        postal,
-        city,
-        phone,
-        email,
-      });
-      
-      // JWT sent automatically via Authorization header
-      const { data, error } = await supabase.functions.invoke('admin-update-contact', {
-        body: {
-          jobId: jobId,
-          cName: cName,
-          contact: contact,
-          street: street,
-          house: house,
-          postal: postal,
-          city: city,
-          phone: phone,
-          contactEmail: email,
-          einsatzort: einsatzort,
-        }
-      });
-
-      if (error) throw error;
-      if (!data?.success) throw new Error('Failed to update contact data');
-      
-      setLastSaved(new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
-      
-    } catch (error: any) {
-      console.error('Error saving contact data:', error);
-      throw error;
-    }
-  };
-
-  const previewAssignment = {
-    rate_type: rateType, rate_value: Number(rateValue),
-    start_date: startDate ? `${startDate}T00:00:00.000Z` : null,
-    end_date: endDate ? `${endDate}T00:00:00.000Z` : null,
-    admin_note: agreementNote(note, { rate: Number(rateValue), unit: rateType, units: Number(paidCount), place: einsatzort.trim(), remunerationConfirmed: payConfirmed, placeConfirmed }),
-  };
-  const previewJob = { ...(jobData ?? {}), einsatzort };
-  const offerView = buildDriverOfferView(previewJob, previewAssignment);
-  const offerErrors = [...new Set([...agreementErrors(previewJob, previewAssignment), ...offerView.missing])];
   const functionError = async (error: any, fallback: string) => {
     if (error instanceof FunctionsHttpError) {
       const details = await error.context.json().catch(() => null);
@@ -255,338 +96,91 @@ export function AdminAssignmentDialog({
   };
 
   const handleAssignAndSend = async () => {
-    if (offerErrors.length) {
-      toast({ title: "Versand gesperrt", description: offerErrors.join(" "), variant: "destructive" });
-      return;
-    }
-    if (!selectedDriverId || !rateValue) {
+    if (!selectedDriverId || !previewAssignment || !automatic.agreement || offerErrors.length > 0) {
       toast({
-        title: "Eingabefehler",
-        description: "Bitte wählen Sie einen Fahrer und geben Sie einen Fahrer-Honorarsatz ein.",
-        variant: "destructive"
+        title: "Zuweisung nicht möglich",
+        description: !selectedDriverId ? "Bitte einen Fahrer auswählen." : offerErrors.join(" "),
+        variant: "destructive",
       });
-      return;
-    }
-
-    if (!allDataComplete) {
-      toast({
-        title: "Daten unvollständig",
-        description: "Bitte Auftraggeber-Daten vollständig eintragen (Straße, Nr., PLZ (5-stellig), Ort sowie Ansprechpartner und mind. Telefon oder E-Mail).",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Einsatzzeitraum: nur Kalenderdatum, keine Uhrzeit (Abstimmung Besteller/Fahrer).
-    // Gespeichert als UTC-Tagesbeginn, wie bisheriger Altbestand ohne Uhrzeit.
-    const dateRe = /^\d{4}-\d{2}-\d{2}$/;
-    const startIso = startDate && dateRe.test(startDate) ? `${startDate}T00:00:00.000Z` : null;
-    const endIso = endDate && dateRe.test(endDate) ? `${endDate}T00:00:00.000Z` : null;
-    if ((startDate && !startIso) || (endDate && !endIso)) {
-      toast({ title: "Eingabefehler", description: "Bitte Einsatzbeginn und -ende jeweils als Datum angeben.", variant: "destructive" });
-      return;
-    }
-    if (startIso && endIso && endIso < startIso) {
-      toast({ title: "Eingabefehler", description: "Das Einsatzende darf nicht vor dem Einsatzbeginn liegen.", variant: "destructive" });
       return;
     }
 
     setIsAssigning(true);
-    
     try {
-      // JWT sent automatically via Authorization header - no need for localStorage email check
-
-      // Always save contact data before assignment to ensure fresh data
-      await saveContactData();
-      toast({
-        title: "Daten gespeichert",
-        description: "Auftraggeber-Daten wurden erfolgreich aktualisiert.",
-      });
-
-      // 1) Zuweisen über Edge Function (JWT sent automatically)
-      const { data: assignResult, error: assignError } = await supabase.functions.invoke('admin-assign-driver', {
+      const { data: assignResult, error: assignError } = await supabase.functions.invoke("admin-assign-driver", {
         body: {
-          jobId: jobId,
+          jobId,
           driverId: selectedDriverId,
-          rateType: rateType,
-          rateValue: parseFloat(rateValue),
-          commissionPct: Number(commissionPct),
-          startDate: startIso,
-          endDate: endIso,
+          rateType: automatic.rateType,
+          rateValue: automatic.rateValue,
+          startDate: previewAssignment.start_date,
+          endDate: previewAssignment.end_date,
           timesEntered: false,
-          note: previewAssignment.admin_note
-        }
+          note: previewAssignment.admin_note,
+        },
       });
-      
       if (assignError || !assignResult?.success) {
-        throw new Error(await functionError(assignError, assignResult?.error || 'Zuweisung fehlgeschlagen'));
+        throw new Error(await functionError(assignError, assignResult?.error || "Zuweisung fehlgeschlagen"));
       }
 
       const assignmentId = assignResult.assignmentId;
-      console.log('✅ Assignment created with ID:', assignmentId);
-
-      // admin-assign-driver löst die Kundenbestätigung bereits serverseitig aus.
-      // Dieser Aufruf ist idempotent und dient als Wiederholung nach einem Versandfehler.
-      // Kein Warten auf eine Fahrerannahme; Fahrerangebot und Kundenmail blockieren sich nicht.
       const notifications = await sendAssignmentNotifications({
         confirmAdminAssignment: async () => {
           const { error } = await supabase.rpc("admin_confirm_assignment", { _assignment_id: assignmentId });
           if (error) throw error;
         },
         sendCustomerConfirmation: async () => {
-          const { data, error } = await supabase.functions.invoke('send-customer-assignment-notice', {
-            body: { assignment_id: assignmentId }
-          });
-          if (error) throw new Error(await functionError(error, 'Kunden-Einsatzbestätigung nicht versendet'));
-          if (data?.success !== true) throw new Error(data?.error || 'Kunden-Einsatzbestätigung nicht bestätigt');
+          const { data, error } = await supabase.functions.invoke("send-customer-assignment-notice", { body: { assignment_id: assignmentId } });
+          if (error) throw new Error(await functionError(error, "Kunden-Einsatzbestätigung nicht versendet"));
+          if (data?.success !== true) throw new Error(data?.error || "Kunden-Einsatzbestätigung nicht bestätigt");
         },
         sendDriverOffer: async () => {
-          const { data, error } = await supabase.functions.invoke('send-driver-confirmation', {
-            body: { assignment_id: assignmentId, mode: attachPdf ? 'both' : 'inline' }
-          });
-          if (error) throw new Error(await functionError(error, 'Fahrerangebot nicht versendet'));
-          if (data?.ok !== true || data?.skipped) throw new Error(data?.message || 'Kein neuer Fahrer-Versand bestätigt');
+          const { data, error } = await supabase.functions.invoke("send-driver-confirmation", { body: { assignment_id: assignmentId, mode: "inline" } });
+          if (error) throw new Error(await functionError(error, "Fahrerangebot nicht versendet"));
+          if (data?.ok !== true || data?.skipped) throw new Error(data?.message || "Kein neuer Fahrer-Versand bestätigt");
         },
       });
 
-      if (notifications.customerConfirmation === 'sent' && notifications.driverOffer === 'sent') {
-        toast({
-          title: "Fahrer verbindlich zugewiesen",
-          description: "Einsatzbestätigung an den Kunden und Fahrerangebot versendet.",
-        });
+      if (notifications.customerConfirmation === "sent" && notifications.driverOffer === "sent") {
+        toast({ title: "Fahrer verbindlich zugewiesen", description: "Einsatzbestätigung an den Kunden und Fahrerangebot versendet." });
       } else {
-        toast({
-          title: "Zuweisung gespeichert – Versand prüfen",
-          description: notifications.errors.join(' · '),
-          variant: "destructive",
-        });
+        toast({ title: "Zuweisung gespeichert – Versand prüfen", description: notifications.errors.join(" · "), variant: "destructive" });
       }
-
-      // Reset form
-      setSelectedDriverId("");
-      setRateType("hourly");
-      setRateValue("");
-      setBillingPreset("hourly_custom");
-      setStartDate("");
-      setEndDate("");
-      setNote("");
-      setAttachPdf(false);
-      
       onAssignmentComplete();
       onClose();
-      
-    } catch (error) {
-      console.error('Assignment error:', error);
-      
-      // Handle unique constraint violation: same driver already on this job
-      const msg = String(error?.message || '');
-      if (
-        (error.code === '23505' && msg.includes('job_assignments_job_id_driver_id_key')) ||
-        msg.includes('driver already assigned to this job') ||
-        msg.includes('Dieser Fahrer ist diesem Auftrag bereits zugewiesen')
-      ) {
-        toast({
-          title: "Fahrer bereits zugewiesen",
-          description: "Dieser Fahrer ist diesem Auftrag bereits zugewiesen. Bitte einen anderen Fahrer wählen.",
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Zuweisungsfehler",
-          description: error.message || "Fehler bei der Zuweisung.",
-          variant: "destructive"
-        });
-      }
+    } catch (error: any) {
+      const message = String(error?.message || "");
+      toast({
+        title: message.includes("Dieser Fahrer ist diesem Auftrag bereits zugewiesen") ? "Fahrer bereits zugewiesen" : "Zuweisungsfehler",
+        description: message || "Fehler bei der Zuweisung.",
+        variant: "destructive",
+      });
     } finally {
       setIsAssigning(false);
     }
   };
 
-
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+    <Dialog open={open} onOpenChange={(next) => { if (!next) onClose(); }}>
+      <DialogContent className="max-w-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Fahrer zuweisen</DialogTitle>
         </DialogHeader>
-        
-        <div className="space-y-4">
-          {/* Customer Data Section - Always show */}
-          <div className="p-4 border border-gray-200 bg-gray-50 rounded-lg">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="font-medium text-gray-800">Auftraggeber-Daten</h3>
-              {lastSaved && (
-                <span className="text-sm text-green-600">Gespeichert • zuletzt um {lastSaved}</span>
-              )}
-            </div>
-              
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <div>
-                  <Label htmlFor="cname" className="text-sm">Firma/Name *</Label>
-                  <Input
-                    id="cname"
-                    value={cName}
-                    onChange={(e) => setCName(e.target.value)}
-                    placeholder="Firma oder Vollname"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="contact" className="text-sm">Ansprechpartner *</Label>
-                  <Input
-                    id="contact"
-                    value={contact}
-                    onChange={(e) => setContact(e.target.value)}
-                    placeholder="Name der Kontaktperson"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <div>
-                  <Label htmlFor="street" className="text-sm">Straße *</Label>
-                  <Input
-                    id="street"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    placeholder="Musterstraße"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="house" className="text-sm">Hausnummer *</Label>
-                  <Input
-                    id="house"
-                    value={house}
-                    onChange={(e) => setHouse(e.target.value)}
-                    placeholder="123"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3 mb-3">
-                <div>
-                  <Label htmlFor="postal" className="text-sm">PLZ *</Label>
-                  <Input
-                    id="postal"
-                    value={postal}
-                    onChange={(e) => setPostal(e.target.value)}
-                    placeholder="12345"
-                    pattern="[0-9]{5}"
-                    maxLength={5}
-                    className={`mt-1 ${!postalOk && postal ? 'border-red-300' : ''}`}
-                  />
-                  {postal && !postalOk && (
-                    <p className="text-xs text-red-600 mt-1">PLZ muss 5-stellig sein</p>
-                  )}
-                </div>
-                <div>
-                  <Label htmlFor="city" className="text-sm">Ort *</Label>
-                  <Input
-                    id="city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="Musterstadt"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label htmlFor="phone" className="text-sm">Telefon</Label>
-                  <Input
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+49 123 456789"
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email" className="text-sm">E-Mail</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="kontakt@firma.de"
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <Label htmlFor="einsatzort" className="text-sm">Tatsächliche Einsatzanschrift / Treffpunkt *</Label>
-                <Input
-                  id="einsatzort"
-                  value={einsatzort}
-                  onChange={(e) => { setEinsatzort(e.target.value); setPlaceConfirmed(false); }}
-                  placeholder="Arbeitsort oder Treffpunkt eingeben"
-                  className="mt-1"
-                />
-                <div className="flex items-start gap-2 mt-2">
-                  <Checkbox id="place-confirmed" checked={placeConfirmed} onCheckedChange={(v) => setPlaceConfirmed(v === true)} />
-                  <Label htmlFor="place-confirmed">Mit dem Auftraggeber geprüft und als tatsächlicher Einsatzort bestätigt (nicht ungeprüft die Firmenanschrift).</Label>
-                </div>
-              </div>
-              
-              {!hasContactWay && (
-                <p className="text-sm text-red-600 mt-2">
-                  Mindestens Telefon oder E-Mail muss angegeben werden.
-                </p>
-              )}
-            </div>
 
-          {/* Driver Filter Toggle */}
-          <div className="flex items-center space-x-2 p-3 bg-muted rounded-lg">
-            <Switch
-              id="show-approved"
-              checked={showOnlyApproved}
-              onCheckedChange={setShowOnlyApproved}
-            />
-            <Label htmlFor="show-approved" className="text-sm">
-              Nur freigeschaltete Fahrer anzeigen ({filteredDrivers.length} von {drivers.length})
-            </Label>
-          </div>
-
+        <div className="space-y-5">
           <div>
-            <Label>Fahrer auswählen</Label>
+            <Label htmlFor="assignment-driver">Fahrer</Label>
             {isLoadingDrivers ? (
-              <div className="p-3 text-center text-muted-foreground">
-                Lade Fahrer...
-              </div>
-            ) : filteredDrivers.length === 0 ? (
-              <div className="space-y-3">
-                <div className="p-3 text-center text-muted-foreground border rounded">
-                  {drivers.length === 0 
-                    ? "Keine Fahrer gefunden. Bitte zuerst Fahrer anlegen."
-                    : "Keine freigeschalteten Fahrer. Filter ausschalten oder Fahrer genehmigen."
-                  }
-                </div>
-                {drivers.length > 0 && showOnlyApproved && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowOnlyApproved(false)}
-                    className="w-full"
-                  >
-                    Alle Fahrer anzeigen
-                  </Button>
-                )}
-              </div>
+              <p className="py-3 text-sm text-muted-foreground">Fahrer werden geladen …</p>
             ) : (
               <Select value={selectedDriverId} onValueChange={setSelectedDriverId}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Fahrer wählen..." />
+                <SelectTrigger id="assignment-driver" className="mt-1">
+                  <SelectValue placeholder={drivers.length ? "Freigeschalteten Fahrer wählen …" : "Keine freigeschalteten Fahrer vorhanden"} />
                 </SelectTrigger>
                 <SelectContent>
-                  {filteredDrivers.map(driver => (
+                  {drivers.map((driver) => (
                     <SelectItem key={driver.id} value={driver.id}>
-                      {driver.vorname} {driver.nachname} ({driver.email}) - {driver.status}
+                      {driver.vorname} {driver.nachname} ({driver.email})
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -594,157 +188,44 @@ export function AdminAssignmentDialog({
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <Label>Abrechnungseinheit (pro Stunde / Tag / Woche)</Label>
-              <Select
-                value={billingPreset}
-                onValueChange={(value) => {
-                  setBillingPreset(value);
-                  setPayConfirmed(false);
-                  setPaidCount("");
-                  switch (value) {
-                    case "hourly_custom":
-                      setRateType("hourly");
-                      setRateValue("");
-                      break;
-                    case "daily_349":
-                      setRateType("daily");
-                      setRateValue("349");
-                      break;
-                    case "daily_450":
-                      setRateType("daily");
-                      setRateValue("450");
-                      break;
-                    case "daily_489":
-                      setRateType("daily");
-                      setRateValue("489");
-                      break;
-                    case "daily_custom":
-                      setRateType("daily");
-                      setRateValue("");
-                      break;
-                    case "weekly_1645":
-                      setRateType("weekly");
-                      setRateValue("1645");
-                      break;
-                    case "weekly_custom":
-                      setRateType("weekly");
-                      setRateValue("");
-                      break;
-                  }
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Abrechnungsart wählen..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="hourly_custom">Stundensatz (individuell)</SelectItem>
-                  <SelectItem value="daily_349">Tagessatz – LKW-Fahrer CE – 349,00 €</SelectItem>
-                  <SelectItem value="daily_450">Tagessatz – nur Fernverkehr (Tarif Fernfahrer) – 450,00 € vor 20 % Provision</SelectItem>
-                  <SelectItem value="daily_489">Tagessatz – Baumaschinenführer / Fahrmischerfahrer / Event-Tourneepauschale – 489,00 €</SelectItem>
-                  <SelectItem value="daily_custom">Tagessatz (individuell)</SelectItem>
-                  <SelectItem value="weekly_1645">Wochenpreis – LKW-Fahrer CE – 1.645,00 € (5 Einsatztage)</SelectItem>
-                  <SelectItem value="weekly_custom">Wochenpreis (individuell)</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="assignment-start">Einsatzbeginn</Label>
+              <Input id="assignment-start" className="mt-1" type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} />
             </div>
-
             <div>
-              <Label htmlFor="driver-rate">Fahrer-Honorarsatz netto vor Provision (€ {rateType === "daily" ? "je Einsatztag" : rateType === "weekly" ? "je Woche" : "je Stunde"})</Label>
-              <Input
-                type="number"
-                value={rateValue}
-                onChange={(e) => { setRateValue(e.target.value); setPayConfirmed(false); }}
-                placeholder={rateType === "daily" ? "349.00" : rateType === "weekly" ? "1645.00" : "25.00"}
-                step="0.01"
-                min="0"
-                id="driver-rate"
-              />
-              <p className="mt-1 text-xs text-muted-foreground">Frei änderbar. Der Wert der Auswahl ist nur ein Vorschlag – bitte den mit dem Fahrer vereinbarten Satz eintragen. Der Kundenpreis bleibt unverändert.</p>
+              <Label htmlFor="assignment-end">Einsatzende</Label>
+              <Input id="assignment-end" className="mt-1" type="date" value={endDate} onChange={(event) => setEndDate(event.target.value)} />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Einsatzbeginn (Datum)</Label>
-              <Input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
+          <div className="rounded-lg border bg-muted/40 p-4" aria-live="polite" data-testid="driver-net-preview">
+            <p className="text-sm font-medium">Fahrer-Nettohonorar nach Provision</p>
+            <p className="mt-1 text-2xl font-bold">{automatic.driverNetCents !== null && netLine ? netLine : "Noch nicht berechenbar"}</p>
+            {automatic.unitNetCents !== null && automatic.unitLabel && (
+              <p className="mt-1 text-sm text-muted-foreground">{formatEuro(automatic.unitNetCents / 100)} {automatic.unitLabel}</p>
+            )}
+            {automatic.billing && <p className="mt-3 text-sm">{automatic.billing}</p>}
+            <p className="mt-2 text-xs text-muted-foreground">Reguläre Arbeitstage Montag bis Freitag werden automatisch aus den Kalenderdaten übernommen. Nur ausdrücklich gebuchte Abweichungen werden zusätzlich berücksichtigt.</p>
+          </div>
+
+          {offerErrors.length > 0 && (
+            <div role="alert" className="rounded-md border border-destructive/40 p-3 text-sm text-destructive">
+              <p className="font-semibold">Bitte vor der Zuweisung klären:</p>
+              <ul className="mt-1 list-disc pl-5">{offerErrors.map((issue) => <li key={issue}>{issue}</li>)}</ul>
             </div>
+          )}
 
-            <div>
-              <Label>Einsatzende (Datum)</Label>
-              <Input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-          </div>
+          <p className="text-xs text-muted-foreground">Das verbindliche Angebot wird erst durch diese Zuweisung erstellt. Der Einsatzort wird aus den vorhandenen Auftragsdaten übernommen.</p>
 
-          <div>
-            <Label>{jobData?.tarif_type === "event" ? "Agenturprovision Fahrerexpress" : "Vermittlungsprovision"}</Label>
-            <Select disabled={commissionPctForTarif(jobData?.tarif_type) !== null} value={commissionPct} onValueChange={(v) => setCommissionPct(v as "20" | "25")}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="20">20 % – normaler Auftrag</SelectItem>
-                <SelectItem value="25">{jobData?.tarif_type === "event" ? "Agenturprovision Fahrerexpress (25 %) – Event-Tourneepauschale" : "25 % – Sonderauftrag"}</SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {commissionPctForTarif(jobData?.tarif_type) !== null
-                ? "Automatisch nach Tarifart festgelegt (CE/Fernfahrer 20 %, Spezialfahrzeuge/Baumaschinen/Event/Überführung 25 %). "
-                : ""}Wird dem Fahrer im Vertragstext zur verbindlichen Annahme angezeigt.
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="paid-units">Tatsächlich vereinbarte vergütete {rateType === 'daily' ? 'Einsatztage' : rateType === 'weekly' ? 'Wochen' : 'Stunden'} *</Label>
-            <Input id="paid-units" type="number" min="0" step={rateType === 'hourly' ? '0.25' : '1'} value={paidCount} onChange={(e) => { setPaidCount(e.target.value); setPayConfirmed(false); }} />
-            <div className="flex items-start gap-2">
-              <Checkbox id="pay-confirmed" checked={payConfirmed} onCheckedChange={(v) => setPayConfirmed(v === true)} />
-              <Label htmlFor="pay-confirmed">Fahrerhonorar, Einheit und Anzahl sind ausdrücklich mit dem Fahrer vereinbart. Kalendertage sind nicht automatisch vergütete Tage.</Label>
-            </div>
-          </div>
-          <div className="rounded-md border border-border bg-muted/40 p-3 text-sm space-y-1" aria-live="polite" data-testid="driver-net-preview">
-            <p className="font-semibold">Vorschau Fahrerangebot</p>
-            {offerView.lines.filter(([label]) => /^(Vergütete Einheiten|Fahrerhonorar netto|Vermittlungsprovision|Verbleibende Nettovergütung)/.test(label)).map(([label, value]) => <p key={label}><span className="text-muted-foreground">{label}:</span> {value}</p>)}
-            {offerErrors.length > 0 && <div role="alert" className="text-destructive"><p className="font-semibold">Versand gesperrt – bitte ergänzen:</p><ul className="list-disc pl-5">{offerErrors.map((issue) => <li key={issue}>{issue}</li>)}</ul></div>}
-            <p className="text-xs text-muted-foreground">Bereits versendete oder angenommene Angebote bleiben unverändert. Eine Änderung danach erfordert eine bewusste neue Zuteilung mit neuem Angebot und erneuter Bestätigung durch den Fahrer.</p>
-          </div>
-
-          <div>
-            <Label>Notiz (optional)</Label>
-            <Textarea
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Zusätzliche Informationen..."
-              rows={3}
-            />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="attach-pdf"
-              checked={attachPdf}
-              onCheckedChange={setAttachPdf}
-            />
-            <Label htmlFor="attach-pdf">PDF als Anhang senden (sonst nur Link)</Label>
-          </div>
-
-          <div className="flex gap-2 pt-4">
-            <Button onClick={onClose} variant="outline" className="flex-1">
-              Abbrechen
-            </Button>
-            <Button 
-              onClick={handleAssignAndSend} 
-              disabled={isAssigning || !selectedDriverId || offerErrors.length > 0 || filteredDrivers.length === 0 || !allDataComplete}
+          <div className="flex gap-2 pt-1">
+            <Button onClick={onClose} variant="outline" className="flex-1">Abbrechen</Button>
+            <Button
+              onClick={handleAssignAndSend}
+              disabled={isAssigning || !selectedDriverId || !previewAssignment || offerErrors.length > 0 || drivers.length === 0}
               className="flex-1"
             >
-              {isAssigning ? "Zuweisen..." : "Zuweisen & Bestätigung senden"}
+              {isAssigning ? "Zuweisen …" : "Zuweisen & Bestätigung senden"}
             </Button>
           </div>
         </div>

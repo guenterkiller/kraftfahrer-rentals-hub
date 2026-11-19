@@ -202,6 +202,11 @@
 - [x] Keine echten E-Mails, produktiven Bestandsänderungen, Deployments, Veröffentlichung oder IONOS-Uploads; Originalrenderer-Mail HTML/Desktop/Mobil geprüft
 - [ ] Produktive Aktivierung und authentifizierte Liveabnahme nicht erfolgt (ausdrücklich kein Deploy); GitHub-Synchronisation nach lokalem Commit durch Plattform noch nicht verifiziert
 
+## Vereinfachte Fahrerzuweisung (2026-11-19)
+- [x] Dialog auf Fahrer, Nettohonorar, Beginn und Ende reduzieren; reguläre Mo–Fr-Einheiten automatisch aus bestehenden Buchungsdaten berechnen
+- [x] Keine Pflichtzahl „0“, keine Zusatz-Checkbox; vorhandene Vergütungs-/Ortsevidenz nutzen, keine Tarife erfinden und keine doppelte Provision
+- [x] Regel-, Sicherheits- und UI-Tests ohne echte Zuweisung, Mail oder Auftragsänderung bestanden; admin-assign-driver, send-driver-confirmation und respond-invite bereitgestellt; IONOS-Hinweis berichten
+
 ## Interessen-Antwortseite: Vergütung und Vertraulichkeit (2026-11-17)
 - [x] Gleiche Nettovergütung wie in der ersten Angebotsmail tokengebunden anzeigen; Kundenidentität aus der Serverantwort entfernen
 - [x] Zuschlagstext nur bei tatsächlich gebuchten Wochenend-/Feiertagstagen; Unverbindlichkeit bis zur persönlichen Zuteilung konsistent formulieren
