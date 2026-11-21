@@ -1,7 +1,20 @@
-# Komplettes Build-Script für kraftfahrer-mieten.com
+﻿# Komplettes Build-Script für kraftfahrer-mieten.com
 # Erstellt einen vollständigen dist-Ordner mit allen erforderlichen Dateien
 
 $ErrorActionPreference = "Stop"
+Set-StrictMode -Version 2.0
+
+# Nur als Datei ausführen: Beim zeilenweisen Einfügen in eine offene PowerShell bricht
+# "throw" nur die aktuelle Zeile ab und alle folgenden Zeilen laufen trotzdem weiter.
+if (-not $PSCommandPath) {
+    Write-Host "Bitte als Datei starten: powershell -NoProfile -ExecutionPolicy Bypass -File .\build-complete-dist.ps1" -ForegroundColor Red
+    return
+}
+
+$buildSucceeded = $false
+$distDir = $null
+$originalDir = Get-Location
+try {
 
 Write-Host "=== Kraftfahrer-Mieten.com - Kompletter Build ===" -ForegroundColor Green
 
@@ -26,6 +39,10 @@ if ((git remote get-url origin) -ne "https://github.com/guenterkiller/kraftfahre
 $sourceCommit = git rev-parse HEAD
 if ($LASTEXITCODE -ne 0) { throw "Quellstand konnte nicht ermittelt werden." }
 Write-Host "Quellstand: guenterkiller/kraftfahrer-rentals-hub / main / $sourceCommit" -ForegroundColor Cyan
+
+Write-Host "2a. package-lock.json gegen package.json pruefen..." -ForegroundColor Yellow
+node scripts/check-lockfile.mjs
+if ($LASTEXITCODE -ne 0) { throw "package-lock.json passt nicht zu package.json; npm ci wuerde abbrechen. Kein Build oder Upload-Paket erstellen." }
 
 Write-Host "2. Dependencies installieren..." -ForegroundColor Yellow
 npm ci --legacy-peer-deps
@@ -124,3 +141,15 @@ Set-Location $originalDir
 Remove-Item $workDir -Recurse -Force
 
 Write-Host "Temp-Dateien bereinigt. Build fertig!" -ForegroundColor Green
+$buildSucceeded = $true
+} catch {
+    Write-Host ""
+    Write-Host "=== BUILD FEHLGESCHLAGEN - KEIN UPLOAD ===" -ForegroundColor Red
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    # Ein unvollständiges Paket darf nicht als hochladbar liegen bleiben.
+    if ($distDir -and (Test-Path $distDir)) { Remove-Item $distDir -Recurse -Force -ErrorAction SilentlyContinue }
+} finally {
+    if ($originalDir) { Set-Location $originalDir }
+}
+if (-not $buildSucceeded) { exit 1 }
+exit 0
