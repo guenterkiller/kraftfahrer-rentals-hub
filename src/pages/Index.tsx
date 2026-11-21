@@ -16,11 +16,15 @@ import ProductCards from "@/components/ProductCards";
 import ProcessSteps from "@/components/ProcessSteps";
 import WhyFahrerexpress from "@/components/WhyFahrerexpress";
 import TestimonialsSection from "@/components/TestimonialsSection";
+
 import FahreranfrageSection from "@/components/FahreranfrageSection";
-import LegalSecuritySection from "@/components/LegalSecuritySection";
-import BookingPriorityBanner from "@/components/BookingPriorityBanner";
-import EUDriverRecruitment from "@/components/EUDriverRecruitment";
-import ContactSection from "@/components/ContactSection";
+
+// Abschnitte unterhalb des Buchungsformulars als eigene Code-Teile laden (kleinerer Startcode).
+// Formular und alles darüber bleiben direkt eingebunden (Sprungziel und Installationsknopf stabil).
+const LegalSecuritySection = lazy(() => import("@/components/LegalSecuritySection"));
+const BookingPriorityBanner = lazy(() => import("@/components/BookingPriorityBanner"));
+const EUDriverRecruitment = lazy(() => import("@/components/EUDriverRecruitment"));
+const ContactSection = lazy(() => import("@/components/ContactSection"));
 
 // Footer lazy-loaded (ganz unten)
 const Footer = lazy(() => import("@/components/Footer"));
@@ -234,10 +238,12 @@ const Index = () => {
         <WhyFahrerexpress />
         <TestimonialsSection />
         <FahreranfrageSection />
-        <LegalSecuritySection />
-        <BookingPriorityBanner />
-        <EUDriverRecruitment />
-        <ContactSection />
+        <Suspense fallback={null}>
+          <LegalSecuritySection />
+          <BookingPriorityBanner />
+          <EUDriverRecruitment />
+          <ContactSection />
+        </Suspense>
         
         {/* SEO-Block für Flüssigboden-Service */}
         <section className="py-16 bg-background">
