@@ -1,6 +1,7 @@
 import { DriverContractStatus } from "@/components/admin/DriverContractStatus";
 import { requireMailResult } from '@/lib/adminMailResult';
 import { sendAssignmentNotifications } from '@/lib/assignmentNotifications';
+import { noteText } from '@/lib/offerReadiness';
 import { DriverContractInvites } from "@/components/admin/DriverContractInvites";
 import { TestDataCleanup } from "@/components/admin/TestDataCleanup";
 import { CustomerConfirmationEvidence } from '@/components/admin/CustomerConfirmationEvidence';
@@ -2034,8 +2035,8 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                                         {asg.end_date ? new Date(asg.end_date).toLocaleDateString('de-DE') : 'offen'}
                                       </div>
                                     )}
-                                    {asg.admin_note && (
-                                      <div className="text-xs text-gray-700 italic">„{asg.admin_note}"</div>
+                                    {noteText({ admin_note: asg.admin_note }) && (
+                                      <div className="text-xs text-gray-700 italic">„{noteText({ admin_note: asg.admin_note })}"</div>
                                     )}
                                     <div className="flex items-center gap-2 flex-wrap pt-1">
                                       <Button size="sm" onClick={() => resendDriverConfirmationNew(asg.id)}>
@@ -2956,9 +2957,9 @@ const [newsletterDialogOpen, setNewsletterDialogOpen] = useState(false);
                     )}
                   </div>
 
-                  {assignment.admin_note && (
+                  {noteText({ admin_note: assignment.admin_note }) && (
                     <div className="text-sm bg-gray-50 p-2 rounded">
-                      <span className="font-medium">Notiz:</span> {assignment.admin_note}
+                      <span className="font-medium">Notiz:</span> {noteText({ admin_note: assignment.admin_note })}
                     </div>
                   )}
 
