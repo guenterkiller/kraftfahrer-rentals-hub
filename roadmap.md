@@ -219,3 +219,9 @@
 - [x] Ausschließlich `send-customer-assignment-notice`: freigegebene Fahrtkosten- und Unterkunftstexte ergänzt; vorhandene `unterkunft_option`/`unterkunft_obergrenze` aus dem Bestell-Datensatz korrekt wiedergegeben, ohne Option keine erfundene Zusage
 - [x] 226 Server-Regressionstests bestanden, 0 fehlgeschlagen; gezielt geprüft: Text nur in der Zuweisungs-Einsatzbestätigung, nicht in der Formular-Buchungsbestätigung, alle drei Optionsfälle sowie fehlende/unbekannte Option; produktiver Handler mit Mock-Versand und vollständiger HTML-/Screenshot-Vorschau unter /mnt/documents/nachweis-einsatzbestaetigung-unterkunft-2026-11-19/
 - [x] Kein Versand, keine Live-Datenänderung, kein Deployment und kein IONOS-Upload; späteres Backend ausschließlich `send-customer-assignment-notice` nach Betreiberfreigabe
+
+## Adminbereich: manuellen Kundenmail-Knopf entfernt (2026-11-21)
+- [x] Nur `src/pages/Admin.tsx`: die beiden sichtbaren Schaltflächen „Kundenmail senden" (Desktop-Zeile und Mobil-Karte) sowie der ausschließlich dafür verwendete Handler `sendCustomerAssignmentNotice` entfernt
+- [x] Automatische Kunden-Einsatzbestätigung bei Zuweisung unverändert (`confirmAndSend` → `sendAssignmentNotifications` → `send-customer-assignment-notice`), Fahrerschaltfläche „E-Mail erneut senden", Mailvorlagen, Dublettenschutz, Serverfunktionen und Datenbank unberührt
+- [x] 174 Website-Regeltests mit vitest bestanden (davon 4 Versandketten-Tests), Typecheck ohne Fehler, Build OK; kein Versand, keine Auftragsänderung, kein Deployment, kein IONOS-Upload
+- [ ] Webseiten-Upload durch Betreiber erforderlich, damit der Adminbereich ohne den Knopf erscheint
