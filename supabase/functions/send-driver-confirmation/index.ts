@@ -186,7 +186,7 @@ serve(async (req) => {
     const innerHtml = `
       <h2 class="body-text" style="margin:0 0 8px 0;font-size:22px;line-height:1.2;color:#0d2340;font-weight:700;">VERBINDLICHES AUFTRAGSANGEBOT</h2>
       <p class="body-text" style="margin:0 0 16px 0;font-size:15px;color:#374151;">Hallo ${escapeOffer(driver.vorname)} ${escapeOffer(driver.nachname)},<br/>Sie wurden für folgenden Einsatz ausgewählt:</p>
-      ${renderDriverCompensationBox(storedOfferLines, bindingAllowed)}
+      ${renderDriverCompensationBox(storedOfferLines, bindingAllowed, true)}
       <p class="body-text" style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#0d2340;"><strong>Bitte prüfen Sie jetzt die vollständigen Einsatzdaten und Vertragsbedingungen.</strong> Wenn alles für Sie passt, freuen wir uns, wenn Sie diesen Auftrag über Ihren persönlichen Link verbindlich übernehmen.</p>
       ${bindingButtonHtml}
       ${sectionStart('#f8fafc')}

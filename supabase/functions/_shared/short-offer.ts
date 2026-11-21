@@ -40,22 +40,23 @@ export function renderShortOffer(lines: [string, string][]) {
 }
 
 /** Auffällige Vergütungsbox für das persönliche Angebot; liest keine Kundenkalkulation. */
-export function renderDriverCompensationBox(lines: [string, string][], bindingAllowed: boolean): string {
+export function renderDriverCompensationBox(lines: [string, string][], bindingAllowed: boolean, bindingAssignment = false): string {
   const c = getDriverCompensation(lines, bindingAllowed);
   if (!c) return '';
   const row = (label: string, value: string | null) => value
     ? `<p class="body-text" style="margin:5px 0;font-size:14px;line-height:1.5;color:#1f2937;"><strong>${escapeOffer(label)}:</strong> ${escapeOffer(value)}</p>`
     : '';
+  const billing = bindingAssignment && c.billing ? c.billing.replace('vergütete', 'geplante') : c.billing;
   return `<table data-testid="driver-compensation-box" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0fdf4" style="background-color:#f0fdf4;border:2px solid #16a34a;border-radius:10px;border-collapse:separate;margin:0 0 16px 0;"><tr><td style="padding:18px 20px;">
     <h3 class="body-text" style="margin:0 0 10px 0;font-size:18px;line-height:1.3;color:#166534;font-weight:700;">Ihre Vergütung für diesen Auftrag</h3>
     <p class="body-text" style="margin:0;font-size:28px;line-height:1.2;color:#14532d;font-weight:800;">${escapeOffer(c.totalNet)}</p>
-    <p class="body-text" style="margin:3px 0 8px 0;font-size:14px;line-height:1.5;color:#166534;font-weight:600;">netto für den Gesamteinsatz</p>
+    <p class="body-text" style="margin:3px 0 8px 0;font-size:14px;line-height:1.5;color:#166534;font-weight:600;">${bindingAssignment ? 'voraussichtliches Nettohonorar für den geplanten Gesamteinsatz' : 'netto für den Gesamteinsatz'}</p>
     ${c.unitNet && c.unitNetLabel ? `<p class="body-text" style="margin:0 0 12px 0;font-size:16px;line-height:1.5;color:#14532d;"><strong>${escapeOffer(c.unitNet)}</strong> ${escapeOffer(c.unitNetLabel)}</p>` : ''}
-    ${row('Abrechnung', c.billing)}
+    ${row(bindingAssignment ? 'Berechnungsgrundlage' : 'Abrechnung', billing)}
     ${row('Einsatzzeitraum', c.period)}
     ${row('Führerschein', c.license)}
     ${row('Fahrzeugart', c.vehicle)}
     ${row('Tätigkeit', c.activity)}
     ${row('Einsatzort / Treffpunkt', c.place)}
-  </td></tr></table>`;
+  </td></tr></table>${bindingAssignment ? `<p data-testid="driver-compensation-forecast-note" class="body-text" style="margin:-4px 0 16px 0;padding:10px 12px;font-size:13px;line-height:1.55;color:#1f2937;background-color:#f8fafc;border-left:4px solid #16a34a;"><strong>Hinweis zur Vergütung:</strong> Der ausgewiesene Gesamtbetrag ist eine Prognose für die vollständige Durchführung des vorgesehenen Einsatzes. Die endgültige Vergütung richtet sich nach den tatsächlich erbrachten sowie den nach den vertraglichen und gesetzlichen Regelungen vergütungspflichtigen Leistungen. Bei einer Änderung oder vorzeitigen Beendigung des Einsatzes erfolgt die Abrechnung nach den geltenden Vereinbarungen.</p>` : ''}`;
 }

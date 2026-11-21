@@ -225,3 +225,9 @@
 - [x] Automatische Kunden-Einsatzbestätigung bei Zuweisung unverändert (`confirmAndSend` → `sendAssignmentNotifications` → `send-customer-assignment-notice`), Fahrerschaltfläche „E-Mail erneut senden", Mailvorlagen, Dublettenschutz, Serverfunktionen und Datenbank unberührt
 - [x] 174 Website-Regeltests mit vitest bestanden (davon 4 Versandketten-Tests), Typecheck ohne Fehler, Build OK; kein Versand, keine Auftragsänderung, kein Deployment, kein IONOS-Upload
 - [ ] Webseiten-Upload durch Betreiber erforderlich, damit der Adminbereich ohne den Knopf erscheint
+
+## Verbindliche Fahrer-Zuweisungsmail: Prognosekennzeichnung (2026-11-21)
+- [x] Nur `send-driver-confirmation`: Gesamtbetrag als voraussichtliches Nettohonorar und Einheiten als geplante Einsatztage bezeichnet; vollständiger freigegebener Vergütungshinweis direkt unter der Vergütungsbox
+- [x] Erste unverbindliche Angebotsmail, Kundenmail, Annahmeseite, Berechnungen, Snapshots, Provision und Annahmelink unverändert; gemeinsamer Renderer nur im Zuweisungszweig umgeschaltet
+- [x] 228 Servertests bestanden, 0 fehlgeschlagen, 1 bedingt übersprungen; dynamisch 22 Tage = 5.790,40 € / 263,20 € und 5 Tage = 1.316,00 € / 263,20 €; Originalhandler mit Mock-Versand sowie vollständige HTML-/Screenshot-Sichtprüfung bestanden
+- [ ] Aktivierung ausschließlich durch Deployment von `send-driver-confirmation` nach gesonderter Betreiberfreigabe; kein Versand, kein Deployment und kein IONOS-Upload erfolgt

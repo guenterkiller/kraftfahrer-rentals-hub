@@ -102,13 +102,17 @@ try {
   const text = textOf(html);
   for (const expected of [
     'Ihre Vergütung für diesen Auftrag', '5.600,00 €', '1.120,00 €',
-    '5 Wochen à 5 Einsatztage (Montag bis Freitag)', 'netto je Woche (5 Einsatztage, Mo–Fr)',
+    'voraussichtliches Nettohonorar für den geplanten Gesamteinsatz',
+    'Berechnungsgrundlage: 5 Wochen à 5 Einsatztage (Montag bis Freitag)', 'netto je Woche (5 Einsatztage, Mo–Fr)',
+    'Hinweis zur Vergütung: Der ausgewiesene Gesamtbetrag ist eine Prognose für die vollständige Durchführung des vorgesehenen Einsatzes. Die endgültige Vergütung richtet sich nach den tatsächlich erbrachten sowie den nach den vertraglichen und gesetzlichen Regelungen vergütungspflichtigen Leistungen. Bei einer Änderung oder vorzeitigen Beendigung des Einsatzes erfolgt die Abrechnung nach den geltenden Vereinbarungen.',
     '11.01.2027 – 12.02.2027', 'CE', 'TEST – Abrollkipper mit oder ohne Anhänger, zu festen Kunden',
     'TEST Hafenstraße 12, Tor 3, 66333 Völklingen',
     'Bitte prüfen Sie jetzt die vollständigen Einsatzdaten und Vertragsbedingungen.',
     'Auftrag verbindlich annehmen', 'Fahrerexpress-Agentur', '01577 1442285',
   ]) assert(text.includes(expected), `Mailtext fehlt: ${expected}`);
   assert(!/1\.645|8\.225|9\.787|1\.316|1\.400,00|7\.000|20 %|25 %|Kundenpreis|Vermittlungsprovision|Marge/.test(text), text);
+  assert(!text.includes('netto für den Gesamteinsatz'));
+  assert(!text.includes('Abrechnung: 5 Wochen'));
 
   const snapshot = capturedInvite.offer_snapshot;
   const storedNet = snapshot.job_lines.find(([label]: [string, string]) => label.startsWith('Verbleibende Nettovergütung'))?.[1];

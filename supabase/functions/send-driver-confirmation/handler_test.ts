@@ -60,6 +60,11 @@ for (const scenario of ['new', 'sent', 'accepted', 'error', 'no-id', 'snapshot-e
         assert(sends[0].html.includes('Ihre Vergütung für diesen Auftrag'));
         assert(sends[0].html.includes('558,40'));
         assert(sends[0].html.includes('279,20'));
+        assert(sends[0].html.includes('voraussichtliches Nettohonorar für den geplanten Gesamteinsatz'));
+        assert(sends[0].html.includes('Berechnungsgrundlage:</strong> 2 geplante Einsatztage'));
+        assert(sends[0].html.includes('Hinweis zur Vergütung:</strong> Der ausgewiesene Gesamtbetrag ist eine Prognose'));
+        assert(!sends[0].html.includes('netto für den Gesamteinsatz'));
+        assert(!sends[0].html.includes('Abrechnung:</strong> 2 vergütete Einsatztage'));
         assert(sends[0].html.includes('Bitte prüfen Sie jetzt die vollständigen Einsatzdaten und Vertragsbedingungen.'));
         assert(!/Kundenpreis|20 %|25 %|Fahrerhonorar netto vor Provision/.test(sends[0].html));
         assertEquals(inserts.find(i => i.table === 'email_log')?.value.status, ['error','no-id','retry-error','throw'].includes(scenario) ? 'error' : 'sent');

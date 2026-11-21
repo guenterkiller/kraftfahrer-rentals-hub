@@ -155,6 +155,10 @@ Deno.test("nur freigegebener, passender, nicht abgelaufener und nicht zugeteilte
   const html = w.mailAttempts[0].payload.html;
   assertStringIncludes(html, "unverbindliche Interessenbekundung");
   assertStringIncludes(html, "keine verbindliche Auftragsannahme");
+  assertStringIncludes(html, "netto für den Gesamteinsatz");
+  assertStringIncludes(html, "Abrechnung:");
+  assert(!html.includes("voraussichtliches Nettohonorar"));
+  assert(!html.includes("Hinweis zur Vergütung:"));
   assert(!html.includes("1.645"));
   assert(!html.toLowerCase().includes("provision"));
 });
