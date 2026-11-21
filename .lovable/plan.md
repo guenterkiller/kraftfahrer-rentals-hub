@@ -1,30 +1,46 @@
-# Annahmebestätigung an Fahrer: Befund und minimaler Änderungsvorschlag
+# Befund und Vorschlag: offene Schreibregeln für Besucher- und Ladezeitdaten
 
-## Befund (nur gelesen)
+## Befund (live gelesen, nichts geändert)
+- `page_views` und `web_vitals` haben je eine Regel "Anyone can log ..." für das Einfügen, mit Rolle `public` und `WITH CHECK (true)`. Jeder darf also beliebige Zeilen einfügen, auch ohne die Webseite.
+- Lesen dürfen nur Admins (`is_admin_user()`). Ändern und Löschen ist für niemanden erlaubt. Eine Datenpanne beim Lesen besteht also nicht.
+- Es gibt keine Prüfregeln, Längenbegrenzungen oder Trigger, nur den Primärschlüssel.
+- Bestand: 3.695 Seitenaufrufe (1,2 MB) und 20.671 Ladezeitwerte (3,9 MB).
+- Schon vorhandene unplausible Werte: FCP bis 23.690.504 ms, LCP bis 99.641.008 ms, CLS bis 19,3.
+- Geschrieben wird nur aus dem Browser mit dem öffentlichen Schlüssel, und zwar über `src/hooks/usePageTracking.tsx` und `src/hooks/useWebVitals.tsx` (über `AnalyticsTracker`). Das passiert nur mit Analyse-Einwilligung und nicht in der Vorschau. Keine Edge Function schreibt dort.
+- Gelesen wird nur von `AdminAnalyticsDashboard.tsx`.
+- Die öffentliche Erfassung ist also gewollt. Die Regel ist nur zu weit gefasst.
 
-**Wer sendet die Mail:** Function `respond-invite`, Datei `supabase/functions/respond-invite/binding.ts`.
-- Versand ab Zeile 185–215 nach dem Speichern der verbindlichen Annahme (Betreff „Annahmebestätigung – verbindliche Auftragsannahme – …“, PDF im Anhang, Kopie an die Agentur, Protokoll `driver_binding_acceptance`).
-- Inhalt erzeugt von `confirmationHtml()` (Zeile 224–233).
+## Risiken
+- **Verfälschung:** Jeder kann beliebige Routen, Werte und Texte einschleusen. Die Admin-Auswertung wird damit unzuverlässig, die bestehenden Ausreißer zeigen das bereits.
+- **Speicher und Kosten:** Massenhaftes Einfügen ist unbegrenzt möglich. Auch sehr lange Texte in `user_agent`, `referrer` oder `route` sind möglich, ebenso eine wachsende Datenbank.
+- **Kein Zugriff auf andere Daten:** Lesen, Ändern und Löschen bleiben gesperrt.
 
-**HTML oder Text:** Es wird **nur HTML** übergeben (`html`), kein `text`-Teil. Es ist also kein reiner Text, aber nur ein schlichtes `<div>` mit Überschrift, Absätzen und Fingerabdruck.
+## Was RLS allein kann und was nicht
+- **RLS kann:** Rollen festlegen (`anon`, `authenticated`), Werte plausibel prüfen (Metrik-Liste, Wertebereiche, Längen, Routenformat) und ein mitgeschicktes Datum oder eine mitgeschickte ID erzwingen.
+- **RLS kann nicht:** Anonyme Absender verlässlich erkennen, Mengen begrenzen (kein Rate-Limit) oder beweisen, dass ein Wert wirklich aus dem Browser stammt. Der öffentliche Schlüssel ist bewusst öffentlich.
 
-**Gemeinsamer Layout-Renderer vorhanden:** `wrapDriverEmailHtml()` in `supabase/functions/_shared/email-templates/driver-html-shell.ts` (dunkelblauer Kopf, rote Linie, Fußzeile). Er wird schon benutzt von `send-driver-confirmation` (VERBINDLICHES AUFTRAGSANGEBOT), `send-driver-job-notification`, `send-customer-assignment-notice`, `admin-cancel-job`, `send-driver-newsletter`.
+## Vorschlag (erst nach Freigabe; nur eine Migration, kein Code, keine neue Tabelle)
+1. Beide Einfüge-Regeln ersetzen. Sie gelten dann nur für `anon, authenticated` und nur mit plausiblen Werten:
+   - **page_views:** `route` beginnt mit `/` und ist höchstens 200 Zeichen lang. `user_agent` höchstens 512, `referrer` höchstens 1.024 Zeichen. `created_at` liegt innerhalb von ±5 Minuten um `now()`, falls es mitgesendet wird.
+   - **web_vitals:** `metric_name` in (`LCP`, `FCP`, `CLS`, `FID`, `TTFB`, `INP`). `metric_value` zwischen 0 und 600.000, bei CLS zwischen 0 und 100. `rating` in (`good`, `needs-improvement`, `poor`, `unknown`) oder leer. `route` wie bei page_views.
+2. Bestehende Daten bleiben unverändert. Die Auswertung kann Ausreißer später optional ausblenden, das ist ein eigener Auftrag.
+3. Danach den Sicherheitsbefund erneut prüfen. Bleibt eine Restwarnung „anonymes Einfügen“, ist sie bewusst akzeptiert und wird mit Begründung markiert.
 
-**Warum sie anders aussieht:** `confirmationHtml()` ruft `wrapDriverEmailHtml()` **nicht** auf und nutzt auch nicht die Vergütungsbox `renderDriverCompensationBox()`, sondern nur die einfache Zeilenliste `renderShortOffer()`.
+## Optional später (nicht Teil dieses Vorschlags)
+- Mengenbegrenzung über eine kleine Edge Function als Zwischenstelle mit IP-Drossel. Dafür ist Code nötig, und die Rolle `anon` verliert das direkte Einfügen. Das ist eine größere Änderung.
+- Regelmäßiges Löschen alter Rohdaten (z. B. älter als 13 Monate). Das ist eine Entscheidung zur Aufbewahrung.
 
-**Vergütungslabel:** Über `shortOfferLines()` erscheint der Betrag als „Ihre Nettovergütung für diesen Auftrag: 5.790,40 €“ (`NET_LABEL`, `_shared/short-offer.ts` Z. 8). Das klingt nach garantiertem Gesamtbetrag. **„voraussichtlich“, „Berechnungsgrundlage … geplante Einsatztage“ und der „Hinweis zur Vergütung“ fehlen** in dieser Mail. Das PDF (`_shared/binding-acceptance-pdf.ts`) ist davon getrennt und wurde nicht geändert.
+## Tests vor Abschluss
+- SQL als `anon`:
+  - Ein gültiges Einfügen in beide Tabellen gelingt.
+  - Abgelehnt werden: zu lange Texte, unbekannte Metrik, negativer oder überhöhter Wert, Route ohne `/`.
+  - Lesen als `anon` liefert weiterhin keine Daten.
+  - Die Testzeilen werden mit einer Testkennung angelegt und anschließend gezielt entfernt. Dafür ist eine gesonderte Freigabe nötig, da Löschen sonst gesperrt ist. Alternativ wird alles in einer zurückgerollten Transaktion getestet.
+- Browser:
+  - Mit Einwilligung entsteht ein Seitenaufruf, und die Ladezeitwerte werden ohne Fehler gespeichert.
+  - Ohne Einwilligung wird nichts gespeichert.
+  - Das Admin-Dashboard zeigt die Daten weiter an.
+- Prüfen, dass `useWebVitals` keine anderen Metriknamen oder Ratings sendet. Das wird vor der Migration im Code verifiziert, weil `INP` und `unknown` möglich sind.
 
-## Vorschlag: minimaler Änderungsumfang (erst nach Freigabe)
-
-Nur eine Produktivdatei: `supabase/functions/respond-invite/binding.ts`, Funktion `confirmationHtml()`.
-1. Den bestehenden Inhalt in `wrapDriverEmailHtml()` einbetten (gleicher Kopf und Fuß wie im Angebot, keine Abmeldezeile).
-2. Statt der einfachen Netto-Zeile die vorhandene `renderDriverCompensationBox(jobLines, true, true)` nutzen. Dann erscheinen derselbe Betrag, „voraussichtliches Nettohonorar für den geplanten Gesamteinsatz“, „Berechnungsgrundlage: 22 geplante Einsatztage“ und der bereits freigegebene „Hinweis zur Vergütung“ wörtlich wie in der Angebotsmail.
-3. Die Netto-Zeile aus der Einsatzdatenliste in dieser Mail weglassen, damit der Betrag nicht doppelt und nicht ohne Prognose-Hinweis steht.
-
-Unverändert: Annahme-Speicherung, Fingerabdruck, PDF, Empfänger, Betreff, Agentur-Kopie, Beträge, alle anderen Mails. `NET_LABEL` bleibt unverändert, weil es auch anderswo genutzt wird.
-
-**Tests:** Vorhandenen Test in `_shared/operational_mails_test.tsx` (Z. 173) erweitern: Kopf/Fuß vorhanden, 5.790,40 € und 263,20 € unverändert, Prognose-Kennzeichnung und Hinweis vorhanden, Fingerabdruck und PDF-Hinweis bleiben. Vorschau mit TEST-Daten.
-
-**Aktivierung später:** nur `respond-invite` bereitstellen, nach Ihrer Freigabe.
-
-Bis zur Freigabe wurde nichts geändert, versendet oder bereitgestellt.
+## Unverändert
+Tracking (GTM, Pixel), SEO, Buchung, Admin, Mails, Edge Functions, weitere Tabellen und vorhandene Daten.
