@@ -27,4 +27,4 @@
 - supabase/functions has its own AGENTS.md; read it before changing files there.
 - `src/lib/driverOfferRemuneration.ts` mirrors `_shared/driver-offer-remuneration.ts` (tested). Why: preview = stored v3.
 
-- Every package.json dependency change (including platform/bun bumps that only touch bun.lock) must update package-lock.json in the same turn; `node scripts/check-lockfile.mjs` must pass and runs in the GitHub workflow and IONOS PowerShell script. Keep `.npmrc`. Why: Windows `npm ci` aborts on drift.
+- package.json dependency changes (incl. platform bun bumps) must sync package-lock.json; `scripts/check-lockfile.mjs` gates CI and the PowerShell build. Why: npm ci aborts on drift.
