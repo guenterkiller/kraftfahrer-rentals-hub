@@ -231,3 +231,7 @@
 - [x] Erste unverbindliche Angebotsmail, Kundenmail, Annahmeseite, Berechnungen, Snapshots, Provision und Annahmelink unverändert; gemeinsamer Renderer nur im Zuweisungszweig umgeschaltet
 - [x] 228 Servertests bestanden, 0 fehlgeschlagen, 1 bedingt übersprungen; dynamisch 22 Tage = 5.790,40 € / 263,20 € und 5 Tage = 1.316,00 € / 263,20 €; Originalhandler mit Mock-Versand sowie vollständige HTML-/Screenshot-Sichtprüfung bestanden
 - [ ] Aktivierung ausschließlich durch Deployment von `send-driver-confirmation` nach gesonderter Betreiberfreigabe; kein Versand, kein Deployment und kein IONOS-Upload erfolgt
+
+## Fahrer-Annahmebestätigung im Fahrerexpress-Layout (2026-11-21)
+- [x] Nur `respond-invite/binding.ts` `confirmationHtml()`: bestehende Hülle + Vergütungsbox mit Prognosekennzeichnung, einfache Nettozeile entfernt
+- [ ] Aktivierung nur durch Deployment von `respond-invite` nach Freigabe

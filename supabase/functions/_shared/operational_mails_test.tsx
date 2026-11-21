@@ -170,10 +170,12 @@ Deno.test('Fahrer-Angebot und Annahmebestätigung: einziger Preis = Nettovergüt
     assert(euros.length === 2 && euros[0] === expected[nr], `${nr}: ${euros}`);
     assert(!/450,00|349,00|489,00|300,00|420,00|1\.645|2\.121|9\.999|\b20 %|\b25 %|vor Provision/.test(x), `${nr}: interner Wert sichtbar`);
     if (nr === '4a') {
-      const c = confirmationHtml('TEST Max Mustermann', '16.11.2026, 08:00:00', lines, 'TEST-HASH');
+      const c = confirmationHtml('TEST Max Mustermann', '16.11.2026, 08:00:00', shortOfferLines(s.job_lines ?? [], false, 'x'), 'TEST-HASH', s.job_lines ?? []);
       mails.push({ nr: '5', titel: 'Annahmebestätigung an Fahrer (mit PDF-Anhang)', empfaenger: 'Fahrer (Kopie Verwaltung)', ausloeser: 'Fahrer bestätigt auf der Bestätigungsseite', betreff: 'Annahmebestätigung – verbindliche Auftragsannahme – TEST-Ort 12345 Musterstadt', html: c });
       const cx = text(c);
-      assert((cx.match(/[\d.]+,\d{2} €/g) ?? []).length === 1 && !/Provisionssatz|\b20 %/.test(cx));
+      assert(!/Provisionssatz|\b20 %/.test(cx) && !cx.includes(NET_LABEL), '5: Netto-Zeile/Provision');
+      assert(cx.includes(expected[nr]) && cx.includes('voraussichtliches Nettohonorar für den geplanten Gesamteinsatz') && cx.includes('Berechnungsgrundlage') && cx.includes('geplante') && cx.includes('Hinweis zur Vergütung:'), '5: Prognose fehlt');
+      assert(c.includes('driver-compensation-forecast-note') && c.includes('TEST-HASH') && c.includes('beigefügten PDF') && c.includes('#0d2340'), '5: Hülle/Fingerabdruck');
     }
   }
 });

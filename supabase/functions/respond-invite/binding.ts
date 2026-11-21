@@ -19,7 +19,8 @@ import { buildBindingAcceptancePdf } from "../_shared/binding-acceptance-pdf.ts"
 import { AGENCY, notifyAgency } from "../_shared/binding-acceptance-mail.ts";
 export { notifyAgency };
 import { formatAssignmentPeriod } from "../_shared/berlin-time.ts";
-import { shortOfferLines, renderShortOffer } from "../_shared/short-offer.ts";
+import { shortOfferLines, renderShortOffer, renderDriverCompensationBox } from "../_shared/short-offer.ts";
+import { wrapDriverEmailHtml } from "../_shared/email-templates/driver-html-shell.ts";
 import { getDriverCompensation } from "../_shared/driver-compensation.ts";
 import { type OfferSnapshot, bindingAcceptanceAllowed } from '../_shared/binding-offer.ts';
 
@@ -196,7 +197,7 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
 
     const b64 = btoa(Array.from(pdf, (b) => String.fromCharCode(b)).join(""));
     const period = formatAssignmentPeriod(offerAssignment.start_date, offerAssignment.end_date, offerAssignment.times_entered) || "";
-    const html = confirmationHtml(driverName, acceptedAtLocal, shortOfferLines(jobLines, true, period), contentHash);
+    const html = confirmationHtml(driverName, acceptedAtLocal, shortOfferLines(jobLines, false, period), contentHash, jobLines);
     const subject = `Annahmebestätigung – verbindliche Auftragsannahme – ${job?.einsatzort ?? "Auftrag"}`;
     const key = Deno.env.get("RESEND_API_KEY");
     if (key && driver?.email) {
@@ -221,13 +222,14 @@ export async function handleBinding(ctx: Ctx): Promise<Response> {
 }
 
 /** Kurze Annahmebestätigung: nur Einsatzdaten und Nettovergütung; vollständige Bedingungen im beigefügten PDF. */
-export function confirmationHtml(name: string, at: string, lines: [string, string][], hash: string) {
-  return `<div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;color:#1f2937;">
-    <h2 style="color:#0d2340;margin:0 0 8px;">Annahmebestätigung</h2>
+export function confirmationHtml(name: string, at: string, lines: [string, string][], hash: string, jobLines: [string, string][]) {
+  const inner = `<h2 class="body-text" style="color:#0d2340;margin:0 0 8px;">Annahmebestätigung</h2>
     <p>Hallo ${esc(name)},</p>
     <p>Sie haben diesen Auftrag am <strong>${esc(at)}</strong> verbindlich angenommen.</p>
+    ${renderDriverCompensationBox(jobLines, true, true)}
     ${renderShortOffer(lines)}
     <p style="font-size:14px;">Die vollständigen Vertragsbedingungen und Ihre Zustimmung finden Sie im beigefügten PDF.</p>
     <p style="font-size:12px;color:#6b7280;">Digitaler Fingerabdruck: ${esc(hash)}</p>
-    <p style="font-size:14px;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p></div>`;
+    <p style="font-size:14px;">Viele Grüße<br/>Fahrerexpress | kraftfahrer-mieten.com</p>`;
+  return wrapDriverEmailHtml(inner, { subject: "Annahmebestätigung", previewText: "Ihre verbindliche Auftragsannahme", showUnsubscribe: false });
 }
