@@ -26,6 +26,7 @@ const TarifCardText = ({
     {tarif.cardLines.map((d) => (
       <p key={d} className={detailClassName}>{d}</p>
     ))}
+    {tarif.legalNote && <p className={detailClassName}>{tarif.legalNote}</p>}
   </>
 );
 

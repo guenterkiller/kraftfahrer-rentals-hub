@@ -21,6 +21,8 @@ export interface TarifText {
   cardUnit: string;
   /** Kompakte Zusatzzeilen für Preiskarten (keine Wiederholungen, keine Ausschlüsse) */
   cardLines: string[];
+  /** Rechtlicher Hinweis unter der Tarifkarte (nur Fernfahrer) */
+  legalNote?: string;
 }
 
 const build = (
@@ -126,6 +128,11 @@ export const TARIF_TEXTE = {
     [],
   ),
 } as const;
+
+/** Gesetzliche Höchstgrenze (§ 21a Abs. 4 ArbZG, § 3 KrFArbZG) – keine Pflicht zu 48/60 Std. je Pauschale. */
+export const FERNVERKEHR_WOCHENARBEITSZEIT_HINWEIS =
+  'Gesetzliche Wochenarbeitszeit im Fernverkehr: Die Arbeitszeit beträgt grundsätzlich maximal 48 Stunden pro Woche. Eine Verlängerung auf bis zu 60 Stunden ist zulässig, sofern innerhalb von vier Kalendermonaten durchschnittlich 48 Wochenstunden nicht überschritten werden. Die gesetzlichen Lenk-, Ruhe- und Pausenzeiten sind einzuhalten.';
+(TARIF_TEXTE.fernfahrer as TarifText).legalNote = FERNVERKEHR_WOCHENARBEITSZEIT_HINWEIS;
 
 export type TarifTextKey = keyof typeof TARIF_TEXTE;
 
