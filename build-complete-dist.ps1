@@ -124,6 +124,10 @@ foreach ($requiredDir in @("assets", "prerender")) {
 $totalFiles = (Get-ChildItem $distDir -Recurse -File).Count
 $totalSize = [math]::Round(((Get-ChildItem $distDir -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB), 2)
 
+# Erst nach erfolgreicher Bereinigung darf eine Erfolgsmeldung erscheinen.
+Set-Location $originalDir
+Remove-Item $workDir -Recurse -Force
+
 Write-Host ""
 Write-Host "=== BUILD ABGESCHLOSSEN ===" -ForegroundColor Green
 Write-Host "Zielordner: $distDir" -ForegroundColor Cyan
@@ -135,10 +139,6 @@ Write-Host "1. Inhalt von '$distDir' auf IONOS hochladen" -ForegroundColor White
 Write-Host "2. DNS sicherstellen: A-Record @ und www → 185.158.133.1" -ForegroundColor White
 Write-Host "3. SSL-Zertifikat bei IONOS aktivieren" -ForegroundColor White
 Write-Host ""
-
-# Aufräumen
-Set-Location $originalDir
-Remove-Item $workDir -Recurse -Force
 
 Write-Host "Temp-Dateien bereinigt. Build fertig!" -ForegroundColor Green
 $buildSucceeded = $true

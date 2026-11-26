@@ -20,8 +20,8 @@ jobs:
           node-version: 22
       - name: package-lock.json passt zu package.json
         run: node scripts/check-lockfile.mjs
-      - name: Regeltests der Lock-Prüfung
-        run: node --test scripts/check-lockfile.test.mjs
+      - name: Lockfile- und Export-Schutztests (inkl. PowerShell)
+        run: node --test scripts/check-lockfile.test.mjs scripts/prerender-utils.test.mjs scripts/build-complete-dist.test.mjs
       - name: npm ci --legacy-peer-deps
         run: npm ci --legacy-peer-deps
       - name: Build inkl. Prerender (22 Seiten)
