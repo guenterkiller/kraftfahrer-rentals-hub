@@ -1,3 +1,7 @@
+# Fahrerregistrierung: zwei Pflicht-Checkboxen und Verfügbarkeit (26.11.2026)
+- [x] Formular, Speicherweg, Administratoranzeige und Zustimmungsnachweise geprüft; zwei Pflicht-Checkboxen und drei Verfügbarkeiten mit Datumsprüfung umgesetzt, bestehendes Textfeld ohne Migration.
+- [x] 207 Regeltests und neun isolierte Formular-/Adminanzeigen bei 1280/390/320 px ohne echte Registrierung oder Mail; Serveränderung ausschließlich nicht aktiver Entwurf unter preview/fahrer-registration.
+- [ ] Produktive Verfügbarkeitsspeicherung: wartet auf ausdrückliche Freigabe zur koordinierten Aktivierung von fahrerwerden und Webseite; im aktuellen Auftrag ist Deployment ausdrücklich verboten. Authentifizierte Admin-Liveabnahme nicht freigegeben/verfügbar.
 # Technischer Optimierungsplan mit Desktop-Schutz
 # SEO-/Sicherheitsabschluss (11.11.2026)
 - [x] Fahrerinfos-H1 und Datumszugriff korrigiert; Desktop-/Mobilabmessungen und Texte unverändert, Kundenmail-Typprüfung bestanden.

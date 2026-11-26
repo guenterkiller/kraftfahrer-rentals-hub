@@ -71,6 +71,7 @@ interface FahrerProfile {
   land: string | null;
   plz: string | null;
   beschreibung: string | null;
+  verfuegbarkeit?: string | null;
 }
 
 interface DocumentFile {

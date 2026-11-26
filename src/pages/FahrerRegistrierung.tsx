@@ -1,4 +1,5 @@
 import { REGISTRATION_CONTRACT_NOTICE } from "@/lib/driverMediationContract";
+import { AVAILABILITY_OPTIONS, availabilityError, registrationToday, serializeAvailability, registrationDeclarationErrors } from '@/lib/driverRegistration';
 import { useState, useEffect } from "react";
 import { sanitizeEmail, isValidEmail } from "@/lib/emailSanitize";
 import { Button } from "@/components/ui/button";
@@ -70,9 +71,9 @@ const FahrerRegistrierung = () => {
     verfuegbare_regionen: [] as string[],
     stundensatz: "",
     verfuegbarkeit: "",
+    verfuegbarkeit_datum: "",
     beschreibung: "",
-    vermittlungszustimmung: false,
-    einsatzbereitschaft_bestaetigt: false,
+    datenschutz: false,
     gewerbenachweis_bestaetigt: false,
     // Neue BF2/BF3 Erlaubnisse
     bf2_erlaubnis: false,
@@ -248,21 +249,6 @@ const FahrerRegistrierung = () => {
           errors.erfahrung_jahre = 'Bitte wählen Sie Ihre Berufserfahrung aus.';
         }
         break;
-      case 'vermittlungszustimmung':
-        if (!value) {
-          errors.vermittlungszustimmung = 'Sie müssen den Vermittlungsbedingungen zustimmen';
-        }
-        break;
-      case 'einsatzbereitschaft_bestaetigt':
-        if (!value) {
-          errors.einsatzbereitschaft_bestaetigt = 'Bitte bestätigen Sie Ihr Interesse an Auftragsangeboten';
-        }
-        break;
-      case 'gewerbenachweis_bestaetigt':
-        if (!value) {
-          errors.gewerbenachweis_bestaetigt = 'Bitte bestätigen Sie, dass Sie selbstständig tätig sind und den Gewerbenachweis vor der Freischaltung einreichen';
-        }
-        break;
     }
     
     return errors;
@@ -338,9 +324,9 @@ const FahrerRegistrierung = () => {
     const stundensatzErrors = validateField('stundensatz', formData.stundensatz);
     const fuehrerscheinklassenErrors = validateField('fuehrerscheinklassen', formData.fuehrerscheinklassen);
     const erfahrungErrors = validateField('erfahrung_jahre', formData.erfahrung_jahre);
-    const vermittlungErrors = validateField('vermittlungszustimmung', formData.vermittlungszustimmung);
-    const einsatzErrors = validateField('einsatzbereitschaft_bestaetigt', formData.einsatzbereitschaft_bestaetigt);
-    const gewerbeErrors = validateField('gewerbenachweis_bestaetigt', formData.gewerbenachweis_bestaetigt);
+    const declarationErrors = registrationDeclarationErrors(formData.datenschutz, formData.gewerbenachweis_bestaetigt);
+    const availabilityValidation = availabilityError(formData.verfuegbarkeit, formData.verfuegbarkeit_datum);
+    if (availabilityValidation) errors.verfuegbarkeit = availabilityValidation;
     // Standort Fahrer (An-/Abfahrt) – Pflichtfelder
     const strasseErrors = validateField('strasse', formData.strasse);
     const hausnummerErrors = validateField('hausnummer', formData.hausnummer);
@@ -348,7 +334,7 @@ const FahrerRegistrierung = () => {
     const ortErrors = validateField('ort', formData.ort);
     const landErrors = validateField('land', formData.land);
 
-    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, vermittlungErrors, einsatzErrors, gewerbeErrors, strasseErrors, hausnummerErrors, plzErrors, ortErrors, landErrors);
+    Object.assign(errors, vornameErrors, nachnameErrors, emailErrors, telefonErrors, stundensatzErrors, fuehrerscheinklassenErrors, erfahrungErrors, declarationErrors, strasseErrors, hausnummerErrors, plzErrors, ortErrors, landErrors);
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -409,6 +395,7 @@ const FahrerRegistrierung = () => {
       formDataToSend.append("specializations", JSON.stringify(formData.spezialisierungen));
       formDataToSend.append("regions", JSON.stringify(formData.verfuegbare_regionen));
       formDataToSend.append("hourly_rate", formData.stundensatz || "");
+      formDataToSend.append("availability", serializeAvailability(formData.verfuegbarkeit, formData.verfuegbarkeit_datum) || "");
       // Neue Felder für BF2/BF3 und Spezialanforderungen
       formDataToSend.append("bf2_erlaubnis", formData.bf2_erlaubnis.toString());
       formDataToSend.append("bf3_erlaubnis", formData.bf3_erlaubnis.toString());
@@ -515,9 +502,9 @@ const FahrerRegistrierung = () => {
         verfuegbare_regionen: [],
         stundensatz: "",
         verfuegbarkeit: "",
+        verfuegbarkeit_datum: "",
         beschreibung: "",
-        vermittlungszustimmung: false,
-        einsatzbereitschaft_bestaetigt: false,
+        datenschutz: false,
         gewerbenachweis_bestaetigt: false,
         bf2_erlaubnis: false,
         bf3_erlaubnis: false,
@@ -1105,19 +1092,37 @@ const FahrerRegistrierung = () => {
                       <Label htmlFor="verfuegbarkeit">Grundsätzliche Verfügbarkeit (optional)</Label>
                       <Select
                         value={formData.verfuegbarkeit}
-                        onValueChange={(value) => handleInputChange('verfuegbarkeit', value)}
+                        onValueChange={(value) => {
+                          setFormData(prev => ({ ...prev, verfuegbarkeit: value, verfuegbarkeit_datum: '' }));
+                          setValidationErrors(prev => ({ ...prev, verfuegbarkeit: '' }));
+                        }}
                       >
-                        <SelectTrigger>
+                        <SelectTrigger id="verfuegbarkeit">
                           <SelectValue placeholder="Bitte auswählen" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="kurzfristig">kurzfristig verfügbar</SelectItem>
-                          <SelectItem value="tageweise">tageweise verfügbar</SelectItem>
-                          <SelectItem value="wochenweise">wochenweise verfügbar</SelectItem>
-                          <SelectItem value="absprache">nur nach Absprache</SelectItem>
+                          {AVAILABILITY_OPTIONS.map(option => (
+                            <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
+                      {validationErrors.verfuegbarkeit && (
+                        <p id="verfuegbarkeit-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.verfuegbarkeit}</p>
+                      )}
                     </div>
+                    {formData.verfuegbarkeit === 'ab_datum' && (
+                      <div>
+                        <Label htmlFor="verfuegbarkeit_datum">Verfügbar ab *</Label>
+                        <Input id="verfuegbarkeit_datum" type="date" required min={registrationToday()}
+                          value={formData.verfuegbarkeit_datum}
+                          aria-invalid={Boolean(validationErrors.verfuegbarkeit)}
+                          aria-describedby={validationErrors.verfuegbarkeit ? 'verfuegbarkeit-error' : undefined}
+                          onChange={e => {
+                            handleInputChange('verfuegbarkeit_datum', e.target.value);
+                            setValidationErrors(prev => ({ ...prev, verfuegbarkeit: '' }));
+                          }} />
+                      </div>
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground -mt-2">
                     Die konkrete Vergütung und der Einsatzzeitraum werden Ihnen jeweils im einzelnen Auftragsangebot mitgeteilt. Sie entscheiden frei, ob Sie ein Angebot annehmen oder ablehnen.
@@ -1343,64 +1348,40 @@ const FahrerRegistrierung = () => {
                    {/* Einverständniserklärungen */}
                    <div className="space-y-3 border-t pt-6">
                      <div className="flex items-start space-x-2">
-                       <Checkbox id="datenschutz" required />
+                       <Checkbox id="datenschutz" required checked={formData.datenschutz}
+                         onCheckedChange={checked => handleInputChange('datenschutz', checked === true)} />
                         <Label htmlFor="datenschutz" className="text-sm leading-relaxed">
-                          Ich stimme der Verarbeitung meiner Daten gemäß der{" "}
+                          Ich habe die{" "}
                           <Link to="/datenschutz" className="text-primary underline decoration-primary/50 hover:decoration-primary">
                             Datenschutzerklärung
                           </Link>{" "}
-                          zu. *
+                          zur Kenntnis genommen. *
                         </Label>
                      </div>
-                     
-                      
-                      <div className="flex items-start space-x-2">
-                        <Checkbox 
-                          id="vermittlungszustimmung"
-                          checked={formData.vermittlungszustimmung}
-                          onCheckedChange={(checked) => handleInputChange('vermittlungszustimmung', checked)}
-                          required 
-                        />
-                        <Label htmlFor="vermittlungszustimmung" className="text-sm leading-relaxed">
-                          {REGISTRATION_CONTRACT_NOTICE} Mit dem Absenden der Registrierung bestätige ich, dass ich als selbstständiger Unternehmer tätig bin. *
-                        </Label>
-                      </div>
-                      {validationErrors.vermittlungszustimmung && (
-                        <p id="vermittlung-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.vermittlungszustimmung}</p>
-                      )}
-
-                      <div className="flex items-start space-x-2">
-                        <Checkbox
-                          id="einsatzbereitschaft_bestaetigt"
-                          checked={formData.einsatzbereitschaft_bestaetigt}
-                          onCheckedChange={(checked) => handleInputChange('einsatzbereitschaft_bestaetigt', checked)}
-                          required
-                        />
-                        <Label htmlFor="einsatzbereitschaft_bestaetigt" className="text-sm leading-relaxed">
-                          Ich bestätige, dass ich als selbstständiger Unternehmer an zukünftigen Auftragsangeboten interessiert bin und passende Angebote eigenverantwortlich prüfen möchte. *
-                        </Label>
-                       </div>
-                       {validationErrors.einsatzbereitschaft_bestaetigt && (
-                         <p id="einsatzbereitschaft-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.einsatzbereitschaft_bestaetigt}</p>
-                       )}
+                     {validationErrors.datenschutz && (
+                       <p className="text-sm text-destructive" role="alert">{validationErrors.datenschutz}</p>
+                     )}
 
                        <div className="flex items-start space-x-2">
                          <Checkbox
                            id="gewerbenachweis_bestaetigt"
                            checked={formData.gewerbenachweis_bestaetigt}
-                           onCheckedChange={(checked) => handleInputChange('gewerbenachweis_bestaetigt', checked)}
+                           onCheckedChange={(checked) => handleInputChange('gewerbenachweis_bestaetigt', checked === true)}
                            required
                          />
                           <Label htmlFor="gewerbenachweis_bestaetigt" className="text-sm leading-relaxed">
-                            Ich bestätige, dass ich als selbstständiger Unternehmer tätig bin, über eine Gewerbeanmeldung verfüge und den Gewerbenachweis vor der Freischaltung bei Fahrerexpress einreiche. Mir ist bekannt, dass die Freischaltung ausschließlich manuell durch den Administrator nach Prüfung der Gewerbeanmeldung und der erforderlichen Fahrerunterlagen erfolgt. *
+                            Ich bin selbstständiger Unternehmer mit Gewerbeanmeldung und reiche den Gewerbenachweis vor der Freischaltung ein. Die Freischaltung erfolgt ausschließlich manuell durch den Administrator nach Prüfung der Gewerbeanmeldung und der erforderlichen Fahrerunterlagen. Ohne Gewerbenachweis sind keine Auszahlung und keine weitere Zusammenarbeit möglich. *
                           </Label>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1 ml-6">
-                          Mir ist bekannt, dass ohne vorliegenden Gewerbenachweis keine Auszahlung und keine weitere Zusammenarbeit erfolgen kann.
-                        </p>
                         {validationErrors.gewerbenachweis_bestaetigt && (
                           <p id="gewerbenachweis-error" className="text-sm text-destructive mt-1" role="alert">{validationErrors.gewerbenachweis_bestaetigt}</p>
                         )}
+                        <p className="text-sm text-muted-foreground">
+                          {REGISTRATION_CONTRACT_NOTICE} Die Registrierung und die beiden Bestätigungen sind keine Annahme des Vermittlungsvertrags und keine Freischaltung.
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          Die Anmeldung dient Ihrem Interesse an zukünftigen unverbindlichen Auftragsangeboten. Sie prüfen jedes Angebot eigenverantwortlich und entscheiden frei über Annahme oder Ablehnung.
+                        </p>
                     </div>
 
                   <Button 

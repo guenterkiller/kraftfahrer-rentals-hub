@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { sanitizeEmail, isValidEmail } from "@/lib/emailSanitize";
+import { displayAvailability } from '@/lib/driverRegistration';
 
 export interface DriverAddressDriver {
   id: string;
@@ -19,6 +20,7 @@ export interface DriverAddressDriver {
   ort?: string | null;
   land?: string | null;
   fuehrerscheinklassen?: string[] | null;
+  verfuegbarkeit?: string | null;
 }
 
 interface DriverAddressDialogProps {
@@ -304,6 +306,7 @@ export function DriverAddressDialog({ open, onClose, driver, onSaved }: DriverAd
           </div>
 
           <SectionTitle>Fahrerdaten</SectionTitle>
+          <p className="text-sm"><span className="font-medium">Grundsätzliche Verfügbarkeit: </span>{displayAvailability(driver?.verfuegbarkeit)}</p>
           <div className="space-y-1">
             <Label htmlFor="driver-klassen">Führerscheinklassen</Label>
             <Input

@@ -1,0 +1,612 @@
+// Disconnected draft: never deploy without explicit operator approval.
+import { normalizeAvailability } from './availability.ts';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Resend } from "npm:resend@2.0.0";
+import { renderAsync } from 'npm:@react-email/components@0.0.22';
+import React from 'npm:react@18.3.1';
+import { DriverRegistrationConfirmation } from '../../../supabase/functions/_shared/email-templates/driver-registration-confirmation.tsx';
+import { AdminDriverNotification } from '../../../supabase/functions/_shared/email-templates/admin-driver-notification.tsx';
+import { DRIVER_DOCS_BUCKET, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '../../../supabase/functions/_shared/storage-config.ts';
+import { TERMS_VERSION_DRIVER } from '../../../supabase/functions/_shared/terms-version.ts';
+
+const MIME_TO_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'application/pdf': 'pdf',
+};
+
+function checkUpload(file: File): { ok: true } | { ok: false; reason: string } {
+  if (!file || file.size <= 0) {
+    return { ok: false, reason: 'Die Datei ist leer oder konnte nicht gelesen werden.' };
+  }
+  if (file.size > MAX_FILE_SIZE) {
+    console.warn(`Rejected upload (size ${file.size} > ${MAX_FILE_SIZE}): ${file.name}`);
+    return { ok: false, reason: 'Die Datei ist größer als 5 MB. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.' };
+  }
+  const isHeic = /heic|heif/i.test(file.type) || /\.(heic|heif)$/i.test(file.name || '');
+  if (isHeic) {
+    console.warn(`Rejected upload (HEIC): ${file.name}`);
+    return { ok: false, reason: 'HEIC-Dateien werden nicht unterstützt. Bitte als PDF, JPG oder PNG hochladen.' };
+  }
+  if (!ALLOWED_MIME_TYPES.has(file.type)) {
+    console.warn(`Rejected upload (invalid MIME ${file.type}): ${file.name}`);
+    return { ok: false, reason: 'Dieser Dateityp wird nicht unterstützt. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.' };
+  }
+  return { ok: true };
+}
+
+
+const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+// Initialize Supabase client
+const supabaseUrl = Deno.env.get("SUPABASE_URL");
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+if (!supabaseUrl || !supabaseServiceKey) throw new Error('Missing Supabase configuration');
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+
+interface FahrerAnfrageRequest {
+  name: string;
+  email: string;
+  phone: string;
+  company?: string;
+  message?: string;
+  description?: string;
+  license_classes?: string[];
+  experience?: string;
+  specializations?: string[];
+  regions?: string[];
+  hourly_rate?: string;
+  bf2_erlaubnis?: string;
+  bf3_erlaubnis?: string;
+  spezialanforderungen?: string[] | string;
+  terms_version?: string;
+  availability?: unknown;
+  strasse?: string;
+  hausnummer?: string;
+  plz?: string;
+  ort?: string;
+  land?: string;
+}
+
+const handler = async (req: Request): Promise<Response> => {
+  // Handle CORS preflight requests
+  if (req.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  try {
+    console.log("fahrerwerden start", new Date().toISOString());
+    console.log("has RESEND key:", !!Deno.env.get("RESEND_API_KEY"));
+    
+    // Runtime guard for MAIL_FROM domain
+    const MAIL_FROM = Deno.env.get("MAIL_FROM") ?? "info@kraftfahrer-mieten.com";
+    const addr = MAIL_FROM.split('<').pop()?.replace(/[<>]/g,'') ?? MAIL_FROM;
+    if (!/@kraftfahrer-mieten\.com$/i.test(addr.trim())) {
+      throw new Error(`MAIL_FROM uses unverified domain: ${MAIL_FROM}`);
+    }
+    
+    console.log("Fahrer-Anfrage submission received");
+    
+    const contentType = req.headers.get("content-type") || "";
+    console.log("Content-Type:", contentType);
+    
+    let formData: FormData | null = null;
+    let requestData: FahrerAnfrageRequest = {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      message: "",
+      description: "",
+      license_classes: [],
+      experience: "",
+      specializations: [],
+      regions: [],
+      hourly_rate: "",
+      bf2_erlaubnis: "",
+      bf3_erlaubnis: "",
+      spezialanforderungen: []
+    };
+    
+    try {
+      if (contentType.includes("multipart/form-data")) {
+        formData = await req.formData();
+        requestData = {
+          name: (formData.get("name") as string) || "",
+          email: (formData.get("email") as string) || "",
+          phone: (formData.get("phone") as string) || "",
+          company: (formData.get("company") as string) || "",
+          message: (formData.get("message") as string) || "",
+          description: (formData.get("description") as string) || "",
+          license_classes: JSON.parse((formData.get("license_classes") as string) || "[]"),
+          experience: (formData.get("experience") as string) || "",
+          specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
+          regions: JSON.parse((formData.get("regions") as string) || "[]"),
+          hourly_rate: (formData.get("hourly_rate") as string) || "",
+          availability: formData.get("availability") ?? "",
+          bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
+          bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
+          spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
+          strasse: (formData.get("strasse") as string) || "",
+          hausnummer: (formData.get("hausnummer") as string) || "",
+          plz: (formData.get("plz") as string) || "",
+          ort: (formData.get("ort") as string) || "",
+          land: (formData.get("land") as string) || "",
+        };
+      } else if (contentType.includes("application/json")) {
+        const body = await req.json();
+        requestData = {
+          name: body.name ?? "",
+          email: body.email ?? "",
+          phone: body.phone ?? "",
+          company: body.company ?? "",
+          message: body.message ?? "",
+          description: body.description ?? "",
+          license_classes: Array.isArray(body.license_classes) ? body.license_classes : [],
+          experience: body.experience ?? "",
+          specializations: Array.isArray(body.specializations) ? body.specializations : [],
+          regions: Array.isArray(body.regions) ? body.regions : [],
+          hourly_rate: body.hourly_rate ?? "",
+          availability: body.availability ?? "",
+          strasse: body.strasse ?? "",
+          hausnummer: body.hausnummer ?? "",
+          plz: body.plz ?? "",
+          ort: body.ort ?? "",
+          land: body.land ?? "",
+        };
+      } else {
+        // Fallback: try to parse as FormData
+        try {
+          formData = await req.formData();
+          requestData = {
+            name: (formData.get("name") as string) || "",
+            email: (formData.get("email") as string) || "",
+            phone: (formData.get("phone") as string) || "",
+            company: (formData.get("company") as string) || "",
+            message: (formData.get("message") as string) || "",
+            description: (formData.get("description") as string) || "",
+            license_classes: JSON.parse((formData.get("license_classes") as string) || "[]"),
+            experience: (formData.get("experience") as string) || "",
+            specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
+            regions: JSON.parse((formData.get("regions") as string) || "[]"),
+            hourly_rate: (formData.get("hourly_rate") as string) || "",
+            availability: formData.get("availability") ?? "",
+            bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
+            bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
+            spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
+            terms_version: (formData.get("terms_version") as string) || "",
+            strasse: (formData.get("strasse") as string) || "",
+            hausnummer: (formData.get("hausnummer") as string) || "",
+            plz: (formData.get("plz") as string) || "",
+            ort: (formData.get("ort") as string) || "",
+            land: (formData.get("land") as string) || "",
+          };
+        } catch (_e) {
+          // ignore
+        }
+      }
+    } catch (parseErr) {
+      console.error("Parse error:", parseErr);
+    }
+
+    // Optional smoke test to validate logging without side effects
+    const url = new URL(req.url);
+    const smoke = req.headers.get("x-smoke-test") === "1" || url.searchParams.get("smoke") === "1";
+    if (smoke) {
+      console.log("Smoke test active → early 200 response");
+      return new Response(JSON.stringify({ success: true, smoke: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // E-Mail serverseitig bereinigen (identisch zu src/lib/emailSanitize.ts)
+    {
+      let v = String(requestData.email ?? "").trim();
+      for (let i = 0; i < 3; i++) {
+        v = v.replace(/^[\s"'`„“”‚‘’<(\[]+|[\s"'`„“”‚‘’>)\],;]+$/g, "");
+      }
+      v = v.replace(/^(mailto:)+/i, "").replace(/\?.*$/, "").replace(/[\u200B-\u200D\uFEFF\s]/g, "");
+      requestData.email = v.toLowerCase();
+      const re = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)*\.[a-z]{2,}$/i;
+      if (requestData.email && (!re.test(requestData.email) || requestData.email.includes(".."))) {
+        return new Response(
+          JSON.stringify({ error: "Bitte eine gültige E-Mail-Adresse angeben." }),
+          { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+        );
+      }
+    }
+
+    // Validation - only name, email, and phone are required
+    if (!requestData.name || !requestData.email || !requestData.phone) {
+      console.error("Missing required fields");
+      return new Response(
+        JSON.stringify({ error: "Name, E-Mail und Telefon sind Pflichtfelder." }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // Standort Fahrer (An-/Abfahrt) ist Pflicht – ohne vollständige Adresse
+    // können keine Anfahrtskosten berechnet werden.
+    const missingAddress: string[] = [];
+    if (!requestData.strasse?.trim()) missingAddress.push("Straße");
+    if (!requestData.hausnummer?.trim()) missingAddress.push("Hausnummer");
+    if (!requestData.plz?.trim()) missingAddress.push("PLZ");
+    if (!requestData.ort?.trim()) missingAddress.push("Ort");
+    if (!requestData.land?.trim()) missingAddress.push("Land");
+    if (missingAddress.length > 0) {
+      console.error("Missing address fields:", missingAddress.join(", "));
+      return new Response(
+        JSON.stringify({
+          error: `Bitte geben Sie Ihren vollständigen Standort für An-/Abfahrt an. Fehlende Angaben: ${missingAddress.join(", ")}.`,
+        }),
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
+      );
+    }
+
+    const availability = normalizeAvailability(requestData.availability);
+    if (!availability.ok) {
+      return new Response(JSON.stringify({ error: availability.error }), {
+        status: 400, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    console.log(`Processing fahrer request from ${requestData.name}`);
+
+    // Extract IP address and User-Agent from headers
+    const ipAddress = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+    const userAgent = req.headers.get("user-agent") || "unknown";
+
+    // Check if email already exists first
+    console.log("Checking if email already exists...");
+    const { data: existingDriver, error: checkError } = await supabase
+      .from('fahrer_profile')
+      .select('id')
+      .eq('email', requestData.email)
+      .maybeSingle();
+    
+    if (checkError) {
+      console.error("Error checking existing email:", checkError);
+      throw new Error("Fehler beim Überprüfen der E-Mail-Adresse");
+    }
+    
+    if (existingDriver) {
+      console.log("Email already exists, returning 409");
+      return new Response(
+        JSON.stringify({ 
+          error: 'Ein Fahrer mit dieser E-Mail-Adresse ist bereits registriert.' 
+        }),
+        { 
+          status: 409, 
+          headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+        }
+      );
+    }
+
+    // Upload files to storage first
+    console.log("Uploading files to storage...");
+    const uploadedFiles: { [key: string]: string } = {};
+    const rejectedFiles: { field: string; filename: string; reason: string }[] = [];
+    const emailSafe = requestData.email.replace(/[^a-zA-Z0-9@.-]/g, '_');
+
+    // field name in FormData -> { docType, filePrefix }
+    const DOC_FIELDS: { field: string; docType: string; prefix: string; label: string }[] = [
+      { field: 'fuehrerschein', docType: 'fuehrerschein', prefix: 'fuehrerschein', label: 'Führerschein' },
+      { field: 'fahrerkarte', docType: 'fahrerkarte', prefix: 'fahrerkarte', label: 'Fahrerkarte' },
+      { field: 'gewerbeanmeldung', docType: 'gewerbeanmeldung', prefix: 'gewerbeanmeldung', label: 'Gewerbeanmeldung' },
+      { field: 'zertifikate', docType: 'zertifikate', prefix: 'zertifikat', label: 'Zertifikat' },
+    ];
+
+    // filepath -> original filename (for fahrer_dokumente entries)
+    const originalNames: Record<string, string> = {};
+
+    for (const { field, prefix, label } of DOC_FIELDS) {
+      const files = formData ? (formData.getAll(field) as File[]) : [];
+      if (files.length === 0) continue;
+
+      const paths: string[] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const check = checkUpload(file);
+        if (!check.ok) {
+          rejectedFiles.push({ field, filename: file?.name || label, reason: check.reason });
+          continue;
+        }
+
+        const fileExt = MIME_TO_EXT[file.type] || 'pdf';
+        const fileName = `uploads/${emailSafe}/${prefix}_${i + 1}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from(DRIVER_DOCS_BUCKET)
+          .upload(fileName, file, { upsert: true });
+
+        if (uploadError) {
+          console.error(`Upload error for ${label} ${i + 1}:`, uploadError);
+          rejectedFiles.push({
+            field,
+            filename: file.name,
+            reason: 'Die Datei konnte nicht hochgeladen werden. Bitte versuchen Sie es erneut oder senden Sie das Dokument per E-Mail.',
+          });
+          continue;
+        }
+
+        paths.push(fileName);
+        originalNames[fileName] = file.name;
+        console.log(`${label} ${i + 1} uploaded successfully: ${fileName}`);
+      }
+
+      if (paths.length > 0) {
+        uploadedFiles[field] = paths.join(',');
+      }
+    }
+
+    
+    console.log("File uploads completed. Uploaded files:", uploadedFiles);
+
+    // Save to database
+    console.log("Email is unique, proceeding with registration...");
+    
+    // Split name into vorname and nachname
+    const nameParts = requestData.name.trim().split(' ');
+    const vorname = nameParts[0] || '';
+    const nachname = nameParts.slice(1).join(' ') || '';
+    
+    // Parse hourly rate safely
+    let parsedRate = null;
+    if (requestData.hourly_rate) {
+      const cleaned = String(requestData.hourly_rate).replace(/[^\d.,]/g, '').replace(',', '.');
+      const parsed = parseFloat(cleaned);
+      parsedRate = isNaN(parsed) ? null : parsed;
+    }
+    
+    // Map data to correct table fields
+    const insertData = {
+      vorname,
+      nachname,
+      email: requestData.email,
+      telefon: requestData.phone,
+      beschreibung: requestData.description || '',
+      fuehrerscheinklassen: Array.isArray(requestData.license_classes) ? requestData.license_classes : [],
+      erfahrung_jahre: requestData.experience ? parseInt(requestData.experience) : null,
+      spezialisierungen: Array.isArray(requestData.specializations) ? requestData.specializations : [],
+      verfuegbare_regionen: Array.isArray(requestData.regions) ? requestData.regions : [],
+      stundensatz: parsedRate,
+      verfuegbarkeit: availability.value,
+      strasse: (requestData.strasse ?? "").trim(),
+      hausnummer: (requestData.hausnummer ?? "").trim(),
+      plz: (requestData.plz ?? "").trim(),
+      ort: (requestData.ort ?? "").trim(),
+      land: (requestData.land ?? "").trim(),
+      adresse: `${(requestData.strasse ?? "").trim()} ${(requestData.hausnummer ?? "").trim()}`.trim(),
+      status: 'pending',
+      dokumente: uploadedFiles,
+      bf2_erlaubnis: (requestData.bf2_erlaubnis as any) === 'true' || (requestData.bf2_erlaubnis as any) === true,
+      bf3_erlaubnis: (requestData.bf3_erlaubnis as any) === 'true' || (requestData.bf3_erlaubnis as any) === true,
+      spezialanforderungen: Array.isArray(requestData.spezialanforderungen) 
+        ? requestData.spezialanforderungen 
+        : (requestData.spezialanforderungen ? 
+           (() => {
+             try {
+               return JSON.parse(requestData.spezialanforderungen);
+             } catch (e) {
+               console.warn('Could not parse spezialanforderungen:', requestData.spezialanforderungen);
+               return [];
+             }
+           })() : [])
+      ,
+      agb_version: (requestData as any).terms_version || TERMS_VERSION_DRIVER,
+      agb_accepted_at: new Date().toISOString(),
+      agb_ip: (ipAddress && ipAddress !== 'unknown') ? ipAddress.split(',')[0].trim() : null,
+      agb_user_agent: userAgent
+    };
+    
+    console.log("Processing driver registration for:", insertData.email?.split('@')[0] + '@***');
+    
+    const { data, error } = await supabase
+      .from('fahrer_profile')
+      .insert([insertData])
+      .select();
+    
+    console.log("Insert result:", { data, error });
+
+    if (error) {
+      console.error("Supabase insert error:", JSON.stringify(error, null, 2));
+      
+      // Check for duplicate email error
+      if (error.code === '23505') {
+        return new Response(
+          JSON.stringify({ 
+            error: 'Diese E-Mail ist bereits registriert.' 
+          }),
+          { 
+            status: 409, 
+            headers: { 'Content-Type': 'application/json', ...corsHeaders } 
+          }
+        );
+      }
+      
+      throw new Error("Fehler beim Speichern der Anfrage in der Datenbank");
+    }
+    
+    const dbData = data && data[0] ? data[0] : null;
+
+    if (dbData && dbData.id) {
+      console.log("Saved to database successfully:", dbData.id);
+      
+      // Also create entries in fahrer_dokumente table for admin preview
+      const fahrerId = dbData.id;
+      const documentInserts: any[] = [];
+      
+      // Create entries for each uploaded file (all document fields)
+      for (const { field, docType, prefix } of DOC_FIELDS) {
+        const value = uploadedFiles[field];
+        if (!value) continue;
+        value.split(',').forEach((path, index) => {
+          documentInserts.push({
+            fahrer_id: fahrerId,
+            filepath: path,
+            filename: originalNames[path] || `${prefix}_${index + 1}`,
+            type: docType,
+            url: path
+          });
+        });
+      }
+
+      
+      if (documentInserts.length > 0) {
+        console.log("Creating document entries for admin access...");
+        const { error: docError } = await supabase
+          .from('fahrer_dokumente')
+          .insert(documentInserts);
+        
+        if (docError) {
+          console.error("Error creating document entries:", docError);
+        } else {
+          console.log(`Created ${documentInserts.length} document entries for admin access`);
+        }
+      }
+      
+      console.log("File uploads completed successfully. Documents are stored in Storage and logged for admin access.");
+    } else {
+      console.log("Kein Datensatz gespeichert – möglicherweise wegen Duplikat oder Fehler.");
+    }
+
+    // Send notification email to admin
+    const adminEmailHtml = await renderAsync(
+      React.createElement(AdminDriverNotification, {
+        firstName: insertData.vorname,
+        lastName: insertData.nachname,
+        email: insertData.email,
+        phone: insertData.telefon,
+        regions: insertData.verfuegbare_regionen || [],
+        licenseClasses: insertData.fuehrerscheinklassen || [],
+        specializations: insertData.spezialisierungen || [],
+        specialRequirements: (insertData as any).spezialanforderungen || [],
+        experienceYears: insertData.erfahrung_jahre ?? null,
+        strasse: insertData.strasse,
+        hausnummer: insertData.hausnummer,
+        plz: insertData.plz,
+        ort: insertData.ort,
+        land: insertData.land,
+        uploadedDocs: uploadedFiles,
+        rejectedFiles,
+      })
+    );
+
+
+    const adminEmailResponse = await resend.emails.send({
+      from: MAIL_FROM,
+      to: ["info@kraftfahrer-mieten.com"],
+      subject: `Neue Fahrer-Registrierung: ${insertData.vorname} ${insertData.nachname}`,
+      html: adminEmailHtml,
+    });
+
+    // Log admin email (WICHTIG: Damit wir Fehler sehen!)
+    if (adminEmailResponse.error) {
+      console.error("Admin email error (Fahrer werden):", adminEmailResponse.error);
+      
+      await supabase.from('email_log').insert({
+        recipient: "info@kraftfahrer-mieten.com",
+        subject: `Neue Fahrer-Registrierung: ${insertData.vorname} ${insertData.nachname}`,
+        template: 'admin_driver_notification',
+        status: 'failed',
+        error_message: adminEmailResponse.error.message || String(adminEmailResponse.error),
+      });
+      
+      // NICHT abbrechen - Fahrer-Bestätigung soll trotzdem gesendet werden
+      console.warn("Admin notification failed, but continuing with driver confirmation");
+    } else {
+      console.log("Admin email sent successfully:", adminEmailResponse);
+      
+      await supabase.from('email_log').insert({
+        recipient: "info@kraftfahrer-mieten.com",
+        subject: `Neue Fahrer-Registrierung: ${insertData.vorname} ${insertData.nachname}`,
+        template: 'admin_driver_notification',
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        message_id: adminEmailResponse.data?.id,
+      });
+    }
+
+    // Kein Vertragsversand bei Registrierung: Der persönliche Vermittlungsvertrag
+    // wird erst nach der manuellen administrativen Freischaltung versendet
+    // (approve-driver-and-send-jobs).
+
+    // Send confirmation email to applicant
+    const confirmationEmailHtml = await renderAsync(
+      React.createElement(DriverRegistrationConfirmation, {
+        driverName: `${insertData.vorname} ${insertData.nachname}`,
+      })
+    );
+
+    const confirmationEmailResponse = await resend.emails.send({
+      from: MAIL_FROM,
+      to: [requestData.email],
+      subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
+      html: confirmationEmailHtml,
+    });
+
+    // Log email sending
+    if (confirmationEmailResponse.error) {
+      console.error("Failed to send confirmation email:", confirmationEmailResponse.error);
+      
+      await supabase.from('email_log').insert({
+        recipient: insertData.email,
+        subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
+        template: 'driver_registration_confirmation',
+        status: 'failed',
+        error_message: confirmationEmailResponse.error.message || String(confirmationEmailResponse.error),
+      });
+    } else {
+      console.log("Confirmation email sent successfully:", confirmationEmailResponse);
+      
+      await supabase.from('email_log').insert({
+        recipient: insertData.email,
+        subject: "Willkommen bei der Fahrerexpress-Agentur – Registrierung bestätigt",
+        template: 'driver_registration_confirmation',
+        status: 'sent',
+        sent_at: new Date().toISOString(),
+        message_id: confirmationEmailResponse.data?.id,
+      });
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        rejectedFiles,
+        uploadWarning: rejectedFiles.length > 0
+          ? 'Einige Dateien konnten nicht hochgeladen werden. Bitte verwenden Sie PDF, JPG oder PNG mit maximal 5 MB.'
+          : null,
+      }),
+      {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders,
+        },
+      }
+    );
+  } catch (error: any) {
+    console.error("Error in fahrerwerden function:", error);
+    return new Response(
+      JSON.stringify({ error: "Ein interner Fehler ist aufgetreten. Bitte versuchen Sie es erneut." }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      }
+    );
+  }
+};
+
+export { handler };
+// No serve() here: this file is test-only and cannot register a live endpoint.

@@ -9,7 +9,7 @@ import type { DriverAddressDriver } from "@/components/DriverAddressDialog";
 import { contractInviteState, matchesContractDriver, type ContractInviteState } from "@/lib/driverContractInvites";
 
 const inviteQuery = () => supabase.from("driver_contract_invites").select(
-  "id, driver_id, created_at, contract_version, status, expires_at, used_at, driver:fahrer_profile!driver_contract_invites_driver_id_fkey(id, vorname, nachname, email, telefon, strasse, hausnummer, plz, ort, land, fuehrerscheinklassen)",
+  "id, driver_id, created_at, contract_version, status, expires_at, used_at, driver:fahrer_profile!driver_contract_invites_driver_id_fkey(id, vorname, nachname, email, telefon, strasse, hausnummer, plz, ort, land, fuehrerscheinklassen, verfuegbarkeit)",
 );
 type Invite = NonNullable<Awaited<ReturnType<typeof inviteQuery>>["data"]>[number];
 
