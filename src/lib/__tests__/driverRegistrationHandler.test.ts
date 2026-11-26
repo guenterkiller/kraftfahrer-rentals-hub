@@ -2,10 +2,10 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
-import { normalizeAvailability } from '../../../preview/fahrer-registration/availability';
+import { normalizeAvailability } from '../../../supabase/functions/fahrerwerden/availability';
 import { serializeAvailability, displayAvailability } from '../driverRegistration';
 
-// Execute the actual disconnected handler; every external import is replaced.
+// Execute the actual production handler; every external import is replaced.
 // An unexpected import fails closed, so these tests cannot send mail or reach Supabase.
 function fixture() {
   const writes: { table: string; value: any }[] = [];
@@ -25,7 +25,9 @@ function fixture() {
     },
   };
   const exports: Record<string, any> = {};
+  let handler: ((req: Request) => Promise<Response>) | undefined;
   const requireMock = (id: string): any => {
+    if (id === 'https://deno.land/std@0.190.0/http/server.ts') return { serve: (fn: (req: Request) => Promise<Response>) => { handler = fn; } };
     if (id === './availability.ts') return { normalizeAvailability };
     if (id === 'https://esm.sh/@supabase/supabase-js@2') return { createClient: () => db };
     if (id === 'npm:resend@2.0.0') return { Resend: class { emails = { send: async (mail: any) => { mails.push(mail); return { data: { id: 'mock-only' } }; } }; } };
@@ -37,14 +39,15 @@ function fixture() {
     if (id.endsWith('/terms-version.ts')) return { TERMS_VERSION_DRIVER: 'unchanged-mock-version' };
     throw new Error(`Unexpected external import: ${id}`);
   };
-  const source = readFileSync('preview/fahrer-registration/fahrerwerden.ts', 'utf8');
+  const source = readFileSync('supabase/functions/fahrerwerden/index.ts', 'utf8');
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   runInNewContext(code, {
     exports, require: requireMock, Request, Response, FormData, File, URL, Date,
     console: { log() {}, warn() {}, error() {} },
     Deno: { env: { get: (name: string) => name === 'MAIL_FROM' ? 'info@kraftfahrer-mieten.com' : 'mock-not-a-secret' } },
   });
-  return { handler: exports.handler as (req: Request) => Promise<Response>, writes, mails };
+  if (!handler) throw new Error('Production handler was not registered by serve');
+  return { handler, writes, mails };
 }
 
 const base = { name: 'TEST Fahrer', email: 'test@example.invalid', phone: '000', strasse: 'Testweg', hausnummer: '1', plz: '00000', ort: 'Testort', land: 'Deutschland' };
@@ -60,7 +63,7 @@ function request(availability: string | undefined, kind: 'json' | 'multipart' | 
 }
 
 afterEach(() => vi.useRealTimers());
-describe('Registrierungsentwurf: echter Handler mit isolierter Speicherung', () => {
+describe('Produktive Registrierung: echter Handler mit isolierter Speicherung', () => {
   it.each(['json', 'multipart', 'fallback'] as const)('alle drei Werte werden über %s gespeichert und wieder angezeigt', async kind => {
     vi.useFakeTimers(); vi.setSystemTime(new Date('2026-11-26T12:00:00Z'));
     for (const [choice, date, label] of [['sofort', '', 'Ab sofort'], ['absprache', '', 'Nach Absprache'], ['ab_datum', '2026-12-01', 'Ab 01.12.2026']]) {
@@ -88,9 +91,9 @@ describe('Registrierungsentwurf: echter Handler mit isolierter Speicherung', () 
     expect(f.writes).toHaveLength(0);
     expect(f.mails).toHaveLength(0);
   });
-  it('alte Anmeldung ohne neues Feld bleibt zulässig', async () => {
+  it.each(['json', 'multipart', 'fallback'] as const)('alte Anmeldung ohne neues Feld bleibt über %s zulässig', async kind => {
     const f = fixture();
-    expect((await f.handler(request(undefined, 'multipart'))).status).toBe(200);
+    expect((await f.handler(request(undefined, kind))).status).toBe(200);
     expect(f.writes.find(write => write.table === 'fahrer_profile')?.value[0].verfuegbarkeit).toBeNull();
   });
 });

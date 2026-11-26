@@ -7,6 +7,7 @@ import { DriverRegistrationConfirmation } from '../_shared/email-templates/drive
 import { AdminDriverNotification } from '../_shared/email-templates/admin-driver-notification.tsx';
 import { DRIVER_DOCS_BUCKET, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from '../_shared/storage-config.ts';
 import { TERMS_VERSION_DRIVER } from '../_shared/terms-version.ts';
+import { normalizeAvailability } from './availability.ts';
 
 const MIME_TO_EXT: Record<string, string> = {
   'image/jpeg': 'jpg',
@@ -65,6 +66,7 @@ interface FahrerAnfrageRequest {
   bf3_erlaubnis?: string;
   spezialanforderungen?: string[] | string;
   terms_version?: string;
+  availability?: unknown;
   strasse?: string;
   hausnummer?: string;
   plz?: string;
@@ -127,6 +129,7 @@ const handler = async (req: Request): Promise<Response> => {
           specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
           regions: JSON.parse((formData.get("regions") as string) || "[]"),
           hourly_rate: (formData.get("hourly_rate") as string) || "",
+          availability: formData.get("availability") ?? "",
           bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
           bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
           spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
@@ -150,6 +153,7 @@ const handler = async (req: Request): Promise<Response> => {
           specializations: Array.isArray(body.specializations) ? body.specializations : [],
           regions: Array.isArray(body.regions) ? body.regions : [],
           hourly_rate: body.hourly_rate ?? "",
+          availability: body.availability ?? "",
           strasse: body.strasse ?? "",
           hausnummer: body.hausnummer ?? "",
           plz: body.plz ?? "",
@@ -172,6 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
             specializations: JSON.parse((formData.get("specializations") as string) || "[]"),
             regions: JSON.parse((formData.get("regions") as string) || "[]"),
             hourly_rate: (formData.get("hourly_rate") as string) || "",
+            availability: formData.get("availability") ?? "",
             bf2_erlaubnis: (formData.get("bf2_erlaubnis") as string) || "",
             bf3_erlaubnis: (formData.get("bf3_erlaubnis") as string) || "",
             spezialanforderungen: JSON.parse((formData.get("spezialanforderungen") as string) || "[]"),
@@ -246,6 +251,13 @@ const handler = async (req: Request): Promise<Response> => {
         }),
         { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
+    }
+
+    const availability = normalizeAvailability(requestData.availability);
+    if (!availability.ok) {
+      return new Response(JSON.stringify({ error: availability.error }), {
+        status: 400, headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
     }
 
     console.log(`Processing fahrer request from ${requestData.name}`);
@@ -368,6 +380,7 @@ const handler = async (req: Request): Promise<Response> => {
       spezialisierungen: Array.isArray(requestData.specializations) ? requestData.specializations : [],
       verfuegbare_regionen: Array.isArray(requestData.regions) ? requestData.regions : [],
       stundensatz: parsedRate,
+      verfuegbarkeit: availability.value,
       strasse: requestData.strasse!.trim(),
       hausnummer: requestData.hausnummer!.trim(),
       plz: requestData.plz!.trim(),

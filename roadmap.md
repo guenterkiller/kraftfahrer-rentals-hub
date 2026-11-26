@@ -1,7 +1,8 @@
 # Fahrerregistrierung: zwei Pflicht-Checkboxen und Verfügbarkeit (26.11.2026)
 - [x] Formular, Speicherweg, Administratoranzeige und Zustimmungsnachweise geprüft; zwei Pflicht-Checkboxen und drei Verfügbarkeiten mit Datumsprüfung umgesetzt, bestehendes Textfeld ohne Migration.
 - [x] 207 Regeltests und neun isolierte Formular-/Adminanzeigen bei 1280/390/320 px ohne echte Registrierung oder Mail; Serveränderung ausschließlich nicht aktiver Entwurf unter preview/fahrer-registration.
-- [ ] Produktive Verfügbarkeitsspeicherung: wartet auf ausdrückliche Freigabe zur koordinierten Aktivierung von fahrerwerden und Webseite; im aktuellen Auftrag ist Deployment ausdrücklich verboten. Authentifizierte Admin-Liveabnahme nicht freigegeben/verfügbar.
+- [x] Freigegebene selektive Aktivierung (26.11.2026): ausschließlich fahrerwerden erfolgreich deployt, SHA-256 22b8be53b89ae05acc4483ceb70c98ad5bb4b0151718b96c6df4e6ac4c914826. 209 Website-/Handler- und 16 Deno-Tests bestanden; drei vorhandene Live-Smoke-Aufrufe HTTP 200 ohne Schreiben/Versand. 44 Profile samt Hash fa9d2cdd2349fe89a158371edb1b164c und 1.754 Mailprotokolle unverändert. Keine Migration/Frontend-Veröffentlichung.
+- [ ] Vollständiger produktiver Registrierungs-/Admin-Livedurchlauf bleibt ausgeschlossen: echte Registrierung und Mail ausdrücklich verboten, angemeldete Admin-Liveabnahme nicht verfügbar. Positive Speicherung ist über den tatsächlichen Handler mit isolierten Abhängigkeiten nachgewiesen; Live-Smoke prüft nur Erreichbarkeit, nicht Speicherung.
 # Technischer Optimierungsplan mit Desktop-Schutz
 # SEO-/Sicherheitsabschluss (11.11.2026)
 - [x] Fahrerinfos-H1 und Datumszugriff korrigiert; Desktop-/Mobilabmessungen und Texte unverändert, Kundenmail-Typprüfung bestanden.

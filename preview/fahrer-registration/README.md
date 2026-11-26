@@ -1,4 +1,6 @@
-# Fahrerregistrierung – nicht aktivierter Serverentwurf
+# Fahrerregistrierung – historischer Serverentwurf
+
+**Aktivierungsstand 26.11.2026:** Nach ausdrücklicher gesonderter Freigabe wurde ausschließlich `fahrerwerden` produktiv eingespielt. Die minimale Speicherung liegt nun in `supabase/functions/fahrerwerden/index.ts` und `availability.ts`. Dieser Ordner bleibt ein historischer, nicht angeschlossener Entwurf. 209 Website-/Handler-Tests und 16 Deno-Tests bestanden; Live-Smoke-Aufrufe waren schreib-/versandfrei. Die folgenden Aktivierungshinweise dokumentieren den früheren Vorschauzustand, nicht den aktuellen Live-Status. Keine Frontend-Veröffentlichung erfolgt.
 
 Dieser Ordner ist vom produktiven Versand getrennt. `fahrerwerden.ts` wird ausschließlich mit gemockten Abhängigkeiten getestet, registriert keinen Server und darf ohne ausdrückliche Betreiberfreigabe nicht eingespielt werden.
 
@@ -6,7 +8,7 @@ Dieser Ordner ist vom produktiven Versand getrennt. `fahrerwerden.ts` wird aussc
 
 Das bisherige `supabase/functions/fahrerwerden/index.ts` ignoriert Verfügbarkeit. Die neue Webseite übermittelt `availability`: `sofort`, `absprache` oder `ab_datum:YYYY-MM-DD`; ohne Auswahl einen leeren Wert. Der Entwurf validiert diese Werte in allen drei bestehenden Eingabewegen vor Dateiupload, Speicherung und Versand und speichert sie im bereits vorhandenen nullable Textfeld `fahrer_profile.verfuegbarkeit`. Keine Migration erforderlich. Bei Aktivierung muss `availability.ts` in den Funktionsordner übernommen werden; die bestehenden Produktionsimporte und `serve(handler)` bleiben erhalten. Nur Parser, Validierung und das eine Insertfeld sind funktionale Änderungen; sichere Adresszugriffe ersetzen im Entwurf bestehende Non-null-Assertions.
 
-**Bis zur gesonderten Aktivierung speichert der produktive Server die neue Verfügbarkeit weiterhin nicht.** Deshalb neue Webseite und Serverkorrektur später koordiniert aktivieren, nicht allein veröffentlichen.
+**Frühere Grenze aufgehoben:** Die serverseitige Speicherung wurde inzwischen selektiv aktiviert. Das Formular aus Commit `8102377d` ist damit serverseitig unterstützt; ein noch nicht veröffentlichter Frontendstand wird durch das Serverdeployment nicht automatisch veröffentlicht.
 
 ## Grenzen und Bestandsschutz
 
